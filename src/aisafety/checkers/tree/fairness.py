@@ -50,13 +50,21 @@ class FairnessChecker(BaseChecker):
             "Selection rate difference between groups",
         ))
 
-        # --- Equalized Odds ---
-        eo_diff = equalized_odds_difference(y_true, y_pred, sensitive_features=sensitive_features)
-        findings.append(self._evaluate_metric(
-            "equalized_odds", "Equalized Odds",
-            abs(eo_diff), threshold,
-            "Max difference in TPR/FPR between groups",
-        ))
+        # --- Equalized Odds (binary only) ---
+        n_unique = len(np.unique(y_true))
+        if n_unique <= 2:
+            eo_diff = equalized_odds_difference(y_true, y_pred, sensitive_features=sensitive_features)
+            findings.append(self._evaluate_metric(
+                "equalized_odds", "Equalized Odds",
+                abs(eo_diff), threshold,
+                "Max difference in TPR/FPR between groups",
+            ))
+        else:
+            findings.append(self._make_finding(
+                "equalized_odds", "Equalized Odds",
+                f"Skipped for multi-class ({n_unique} classes). Metric requires binary labels.",
+                Severity.INFO, CheckStatus.SKIPPED,
+            ))
 
         # --- Disparate Impact (4/5ths rule) ---
         findings.append(self._check_disparate_impact(y_pred, sensitive_features))
