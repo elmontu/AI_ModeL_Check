@@ -48,6 +48,7 @@ class AdversarialRobustnessChecker(BaseChecker):
     name = "Adversarial Robustness"
     category = "adversarial"
     requires = ["art"]
+    model_types = ["cnn"]
 
     def check(
         self,

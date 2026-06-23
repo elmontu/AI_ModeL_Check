@@ -1,6 +1,6 @@
 """Tests for expanded agentic safety checks."""
 
-from aisafety.checkers.agentic_safety import AgenticSafetyChecker
+from aisafety.checkers.llm.agentic_safety import AgenticSafetyChecker
 
 
 def test_tool_output_injection():

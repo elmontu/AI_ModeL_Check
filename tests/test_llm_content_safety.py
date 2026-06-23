@@ -2,7 +2,7 @@
 
 import pytest
 
-from aisafety.checkers.llm_content_safety import LLMContentSafetyChecker
+from aisafety.checkers.llm.content_safety import LLMContentSafetyChecker
 
 
 def test_content_safety_no_endpoint():

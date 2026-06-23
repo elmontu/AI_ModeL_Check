@@ -3,7 +3,7 @@
 import tempfile
 from pathlib import Path
 
-from aisafety.checkers.governance import GovernanceChecker
+from aisafety.checkers.common.governance import GovernanceChecker
 from aisafety.core.types import CheckResult, CheckStatus, Finding, SafetyReport, Severity, ReportSummary
 
 

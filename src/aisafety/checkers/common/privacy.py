@@ -25,6 +25,7 @@ class PrivacyChecker(BaseChecker):
     name = "Privacy"
     category = "privacy"
     requires = ["art"]
+    model_types = ["all"]
 
     def check(
         self,

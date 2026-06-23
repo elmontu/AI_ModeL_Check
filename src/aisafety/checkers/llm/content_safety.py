@@ -22,7 +22,7 @@ from aisafety.core.base import BaseChecker
 from aisafety.core.registry import register_checker
 from aisafety.core.types import CheckStatus, Finding, Severity
 
-DATA_DIR = Path(__file__).parent / "data"
+DATA_DIR = Path(__file__).parent.parent / "data"
 
 
 @register_checker
@@ -30,6 +30,7 @@ class LLMContentSafetyChecker(BaseChecker):
     name = "LLM Content Safety"
     category = "llm_content_safety"
     requires = ["detoxify"]
+    model_types = ["llm"]
 
     def check(
         self,

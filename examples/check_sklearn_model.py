@@ -6,8 +6,8 @@ from sklearn.datasets import make_classification
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
 
-from aisafety.checkers.fairness import FairnessChecker
-from aisafety.checkers.interpretability import InterpretabilityChecker
+from aisafety.checkers.tree.fairness import FairnessChecker
+from aisafety.checkers.tree.interpretability import InterpretabilityChecker
 from aisafety.core.report import ReportBuilder
 
 

@@ -89,6 +89,7 @@ class LLMGuardrailsChecker(BaseChecker):
     name = "LLM Deployment Guardrails"
     category = "llm_guardrails"
     requires = []
+    model_types = ["llm"]
 
     def check(
         self,

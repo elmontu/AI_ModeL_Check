@@ -26,3 +26,20 @@ def get_checker(category: str) -> type[BaseChecker]:
     if category not in _REGISTRY:
         raise KeyError(f"Unknown checker category: {category!r}. Available: {list(_REGISTRY)}")
     return _REGISTRY[category]
+
+
+def get_checkers_for_model_type(model_type: str) -> dict[str, type[BaseChecker]]:
+    """Return checkers compatible with a given model type."""
+    return {
+        cat: cls for cat, cls in _REGISTRY.items()
+        if "all" in cls.model_types or model_type in cls.model_types
+    }
+
+
+def get_model_types() -> dict[str, list[str]]:
+    """Return mapping of model_type → list of checker categories."""
+    types: dict[str, list[str]] = {}
+    for cat, cls in _REGISTRY.items():
+        for mt in cls.model_types:
+            types.setdefault(mt, []).append(cat)
+    return types

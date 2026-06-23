@@ -1,6 +1,6 @@
 """Tests for the LLM Prompt Safety checker."""
 
-from aisafety.checkers.llm_prompt_safety import LLMPromptSafetyChecker
+from aisafety.checkers.llm.prompt_safety import LLMPromptSafetyChecker
 
 
 def test_prompt_safety_no_endpoint():

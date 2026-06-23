@@ -3,9 +3,9 @@
 
 import os
 
-from aisafety.checkers.llm_prompt_safety import LLMPromptSafetyChecker
-from aisafety.checkers.llm_content_safety import LLMContentSafetyChecker
-from aisafety.checkers.llm_guardrails import LLMGuardrailsChecker
+from aisafety.checkers.llm.prompt_safety import LLMPromptSafetyChecker
+from aisafety.checkers.llm.content_safety import LLMContentSafetyChecker
+from aisafety.checkers.llm.guardrails import LLMGuardrailsChecker
 from aisafety.core.report import ReportBuilder
 
 

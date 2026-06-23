@@ -1,6 +1,6 @@
 """Tests for expanded guardrails checks."""
 
-from aisafety.checkers.llm_guardrails import LLMGuardrailsChecker
+from aisafety.checkers.llm.guardrails import LLMGuardrailsChecker
 
 
 def test_guardrails_pii_redaction(mock_llm_endpoint):

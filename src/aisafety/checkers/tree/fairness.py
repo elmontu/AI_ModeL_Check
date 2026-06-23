@@ -14,6 +14,7 @@ class FairnessChecker(BaseChecker):
     name = "Fairness & Bias"
     category = "fairness"
     requires = ["fairlearn", "numpy"]
+    model_types = ["tree"]
 
     def check(
         self,

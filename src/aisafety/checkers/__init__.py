@@ -1,29 +1,13 @@
-"""Safety checker modules — import to auto-register all checkers."""
+"""Safety checker modules — organized by model type.
 
-from aisafety.checkers import (
-    adversarial,
-    agentic_safety,
-    alignment,
-    data_safety,
-    fairness,
-    governance,
-    interpretability,
-    llm_content_safety,
-    llm_guardrails,
-    llm_prompt_safety,
-    privacy,
-)
+Layers:
+    cnn/           — CNN / Vision models (adversarial robustness, Grad-CAM)
+    tree/          — Tree-based / Tabular models (fairness, data safety, SHAP)
+    llm/           — LLM / Transformer models (prompt safety, toxicity, guardrails)
+    longitudinal/  — Longitudinal / Time-series models (drift, temporal attacks)
+    common/        — Cross-cutting checks (privacy, alignment, governance)
+"""
 
-__all__ = [
-    "adversarial",
-    "agentic_safety",
-    "alignment",
-    "data_safety",
-    "fairness",
-    "governance",
-    "interpretability",
-    "llm_content_safety",
-    "llm_guardrails",
-    "llm_prompt_safety",
-    "privacy",
-]
+from aisafety.checkers import cnn, common, llm, longitudinal, tree
+
+__all__ = ["cnn", "common", "llm", "longitudinal", "tree"]

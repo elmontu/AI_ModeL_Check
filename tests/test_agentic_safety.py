@@ -1,6 +1,6 @@
 """Tests for the Agentic Safety checker."""
 
-from aisafety.checkers.agentic_safety import AgenticSafetyChecker
+from aisafety.checkers.llm.agentic_safety import AgenticSafetyChecker
 
 
 def test_agentic_tool_definitions(sample_tool_definitions):

@@ -26,9 +26,9 @@ def main():
 
     # Programmatic usage
     import numpy as np
-    from aisafety.checkers.agentic_safety import AgenticSafetyChecker
-    from aisafety.checkers.alignment import AlignmentChecker
-    from aisafety.checkers.governance import GovernanceChecker
+    from aisafety.checkers.llm.agentic_safety import AgenticSafetyChecker
+    from aisafety.checkers.common.alignment import AlignmentChecker
+    from aisafety.checkers.common.governance import GovernanceChecker
     from aisafety.core.report import ReportBuilder
 
     builder = ReportBuilder(target_description="Full audit demo")

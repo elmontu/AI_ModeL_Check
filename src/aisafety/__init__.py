@@ -11,7 +11,7 @@ from aisafety.core.types import (
     Severity,
 )
 from aisafety.core.base import BaseChecker
-from aisafety.core.registry import get_all_checkers, get_checker, register_checker
+from aisafety.core.registry import get_all_checkers, get_checker, get_checkers_for_model_type, register_checker
 from aisafety.core.report import ReportBuilder
 
 __all__ = [
@@ -25,5 +25,6 @@ __all__ = [
     "Severity",
     "get_all_checkers",
     "get_checker",
+    "get_checkers_for_model_type",
     "register_checker",
 ]

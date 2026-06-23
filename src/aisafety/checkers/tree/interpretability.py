@@ -14,6 +14,7 @@ class InterpretabilityChecker(BaseChecker):
     name = "Interpretability"
     category = "interpretability"
     requires = ["shap"]
+    model_types = ["tree"]
 
     def check(
         self,

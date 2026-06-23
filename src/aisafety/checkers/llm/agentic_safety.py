@@ -89,6 +89,7 @@ class AgenticSafetyChecker(BaseChecker):
     name = "Agentic Safety"
     category = "agentic_safety"
     requires = []
+    model_types = ["llm"]
 
     def check(
         self,

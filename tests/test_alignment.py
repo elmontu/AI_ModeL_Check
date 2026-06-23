@@ -3,7 +3,7 @@
 import numpy as np
 import pytest
 
-from aisafety.checkers.alignment import AlignmentChecker
+from aisafety.checkers.common.alignment import AlignmentChecker
 
 
 def test_alignment_no_data():

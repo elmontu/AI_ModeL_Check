@@ -16,6 +16,7 @@ class AlignmentChecker(BaseChecker):
     name = "Alignment"
     category = "alignment"
     requires = ["numpy"]
+    model_types = ["all"]
 
     def check(
         self,

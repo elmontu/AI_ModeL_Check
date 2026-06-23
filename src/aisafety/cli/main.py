@@ -2,8 +2,6 @@
 
 from __future__ import annotations
 
-import json
-import sys
 import time
 from pathlib import Path
 
@@ -20,16 +18,26 @@ console = Console()
 
 
 @app.command("list")
-def list_checkers() -> None:
+def list_checkers(
+    model_type: str | None = typer.Option(None, "--type", "-t", help="Filter by model type: cnn, tree, llm, longitudinal"),
+) -> None:
     """List all available checkers and their dependency status."""
-    from aisafety.core.registry import get_all_checkers
+    from aisafety.core.base import MODEL_TYPE_LABELS
+    from aisafety.core.registry import get_all_checkers, get_checkers_for_model_type
 
     _ensure_checkers_loaded()
-    checkers = get_all_checkers()
 
-    table = Table(title="Available Safety Checkers")
+    if model_type:
+        checkers = get_checkers_for_model_type(model_type)
+        title = f"Safety Checkers for {MODEL_TYPE_LABELS.get(model_type, model_type)}"
+    else:
+        checkers = get_all_checkers()
+        title = "Available Safety Checkers"
+
+    table = Table(title=title)
     table.add_column("Category", style="cyan")
     table.add_column("Name", style="white")
+    table.add_column("Layer", style="magenta")
     table.add_column("Status", style="bold")
     table.add_column("Missing Deps", style="red")
 
@@ -39,7 +47,8 @@ def list_checkers() -> None:
         missing = instance.missing_dependencies()
         status = "[green]ready[/green]" if available else "[red]missing deps[/red]"
         missing_str = ", ".join(missing) if missing else ""
-        table.add_row(category, cls.name, status, missing_str)
+        layer = ", ".join(MODEL_TYPE_LABELS.get(mt, mt) for mt in cls.model_types)
+        table.add_row(category, cls.name, layer, status, missing_str)
 
     console.print(table)
 
@@ -75,7 +84,6 @@ def run(
     if not instance.is_available():
         missing = instance.missing_dependencies()
         console.print(f"[red]Missing dependencies for {category}: {', '.join(missing)}[/red]")
-        console.print(f"Install with: pip install ai-safety-checker[{category}]")
         raise typer.Exit(1)
 
     params = {}
@@ -105,8 +113,10 @@ def run(
 def audit(
     config: str = typer.Argument(help="Config file path"),
     output: str | None = typer.Option(None, help="Output report file path"),
+    auto_filter: bool = typer.Option(True, help="Auto-filter checkers by target.type"),
 ) -> None:
     """Run all enabled checks from a config file and produce a unified report."""
+    from aisafety.core.base import MODEL_TYPE_LABELS
     from aisafety.core.config import load_config
     from aisafety.core.registry import get_all_checkers
     from aisafety.core.report import ReportBuilder
@@ -115,9 +125,13 @@ def audit(
 
     cfg = load_config(config)
     all_checkers = get_all_checkers()
+    target_type = cfg.target.get("type", "")
 
     target_desc = cfg.target.get("description", "Unknown target")
     builder = ReportBuilder(target_description=target_desc)
+
+    if target_type and auto_filter:
+        console.print(f"[bold]Target type: {MODEL_TYPE_LABELS.get(target_type, target_type)}[/bold]")
 
     for category, checker_cfg in cfg.checkers.items():
         if not checker_cfg.enabled:
@@ -130,6 +144,11 @@ def audit(
 
         checker_cls = all_checkers[category]
         instance = checker_cls()
+
+        # Auto-filter by model type
+        if auto_filter and target_type and not instance.supports_model_type(target_type):
+            console.print(f"  [dim]Skipping {category} (not applicable to {target_type})[/dim]")
+            continue
 
         if not instance.is_available():
             missing = instance.missing_dependencies()
@@ -161,8 +180,6 @@ def _ensure_checkers_loaded() -> None:
 
 
 def _print_result(result) -> None:
-    from aisafety.core.types import CheckStatus
-
     for f in result.findings:
         icon = {"pass": "[green]PASS[/green]", "fail": "[red]FAIL[/red]",
                 "warn": "[yellow]WARN[/yellow]", "error": "[red]ERR [/red]",

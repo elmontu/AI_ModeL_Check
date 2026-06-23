@@ -49,20 +49,16 @@ DEFAULT_CONFIG_TEMPLATE = """\
 # AI Safety Checker configuration
 target:
   description: "My AI Model"
-  type: "sklearn"  # sklearn | pytorch | llm_endpoint
+  type: "tree"  # cnn | tree | llm | longitudinal
 
 checkers:
+  # ── Tree / Tabular ────────────────────────────
   data_safety:
     enabled: true
     # dataset: "data/train.csv"
     # text_columns: ["description"]
     # sensitive_columns: ["gender", "race"]
     # label_column: "approved"
-
-  adversarial:
-    enabled: false
-    # attacks: ["fgsm", "pgd"]
-    # eps: 0.3
 
   fairness:
     enabled: true
@@ -72,12 +68,17 @@ checkers:
     enabled: true
     # methods: ["shap", "lime"]
 
-  privacy:
+  # ── CNN / Vision ──────────────────────────────
+  adversarial:
     enabled: false
+    # attacks: ["fgsm", "pgd", "deepfool", "cw_l2"]
+    # eps: 0.3
 
-  alignment:
+  cnn_robustness:
     enabled: false
+    # severities: [1, 2, 3, 4, 5]
 
+  # ── LLM / Transformer ────────────────────────
   llm_prompt_safety:
     enabled: false
     # endpoint_url: "https://api.example.com/v1/chat"
@@ -90,6 +91,23 @@ checkers:
     enabled: false
 
   agentic_safety:
+    enabled: false
+
+  # ── Longitudinal / Time-Series ────────────────
+  temporal_robustness:
+    enabled: false
+
+  concept_drift:
+    enabled: false
+
+  sequence_safety:
+    enabled: false
+
+  # ── Common (all model types) ──────────────────
+  privacy:
+    enabled: false
+
+  alignment:
     enabled: false
 
   governance:

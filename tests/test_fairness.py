@@ -5,7 +5,7 @@ import pytest
 
 
 def test_fairness_checker_basic(binary_classification_data):
-    from aisafety.checkers.fairness import FairnessChecker
+    from aisafety.checkers.tree.fairness import FairnessChecker
 
     checker = FairnessChecker()
     if not checker.is_available():
@@ -27,7 +27,7 @@ def test_fairness_checker_basic(binary_classification_data):
 
 
 def test_fairness_checker_no_data():
-    from aisafety.checkers.fairness import FairnessChecker
+    from aisafety.checkers.tree.fairness import FairnessChecker
 
     checker = FairnessChecker()
     result = checker.check()
@@ -36,7 +36,7 @@ def test_fairness_checker_no_data():
 
 
 def test_fairness_checker_perfect_fairness():
-    from aisafety.checkers.fairness import FairnessChecker
+    from aisafety.checkers.tree.fairness import FairnessChecker
 
     checker = FairnessChecker()
     if not checker.is_available():

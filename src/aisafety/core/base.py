@@ -9,12 +9,27 @@ from abc import ABC, abstractmethod
 from aisafety.core.types import CheckResult, CheckStatus, Finding, Severity
 
 
+MODEL_TYPES = ("cnn", "tree", "llm", "longitudinal")
+MODEL_TYPE_LABELS = {
+    "cnn": "CNN / Vision",
+    "tree": "Tree / Tabular",
+    "llm": "LLM / Transformer",
+    "longitudinal": "Longitudinal / Time-Series",
+    "all": "All Model Types",
+}
+
+
 class BaseChecker(ABC):
     """All checker modules inherit from this."""
 
     name: str = "BaseChecker"
     category: str = "base"
     requires: list[str] = []
+    model_types: list[str] = ["all"]  # which model architectures this applies to
+
+    def supports_model_type(self, model_type: str) -> bool:
+        """Return True if this checker applies to the given model type."""
+        return "all" in self.model_types or model_type in self.model_types
 
     @abstractmethod
     def check(self, **kwargs) -> CheckResult:

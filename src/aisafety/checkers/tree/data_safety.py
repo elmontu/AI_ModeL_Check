@@ -12,6 +12,7 @@ class DataSafetyChecker(BaseChecker):
     name = "Data Safety"
     category = "data_safety"
     requires = ["pandas", "presidio_analyzer"]
+    model_types = ["tree"]
 
     def check(
         self,
