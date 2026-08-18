@@ -1,0 +1,50 @@
+{
+  "class_counts": {
+    "1": 290,
+    "2": 210
+  },
+  "classes": 2,
+  "dataset_id": 23381,
+  "feature_dtypes": {
+    "V10": "category",
+    "V11": "category",
+    "V12": "category",
+    "V13": "category",
+    "V2": "category",
+    "V3": "category",
+    "V4": "float64",
+    "V5": "category",
+    "V6": "category",
+    "V7": "category",
+    "V8": "category",
+    "V9": "category"
+  },
+  "feature_names": [
+    "V2",
+    "V3",
+    "V4",
+    "V5",
+    "V6",
+    "V7",
+    "V8",
+    "V9",
+    "V10",
+    "V11",
+    "V12",
+    "V13"
+  ],
+  "features": 12,
+  "file_id": "1910507",
+  "missing_feature_values": 835,
+  "name": "dresses-sales",
+  "openml_md5_checksum": "996f7aacb2eab289cc1a968e263f5281",
+  "openml_url": "https://openml.org/data/v1/download/1910507/dresses-sales.arff",
+  "parquet_url": "https://data.openml.org/datasets/0002/23381/dataset_23381.pq",
+  "rows": 500,
+  "snapshot_bytes": 14215,
+  "snapshot_path": "reproduction/openml/raw/openml-23381.parquet",
+  "snapshot_sha256": "da9d4fb331b68337e362a0222bb03c6af1fcd50c6c2f11d25655a5b93688ac27",
+  "status": "active",
+  "target": "Class",
+  "version": 2
+}

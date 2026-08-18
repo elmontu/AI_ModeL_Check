@@ -1,0 +1,174 @@
+{
+  "$defs": {
+    "MultinomialReleaseCounts": {
+      "additionalProperties": false,
+      "properties": {
+        "observation_ids": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Observation Ids",
+          "type": "array"
+        },
+        "release_id": {
+          "maxLength": 128,
+          "minLength": 3,
+          "pattern": "^[A-Za-z0-9._:-]+$",
+          "title": "Release Id",
+          "type": "string"
+        },
+        "state_rows": {
+          "items": {
+            "$ref": "#/$defs/MultinomialStateCounts"
+          },
+          "minItems": 2,
+          "title": "State Rows",
+          "type": "array"
+        }
+      },
+      "required": [
+        "release_id",
+        "observation_ids",
+        "state_rows"
+      ],
+      "title": "MultinomialReleaseCounts",
+      "type": "object"
+    },
+    "MultinomialStateCounts": {
+      "additionalProperties": false,
+      "properties": {
+        "counts": {
+          "items": {
+            "type": "integer"
+          },
+          "minItems": 1,
+          "title": "Counts",
+          "type": "array"
+        },
+        "state_id": {
+          "maxLength": 256,
+          "minLength": 1,
+          "title": "State Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "state_id",
+        "counts"
+      ],
+      "title": "MultinomialStateCounts",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "audit_sample_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Audit Sample Sha256",
+      "type": "string"
+    },
+    "count_file_id": {
+      "maxLength": 128,
+      "minLength": 3,
+      "pattern": "^[A-Za-z0-9._:-]+$",
+      "title": "Count File Id",
+      "type": "string"
+    },
+    "family_id": {
+      "maxLength": 128,
+      "minLength": 3,
+      "pattern": "^[A-Za-z0-9._:-]+$",
+      "title": "Family Id",
+      "type": "string"
+    },
+    "population_scope_id": {
+      "maxLength": 128,
+      "minLength": 3,
+      "pattern": "^[A-Za-z0-9._:-]+$",
+      "title": "Population Scope Id",
+      "type": "string"
+    },
+    "portfolio_id": {
+      "maxLength": 128,
+      "minLength": 3,
+      "pattern": "^[A-Za-z0-9._:-]+$",
+      "title": "Portfolio Id",
+      "type": "string"
+    },
+    "releases": {
+      "items": {
+        "$ref": "#/$defs/MultinomialReleaseCounts"
+      },
+      "minItems": 1,
+      "title": "Releases",
+      "type": "array"
+    },
+    "sampling_ended_at": {
+      "format": "date-time",
+      "title": "Sampling Ended At",
+      "type": "string"
+    },
+    "sampling_plan_id": {
+      "maxLength": 128,
+      "minLength": 3,
+      "pattern": "^[A-Za-z0-9._:-]+$",
+      "title": "Sampling Plan Id",
+      "type": "string"
+    },
+    "sampling_plan_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Sampling Plan Sha256",
+      "type": "string"
+    },
+    "sampling_protocol": {
+      "maxLength": 4096,
+      "minLength": 1,
+      "title": "Sampling Protocol",
+      "type": "string"
+    },
+    "sampling_started_at": {
+      "format": "date-time",
+      "title": "Sampling Started At",
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "1.0",
+      "default": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "state_ids": {
+      "items": {
+        "type": "string"
+      },
+      "minItems": 2,
+      "title": "State Ids",
+      "type": "array"
+    },
+    "threat_id": {
+      "maxLength": 128,
+      "minLength": 3,
+      "pattern": "^[A-Za-z0-9._:-]+$",
+      "title": "Threat Id",
+      "type": "string"
+    }
+  },
+  "required": [
+    "count_file_id",
+    "sampling_plan_id",
+    "sampling_plan_sha256",
+    "portfolio_id",
+    "population_scope_id",
+    "threat_id",
+    "family_id",
+    "sampling_started_at",
+    "sampling_ended_at",
+    "audit_sample_sha256",
+    "sampling_protocol",
+    "state_ids",
+    "releases"
+  ],
+  "title": "MultinomialCountsFile",
+  "type": "object"
+}

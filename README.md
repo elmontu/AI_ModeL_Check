@@ -1,302 +1,149 @@
-# AI Model Safety Checker
+# Model Release Assurance
 
-A modular Python toolkit for automated AI safety evaluation — from CNNs and tree-based models to LLMs and time-series systems. Includes 15 checker modules across 5 model-type layers, a CLI, structured JSON reports, and 200+ curated attack prompts.
+Model Release Assurance (MRA) is a Python reference implementation for evaluating and authorizing model-release contracts. It binds a model artifact to its interface, recipient, population, controls, utility requirements, evidence, and related releases before returning a typed decision.
 
-```
-pip install -e "."              # core only
-pip install -e ".[all]"         # all optional dependencies
-```
+MRA is sector-neutral and supports protected units such as people, households, organizations, programmes, transactions, devices, and events.
 
----
+> **Status:** offline reference implementation, version 0.5.0. It is not an accredited production authorization service.
 
-## Architecture
+The `0.x` series is an alpha interface: decision invariants are tested, but schemas and APIs may change between minor versions. See the [changelog](CHANGELOG.md), [support policy](SUPPORT.md), and [release process](docs/releasing.md).
 
-```
-src/aisafety/checkers/
-├── cnn/                          CNN / Vision
-│   ├── adversarial.py              20 evasion attacks (FGSM → AutoAttack)
-│   └── robustness.py               Corruption: noise, blur, contrast, occlusion, mCE
-│
-├── tree/                         Tree / Tabular
-│   ├── fairness.py                 Demographic parity, equalized odds, disparate impact
-│   ├── data_safety.py              PII scanning, bias detection, poisoning
-│   └── interpretability.py         SHAP, LIME, feature consistency
-│
-├── llm/                          LLM / Transformer
-│   ├── prompt_safety.py            60+ injection tests, 50+ jailbreak templates
-│   ├── content_safety.py           Toxicity, hallucination, stereotypes, copyright
-│   ├── guardrails.py               OWASP LLM Top 10, PII redaction, XSS
-│   └── agentic_safety.py           CoT deception, tool injection, escalation
-│
-├── longitudinal/                 Time-Series / Sequential
-│   ├── temporal_robustness.py      Noise, segment shift, time-warp, burst dropout
-│   ├── concept_drift.py            Covariate/label/prediction drift, PSI, staleness
-│   └── sequence_safety.py          Look-ahead bias, leakage, anomaly injection
-│
-└── common/                       Cross-cutting (all model types)
-    ├── privacy.py                  MIA, model extraction, attribute inference, DP audit
-    ├── alignment.py                Reward hacking, shortcut detection
-    └── governance.py               Model card, NIST / EU AI Act compliance
+## Decisions
+
+The engine returns one of four outcomes:
+
+- `release_as_proposed`: every mandatory requirement is satisfied;
+- `release_with_controls`: a restricted configuration satisfies the policy;
+- `redesign_required`: the submitted evidence or configuration set is incomplete; or
+- `reject`: a replayable exhaustive-search certificate shows that no submitted option can satisfy the policy.
+
+Missing, stale, mismatched, underpowered, or unassessed evidence never becomes evidence of safety.
+
+## Repository layout
+
+```text
+src/model_release_assurance/   Python package and CLI
+schemas/                       versioned JSON contracts
+examples/                      executable requests, evidence, and policies
+tests/                         unit, replay, and integration tests
+docs/                          architecture, security, adoption, and deployment guidance
+scripts/                       optional benchmark and evidence-generation utilities
+reproduction/                  benchmark configurations and retained manifests
+.github/workflows/             GitHub Actions CI
 ```
 
----
-
-## Quick Start
-
-### CLI
-
-```bash
-# List all checkers (with model-type layer and dependency status)
-aisafety list
-
-# Filter by model type
-aisafety list --type llm
-aisafety list --type cnn
-aisafety list --type tree
-aisafety list --type longitudinal
-
-# Generate a starter config
-aisafety init
-
-# Run a single checker
-aisafety run fairness --config aisafety.yaml
-
-# Run a full audit (auto-filters by target.type)
-aisafety audit aisafety.yaml
-```
-
-### Python API
-
-```python
-from aisafety.checkers.tree.fairness import FairnessChecker
-
-checker = FairnessChecker()
-result = checker.check(
-    y_true=y_test,
-    y_pred=model.predict(X_test),
-    sensitive_features=gender,
-)
-
-for finding in result.findings:
-    print(f"[{finding.status.value}] {finding.title}: {finding.description}")
-```
-
-```python
-from aisafety.checkers.llm.prompt_safety import LLMPromptSafetyChecker
-
-checker = LLMPromptSafetyChecker()
-result = checker.check(
-    llm_endpoint=lambda prompt: my_llm(prompt),
-    system_prompt="You are a helpful assistant.",
-)
-```
-
-```python
-from aisafety.core.report import ReportBuilder
-
-builder = ReportBuilder(target_description="My Model v2")
-builder.add_result(fairness_result)
-builder.add_result(privacy_result)
-report = builder.build()
-builder.to_json("safety_report.json")
-```
-
----
-
-## Checker Reference
-
-### CNN / Vision Layer
-
-| Checker | Category | Checks |
-|---------|----------|--------|
-| **Adversarial Robustness** | `adversarial` | FGSM, PGD, BIM, C&W (L2/L∞), DeepFool, JSMA, ElasticNet, AutoAttack, APGD, Square, ZOO, HopSkipJump, Boundary, Spatial, Pixel, Patch, Universal, Feature Adversaries, Backdoor. OOD detection (MSP + energy score). Gradient masking detection. Input edge-case validation. |
-| **Corruption Robustness** | `cnn_robustness` | Gaussian noise, Gaussian blur, contrast/brightness, salt-and-pepper noise, patch occlusion. Mean Corruption Error (mCE) metric across 5 severity levels. |
-
-### Tree / Tabular Layer
-
-| Checker | Category | Checks |
-|---------|----------|--------|
-| **Fairness & Bias** | `fairness` | Demographic parity, equalized odds, disparate impact (4/5ths rule), subgroup performance gap. |
-| **Data Safety** | `data_safety` | PII scanning (presidio), class imbalance, chi-squared bias detection, z-score poisoning detection. |
-| **Interpretability** | `interpretability` | SHAP (Tree/Kernel), LIME, cross-method consistency, feature dominance check. |
-
-### LLM / Transformer Layer
-
-| Checker | Category | Checks |
-|---------|----------|--------|
-| **Prompt Safety** | `llm_prompt_safety` | 60+ prompt injection tests (direct, indirect, encoding, unicode, structural, multi-turn, cross-language). 50+ jailbreak templates (DAN, many-shot, crescendo, cipher, gaslighting, virtualization). System prompt leakage detection. |
-| **Content Safety** | `llm_content_safety` | Toxicity (detoxify), harmful content refusal (40+ categories incl. CBRN), false refusal rate, sycophancy, hallucination/confabulation, stereotype reinforcement, copyright reproduction, response consistency. |
-| **Guardrails** | `llm_guardrails` | OWASP LLM Top 10 coverage: PII redaction, XSS/injection output filtering, rate limiting, token limits, resource exhaustion, input sanitization (null bytes, CRLF, ANSI), error information leakage. |
-| **Agentic Safety** | `agentic_safety` | Tool risk classification, permission audit (least-privilege), tool call validation, escalation detection, excessive agency, tool output injection, chain-of-thought deception analysis, self-modification detection, reasoning loop detection, data exfiltration patterns, function schema abuse. |
-
-### Longitudinal / Time-Series Layer
-
-| Checker | Category | Checks |
-|---------|----------|--------|
-| **Temporal Robustness** | `temporal_robustness` | Point-wise noise injection, segment shift attack, time-warp attack, random/burst dropout, temporal distribution shift detection. |
-| **Concept Drift** | `concept_drift` | Covariate drift (KS statistic), prediction drift (JS divergence), label drift, model staleness (windowed performance decay), Population Stability Index (PSI). |
-| **Sequence Safety** | `sequence_safety` | Look-ahead bias detection, temporal ordering validation, train-test data leakage, anomaly injection robustness, autocorrelation memorization, label distribution consistency. |
-
-### Common Layer (All Model Types)
-
-| Checker | Category | Checks |
-|---------|----------|--------|
-| **Privacy** | `privacy` | Black-box MIA, label-only MIA, model extraction/stealing, attribute inference, confidence score leakage, canary-based memorization, DP training detection, generalization gap analysis. |
-| **Alignment** | `alignment` | Reward hacking detection (reward-GT correlation), reward-objective divergence, shortcut/degenerate behavior, action diversity. |
-| **Governance** | `governance` | Model card generation, completeness audit, NIST AI RMF compliance mapping, EU AI Act risk classification, safety checklist coverage audit. |
-
----
-
-## Configuration
-
-```yaml
-# aisafety.yaml
-target:
-  description: "Credit Scoring Model v2"
-  type: "tree"  # cnn | tree | llm | longitudinal
-
-checkers:
-  # Tree / Tabular
-  fairness:
-    enabled: true
-    threshold: 0.1
-  data_safety:
-    enabled: true
-    text_columns: ["description"]
-    sensitive_columns: ["gender", "race"]
-
-  # Common
-  governance:
-    enabled: true
-
-output:
-  format: "json"
-  path: "safety_report.json"
-```
-
-When `target.type` is set, `aisafety audit` auto-filters to checkers applicable to that model type (layer-specific + common).
-
----
+Generated assessments, audit databases, trained models, benchmark output, reports, and local build intermediates are intentionally excluded from version control.
 
 ## Installation
 
+MRA requires Python 3.11 or newer.
+
 ```bash
-# Core (CLI + report framework, no ML dependencies)
-pip install -e "."
-
-# By layer
-pip install -e ".[fairness]"         # fairlearn
-pip install -e ".[adversarial]"      # ART + PyTorch
-pip install -e ".[interpretability]" # SHAP + LIME
-pip install -e ".[llm]"             # detoxify + presidio + openai
-pip install -e ".[data]"            # presidio + pandas
-pip install -e ".[privacy]"         # ART
-pip install -e ".[governance]"      # jinja2
-
-# Everything
-pip install -e ".[all]"
-
-# Development
-pip install -e ".[dev]"             # pytest + ruff
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install --upgrade pip
+python -m pip install -e .
 ```
 
----
+Install the finite portfolio solver when required:
 
-## Safety Checklist
+```bash
+python -m pip install -e '.[portfolio]'
+```
 
-### Data Safety
-- [ ] Training data audited for biases (gender, race, age, etc.)
-- [ ] PII removed or anonymized
-- [ ] Data provenance documented (sources, licenses, consent)
-- [ ] Poisoning detection — validate data integrity before training
-- [ ] Class imbalance assessed and mitigated
+Install the optional benchmark dependencies separately:
 
-### Model Robustness
-- [ ] Adversarial attack testing (FGSM, PGD, C&W, AutoAttack)
-- [ ] Out-of-distribution detection implemented (MSP, energy score)
-- [ ] Corruption robustness tested (noise, blur, occlusion)
-- [ ] Input validation and sanitization
-- [ ] Gradient masking vulnerabilities checked
-- [ ] Distribution shift handled gracefully
+```bash
+python -m pip install -e '.[experiments]'
+```
 
-### Fairness & Bias
-- [ ] Demographic parity, equalized odds measured
-- [ ] Performance disaggregated across subgroups
-- [ ] Disparate impact assessment (4/5ths rule)
-- [ ] Bias mitigation applied (pre/in/post-processing)
+## Quick start
 
-### Interpretability
-- [ ] Feature attribution methods applied (SHAP, LIME, Grad-CAM)
-- [ ] Cross-method consistency verified
-- [ ] Model decisions explainable to stakeholders
+Validate and assess an example release contract:
 
-### Privacy & Security
-- [ ] Membership inference attack resistance tested
-- [ ] Model extraction/stealing defenses in place
-- [ ] Attribute inference attack tested
-- [ ] Differential privacy applied where needed
-- [ ] Confidence score leakage assessed
+```bash
+mra validate examples/request.json
+mra assess examples/request.json \
+  --output output/assessments/demo-report.json \
+  --audit-db output/audit/mra.sqlite3
+```
 
-### Alignment
-- [ ] Reward function reviewed for misspecification
-- [ ] Reward hacking / shortcut learning tested
-- [ ] Goal misgeneralization evaluated
+Select a release configuration:
 
-### LLM: Prompt & Output Safety
-- [ ] Prompt injection resistance tested (60+ patterns)
-- [ ] Jailbreak resistance evaluated (50+ templates)
-- [ ] System prompt leakage prevented
-- [ ] Hallucination rate measured
-- [ ] Sycophancy and over-agreement evaluated
+```bash
+mra optimize examples/optimization-request.json \
+  --output output/assessments/demo-optimization.json \
+  --audit-db output/audit/mra.sqlite3
+```
 
-### LLM: Content & Behavior
-- [ ] Harmful content refusal tested (40+ categories incl. CBRN)
-- [ ] False refusal rate (over-refusal) measured
-- [ ] Stereotype reinforcement checked
-- [ ] Copyright/verbatim reproduction tested
-- [ ] Response consistency across rephrasings
+Solve and independently replay a finite protocol certificate:
 
-### LLM: Deployment Guardrails
-- [ ] OWASP LLM Top 10 coverage verified
-- [ ] PII redaction in inputs and outputs
-- [ ] XSS/injection output filtering
-- [ ] Rate limiting and token limits enforced
-- [ ] Error responses don't leak sensitive information
-- [ ] Input sanitization (null bytes, CRLF, unicode)
+```bash
+mra protocol-solve examples/protocol-feasibility-problem.json \
+  --output output/assessments/demo-protocol-certificate.json
+mra protocol-verify output/assessments/demo-protocol-certificate.json \
+  --problem examples/protocol-feasibility-problem.json
+```
 
-### LLM: Agentic Safety
-- [ ] Tool calls validated and sandboxed
-- [ ] Least privilege for tool permissions
-- [ ] Chain-of-thought monitored for deception
-- [ ] Tool output injection resistance tested
-- [ ] Self-modification blocked
-- [ ] Reasoning loop detection in place
+Solve and replay an incomplete-portfolio certificate:
 
-### Time-Series: Temporal Safety
-- [ ] Temporal perturbation robustness tested
-- [ ] Concept drift detection implemented
-- [ ] Look-ahead bias / temporal leakage checked
-- [ ] Model staleness monitoring in place
-- [ ] Missing data and burst dropout handled
+```bash
+mra portfolio-solve examples/incomplete-portfolio-problem.json \
+  --output output/assessments/demo-portfolio-certificate.json \
+  --evidence-base examples
+mra portfolio-verify output/assessments/demo-portfolio-certificate.json \
+  --evidence-base examples
+```
 
-### Governance & Compliance
-- [ ] Model card published
-- [ ] NIST AI RMF risk categories covered
-- [ ] EU AI Act risk tier classified
-- [ ] Red-teaming conducted
-- [ ] Incident response plan documented
+## Core safety invariants
 
----
+- A validated attack establishes a lower bound and may block; it cannot clear.
+- Clearance requires an applicable exact value, verified upper bound, accountant, or replayable certificate.
+- Every result is bound to the artifact, complete interface, recipient information, population, policy, controls, and portfolio state.
+- Evaluated-to-released transfer requires direct reassessment or a verified information-reduction certificate in the safe direction.
+- Utility is enforced before selecting a least-informative feasible release.
+- Portfolio dependence must be assessed directly, composed analytically, or bounded by a replayable incomplete-portfolio certificate.
+- `unassessed` and `inconclusive` states cannot authorize release.
+- Signatures protect integrity and non-repudiation; they do not validate the truth of submitted evidence.
 
-## Reference Frameworks
+See [architecture](docs/architecture.md), [threat model](docs/reference/threat-model.md), and [production roadmap](docs/reference/production-roadmap.md).
 
-- [NIST AI Risk Management Framework](https://www.nist.gov/artificial-intelligence/risk-management-framework)
-- [OWASP Top 10 for LLM Applications](https://owasp.org/www-project-top-10-for-large-language-model-applications/)
-- [EU AI Act](https://artificialintelligenceact.eu/)
-- [ISO/IEC 42001](https://www.iso.org/standard/81230.html)
+## Development
 
----
+The standard local verification command is:
 
-## License
+```bash
+make check
+```
 
-MIT
+Run the test suite:
+
+```bash
+python -m pip install -r requirements.lock
+PYTHONPATH=src python -m unittest discover -s tests -v
+```
+
+Run a source compilation check:
+
+```bash
+PYTHONPATH=src python -m compileall -q src tests
+```
+
+The GitHub Actions workflow runs both checks and verifies that committed JSON schemas match the current models.
+
+## Production boundary
+
+The repository supplies an offline decision core. A production deployment also needs authoritative identity and separation of duties, isolated analyzer workers, managed keys and storage, monitoring and incident response, a transactionally locked portfolio registry, population validation, independent security review, and institutional accreditation.
+
+Interactive LLM services require transcript-level analysis covering prompts, retrieval, tools, memory, updates, concurrency, and query budgets. One-shot attack results are not sufficient to authorize such a service.
+
+## Security and contributions
+
+- Report security issues using [SECURITY.md](SECURITY.md).
+- Development and pull-request guidance is in [CONTRIBUTING.md](CONTRIBUTING.md).
+- Supported use and issue-routing guidance is in [SUPPORT.md](SUPPORT.md).
+- Operational documentation is indexed in [docs/README.md](docs/README.md).
+
+## Licensing
+
+No public-use licence has been selected. Do not treat repository visibility as permission to use, modify, or redistribute the software. Selecting and approving a licence is a required gate before a public release.

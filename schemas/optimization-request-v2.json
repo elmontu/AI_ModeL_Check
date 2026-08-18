@@ -1,0 +1,1111 @@
+{
+  "$defs": {
+    "AssessmentReportReference": {
+      "additionalProperties": false,
+      "properties": {
+        "accepted_signer_key_ids": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Accepted Signer Key Ids",
+          "type": "array"
+        },
+        "assessor_public_key_path": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Assessor Public Key Path"
+        },
+        "report_path": {
+          "minLength": 1,
+          "title": "Report Path",
+          "type": "string"
+        },
+        "report_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Report Sha256",
+          "type": "string"
+        },
+        "signed_manifest_path": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Signed Manifest Path"
+        },
+        "signed_manifest_sha256": {
+          "anyOf": [
+            {
+              "pattern": "^[0-9a-f]{64}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Signed Manifest Sha256"
+        }
+      },
+      "required": [
+        "report_path",
+        "report_sha256"
+      ],
+      "title": "AssessmentReportReference",
+      "type": "object"
+    },
+    "ControlType": {
+      "enum": [
+        "information_reduction",
+        "access_governance"
+      ],
+      "title": "ControlType",
+      "type": "string"
+    },
+    "FiniteExperiment": {
+      "additionalProperties": false,
+      "description": "A finite information structure P(observation | secret state).",
+      "properties": {
+        "artifact_sha256": {
+          "anyOf": [
+            {
+              "pattern": "^[0-9a-f]{64}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Artifact Sha256"
+        },
+        "channel": {
+          "items": {
+            "items": {
+              "type": "number"
+            },
+            "type": "array"
+          },
+          "title": "Channel",
+          "type": "array"
+        },
+        "decision_game_sha256": {
+          "anyOf": [
+            {
+              "pattern": "^[0-9a-f]{64}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Decision Game Sha256"
+        },
+        "experiment_id": {
+          "maxLength": 128,
+          "minLength": 3,
+          "pattern": "^[A-Za-z0-9._:-]+$",
+          "title": "Experiment Id",
+          "type": "string"
+        },
+        "interface_description": {
+          "maxLength": 2048,
+          "minLength": 1,
+          "title": "Interface Description",
+          "type": "string"
+        },
+        "interface_sha256": {
+          "anyOf": [
+            {
+              "pattern": "^[0-9a-f]{64}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Interface Sha256"
+        },
+        "observation_ids": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Observation Ids",
+          "type": "array"
+        },
+        "population_scope_id": {
+          "maxLength": 128,
+          "minLength": 3,
+          "pattern": "^[A-Za-z0-9._:-]+$",
+          "title": "Population Scope Id",
+          "type": "string"
+        },
+        "prior": {
+          "items": {
+            "type": "number"
+          },
+          "title": "Prior",
+          "type": "array"
+        },
+        "state_ids": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 2,
+          "title": "State Ids",
+          "type": "array"
+        },
+        "threat_id": {
+          "maxLength": 128,
+          "minLength": 3,
+          "pattern": "^[A-Za-z0-9._:-]+$",
+          "title": "Threat Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "experiment_id",
+        "threat_id",
+        "population_scope_id",
+        "state_ids",
+        "observation_ids",
+        "channel",
+        "prior",
+        "interface_description"
+      ],
+      "title": "FiniteExperiment",
+      "type": "object"
+    },
+    "GarblingCertificate": {
+      "additionalProperties": false,
+      "description": "Replayable exact/approximate witness that dominated is a garbling of dominant.",
+      "properties": {
+        "certificate_id": {
+          "maxLength": 128,
+          "minLength": 3,
+          "pattern": "^[A-Za-z0-9._:-]+$",
+          "title": "Certificate Id",
+          "type": "string"
+        },
+        "construction": {
+          "maxLength": 2048,
+          "minLength": 1,
+          "title": "Construction",
+          "type": "string"
+        },
+        "dominant_experiment_id": {
+          "title": "Dominant Experiment Id",
+          "type": "string"
+        },
+        "dominated_experiment_id": {
+          "title": "Dominated Experiment Id",
+          "type": "string"
+        },
+        "kernel": {
+          "items": {
+            "items": {
+              "type": "number"
+            },
+            "type": "array"
+          },
+          "title": "Kernel",
+          "type": "array"
+        },
+        "maximum_row_total_variation": {
+          "default": 0.0,
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Maximum Row Total Variation",
+          "type": "number"
+        },
+        "numerical_tolerance": {
+          "default": 1e-12,
+          "exclusiveMinimum": 0.0,
+          "maximum": 1e-09,
+          "title": "Numerical Tolerance",
+          "type": "number"
+        }
+      },
+      "required": [
+        "certificate_id",
+        "dominant_experiment_id",
+        "dominated_experiment_id",
+        "kernel",
+        "construction"
+      ],
+      "title": "GarblingCertificate",
+      "type": "object"
+    },
+    "InterfaceContract": {
+      "additionalProperties": false,
+      "properties": {
+        "access": {
+          "enum": [
+            "aggregate",
+            "label",
+            "score",
+            "embedding",
+            "gradient",
+            "weights",
+            "full_artifact"
+          ],
+          "title": "Access",
+          "type": "string"
+        },
+        "adaptive_queries": {
+          "default": false,
+          "title": "Adaptive Queries",
+          "type": "boolean"
+        },
+        "authenticated": {
+          "default": false,
+          "title": "Authenticated",
+          "type": "boolean"
+        },
+        "llm_protocol": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/LlmProtocolContract"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "notes": {
+          "default": "",
+          "title": "Notes",
+          "type": "string"
+        },
+        "outputs": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Outputs",
+          "type": "array"
+        },
+        "precision_bits": {
+          "anyOf": [
+            {
+              "maximum": 4096,
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Precision Bits"
+        },
+        "protocol_type": {
+          "default": "predictive",
+          "enum": [
+            "predictive",
+            "interactive_llm"
+          ],
+          "title": "Protocol Type",
+          "type": "string"
+        },
+        "query_budget": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Query Budget"
+        },
+        "rate_limited": {
+          "default": false,
+          "title": "Rate Limited",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "access"
+      ],
+      "title": "InterfaceContract",
+      "type": "object"
+    },
+    "LlmProtocolContract": {
+      "additionalProperties": false,
+      "properties": {
+        "adapter_sha256s": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Adapter Sha256S",
+          "type": "array"
+        },
+        "decoding_parameters": {
+          "additionalProperties": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              },
+              {
+                "type": "number"
+              },
+              {
+                "type": "boolean"
+              }
+            ]
+          },
+          "title": "Decoding Parameters",
+          "type": "object"
+        },
+        "filter_bundle_sha256": {
+          "anyOf": [
+            {
+              "pattern": "^[0-9a-f]{64}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Filter Bundle Sha256"
+        },
+        "logging_mode": {
+          "enum": [
+            "none",
+            "security_only",
+            "full_transcript"
+          ],
+          "title": "Logging Mode",
+          "type": "string"
+        },
+        "maximum_concurrent_sessions": {
+          "exclusiveMinimum": 0,
+          "title": "Maximum Concurrent Sessions",
+          "type": "integer"
+        },
+        "maximum_lifetime_queries": {
+          "exclusiveMinimum": 0,
+          "title": "Maximum Lifetime Queries",
+          "type": "integer"
+        },
+        "maximum_session_tokens": {
+          "exclusiveMinimum": 0,
+          "title": "Maximum Session Tokens",
+          "type": "integer"
+        },
+        "memory_mode": {
+          "enum": [
+            "none",
+            "session",
+            "persistent"
+          ],
+          "title": "Memory Mode",
+          "type": "string"
+        },
+        "memory_ttl_seconds": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Memory Ttl Seconds"
+        },
+        "model_identifier": {
+          "maxLength": 256,
+          "minLength": 1,
+          "title": "Model Identifier",
+          "type": "string"
+        },
+        "model_provider": {
+          "maxLength": 256,
+          "minLength": 1,
+          "title": "Model Provider",
+          "type": "string"
+        },
+        "model_version": {
+          "maxLength": 256,
+          "minLength": 1,
+          "title": "Model Version",
+          "type": "string"
+        },
+        "provider_retention_days": {
+          "minimum": 0,
+          "title": "Provider Retention Days",
+          "type": "integer"
+        },
+        "reset_semantics": {
+          "maxLength": 2048,
+          "minLength": 1,
+          "title": "Reset Semantics",
+          "type": "string"
+        },
+        "retrieval_corpus_sha256": {
+          "anyOf": [
+            {
+              "pattern": "^[0-9a-f]{64}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Retrieval Corpus Sha256"
+        },
+        "retriever_config_sha256": {
+          "anyOf": [
+            {
+              "pattern": "^[0-9a-f]{64}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Retriever Config Sha256"
+        },
+        "system_prompt_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "System Prompt Sha256",
+          "type": "string"
+        },
+        "tokenizer_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Tokenizer Sha256",
+          "type": "string"
+        },
+        "tool_names": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Tool Names",
+          "type": "array"
+        },
+        "tool_policy_sha256": {
+          "anyOf": [
+            {
+              "pattern": "^[0-9a-f]{64}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Tool Policy Sha256"
+        },
+        "update_policy": {
+          "enum": [
+            "immutable",
+            "versioned_reassessment_required"
+          ],
+          "title": "Update Policy",
+          "type": "string"
+        },
+        "valid_until": {
+          "format": "date-time",
+          "title": "Valid Until",
+          "type": "string"
+        }
+      },
+      "required": [
+        "model_provider",
+        "model_identifier",
+        "model_version",
+        "tokenizer_sha256",
+        "decoding_parameters",
+        "system_prompt_sha256",
+        "memory_mode",
+        "logging_mode",
+        "provider_retention_days",
+        "maximum_session_tokens",
+        "maximum_lifetime_queries",
+        "maximum_concurrent_sessions",
+        "reset_semantics",
+        "update_policy",
+        "valid_until"
+      ],
+      "title": "LlmProtocolContract",
+      "type": "object"
+    },
+    "PortfolioAssuranceStatus": {
+      "enum": [
+        "analytically_composed",
+        "directly_joint_assessed",
+        "unassessed"
+      ],
+      "title": "PortfolioAssuranceStatus",
+      "type": "string"
+    },
+    "PortfolioCertificate": {
+      "additionalProperties": false,
+      "properties": {
+        "composition_domain_id": {
+          "maxLength": 256,
+          "minLength": 3,
+          "title": "Composition Domain Id",
+          "type": "string"
+        },
+        "evidence_path": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Evidence Path"
+        },
+        "evidence_sha256": {
+          "anyOf": [
+            {
+              "pattern": "^[0-9a-f]{64}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Evidence Sha256"
+        },
+        "joint_experiment_ids": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "title": "Joint Experiment Ids",
+          "type": "object"
+        },
+        "joint_upper_bounds": {
+          "additionalProperties": {
+            "type": "number"
+          },
+          "title": "Joint Upper Bounds",
+          "type": "object"
+        },
+        "method": {
+          "maxLength": 2048,
+          "minLength": 1,
+          "title": "Method",
+          "type": "string"
+        },
+        "population_secret_pairs": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Population Secret Pairs",
+          "type": "array"
+        },
+        "registered_release_ids": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Registered Release Ids",
+          "type": "array"
+        },
+        "registry_head_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Registry Head Sha256",
+          "type": "string"
+        },
+        "status": {
+          "$ref": "#/$defs/PortfolioAssuranceStatus"
+        }
+      },
+      "required": [
+        "status",
+        "composition_domain_id",
+        "population_secret_pairs",
+        "registry_head_sha256",
+        "method"
+      ],
+      "title": "PortfolioCertificate",
+      "type": "object"
+    },
+    "ReleaseConfiguration": {
+      "additionalProperties": false,
+      "properties": {
+        "assessment": {
+          "$ref": "#/$defs/AssessmentReportReference"
+        },
+        "configuration_id": {
+          "maxLength": 128,
+          "minLength": 3,
+          "pattern": "^[A-Za-z0-9._:-]+$",
+          "title": "Configuration Id",
+          "type": "string"
+        },
+        "controls": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/ReleaseControl"
+          },
+          "title": "Controls",
+          "type": "array"
+        },
+        "implementation_cost": {
+          "minimum": 0.0,
+          "title": "Implementation Cost",
+          "type": "number"
+        },
+        "is_proposed_configuration": {
+          "title": "Is Proposed Configuration",
+          "type": "boolean"
+        },
+        "name": {
+          "maxLength": 256,
+          "minLength": 1,
+          "title": "Name",
+          "type": "string"
+        },
+        "notes": {
+          "default": "",
+          "title": "Notes",
+          "type": "string"
+        },
+        "portfolio": {
+          "$ref": "#/$defs/PortfolioCertificate"
+        },
+        "release_artifact_path": {
+          "minLength": 1,
+          "title": "Release Artifact Path",
+          "type": "string"
+        },
+        "release_artifact_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Release Artifact Sha256",
+          "type": "string"
+        },
+        "release_interface": {
+          "$ref": "#/$defs/InterfaceContract"
+        },
+        "threat_experiments": {
+          "items": {
+            "$ref": "#/$defs/ThreatExperimentBinding"
+          },
+          "minItems": 1,
+          "title": "Threat Experiments",
+          "type": "array"
+        },
+        "utility": {
+          "$ref": "#/$defs/UtilityCertificate"
+        }
+      },
+      "required": [
+        "configuration_id",
+        "name",
+        "is_proposed_configuration",
+        "assessment",
+        "release_artifact_path",
+        "release_artifact_sha256",
+        "release_interface",
+        "utility",
+        "implementation_cost",
+        "threat_experiments",
+        "portfolio"
+      ],
+      "title": "ReleaseConfiguration",
+      "type": "object"
+    },
+    "ReleaseControl": {
+      "additionalProperties": false,
+      "properties": {
+        "artifact_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Artifact Sha256",
+          "type": "string"
+        },
+        "changes_information_structure": {
+          "title": "Changes Information Structure",
+          "type": "boolean"
+        },
+        "control_id": {
+          "maxLength": 128,
+          "minLength": 3,
+          "pattern": "^[A-Za-z0-9._:-]+$",
+          "title": "Control Id",
+          "type": "string"
+        },
+        "control_type": {
+          "$ref": "#/$defs/ControlType"
+        },
+        "credited_for_privacy": {
+          "default": true,
+          "title": "Credited For Privacy",
+          "type": "boolean"
+        },
+        "description": {
+          "maxLength": 2048,
+          "minLength": 1,
+          "title": "Description",
+          "type": "string"
+        },
+        "evidence_path": {
+          "minLength": 1,
+          "title": "Evidence Path",
+          "type": "string"
+        },
+        "evidence_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Evidence Sha256",
+          "type": "string"
+        },
+        "interface_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Interface Sha256",
+          "type": "string"
+        },
+        "kind": {
+          "maxLength": 128,
+          "minLength": 1,
+          "title": "Kind",
+          "type": "string"
+        },
+        "valid_until": {
+          "format": "date-time",
+          "title": "Valid Until",
+          "type": "string"
+        }
+      },
+      "required": [
+        "control_id",
+        "control_type",
+        "kind",
+        "description",
+        "changes_information_structure",
+        "artifact_sha256",
+        "interface_sha256",
+        "valid_until",
+        "evidence_path",
+        "evidence_sha256"
+      ],
+      "title": "ReleaseControl",
+      "type": "object"
+    },
+    "SearchSpaceCertificate": {
+      "additionalProperties": false,
+      "properties": {
+        "configuration_ids": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Configuration Ids",
+          "type": "array"
+        },
+        "evidence_path": {
+          "minLength": 1,
+          "title": "Evidence Path",
+          "type": "string"
+        },
+        "evidence_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Evidence Sha256",
+          "type": "string"
+        },
+        "method": {
+          "maxLength": 2048,
+          "minLength": 1,
+          "title": "Method",
+          "type": "string"
+        }
+      },
+      "required": [
+        "method",
+        "configuration_ids",
+        "evidence_path",
+        "evidence_sha256"
+      ],
+      "title": "SearchSpaceCertificate",
+      "type": "object"
+    },
+    "SearchSpaceStatus": {
+      "enum": [
+        "candidate_set_only",
+        "certified_exhaustive"
+      ],
+      "title": "SearchSpaceStatus",
+      "type": "string"
+    },
+    "ThreatExperimentBinding": {
+      "additionalProperties": false,
+      "properties": {
+        "assessed_experiment_id": {
+          "title": "Assessed Experiment Id",
+          "type": "string"
+        },
+        "released_experiment_id": {
+          "title": "Released Experiment Id",
+          "type": "string"
+        },
+        "substitution_certificate_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Substitution Certificate Id"
+        },
+        "threat_id": {
+          "title": "Threat Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "threat_id",
+        "assessed_experiment_id",
+        "released_experiment_id"
+      ],
+      "title": "ThreatExperimentBinding",
+      "type": "object"
+    },
+    "TrustProfile": {
+      "enum": [
+        "cooperative",
+        "separated_assessor",
+        "adversarial_supply_chain"
+      ],
+      "title": "TrustProfile",
+      "type": "string"
+    },
+    "UtilityCertificate": {
+      "additionalProperties": false,
+      "properties": {
+        "artifact_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Artifact Sha256",
+          "type": "string"
+        },
+        "audit_disjoint": {
+          "title": "Audit Disjoint",
+          "type": "boolean"
+        },
+        "confidence": {
+          "exclusiveMaximum": 1.0,
+          "exclusiveMinimum": 0.5,
+          "title": "Confidence",
+          "type": "number"
+        },
+        "configuration_id": {
+          "maxLength": 128,
+          "minLength": 3,
+          "pattern": "^[A-Za-z0-9._:-]+$",
+          "title": "Configuration Id",
+          "type": "string"
+        },
+        "evaluation_population": {
+          "maxLength": 2048,
+          "minLength": 1,
+          "title": "Evaluation Population",
+          "type": "string"
+        },
+        "evaluation_split_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Evaluation Split Sha256",
+          "type": "string"
+        },
+        "interface_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Interface Sha256",
+          "type": "string"
+        },
+        "lower_bound": {
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Lower Bound",
+          "type": "number"
+        },
+        "metric": {
+          "maxLength": 256,
+          "minLength": 1,
+          "title": "Metric",
+          "type": "string"
+        },
+        "minimum_required": {
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Minimum Required",
+          "type": "number"
+        },
+        "point_estimate": {
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Point Estimate",
+          "type": "number"
+        },
+        "population_scope_sha256s": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Population Scope Sha256S",
+          "type": "array"
+        },
+        "raw_evidence_retained": {
+          "title": "Raw Evidence Retained",
+          "type": "boolean"
+        },
+        "source_path": {
+          "minLength": 1,
+          "title": "Source Path",
+          "type": "string"
+        },
+        "source_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Source Sha256",
+          "type": "string"
+        },
+        "uncertainty_method": {
+          "maxLength": 1024,
+          "minLength": 1,
+          "title": "Uncertainty Method",
+          "type": "string"
+        }
+      },
+      "required": [
+        "configuration_id",
+        "artifact_sha256",
+        "interface_sha256",
+        "population_scope_sha256s",
+        "evaluation_split_sha256",
+        "metric",
+        "lower_bound",
+        "point_estimate",
+        "minimum_required",
+        "evaluation_population",
+        "confidence",
+        "uncertainty_method",
+        "audit_disjoint",
+        "raw_evidence_retained",
+        "source_path",
+        "source_sha256"
+      ],
+      "title": "UtilityCertificate",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "authorization_expires_at": {
+      "format": "date-time",
+      "title": "Authorization Expires At",
+      "type": "string"
+    },
+    "configurations": {
+      "items": {
+        "$ref": "#/$defs/ReleaseConfiguration"
+      },
+      "minItems": 1,
+      "title": "Configurations",
+      "type": "array"
+    },
+    "experiments": {
+      "items": {
+        "$ref": "#/$defs/FiniteExperiment"
+      },
+      "minItems": 1,
+      "title": "Experiments",
+      "type": "array"
+    },
+    "garbling_certificates": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/GarblingCertificate"
+      },
+      "title": "Garbling Certificates",
+      "type": "array"
+    },
+    "objective": {
+      "default": "utility feasibility, then Blackwell-minimal disclosure, then cost and utility tie-breaks",
+      "maxLength": 2048,
+      "minLength": 1,
+      "title": "Objective",
+      "type": "string"
+    },
+    "optimization_id": {
+      "maxLength": 128,
+      "minLength": 3,
+      "pattern": "^[A-Za-z0-9._:-]+$",
+      "title": "Optimization Id",
+      "type": "string"
+    },
+    "portfolio_registry_head_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Portfolio Registry Head Sha256",
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "2.0",
+      "default": "2.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "search_space_certificate": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/SearchSpaceCertificate"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "search_space_status": {
+      "$ref": "#/$defs/SearchSpaceStatus",
+      "default": "candidate_set_only"
+    },
+    "trust_profile": {
+      "$ref": "#/$defs/TrustProfile"
+    }
+  },
+  "required": [
+    "optimization_id",
+    "trust_profile",
+    "authorization_expires_at",
+    "portfolio_registry_head_sha256",
+    "experiments",
+    "configurations"
+  ],
+  "title": "OptimizationRequest",
+  "type": "object"
+}

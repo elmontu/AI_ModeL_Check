@@ -1,0 +1,107 @@
+{
+  "$defs": {
+    "SourceFileReference": {
+      "additionalProperties": false,
+      "properties": {
+        "source_id": {
+          "maxLength": 128,
+          "minLength": 3,
+          "pattern": "^[A-Za-z0-9._:-]+$",
+          "title": "Source Id",
+          "type": "string"
+        },
+        "source_path": {
+          "minLength": 1,
+          "title": "Source Path",
+          "type": "string"
+        },
+        "source_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Source Sha256",
+          "type": "string"
+        }
+      },
+      "required": [
+        "source_id",
+        "source_path",
+        "source_sha256"
+      ],
+      "title": "SourceFileReference",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "all_cells_reported": {
+      "title": "All Cells Reported",
+      "type": "boolean"
+    },
+    "allocation_id": {
+      "maxLength": 128,
+      "minLength": 3,
+      "pattern": "^[A-Za-z0-9._:-]+$",
+      "title": "Allocation Id",
+      "type": "string"
+    },
+    "assurance_ledger_complete": {
+      "title": "Assurance Ledger Complete",
+      "type": "boolean"
+    },
+    "budget_reference": {
+      "$ref": "#/$defs/SourceFileReference"
+    },
+    "counts_reference": {
+      "$ref": "#/$defs/SourceFileReference"
+    },
+    "family_pre_registered": {
+      "title": "Family Pre Registered",
+      "type": "boolean"
+    },
+    "generation_id": {
+      "maxLength": 128,
+      "minLength": 3,
+      "pattern": "^[A-Za-z0-9._:-]+$",
+      "title": "Generation Id",
+      "type": "string"
+    },
+    "sampling_model": {
+      "const": "iid_multinomial",
+      "default": "iid_multinomial",
+      "title": "Sampling Model",
+      "type": "string"
+    },
+    "sampling_plan_reference": {
+      "$ref": "#/$defs/SourceFileReference"
+    },
+    "schema_version": {
+      "const": "1.0",
+      "default": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "selection_process_covered": {
+      "title": "Selection Process Covered",
+      "type": "boolean"
+    },
+    "selection_scope": {
+      "maxLength": 4096,
+      "minLength": 1,
+      "title": "Selection Scope",
+      "type": "string"
+    }
+  },
+  "required": [
+    "generation_id",
+    "allocation_id",
+    "sampling_plan_reference",
+    "counts_reference",
+    "budget_reference",
+    "family_pre_registered",
+    "all_cells_reported",
+    "selection_process_covered",
+    "assurance_ledger_complete",
+    "selection_scope"
+  ],
+  "title": "MultinomialEvidenceRequest",
+  "type": "object"
+}

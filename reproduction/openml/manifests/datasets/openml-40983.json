@@ -1,0 +1,36 @@
+{
+  "class_counts": {
+    "1": 4578,
+    "2": 261
+  },
+  "classes": 2,
+  "dataset_id": 40983,
+  "feature_dtypes": {
+    "GLCM_Pan": "float64",
+    "Mean_G": "float64",
+    "Mean_NIR": "float64",
+    "Mean_R": "float64",
+    "SD_Plan": "float64"
+  },
+  "feature_names": [
+    "GLCM_Pan",
+    "Mean_G",
+    "Mean_R",
+    "Mean_NIR",
+    "SD_Plan"
+  ],
+  "features": 5,
+  "file_id": "18151926",
+  "missing_feature_values": 0,
+  "name": "wilt",
+  "openml_md5_checksum": "aa7c0aaf3fd671f06bbf6a68be4754f7",
+  "openml_url": "https://openml.org/data/v1/download/18151926/wilt.arff",
+  "parquet_url": "https://data.openml.org/datasets/0004/40983/dataset_40983.pq",
+  "rows": 4839,
+  "snapshot_bytes": 196397,
+  "snapshot_path": "reproduction/openml/raw/openml-40983.parquet",
+  "snapshot_sha256": "382052803b0b6c7746231791bea569ba841d4538735f97ac685d3f0dfd410a70",
+  "status": "active",
+  "target": "class",
+  "version": 2
+}

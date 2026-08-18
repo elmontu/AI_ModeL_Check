@@ -1,0 +1,42 @@
+{
+  "assumption": "The adversary knows the complete schema, full-source database metadata, exact target-training database metadata, the candidate record and label, and the released model surface.",
+  "categorical_metadata": [
+    "dtype",
+    "missing_count",
+    "missing_rate",
+    "unique_count",
+    "category_counts",
+    "category_frequencies"
+  ],
+  "confidence_family": 0.95,
+  "continuous_metadata": [
+    "dtype",
+    "non_missing_count",
+    "missing_count",
+    "missing_rate",
+    "unique_count",
+    "minimum",
+    "maximum",
+    "range",
+    "mean",
+    "median",
+    "standard_deviation",
+    "variance",
+    "first_quartile",
+    "third_quartile",
+    "interquartile_range",
+    "median_absolute_deviation"
+  ],
+  "implementation_version": 1,
+  "new_attack_family_size": 2,
+  "post_hoc_sensitivity_analysis": true,
+  "scores": {
+    "combined": "logistic attack over the fixed metadata features plus the existing reference-minus-target loss score",
+    "metadata_only": "logistic attack over fixed summary-consistency features without model outputs"
+  },
+  "target_metadata": [
+    "row_count",
+    "class_counts",
+    "class_frequencies"
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "population_scope_id": "service-participants-2026",
+  "candidate_ids": ["a", "b", "c", "d"],
+  "observations": ["L1", "L1", "L2", "L2"],
+  "recipient_has_candidate_roster": true,
+  "recipient_has_target_signal": true,
+  "observed_interface_sha256": "d7ca53bb8dbf0efb85abf373dba00fdb285764d783856f51b27658d49e65d111",
+  "complete_interface_coverage": true
+}

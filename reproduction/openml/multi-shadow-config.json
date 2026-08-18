@@ -1,0 +1,13 @@
+{
+  "experiment": "openml_cc18_multi_shadow_likelihood_ratio_membership",
+  "implementation_version": 1,
+  "subset_key": "neural_dp_subset",
+  "seed": 20260812,
+  "target_capacity": {"n_estimators": 30, "max_depth": 4},
+  "shadow_models": 15,
+  "shadow_memberships_per_record": 3,
+  "variance_shrinkage_to_global": 0.5,
+  "minimum_standard_deviation": 0.001,
+  "score": "per-example Gaussian log likelihood ratio of true-class logit confidence under shadow-in versus shadow-out distributions",
+  "status": "predeclared before executing this tier; LiRA-style multi-shadow baseline, not the full augmented online LiRA protocol"
+}

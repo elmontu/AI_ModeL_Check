@@ -1,0 +1,280 @@
+{
+  "$defs": {
+    "CandidateEvaluation": {
+      "additionalProperties": false,
+      "properties": {
+        "assessment_verdict": {
+          "$ref": "#/$defs/OverallVerdict"
+        },
+        "configuration_id": {
+          "title": "Configuration Id",
+          "type": "string"
+        },
+        "feasible": {
+          "title": "Feasible",
+          "type": "boolean"
+        },
+        "implementation_cost": {
+          "title": "Implementation Cost",
+          "type": "number"
+        },
+        "reasons": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Reasons",
+          "type": "array"
+        },
+        "substitution_penalties": {
+          "additionalProperties": {
+            "type": "number"
+          },
+          "title": "Substitution Penalties",
+          "type": "object"
+        },
+        "utility_margin": {
+          "title": "Utility Margin",
+          "type": "number"
+        }
+      },
+      "required": [
+        "configuration_id",
+        "feasible",
+        "assessment_verdict",
+        "utility_margin",
+        "implementation_cost",
+        "substitution_penalties",
+        "reasons"
+      ],
+      "title": "CandidateEvaluation",
+      "type": "object"
+    },
+    "OptimizationOutcome": {
+      "enum": [
+        "release_as_proposed",
+        "release_with_controls",
+        "redesign_required",
+        "reject"
+      ],
+      "title": "OptimizationOutcome",
+      "type": "string"
+    },
+    "OverallVerdict": {
+      "enum": [
+        "clear",
+        "block",
+        "inconclusive"
+      ],
+      "title": "OverallVerdict",
+      "type": "string"
+    },
+    "PortfolioAssuranceStatus": {
+      "enum": [
+        "analytically_composed",
+        "directly_joint_assessed",
+        "unassessed"
+      ],
+      "title": "PortfolioAssuranceStatus",
+      "type": "string"
+    },
+    "TrustProfile": {
+      "enum": [
+        "cooperative",
+        "separated_assessor",
+        "adversarial_supply_chain"
+      ],
+      "title": "TrustProfile",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "assurance_frontier_configuration_ids": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Assurance Frontier Configuration Ids",
+      "type": "array"
+    },
+    "candidate_evaluations": {
+      "items": {
+        "$ref": "#/$defs/CandidateEvaluation"
+      },
+      "title": "Candidate Evaluations",
+      "type": "array"
+    },
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    },
+    "engine_version": {
+      "title": "Engine Version",
+      "type": "string"
+    },
+    "expires_at": {
+      "format": "date-time",
+      "title": "Expires At",
+      "type": "string"
+    },
+    "fail_safe_gate_passed": {
+      "title": "Fail Safe Gate Passed",
+      "type": "boolean"
+    },
+    "optimization_id": {
+      "title": "Optimization Id",
+      "type": "string"
+    },
+    "outcome": {
+      "$ref": "#/$defs/OptimizationOutcome"
+    },
+    "policy_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Policy Sha256",
+      "type": "string"
+    },
+    "portfolio_registry_head_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Portfolio Registry Head Sha256",
+      "type": "string"
+    },
+    "reasons": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Reasons",
+      "type": "array"
+    },
+    "request_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Request Sha256",
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "2.0",
+      "default": "2.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "selected_assessment_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Selected Assessment Id"
+    },
+    "selected_assessment_report_sha256": {
+      "anyOf": [
+        {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Selected Assessment Report Sha256"
+    },
+    "selected_configuration_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Selected Configuration Id"
+    },
+    "selected_configuration_sha256": {
+      "anyOf": [
+        {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Selected Configuration Sha256"
+    },
+    "selected_control_ids": {
+      "default": [],
+      "items": {
+        "type": "string"
+      },
+      "title": "Selected Control Ids",
+      "type": "array"
+    },
+    "selected_portfolio_status": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/PortfolioAssuranceStatus"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "selected_release_artifact_sha256": {
+      "anyOf": [
+        {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Selected Release Artifact Sha256"
+    },
+    "selected_release_interface_sha256": {
+      "anyOf": [
+        {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Selected Release Interface Sha256"
+    },
+    "selection_rule": {
+      "title": "Selection Rule",
+      "type": "string"
+    },
+    "trust_profile": {
+      "$ref": "#/$defs/TrustProfile"
+    }
+  },
+  "required": [
+    "optimization_id",
+    "created_at",
+    "expires_at",
+    "request_sha256",
+    "policy_sha256",
+    "trust_profile",
+    "portfolio_registry_head_sha256",
+    "outcome",
+    "selected_configuration_id",
+    "selected_assessment_id",
+    "fail_safe_gate_passed",
+    "assurance_frontier_configuration_ids",
+    "candidate_evaluations",
+    "selection_rule",
+    "reasons",
+    "engine_version"
+  ],
+  "title": "OptimizationReport",
+  "type": "object"
+}

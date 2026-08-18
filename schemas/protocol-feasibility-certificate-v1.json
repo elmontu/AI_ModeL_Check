@@ -1,0 +1,336 @@
+{
+  "$defs": {
+    "AuthorizationMode": {
+      "enum": [
+        "randomized",
+        "deterministic"
+      ],
+      "title": "AuthorizationMode",
+      "type": "string"
+    },
+    "ProtocolDualCertificate": {
+      "additionalProperties": false,
+      "properties": {
+        "evidence_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Evidence Ids",
+          "type": "array"
+        },
+        "feasible_world_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Feasible World Ids",
+          "type": "array"
+        },
+        "liveness_multipliers": {
+          "items": {
+            "$ref": "#/$defs/RationalNumber"
+          },
+          "title": "Liveness Multipliers",
+          "type": "array"
+        },
+        "objective_upper": {
+          "$ref": "#/$defs/RationalNumber"
+        },
+        "simplex_multipliers": {
+          "items": {
+            "$ref": "#/$defs/RationalNumber"
+          },
+          "title": "Simplex Multipliers",
+          "type": "array"
+        },
+        "unsafe_multipliers": {
+          "items": {
+            "$ref": "#/$defs/RationalNumber"
+          },
+          "title": "Unsafe Multipliers",
+          "type": "array"
+        },
+        "world_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "World Ids",
+          "type": "array"
+        }
+      },
+      "required": [
+        "feasible_world_ids",
+        "liveness_multipliers",
+        "world_ids",
+        "unsafe_multipliers",
+        "evidence_ids",
+        "simplex_multipliers",
+        "objective_upper"
+      ],
+      "title": "ProtocolDualCertificate",
+      "type": "object"
+    },
+    "ProtocolFeasibilityProblem": {
+      "additionalProperties": false,
+      "description": "Finite, rationally encoded evidence-protocol decision problem.",
+      "properties": {
+        "authorization_mode": {
+          "$ref": "#/$defs/AuthorizationMode",
+          "default": "randomized"
+        },
+        "configuration_ids": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Configuration Ids",
+          "type": "array"
+        },
+        "evidence_ids": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Evidence Ids",
+          "type": "array"
+        },
+        "liveness_failure_budget": {
+          "$ref": "#/$defs/RationalNumber"
+        },
+        "problem_id": {
+          "maxLength": 128,
+          "minLength": 3,
+          "pattern": "^[A-Za-z0-9._:-]+$",
+          "title": "Problem Id",
+          "type": "string"
+        },
+        "schema_version": {
+          "const": "1.0",
+          "default": "1.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "unsafe_release_budget": {
+          "$ref": "#/$defs/RationalNumber"
+        },
+        "worlds": {
+          "items": {
+            "$ref": "#/$defs/ProtocolWorld"
+          },
+          "minItems": 1,
+          "title": "Worlds",
+          "type": "array"
+        }
+      },
+      "required": [
+        "problem_id",
+        "evidence_ids",
+        "configuration_ids",
+        "worlds",
+        "unsafe_release_budget",
+        "liveness_failure_budget"
+      ],
+      "title": "ProtocolFeasibilityProblem",
+      "type": "object"
+    },
+    "ProtocolKernelRow": {
+      "additionalProperties": false,
+      "properties": {
+        "action_probabilities": {
+          "items": {
+            "$ref": "#/$defs/RationalNumber"
+          },
+          "title": "Action Probabilities",
+          "type": "array"
+        },
+        "evidence_id": {
+          "title": "Evidence Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "evidence_id",
+        "action_probabilities"
+      ],
+      "title": "ProtocolKernelRow",
+      "type": "object"
+    },
+    "ProtocolPrimalCertificate": {
+      "additionalProperties": false,
+      "properties": {
+        "action_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Action Ids",
+          "type": "array"
+        },
+        "kernel_rows": {
+          "items": {
+            "$ref": "#/$defs/ProtocolKernelRow"
+          },
+          "title": "Kernel Rows",
+          "type": "array"
+        },
+        "liveness_by_feasible_world": {
+          "items": {
+            "$ref": "#/$defs/RationalNumber"
+          },
+          "title": "Liveness By Feasible World",
+          "type": "array"
+        },
+        "minimum_liveness": {
+          "$ref": "#/$defs/RationalNumber"
+        },
+        "unsafe_by_world": {
+          "items": {
+            "$ref": "#/$defs/RationalNumber"
+          },
+          "title": "Unsafe By World",
+          "type": "array"
+        }
+      },
+      "required": [
+        "action_ids",
+        "kernel_rows",
+        "unsafe_by_world",
+        "liveness_by_feasible_world",
+        "minimum_liveness"
+      ],
+      "title": "ProtocolPrimalCertificate",
+      "type": "object"
+    },
+    "ProtocolWorld": {
+      "additionalProperties": false,
+      "properties": {
+        "acceptable_configuration_ids": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Acceptable Configuration Ids",
+          "type": "array"
+        },
+        "evidence_probabilities": {
+          "items": {
+            "$ref": "#/$defs/RationalNumber"
+          },
+          "minItems": 1,
+          "title": "Evidence Probabilities",
+          "type": "array"
+        },
+        "world_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9._:-]+$",
+          "title": "World Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "world_id",
+        "evidence_probabilities"
+      ],
+      "title": "ProtocolWorld",
+      "type": "object"
+    },
+    "RationalNumber": {
+      "additionalProperties": false,
+      "properties": {
+        "denominator": {
+          "exclusiveMinimum": 0,
+          "title": "Denominator",
+          "type": "integer"
+        },
+        "numerator": {
+          "minimum": 0,
+          "title": "Numerator",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "numerator",
+        "denominator"
+      ],
+      "title": "RationalNumber",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "certificate_id": {
+      "maxLength": 128,
+      "minLength": 3,
+      "pattern": "^[A-Za-z0-9._:-]+$",
+      "title": "Certificate Id",
+      "type": "string"
+    },
+    "deterministic_protocols_checked": {
+      "anyOf": [
+        {
+          "minimum": 1,
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Deterministic Protocols Checked"
+    },
+    "dual": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/ProtocolDualCertificate"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "primal": {
+      "$ref": "#/$defs/ProtocolPrimalCertificate"
+    },
+    "problem": {
+      "$ref": "#/$defs/ProtocolFeasibilityProblem"
+    },
+    "problem_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Problem Sha256",
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "1.0",
+      "default": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "solver": {
+      "title": "Solver",
+      "type": "string"
+    },
+    "status": {
+      "enum": [
+        "target_met",
+        "target_impossible",
+        "numerically_unresolved"
+      ],
+      "title": "Status",
+      "type": "string"
+    },
+    "target_liveness": {
+      "$ref": "#/$defs/RationalNumber"
+    }
+  },
+  "required": [
+    "certificate_id",
+    "problem",
+    "problem_sha256",
+    "solver",
+    "status",
+    "target_liveness",
+    "primal"
+  ],
+  "title": "ProtocolFeasibilityCertificate",
+  "type": "object"
+}

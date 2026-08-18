@@ -1,0 +1,1185 @@
+{
+  "$defs": {
+    "AnalyzerProvenance": {
+      "additionalProperties": false,
+      "properties": {
+        "bound_fields": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Bound Fields",
+          "type": "array"
+        },
+        "source_path": {
+          "minLength": 1,
+          "title": "Source Path",
+          "type": "string"
+        },
+        "source_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Source Sha256",
+          "type": "string"
+        },
+        "tool": {
+          "maxLength": 256,
+          "minLength": 1,
+          "title": "Tool",
+          "type": "string"
+        },
+        "tool_version": {
+          "maxLength": 128,
+          "minLength": 1,
+          "title": "Tool Version",
+          "type": "string"
+        }
+      },
+      "required": [
+        "tool",
+        "tool_version",
+        "source_path",
+        "source_sha256",
+        "bound_fields"
+      ],
+      "title": "AnalyzerProvenance",
+      "type": "object"
+    },
+    "AttackInput": {
+      "additionalProperties": false,
+      "properties": {
+        "analyzer": {
+          "const": "attack",
+          "default": "attack",
+          "title": "Analyzer",
+          "type": "string"
+        },
+        "attack_name": {
+          "minLength": 1,
+          "title": "Attack Name",
+          "type": "string"
+        },
+        "audit_disjoint": {
+          "title": "Audit Disjoint",
+          "type": "boolean"
+        },
+        "calibration_disjoint": {
+          "title": "Calibration Disjoint",
+          "type": "boolean"
+        },
+        "confidence": {
+          "default": 0.95,
+          "exclusiveMaximum": 1.0,
+          "exclusiveMinimum": 0.5,
+          "title": "Confidence",
+          "type": "number"
+        },
+        "false_positives": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "False Positives"
+        },
+        "metric": {
+          "enum": [
+            "membership_tpr_at_fpr",
+            "equal_prior_membership_success",
+            "finite_secret_exact_guess_success",
+            "attribute_attack_success",
+            "reconstruction_success"
+          ],
+          "title": "Metric",
+          "type": "string"
+        },
+        "nonmember_trials": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Nonmember Trials"
+        },
+        "population_scope_id": {
+          "title": "Population Scope Id",
+          "type": "string"
+        },
+        "provenance": {
+          "$ref": "#/$defs/AnalyzerProvenance"
+        },
+        "raw_counts_retained": {
+          "default": true,
+          "title": "Raw Counts Retained",
+          "type": "boolean"
+        },
+        "successes": {
+          "minimum": 0,
+          "title": "Successes",
+          "type": "integer"
+        },
+        "target_fpr": {
+          "anyOf": [
+            {
+              "exclusiveMaximum": 1.0,
+              "exclusiveMinimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Target Fpr"
+        },
+        "threat_id": {
+          "title": "Threat Id",
+          "type": "string"
+        },
+        "threshold_pre_registered": {
+          "default": true,
+          "title": "Threshold Pre Registered",
+          "type": "boolean"
+        },
+        "trials": {
+          "exclusiveMinimum": 0,
+          "title": "Trials",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "threat_id",
+        "population_scope_id",
+        "attack_name",
+        "metric",
+        "successes",
+        "trials",
+        "calibration_disjoint",
+        "audit_disjoint",
+        "provenance"
+      ],
+      "title": "AttackInput",
+      "type": "object"
+    },
+    "ControlledInferenceInput": {
+      "additionalProperties": false,
+      "properties": {
+        "analyzer": {
+          "const": "controlled_inference",
+          "default": "controlled_inference",
+          "title": "Analyzer",
+          "type": "string"
+        },
+        "attack_name": {
+          "minLength": 1,
+          "title": "Attack Name",
+          "type": "string"
+        },
+        "attack_training_disjoint": {
+          "title": "Attack Training Disjoint",
+          "type": "boolean"
+        },
+        "audit_disjoint": {
+          "title": "Audit Disjoint",
+          "type": "boolean"
+        },
+        "baseline_only_successes": {
+          "minimum": 0,
+          "title": "Baseline Only Successes",
+          "type": "integer"
+        },
+        "baseline_successes": {
+          "minimum": 0,
+          "title": "Baseline Successes",
+          "type": "integer"
+        },
+        "combined_only_successes": {
+          "minimum": 0,
+          "title": "Combined Only Successes",
+          "type": "integer"
+        },
+        "combined_successes": {
+          "minimum": 0,
+          "title": "Combined Successes",
+          "type": "integer"
+        },
+        "comparator_same_side_information": {
+          "title": "Comparator Same Side Information",
+          "type": "boolean"
+        },
+        "comparison_family_size": {
+          "default": 1,
+          "minimum": 1,
+          "title": "Comparison Family Size",
+          "type": "integer"
+        },
+        "confidence_family": {
+          "default": 0.95,
+          "exclusiveMaximum": 1.0,
+          "exclusiveMinimum": 0.5,
+          "title": "Confidence Family",
+          "type": "number"
+        },
+        "ground_truth_verified": {
+          "title": "Ground Truth Verified",
+          "type": "boolean"
+        },
+        "metric": {
+          "enum": [
+            "attribute_attack_success",
+            "incremental_attribute_attack_success",
+            "reconstruction_success",
+            "incremental_reconstruction_success"
+          ],
+          "title": "Metric",
+          "type": "string"
+        },
+        "population_scope_id": {
+          "title": "Population Scope Id",
+          "type": "string"
+        },
+        "provenance": {
+          "$ref": "#/$defs/AnalyzerProvenance"
+        },
+        "raw_paired_counts_retained": {
+          "title": "Raw Paired Counts Retained",
+          "type": "boolean"
+        },
+        "secret_and_metric_pre_registered": {
+          "title": "Secret And Metric Pre Registered",
+          "type": "boolean"
+        },
+        "success_definition": {
+          "maxLength": 2048,
+          "minLength": 1,
+          "title": "Success Definition",
+          "type": "string"
+        },
+        "threat_id": {
+          "title": "Threat Id",
+          "type": "string"
+        },
+        "training_membership_verified": {
+          "default": false,
+          "title": "Training Membership Verified",
+          "type": "boolean"
+        },
+        "trials": {
+          "exclusiveMinimum": 0,
+          "title": "Trials",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "threat_id",
+        "population_scope_id",
+        "attack_name",
+        "metric",
+        "trials",
+        "combined_successes",
+        "baseline_successes",
+        "combined_only_successes",
+        "baseline_only_successes",
+        "attack_training_disjoint",
+        "audit_disjoint",
+        "raw_paired_counts_retained",
+        "comparator_same_side_information",
+        "secret_and_metric_pre_registered",
+        "ground_truth_verified",
+        "success_definition",
+        "provenance"
+      ],
+      "title": "ControlledInferenceInput",
+      "type": "object"
+    },
+    "DpInput": {
+      "additionalProperties": false,
+      "properties": {
+        "accountant": {
+          "minLength": 1,
+          "title": "Accountant",
+          "type": "string"
+        },
+        "accountant_replayed": {
+          "title": "Accountant Replayed",
+          "type": "boolean"
+        },
+        "adjacency": {
+          "minLength": 1,
+          "title": "Adjacency",
+          "type": "string"
+        },
+        "analyzer": {
+          "const": "dp",
+          "default": "dp",
+          "title": "Analyzer",
+          "type": "string"
+        },
+        "complete_pipeline": {
+          "title": "Complete Pipeline",
+          "type": "boolean"
+        },
+        "delta": {
+          "exclusiveMaximum": 1.0,
+          "minimum": 0.0,
+          "title": "Delta",
+          "type": "number"
+        },
+        "epsilon": {
+          "minimum": 0.0,
+          "title": "Epsilon",
+          "type": "number"
+        },
+        "fpr": {
+          "anyOf": [
+            {
+              "maximum": 1.0,
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Fpr"
+        },
+        "pairwise_secret_relation_validated": {
+          "default": false,
+          "title": "Pairwise Secret Relation Validated",
+          "type": "boolean"
+        },
+        "population_scope_id": {
+          "title": "Population Scope Id",
+          "type": "string"
+        },
+        "protected_unit": {
+          "minLength": 1,
+          "title": "Protected Unit",
+          "type": "string"
+        },
+        "provenance": {
+          "$ref": "#/$defs/AnalyzerProvenance"
+        },
+        "secret_cardinality": {
+          "anyOf": [
+            {
+              "minimum": 2,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Secret Cardinality"
+        },
+        "threat_id": {
+          "title": "Threat Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "threat_id",
+        "population_scope_id",
+        "epsilon",
+        "delta",
+        "adjacency",
+        "protected_unit",
+        "accountant",
+        "accountant_replayed",
+        "complete_pipeline",
+        "provenance"
+      ],
+      "title": "DpInput",
+      "type": "object"
+    },
+    "InterfaceContract": {
+      "additionalProperties": false,
+      "properties": {
+        "access": {
+          "enum": [
+            "aggregate",
+            "label",
+            "score",
+            "embedding",
+            "gradient",
+            "weights",
+            "full_artifact"
+          ],
+          "title": "Access",
+          "type": "string"
+        },
+        "adaptive_queries": {
+          "default": false,
+          "title": "Adaptive Queries",
+          "type": "boolean"
+        },
+        "authenticated": {
+          "default": false,
+          "title": "Authenticated",
+          "type": "boolean"
+        },
+        "notes": {
+          "default": "",
+          "title": "Notes",
+          "type": "string"
+        },
+        "outputs": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Outputs",
+          "type": "array"
+        },
+        "precision_bits": {
+          "anyOf": [
+            {
+              "maximum": 4096,
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Precision Bits"
+        },
+        "query_budget": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Query Budget"
+        },
+        "rate_limited": {
+          "default": false,
+          "title": "Rate Limited",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "access"
+      ],
+      "title": "InterfaceContract",
+      "type": "object"
+    },
+    "PolicyReference": {
+      "additionalProperties": false,
+      "properties": {
+        "policy_id": {
+          "maxLength": 128,
+          "minLength": 3,
+          "pattern": "^[A-Za-z0-9._:-]+$",
+          "title": "Policy Id",
+          "type": "string"
+        },
+        "policy_path": {
+          "minLength": 1,
+          "title": "Policy Path",
+          "type": "string"
+        },
+        "policy_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Policy Sha256",
+          "type": "string"
+        },
+        "policy_version": {
+          "maxLength": 64,
+          "minLength": 1,
+          "title": "Policy Version",
+          "type": "string"
+        }
+      },
+      "required": [
+        "policy_id",
+        "policy_version",
+        "policy_path",
+        "policy_sha256"
+      ],
+      "title": "PolicyReference",
+      "type": "object"
+    },
+    "PopulationInput": {
+      "additionalProperties": false,
+      "properties": {
+        "analyzer": {
+          "const": "population",
+          "default": "population",
+          "title": "Analyzer",
+          "type": "string"
+        },
+        "coverage": {
+          "exclusiveMaximum": 1.0,
+          "exclusiveMinimum": 0.5,
+          "title": "Coverage",
+          "type": "number"
+        },
+        "fitted_joint_model": {
+          "title": "Fitted Joint Model",
+          "type": "boolean"
+        },
+        "heldout_validated": {
+          "title": "Heldout Validated",
+          "type": "boolean"
+        },
+        "multiplicity_adjusted": {
+          "title": "Multiplicity Adjusted",
+          "type": "boolean"
+        },
+        "population_scope_id": {
+          "title": "Population Scope Id",
+          "type": "string"
+        },
+        "provenance": {
+          "$ref": "#/$defs/AnalyzerProvenance"
+        },
+        "required_match_count": {
+          "exclusiveMinimum": 0.0,
+          "title": "Required Match Count",
+          "type": "number"
+        },
+        "simultaneous_lower_match_count": {
+          "minimum": 0.0,
+          "title": "Simultaneous Lower Match Count",
+          "type": "number"
+        },
+        "threat_id": {
+          "title": "Threat Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "threat_id",
+        "population_scope_id",
+        "simultaneous_lower_match_count",
+        "required_match_count",
+        "coverage",
+        "fitted_joint_model",
+        "heldout_validated",
+        "multiplicity_adjusted",
+        "provenance"
+      ],
+      "title": "PopulationInput",
+      "type": "object"
+    },
+    "PopulationScope": {
+      "additionalProperties": false,
+      "properties": {
+        "custom_unit_definition": {
+          "anyOf": [
+            {
+              "maxLength": 1024,
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Custom Unit Definition"
+        },
+        "data_steward": {
+          "maxLength": 256,
+          "minLength": 1,
+          "title": "Data Steward",
+          "type": "string"
+        },
+        "exclusion_criteria": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Exclusion Criteria",
+          "type": "array"
+        },
+        "inclusion_criteria": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Inclusion Criteria",
+          "type": "array"
+        },
+        "jurisdictions": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Jurisdictions",
+          "type": "array"
+        },
+        "name": {
+          "maxLength": 256,
+          "minLength": 1,
+          "title": "Name",
+          "type": "string"
+        },
+        "notes": {
+          "default": "",
+          "title": "Notes",
+          "type": "string"
+        },
+        "reference_date": {
+          "format": "date",
+          "title": "Reference Date",
+          "type": "string"
+        },
+        "scope_id": {
+          "maxLength": 128,
+          "minLength": 3,
+          "pattern": "^[A-Za-z0-9._:-]+$",
+          "title": "Scope Id",
+          "type": "string"
+        },
+        "size": {
+          "$ref": "#/$defs/PopulationSize"
+        },
+        "subgroup_dimensions": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Subgroup Dimensions",
+          "type": "array"
+        },
+        "unit_kind": {
+          "$ref": "#/$defs/PopulationUnitKind"
+        },
+        "universe_definition": {
+          "maxLength": 4096,
+          "minLength": 1,
+          "title": "Universe Definition",
+          "type": "string"
+        }
+      },
+      "required": [
+        "scope_id",
+        "name",
+        "unit_kind",
+        "universe_definition",
+        "inclusion_criteria",
+        "jurisdictions",
+        "reference_date",
+        "size",
+        "data_steward"
+      ],
+      "title": "PopulationScope",
+      "type": "object"
+    },
+    "PopulationSize": {
+      "additionalProperties": false,
+      "properties": {
+        "basis": {
+          "$ref": "#/$defs/PopulationSizeBasis"
+        },
+        "lower_bound": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Lower Bound"
+        },
+        "measured_at": {
+          "format": "date-time",
+          "title": "Measured At",
+          "type": "string"
+        },
+        "point_estimate": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Point Estimate"
+        },
+        "source": {
+          "maxLength": 2048,
+          "minLength": 1,
+          "title": "Source",
+          "type": "string"
+        },
+        "upper_bound": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Upper Bound"
+        }
+      },
+      "required": [
+        "basis",
+        "source",
+        "measured_at"
+      ],
+      "title": "PopulationSize",
+      "type": "object"
+    },
+    "PopulationSizeBasis": {
+      "enum": [
+        "exact_registry",
+        "bounded_estimate",
+        "point_estimate",
+        "open_dynamic"
+      ],
+      "title": "PopulationSizeBasis",
+      "type": "string"
+    },
+    "PopulationUnitKind": {
+      "enum": [
+        "person",
+        "household",
+        "organization",
+        "establishment",
+        "record",
+        "device",
+        "transaction",
+        "event",
+        "custom"
+      ],
+      "title": "PopulationUnitKind",
+      "type": "string"
+    },
+    "Realizability": {
+      "enum": [
+        "recipient_realizable",
+        "auditor_only",
+        "population_model",
+        "not_applicable"
+      ],
+      "title": "Realizability",
+      "type": "string"
+    },
+    "ReleaseContract": {
+      "additionalProperties": false,
+      "properties": {
+        "artifact_path": {
+          "minLength": 1,
+          "title": "Artifact Path",
+          "type": "string"
+        },
+        "artifact_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Artifact Sha256",
+          "type": "string"
+        },
+        "expires_at": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Expires At"
+        },
+        "interface": {
+          "$ref": "#/$defs/InterfaceContract"
+        },
+        "model_family": {
+          "maxLength": 128,
+          "minLength": 1,
+          "title": "Model Family",
+          "type": "string"
+        },
+        "owner": {
+          "maxLength": 256,
+          "minLength": 1,
+          "title": "Owner",
+          "type": "string"
+        },
+        "previous_release_ids": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Previous Release Ids",
+          "type": "array"
+        },
+        "protected_unit": {
+          "enum": [
+            "record",
+            "person",
+            "household",
+            "organization",
+            "establishment",
+            "episode",
+            "event",
+            "session",
+            "device",
+            "transaction",
+            "custom"
+          ],
+          "title": "Protected Unit",
+          "type": "string"
+        },
+        "purpose": {
+          "maxLength": 2048,
+          "minLength": 1,
+          "title": "Purpose",
+          "type": "string"
+        },
+        "recipient": {
+          "maxLength": 256,
+          "minLength": 1,
+          "title": "Recipient",
+          "type": "string"
+        },
+        "release_id": {
+          "maxLength": 128,
+          "minLength": 3,
+          "pattern": "^[A-Za-z0-9._:-]+$",
+          "title": "Release Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "release_id",
+        "owner",
+        "recipient",
+        "purpose",
+        "model_family",
+        "protected_unit",
+        "artifact_path",
+        "artifact_sha256",
+        "interface"
+      ],
+      "title": "ReleaseContract",
+      "type": "object"
+    },
+    "ThreatContract": {
+      "additionalProperties": false,
+      "properties": {
+        "adversary_metadata_profile": {
+          "const": "exact_database_feature_summaries_v1",
+          "default": "exact_database_feature_summaries_v1",
+          "description": "Mandatory conservative profile: complete schema; exact row/class/missingness/cardinality and categorical frequencies; numeric min, max, range, mean, median, standard deviation, variance, quartiles/IQR, and median absolute deviation. Pre-existing values belong in the no-release baseline; newly transferred values belong in the release channel.",
+          "title": "Adversary Metadata Profile",
+          "type": "string"
+        },
+        "candidate_set": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Candidate Set"
+        },
+        "decision_metric": {
+          "enum": [
+            "bayes_linkage_success",
+            "incremental_bayes_linkage_success",
+            "worst_observation_success",
+            "membership_tpr_at_fpr",
+            "equal_prior_membership_success",
+            "finite_secret_exact_guess_success",
+            "attribute_attack_success",
+            "incremental_attribute_attack_success",
+            "reconstruction_success",
+            "incremental_reconstruction_success"
+          ],
+          "title": "Decision Metric",
+          "type": "string"
+        },
+        "harm_rationale": {
+          "maxLength": 4096,
+          "minLength": 1,
+          "title": "Harm Rationale",
+          "type": "string"
+        },
+        "kind": {
+          "$ref": "#/$defs/ThreatKind"
+        },
+        "mandatory": {
+          "default": true,
+          "title": "Mandatory",
+          "type": "boolean"
+        },
+        "metric_parameters": {
+          "additionalProperties": {
+            "type": "number"
+          },
+          "title": "Metric Parameters",
+          "type": "object"
+        },
+        "population_scope_id": {
+          "maxLength": 128,
+          "minLength": 3,
+          "pattern": "^[A-Za-z0-9._:-]+$",
+          "title": "Population Scope Id",
+          "type": "string"
+        },
+        "prior": {
+          "maxLength": 2048,
+          "minLength": 1,
+          "title": "Prior",
+          "type": "string"
+        },
+        "realizability": {
+          "$ref": "#/$defs/Realizability",
+          "default": "not_applicable"
+        },
+        "secret": {
+          "maxLength": 1024,
+          "minLength": 1,
+          "title": "Secret",
+          "type": "string"
+        },
+        "side_information": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Side Information",
+          "type": "array"
+        },
+        "success_metric": {
+          "maxLength": 1024,
+          "minLength": 1,
+          "title": "Success Metric",
+          "type": "string"
+        },
+        "target_signal_source": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Target Signal Source"
+        },
+        "threat_id": {
+          "maxLength": 128,
+          "minLength": 3,
+          "pattern": "^[A-Za-z0-9._:-]+$",
+          "title": "Threat Id",
+          "type": "string"
+        },
+        "tolerance": {
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Tolerance",
+          "type": "number"
+        },
+        "tolerance_basis": {
+          "default": "absolute",
+          "enum": [
+            "absolute",
+            "incremental"
+          ],
+          "title": "Tolerance Basis",
+          "type": "string"
+        }
+      },
+      "required": [
+        "threat_id",
+        "kind",
+        "secret",
+        "prior",
+        "side_information",
+        "success_metric",
+        "decision_metric",
+        "tolerance",
+        "harm_rationale",
+        "population_scope_id"
+      ],
+      "title": "ThreatContract",
+      "type": "object"
+    },
+    "ThreatKind": {
+      "enum": [
+        "linkage",
+        "membership",
+        "attribute",
+        "reconstruction"
+      ],
+      "title": "ThreatKind",
+      "type": "string"
+    },
+    "TreeLinkageInput": {
+      "additionalProperties": false,
+      "properties": {
+        "analyzer": {
+          "const": "tree_linkage",
+          "default": "tree_linkage",
+          "title": "Analyzer",
+          "type": "string"
+        },
+        "candidate_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Candidate Ids",
+          "type": "array"
+        },
+        "observations": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Observations",
+          "type": "array"
+        },
+        "population_scope_id": {
+          "title": "Population Scope Id",
+          "type": "string"
+        },
+        "prior": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "number"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Prior"
+        },
+        "provenance": {
+          "$ref": "#/$defs/AnalyzerProvenance"
+        },
+        "recipient_has_candidate_roster": {
+          "title": "Recipient Has Candidate Roster",
+          "type": "boolean"
+        },
+        "recipient_has_target_signal": {
+          "title": "Recipient Has Target Signal",
+          "type": "boolean"
+        },
+        "threat_id": {
+          "title": "Threat Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "threat_id",
+        "population_scope_id",
+        "candidate_ids",
+        "observations",
+        "recipient_has_candidate_roster",
+        "recipient_has_target_signal",
+        "provenance"
+      ],
+      "title": "TreeLinkageInput",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "analyzer_inputs": {
+      "items": {
+        "discriminator": {
+          "mapping": {
+            "attack": "#/$defs/AttackInput",
+            "controlled_inference": "#/$defs/ControlledInferenceInput",
+            "dp": "#/$defs/DpInput",
+            "population": "#/$defs/PopulationInput",
+            "tree_linkage": "#/$defs/TreeLinkageInput"
+          },
+          "propertyName": "analyzer"
+        },
+        "oneOf": [
+          {
+            "$ref": "#/$defs/TreeLinkageInput"
+          },
+          {
+            "$ref": "#/$defs/DpInput"
+          },
+          {
+            "$ref": "#/$defs/AttackInput"
+          },
+          {
+            "$ref": "#/$defs/PopulationInput"
+          },
+          {
+            "$ref": "#/$defs/ControlledInferenceInput"
+          }
+        ]
+      },
+      "title": "Analyzer Inputs",
+      "type": "array"
+    },
+    "policy": {
+      "$ref": "#/$defs/PolicyReference"
+    },
+    "population_scopes": {
+      "items": {
+        "$ref": "#/$defs/PopulationScope"
+      },
+      "title": "Population Scopes",
+      "type": "array"
+    },
+    "release": {
+      "$ref": "#/$defs/ReleaseContract"
+    },
+    "schema_version": {
+      "const": "1.1",
+      "default": "1.1",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "threats": {
+      "items": {
+        "$ref": "#/$defs/ThreatContract"
+      },
+      "title": "Threats",
+      "type": "array"
+    }
+  },
+  "required": [
+    "policy",
+    "release",
+    "population_scopes",
+    "threats",
+    "analyzer_inputs"
+  ],
+  "title": "AssessmentRequest",
+  "type": "object"
+}

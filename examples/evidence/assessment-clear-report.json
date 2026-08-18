@@ -1,0 +1,340 @@
+{
+  "schema_version": "2.0",
+  "assessment_id": "f3b67ada-4b2e-5f3a-a1a6-31a3f0b6ea0d",
+  "release_id": "whole-government-demo-tree-v1",
+  "policy_id": "whole-government-model-release-demo",
+  "policy_version": "1.0.0",
+  "policy_sha256": "ef0780f17ae1f732296ef53c4040799792ec907abbb6ab69950f1d045a0d3316",
+  "created_at": "2026-08-12T17:13:38.572818Z",
+  "request_sha256": "3141730ee2a77ba9a8b6d8569ac02993afc0f3b645b2c9ece5baa42be9aa5f2b",
+  "artifact_sha256": "2f42b587627c5b6c4447d781b57a47082743f029b475f560a574553abcedfdd5",
+  "release_contract_sha256": "55fcc0540a35e602fe29f9486b9bd5d8a7ef982e511a4ee9ebbc64cd8cee6895",
+  "release_interface": {
+    "protocol_type": "predictive",
+    "access": "full_artifact",
+    "outputs": [
+      "tree rules",
+      "leaf signature"
+    ],
+    "adaptive_queries": false,
+    "authenticated": true,
+    "rate_limited": false,
+    "notes": ""
+  },
+  "policy_expires_at": "2099-01-01T00:00:00Z",
+  "population_scope_sha256s": {
+    "service-participants-2026": "d0ceafb482b5ed133cd89c765ec4e9d228f4c14bf07fac3f4aa67297a79ed5e8"
+  },
+  "population_scopes": [
+    {
+      "scope_id": "service-participants-2026",
+      "name": "Participants in the defined public-service programme",
+      "unit_kind": "person",
+      "universe_definition": "People meeting the programme eligibility and reference-date criteria, regardless of which participating agency holds the source record.",
+      "inclusion_criteria": [
+        "meets the documented programme eligibility rule",
+        "has an active or historical programme record as at the reference date"
+      ],
+      "exclusion_criteria": [
+        "test and synthetic identities"
+      ],
+      "jurisdictions": [
+        "Singapore"
+      ],
+      "reference_date": "2026-01-01",
+      "valid_until": "2099-01-01",
+      "population_snapshot_sha256": "2222222222222222222222222222222222222222222222222222222222222222",
+      "size": {
+        "basis": "bounded_estimate",
+        "lower_bound": 90000,
+        "point_estimate": 100000,
+        "upper_bound": 110000,
+        "source": "Demonstration-only bounded programme register estimate",
+        "measured_at": "2026-01-01T00:00:00Z"
+      },
+      "subgroup_dimensions": [
+        "programme",
+        "region",
+        "eligibility_band"
+      ],
+      "data_steward": "Demonstration cross-government data steward",
+      "notes": "Synthetic scope metadata; not an empirical government population estimate."
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "linkage-person:tree:absolute",
+      "threat_id": "linkage-person",
+      "analyzer": "tree_linkage",
+      "evidence_class": "exact",
+      "coverage": "complete_interface",
+      "population_scope_id": "service-participants-2026",
+      "population_scope_sha256": "d0ceafb482b5ed133cd89c765ec4e9d228f4c14bf07fac3f4aa67297a79ed5e8",
+      "decision_game_sha256": "4bb158d840ec659005d778c0443f537245d03ba7dfdef279ff98e11f5e271430",
+      "interface_sha256": "d7ca53bb8dbf0efb85abf373dba00fdb285764d783856f51b27658d49e65d111",
+      "artifact_sha256": "2f42b587627c5b6c4447d781b57a47082743f029b475f560a574553abcedfdd5",
+      "metric": "bayes_linkage_success",
+      "value": 0.5,
+      "lower": 0.5,
+      "upper": 0.5,
+      "baseline": 0.25,
+      "realizability": "recipient_realizable",
+      "can_clear": true,
+      "can_block": true,
+      "assumptions": [
+        "population_scope_id=service-participants-2026",
+        "fixed candidate set",
+        "deterministic declared observation",
+        "declared prior"
+      ],
+      "limitations": [
+        "does not establish membership privacy"
+      ],
+      "details": {
+        "candidate_count": 4,
+        "population_scope_id": "service-participants-2026",
+        "occupied_cells": 2,
+        "minimum_cell_size": 2,
+        "singleton_fraction": 0.0,
+        "source_sha256": "0d3bfe44915660b26210757bd13d6000945eaeb7ba48932a1851b960a3fd7f0d",
+        "tool": "mra-demo-tree-export",
+        "tool_version": "1.0"
+      }
+    },
+    {
+      "evidence_id": "linkage-person:tree:incremental",
+      "threat_id": "linkage-person",
+      "analyzer": "tree_linkage",
+      "evidence_class": "exact",
+      "coverage": "complete_interface",
+      "population_scope_id": "service-participants-2026",
+      "population_scope_sha256": "d0ceafb482b5ed133cd89c765ec4e9d228f4c14bf07fac3f4aa67297a79ed5e8",
+      "decision_game_sha256": "4bb158d840ec659005d778c0443f537245d03ba7dfdef279ff98e11f5e271430",
+      "interface_sha256": "d7ca53bb8dbf0efb85abf373dba00fdb285764d783856f51b27658d49e65d111",
+      "artifact_sha256": "2f42b587627c5b6c4447d781b57a47082743f029b475f560a574553abcedfdd5",
+      "metric": "incremental_bayes_linkage_success",
+      "value": 0.25,
+      "lower": 0.25,
+      "upper": 0.25,
+      "baseline": 0.25,
+      "realizability": "recipient_realizable",
+      "can_clear": true,
+      "can_block": true,
+      "assumptions": [
+        "population_scope_id=service-participants-2026",
+        "fixed candidate set",
+        "deterministic declared observation",
+        "declared prior"
+      ],
+      "limitations": [
+        "does not establish membership privacy"
+      ],
+      "details": {
+        "candidate_count": 4,
+        "population_scope_id": "service-participants-2026",
+        "occupied_cells": 2,
+        "minimum_cell_size": 2,
+        "singleton_fraction": 0.0,
+        "source_sha256": "0d3bfe44915660b26210757bd13d6000945eaeb7ba48932a1851b960a3fd7f0d",
+        "tool": "mra-demo-tree-export",
+        "tool_version": "1.0"
+      }
+    },
+    {
+      "evidence_id": "linkage-person:tree:worst-observation",
+      "threat_id": "linkage-person",
+      "analyzer": "tree_linkage",
+      "evidence_class": "exact",
+      "coverage": "complete_interface",
+      "population_scope_id": "service-participants-2026",
+      "population_scope_sha256": "d0ceafb482b5ed133cd89c765ec4e9d228f4c14bf07fac3f4aa67297a79ed5e8",
+      "decision_game_sha256": "4bb158d840ec659005d778c0443f537245d03ba7dfdef279ff98e11f5e271430",
+      "interface_sha256": "d7ca53bb8dbf0efb85abf373dba00fdb285764d783856f51b27658d49e65d111",
+      "artifact_sha256": "2f42b587627c5b6c4447d781b57a47082743f029b475f560a574553abcedfdd5",
+      "metric": "worst_observation_success",
+      "value": 0.5,
+      "lower": 0.5,
+      "upper": 0.5,
+      "baseline": 0.25,
+      "realizability": "recipient_realizable",
+      "can_clear": false,
+      "can_block": true,
+      "assumptions": [
+        "population_scope_id=service-participants-2026",
+        "fixed candidate set",
+        "deterministic declared observation",
+        "declared prior"
+      ],
+      "limitations": [
+        "does not establish membership privacy"
+      ],
+      "details": {
+        "candidate_count": 4,
+        "population_scope_id": "service-participants-2026",
+        "occupied_cells": 2,
+        "minimum_cell_size": 2,
+        "singleton_fraction": 0.0,
+        "source_sha256": "0d3bfe44915660b26210757bd13d6000945eaeb7ba48932a1851b960a3fd7f0d",
+        "tool": "mra-demo-tree-export",
+        "tool_version": "1.0"
+      }
+    },
+    {
+      "evidence_id": "membership-person:dp:roc",
+      "threat_id": "membership-person",
+      "analyzer": "dp",
+      "evidence_class": "ceiling",
+      "coverage": "complete_interface",
+      "population_scope_id": "service-participants-2026",
+      "population_scope_sha256": "d0ceafb482b5ed133cd89c765ec4e9d228f4c14bf07fac3f4aa67297a79ed5e8",
+      "decision_game_sha256": "686901249c969d5c1a631f1a617c319f9c235842745ea34c6956b6c5c2fef38c",
+      "interface_sha256": "d7ca53bb8dbf0efb85abf373dba00fdb285764d783856f51b27658d49e65d111",
+      "artifact_sha256": "2f42b587627c5b6c4447d781b57a47082743f029b475f560a574553abcedfdd5",
+      "metric": "membership_tpr_at_fpr",
+      "value": 0.0012224027581601699,
+      "upper": 0.0012224027581601699,
+      "realizability": "not_applicable",
+      "can_clear": true,
+      "can_block": false,
+      "assumptions": [
+        "population_scope_id=service-participants-2026",
+        "adjacency=add/remove one person",
+        "protected_unit=person",
+        "accountant=demonstration accountant",
+        "epsilon=0.2",
+        "delta=1e-06"
+      ],
+      "limitations": [],
+      "details": {
+        "population_scope_id": "service-participants-2026",
+        "fpr": 0.001,
+        "bound_1": 0.0012224027581601699,
+        "bound_2": 0.1820887964058493,
+        "source_sha256": "bc405852d3c20f0d3c85869b59a4e173622b5b07f6fc7e31fd70f00f80e01f67"
+      }
+    },
+    {
+      "evidence_id": "membership-person:dp:equal-prior",
+      "threat_id": "membership-person",
+      "analyzer": "dp",
+      "evidence_class": "ceiling",
+      "coverage": "complete_interface",
+      "population_scope_id": "service-participants-2026",
+      "population_scope_sha256": "d0ceafb482b5ed133cd89c765ec4e9d228f4c14bf07fac3f4aa67297a79ed5e8",
+      "decision_game_sha256": "686901249c969d5c1a631f1a617c319f9c235842745ea34c6956b6c5c2fef38c",
+      "interface_sha256": "d7ca53bb8dbf0efb85abf373dba00fdb285764d783856f51b27658d49e65d111",
+      "artifact_sha256": "2f42b587627c5b6c4447d781b57a47082743f029b475f560a574553abcedfdd5",
+      "metric": "equal_prior_membership_success",
+      "value": 0.5498344474784806,
+      "upper": 0.5498344474784806,
+      "realizability": "not_applicable",
+      "can_clear": true,
+      "can_block": false,
+      "assumptions": [
+        "population_scope_id=service-participants-2026",
+        "adjacency=add/remove one person",
+        "protected_unit=person",
+        "accountant=demonstration accountant",
+        "epsilon=0.2",
+        "delta=1e-06"
+      ],
+      "limitations": [],
+      "details": {
+        "population_scope_id": "service-participants-2026",
+        "source_sha256": "bc405852d3c20f0d3c85869b59a4e173622b5b07f6fc7e31fd70f00f80e01f67"
+      }
+    },
+    {
+      "evidence_id": "membership-person:attack:calibrated-loss",
+      "threat_id": "membership-person",
+      "analyzer": "attack",
+      "evidence_class": "floor",
+      "coverage": "named_projection",
+      "population_scope_id": "service-participants-2026",
+      "population_scope_sha256": "d0ceafb482b5ed133cd89c765ec4e9d228f4c14bf07fac3f4aa67297a79ed5e8",
+      "decision_game_sha256": "686901249c969d5c1a631f1a617c319f9c235842745ea34c6956b6c5c2fef38c",
+      "interface_sha256": "d7ca53bb8dbf0efb85abf373dba00fdb285764d783856f51b27658d49e65d111",
+      "artifact_sha256": "2f42b587627c5b6c4447d781b57a47082743f029b475f560a574553abcedfdd5",
+      "metric": "equal_prior_membership_success",
+      "value": 0.52,
+      "lower": 0.4934947780172694,
+      "realizability": "recipient_realizable",
+      "can_clear": false,
+      "can_block": true,
+      "assumptions": [
+        "population_scope_id=service-participants-2026",
+        "exact one-sided Clopper-Pearson confidence=0.95",
+        "comparison family size=1"
+      ],
+      "limitations": [],
+      "details": {
+        "attack_name": "calibrated-loss",
+        "population_scope_id": "service-participants-2026",
+        "successes": 520,
+        "trials": 1000,
+        "confidence": 0.95,
+        "per_comparison_confidence": 0.95,
+        "comparison_family_size": 1,
+        "false_positives": null,
+        "nonmember_trials": null,
+        "target_fpr": null,
+        "one_sided_fpr_upper": null,
+        "operating_point_attained": true,
+        "source_sha256": "bdf0cc12afa9140f1edfac4fa5923f184d7aae62fd98f7a26b21889f14507cc9",
+        "tool": "mra-demo-attack",
+        "tool_version": "1.0"
+      }
+    }
+  ],
+  "decisions": [
+    {
+      "threat_id": "linkage-person",
+      "population_scope_id": "service-participants-2026",
+      "population_scope_sha256": "d0ceafb482b5ed133cd89c765ec4e9d228f4c14bf07fac3f4aa67297a79ed5e8",
+      "decision_game_sha256": "4bb158d840ec659005d778c0443f537245d03ba7dfdef279ff98e11f5e271430",
+      "assessed_interface_sha256": "d7ca53bb8dbf0efb85abf373dba00fdb285764d783856f51b27658d49e65d111",
+      "assessed_artifact_sha256": "2f42b587627c5b6c4447d781b57a47082743f029b475f560a574553abcedfdd5",
+      "decision_metric": "incremental_bayes_linkage_success",
+      "kind": "linkage",
+      "mandatory": true,
+      "tolerance": 0.3,
+      "tolerance_basis": "incremental",
+      "lower_bound": 0.25,
+      "upper_bound": 0.25,
+      "verdict": "clear",
+      "evidence_ids": [
+        "linkage-person:tree:incremental"
+      ],
+      "reasons": [
+        "validated ceiling 0.25 is within tolerance 0.3",
+        "2 evidence record(s) did not match decision metric incremental_bayes_linkage_success"
+      ]
+    },
+    {
+      "threat_id": "membership-person",
+      "population_scope_id": "service-participants-2026",
+      "population_scope_sha256": "d0ceafb482b5ed133cd89c765ec4e9d228f4c14bf07fac3f4aa67297a79ed5e8",
+      "decision_game_sha256": "686901249c969d5c1a631f1a617c319f9c235842745ea34c6956b6c5c2fef38c",
+      "assessed_interface_sha256": "d7ca53bb8dbf0efb85abf373dba00fdb285764d783856f51b27658d49e65d111",
+      "assessed_artifact_sha256": "2f42b587627c5b6c4447d781b57a47082743f029b475f560a574553abcedfdd5",
+      "decision_metric": "equal_prior_membership_success",
+      "kind": "membership",
+      "mandatory": true,
+      "tolerance": 0.6,
+      "tolerance_basis": "absolute",
+      "lower_bound": 0.4934947780172694,
+      "upper_bound": 0.5498344474784806,
+      "verdict": "clear",
+      "evidence_ids": [
+        "membership-person:dp:equal-prior",
+        "membership-person:attack:calibrated-loss"
+      ],
+      "reasons": [
+        "validated ceiling 0.549834 is within tolerance 0.6",
+        "1 evidence record(s) did not match decision metric equal_prior_membership_success"
+      ]
+    }
+  ],
+  "overall_verdict": "clear",
+  "engine_version": "0.4.0"
+}

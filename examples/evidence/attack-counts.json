@@ -1,0 +1,11 @@
+{
+  "population_scope_id": "service-participants-2026",
+  "attack_name": "calibrated-loss",
+  "metric": "equal_prior_membership_success",
+  "successes": 520,
+  "trials": 1000,
+  "calibration_disjoint": true,
+  "audit_disjoint": true,
+  "raw_counts_retained": true,
+  "threshold_pre_registered": true
+}

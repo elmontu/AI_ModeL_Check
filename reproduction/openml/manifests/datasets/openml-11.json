@@ -1,0 +1,35 @@
+{
+  "class_counts": {
+    "B": 49,
+    "L": 288,
+    "R": 288
+  },
+  "classes": 3,
+  "dataset_id": 11,
+  "feature_dtypes": {
+    "left-distance": "float64",
+    "left-weight": "float64",
+    "right-distance": "float64",
+    "right-weight": "float64"
+  },
+  "feature_names": [
+    "left-weight",
+    "left-distance",
+    "right-weight",
+    "right-distance"
+  ],
+  "features": 4,
+  "file_id": "11",
+  "missing_feature_values": 0,
+  "name": "balance-scale",
+  "openml_md5_checksum": "76938608d472f620c170cef9c8c1fa65",
+  "openml_url": "https://openml.org/data/v1/download/11/balance-scale.arff",
+  "parquet_url": "https://data.openml.org/datasets/0000/0011/dataset_11.pq",
+  "rows": 625,
+  "snapshot_bytes": 4942,
+  "snapshot_path": "reproduction/openml/raw/openml-11.parquet",
+  "snapshot_sha256": "ff6000f4086ffc8540a891c2eecd5692080c85226e30f5aa6e54ed6d7905ea2c",
+  "status": "active",
+  "target": "class",
+  "version": 1
+}

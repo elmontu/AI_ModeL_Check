@@ -1,0 +1,24 @@
+{
+  "schema_version": "1.0",
+  "plan_id": "demo-multinomial-plan-v1",
+  "family_id": "demo-portfolio-family-2026",
+  "portfolio_id": "uniform-independent-statistical-portfolio",
+  "population_scope_id": "whole-government-demo-population-v1",
+  "threat_id": "binary-secret-exact-guess",
+  "registered_at": "2026-01-01T00:00:00Z",
+  "sampling_model": "iid_multinomial",
+  "state_ids": ["state-0", "state-1"],
+  "releases": [
+    {
+      "release_id": "release-one",
+      "observation_ids": ["bit-0", "bit-1"]
+    },
+    {
+      "release_id": "release-two",
+      "observation_ids": ["bit-0", "bit-1"]
+    }
+  ],
+  "minimum_trials_per_state": 10000,
+  "selection_scope": "Both declared releases, both protected states, all output cells, and the complete pre-declared configuration comparison are covered.",
+  "audit_sample_definition": "A fixed, pre-registered IID audit sample stratified by protected state; all queries, releases, and output cells are retained."
+}

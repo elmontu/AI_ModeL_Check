@@ -1,0 +1,10 @@
+# Environment family for rerunning the retained OpenML and stochastic studies.
+# Exact versions used to seal the current evidence record are recorded in
+# output/reproduction/openml-study-manifest.json under `runtime`.
+joblib>=1.4
+numpy>=2.0
+pandas>=2.2
+pyarrow>=17
+scikit-learn>=1.5
+scipy>=1.13
+xgboost>=2.1

@@ -1,0 +1,15 @@
+{
+  "experiment": "openml_cc18_finite_population_linkage_validation",
+  "implementation_version": 1,
+  "suite_scope": "all_72_openml_cc18_snapshots",
+  "model_seed": 20260812,
+  "protected_unit": "OpenML row",
+  "declared_target_population": "the complete frozen OpenML dataset snapshot for that run",
+  "probability_sample": "simple random sample without replacement",
+  "sample_size_cap": 2000,
+  "query_records": 100,
+  "familywise_confidence_per_dataset": 0.95,
+  "interval": "exact one-sided hypergeometric lower confidence bound with Bonferroni control across queried cells",
+  "stress_control": "deterministic covariate-ordered nonprobability sample analyzed as if random",
+  "claim_boundary": "validates design-based inference only to each frozen benchmark population; no Singapore resident, company, ministry, or whole-of-government representativeness claim"
+}

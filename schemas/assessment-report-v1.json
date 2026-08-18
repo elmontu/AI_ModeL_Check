@@ -1,0 +1,613 @@
+{
+  "$defs": {
+    "EvidenceClass": {
+      "enum": [
+        "exact",
+        "ceiling",
+        "floor",
+        "screen"
+      ],
+      "title": "EvidenceClass",
+      "type": "string"
+    },
+    "EvidenceRecord": {
+      "additionalProperties": false,
+      "properties": {
+        "analyzer": {
+          "title": "Analyzer",
+          "type": "string"
+        },
+        "assumptions": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Assumptions",
+          "type": "array"
+        },
+        "baseline": {
+          "anyOf": [
+            {
+              "maximum": 1.0,
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Baseline"
+        },
+        "can_block": {
+          "title": "Can Block",
+          "type": "boolean"
+        },
+        "can_clear": {
+          "title": "Can Clear",
+          "type": "boolean"
+        },
+        "details": {
+          "additionalProperties": true,
+          "title": "Details",
+          "type": "object"
+        },
+        "evidence_class": {
+          "$ref": "#/$defs/EvidenceClass"
+        },
+        "evidence_id": {
+          "title": "Evidence Id",
+          "type": "string"
+        },
+        "limitations": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Limitations",
+          "type": "array"
+        },
+        "lower": {
+          "anyOf": [
+            {
+              "maximum": 1.0,
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Lower"
+        },
+        "metric": {
+          "title": "Metric",
+          "type": "string"
+        },
+        "realizability": {
+          "$ref": "#/$defs/Realizability"
+        },
+        "threat_id": {
+          "title": "Threat Id",
+          "type": "string"
+        },
+        "upper": {
+          "anyOf": [
+            {
+              "maximum": 1.0,
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Upper"
+        },
+        "value": {
+          "anyOf": [
+            {
+              "maximum": 1.0,
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Value"
+        }
+      },
+      "required": [
+        "evidence_id",
+        "threat_id",
+        "analyzer",
+        "evidence_class",
+        "metric",
+        "realizability",
+        "can_clear",
+        "can_block"
+      ],
+      "title": "EvidenceRecord",
+      "type": "object"
+    },
+    "InterfaceContract": {
+      "additionalProperties": false,
+      "properties": {
+        "access": {
+          "enum": [
+            "aggregate",
+            "label",
+            "score",
+            "embedding",
+            "gradient",
+            "weights",
+            "full_artifact"
+          ],
+          "title": "Access",
+          "type": "string"
+        },
+        "adaptive_queries": {
+          "default": false,
+          "title": "Adaptive Queries",
+          "type": "boolean"
+        },
+        "authenticated": {
+          "default": false,
+          "title": "Authenticated",
+          "type": "boolean"
+        },
+        "notes": {
+          "default": "",
+          "title": "Notes",
+          "type": "string"
+        },
+        "outputs": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Outputs",
+          "type": "array"
+        },
+        "precision_bits": {
+          "anyOf": [
+            {
+              "maximum": 4096,
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Precision Bits"
+        },
+        "query_budget": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Query Budget"
+        },
+        "rate_limited": {
+          "default": false,
+          "title": "Rate Limited",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "access"
+      ],
+      "title": "InterfaceContract",
+      "type": "object"
+    },
+    "OverallVerdict": {
+      "enum": [
+        "clear",
+        "block",
+        "inconclusive"
+      ],
+      "title": "OverallVerdict",
+      "type": "string"
+    },
+    "PopulationScope": {
+      "additionalProperties": false,
+      "properties": {
+        "custom_unit_definition": {
+          "anyOf": [
+            {
+              "maxLength": 1024,
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Custom Unit Definition"
+        },
+        "data_steward": {
+          "maxLength": 256,
+          "minLength": 1,
+          "title": "Data Steward",
+          "type": "string"
+        },
+        "exclusion_criteria": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Exclusion Criteria",
+          "type": "array"
+        },
+        "inclusion_criteria": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Inclusion Criteria",
+          "type": "array"
+        },
+        "jurisdictions": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Jurisdictions",
+          "type": "array"
+        },
+        "name": {
+          "maxLength": 256,
+          "minLength": 1,
+          "title": "Name",
+          "type": "string"
+        },
+        "notes": {
+          "default": "",
+          "title": "Notes",
+          "type": "string"
+        },
+        "reference_date": {
+          "format": "date",
+          "title": "Reference Date",
+          "type": "string"
+        },
+        "scope_id": {
+          "maxLength": 128,
+          "minLength": 3,
+          "pattern": "^[A-Za-z0-9._:-]+$",
+          "title": "Scope Id",
+          "type": "string"
+        },
+        "size": {
+          "$ref": "#/$defs/PopulationSize"
+        },
+        "subgroup_dimensions": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Subgroup Dimensions",
+          "type": "array"
+        },
+        "unit_kind": {
+          "$ref": "#/$defs/PopulationUnitKind"
+        },
+        "universe_definition": {
+          "maxLength": 4096,
+          "minLength": 1,
+          "title": "Universe Definition",
+          "type": "string"
+        }
+      },
+      "required": [
+        "scope_id",
+        "name",
+        "unit_kind",
+        "universe_definition",
+        "inclusion_criteria",
+        "jurisdictions",
+        "reference_date",
+        "size",
+        "data_steward"
+      ],
+      "title": "PopulationScope",
+      "type": "object"
+    },
+    "PopulationSize": {
+      "additionalProperties": false,
+      "properties": {
+        "basis": {
+          "$ref": "#/$defs/PopulationSizeBasis"
+        },
+        "lower_bound": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Lower Bound"
+        },
+        "measured_at": {
+          "format": "date-time",
+          "title": "Measured At",
+          "type": "string"
+        },
+        "point_estimate": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Point Estimate"
+        },
+        "source": {
+          "maxLength": 2048,
+          "minLength": 1,
+          "title": "Source",
+          "type": "string"
+        },
+        "upper_bound": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Upper Bound"
+        }
+      },
+      "required": [
+        "basis",
+        "source",
+        "measured_at"
+      ],
+      "title": "PopulationSize",
+      "type": "object"
+    },
+    "PopulationSizeBasis": {
+      "enum": [
+        "exact_registry",
+        "bounded_estimate",
+        "point_estimate",
+        "open_dynamic"
+      ],
+      "title": "PopulationSizeBasis",
+      "type": "string"
+    },
+    "PopulationUnitKind": {
+      "enum": [
+        "person",
+        "household",
+        "organization",
+        "establishment",
+        "record",
+        "device",
+        "transaction",
+        "event",
+        "custom"
+      ],
+      "title": "PopulationUnitKind",
+      "type": "string"
+    },
+    "Realizability": {
+      "enum": [
+        "recipient_realizable",
+        "auditor_only",
+        "population_model",
+        "not_applicable"
+      ],
+      "title": "Realizability",
+      "type": "string"
+    },
+    "ThreatDecision": {
+      "additionalProperties": false,
+      "properties": {
+        "evidence_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Evidence Ids",
+          "type": "array"
+        },
+        "kind": {
+          "$ref": "#/$defs/ThreatKind"
+        },
+        "lower_bound": {
+          "title": "Lower Bound",
+          "type": "number"
+        },
+        "mandatory": {
+          "title": "Mandatory",
+          "type": "boolean"
+        },
+        "reasons": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Reasons",
+          "type": "array"
+        },
+        "threat_id": {
+          "title": "Threat Id",
+          "type": "string"
+        },
+        "tolerance": {
+          "title": "Tolerance",
+          "type": "number"
+        },
+        "tolerance_basis": {
+          "enum": [
+            "absolute",
+            "incremental"
+          ],
+          "title": "Tolerance Basis",
+          "type": "string"
+        },
+        "upper_bound": {
+          "title": "Upper Bound",
+          "type": "number"
+        },
+        "verdict": {
+          "$ref": "#/$defs/Verdict"
+        }
+      },
+      "required": [
+        "threat_id",
+        "kind",
+        "mandatory",
+        "tolerance",
+        "tolerance_basis",
+        "lower_bound",
+        "upper_bound",
+        "verdict",
+        "evidence_ids",
+        "reasons"
+      ],
+      "title": "ThreatDecision",
+      "type": "object"
+    },
+    "ThreatKind": {
+      "enum": [
+        "linkage",
+        "membership",
+        "attribute",
+        "reconstruction"
+      ],
+      "title": "ThreatKind",
+      "type": "string"
+    },
+    "Verdict": {
+      "enum": [
+        "clear",
+        "block",
+        "inconclusive"
+      ],
+      "title": "Verdict",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "artifact_sha256": {
+      "title": "Artifact Sha256",
+      "type": "string"
+    },
+    "assessment_id": {
+      "title": "Assessment Id",
+      "type": "string"
+    },
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    },
+    "decisions": {
+      "items": {
+        "$ref": "#/$defs/ThreatDecision"
+      },
+      "title": "Decisions",
+      "type": "array"
+    },
+    "engine_version": {
+      "title": "Engine Version",
+      "type": "string"
+    },
+    "evidence": {
+      "items": {
+        "$ref": "#/$defs/EvidenceRecord"
+      },
+      "title": "Evidence",
+      "type": "array"
+    },
+    "overall_verdict": {
+      "$ref": "#/$defs/OverallVerdict"
+    },
+    "policy_id": {
+      "title": "Policy Id",
+      "type": "string"
+    },
+    "policy_sha256": {
+      "title": "Policy Sha256",
+      "type": "string"
+    },
+    "policy_version": {
+      "title": "Policy Version",
+      "type": "string"
+    },
+    "population_scopes": {
+      "items": {
+        "$ref": "#/$defs/PopulationScope"
+      },
+      "title": "Population Scopes",
+      "type": "array"
+    },
+    "release_contract_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Release Contract Sha256",
+      "type": "string"
+    },
+    "release_id": {
+      "title": "Release Id",
+      "type": "string"
+    },
+    "release_interface": {
+      "$ref": "#/$defs/InterfaceContract"
+    },
+    "request_sha256": {
+      "title": "Request Sha256",
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "1.2",
+      "default": "1.2",
+      "title": "Schema Version",
+      "type": "string"
+    }
+  },
+  "required": [
+    "assessment_id",
+    "release_id",
+    "policy_id",
+    "policy_version",
+    "policy_sha256",
+    "created_at",
+    "request_sha256",
+    "artifact_sha256",
+    "release_contract_sha256",
+    "release_interface",
+    "population_scopes",
+    "evidence",
+    "decisions",
+    "overall_verdict",
+    "engine_version"
+  ],
+  "title": "AssessmentReport",
+  "type": "object"
+}

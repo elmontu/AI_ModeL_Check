@@ -1,0 +1,133 @@
+{
+  "$defs": {
+    "MultinomialSamplingPlanRelease": {
+      "additionalProperties": false,
+      "properties": {
+        "observation_ids": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Observation Ids",
+          "type": "array"
+        },
+        "release_id": {
+          "maxLength": 128,
+          "minLength": 3,
+          "pattern": "^[A-Za-z0-9._:-]+$",
+          "title": "Release Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "release_id",
+        "observation_ids"
+      ],
+      "title": "MultinomialSamplingPlanRelease",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "audit_sample_definition": {
+      "maxLength": 4096,
+      "minLength": 1,
+      "title": "Audit Sample Definition",
+      "type": "string"
+    },
+    "family_id": {
+      "maxLength": 128,
+      "minLength": 3,
+      "pattern": "^[A-Za-z0-9._:-]+$",
+      "title": "Family Id",
+      "type": "string"
+    },
+    "minimum_trials_per_state": {
+      "exclusiveMinimum": 0,
+      "title": "Minimum Trials Per State",
+      "type": "integer"
+    },
+    "plan_id": {
+      "maxLength": 128,
+      "minLength": 3,
+      "pattern": "^[A-Za-z0-9._:-]+$",
+      "title": "Plan Id",
+      "type": "string"
+    },
+    "population_scope_id": {
+      "maxLength": 128,
+      "minLength": 3,
+      "pattern": "^[A-Za-z0-9._:-]+$",
+      "title": "Population Scope Id",
+      "type": "string"
+    },
+    "portfolio_id": {
+      "maxLength": 128,
+      "minLength": 3,
+      "pattern": "^[A-Za-z0-9._:-]+$",
+      "title": "Portfolio Id",
+      "type": "string"
+    },
+    "registered_at": {
+      "format": "date-time",
+      "title": "Registered At",
+      "type": "string"
+    },
+    "releases": {
+      "items": {
+        "$ref": "#/$defs/MultinomialSamplingPlanRelease"
+      },
+      "minItems": 1,
+      "title": "Releases",
+      "type": "array"
+    },
+    "sampling_model": {
+      "const": "iid_multinomial",
+      "default": "iid_multinomial",
+      "title": "Sampling Model",
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "1.0",
+      "default": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "selection_scope": {
+      "maxLength": 4096,
+      "minLength": 1,
+      "title": "Selection Scope",
+      "type": "string"
+    },
+    "state_ids": {
+      "items": {
+        "type": "string"
+      },
+      "minItems": 2,
+      "title": "State Ids",
+      "type": "array"
+    },
+    "threat_id": {
+      "maxLength": 128,
+      "minLength": 3,
+      "pattern": "^[A-Za-z0-9._:-]+$",
+      "title": "Threat Id",
+      "type": "string"
+    }
+  },
+  "required": [
+    "plan_id",
+    "family_id",
+    "portfolio_id",
+    "population_scope_id",
+    "threat_id",
+    "registered_at",
+    "state_ids",
+    "releases",
+    "minimum_trials_per_state",
+    "selection_scope",
+    "audit_sample_definition"
+  ],
+  "title": "MultinomialSamplingPlan",
+  "type": "object"
+}

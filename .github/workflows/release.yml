@@ -1,0 +1,52 @@
+name: Draft release
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - name: Require tag and package versions to match
+        env:
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: |
+          PYTHONPATH=src python - <<'PY'
+          import os
+          from model_release_assurance.version import VERSION
+
+          expected = os.environ["RELEASE_TAG"].removeprefix("v")
+          if VERSION != expected:
+              raise SystemExit(f"tag {expected!r} does not match package version {VERSION!r}")
+          PY
+      - name: Install runtime and release tools
+        run: |
+          python -m pip install --disable-pip-version-check -r requirements.lock
+          python -m pip install --no-deps -e .
+          python -m pip install --disable-pip-version-check build twine
+      - name: Run release verification
+        run: make PYTHON=python check
+      - name: Build and validate artifacts
+        run: |
+          python -m build
+          python -m twine check dist/*
+      - uses: actions/upload-artifact@v4
+        with:
+          name: model-release-assurance-${{ github.ref_name }}
+          path: dist/*
+          if-no-files-found: error
+      - name: Create draft GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release create "${{ github.ref_name }}" dist/* --draft --verify-tag --generate-notes --title "${{ github.ref_name }}"

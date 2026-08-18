@@ -1,0 +1,574 @@
+{
+  "$defs": {
+    "AssessmentReportReference": {
+      "additionalProperties": false,
+      "properties": {
+        "report_path": {
+          "minLength": 1,
+          "title": "Report Path",
+          "type": "string"
+        },
+        "report_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Report Sha256",
+          "type": "string"
+        }
+      },
+      "required": [
+        "report_path",
+        "report_sha256"
+      ],
+      "title": "AssessmentReportReference",
+      "type": "object"
+    },
+    "FiniteExperiment": {
+      "additionalProperties": false,
+      "description": "A finite information structure P(observation | secret state).",
+      "properties": {
+        "artifact_sha256": {
+          "anyOf": [
+            {
+              "pattern": "^[0-9a-f]{64}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Artifact Sha256"
+        },
+        "channel": {
+          "items": {
+            "items": {
+              "type": "number"
+            },
+            "type": "array"
+          },
+          "title": "Channel",
+          "type": "array"
+        },
+        "experiment_id": {
+          "maxLength": 128,
+          "minLength": 3,
+          "pattern": "^[A-Za-z0-9._:-]+$",
+          "title": "Experiment Id",
+          "type": "string"
+        },
+        "interface_description": {
+          "maxLength": 2048,
+          "minLength": 1,
+          "title": "Interface Description",
+          "type": "string"
+        },
+        "interface_sha256": {
+          "anyOf": [
+            {
+              "pattern": "^[0-9a-f]{64}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Interface Sha256"
+        },
+        "observation_ids": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Observation Ids",
+          "type": "array"
+        },
+        "population_scope_id": {
+          "maxLength": 128,
+          "minLength": 3,
+          "pattern": "^[A-Za-z0-9._:-]+$",
+          "title": "Population Scope Id",
+          "type": "string"
+        },
+        "prior": {
+          "items": {
+            "type": "number"
+          },
+          "title": "Prior",
+          "type": "array"
+        },
+        "state_ids": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 2,
+          "title": "State Ids",
+          "type": "array"
+        },
+        "threat_id": {
+          "maxLength": 128,
+          "minLength": 3,
+          "pattern": "^[A-Za-z0-9._:-]+$",
+          "title": "Threat Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "experiment_id",
+        "threat_id",
+        "population_scope_id",
+        "state_ids",
+        "observation_ids",
+        "channel",
+        "prior",
+        "interface_description"
+      ],
+      "title": "FiniteExperiment",
+      "type": "object"
+    },
+    "GarblingCertificate": {
+      "additionalProperties": false,
+      "description": "Replayable witness that dominated = dominant @ kernel.",
+      "properties": {
+        "certificate_id": {
+          "maxLength": 128,
+          "minLength": 3,
+          "pattern": "^[A-Za-z0-9._:-]+$",
+          "title": "Certificate Id",
+          "type": "string"
+        },
+        "construction": {
+          "maxLength": 2048,
+          "minLength": 1,
+          "title": "Construction",
+          "type": "string"
+        },
+        "dominant_experiment_id": {
+          "title": "Dominant Experiment Id",
+          "type": "string"
+        },
+        "dominated_experiment_id": {
+          "title": "Dominated Experiment Id",
+          "type": "string"
+        },
+        "kernel": {
+          "items": {
+            "items": {
+              "type": "number"
+            },
+            "type": "array"
+          },
+          "title": "Kernel",
+          "type": "array"
+        },
+        "tolerance": {
+          "default": 1e-10,
+          "exclusiveMinimum": 0.0,
+          "maximum": 1e-06,
+          "title": "Tolerance",
+          "type": "number"
+        }
+      },
+      "required": [
+        "certificate_id",
+        "dominant_experiment_id",
+        "dominated_experiment_id",
+        "kernel",
+        "construction"
+      ],
+      "title": "GarblingCertificate",
+      "type": "object"
+    },
+    "InterfaceContract": {
+      "additionalProperties": false,
+      "properties": {
+        "access": {
+          "enum": [
+            "aggregate",
+            "label",
+            "score",
+            "embedding",
+            "gradient",
+            "weights",
+            "full_artifact"
+          ],
+          "title": "Access",
+          "type": "string"
+        },
+        "adaptive_queries": {
+          "default": false,
+          "title": "Adaptive Queries",
+          "type": "boolean"
+        },
+        "authenticated": {
+          "default": false,
+          "title": "Authenticated",
+          "type": "boolean"
+        },
+        "notes": {
+          "default": "",
+          "title": "Notes",
+          "type": "string"
+        },
+        "outputs": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Outputs",
+          "type": "array"
+        },
+        "precision_bits": {
+          "anyOf": [
+            {
+              "maximum": 4096,
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Precision Bits"
+        },
+        "query_budget": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Query Budget"
+        },
+        "rate_limited": {
+          "default": false,
+          "title": "Rate Limited",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "access"
+      ],
+      "title": "InterfaceContract",
+      "type": "object"
+    },
+    "ReleaseConfiguration": {
+      "additionalProperties": false,
+      "properties": {
+        "assessment": {
+          "$ref": "#/$defs/AssessmentReportReference"
+        },
+        "configuration_id": {
+          "maxLength": 128,
+          "minLength": 3,
+          "pattern": "^[A-Za-z0-9._:-]+$",
+          "title": "Configuration Id",
+          "type": "string"
+        },
+        "controls": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/ReleaseControl"
+          },
+          "title": "Controls",
+          "type": "array"
+        },
+        "implementation_cost": {
+          "minimum": 0.0,
+          "title": "Implementation Cost",
+          "type": "number"
+        },
+        "is_proposed_configuration": {
+          "title": "Is Proposed Configuration",
+          "type": "boolean"
+        },
+        "name": {
+          "maxLength": 256,
+          "minLength": 1,
+          "title": "Name",
+          "type": "string"
+        },
+        "notes": {
+          "default": "",
+          "title": "Notes",
+          "type": "string"
+        },
+        "portfolio_assessment_complete": {
+          "title": "Portfolio Assessment Complete",
+          "type": "boolean"
+        },
+        "release_artifact_path": {
+          "minLength": 1,
+          "title": "Release Artifact Path",
+          "type": "string"
+        },
+        "release_artifact_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Release Artifact Sha256",
+          "type": "string"
+        },
+        "release_interface": {
+          "$ref": "#/$defs/InterfaceContract"
+        },
+        "threat_experiments": {
+          "items": {
+            "$ref": "#/$defs/ThreatExperimentBinding"
+          },
+          "minItems": 1,
+          "title": "Threat Experiments",
+          "type": "array"
+        },
+        "utility": {
+          "$ref": "#/$defs/UtilityCertificate"
+        }
+      },
+      "required": [
+        "configuration_id",
+        "name",
+        "is_proposed_configuration",
+        "assessment",
+        "release_artifact_path",
+        "release_artifact_sha256",
+        "release_interface",
+        "utility",
+        "implementation_cost",
+        "threat_experiments",
+        "portfolio_assessment_complete"
+      ],
+      "title": "ReleaseConfiguration",
+      "type": "object"
+    },
+    "ReleaseControl": {
+      "additionalProperties": false,
+      "properties": {
+        "changes_information_structure": {
+          "title": "Changes Information Structure",
+          "type": "boolean"
+        },
+        "control_id": {
+          "maxLength": 128,
+          "minLength": 3,
+          "pattern": "^[A-Za-z0-9._:-]+$",
+          "title": "Control Id",
+          "type": "string"
+        },
+        "credited_for_privacy": {
+          "default": true,
+          "title": "Credited For Privacy",
+          "type": "boolean"
+        },
+        "description": {
+          "maxLength": 2048,
+          "minLength": 1,
+          "title": "Description",
+          "type": "string"
+        },
+        "enforcement_evidence": {
+          "maxLength": 2048,
+          "minLength": 1,
+          "title": "Enforcement Evidence",
+          "type": "string"
+        },
+        "enforcement_validated": {
+          "title": "Enforcement Validated",
+          "type": "boolean"
+        },
+        "kind": {
+          "maxLength": 128,
+          "minLength": 1,
+          "title": "Kind",
+          "type": "string"
+        }
+      },
+      "required": [
+        "control_id",
+        "kind",
+        "description",
+        "changes_information_structure",
+        "enforcement_validated",
+        "enforcement_evidence"
+      ],
+      "title": "ReleaseControl",
+      "type": "object"
+    },
+    "ThreatExperimentBinding": {
+      "additionalProperties": false,
+      "properties": {
+        "assessed_experiment_id": {
+          "title": "Assessed Experiment Id",
+          "type": "string"
+        },
+        "released_experiment_id": {
+          "title": "Released Experiment Id",
+          "type": "string"
+        },
+        "substitution_certificate_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Substitution Certificate Id"
+        },
+        "threat_id": {
+          "title": "Threat Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "threat_id",
+        "assessed_experiment_id",
+        "released_experiment_id"
+      ],
+      "title": "ThreatExperimentBinding",
+      "type": "object"
+    },
+    "UtilityCertificate": {
+      "additionalProperties": false,
+      "properties": {
+        "audit_disjoint": {
+          "title": "Audit Disjoint",
+          "type": "boolean"
+        },
+        "confidence": {
+          "exclusiveMaximum": 1.0,
+          "exclusiveMinimum": 0.5,
+          "title": "Confidence",
+          "type": "number"
+        },
+        "evaluation_population": {
+          "maxLength": 2048,
+          "minLength": 1,
+          "title": "Evaluation Population",
+          "type": "string"
+        },
+        "lower_bound": {
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Lower Bound",
+          "type": "number"
+        },
+        "metric": {
+          "maxLength": 256,
+          "minLength": 1,
+          "title": "Metric",
+          "type": "string"
+        },
+        "minimum_required": {
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Minimum Required",
+          "type": "number"
+        },
+        "point_estimate": {
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Point Estimate",
+          "type": "number"
+        },
+        "raw_evidence_retained": {
+          "title": "Raw Evidence Retained",
+          "type": "boolean"
+        },
+        "source_path": {
+          "minLength": 1,
+          "title": "Source Path",
+          "type": "string"
+        },
+        "source_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Source Sha256",
+          "type": "string"
+        },
+        "uncertainty_method": {
+          "maxLength": 1024,
+          "minLength": 1,
+          "title": "Uncertainty Method",
+          "type": "string"
+        }
+      },
+      "required": [
+        "metric",
+        "lower_bound",
+        "point_estimate",
+        "minimum_required",
+        "evaluation_population",
+        "confidence",
+        "uncertainty_method",
+        "audit_disjoint",
+        "raw_evidence_retained",
+        "source_path",
+        "source_sha256"
+      ],
+      "title": "UtilityCertificate",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "configurations": {
+      "items": {
+        "$ref": "#/$defs/ReleaseConfiguration"
+      },
+      "minItems": 1,
+      "title": "Configurations",
+      "type": "array"
+    },
+    "experiments": {
+      "items": {
+        "$ref": "#/$defs/FiniteExperiment"
+      },
+      "minItems": 1,
+      "title": "Experiments",
+      "type": "array"
+    },
+    "garbling_certificates": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/GarblingCertificate"
+      },
+      "title": "Garbling Certificates",
+      "type": "array"
+    },
+    "objective": {
+      "default": "privacy constraints, then minimum implementation cost, then maximum certified utility",
+      "maxLength": 2048,
+      "minLength": 1,
+      "title": "Objective",
+      "type": "string"
+    },
+    "optimization_id": {
+      "maxLength": 128,
+      "minLength": 3,
+      "pattern": "^[A-Za-z0-9._:-]+$",
+      "title": "Optimization Id",
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "1.0",
+      "default": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "search_space_exhaustive": {
+      "default": false,
+      "title": "Search Space Exhaustive",
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "optimization_id",
+    "experiments",
+    "configurations"
+  ],
+  "title": "OptimizationRequest",
+  "type": "object"
+}

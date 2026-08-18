@@ -1,0 +1,44 @@
+{
+  "class_counts": {
+    "negative": 332,
+    "positive": 626
+  },
+  "classes": 2,
+  "dataset_id": 50,
+  "feature_dtypes": {
+    "bottom-left-square": "category",
+    "bottom-middle-square": "category",
+    "bottom-right-square": "category",
+    "middle-left-square": "category",
+    "middle-middle-square": "category",
+    "middle-right-square": "category",
+    "top-left-square": "category",
+    "top-middle-square": "category",
+    "top-right-square": "category"
+  },
+  "feature_names": [
+    "top-left-square",
+    "top-middle-square",
+    "top-right-square",
+    "middle-left-square",
+    "middle-middle-square",
+    "middle-right-square",
+    "bottom-left-square",
+    "bottom-middle-square",
+    "bottom-right-square"
+  ],
+  "features": 9,
+  "file_id": "50",
+  "missing_feature_values": 0,
+  "name": "tic-tac-toe",
+  "openml_md5_checksum": "34b2992c41e5e23c42769817e96305ac",
+  "openml_url": "https://openml.org/data/v1/download/50/tic-tac-toe.arff",
+  "parquet_url": "https://data.openml.org/datasets/0000/0050/dataset_50.pq",
+  "rows": 958,
+  "snapshot_bytes": 10485,
+  "snapshot_path": "reproduction/openml/raw/openml-50.parquet",
+  "snapshot_sha256": "a9f22be92a8643e27a252d909f965a29e96b6cd3b364a202a9d7175c08fdb293",
+  "status": "active",
+  "target": "Class",
+  "version": 1
+}

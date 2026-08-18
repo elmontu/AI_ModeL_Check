@@ -1,0 +1,361 @@
+{
+  "$defs": {
+    "ConditionalMarginalBounds": {
+      "additionalProperties": false,
+      "properties": {
+        "evidence": {
+          "$ref": "#/$defs/EvidenceReference"
+        },
+        "lower": {
+          "items": {
+            "items": {
+              "type": "number"
+            },
+            "type": "array"
+          },
+          "minItems": 2,
+          "title": "Lower",
+          "type": "array"
+        },
+        "observation_ids": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Observation Ids",
+          "type": "array"
+        },
+        "release_id": {
+          "maxLength": 128,
+          "minLength": 3,
+          "pattern": "^[A-Za-z0-9._:-]+$",
+          "title": "Release Id",
+          "type": "string"
+        },
+        "upper": {
+          "items": {
+            "items": {
+              "type": "number"
+            },
+            "type": "array"
+          },
+          "minItems": 2,
+          "title": "Upper",
+          "type": "array"
+        }
+      },
+      "required": [
+        "release_id",
+        "observation_ids",
+        "lower",
+        "upper",
+        "evidence"
+      ],
+      "title": "ConditionalMarginalBounds",
+      "type": "object"
+    },
+    "CouplingModel": {
+      "description": "Declared relationship between release randomizers conditional on the secret.",
+      "enum": [
+        "arbitrary",
+        "linear_mechanism",
+        "conditional_independence"
+      ],
+      "title": "CouplingModel",
+      "type": "string"
+    },
+    "DecisionProblem": {
+      "additionalProperties": false,
+      "description": "A bounded success functional g(secret state, adversary action).",
+      "properties": {
+        "action_ids": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Action Ids",
+          "type": "array"
+        },
+        "gain": {
+          "items": {
+            "items": {
+              "type": "number"
+            },
+            "type": "array"
+          },
+          "title": "Gain",
+          "type": "array"
+        },
+        "interpretation": {
+          "maxLength": 4096,
+          "minLength": 1,
+          "title": "Interpretation",
+          "type": "string"
+        },
+        "problem_id": {
+          "maxLength": 128,
+          "minLength": 3,
+          "pattern": "^[A-Za-z0-9._:-]+$",
+          "title": "Problem Id",
+          "type": "string"
+        },
+        "state_ids": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 2,
+          "title": "State Ids",
+          "type": "array"
+        }
+      },
+      "required": [
+        "problem_id",
+        "state_ids",
+        "action_ids",
+        "gain",
+        "interpretation"
+      ],
+      "title": "DecisionProblem",
+      "type": "object"
+    },
+    "EvidenceReference": {
+      "additionalProperties": false,
+      "properties": {
+        "evidence_id": {
+          "maxLength": 128,
+          "minLength": 3,
+          "pattern": "^[A-Za-z0-9._:-]+$",
+          "title": "Evidence Id",
+          "type": "string"
+        },
+        "source_path": {
+          "minLength": 1,
+          "title": "Source Path",
+          "type": "string"
+        },
+        "source_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Source Sha256",
+          "type": "string"
+        },
+        "supports": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Supports",
+          "type": "array"
+        }
+      },
+      "required": [
+        "evidence_id",
+        "source_path",
+        "source_sha256",
+        "supports"
+      ],
+      "title": "EvidenceReference",
+      "type": "object"
+    },
+    "JointEventBound": {
+      "additionalProperties": false,
+      "description": "A mechanism-derived linear bound on a set of joint transcripts in one state.",
+      "properties": {
+        "event_id": {
+          "maxLength": 128,
+          "minLength": 3,
+          "pattern": "^[A-Za-z0-9._:-]+$",
+          "title": "Event Id",
+          "type": "string"
+        },
+        "justification": {
+          "maxLength": 4096,
+          "minLength": 1,
+          "title": "Justification",
+          "type": "string"
+        },
+        "lower": {
+          "default": 0.0,
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Lower",
+          "type": "number"
+        },
+        "state_id": {
+          "maxLength": 256,
+          "minLength": 1,
+          "title": "State Id",
+          "type": "string"
+        },
+        "transcripts": {
+          "items": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "minItems": 1,
+          "title": "Transcripts",
+          "type": "array"
+        },
+        "upper": {
+          "default": 1.0,
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Upper",
+          "type": "number"
+        }
+      },
+      "required": [
+        "event_id",
+        "state_id",
+        "transcripts",
+        "justification"
+      ],
+      "title": "JointEventBound",
+      "type": "object"
+    },
+    "StatisticalCoverage": {
+      "description": "How the channel bounds cover the data-dependent assurance search.",
+      "enum": [
+        "deterministic",
+        "simultaneous",
+        "anytime_valid",
+        "pointwise"
+      ],
+      "title": "StatisticalCoverage",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "description": "Finite ambiguity set built from observable marginals and mechanism constraints.",
+  "properties": {
+    "coupling_model": {
+      "$ref": "#/$defs/CouplingModel"
+    },
+    "coverage": {
+      "$ref": "#/$defs/StatisticalCoverage"
+    },
+    "coverage_confidence": {
+      "exclusiveMinimum": 0.0,
+      "maximum": 1.0,
+      "title": "Coverage Confidence",
+      "type": "number"
+    },
+    "decision_game_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Decision Game Sha256",
+      "type": "string"
+    },
+    "decision_problem": {
+      "$ref": "#/$defs/DecisionProblem"
+    },
+    "joint_event_bounds": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/JointEventBound"
+      },
+      "title": "Joint Event Bounds",
+      "type": "array"
+    },
+    "mechanism_assumptions": {
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Mechanism Assumptions",
+      "type": "array"
+    },
+    "mechanism_evidence": {
+      "items": {
+        "$ref": "#/$defs/EvidenceReference"
+      },
+      "minItems": 1,
+      "title": "Mechanism Evidence",
+      "type": "array"
+    },
+    "population_scope_id": {
+      "maxLength": 128,
+      "minLength": 3,
+      "pattern": "^[A-Za-z0-9._:-]+$",
+      "title": "Population Scope Id",
+      "type": "string"
+    },
+    "population_scope_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Population Scope Sha256",
+      "type": "string"
+    },
+    "portfolio_id": {
+      "maxLength": 128,
+      "minLength": 3,
+      "pattern": "^[A-Za-z0-9._:-]+$",
+      "title": "Portfolio Id",
+      "type": "string"
+    },
+    "prior": {
+      "items": {
+        "type": "number"
+      },
+      "title": "Prior",
+      "type": "array"
+    },
+    "prior_evidence": {
+      "$ref": "#/$defs/EvidenceReference"
+    },
+    "releases": {
+      "items": {
+        "$ref": "#/$defs/ConditionalMarginalBounds"
+      },
+      "minItems": 1,
+      "title": "Releases",
+      "type": "array"
+    },
+    "schema_version": {
+      "const": "1.0",
+      "default": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "selection_scope": {
+      "maxLength": 4096,
+      "minLength": 1,
+      "title": "Selection Scope",
+      "type": "string"
+    },
+    "state_ids": {
+      "items": {
+        "type": "string"
+      },
+      "minItems": 2,
+      "title": "State Ids",
+      "type": "array"
+    },
+    "threat_id": {
+      "maxLength": 128,
+      "minLength": 3,
+      "pattern": "^[A-Za-z0-9._:-]+$",
+      "title": "Threat Id",
+      "type": "string"
+    }
+  },
+  "required": [
+    "portfolio_id",
+    "population_scope_id",
+    "population_scope_sha256",
+    "threat_id",
+    "decision_game_sha256",
+    "state_ids",
+    "prior",
+    "releases",
+    "decision_problem",
+    "coupling_model",
+    "coverage",
+    "coverage_confidence",
+    "selection_scope",
+    "prior_evidence",
+    "mechanism_assumptions",
+    "mechanism_evidence"
+  ],
+  "title": "IncompletePortfolioProblem",
+  "type": "object"
+}

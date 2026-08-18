@@ -1,0 +1,45 @@
+{
+  "class_counts": {
+    "1": 629,
+    "2": 333,
+    "3": 511
+  },
+  "classes": 3,
+  "dataset_id": 23,
+  "feature_dtypes": {
+    "Husbands_education": "category",
+    "Husbands_occupation": "category",
+    "Media_exposure": "category",
+    "Number_of_children_ever_born": "uint8",
+    "Standard-of-living_index": "category",
+    "Wifes_age": "uint8",
+    "Wifes_education": "category",
+    "Wifes_now_working%3F": "category",
+    "Wifes_religion": "category"
+  },
+  "feature_names": [
+    "Wifes_age",
+    "Wifes_education",
+    "Husbands_education",
+    "Number_of_children_ever_born",
+    "Wifes_religion",
+    "Wifes_now_working%3F",
+    "Husbands_occupation",
+    "Standard-of-living_index",
+    "Media_exposure"
+  ],
+  "features": 9,
+  "file_id": "23",
+  "missing_feature_values": 0,
+  "name": "cmc",
+  "openml_md5_checksum": "3149646ecff276abac3e892d1556655f",
+  "openml_url": "https://openml.org/data/v1/download/23/cmc.arff",
+  "parquet_url": "https://data.openml.org/datasets/0000/0023/dataset_23.pq",
+  "rows": 1473,
+  "snapshot_bytes": 12976,
+  "snapshot_path": "reproduction/openml/raw/openml-23.parquet",
+  "snapshot_sha256": "e27aa2f656cddac85adabdc4d2d4398656b9d499b4efce447640b15549cd5640",
+  "status": "active",
+  "target": "Contraceptive_method_used",
+  "version": 1
+}

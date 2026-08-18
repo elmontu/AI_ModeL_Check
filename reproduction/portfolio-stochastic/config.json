@@ -1,0 +1,56 @@
+{
+  "experiment": "finite_incomplete_portfolio_stochastic_ground_truth",
+  "implementation_version": 1,
+  "master_seed": 20260813,
+  "replicates": 1000,
+  "sample_sizes_per_state": [100, 500, 2000],
+  "family_alpha": 0.04,
+  "assurance_wide_alpha": 0.05,
+  "thresholds": [0.55, 0.65],
+  "exact_solver_replicates_per_scenario_sample": 3,
+  "scenarios": [
+    {
+      "scenario_id": "xor-arbitrary",
+      "description": "Each marginal is uninformative but arbitrary coupling admits XOR disclosure.",
+      "true_joint_channel": [[0.5, 0.0, 0.0, 0.5], [0.0, 0.5, 0.5, 0.0]],
+      "coupling_model": "arbitrary",
+      "joint_event_bounds": [],
+      "true_bayes_value": 1.0
+    },
+    {
+      "scenario_id": "independent-arbitrary",
+      "description": "The deployed channel is independent but the assurance record does not credit independence.",
+      "true_joint_channel": [[0.25, 0.25, 0.25, 0.25], [0.25, 0.25, 0.25, 0.25]],
+      "coupling_model": "arbitrary",
+      "joint_event_bounds": [],
+      "true_bayes_value": 0.5
+    },
+    {
+      "scenario_id": "independent-certified",
+      "description": "The deployed independent channel has a credited conditional-independence mechanism claim.",
+      "true_joint_channel": [[0.25, 0.25, 0.25, 0.25], [0.25, 0.25, 0.25, 0.25]],
+      "coupling_model": "conditional_independence",
+      "joint_event_bounds": [],
+      "true_bayes_value": 0.5
+    },
+    {
+      "scenario_id": "partial-arbitrary",
+      "description": "The deployed channel has Bayes value 0.6 but no joint mechanism constraint is credited.",
+      "true_joint_channel": [[0.3, 0.2, 0.2, 0.3], [0.2, 0.3, 0.3, 0.2]],
+      "coupling_model": "arbitrary",
+      "joint_event_bounds": [],
+      "true_bayes_value": 0.6
+    },
+    {
+      "scenario_id": "partial-certified",
+      "description": "The deployed partial-dependence channel has exact audited diagonal-mass constraints.",
+      "true_joint_channel": [[0.3, 0.2, 0.2, 0.3], [0.2, 0.3, 0.3, 0.2]],
+      "coupling_model": "linear_mechanism",
+      "joint_event_bounds": [
+        {"event_id": "diagonal-state-0", "state_id": "state-0", "transcripts": [["0", "0"], ["1", "1"]], "lower": 0.6, "upper": 0.6, "justification": "known stochastic ground-truth mechanism"},
+        {"event_id": "diagonal-state-1", "state_id": "state-1", "transcripts": [["0", "0"], ["1", "1"]], "lower": 0.4, "upper": 0.4, "justification": "known stochastic ground-truth mechanism"}
+      ],
+      "true_bayes_value": 0.6
+    }
+  ]
+}

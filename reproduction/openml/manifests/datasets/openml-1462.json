@@ -1,0 +1,34 @@
+{
+  "class_counts": {
+    "1": 762,
+    "2": 610
+  },
+  "classes": 2,
+  "dataset_id": 1462,
+  "feature_dtypes": {
+    "V1": "float64",
+    "V2": "float64",
+    "V3": "float64",
+    "V4": "float64"
+  },
+  "feature_names": [
+    "V1",
+    "V2",
+    "V3",
+    "V4"
+  ],
+  "features": 4,
+  "file_id": "1586223",
+  "missing_feature_values": 0,
+  "name": "banknote-authentication",
+  "openml_md5_checksum": "baa2dc5b745775a943ebeb9c276401f8",
+  "openml_url": "https://openml.org/data/v1/download/1586223/banknote-authentication.arff",
+  "parquet_url": "https://data.openml.org/datasets/0000/1462/dataset_1462.pq",
+  "rows": 1372,
+  "snapshot_bytes": 50048,
+  "snapshot_path": "reproduction/openml/raw/openml-1462.parquet",
+  "snapshot_sha256": "94ae64cb943d0bfe292167ce3dfb562f7c0dea707da055a904948d9cd1a2aa17",
+  "status": "active",
+  "target": "Class",
+  "version": 1
+}

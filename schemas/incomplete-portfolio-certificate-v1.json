@@ -1,0 +1,659 @@
+{
+  "$defs": {
+    "ConditionalMarginalBounds": {
+      "additionalProperties": false,
+      "properties": {
+        "evidence": {
+          "$ref": "#/$defs/EvidenceReference"
+        },
+        "lower": {
+          "items": {
+            "items": {
+              "type": "number"
+            },
+            "type": "array"
+          },
+          "minItems": 2,
+          "title": "Lower",
+          "type": "array"
+        },
+        "observation_ids": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Observation Ids",
+          "type": "array"
+        },
+        "release_id": {
+          "maxLength": 128,
+          "minLength": 3,
+          "pattern": "^[A-Za-z0-9._:-]+$",
+          "title": "Release Id",
+          "type": "string"
+        },
+        "upper": {
+          "items": {
+            "items": {
+              "type": "number"
+            },
+            "type": "array"
+          },
+          "minItems": 2,
+          "title": "Upper",
+          "type": "array"
+        }
+      },
+      "required": [
+        "release_id",
+        "observation_ids",
+        "lower",
+        "upper",
+        "evidence"
+      ],
+      "title": "ConditionalMarginalBounds",
+      "type": "object"
+    },
+    "CouplingModel": {
+      "description": "Declared relationship between release randomizers conditional on the secret.",
+      "enum": [
+        "arbitrary",
+        "linear_mechanism",
+        "conditional_independence"
+      ],
+      "title": "CouplingModel",
+      "type": "string"
+    },
+    "DecisionProblem": {
+      "additionalProperties": false,
+      "description": "A bounded success functional g(secret state, adversary action).",
+      "properties": {
+        "action_ids": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Action Ids",
+          "type": "array"
+        },
+        "gain": {
+          "items": {
+            "items": {
+              "type": "number"
+            },
+            "type": "array"
+          },
+          "title": "Gain",
+          "type": "array"
+        },
+        "interpretation": {
+          "maxLength": 4096,
+          "minLength": 1,
+          "title": "Interpretation",
+          "type": "string"
+        },
+        "problem_id": {
+          "maxLength": 128,
+          "minLength": 3,
+          "pattern": "^[A-Za-z0-9._:-]+$",
+          "title": "Problem Id",
+          "type": "string"
+        },
+        "state_ids": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 2,
+          "title": "State Ids",
+          "type": "array"
+        }
+      },
+      "required": [
+        "problem_id",
+        "state_ids",
+        "action_ids",
+        "gain",
+        "interpretation"
+      ],
+      "title": "DecisionProblem",
+      "type": "object"
+    },
+    "DecoderUpperCertificate": {
+      "additionalProperties": false,
+      "properties": {
+        "action_indices": {
+          "items": {
+            "type": "integer"
+          },
+          "title": "Action Indices",
+          "type": "array"
+        },
+        "state_duals": {
+          "items": {
+            "$ref": "#/$defs/StateDualCertificate"
+          },
+          "title": "State Duals",
+          "type": "array"
+        },
+        "upper_bound": {
+          "title": "Upper Bound",
+          "type": "number"
+        }
+      },
+      "required": [
+        "action_indices",
+        "state_duals",
+        "upper_bound"
+      ],
+      "title": "DecoderUpperCertificate",
+      "type": "object"
+    },
+    "EnvelopePortfolioCertificate": {
+      "additionalProperties": false,
+      "properties": {
+        "cell_upper_bounds": {
+          "items": {
+            "items": {
+              "type": "number"
+            },
+            "type": "array"
+          },
+          "title": "Cell Upper Bounds",
+          "type": "array"
+        },
+        "certificate_id": {
+          "maxLength": 128,
+          "minLength": 3,
+          "pattern": "^[A-Za-z0-9._:-]+$",
+          "title": "Certificate Id",
+          "type": "string"
+        },
+        "coverage_confidence": {
+          "exclusiveMinimum": 0.0,
+          "maximum": 1.0,
+          "title": "Coverage Confidence",
+          "type": "number"
+        },
+        "derivation": {
+          "title": "Derivation",
+          "type": "string"
+        },
+        "feasible_joint_channel": {
+          "items": {
+            "items": {
+              "type": "number"
+            },
+            "type": "array"
+          },
+          "title": "Feasible Joint Channel",
+          "type": "array"
+        },
+        "joint_observation_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Joint Observation Ids",
+          "type": "array"
+        },
+        "problem_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Problem Sha256",
+          "type": "string"
+        },
+        "raw_upper_bound": {
+          "minimum": 0.0,
+          "title": "Raw Upper Bound",
+          "type": "number"
+        },
+        "selection_valid": {
+          "title": "Selection Valid",
+          "type": "boolean"
+        },
+        "upper_bound": {
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Upper Bound",
+          "type": "number"
+        }
+      },
+      "required": [
+        "certificate_id",
+        "problem_sha256",
+        "joint_observation_ids",
+        "cell_upper_bounds",
+        "feasible_joint_channel",
+        "raw_upper_bound",
+        "upper_bound",
+        "derivation",
+        "selection_valid",
+        "coverage_confidence"
+      ],
+      "title": "EnvelopePortfolioCertificate",
+      "type": "object"
+    },
+    "EvidenceReference": {
+      "additionalProperties": false,
+      "properties": {
+        "evidence_id": {
+          "maxLength": 128,
+          "minLength": 3,
+          "pattern": "^[A-Za-z0-9._:-]+$",
+          "title": "Evidence Id",
+          "type": "string"
+        },
+        "source_path": {
+          "minLength": 1,
+          "title": "Source Path",
+          "type": "string"
+        },
+        "source_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Source Sha256",
+          "type": "string"
+        },
+        "supports": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Supports",
+          "type": "array"
+        }
+      },
+      "required": [
+        "evidence_id",
+        "source_path",
+        "source_sha256",
+        "supports"
+      ],
+      "title": "EvidenceReference",
+      "type": "object"
+    },
+    "ExactPortfolioCertificate": {
+      "additionalProperties": false,
+      "properties": {
+        "certificate_id": {
+          "maxLength": 128,
+          "minLength": 3,
+          "pattern": "^[A-Za-z0-9._:-]+$",
+          "title": "Certificate Id",
+          "type": "string"
+        },
+        "coverage_confidence": {
+          "exclusiveMinimum": 0.0,
+          "maximum": 1.0,
+          "title": "Coverage Confidence",
+          "type": "number"
+        },
+        "decoder_certificates": {
+          "items": {
+            "$ref": "#/$defs/DecoderUpperCertificate"
+          },
+          "title": "Decoder Certificates",
+          "type": "array"
+        },
+        "decoder_count": {
+          "exclusiveMinimum": 0,
+          "title": "Decoder Count",
+          "type": "integer"
+        },
+        "joint_observation_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Joint Observation Ids",
+          "type": "array"
+        },
+        "lower_bound": {
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Lower Bound",
+          "type": "number"
+        },
+        "numerical_tolerance": {
+          "default": 1e-08,
+          "exclusiveMinimum": 0.0,
+          "maximum": 1e-05,
+          "title": "Numerical Tolerance",
+          "type": "number"
+        },
+        "optimality_gap": {
+          "minimum": 0.0,
+          "title": "Optimality Gap",
+          "type": "number"
+        },
+        "problem_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Problem Sha256",
+          "type": "string"
+        },
+        "selection_valid": {
+          "title": "Selection Valid",
+          "type": "boolean"
+        },
+        "solver": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Solver",
+          "type": "string"
+        },
+        "upper_bound": {
+          "minimum": 0.0,
+          "title": "Upper Bound",
+          "type": "number"
+        },
+        "winning_joint_channel": {
+          "items": {
+            "items": {
+              "type": "number"
+            },
+            "type": "array"
+          },
+          "title": "Winning Joint Channel",
+          "type": "array"
+        }
+      },
+      "required": [
+        "certificate_id",
+        "problem_sha256",
+        "joint_observation_ids",
+        "decoder_count",
+        "decoder_certificates",
+        "upper_bound",
+        "lower_bound",
+        "winning_joint_channel",
+        "optimality_gap",
+        "solver",
+        "selection_valid",
+        "coverage_confidence"
+      ],
+      "title": "ExactPortfolioCertificate",
+      "type": "object"
+    },
+    "IncompletePortfolioProblem": {
+      "additionalProperties": false,
+      "description": "Finite ambiguity set built from observable marginals and mechanism constraints.",
+      "properties": {
+        "coupling_model": {
+          "$ref": "#/$defs/CouplingModel"
+        },
+        "coverage": {
+          "$ref": "#/$defs/StatisticalCoverage"
+        },
+        "coverage_confidence": {
+          "exclusiveMinimum": 0.0,
+          "maximum": 1.0,
+          "title": "Coverage Confidence",
+          "type": "number"
+        },
+        "decision_game_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Decision Game Sha256",
+          "type": "string"
+        },
+        "decision_problem": {
+          "$ref": "#/$defs/DecisionProblem"
+        },
+        "joint_event_bounds": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/JointEventBound"
+          },
+          "title": "Joint Event Bounds",
+          "type": "array"
+        },
+        "mechanism_assumptions": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Mechanism Assumptions",
+          "type": "array"
+        },
+        "mechanism_evidence": {
+          "items": {
+            "$ref": "#/$defs/EvidenceReference"
+          },
+          "minItems": 1,
+          "title": "Mechanism Evidence",
+          "type": "array"
+        },
+        "population_scope_id": {
+          "maxLength": 128,
+          "minLength": 3,
+          "pattern": "^[A-Za-z0-9._:-]+$",
+          "title": "Population Scope Id",
+          "type": "string"
+        },
+        "population_scope_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Population Scope Sha256",
+          "type": "string"
+        },
+        "portfolio_id": {
+          "maxLength": 128,
+          "minLength": 3,
+          "pattern": "^[A-Za-z0-9._:-]+$",
+          "title": "Portfolio Id",
+          "type": "string"
+        },
+        "prior": {
+          "items": {
+            "type": "number"
+          },
+          "title": "Prior",
+          "type": "array"
+        },
+        "prior_evidence": {
+          "$ref": "#/$defs/EvidenceReference"
+        },
+        "releases": {
+          "items": {
+            "$ref": "#/$defs/ConditionalMarginalBounds"
+          },
+          "minItems": 1,
+          "title": "Releases",
+          "type": "array"
+        },
+        "schema_version": {
+          "const": "1.0",
+          "default": "1.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "selection_scope": {
+          "maxLength": 4096,
+          "minLength": 1,
+          "title": "Selection Scope",
+          "type": "string"
+        },
+        "state_ids": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 2,
+          "title": "State Ids",
+          "type": "array"
+        },
+        "threat_id": {
+          "maxLength": 128,
+          "minLength": 3,
+          "pattern": "^[A-Za-z0-9._:-]+$",
+          "title": "Threat Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "portfolio_id",
+        "population_scope_id",
+        "population_scope_sha256",
+        "threat_id",
+        "decision_game_sha256",
+        "state_ids",
+        "prior",
+        "releases",
+        "decision_problem",
+        "coupling_model",
+        "coverage",
+        "coverage_confidence",
+        "selection_scope",
+        "prior_evidence",
+        "mechanism_assumptions",
+        "mechanism_evidence"
+      ],
+      "title": "IncompletePortfolioProblem",
+      "type": "object"
+    },
+    "JointEventBound": {
+      "additionalProperties": false,
+      "description": "A mechanism-derived linear bound on a set of joint transcripts in one state.",
+      "properties": {
+        "event_id": {
+          "maxLength": 128,
+          "minLength": 3,
+          "pattern": "^[A-Za-z0-9._:-]+$",
+          "title": "Event Id",
+          "type": "string"
+        },
+        "justification": {
+          "maxLength": 4096,
+          "minLength": 1,
+          "title": "Justification",
+          "type": "string"
+        },
+        "lower": {
+          "default": 0.0,
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Lower",
+          "type": "number"
+        },
+        "state_id": {
+          "maxLength": 256,
+          "minLength": 1,
+          "title": "State Id",
+          "type": "string"
+        },
+        "transcripts": {
+          "items": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "minItems": 1,
+          "title": "Transcripts",
+          "type": "array"
+        },
+        "upper": {
+          "default": 1.0,
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Upper",
+          "type": "number"
+        }
+      },
+      "required": [
+        "event_id",
+        "state_id",
+        "transcripts",
+        "justification"
+      ],
+      "title": "JointEventBound",
+      "type": "object"
+    },
+    "StateDualCertificate": {
+      "additionalProperties": false,
+      "properties": {
+        "inequality_multipliers": {
+          "items": {
+            "type": "number"
+          },
+          "title": "Inequality Multipliers",
+          "type": "array"
+        },
+        "maximum_constraint_shortfall": {
+          "minimum": 0.0,
+          "title": "Maximum Constraint Shortfall",
+          "type": "number"
+        },
+        "normalization_multiplier": {
+          "title": "Normalization Multiplier",
+          "type": "number"
+        },
+        "objective_bound": {
+          "title": "Objective Bound",
+          "type": "number"
+        },
+        "raw_dual_objective": {
+          "title": "Raw Dual Objective",
+          "type": "number"
+        },
+        "state_id": {
+          "title": "State Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "state_id",
+        "inequality_multipliers",
+        "normalization_multiplier",
+        "raw_dual_objective",
+        "maximum_constraint_shortfall",
+        "objective_bound"
+      ],
+      "title": "StateDualCertificate",
+      "type": "object"
+    },
+    "StatisticalCoverage": {
+      "description": "How the channel bounds cover the data-dependent assurance search.",
+      "enum": [
+        "deterministic",
+        "simultaneous",
+        "anytime_valid",
+        "pointwise"
+      ],
+      "title": "StatisticalCoverage",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "envelope_certificate": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/EnvelopePortfolioCertificate"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "exact_certificate": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/ExactPortfolioCertificate"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "problem": {
+      "$ref": "#/$defs/IncompletePortfolioProblem"
+    },
+    "schema_version": {
+      "const": "1.0",
+      "default": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    }
+  },
+  "required": [
+    "problem"
+  ],
+  "title": "AnalyticPortfolioEvidenceEntry",
+  "type": "object"
+}

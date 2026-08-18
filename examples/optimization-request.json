@@ -1,0 +1,174 @@
+{
+  "schema_version": "2.0",
+  "optimization_id": "whole-government-demo-release-search",
+  "objective": "utility feasibility, then Blackwell-minimal disclosure, then cost and utility tie-breaks",
+  "trust_profile": "cooperative",
+  "authorization_expires_at": "2099-01-01T00:00:00Z",
+  "portfolio_registry_head_sha256": "1111111111111111111111111111111111111111111111111111111111111111",
+  "experiments": [
+    {
+      "experiment_id": "linkage-full-artifact",
+      "threat_id": "linkage-person",
+      "population_scope_id": "service-participants-2026",
+      "decision_game_sha256": "4bb158d840ec659005d778c0443f537245d03ba7dfdef279ff98e11f5e271430",
+      "state_ids": ["a", "b", "c", "d"],
+      "observation_ids": ["L1", "L2"],
+      "channel": [[1, 0], [1, 0], [0, 1], [0, 1]],
+      "prior": [0.25, 0.25, 0.25, 0.25],
+      "interface_description": "assessed full-artifact linkage surface",
+      "interface_sha256": "d7ca53bb8dbf0efb85abf373dba00fdb285764d783856f51b27658d49e65d111",
+      "artifact_sha256": "2f42b587627c5b6c4447d781b57a47082743f029b475f560a574553abcedfdd5"
+    },
+    {
+      "experiment_id": "linkage-bounded-api",
+      "threat_id": "linkage-person",
+      "population_scope_id": "service-participants-2026",
+      "decision_game_sha256": "4bb158d840ec659005d778c0443f537245d03ba7dfdef279ff98e11f5e271430",
+      "state_ids": ["a", "b", "c", "d"],
+      "observation_ids": ["bounded-response"],
+      "channel": [[1], [1], [1], [1]],
+      "prior": [0.25, 0.25, 0.25, 0.25],
+      "interface_description": "released bounded API linkage surface",
+      "interface_sha256": "473daec48b65bcc6c89c0bbbac557e0619c99b9f795e6f46fdafc87781f8bc72",
+      "artifact_sha256": "2f42b587627c5b6c4447d781b57a47082743f029b475f560a574553abcedfdd5"
+    },
+    {
+      "experiment_id": "membership-full-artifact",
+      "threat_id": "membership-person",
+      "population_scope_id": "service-participants-2026",
+      "decision_game_sha256": "686901249c969d5c1a631f1a617c319f9c235842745ea34c6956b6c5c2fef38c",
+      "state_ids": ["member", "nonmember"],
+      "observation_ids": ["response-a", "response-b"],
+      "channel": [[0.55, 0.45], [0.45, 0.55]],
+      "prior": [0.5, 0.5],
+      "interface_description": "assessed full-artifact membership surface",
+      "interface_sha256": "d7ca53bb8dbf0efb85abf373dba00fdb285764d783856f51b27658d49e65d111",
+      "artifact_sha256": "2f42b587627c5b6c4447d781b57a47082743f029b475f560a574553abcedfdd5"
+    },
+    {
+      "experiment_id": "membership-bounded-api",
+      "threat_id": "membership-person",
+      "population_scope_id": "service-participants-2026",
+      "decision_game_sha256": "686901249c969d5c1a631f1a617c319f9c235842745ea34c6956b6c5c2fef38c",
+      "state_ids": ["member", "nonmember"],
+      "observation_ids": ["bounded-response"],
+      "channel": [[1], [1]],
+      "prior": [0.5, 0.5],
+      "interface_description": "released bounded API membership surface",
+      "interface_sha256": "473daec48b65bcc6c89c0bbbac557e0619c99b9f795e6f46fdafc87781f8bc72",
+      "artifact_sha256": "2f42b587627c5b6c4447d781b57a47082743f029b475f560a574553abcedfdd5"
+    }
+  ],
+  "garbling_certificates": [
+    {
+      "certificate_id": "linkage-api-garbling",
+      "dominant_experiment_id": "linkage-full-artifact",
+      "dominated_experiment_id": "linkage-bounded-api",
+      "kernel": [[1], [1]],
+      "maximum_row_total_variation": 0.0,
+      "numerical_tolerance": 1e-12,
+      "construction": "both full-artifact linkage observations are mapped to the single bounded API response"
+    },
+    {
+      "certificate_id": "membership-api-garbling",
+      "dominant_experiment_id": "membership-full-artifact",
+      "dominated_experiment_id": "membership-bounded-api",
+      "kernel": [[1], [1]],
+      "maximum_row_total_variation": 0.0,
+      "numerical_tolerance": 1e-12,
+      "construction": "both full-artifact membership observations are mapped to the single bounded API response"
+    }
+  ],
+  "configurations": [
+    {
+      "configuration_id": "bounded-api-release",
+      "name": "Authenticated bounded-output API",
+      "is_proposed_configuration": false,
+      "assessment": {
+        "report_path": "evidence/assessment-clear-report.json",
+        "report_sha256": "5440b4826db296da5bca9a9a50925588a0c3a60d17f8a73ee11d0551d030bdda"
+      },
+      "release_artifact_path": "artifacts/demo-tree.json",
+      "release_artifact_sha256": "2f42b587627c5b6c4447d781b57a47082743f029b475f560a574553abcedfdd5",
+      "release_interface": {
+        "access": "aggregate",
+        "outputs": ["bounded-response"],
+        "query_budget": 1000,
+        "adaptive_queries": false,
+        "authenticated": true,
+        "rate_limited": true,
+        "notes": "demonstration bounded API"
+      },
+      "utility": {
+        "configuration_id": "bounded-api-release",
+        "artifact_sha256": "2f42b587627c5b6c4447d781b57a47082743f029b475f560a574553abcedfdd5",
+        "interface_sha256": "473daec48b65bcc6c89c0bbbac557e0619c99b9f795e6f46fdafc87781f8bc72",
+        "population_scope_sha256s": ["d0ceafb482b5ed133cd89c765ec4e9d228f4c14bf07fac3f4aa67297a79ed5e8"],
+        "evaluation_split_sha256": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+        "metric": "balanced_accuracy",
+        "lower_bound": 0.8,
+        "point_estimate": 0.82,
+        "minimum_required": 0.7,
+        "evaluation_population": "disjoint demonstration utility set",
+        "confidence": 0.95,
+        "uncertainty_method": "one-sided stratified bootstrap lower confidence bound",
+        "audit_disjoint": true,
+        "raw_evidence_retained": true,
+        "source_path": "evidence/optimization-utility.json",
+        "source_sha256": "280293b536cd92d05860c398d3778bbb7bfe725494656b6931410d4be50624be"
+      },
+      "implementation_cost": 1.0,
+      "controls": [
+        {
+          "control_id": "authenticated-bounded-api",
+          "control_type": "information_reduction",
+          "kind": "interface",
+          "description": "serve only the bounded response through an authenticated gateway",
+          "changes_information_structure": true,
+          "credited_for_privacy": true,
+          "artifact_sha256": "2f42b587627c5b6c4447d781b57a47082743f029b475f560a574553abcedfdd5",
+          "interface_sha256": "473daec48b65bcc6c89c0bbbac557e0619c99b9f795e6f46fdafc87781f8bc72",
+          "valid_until": "2099-01-01T00:00:00Z",
+          "evidence_path": "evidence/bounded-api-control.json",
+          "evidence_sha256": "5d48fa30e5304977da728b4e13af09ce39cb652f5618d762f525c23e576c2abf"
+        }
+      ],
+      "threat_experiments": [
+        {
+          "threat_id": "linkage-person",
+          "assessed_experiment_id": "linkage-full-artifact",
+          "released_experiment_id": "linkage-bounded-api",
+          "substitution_certificate_id": "linkage-api-garbling"
+        },
+        {
+          "threat_id": "membership-person",
+          "assessed_experiment_id": "membership-full-artifact",
+          "released_experiment_id": "membership-bounded-api",
+          "substitution_certificate_id": "membership-api-garbling"
+        }
+      ],
+      "portfolio": {
+        "status": "directly_joint_assessed",
+        "composition_domain_id": "demo-service-participants-registry-v1",
+        "population_secret_pairs": [
+          "service-participants-2026|linkage-person",
+          "service-participants-2026|membership-person"
+        ],
+        "registry_head_sha256": "1111111111111111111111111111111111111111111111111111111111111111",
+        "method": "direct finite joint-channel replay over the registered demonstration releases",
+        "joint_upper_bounds": {
+          "service-participants-2026|linkage-person": 0.0,
+          "service-participants-2026|membership-person": 0.5
+        },
+        "joint_experiment_ids": {
+          "service-participants-2026|linkage-person": "linkage-bounded-api",
+          "service-participants-2026|membership-person": "membership-bounded-api"
+        },
+        "evidence_path": "evidence/bounded-api-portfolio.json",
+        "evidence_sha256": "7eab293feb2675cd69fd3628c32ee3526bdb5f563ceb6b15cd4cf146601648c7"
+      },
+      "notes": "Demonstration only; the one-response API is intentionally simple so the garbling can be inspected directly."
+    }
+  ],
+  "search_space_status": "candidate_set_only"
+}

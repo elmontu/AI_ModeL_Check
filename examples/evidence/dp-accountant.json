@@ -1,0 +1,10 @@
+{
+  "population_scope_id": "service-participants-2026",
+  "epsilon": 0.2,
+  "delta": 0.000001,
+  "adjacency": "add/remove one person",
+  "protected_unit": "person",
+  "accountant": "demonstration accountant",
+  "accountant_replayed": true,
+  "complete_pipeline": true
+}

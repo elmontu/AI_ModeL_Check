@@ -1,0 +1,18 @@
+{
+  "experiment": "openml_cc18_attribute_and_partial_record_reconstruction",
+  "implementation_version": 1,
+  "subset_key": "expensive_subset",
+  "seed": 20260812,
+  "target_model": {"n_estimators": 30, "max_depth": 4},
+  "attribute_secret": "highest-entropy eligible exact low-cardinality feature; otherwise a four-quantile derived attribute",
+  "attribute_max_classes": 12,
+  "attribute_attacker": {"n_estimators": 50, "max_depth": 4, "min_child_weight": 5},
+  "reconstruction_secret": "highest-cardinality numeric feature with at least three distinct nonmissing values; exact categorical fallback when a dataset has no numeric feature",
+  "reconstruction_candidate_grid": ["minimum", "first_quartile", "median", "third_quartile", "maximum"],
+  "reconstruction_attacker": {"n_estimators": 80, "max_depth": 4, "min_child_weight": 5},
+  "attack_training_data": "disjoint reference split with known secrets",
+  "audit_strata": ["target-training member audit", "nonmember audit"],
+  "baseline": "same auxiliary records, candidate-known features, label, and exact summaries but no target-model response curve",
+  "uncertainty": "paired percentile bootstrap with 10000 fixed-seed resamples plus exact one-sided McNemar test for attribute correctness",
+  "claim_boundary": "attribute inference and one-feature numeric or categorical reconstruction; not full-row reconstruction"
+}

@@ -1,0 +1,39 @@
+{
+  "class_counts": {
+    "b": 17422,
+    "d": 4335,
+    "w": 23062
+  },
+  "classes": 3,
+  "dataset_id": 41027,
+  "feature_dtypes": {
+    "black_piece0_file": "uint8",
+    "black_piece0_rank": "uint8",
+    "black_piece0_strength": "uint8",
+    "white_piece0_file": "uint8",
+    "white_piece0_rank": "uint8",
+    "white_piece0_strength": "uint8"
+  },
+  "feature_names": [
+    "white_piece0_strength",
+    "white_piece0_file",
+    "white_piece0_rank",
+    "black_piece0_strength",
+    "black_piece0_file",
+    "black_piece0_rank"
+  ],
+  "features": 6,
+  "file_id": "18631418",
+  "missing_feature_values": 0,
+  "name": "jungle_chess_2pcs_raw_endgame_complete",
+  "openml_md5_checksum": "25ca110c24c9dc3ffdcb5c2453382778",
+  "openml_url": "https://openml.org/data/v1/download/18631418/jungle_chess_2pcs_raw_endgame_complete.arff",
+  "parquet_url": "https://data.openml.org/datasets/0004/41027/dataset_41027.pq",
+  "rows": 44819,
+  "snapshot_bytes": 16071,
+  "snapshot_path": "reproduction/openml/raw/openml-41027.parquet",
+  "snapshot_sha256": "64c739429fea003f8cdf646441bb42a8e881316a5c3aadb01c46ae9954177fc0",
+  "status": "active",
+  "target": "class",
+  "version": 1
+}

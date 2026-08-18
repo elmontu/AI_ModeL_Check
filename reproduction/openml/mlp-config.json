@@ -1,0 +1,28 @@
+{
+  "experiment": "openml_cc18_non_private_mlp",
+  "implementation_version": 2,
+  "model": {
+    "activation": "relu",
+    "alpha": 0.0001,
+    "batch_size": 256,
+    "early_stopping": true,
+    "hidden_layer_sizes": [
+      32
+    ],
+    "learning_rate_init": 0.001,
+    "max_iter": 100,
+    "n_iter_no_change": 10,
+    "shuffle": true,
+    "solver": "adam",
+    "tol": 0.0001,
+    "validation_fraction": 0.1
+  },
+  "replicate_seeds": [
+    20260812,
+    20260813,
+    20260814
+  ],
+  "scaling": "StandardScaler fitted independently on each model training split",
+  "subset_key": "neural_dp_subset",
+  "tuning_basis": "The full configuration was fixed after a one-run convergence smoke test and before inspecting any full-tier privacy outcomes."
+}

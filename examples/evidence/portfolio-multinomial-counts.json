@@ -1,0 +1,33 @@
+{
+  "schema_version": "1.0",
+  "count_file_id": "uniform-independent-portfolio-counts",
+  "sampling_plan_id": "demo-multinomial-plan-v1",
+  "sampling_plan_sha256": "bc080ed808356f5c824f68059a07b28c53e42020bec1afe26cd02cf0d343981f",
+  "portfolio_id": "uniform-independent-statistical-portfolio",
+  "population_scope_id": "whole-government-demo-population-v1",
+  "threat_id": "binary-secret-exact-guess",
+  "family_id": "demo-portfolio-family-2026",
+  "sampling_started_at": "2026-02-01T00:00:00Z",
+  "sampling_ended_at": "2026-02-02T00:00:00Z",
+  "audit_sample_sha256": "3333333333333333333333333333333333333333333333333333333333333333",
+  "sampling_protocol": "Pre-registered IID audit queries stratified by the protected binary state; all release, state, and output cells are retained.",
+  "state_ids": ["state-0", "state-1"],
+  "releases": [
+    {
+      "release_id": "release-one",
+      "observation_ids": ["bit-0", "bit-1"],
+      "state_rows": [
+        {"state_id": "state-0", "counts": [5000, 5000]},
+        {"state_id": "state-1", "counts": [5000, 5000]}
+      ]
+    },
+    {
+      "release_id": "release-two",
+      "observation_ids": ["bit-0", "bit-1"],
+      "state_rows": [
+        {"state_id": "state-0", "counts": [5000, 5000]},
+        {"state_id": "state-1", "counts": [5000, 5000]}
+      ]
+    }
+  ]
+}

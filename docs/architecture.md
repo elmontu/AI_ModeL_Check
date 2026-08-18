@@ -1,0 +1,70 @@
+# Architecture
+
+## Scope
+
+MRA is an offline assurance core. It validates a release contract, evaluates bound evidence, selects among submitted release configurations, emits a typed report, and optionally appends that report to a hash-chained audit database.
+
+It does not load untrusted model binaries, operate a release gateway, own an authoritative portfolio registry, or provide production identity, key management, storage, and monitoring.
+
+## Decision flow
+
+```text
+release request + policy + evidence
+                 |
+                 v
+        schema and hash validation
+                 |
+                 v
+        evidence classification
+       /          |           \
+ exact/ceiling  attack floor  missing/screen
+       |            |              |
+       v            v              v
+    may clear     may block     inconclusive
+                 |
+                 v
+     privacy and utility feasibility
+                 |
+                 v
+       portfolio-state validation
+                 |
+                 v
+ least-informative feasible selection
+                 |
+                 v
+ typed report + optional signature + audit event
+```
+
+## Package map
+
+| Module | Responsibility |
+|---|---|
+| `models.py` | Versioned request, policy, evidence, and report contracts |
+| `engine.py` | Assessment orchestration and fail-closed verdicts |
+| `optimizer.py` | Feasible release-configuration selection |
+| `decision.py` | Evidence classification and decision rules |
+| `decision_theory.py` | Finite information-experiment comparison helpers |
+| `portfolio.py` | Portfolio-state contracts and validation |
+| `incomplete_portfolio.py` | Finite incomplete-portfolio solver and replay verifier |
+| `portfolio_statistics.py` | Simultaneous marginal evidence generation and verification |
+| `protocol_feasibility.py` | Finite protocol solver and exact certificate replay |
+| `integrity.py` | Hashing and Ed25519 manifests |
+| `audit.py` | Hash-chained SQLite audit records |
+| `cli.py` | Command-line interface |
+
+## Trust boundaries
+
+The core accepts inert JSON and referenced evidence files. Potentially hostile model parsing and empirical attacks belong in separate sandboxed workers. A production orchestrator must bind worker output to immutable artifacts, approved analyzer versions, population snapshots, policy versions, and the current portfolio-registry head.
+
+Final authorization must be committed atomically with the portfolio-state update. A read-evaluate-write sequence without transactional locking can approve individually valid releases against the same stale state.
+
+## Extending the engine
+
+1. Add or version the Pydantic contract.
+2. Export and commit the matching JSON Schema.
+3. Implement deterministic validation and explicit evidence semantics.
+4. Add positive, negative, malformed-input, and replay tests.
+5. Update examples and operational documentation.
+6. Preserve backward compatibility or document a deliberate contract break.
+
+New empirical analyzers must state whether their output is an upper bound, a lower bound, or a screen. A lower-bound attack result must never be routed into a clearance path.

@@ -1,0 +1,21 @@
+{
+  "experiment": "openml_cc18_numpy_dp_sgd_mlp",
+  "implementation_version": 1,
+  "subset_key": "neural_dp_subset",
+  "replicate_seeds": [20260812, 20260813, 20260814],
+  "epsilon_targets": [2.0, 8.0],
+  "delta_rule": "one_over_training_size_squared",
+  "adjacency": "add_remove_one_training_record",
+  "sampling": "independent_poisson",
+  "public_preprocessing": "OpenML benchmark schema, domains, and full-source feature summaries are fixed auxiliary knowledge",
+  "dp_row_cap": 12000,
+  "hidden_units": 16,
+  "epochs": 12,
+  "expected_batch_size": 256,
+  "learning_rate": 0.03,
+  "gradient_clip_norm": 1.0,
+  "rdp_integer_orders": [2, 3, 4, 5, 6, 8, 10, 12, 16, 20, 24, 32, 40, 48, 64],
+  "accountant": "exact integer-order log-moment evaluation for the Poisson-sampled Gaussian mechanism followed by basic RDP-to-DP conversion",
+  "accountant_replay": "a separate analysis program recomputes epsilon from the sealed step ledger",
+  "non_private_control": "same architecture, Poisson batch schedule, optimizer, seed, and steps without clipping or Gaussian noise"
+}

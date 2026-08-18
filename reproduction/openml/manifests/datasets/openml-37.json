@@ -1,0 +1,42 @@
+{
+  "class_counts": {
+    "tested_negative": 500,
+    "tested_positive": 268
+  },
+  "classes": 2,
+  "dataset_id": 37,
+  "feature_dtypes": {
+    "age": "float64",
+    "insu": "float64",
+    "mass": "float64",
+    "pedi": "float64",
+    "plas": "float64",
+    "preg": "float64",
+    "pres": "float64",
+    "skin": "float64"
+  },
+  "feature_names": [
+    "preg",
+    "plas",
+    "pres",
+    "skin",
+    "insu",
+    "mass",
+    "pedi",
+    "age"
+  ],
+  "features": 8,
+  "file_id": "37",
+  "missing_feature_values": 0,
+  "name": "diabetes",
+  "openml_md5_checksum": "3cbaa3e54586aa88cf6aacb4033e4470",
+  "openml_url": "https://openml.org/data/v1/download/37/diabetes.arff",
+  "parquet_url": "https://data.openml.org/datasets/0000/0037/dataset_37.pq",
+  "rows": 768,
+  "snapshot_bytes": 17924,
+  "snapshot_path": "reproduction/openml/raw/openml-37.parquet",
+  "snapshot_sha256": "4afd14f6318d2954a00fbd58ebe8427b73aa6b7ef9a1aac1ec1b88372b4a5cef",
+  "status": "active",
+  "target": "class",
+  "version": 1
+}

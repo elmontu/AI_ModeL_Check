@@ -1,0 +1,33 @@
+{
+  "schema_version": "1.0",
+  "problem_id": "two-world-noisy-evidence",
+  "evidence_ids": [
+    "evidence-points-to-world-0",
+    "evidence-points-to-world-1"
+  ],
+  "configuration_ids": [
+    "configuration-0",
+    "configuration-1"
+  ],
+  "worlds": [
+    {
+      "world_id": "world-0",
+      "evidence_probabilities": [
+        {"numerator": 9, "denominator": 10},
+        {"numerator": 1, "denominator": 10}
+      ],
+      "acceptable_configuration_ids": ["configuration-0"]
+    },
+    {
+      "world_id": "world-1",
+      "evidence_probabilities": [
+        {"numerator": 1, "denominator": 10},
+        {"numerator": 9, "denominator": 10}
+      ],
+      "acceptable_configuration_ids": ["configuration-1"]
+    }
+  ],
+  "unsafe_release_budget": {"numerator": 1, "denominator": 10},
+  "liveness_failure_budget": {"numerator": 1, "denominator": 10},
+  "authorization_mode": "randomized"
+}

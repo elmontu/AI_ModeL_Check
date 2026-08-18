@@ -1,0 +1,128 @@
+{
+  "$defs": {
+    "AuthorizationMode": {
+      "enum": [
+        "randomized",
+        "deterministic"
+      ],
+      "title": "AuthorizationMode",
+      "type": "string"
+    },
+    "ProtocolWorld": {
+      "additionalProperties": false,
+      "properties": {
+        "acceptable_configuration_ids": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Acceptable Configuration Ids",
+          "type": "array"
+        },
+        "evidence_probabilities": {
+          "items": {
+            "$ref": "#/$defs/RationalNumber"
+          },
+          "minItems": 1,
+          "title": "Evidence Probabilities",
+          "type": "array"
+        },
+        "world_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9._:-]+$",
+          "title": "World Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "world_id",
+        "evidence_probabilities"
+      ],
+      "title": "ProtocolWorld",
+      "type": "object"
+    },
+    "RationalNumber": {
+      "additionalProperties": false,
+      "properties": {
+        "denominator": {
+          "exclusiveMinimum": 0,
+          "title": "Denominator",
+          "type": "integer"
+        },
+        "numerator": {
+          "minimum": 0,
+          "title": "Numerator",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "numerator",
+        "denominator"
+      ],
+      "title": "RationalNumber",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "description": "Finite, rationally encoded evidence-protocol decision problem.",
+  "properties": {
+    "authorization_mode": {
+      "$ref": "#/$defs/AuthorizationMode",
+      "default": "randomized"
+    },
+    "configuration_ids": {
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Configuration Ids",
+      "type": "array"
+    },
+    "evidence_ids": {
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Evidence Ids",
+      "type": "array"
+    },
+    "liveness_failure_budget": {
+      "$ref": "#/$defs/RationalNumber"
+    },
+    "problem_id": {
+      "maxLength": 128,
+      "minLength": 3,
+      "pattern": "^[A-Za-z0-9._:-]+$",
+      "title": "Problem Id",
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "1.0",
+      "default": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "unsafe_release_budget": {
+      "$ref": "#/$defs/RationalNumber"
+    },
+    "worlds": {
+      "items": {
+        "$ref": "#/$defs/ProtocolWorld"
+      },
+      "minItems": 1,
+      "title": "Worlds",
+      "type": "array"
+    }
+  },
+  "required": [
+    "problem_id",
+    "evidence_ids",
+    "configuration_ids",
+    "worlds",
+    "unsafe_release_budget",
+    "liveness_failure_budget"
+  ],
+  "title": "ProtocolFeasibilityProblem",
+  "type": "object"
+}

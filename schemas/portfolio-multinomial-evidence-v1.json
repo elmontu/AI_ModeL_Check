@@ -1,0 +1,320 @@
+{
+  "$defs": {
+    "MultinomialEvidenceRequest": {
+      "additionalProperties": false,
+      "properties": {
+        "all_cells_reported": {
+          "title": "All Cells Reported",
+          "type": "boolean"
+        },
+        "allocation_id": {
+          "maxLength": 128,
+          "minLength": 3,
+          "pattern": "^[A-Za-z0-9._:-]+$",
+          "title": "Allocation Id",
+          "type": "string"
+        },
+        "assurance_ledger_complete": {
+          "title": "Assurance Ledger Complete",
+          "type": "boolean"
+        },
+        "budget_reference": {
+          "$ref": "#/$defs/SourceFileReference"
+        },
+        "counts_reference": {
+          "$ref": "#/$defs/SourceFileReference"
+        },
+        "family_pre_registered": {
+          "title": "Family Pre Registered",
+          "type": "boolean"
+        },
+        "generation_id": {
+          "maxLength": 128,
+          "minLength": 3,
+          "pattern": "^[A-Za-z0-9._:-]+$",
+          "title": "Generation Id",
+          "type": "string"
+        },
+        "sampling_model": {
+          "const": "iid_multinomial",
+          "default": "iid_multinomial",
+          "title": "Sampling Model",
+          "type": "string"
+        },
+        "sampling_plan_reference": {
+          "$ref": "#/$defs/SourceFileReference"
+        },
+        "schema_version": {
+          "const": "1.0",
+          "default": "1.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "selection_process_covered": {
+          "title": "Selection Process Covered",
+          "type": "boolean"
+        },
+        "selection_scope": {
+          "maxLength": 4096,
+          "minLength": 1,
+          "title": "Selection Scope",
+          "type": "string"
+        }
+      },
+      "required": [
+        "generation_id",
+        "allocation_id",
+        "sampling_plan_reference",
+        "counts_reference",
+        "budget_reference",
+        "family_pre_registered",
+        "all_cells_reported",
+        "selection_process_covered",
+        "assurance_ledger_complete",
+        "selection_scope"
+      ],
+      "title": "MultinomialEvidenceRequest",
+      "type": "object"
+    },
+    "SimultaneousMultinomialRow": {
+      "additionalProperties": false,
+      "properties": {
+        "counts": {
+          "items": {
+            "type": "integer"
+          },
+          "title": "Counts",
+          "type": "array"
+        },
+        "lower": {
+          "items": {
+            "type": "number"
+          },
+          "title": "Lower",
+          "type": "array"
+        },
+        "observation_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Observation Ids",
+          "type": "array"
+        },
+        "release_id": {
+          "title": "Release Id",
+          "type": "string"
+        },
+        "state_id": {
+          "title": "State Id",
+          "type": "string"
+        },
+        "trials": {
+          "exclusiveMinimum": 0,
+          "title": "Trials",
+          "type": "integer"
+        },
+        "upper": {
+          "items": {
+            "type": "number"
+          },
+          "title": "Upper",
+          "type": "array"
+        }
+      },
+      "required": [
+        "release_id",
+        "state_id",
+        "observation_ids",
+        "counts",
+        "trials",
+        "lower",
+        "upper"
+      ],
+      "title": "SimultaneousMultinomialRow",
+      "type": "object"
+    },
+    "SourceFileReference": {
+      "additionalProperties": false,
+      "properties": {
+        "source_id": {
+          "maxLength": 128,
+          "minLength": 3,
+          "pattern": "^[A-Za-z0-9._:-]+$",
+          "title": "Source Id",
+          "type": "string"
+        },
+        "source_path": {
+          "minLength": 1,
+          "title": "Source Path",
+          "type": "string"
+        },
+        "source_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Source Sha256",
+          "type": "string"
+        }
+      },
+      "required": [
+        "source_id",
+        "source_path",
+        "source_sha256"
+      ],
+      "title": "SourceFileReference",
+      "type": "object"
+    },
+    "StatisticalCoverage": {
+      "description": "How the channel bounds cover the data-dependent assurance search.",
+      "enum": [
+        "deterministic",
+        "simultaneous",
+        "anytime_valid",
+        "pointwise"
+      ],
+      "title": "StatisticalCoverage",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "assumptions": {
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Assumptions",
+      "type": "array"
+    },
+    "assurance_wide_alpha": {
+      "exclusiveMinimum": 0.0,
+      "maximum": 0.05,
+      "title": "Assurance Wide Alpha",
+      "type": "number"
+    },
+    "assurance_wide_confidence": {
+      "exclusiveMaximum": 1.0,
+      "minimum": 0.95,
+      "title": "Assurance Wide Confidence",
+      "type": "number"
+    },
+    "budget_id": {
+      "title": "Budget Id",
+      "type": "string"
+    },
+    "count_file_id": {
+      "title": "Count File Id",
+      "type": "string"
+    },
+    "coverage": {
+      "$ref": "#/$defs/StatisticalCoverage"
+    },
+    "evidence_type": {
+      "const": "simultaneous_multinomial_marginals",
+      "default": "simultaneous_multinomial_marginals",
+      "title": "Evidence Type",
+      "type": "string"
+    },
+    "family_alpha": {
+      "exclusiveMinimum": 0.0,
+      "maximum": 0.05,
+      "title": "Family Alpha",
+      "type": "number"
+    },
+    "family_coverage_confidence": {
+      "exclusiveMaximum": 1.0,
+      "minimum": 0.95,
+      "title": "Family Coverage Confidence",
+      "type": "number"
+    },
+    "family_id": {
+      "title": "Family Id",
+      "type": "string"
+    },
+    "limitations": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Limitations",
+      "type": "array"
+    },
+    "method": {
+      "const": "bonferroni_two_sided_clopper_pearson",
+      "default": "bonferroni_two_sided_clopper_pearson",
+      "title": "Method",
+      "type": "string"
+    },
+    "per_tail_alpha": {
+      "exclusiveMinimum": 0.0,
+      "title": "Per Tail Alpha",
+      "type": "number"
+    },
+    "population_scope_id": {
+      "title": "Population Scope Id",
+      "type": "string"
+    },
+    "portfolio_id": {
+      "title": "Portfolio Id",
+      "type": "string"
+    },
+    "request": {
+      "$ref": "#/$defs/MultinomialEvidenceRequest"
+    },
+    "rows": {
+      "items": {
+        "$ref": "#/$defs/SimultaneousMultinomialRow"
+      },
+      "minItems": 2,
+      "title": "Rows",
+      "type": "array"
+    },
+    "schema_version": {
+      "const": "1.0",
+      "default": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "selection_valid": {
+      "title": "Selection Valid",
+      "type": "boolean"
+    },
+    "simultaneous_cell_count": {
+      "exclusiveMinimum": 0,
+      "maximum": 10000,
+      "title": "Simultaneous Cell Count",
+      "type": "integer"
+    },
+    "state_ids": {
+      "items": {
+        "type": "string"
+      },
+      "title": "State Ids",
+      "type": "array"
+    },
+    "threat_id": {
+      "title": "Threat Id",
+      "type": "string"
+    }
+  },
+  "required": [
+    "request",
+    "count_file_id",
+    "budget_id",
+    "family_id",
+    "portfolio_id",
+    "population_scope_id",
+    "threat_id",
+    "state_ids",
+    "family_alpha",
+    "assurance_wide_alpha",
+    "family_coverage_confidence",
+    "assurance_wide_confidence",
+    "simultaneous_cell_count",
+    "per_tail_alpha",
+    "coverage",
+    "selection_valid",
+    "rows",
+    "assumptions",
+    "limitations"
+  ],
+  "title": "SimultaneousMultinomialEvidence",
+  "type": "object"
+}

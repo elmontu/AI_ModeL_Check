@@ -1,0 +1,42 @@
+{
+  "class_counts": {
+    "DOWN": 26075,
+    "UP": 19237
+  },
+  "classes": 2,
+  "dataset_id": 151,
+  "feature_dtypes": {
+    "date": "float64",
+    "day": "category",
+    "nswdemand": "float64",
+    "nswprice": "float64",
+    "period": "float64",
+    "transfer": "float64",
+    "vicdemand": "float64",
+    "vicprice": "float64"
+  },
+  "feature_names": [
+    "date",
+    "day",
+    "period",
+    "nswprice",
+    "nswdemand",
+    "vicprice",
+    "vicdemand",
+    "transfer"
+  ],
+  "features": 8,
+  "file_id": "2419",
+  "missing_feature_values": 0,
+  "name": "electricity",
+  "openml_md5_checksum": "8ca97867d960ae029ae3a9ac2c923d34",
+  "openml_url": "https://openml.org/data/v1/download/2419/electricity.arff",
+  "parquet_url": "https://data.openml.org/datasets/0000/0151/dataset_151.pq",
+  "rows": 45312,
+  "snapshot_bytes": 427719,
+  "snapshot_path": "reproduction/openml/raw/openml-151.parquet",
+  "snapshot_sha256": "b51cffb5e05c5d0849af5156b4ca3a3cab8d837008f0723f7b136bd162c25c79",
+  "status": "active",
+  "target": "class",
+  "version": 1
+}

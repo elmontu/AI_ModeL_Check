@@ -1,0 +1,65 @@
+{
+  "schema_version": "1.0",
+  "portfolio_id": "uniform-bit-xor-worst-case",
+  "population_scope_id": "whole-government-demo-population-v1",
+  "population_scope_sha256": "1111111111111111111111111111111111111111111111111111111111111111",
+  "threat_id": "binary-secret-exact-guess",
+  "decision_game_sha256": "2222222222222222222222222222222222222222222222222222222222222222",
+  "state_ids": ["state-0", "state-1"],
+  "prior": [0.5, 0.5],
+  "releases": [
+    {
+      "release_id": "release-one",
+      "observation_ids": ["bit-0", "bit-1"],
+      "lower": [[0.5, 0.5], [0.5, 0.5]],
+      "upper": [[0.5, 0.5], [0.5, 0.5]],
+      "evidence": {
+        "evidence_id": "uniform-bit-release-one",
+        "source_path": "evidence/incomplete-portfolio-uniform-bit.json",
+        "source_sha256": "a675a6a4971d92c95215c3e4661f1d05405ea53221cbdb715c24536b946cce74",
+        "supports": ["marginal:release-one", "coverage:deterministic"]
+      }
+    },
+    {
+      "release_id": "release-two",
+      "observation_ids": ["bit-0", "bit-1"],
+      "lower": [[0.5, 0.5], [0.5, 0.5]],
+      "upper": [[0.5, 0.5], [0.5, 0.5]],
+      "evidence": {
+        "evidence_id": "uniform-bit-release-two",
+        "source_path": "evidence/incomplete-portfolio-uniform-bit.json",
+        "source_sha256": "a675a6a4971d92c95215c3e4661f1d05405ea53221cbdb715c24536b946cce74",
+        "supports": ["marginal:release-two", "coverage:deterministic"]
+      }
+    }
+  ],
+  "decision_problem": {
+    "problem_id": "binary-secret-exact-guess",
+    "state_ids": ["state-0", "state-1"],
+    "action_ids": ["guess-state-0", "guess-state-1"],
+    "gain": [[1.0, 0.0], [0.0, 1.0]],
+    "interpretation": "Gain one for exactly guessing the protected binary state and zero otherwise."
+  },
+  "coupling_model": "arbitrary",
+  "joint_event_bounds": [],
+  "coverage": "deterministic",
+  "coverage_confidence": 1.0,
+  "selection_scope": "Deterministic demonstration covering both declared releases and the complete binary decision game.",
+  "prior_evidence": {
+    "evidence_id": "uniform-bit-prior",
+    "source_path": "evidence/incomplete-portfolio-uniform-bit.json",
+    "source_sha256": "a675a6a4971d92c95215c3e4661f1d05405ea53221cbdb715c24536b946cce74",
+    "supports": ["prior"]
+  },
+  "mechanism_assumptions": [
+    "Only the two declared marginal channels constrain dependence; every compatible joint coupling is admitted."
+  ],
+  "mechanism_evidence": [
+    {
+      "evidence_id": "uniform-bit-arbitrary-coupling",
+      "source_path": "evidence/incomplete-portfolio-uniform-bit.json",
+      "source_sha256": "a675a6a4971d92c95215c3e4661f1d05405ea53221cbdb715c24536b946cce74",
+      "supports": ["coupling:arbitrary"]
+    }
+  ]
+}

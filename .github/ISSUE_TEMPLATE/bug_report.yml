@@ -1,0 +1,52 @@
+name: Bug report
+description: Report a reproducible defect using synthetic or public data.
+title: "[Bug]: "
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: Do not include agency data, credentials, private keys, model artifacts, or vulnerability details. Follow SECURITY.md for security reports.
+  - type: input
+    id: version
+    attributes:
+      label: Version or commit
+    validations:
+      required: true
+  - type: dropdown
+    id: component
+    attributes:
+      label: Component
+      options:
+        - Assessment engine
+        - Optimizer
+        - Portfolio solver
+        - Protocol solver
+        - Integrity or audit
+        - CLI or schemas
+        - Benchmark tooling
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Minimal synthetic reproduction
+      render: shell
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Sanitized logs
+      render: text

@@ -1,0 +1,142 @@
+{
+  "$defs": {
+    "ErrorBudgetAllocation": {
+      "additionalProperties": false,
+      "properties": {
+        "allocation_id": {
+          "maxLength": 128,
+          "minLength": 3,
+          "pattern": "^[A-Za-z0-9._:-]+$",
+          "title": "Allocation Id",
+          "type": "string"
+        },
+        "alpha": {
+          "maximum": 0.05,
+          "minimum": 1e-08,
+          "title": "Alpha",
+          "type": "number"
+        },
+        "family_id": {
+          "maxLength": 128,
+          "minLength": 3,
+          "pattern": "^[A-Za-z0-9._:-]+$",
+          "title": "Family Id",
+          "type": "string"
+        },
+        "generation_id": {
+          "maxLength": 128,
+          "minLength": 3,
+          "pattern": "^[A-Za-z0-9._:-]+$",
+          "title": "Generation Id",
+          "type": "string"
+        },
+        "population_scope_id": {
+          "maxLength": 128,
+          "minLength": 3,
+          "pattern": "^[A-Za-z0-9._:-]+$",
+          "title": "Population Scope Id",
+          "type": "string"
+        },
+        "portfolio_id": {
+          "maxLength": 128,
+          "minLength": 3,
+          "pattern": "^[A-Za-z0-9._:-]+$",
+          "title": "Portfolio Id",
+          "type": "string"
+        },
+        "sampling_plan_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Sampling Plan Sha256",
+          "type": "string"
+        },
+        "status": {
+          "const": "committed",
+          "default": "committed",
+          "title": "Status",
+          "type": "string"
+        },
+        "threat_id": {
+          "maxLength": 128,
+          "minLength": 3,
+          "pattern": "^[A-Za-z0-9._:-]+$",
+          "title": "Threat Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "allocation_id",
+        "generation_id",
+        "family_id",
+        "portfolio_id",
+        "population_scope_id",
+        "threat_id",
+        "sampling_plan_sha256",
+        "alpha"
+      ],
+      "title": "ErrorBudgetAllocation",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "allocations": {
+      "items": {
+        "$ref": "#/$defs/ErrorBudgetAllocation"
+      },
+      "minItems": 1,
+      "title": "Allocations",
+      "type": "array"
+    },
+    "authority": {
+      "maxLength": 512,
+      "minLength": 1,
+      "title": "Authority",
+      "type": "string"
+    },
+    "budget_id": {
+      "maxLength": 128,
+      "minLength": 3,
+      "pattern": "^[A-Za-z0-9._:-]+$",
+      "title": "Budget Id",
+      "type": "string"
+    },
+    "committed_at": {
+      "format": "date-time",
+      "title": "Committed At",
+      "type": "string"
+    },
+    "period_end": {
+      "format": "date",
+      "title": "Period End",
+      "type": "string"
+    },
+    "period_start": {
+      "format": "date",
+      "title": "Period Start",
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "1.0",
+      "default": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "total_alpha": {
+      "maximum": 0.05,
+      "minimum": 1e-08,
+      "title": "Total Alpha",
+      "type": "number"
+    }
+  },
+  "required": [
+    "budget_id",
+    "authority",
+    "committed_at",
+    "period_start",
+    "period_end",
+    "total_alpha",
+    "allocations"
+  ],
+  "title": "AssuranceErrorBudget",
+  "type": "object"
+}

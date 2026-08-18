@@ -1,0 +1,164 @@
+{
+  "schema_version": "2.0",
+  "policy": {
+    "policy_id": "whole-government-model-release-demo",
+    "policy_version": "1.0.0",
+    "policy_path": "policy.json",
+    "policy_sha256": "ef0780f17ae1f732296ef53c4040799792ec907abbb6ab69950f1d045a0d3316"
+  },
+  "release": {
+    "release_id": "whole-government-demo-tree-v1",
+    "owner": "Cross-government demonstration owner",
+    "recipient": "Approved research partner",
+    "purpose": "Demonstrate fail-closed model release assurance",
+    "model_family": "tree_ensemble",
+    "protected_unit": "person",
+    "artifact_path": "artifacts/demo-tree.json",
+    "artifact_sha256": "2f42b587627c5b6c4447d781b57a47082743f029b475f560a574553abcedfdd5",
+    "interface": {
+      "access": "full_artifact",
+      "outputs": ["tree rules", "leaf signature"],
+      "authenticated": true,
+      "rate_limited": false,
+      "adaptive_queries": false
+    },
+    "previous_release_ids": []
+  },
+  "population_scopes": [
+    {
+      "scope_id": "service-participants-2026",
+      "name": "Participants in the defined public-service programme",
+      "unit_kind": "person",
+      "universe_definition": "People meeting the programme eligibility and reference-date criteria, regardless of which participating agency holds the source record.",
+      "inclusion_criteria": [
+        "meets the documented programme eligibility rule",
+        "has an active or historical programme record as at the reference date"
+      ],
+      "exclusion_criteria": ["test and synthetic identities"],
+      "jurisdictions": ["Singapore"],
+      "reference_date": "2026-01-01",
+      "valid_until": "2099-01-01",
+      "population_snapshot_sha256": "2222222222222222222222222222222222222222222222222222222222222222",
+      "size": {
+        "basis": "bounded_estimate",
+        "lower_bound": 90000,
+        "point_estimate": 100000,
+        "upper_bound": 110000,
+        "source": "Demonstration-only bounded programme register estimate",
+        "measured_at": "2026-01-01T00:00:00Z"
+      },
+      "subgroup_dimensions": ["programme", "region", "eligibility_band"],
+      "data_steward": "Demonstration cross-government data steward",
+      "notes": "Synthetic scope metadata; not an empirical government population estimate."
+    }
+  ],
+  "threats": [
+    {
+      "threat_id": "linkage-person",
+      "kind": "linkage",
+      "mandatory": true,
+      "secret": "identity of one person among the declared candidate roster",
+      "prior": "uniform over four candidates",
+      "side_information": [
+        "candidate roster",
+        "candidate features",
+        "target signature",
+        "complete database and feature schema",
+        "exact numeric min/max/range/mean/median/standard-deviation/variance/quartiles/IQR/MAD",
+        "exact categorical and class counts/frequencies"
+      ],
+      "adversary_metadata_profile": "exact_database_feature_summaries_v1",
+      "success_metric": "incremental exact-identity Bayes success",
+      "decision_metric": "incremental_bayes_linkage_success",
+      "tolerance": 0.3,
+      "tolerance_basis": "incremental",
+      "harm_rationale": "Incorrect or unauthorised person-level linkage may expose a protected relationship with a public service.",
+      "population_scope_id": "service-participants-2026",
+      "candidate_set": "four externally known demonstration candidates",
+      "target_signal_source": "independently observed leaf signature",
+      "realizability": "recipient_realizable"
+    },
+    {
+      "threat_id": "membership-person",
+      "kind": "membership",
+      "mandatory": true,
+      "secret": "whether one person's contribution was used for training",
+      "prior": "equal neighbouring-dataset prior",
+      "side_information": [
+        "target record",
+        "complete database and feature schema",
+        "exact full-source and target-training numeric min/max/range/mean/median/standard-deviation/variance/quartiles/IQR/MAD",
+        "exact categorical and class counts/frequencies"
+      ],
+      "adversary_metadata_profile": "exact_database_feature_summaries_v1",
+      "success_metric": "equal-prior exact membership success",
+      "decision_metric": "equal_prior_membership_success",
+      "tolerance": 0.6,
+      "tolerance_basis": "absolute",
+      "harm_rationale": "Training membership may reveal engagement with a sensitive public programme.",
+      "population_scope_id": "service-participants-2026",
+      "realizability": "not_applicable"
+    }
+  ],
+  "analyzer_inputs": [
+    {
+      "analyzer": "tree_linkage",
+      "threat_id": "linkage-person",
+      "population_scope_id": "service-participants-2026",
+      "candidate_ids": ["a", "b", "c", "d"],
+      "observations": ["L1", "L1", "L2", "L2"],
+      "recipient_has_candidate_roster": true,
+      "recipient_has_target_signal": true,
+      "observed_interface_sha256": "d7ca53bb8dbf0efb85abf373dba00fdb285764d783856f51b27658d49e65d111",
+      "complete_interface_coverage": true,
+      "provenance": {
+        "tool": "mra-demo-tree-export",
+        "tool_version": "1.0",
+        "source_path": "evidence/tree-linkage.json",
+        "source_sha256": "0d3bfe44915660b26210757bd13d6000945eaeb7ba48932a1851b960a3fd7f0d",
+        "bound_fields": ["population_scope_id", "candidate_ids", "observations", "recipient_has_candidate_roster", "recipient_has_target_signal", "observed_interface_sha256", "complete_interface_coverage"]
+      }
+    },
+    {
+      "analyzer": "dp",
+      "threat_id": "membership-person",
+      "population_scope_id": "service-participants-2026",
+      "epsilon": 0.2,
+      "delta": 0.000001,
+      "adjacency": "add/remove one person",
+      "protected_unit": "person",
+      "accountant": "demonstration accountant",
+      "accountant_replayed": true,
+      "complete_pipeline": true,
+      "fpr": 0.001,
+      "provenance": {
+        "tool": "mra-demo-accountant",
+        "tool_version": "1.0",
+        "source_path": "evidence/dp-accountant.json",
+        "source_sha256": "bc405852d3c20f0d3c85869b59a4e173622b5b07f6fc7e31fd70f00f80e01f67",
+        "bound_fields": ["population_scope_id", "epsilon", "delta", "adjacency", "protected_unit", "accountant", "accountant_replayed", "complete_pipeline"]
+      }
+    },
+    {
+      "analyzer": "attack",
+      "threat_id": "membership-person",
+      "population_scope_id": "service-participants-2026",
+      "attack_name": "calibrated-loss",
+      "metric": "equal_prior_membership_success",
+      "successes": 520,
+      "trials": 1000,
+      "confidence": 0.95,
+      "calibration_disjoint": true,
+      "audit_disjoint": true,
+      "raw_counts_retained": true,
+      "threshold_pre_registered": true,
+      "provenance": {
+        "tool": "mra-demo-attack",
+        "tool_version": "1.0",
+        "source_path": "evidence/attack-counts.json",
+        "source_sha256": "bdf0cc12afa9140f1edfac4fa5923f184d7aae62fd98f7a26b21889f14507cc9",
+        "bound_fields": ["population_scope_id", "attack_name", "metric", "successes", "trials", "calibration_disjoint", "audit_disjoint", "raw_counts_retained", "threshold_pre_registered"]
+      }
+    }
+  ]
+}

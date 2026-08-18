@@ -1,0 +1,40 @@
+{
+  "class_counts": {
+    "acc": 384,
+    "good": 69,
+    "unacc": 1210,
+    "vgood": 65
+  },
+  "classes": 4,
+  "dataset_id": 40975,
+  "feature_dtypes": {
+    "buying": "category",
+    "doors": "category",
+    "lug_boot": "category",
+    "maint": "category",
+    "persons": "category",
+    "safety": "category"
+  },
+  "feature_names": [
+    "buying",
+    "maint",
+    "doors",
+    "persons",
+    "lug_boot",
+    "safety"
+  ],
+  "features": 6,
+  "file_id": "18116966",
+  "missing_feature_values": 0,
+  "name": "car",
+  "openml_md5_checksum": "baf70f94f550c2ba489422bb742c54ae",
+  "openml_url": "https://openml.org/data/v1/download/18116966/car.arff",
+  "parquet_url": "https://data.openml.org/datasets/0004/40975/dataset_40975.pq",
+  "rows": 1728,
+  "snapshot_bytes": 6287,
+  "snapshot_path": "reproduction/openml/raw/openml-40975.parquet",
+  "snapshot_sha256": "e0d79e12921ad5070e169628ad8711d698141b54a619626b5d0149143f2fb310",
+  "status": "active",
+  "target": "class",
+  "version": 3
+}

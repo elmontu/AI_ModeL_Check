@@ -1,0 +1,38 @@
+{
+  "class_counts": {
+    "All_methods": 127,
+    "Diet_enrichment": 132,
+    "Health_education": 124,
+    "Mouthwash": 155,
+    "None": 136,
+    "Oral_hygiene": 123
+  },
+  "classes": 6,
+  "dataset_id": 469,
+  "feature_dtypes": {
+    "DMFT.Begin": "category",
+    "DMFT.End": "category",
+    "Ethnic": "category",
+    "Gender": "category"
+  },
+  "feature_names": [
+    "DMFT.Begin",
+    "DMFT.End",
+    "Gender",
+    "Ethnic"
+  ],
+  "features": 4,
+  "file_id": "52581",
+  "missing_feature_values": 0,
+  "name": "analcatdata_dmft",
+  "openml_md5_checksum": "ad86226880052117a3e95479cf61faf6",
+  "openml_url": "https://openml.org/data/v1/download/52581/analcatdata_dmft.arff",
+  "parquet_url": "https://data.openml.org/datasets/0000/0469/dataset_469.pq",
+  "rows": 797,
+  "snapshot_bytes": 5847,
+  "snapshot_path": "reproduction/openml/raw/openml-469.parquet",
+  "snapshot_sha256": "e0202b33dad1fb0463b77327f08332afe35596a108918488a945c91ae54be70e",
+  "status": "active",
+  "target": "Prevention",
+  "version": 1
+}

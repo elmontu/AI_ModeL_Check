@@ -1,0 +1,44 @@
+{
+  "class_counts": {
+    "benign": 458,
+    "malignant": 241
+  },
+  "classes": 2,
+  "dataset_id": 15,
+  "feature_dtypes": {
+    "Bare_Nuclei": "float64",
+    "Bland_Chromatin": "float64",
+    "Cell_Shape_Uniformity": "float64",
+    "Cell_Size_Uniformity": "float64",
+    "Clump_Thickness": "float64",
+    "Marginal_Adhesion": "float64",
+    "Mitoses": "float64",
+    "Normal_Nucleoli": "float64",
+    "Single_Epi_Cell_Size": "float64"
+  },
+  "feature_names": [
+    "Clump_Thickness",
+    "Cell_Size_Uniformity",
+    "Cell_Shape_Uniformity",
+    "Marginal_Adhesion",
+    "Single_Epi_Cell_Size",
+    "Bare_Nuclei",
+    "Bland_Chromatin",
+    "Normal_Nucleoli",
+    "Mitoses"
+  ],
+  "features": 9,
+  "file_id": "52350",
+  "missing_feature_values": 16,
+  "name": "breast-w",
+  "openml_md5_checksum": "88633c065209e7a57323d3d7f2d00546",
+  "openml_url": "https://openml.org/data/v1/download/52350/breast-w.arff",
+  "parquet_url": "https://data.openml.org/datasets/0000/0015/dataset_15.pq",
+  "rows": 699,
+  "snapshot_bytes": 11933,
+  "snapshot_path": "reproduction/openml/raw/openml-15.parquet",
+  "snapshot_sha256": "4ec569c70d5e3beb79245c480571603b0bc2ee177dcb589ffc7fa2e733fa649e",
+  "status": "active",
+  "target": "Class",
+  "version": 1
+}

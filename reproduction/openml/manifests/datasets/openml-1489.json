@@ -1,0 +1,36 @@
+{
+  "class_counts": {
+    "1": 3818,
+    "2": 1586
+  },
+  "classes": 2,
+  "dataset_id": 1489,
+  "feature_dtypes": {
+    "V1": "float64",
+    "V2": "float64",
+    "V3": "float64",
+    "V4": "float64",
+    "V5": "float64"
+  },
+  "feature_names": [
+    "V1",
+    "V2",
+    "V3",
+    "V4",
+    "V5"
+  ],
+  "features": 5,
+  "file_id": "1592281",
+  "missing_feature_values": 0,
+  "name": "phoneme",
+  "openml_md5_checksum": "902ff27649dbfb512f3fb01fc05c6b24",
+  "openml_url": "https://openml.org/data/v1/download/1592281/phoneme.arff",
+  "parquet_url": "https://data.openml.org/datasets/0000/1489/dataset_1489.pq",
+  "rows": 5404,
+  "snapshot_bytes": 255949,
+  "snapshot_path": "reproduction/openml/raw/openml-1489.parquet",
+  "snapshot_sha256": "35ff4070f59b86a45fa21c6ce16a49ace015f8633cc36fc6b795a6b918bba55d",
+  "status": "active",
+  "target": "Class",
+  "version": 1
+}

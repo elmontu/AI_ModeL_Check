@@ -1,0 +1,26 @@
+{
+  "schema_version": "1.0",
+  "generation_id": "demo-multinomial-generation",
+  "allocation_id": "demo-portfolio-allocation",
+  "sampling_plan_reference": {
+    "source_id": "demo-multinomial-sampling-plan",
+    "source_path": "evidence/portfolio-multinomial-plan.json",
+    "source_sha256": "bc080ed808356f5c824f68059a07b28c53e42020bec1afe26cd02cf0d343981f"
+  },
+  "counts_reference": {
+    "source_id": "demo-raw-multinomial-counts",
+    "source_path": "evidence/portfolio-multinomial-counts.json",
+    "source_sha256": "7352dcc0afc3120cb61f8ea98cb805be401884eaa675c0de9121048c95b2db77"
+  },
+  "budget_reference": {
+    "source_id": "demo-assurance-error-budget",
+    "source_path": "evidence/portfolio-error-budget.json",
+    "source_sha256": "5a50f8c9f534f845d4139c15f172e5a261d5dd02a739a762a6c439fa789faf1a"
+  },
+  "sampling_model": "iid_multinomial",
+  "family_pre_registered": true,
+  "all_cells_reported": true,
+  "selection_process_covered": true,
+  "assurance_ledger_complete": true,
+  "selection_scope": "Both declared releases, both protected states, all output cells, and the complete pre-declared configuration comparison are covered."
+}

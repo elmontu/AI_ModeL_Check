@@ -1,0 +1,20 @@
+{
+  "status": "directly_joint_assessed",
+  "composition_domain_id": "demo-service-participants-registry-v1",
+  "population_secret_pairs": [
+    "service-participants-2026|linkage-person",
+    "service-participants-2026|membership-person"
+  ],
+  "registry_head_sha256": "1111111111111111111111111111111111111111111111111111111111111111",
+  "registered_release_ids": [],
+  "method": "direct finite joint-channel replay over the registered demonstration releases",
+  "joint_upper_bounds": {
+    "service-participants-2026|linkage-person": 0.0,
+    "service-participants-2026|membership-person": 0.5
+  },
+  "joint_experiment_ids": {
+    "service-participants-2026|linkage-person": "linkage-bounded-api",
+    "service-participants-2026|membership-person": "membership-bounded-api"
+  },
+  "warning": "Demonstration evidence only; this is not a general product-channel composition theorem."
+}

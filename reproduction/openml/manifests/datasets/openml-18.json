@@ -1,0 +1,46 @@
+{
+  "class_counts": {
+    "1": 200,
+    "10": 200,
+    "2": 200,
+    "3": 200,
+    "4": 200,
+    "5": 200,
+    "6": 200,
+    "7": 200,
+    "8": 200,
+    "9": 200
+  },
+  "classes": 10,
+  "dataset_id": 18,
+  "feature_dtypes": {
+    "att1": "float64",
+    "att2": "float64",
+    "att3": "float64",
+    "att4": "float64",
+    "att5": "float64",
+    "att6": "float64"
+  },
+  "feature_names": [
+    "att1",
+    "att2",
+    "att3",
+    "att4",
+    "att5",
+    "att6"
+  ],
+  "features": 6,
+  "file_id": "18",
+  "missing_feature_values": 0,
+  "name": "mfeat-morphological",
+  "openml_md5_checksum": "5600bd857927b893e2e4430240b2e74a",
+  "openml_url": "https://openml.org/data/v1/download/18/mfeat-morphological.arff",
+  "parquet_url": "https://data.openml.org/datasets/0000/0018/dataset_18.pq",
+  "rows": 2000,
+  "snapshot_bytes": 54376,
+  "snapshot_path": "reproduction/openml/raw/openml-18.parquet",
+  "snapshot_sha256": "9b2383850f9b976dfd1db58a3bf469972c2955d035b9eeffb8388cfd10b4d578",
+  "status": "active",
+  "target": "class",
+  "version": 1
+}

@@ -1,0 +1,46 @@
+{
+  "class_counts": {
+    "1": 416,
+    "2": 167
+  },
+  "classes": 2,
+  "dataset_id": 1480,
+  "feature_dtypes": {
+    "V1": "uint8",
+    "V10": "float64",
+    "V2": "category",
+    "V3": "float64",
+    "V4": "float64",
+    "V5": "float64",
+    "V6": "float64",
+    "V7": "float64",
+    "V8": "float64",
+    "V9": "float64"
+  },
+  "feature_names": [
+    "V1",
+    "V2",
+    "V3",
+    "V4",
+    "V5",
+    "V6",
+    "V7",
+    "V8",
+    "V9",
+    "V10"
+  ],
+  "features": 10,
+  "file_id": "1590565",
+  "missing_feature_values": 0,
+  "name": "ilpd",
+  "openml_md5_checksum": "155295549a459387fb71312caf1b8360",
+  "openml_url": "https://openml.org/data/v1/download/1590565/ilpd.arff",
+  "parquet_url": "https://data.openml.org/datasets/0000/1480/dataset_1480.pq",
+  "rows": 583,
+  "snapshot_bytes": 17162,
+  "snapshot_path": "reproduction/openml/raw/openml-1480.parquet",
+  "snapshot_sha256": "ce67c4d13f864458bac48fa9b126c20e00060c60883c2c1d0d91c01aca853bf7",
+  "status": "active",
+  "target": "Class",
+  "version": 1
+}

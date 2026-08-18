@@ -1,0 +1,27 @@
+{
+  "schema_version": "1.0",
+  "policy_id": "whole-government-model-release-demo",
+  "policy_version": "1.0.0",
+  "effective_from": "2026-01-01T00:00:00Z",
+  "expires_at": "2099-01-01T00:00:00Z",
+  "rules": [
+    {
+      "threat_id": "linkage-person",
+      "kind": "linkage",
+      "mandatory": true,
+      "decision_metric": "incremental_bayes_linkage_success",
+      "metric_parameters": {},
+      "tolerance": 0.3,
+      "tolerance_basis": "incremental"
+    },
+    {
+      "threat_id": "membership-person",
+      "kind": "membership",
+      "mandatory": true,
+      "decision_metric": "equal_prior_membership_success",
+      "metric_parameters": {},
+      "tolerance": 0.6,
+      "tolerance_basis": "absolute"
+    }
+  ]
+}

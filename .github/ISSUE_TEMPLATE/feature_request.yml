@@ -1,0 +1,36 @@
+name: Feature request
+description: Propose a bounded change to the reference implementation or a versioned contract.
+title: "[Feature]: "
+labels: [enhancement]
+body:
+  - type: markdown
+    attributes:
+      value: Do not include agency data, credentials, private model artifacts, or sensitive attack details.
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: Describe the release-assurance problem and who encounters it.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed change
+      description: Describe the smallest useful behavior or contract change.
+    validations:
+      required: true
+  - type: textarea
+    id: safety
+    attributes:
+      label: Safety and compatibility impact
+      description: Identify affected evidence direction, fail-safe behavior, schemas, integrations, or migration needs.
+    validations:
+      required: true
+  - type: textarea
+    id: validation
+    attributes:
+      label: Acceptance evidence
+      description: State how the change can be tested with synthetic or public data.
+    validations:
+      required: true

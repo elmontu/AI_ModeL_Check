@@ -1,0 +1,40 @@
+{
+  "study_id": 99,
+  "study_alias": "OpenML-CC18",
+  "snapshot_format": "openml_parquet",
+  "master_seed": 20260812,
+  "replicate_seeds": [20260812, 20260813, 20260814],
+  "split_fractions": {
+    "target_train": 0.5,
+    "reference_train": 0.2,
+    "attack_calibration": 0.1,
+    "attack_audit_nonmember": 0.1,
+    "utility_test": 0.1
+  },
+  "broad_structural_model": {
+    "n_estimators": 30,
+    "max_depth": 4,
+    "min_child_weight": 20,
+    "subsample": 1.0,
+    "colsample_bytree": 1.0
+  },
+  "capacity_grid": {
+    "n_estimators": [2, 4, 8, 16, 30, 50, 100],
+    "max_depth": [2, 3, 4, 6],
+    "min_child_weight": [1, 5, 20, 50, 200]
+  },
+  "attack_capacities": [
+    {"n_estimators": 2, "max_depth": 2},
+    {"n_estimators": 4, "max_depth": 3},
+    {"n_estimators": 8, "max_depth": 3},
+    {"n_estimators": 16, "max_depth": 4},
+    {"n_estimators": 30, "max_depth": 4},
+    {"n_estimators": 100, "max_depth": 6}
+  ],
+  "target_fpr": 0.001,
+  "confidence": 0.95,
+  "row_cap": 20000,
+  "large_row_threshold": 10000,
+  "expensive_subset_size": 16,
+  "neural_dp_subset_size": 8
+}

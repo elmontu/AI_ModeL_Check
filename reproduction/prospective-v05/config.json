@@ -1,0 +1,91 @@
+{
+  "study_id": "mra-v05-openml-cc18-full-corpus-release-study-2026-08-17",
+  "design_version": 2,
+  "design_status": "full_corpus_extension_fixed_after_observing_the_original_eight_dataset_results_not_blinded_or_externally_preregistered",
+  "sampling_frame": "all 72 active datasets in the retained OpenML-CC18 suite manifest",
+  "claim_boundary": "conditional benchmark release capability and held-out training-randomness validation; not representative government release yield, deployment safety, or population prevalence",
+  "base_config": "reproduction/openml/config.json",
+  "dp_config": "reproduction/openml/dp-sgd-config.json",
+  "dataset_manifest": "reproduction/openml/manifests/suite-99-datasets.json",
+  "expected_dataset_count": 72,
+  "eligibility_rule": "include every active dataset in the sealed OpenML-CC18 suite manifest with a present snapshot whose SHA-256 matches the manifest; retain and report every failed training cell",
+  "original_eight_dataset_ids": [11, 44, 188, 1590, 6332, 23517, 40499, 40923],
+  "extension_disclosure": "the protocol, mechanisms, seeds, utility rule, profiles, and estimands are unchanged from design version 1, but expansion to all 72 datasets was decided after the original eight-dataset results were observed",
+  "development_seeds": [
+    2026081701,
+    2026081702,
+    2026081703,
+    2026081704,
+    2026081705,
+    2026081706,
+    2026081707,
+    2026081708,
+    2026081709,
+    2026081710,
+    2026081711,
+    2026081712,
+    2026081713,
+    2026081714,
+    2026081715,
+    2026081716,
+    2026081717,
+    2026081718,
+    2026081719,
+    2026081720
+  ],
+  "evaluation_seeds": [
+    2026081721,
+    2026081722,
+    2026081723,
+    2026081724,
+    2026081725,
+    2026081726,
+    2026081727,
+    2026081728,
+    2026081729,
+    2026081730
+  ],
+  "candidate_epsilon_targets": [0.5, 2.0, 8.0],
+  "release_horizon": 3,
+  "release_position_value_weights": [1.0, 0.8, 0.6],
+  "familywise_confidence": 0.95,
+  "utility_reliability_floor": 0.7,
+  "utility_max_balanced_accuracy_degradation": 0.1,
+  "utility_minimum_margin_above_chance": 0.05,
+  "membership_floor_tolerance_at_target_fpr": 0.1,
+  "profiles": [
+    {
+      "profile_id": "individual-high-sensitivity",
+      "protected_unit": "one person represented by at most one training row",
+      "group_size_bound": 1,
+      "portfolio_epsilon_budget": 2.0,
+      "portfolio_delta_budget": 0.001
+    },
+    {
+      "profile_id": "individual-standard",
+      "protected_unit": "one person represented by at most one training row",
+      "group_size_bound": 1,
+      "portfolio_epsilon_budget": 8.0,
+      "portfolio_delta_budget": 0.001
+    },
+    {
+      "profile_id": "household-standard",
+      "protected_unit": "one household represented by at most four training rows",
+      "group_size_bound": 4,
+      "portfolio_epsilon_budget": 8.0,
+      "portfolio_delta_budget": 0.001
+    },
+    {
+      "profile_id": "organization-standard",
+      "protected_unit": "one organization represented by at most ten training rows",
+      "group_size_bound": 10,
+      "portfolio_epsilon_budget": 20.0,
+      "portfolio_delta_budget": 0.001
+    }
+  ],
+  "selection_rule": "maximize the predeclared weighted sum of development mean balanced accuracy over the complete three-release allocation, then maximize release count, then minimize composed epsilon and delta",
+  "utility_multiplicity_rule": "Bonferroni one-sided exact binomial lower bounds across the three candidate mechanisms within each dataset",
+  "privacy_rule": "independently replay each record-level accountant, lift it to the declared protected unit with basic group privacy, then apply sequential composition across the complete portfolio",
+  "evidence_asymmetry_rule": "a validated DP accountant is a mechanism-relative ceiling; empirical membership attacks are lower bounds and can block but a null attack cannot clear",
+  "evaluation_rule": "freeze selection on the twenty development seeds; evaluate reliability, proxy false clearance, release yield, portfolio success, and utility regret only on the ten untouched evaluation seeds"
+}
