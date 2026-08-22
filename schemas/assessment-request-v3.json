@@ -79,6 +79,9 @@
           "title": "Confidence",
           "type": "number"
         },
+        "evidence_context": {
+          "$ref": "#/$defs/EvidenceContext"
+        },
         "false_positives": {
           "anyOf": [
             {
@@ -171,6 +174,7 @@
         "trials",
         "calibration_disjoint",
         "audit_disjoint",
+        "evidence_context",
         "provenance"
       ],
       "title": "AttackInput",
@@ -234,6 +238,9 @@
           "exclusiveMinimum": 0.5,
           "title": "Confidence Family",
           "type": "number"
+        },
+        "evidence_context": {
+          "$ref": "#/$defs/EvidenceContext"
         },
         "ground_truth_verified": {
           "title": "Ground Truth Verified",
@@ -302,10 +309,29 @@
         "secret_and_metric_pre_registered",
         "ground_truth_verified",
         "success_definition",
+        "evidence_context",
         "provenance"
       ],
       "title": "ControlledInferenceInput",
       "type": "object"
+    },
+    "DataModality": {
+      "enum": [
+        "tabular",
+        "text",
+        "image",
+        "audio",
+        "video",
+        "time_series",
+        "graph",
+        "geospatial",
+        "embedding",
+        "action",
+        "multimodal",
+        "custom"
+      ],
+      "title": "DataModality",
+      "type": "string"
     },
     "DpInput": {
       "additionalProperties": false,
@@ -344,6 +370,9 @@
           "minimum": 0.0,
           "title": "Epsilon",
           "type": "number"
+        },
+        "evidence_context": {
+          "$ref": "#/$defs/EvidenceContext"
         },
         "fpr": {
           "anyOf": [
@@ -404,9 +433,77 @@
         "accountant",
         "accountant_replayed",
         "complete_pipeline",
+        "evidence_context",
         "provenance"
       ],
       "title": "DpInput",
+      "type": "object"
+    },
+    "EvidenceContext": {
+      "additionalProperties": false,
+      "properties": {
+        "artifact_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Artifact Sha256",
+          "type": "string"
+        },
+        "decision_game_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Decision Game Sha256",
+          "type": "string"
+        },
+        "interface_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Interface Sha256",
+          "type": "string"
+        },
+        "observed_at": {
+          "format": "date-time",
+          "title": "Observed At",
+          "type": "string"
+        },
+        "policy_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Policy Sha256",
+          "type": "string"
+        },
+        "population_scope_id": {
+          "maxLength": 128,
+          "minLength": 3,
+          "pattern": "^[A-Za-z0-9._:-]+$",
+          "title": "Population Scope Id",
+          "type": "string"
+        },
+        "population_scope_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Population Scope Sha256",
+          "type": "string"
+        },
+        "release_contract_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Release Contract Sha256",
+          "type": "string"
+        },
+        "release_id": {
+          "maxLength": 128,
+          "minLength": 3,
+          "pattern": "^[A-Za-z0-9._:-]+$",
+          "title": "Release Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "release_id",
+        "release_contract_sha256",
+        "policy_sha256",
+        "artifact_sha256",
+        "interface_sha256",
+        "population_scope_id",
+        "population_scope_sha256",
+        "decision_game_sha256",
+        "observed_at"
+      ],
+      "title": "EvidenceContext",
       "type": "object"
     },
     "InterfaceContract": {
@@ -719,6 +816,92 @@
       "title": "LlmProtocolContract",
       "type": "object"
     },
+    "ModelProfile": {
+      "additionalProperties": false,
+      "properties": {
+        "component_model_families": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Component Model Families",
+          "type": "array"
+        },
+        "custom_task_definition": {
+          "anyOf": [
+            {
+              "maxLength": 2048,
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Custom Task Definition"
+        },
+        "generative": {
+          "default": false,
+          "title": "Generative",
+          "type": "boolean"
+        },
+        "input_modalities": {
+          "items": {
+            "$ref": "#/$defs/DataModality"
+          },
+          "minItems": 1,
+          "title": "Input Modalities",
+          "type": "array"
+        },
+        "output_modalities": {
+          "items": {
+            "$ref": "#/$defs/DataModality"
+          },
+          "minItems": 1,
+          "title": "Output Modalities",
+          "type": "array"
+        },
+        "stateful": {
+          "default": false,
+          "title": "Stateful",
+          "type": "boolean"
+        },
+        "task": {
+          "$ref": "#/$defs/ModelTask"
+        },
+        "training_paradigm": {
+          "$ref": "#/$defs/TrainingParadigm"
+        }
+      },
+      "required": [
+        "task",
+        "input_modalities",
+        "output_modalities",
+        "training_paradigm"
+      ],
+      "title": "ModelProfile",
+      "type": "object"
+    },
+    "ModelTask": {
+      "enum": [
+        "classification",
+        "regression",
+        "ranking",
+        "recommendation",
+        "forecasting",
+        "clustering",
+        "anomaly_detection",
+        "representation",
+        "generation",
+        "retrieval",
+        "control",
+        "decision_support",
+        "custom"
+      ],
+      "title": "ModelTask",
+      "type": "string"
+    },
     "PolicyReference": {
       "additionalProperties": false,
       "properties": {
@@ -770,6 +953,9 @@
           "title": "Coverage",
           "type": "number"
         },
+        "evidence_context": {
+          "$ref": "#/$defs/EvidenceContext"
+        },
         "fitted_joint_model": {
           "title": "Fitted Joint Model",
           "type": "boolean"
@@ -813,6 +999,7 @@
         "fitted_joint_model",
         "heldout_validated",
         "multiplicity_adjusted",
+        "evidence_context",
         "provenance"
       ],
       "title": "PopulationInput",
@@ -1085,6 +1272,9 @@
           "title": "Model Family",
           "type": "string"
         },
+        "model_profile": {
+          "$ref": "#/$defs/ModelProfile"
+        },
         "owner": {
           "maxLength": 256,
           "minLength": 1,
@@ -1142,6 +1332,7 @@
         "recipient",
         "purpose",
         "model_family",
+        "model_profile",
         "protected_unit",
         "artifact_path",
         "artifact_sha256",
@@ -1305,6 +1496,20 @@
       "title": "ThreatKind",
       "type": "string"
     },
+    "TrainingParadigm": {
+      "enum": [
+        "supervised",
+        "semi_supervised",
+        "self_supervised",
+        "unsupervised",
+        "reinforcement_learning",
+        "in_context_or_prompted",
+        "hybrid",
+        "custom"
+      ],
+      "title": "TrainingParadigm",
+      "type": "string"
+    },
     "TreeLinkageInput": {
       "additionalProperties": false,
       "properties": {
@@ -1324,6 +1529,9 @@
         "complete_interface_coverage": {
           "title": "Complete Interface Coverage",
           "type": "boolean"
+        },
+        "evidence_context": {
+          "$ref": "#/$defs/EvidenceContext"
         },
         "observations": {
           "items": {
@@ -1381,6 +1589,7 @@
         "recipient_has_target_signal",
         "observed_interface_sha256",
         "complete_interface_coverage",
+        "evidence_context",
         "provenance"
       ],
       "title": "TreeLinkageInput",
@@ -1436,8 +1645,8 @@
       "$ref": "#/$defs/ReleaseContract"
     },
     "schema_version": {
-      "const": "2.0",
-      "default": "2.0",
+      "const": "3.0",
+      "default": "3.0",
       "title": "Schema Version",
       "type": "string"
     },

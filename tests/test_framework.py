@@ -15,14 +15,14 @@ from model_release_assurance.analyzers.attack import (
     wilson_lower,
 )
 from model_release_assurance.analyzers.controlled_inference import ControlledInferenceAnalyzer
+from model_release_assurance.analyzers.tree import TreeLinkageAnalyzer
 from model_release_assurance.audit import AuditStore
 from model_release_assurance.decision import decision_game_sha256, decide_threat, population_scope_sha256
 from model_release_assurance.engine import AssuranceEngine
+from model_release_assurance.errors import AnalyzerError
 from model_release_assurance.integrity import (
     build_signed_manifest,
-    canonical_json_bytes,
     generate_ed25519_keypair,
-    sha256_bytes,
     sha256_file,
     verify_signed_manifest,
 )
@@ -33,6 +33,7 @@ from model_release_assurance.models import (
     EvidenceClass,
     EvidenceRecord,
     InterfaceContract,
+    PolicyRule,
     PopulationSize,
     Realizability,
     ThreatContract,
@@ -51,8 +52,6 @@ def load_example() -> dict:
 
 
 def make_paths_absolute(raw: dict) -> None:
-    raw["policy"]["policy_path"] = str(ROOT / "examples" / raw["policy"]["policy_path"])
-    raw["release"]["artifact_path"] = str(ROOT / "examples" / raw["release"]["artifact_path"])
     for analyzer in raw["analyzer_inputs"]:
         analyzer["provenance"]["source_path"] = str(
             ROOT / "examples" / analyzer["provenance"]["source_path"]
@@ -64,11 +63,12 @@ class ContractTests(unittest.TestCase):
         with self.assertRaises(ValidationError):
             InterfaceContract.model_validate({
                 "protocol_type": "interactive_llm",
-                "access": "score",
+                "access": "text",
             })
-        contract = InterfaceContract.model_validate({
+        raw = {
             "protocol_type": "interactive_llm",
-            "access": "score",
+            "access": "text",
+            "outputs": ["text"],
             "query_budget": 100,
             "adaptive_queries": True,
             "llm_protocol": {
@@ -88,14 +88,78 @@ class ContractTests(unittest.TestCase):
                 "update_policy": "versioned_reassessment_required",
                 "valid_until": "2099-01-01T00:00:00Z",
             },
-        })
+        }
+        contract = InterfaceContract.model_validate(raw)
         self.assertEqual(contract.protocol_type, "interactive_llm")
+        self.assertEqual(contract.access, "text")
+
+        empty_decoding = json.loads(json.dumps(raw))
+        empty_decoding["llm_protocol"]["decoding_parameters"] = {}
+        with self.assertRaises(ValidationError):
+            InterfaceContract.model_validate(empty_decoding)
+
+        invalid_adapter = json.loads(json.dumps(raw))
+        invalid_adapter["llm_protocol"]["adapter_sha256s"] = ["not-a-digest"]
+        with self.assertRaises(ValidationError):
+            InterfaceContract.model_validate(invalid_adapter)
+
+        stateful_without_ttl = json.loads(json.dumps(raw))
+        stateful_without_ttl["llm_protocol"]["memory_mode"] = "session"
+        with self.assertRaises(ValidationError):
+            InterfaceContract.model_validate(stateful_without_ttl)
+
+        budget_mismatch = json.loads(json.dumps(raw))
+        budget_mismatch["query_budget"] = 99
+        with self.assertRaises(ValidationError):
+            InterfaceContract.model_validate(budget_mismatch)
 
     def test_unknown_field_fails_closed(self) -> None:
         raw = load_example()
         raw["release"]["undeclared_control"] = True
         with self.assertRaises(ValidationError):
             AssessmentRequest.model_validate(raw)
+
+    def test_generic_attack_cannot_create_an_interactive_llm_floor(self) -> None:
+        raw = load_example()
+        release = AssessmentRequest.model_validate(raw).release.model_copy(
+            update={
+                "interface": InterfaceContract.model_validate({
+                    "protocol_type": "interactive_llm",
+                    "access": "text",
+                    "outputs": ["text"],
+                    "query_budget": 100,
+                    "adaptive_queries": True,
+                    "llm_protocol": {
+                        "model_provider": "test provider",
+                        "model_identifier": "test model",
+                        "model_version": "2026-08-13",
+                        "tokenizer_sha256": "1" * 64,
+                        "decoding_parameters": {"temperature": 0.0},
+                        "system_prompt_sha256": "2" * 64,
+                        "memory_mode": "none",
+                        "logging_mode": "security_only",
+                        "provider_retention_days": 0,
+                        "maximum_session_tokens": 4096,
+                        "maximum_lifetime_queries": 100,
+                        "maximum_concurrent_sessions": 1,
+                        "reset_semantics": "fresh context per authenticated session",
+                        "update_policy": "versioned_reassessment_required",
+                        "valid_until": "2099-01-01T00:00:00Z",
+                    },
+                })
+            }
+        )
+        attack = AttackInput.model_validate(raw["analyzer_inputs"][2])
+        threat = ThreatContract.model_validate(raw["threats"][1])
+        with self.assertRaisesRegex(AnalyzerError, "dedicated transcript-bound LLM analyzer"):
+            AttackAnalyzer().analyze(release, threat, attack)
+
+    def test_tree_evidence_cannot_be_applied_to_another_model_family(self) -> None:
+        raw = load_example()
+        request = AssessmentRequest.model_validate(raw)
+        release = request.release.model_copy(update={"model_family": "linear_generalized_linear"})
+        with self.assertRaisesRegex(AnalyzerError, "tree-ensemble"):
+            TreeLinkageAnalyzer().analyze(release, request.threats[0], request.analyzer_inputs[0])
 
     def test_linkage_requires_target_signal(self) -> None:
         raw = load_example()
@@ -168,6 +232,70 @@ class ContractTests(unittest.TestCase):
                 "measured_at": "2026-01-01T00:00:00Z",
             })
 
+    def test_evidence_classes_enforce_direction(self) -> None:
+        context = load_example()["analyzer_inputs"][2]["evidence_context"]
+        common = {
+            **context,
+            "evidence_id": "direction-test",
+            "threat_id": "membership-person",
+            "analyzer": "test",
+            "coverage": "complete_interface",
+            "metric": "equal_prior_membership_success",
+            "value": 0.5,
+            "realizability": "recipient_realizable",
+        }
+        with self.assertRaisesRegex(ValidationError, "screen evidence cannot"):
+            EvidenceRecord.model_validate({
+                **common,
+                "evidence_class": "screen",
+                "lower": 0.4,
+                "can_block": True,
+                "can_clear": False,
+            })
+        with self.assertRaisesRegex(ValidationError, "floor evidence cannot clear"):
+            EvidenceRecord.model_validate({
+                **common,
+                "evidence_class": "floor",
+                "lower": 0.4,
+                "upper": 0.6,
+                "can_block": True,
+                "can_clear": True,
+            })
+        with self.assertRaisesRegex(ValidationError, "ceiling evidence cannot block"):
+            EvidenceRecord.model_validate({
+                **common,
+                "evidence_class": "ceiling",
+                "lower": 0.4,
+                "upper": 0.6,
+                "can_block": True,
+                "can_clear": True,
+            })
+        with self.assertRaisesRegex(ValidationError, "auditor-only evidence cannot clear"):
+            EvidenceRecord.model_validate({
+                **common,
+                "evidence_class": "exact",
+                "lower": 0.5,
+                "upper": 0.5,
+                "realizability": "auditor_only",
+                "can_block": False,
+                "can_clear": True,
+            })
+
+    def test_policy_accepts_incremental_controlled_inference_metrics(self) -> None:
+        for kind, metric in (
+            ("attribute", "incremental_attribute_attack_success"),
+            ("reconstruction", "incremental_reconstruction_success"),
+        ):
+            rule = PolicyRule.model_validate({
+                "threat_id": f"{kind}-incremental",
+                "kind": kind,
+                "mandatory": True,
+                "decision_metric": metric,
+                "tolerance": 0.05,
+                "tolerance_basis": "incremental",
+            })
+            self.assertEqual(rule.decision_metric, metric)
+
 
 class EngineTests(unittest.TestCase):
     def test_end_to_end_clear(self) -> None:
@@ -182,16 +310,22 @@ class EngineTests(unittest.TestCase):
         raw = load_example()
         raw["threats"][0]["realizability"] = "auditor_only"
         raw["analyzer_inputs"][0]["recipient_has_target_signal"] = False
+        request_for_hashes = AssessmentRequest.model_validate(raw)
+        game_hash = decision_game_sha256(
+            request_for_hashes.threats[0], request_for_hashes.population_scopes[0]
+        )
+        raw["analyzer_inputs"][0]["evidence_context"]["decision_game_sha256"] = game_hash
         make_paths_absolute(raw)
         with tempfile.TemporaryDirectory() as directory:
             source = Path(directory) / "tree.json"
             source_raw = json.loads((ROOT / "examples" / "evidence" / "tree-linkage.json").read_text())
             source_raw["recipient_has_target_signal"] = False
+            source_raw["evidence_context"]["decision_game_sha256"] = game_hash
             source.write_text(json.dumps(source_raw))
             raw["analyzer_inputs"][0]["provenance"]["source_path"] = str(source)
             raw["analyzer_inputs"][0]["provenance"]["source_sha256"] = sha256_file(source)
             request = AssessmentRequest.model_validate(raw)
-            report = AssuranceEngine().assess(request, ROOT)
+            report = AssuranceEngine().assess(request, ROOT / "examples")
             decision = next(d for d in report.decisions if d.threat_id == "linkage-person")
             self.assertEqual(decision.verdict, Verdict.INCONCLUSIVE)
 
@@ -207,7 +341,7 @@ class EngineTests(unittest.TestCase):
             raw["analyzer_inputs"][1]["provenance"]["source_path"] = str(source)
             raw["analyzer_inputs"][1]["provenance"]["source_sha256"] = sha256_file(source)
             request = AssessmentRequest.model_validate(raw)
-            report = AssuranceEngine().assess(request, ROOT)
+            report = AssuranceEngine().assess(request, ROOT / "examples")
             decision = next(d for d in report.decisions if d.threat_id == "membership-person")
             self.assertEqual(decision.verdict, Verdict.INCONCLUSIVE)
 
@@ -215,18 +349,13 @@ class EngineTests(unittest.TestCase):
         request = AssessmentRequest.model_validate(load_example())
         threat = request.threats[1]
         scope = request.population_scopes[0]
-        interface_hash = sha256_bytes(canonical_json_bytes(request.release.interface))
         floor = EvidenceRecord(
+            **request.analyzer_inputs[2].evidence_context.model_dump(mode="python"),
             evidence_id="floor",
             threat_id=threat.threat_id,
             analyzer="attack",
             evidence_class=EvidenceClass.FLOOR,
             coverage="named_projection",
-            population_scope_id=scope.scope_id,
-            population_scope_sha256=population_scope_sha256(scope),
-            decision_game_sha256=decision_game_sha256(threat, scope),
-            interface_sha256=interface_hash,
-            artifact_sha256=request.release.artifact_sha256,
             metric="equal_prior_membership_success",
             value=0.9,
             lower=0.8,
@@ -234,7 +363,10 @@ class EngineTests(unittest.TestCase):
             can_clear=False,
             can_block=True,
         )
-        self.assertEqual(decide_threat(threat, scope, request.release, (floor,)).verdict, Verdict.BLOCK)
+        self.assertEqual(
+            decide_threat(threat, scope, request.release, (floor,), request.policy.policy_sha256).verdict,
+            Verdict.BLOCK,
+        )
 
     def test_hash_mismatch_fails(self) -> None:
         raw = load_example()
@@ -256,6 +388,46 @@ class EngineTests(unittest.TestCase):
         request = AssessmentRequest.model_validate(raw)
         with self.assertRaises(Exception):
             AssuranceEngine().assess(request, ROOT / "examples")
+
+        raw = load_example()
+        raw["analyzer_inputs"][2]["provenance"]["bound_fields"].remove("confidence")
+        request = AssessmentRequest.model_validate(raw)
+        with self.assertRaisesRegex(Exception, "framework-owned analyzer payload"):
+            AssuranceEngine().assess(request, ROOT / "examples")
+
+    def test_source_observed_context_cannot_be_rebound(self) -> None:
+        raw = load_example()
+        make_paths_absolute(raw)
+        with tempfile.TemporaryDirectory() as directory:
+            source = Path(directory) / "attack.json"
+            source_raw = json.loads(
+                (ROOT / "examples" / "evidence" / "attack-counts.json").read_text()
+            )
+            source_raw["evidence_context"]["artifact_sha256"] = "0" * 64
+            source.write_text(json.dumps(source_raw))
+            raw["analyzer_inputs"][2]["evidence_context"]["artifact_sha256"] = "0" * 64
+            raw["analyzer_inputs"][2]["provenance"]["source_path"] = str(source)
+            raw["analyzer_inputs"][2]["provenance"]["source_sha256"] = sha256_file(source)
+            request = AssessmentRequest.model_validate(raw)
+            with self.assertRaisesRegex(ValueError, "evidence context does not match"):
+                AssuranceEngine().assess(request, ROOT / "examples")
+
+    def test_future_source_observation_is_rejected(self) -> None:
+        raw = load_example()
+        make_paths_absolute(raw)
+        with tempfile.TemporaryDirectory() as directory:
+            source = Path(directory) / "attack.json"
+            source_raw = json.loads(
+                (ROOT / "examples" / "evidence" / "attack-counts.json").read_text()
+            )
+            source_raw["evidence_context"]["observed_at"] = "2098-01-01T00:00:00Z"
+            source.write_text(json.dumps(source_raw))
+            raw["analyzer_inputs"][2]["evidence_context"]["observed_at"] = "2098-01-01T00:00:00Z"
+            raw["analyzer_inputs"][2]["provenance"]["source_path"] = str(source)
+            raw["analyzer_inputs"][2]["provenance"]["source_sha256"] = sha256_file(source)
+            request = AssessmentRequest.model_validate(raw)
+            with self.assertRaisesRegex(ValueError, "future"):
+                AssuranceEngine().assess(request, ROOT / "examples")
 
     def test_request_cannot_weaken_policy_tolerance(self) -> None:
         raw = load_example()
@@ -330,6 +502,9 @@ class MathTests(unittest.TestCase):
         evidence = AttackAnalyzer().analyze(release, threat, attack)[0]
         self.assertEqual(evidence.evidence_class, EvidenceClass.SCREEN)
         self.assertFalse(evidence.details["operating_point_attained"])
+        self.assertAlmostEqual(evidence.details["per_comparison_confidence"], 0.975)
+        self.assertEqual(evidence.details["bounds_per_comparison"], 2)
+        self.assertEqual(evidence.details["simultaneous_bound_count"], 2)
 
     def test_controlled_attribute_gap_uses_paired_cells_and_multiplicity(self) -> None:
         raw = load_example()
@@ -367,6 +542,7 @@ class MathTests(unittest.TestCase):
             "secret_and_metric_pre_registered": True,
             "ground_truth_verified": True,
             "success_definition": "exact attribute recovery",
+            "evidence_context": raw["analyzer_inputs"][2]["evidence_context"],
             "provenance": provenance,
         })
         evidence = ControlledInferenceAnalyzer().analyze(release, threat, value)[0]
@@ -409,6 +585,7 @@ class MathTests(unittest.TestCase):
             "ground_truth_verified": True,
             "training_membership_verified": False,
             "success_definition": "within predeclared feature distance",
+            "evidence_context": raw["analyzer_inputs"][2]["evidence_context"],
             "provenance": raw["analyzer_inputs"][2]["provenance"],
         })
         evidence = ControlledInferenceAnalyzer().analyze(release, threat, value)[0]
@@ -425,17 +602,31 @@ class IntegrityTests(unittest.TestCase):
             private = temp / "private.pem"
             public = temp / "public.pem"
             generate_ed25519_keypair(private, public)
-            manifest = build_signed_manifest(report, request.release, private)
+            manifest = build_signed_manifest(report, request, private)
             verify_signed_manifest(manifest, report, public)
+            mismatched_request = request.model_copy(
+                update={"release": request.release.model_copy(update={"owner": "another owner"})}
+            )
+            with self.assertRaisesRegex(Exception, "assessment request"):
+                build_signed_manifest(report, mismatched_request, private)
+            mismatched_expiry = manifest.model_copy(update={"expires_at": report.created_at})
+            with self.assertRaisesRegex(Exception, "expiry"):
+                verify_signed_manifest(mismatched_expiry, report, public)
+            mismatched_creation = manifest.model_copy(update={"created_at": report.created_at.replace(year=2098)})
+            with self.assertRaisesRegex(Exception, "created_at"):
+                verify_signed_manifest(mismatched_creation, report, public)
             tampered = manifest.model_copy(update={"artifact_sha256": "0" * 64})
             with self.assertRaises(Exception):
                 verify_signed_manifest(tampered, report, public)
             store = AuditStore(temp / "audit.sqlite3")
             store.append_report(report)
             self.assertEqual(store.verify_chain(), 1)
-            with sqlite3.connect(temp / "audit.sqlite3") as connection:
+            connection = sqlite3.connect(temp / "audit.sqlite3")
+            try:
                 connection.execute("UPDATE audit_events SET payload_json = '{}' WHERE sequence = 1")
                 connection.commit()
+            finally:
+                connection.close()
             with self.assertRaises(Exception):
                 store.verify_chain()
 

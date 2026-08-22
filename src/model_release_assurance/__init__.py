@@ -22,6 +22,11 @@ from .incomplete_portfolio import (
     verified_upper_fraction,
 )
 from .models import AssessmentRequest, AssessmentReport
+from .model_coverage import (
+    MODEL_FAMILY_CATALOG,
+    assess_request_model_coverage,
+    resolve_model_family,
+)
 from .optimizer import (
     OptimizationRequest,
     OptimizationReport,
@@ -57,6 +62,7 @@ __all__ = [
     "AssuranceEngine",
     "AssessmentRequest",
     "AssessmentReport",
+    "MODEL_FAMILY_CATALOG",
     "AnalyticPortfolioEvidenceEntry",
     "AssuranceErrorBudget",
     "CertificateVerification",
@@ -88,6 +94,8 @@ __all__ = [
     "verify_portfolio_problem_evidence",
     "verified_upper_fraction",
     "verify_simultaneous_multinomial_evidence",
+    "assess_request_model_coverage",
+    "resolve_model_family",
     "assurance_failure_upper_bound",
     "AuthorizationMode",
     "maximal_sound_gate",

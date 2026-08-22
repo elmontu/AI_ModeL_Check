@@ -26,8 +26,10 @@ from model_release_assurance.models import (
     AttackInput,
     ControlledInferenceInput,
     DpInput,
+    EvidenceContext,
     EvidenceClass,
     InterfaceContract,
+    ModelProfile,
     PopulationInput,
     PopulationScope,
     PopulationSize,
@@ -56,6 +58,8 @@ REPORTED_DATASETS = (
     ("myocardial", 1_700, 111, 1, 1.000),
     ("german_credit", 1_000, 20, 1, 0.991),
 )
+
+SIMULATION_POLICY_SHA256 = "f" * 64
 
 CAPACITY_SWEEP = (
     ("2x2", 30_000, 1, 30_000, 0.5000),
@@ -115,6 +119,12 @@ def release(protected_unit: str = "person", family: str = "tree_ensemble") -> Re
         recipient="simulated recipient",
         purpose="claim-level effectiveness evaluation",
         model_family=family,
+        model_profile=ModelProfile(
+            task="classification",
+            input_modalities=("tabular",),
+            output_modalities=("tabular",),
+            training_paradigm="supervised",
+        ),
         protected_unit=protected_unit,
         artifact_path="simulation.bin",
         artifact_sha256="0" * 64,
@@ -140,18 +150,31 @@ def simulation_scope() -> PopulationScope:
     )
 
 
+def source_context(contract: ThreatContract, bound_release: ReleaseContract) -> EvidenceContext:
+    scope = simulation_scope()
+    return EvidenceContext(
+        release_id=bound_release.release_id,
+        release_contract_sha256=sha256_bytes(canonical_json_bytes(bound_release)),
+        policy_sha256=SIMULATION_POLICY_SHA256,
+        artifact_sha256=bound_release.artifact_sha256,
+        interface_sha256=sha256_bytes(canonical_json_bytes(bound_release.interface)),
+        population_scope_id=scope.scope_id,
+        population_scope_sha256=population_scope_sha256(scope),
+        decision_game_sha256=decision_game_sha256(contract, scope),
+        observed_at=datetime(2026, 8, 18, tzinfo=timezone.utc),
+    )
+
+
 def bound_decide(contract: ThreatContract, evidence, release_contract: ReleaseContract | None = None):
     bound_release = release_contract or release()
     scope = simulation_scope()
-    bindings = {
-        "population_scope_id": scope.scope_id,
-        "population_scope_sha256": population_scope_sha256(scope),
-        "decision_game_sha256": decision_game_sha256(contract, scope),
-        "interface_sha256": sha256_bytes(canonical_json_bytes(bound_release.interface)),
-        "artifact_sha256": bound_release.artifact_sha256,
-    }
-    records = tuple(item.model_copy(update=bindings) for item in evidence)
-    return decide_threat(contract, scope, bound_release, records)
+    return decide_threat(
+        contract,
+        scope,
+        bound_release,
+        tuple(evidence),
+        SIMULATION_POLICY_SHA256,
+    )
 
 
 def threat(
@@ -198,6 +221,7 @@ def partition(n: int, occupied_cells: int, minimum_cell_size: int) -> tuple[tupl
 def tree_case(n: int, occupied_cells: int, minimum_cell_size: int) -> tuple[float, float, Verdict]:
     candidates, observations = partition(n, occupied_cells, minimum_cell_size)
     release_contract = release()
+    contract = threat("linkage-test", "linkage", "worst_observation_success", 0.2)
     value = TreeLinkageInput(
         threat_id="linkage-test",
         population_scope_id="writeup-simulation",
@@ -207,9 +231,9 @@ def tree_case(n: int, occupied_cells: int, minimum_cell_size: int) -> tuple[floa
         recipient_has_target_signal=True,
         observed_interface_sha256=sha256_bytes(canonical_json_bytes(release_contract.interface)),
         complete_interface_coverage=True,
+        evidence_context=source_context(contract, release_contract),
         provenance=provenance(),
     )
-    contract = threat("linkage-test", "linkage", "worst_observation_success", 0.2)
     evidence = TreeLinkageAnalyzer().analyze(release_contract, contract, value)
     absolute = next(item for item in evidence if item.metric == "bayes_linkage_success")
     worst = next(item for item in evidence if item.metric == "worst_observation_success")
@@ -284,6 +308,7 @@ def evaluate_membership_attacks() -> dict[str, Any]:
                 false_positives=false_positives,
                 nonmember_trials=100_000,
                 target_fpr=0.001,
+                evidence_context=source_context(contract, release()),
                 provenance=provenance(),
             )
             evidence = analyzer.analyze(release(), contract, value)
@@ -324,6 +349,7 @@ def evaluate_membership_attacks() -> dict[str, Any]:
         false_positives=50,
         nonmember_trials=100_000,
         target_fpr=0.001,
+        evidence_context=source_context(contract, release()),
         provenance=provenance(),
     )
     for name, mutation in mutations:
@@ -352,6 +378,7 @@ def evaluate_dp_mlp() -> dict[str, Any]:
     analyzer = DpAnalyzer()
     rows = []
     for epsilon in (0.2, 1.0, 8.0):
+        release_contract = release(family="mlp_dp_sgd")
         value = DpInput(
             threat_id="dp-membership",
             population_scope_id="writeup-simulation",
@@ -362,11 +389,12 @@ def evaluate_dp_mlp() -> dict[str, Any]:
             accountant="simulated pure-DP accountant",
             accountant_replayed=True,
             complete_pipeline=True,
+            evidence_context=source_context(contract, release_contract),
             provenance=provenance(),
         )
-        evidence = analyzer.analyze(release(family="mlp_dp_sgd"), contract, value)
+        evidence = analyzer.analyze(release_contract, contract, value)
         ceiling = next(item for item in evidence if item.metric == "equal_prior_membership_success")
-        verdict = bound_decide(contract, evidence).verdict
+        verdict = bound_decide(contract, evidence, release_contract).verdict
         expected = Verdict.CLEAR if epsilon == 0.2 else Verdict.INCONCLUSIVE
         rows.append({
             "epsilon": epsilon,
@@ -382,6 +410,7 @@ def evaluate_dp_mlp() -> dict[str, Any]:
         ("incomplete_pipeline", {"complete_pipeline": False}),
         ("protected_unit_mismatch", {"protected_unit": "record"}),
     ):
+        release_contract = release(family="mlp_dp_sgd")
         raw = dict(
             threat_id="dp-membership",
             population_scope_id="writeup-simulation",
@@ -392,10 +421,11 @@ def evaluate_dp_mlp() -> dict[str, Any]:
             accountant="simulated pure-DP accountant",
             accountant_replayed=True,
             complete_pipeline=True,
+            evidence_context=source_context(contract, release_contract),
             provenance=provenance(),
         )
-        evidence = analyzer.analyze(release(family="mlp_dp_sgd"), contract, DpInput(**{**raw, **changes}))
-        verdict = bound_decide(contract, evidence).verdict
+        evidence = analyzer.analyze(release_contract, contract, DpInput(**{**raw, **changes}))
+        verdict = bound_decide(contract, evidence, release_contract).verdict
         invalid.append({"control": name, "verdict": verdict, "passed": verdict is Verdict.INCONCLUSIVE})
     return {"theorem_scenarios": rows, "invalid_scope_controls": invalid}
 
@@ -405,6 +435,7 @@ def evaluate_population_screens() -> list[dict[str, Any]]:
     analyzer = PopulationAnalyzer()
     rows = []
     for expected_count in (714.0, 24.0, 0.74):
+        release_contract = release()
         value = PopulationInput(
             threat_id="population-linkage",
             population_scope_id="writeup-simulation",
@@ -414,10 +445,11 @@ def evaluate_population_screens() -> list[dict[str, Any]]:
             fitted_joint_model=False,
             heldout_validated=False,
             multiplicity_adjusted=False,
+            evidence_context=source_context(contract, release_contract),
             provenance=provenance(),
         )
-        evidence = analyzer.analyze(release(), contract, value)
-        decision = bound_decide(contract, evidence)
+        evidence = analyzer.analyze(release_contract, contract, value)
+        decision = bound_decide(contract, evidence, release_contract)
         rows.append({
             "illustrative_count": expected_count,
             "gate_passes": evidence[0].details["gate_passes"],
@@ -436,6 +468,7 @@ def evaluate_attribute_and_reconstruction() -> dict[str, Any]:
         "incremental_attribute_attack_success",
         0.02,
     )
+    attribute_release = release()
     attribute_value = ControlledInferenceInput(
         threat_id="attribute-gap",
         population_scope_id="writeup-simulation",
@@ -456,10 +489,11 @@ def evaluate_attribute_and_reconstruction() -> dict[str, Any]:
         ground_truth_verified=True,
         training_membership_verified=False,
         success_definition="exact recovery of the preregistered sensitive attribute",
+        evidence_context=source_context(attribute_contract, attribute_release),
         provenance=provenance(),
     )
-    attribute_evidence = analyzer.analyze(release(), attribute_contract, attribute_value)
-    attribute_verdict = bound_decide(attribute_contract, attribute_evidence).verdict
+    attribute_evidence = analyzer.analyze(attribute_release, attribute_contract, attribute_value)
+    attribute_verdict = bound_decide(attribute_contract, attribute_evidence, attribute_release).verdict
 
     reconstruction_contract = threat(
         "reconstruction-test",
@@ -467,6 +501,7 @@ def evaluate_attribute_and_reconstruction() -> dict[str, Any]:
         "incremental_reconstruction_success",
         0.05,
     )
+    reconstruction_release = release()
     reconstruction_value = ControlledInferenceInput(
         threat_id="reconstruction-test",
         population_scope_id="writeup-simulation",
@@ -487,10 +522,15 @@ def evaluate_attribute_and_reconstruction() -> dict[str, Any]:
         ground_truth_verified=True,
         training_membership_verified=False,
         success_definition="record reconstructed within the preregistered feature-distance threshold",
+        evidence_context=source_context(reconstruction_contract, reconstruction_release),
         provenance=provenance(),
     )
-    reconstruction_evidence = analyzer.analyze(release(), reconstruction_contract, reconstruction_value)
-    reconstruction_verdict = bound_decide(reconstruction_contract, reconstruction_evidence).verdict
+    reconstruction_evidence = analyzer.analyze(
+        reconstruction_release, reconstruction_contract, reconstruction_value
+    )
+    reconstruction_verdict = bound_decide(
+        reconstruction_contract, reconstruction_evidence, reconstruction_release
+    ).verdict
     return {
         "attribute_inference": {
             "reported_member_success": 0.417,

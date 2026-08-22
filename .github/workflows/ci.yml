@@ -30,6 +30,8 @@ jobs:
           cache: pip
       - name: Install locked runtime
         run: python -m pip install --disable-pip-version-check -r requirements.lock
+      - name: Install experiment test dependencies
+        run: python -m pip install --disable-pip-version-check -r requirements-experiments.txt
       - name: Install package without resolving dependencies
         run: python -m pip install --no-deps -e .
       - name: Compile, test, and replay schemas

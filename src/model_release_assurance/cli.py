@@ -23,6 +23,7 @@ from .incomplete_portfolio import (
     verify_portfolio_problem_evidence,
 )
 from .models import AssessmentReport, AssessmentRequest, PolicyBundle, SignedManifest
+from .model_coverage import assess_request_model_coverage, catalog_as_dicts
 from .optimizer import (
     OptimizationReport,
     OptimizationRequest,
@@ -61,7 +62,13 @@ def _read_json(path: Path) -> dict:
 
 def _write_model(path: Path, model) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(model.model_dump_json(indent=2, exclude_none=True) + "\n", encoding="utf-8")
+    _write_text_lf(path, model.model_dump_json(indent=2, exclude_none=True) + "\n")
+
+
+def _write_text_lf(path: Path, value: str) -> None:
+    """Write canonical CLI output without platform-dependent newline conversion."""
+    with path.open("w", encoding="utf-8", newline="\n") as stream:
+        stream.write(value)
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -70,6 +77,13 @@ def build_parser() -> argparse.ArgumentParser:
 
     validate = subparsers.add_parser("validate", help="validate a release assessment contract")
     validate.add_argument("request", type=Path)
+
+    model_coverage = subparsers.add_parser(
+        "model-coverage",
+        help="list governed model families or review one assessment request for coverage gaps",
+    )
+    model_coverage.add_argument("request", type=Path, nargs="?")
+    model_coverage.add_argument("--json", action="store_true", dest="as_json")
 
     assess = subparsers.add_parser("assess", help="run an assessment")
     assess.add_argument("request", type=Path)
@@ -228,6 +242,25 @@ def main(argv: list[str] | None = None) -> int:
         if args.command == "validate":
             AssessmentRequest.model_validate(_read_json(args.request))
             print("valid")
+        elif args.command == "model-coverage":
+            result = (
+                catalog_as_dicts()
+                if args.request is None
+                else assess_request_model_coverage(
+                    AssessmentRequest.model_validate(_read_json(args.request))
+                )
+            )
+            if args.as_json:
+                print(json.dumps(result, indent=2, sort_keys=True))
+            elif args.request is None:
+                for entry in result:
+                    print(f"{entry['family_id']}: {entry['status']} - {entry['display_name']}")
+            else:
+                print(
+                    f"{result['submitted_model_family']} -> "
+                    f"{result['resolved_family']['family_id']}; "
+                    f"coverage_ready={str(result['coverage_ready']).lower()}; can_clear=false"
+                )
         elif args.command == "schema":
             schema_models = {
                 "request": AssessmentRequest,
@@ -249,9 +282,9 @@ def main(argv: list[str] | None = None) -> int:
                 "protocol-certificate": ProtocolFeasibilityCertificate,
             }
             args.output.parent.mkdir(parents=True, exist_ok=True)
-            args.output.write_text(
+            _write_text_lf(
+                args.output,
                 json.dumps(schema_models[args.kind].model_json_schema(), indent=2, sort_keys=True) + "\n",
-                encoding="utf-8",
             )
         elif args.command == "assess":
             request = AssessmentRequest.model_validate(_read_json(args.request))
@@ -445,7 +478,7 @@ def main(argv: list[str] | None = None) -> int:
         elif args.command == "sign":
             request = AssessmentRequest.model_validate(_read_json(args.request))
             report = AssessmentReport.model_validate(_read_json(args.report))
-            manifest = build_signed_manifest(report, request.release, args.private)
+            manifest = build_signed_manifest(report, request, args.private)
             _write_model(args.output, manifest)
         elif args.command == "verify":
             manifest = SignedManifest.model_validate(_read_json(args.manifest))

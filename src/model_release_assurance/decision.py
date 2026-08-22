@@ -36,14 +36,19 @@ def decide_threat(
     population_scope: PopulationScope,
     release: ReleaseContract,
     records: tuple[EvidenceRecord, ...],
+    policy_sha256: str,
 ) -> ThreatDecision:
     scope_hash = population_scope_sha256(population_scope)
     game_hash = decision_game_sha256(threat, population_scope)
     interface_hash = sha256_bytes(canonical_json_bytes(release.interface))
+    release_contract_hash = sha256_bytes(canonical_json_bytes(release))
     applicable = [
         record
         for record in records
         if record.threat_id == threat.threat_id
+        and record.release_id == release.release_id
+        and record.release_contract_sha256 == release_contract_hash
+        and record.policy_sha256 == policy_sha256
         and record.metric == threat.decision_metric
         and record.population_scope_id == population_scope.scope_id
         and record.population_scope_sha256 == scope_hash
@@ -92,6 +97,8 @@ def decide_threat(
         decision_game_sha256=game_hash,
         assessed_interface_sha256=interface_hash,
         assessed_artifact_sha256=release.artifact_sha256,
+        assessed_release_contract_sha256=release_contract_hash,
+        assessed_policy_sha256=policy_sha256,
         decision_metric=threat.decision_metric,
         kind=threat.kind,
         mandatory=threat.mandatory,

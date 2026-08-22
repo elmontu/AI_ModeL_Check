@@ -11,6 +11,7 @@ from ..models import (
     ReleaseContract,
     ThreatContract,
 )
+from .base import evidence_context_fields
 
 
 class PopulationAnalyzer:
@@ -31,6 +32,7 @@ class PopulationAnalyzer:
         passes = value.simultaneous_lower_match_count >= value.required_match_count
         # This is a population uniqueness screen, not a universal probability ceiling.
         return (EvidenceRecord(
+            **evidence_context_fields(value.evidence_context),
             evidence_id=f"{threat.threat_id}:population:match-count",
             threat_id=threat.threat_id,
             analyzer=self.name,

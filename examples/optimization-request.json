@@ -86,7 +86,7 @@
       "is_proposed_configuration": false,
       "assessment": {
         "report_path": "evidence/assessment-clear-report.json",
-        "report_sha256": "5440b4826db296da5bca9a9a50925588a0c3a60d17f8a73ee11d0551d030bdda"
+        "report_sha256": "fea1aaee48ce49232a84b769024e6ea589e0f0643befafee2cb6b043ce29e96d"
       },
       "release_artifact_path": "artifacts/demo-tree.json",
       "release_artifact_sha256": "2f42b587627c5b6c4447d781b57a47082743f029b475f560a574553abcedfdd5",

@@ -15,6 +15,8 @@ from ..models import (
     TreeLinkageInput,
 )
 from ..integrity import canonical_json_bytes, sha256_bytes
+from ..model_coverage import resolve_model_family
+from .base import evidence_context_fields
 
 
 class TreeLinkageAnalyzer:
@@ -33,6 +35,8 @@ class TreeLinkageAnalyzer:
             raise AnalyzerError("tree analyzer received an incompatible input")
         if threat.kind is not ThreatKind.LINKAGE:
             raise ValueError("tree_linkage evidence can only target a linkage threat")
+        if resolve_model_family(release.model_family).family_id != "tree_ensemble":
+            raise AnalyzerError("tree_linkage evidence requires a governed tree-ensemble release family")
 
         n = len(value.candidate_ids)
         prior = value.prior or tuple(1.0 / n for _ in range(n))
@@ -61,6 +65,7 @@ class TreeLinkageAnalyzer:
         evidence_class = EvidenceClass.EXACT if realizable else EvidenceClass.SCREEN
 
         common = dict(
+            **evidence_context_fields(value.evidence_context),
             threat_id=threat.threat_id,
             analyzer=self.name,
             realizability=classification,

@@ -154,7 +154,7 @@ class LlmProtocolContract(StrictModel):
     model_identifier: str = Field(min_length=1, max_length=256)
     model_version: str = Field(min_length=1, max_length=256)
     tokenizer_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
-    decoding_parameters: dict[str, str | int | float | bool]
+    decoding_parameters: dict[str, str | int | float | bool] = Field(min_length=1)
     system_prompt_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
     adapter_sha256s: tuple[str, ...] = ()
     retrieval_corpus_sha256: str | None = Field(default=None, pattern=r"^[0-9a-f]{64}$")
@@ -183,14 +183,92 @@ class LlmProtocolContract(StrictModel):
             raise ValueError("tool-enabled LLM protocols require a tool-policy hash")
         if self.memory_mode == "none" and self.memory_ttl_seconds not in (None, 0):
             raise ValueError("stateless LLM protocols cannot declare a positive memory TTL")
+        if self.memory_mode in ("session", "persistent") and (
+            self.memory_ttl_seconds is None or self.memory_ttl_seconds <= 0
+        ):
+            raise ValueError("stateful LLM protocols require a positive memory TTL")
         if len(set(self.tool_names)) != len(self.tool_names):
             raise ValueError("LLM tool names must be unique")
+        if len(set(self.adapter_sha256s)) != len(self.adapter_sha256s):
+            raise ValueError("LLM adapter hashes must be unique")
+        if any(
+            len(value) != 64 or any(character not in "0123456789abcdef" for character in value)
+            for value in self.adapter_sha256s
+        ):
+            raise ValueError("LLM adapter hashes must be lowercase SHA-256 digests")
+        return self
+
+
+class ModelTask(StrEnum):
+    CLASSIFICATION = "classification"
+    REGRESSION = "regression"
+    RANKING = "ranking"
+    RECOMMENDATION = "recommendation"
+    FORECASTING = "forecasting"
+    CLUSTERING = "clustering"
+    ANOMALY_DETECTION = "anomaly_detection"
+    REPRESENTATION = "representation"
+    GENERATION = "generation"
+    RETRIEVAL = "retrieval"
+    CONTROL = "control"
+    DECISION_SUPPORT = "decision_support"
+    CUSTOM = "custom"
+
+
+class DataModality(StrEnum):
+    TABULAR = "tabular"
+    TEXT = "text"
+    IMAGE = "image"
+    AUDIO = "audio"
+    VIDEO = "video"
+    TIME_SERIES = "time_series"
+    GRAPH = "graph"
+    GEOSPATIAL = "geospatial"
+    EMBEDDING = "embedding"
+    ACTION = "action"
+    MULTIMODAL = "multimodal"
+    CUSTOM = "custom"
+
+
+class TrainingParadigm(StrEnum):
+    SUPERVISED = "supervised"
+    SEMI_SUPERVISED = "semi_supervised"
+    SELF_SUPERVISED = "self_supervised"
+    UNSUPERVISED = "unsupervised"
+    REINFORCEMENT_LEARNING = "reinforcement_learning"
+    IN_CONTEXT_OR_PROMPTED = "in_context_or_prompted"
+    HYBRID = "hybrid"
+    CUSTOM = "custom"
+
+
+class ModelProfile(StrictModel):
+    task: ModelTask
+    input_modalities: tuple[DataModality, ...] = Field(min_length=1)
+    output_modalities: tuple[DataModality, ...] = Field(min_length=1)
+    training_paradigm: TrainingParadigm
+    component_model_families: tuple[str, ...] = ()
+    generative: bool = False
+    stateful: bool = False
+    custom_task_definition: str | None = Field(default=None, min_length=1, max_length=2048)
+
+    @model_validator(mode="after")
+    def profile_is_complete(self) -> ModelProfile:
+        if len(set(self.input_modalities)) != len(self.input_modalities):
+            raise ValueError("model input modalities must be unique")
+        if len(set(self.output_modalities)) != len(self.output_modalities):
+            raise ValueError("model output modalities must be unique")
+        if len(set(self.component_model_families)) != len(self.component_model_families):
+            raise ValueError("component model families must be unique")
+        if self.task is ModelTask.CUSTOM and self.custom_task_definition is None:
+            raise ValueError("custom model tasks require custom_task_definition")
+        if self.task is not ModelTask.CUSTOM and self.custom_task_definition is not None:
+            raise ValueError("custom_task_definition is only valid for custom tasks")
         return self
 
 
 class InterfaceContract(StrictModel):
     protocol_type: Literal["predictive", "interactive_llm"] = "predictive"
-    access: Literal["aggregate", "label", "score", "embedding", "gradient", "weights", "full_artifact"]
+    access: Literal["aggregate", "label", "score", "text", "embedding", "gradient", "weights", "full_artifact"]
     outputs: tuple[str, ...] = ()
     precision_bits: int | None = Field(default=None, ge=1, le=4096)
     query_budget: int | None = Field(default=None, ge=0)
@@ -206,6 +284,12 @@ class InterfaceContract(StrictModel):
             raise ValueError("interactive_llm interfaces require a complete LLM protocol contract")
         if self.protocol_type == "predictive" and self.llm_protocol is not None:
             raise ValueError("predictive interfaces cannot contain an LLM protocol contract")
+        if self.protocol_type == "interactive_llm":
+            assert self.llm_protocol is not None
+            if self.access != "text" or "text" not in self.outputs:
+                raise ValueError("interactive_llm interfaces must declare text access and text output")
+            if self.query_budget != self.llm_protocol.maximum_lifetime_queries:
+                raise ValueError("interactive_llm query_budget must equal maximum_lifetime_queries")
         return self
 
 
@@ -215,6 +299,7 @@ class ReleaseContract(StrictModel):
     recipient: str = Field(min_length=1, max_length=256)
     purpose: str = Field(min_length=1, max_length=2048)
     model_family: str = Field(min_length=1, max_length=128)
+    model_profile: ModelProfile
     protected_unit: Literal[
         "record", "person", "household", "organization", "establishment", "episode",
         "event", "session", "device", "transaction", "custom",
@@ -229,6 +314,21 @@ class ReleaseContract(StrictModel):
     def expiry_is_timezone_aware(self) -> ReleaseContract:
         if self.expires_at is not None and self.expires_at.utcoffset() is None:
             raise ValueError("expires_at must include a timezone offset")
+        protocol = self.interface.llm_protocol
+        if protocol is not None:
+            now = datetime.now(timezone.utc)
+            if protocol.valid_until <= now:
+                raise ValueError("LLM protocol is already expired")
+            if self.expires_at is None:
+                raise ValueError("interactive LLM releases require an explicit expiry")
+            if self.expires_at > protocol.valid_until:
+                raise ValueError("release expiry cannot outlive the LLM protocol")
+        if self.model_profile is not None:
+            if self.interface.protocol_type == "interactive_llm":
+                if not self.model_profile.generative or DataModality.TEXT not in self.model_profile.output_modalities:
+                    raise ValueError("interactive LLM releases require a generative text model profile")
+            if self.model_profile.stateful and not self.interface.adaptive_queries:
+                raise ValueError("stateful model profiles require an adaptive-query interface")
         return self
 
 
@@ -253,8 +353,16 @@ class PolicyRule(StrictModel):
         allowed = {
             ThreatKind.LINKAGE: {"bayes_linkage_success", "incremental_bayes_linkage_success", "worst_observation_success"},
             ThreatKind.MEMBERSHIP: {"membership_tpr_at_fpr", "equal_prior_membership_success"},
-            ThreatKind.ATTRIBUTE: {"finite_secret_exact_guess_success", "attribute_attack_success"},
-            ThreatKind.RECONSTRUCTION: {"finite_secret_exact_guess_success", "reconstruction_success"},
+            ThreatKind.ATTRIBUTE: {
+                "finite_secret_exact_guess_success",
+                "attribute_attack_success",
+                "incremental_attribute_attack_success",
+            },
+            ThreatKind.RECONSTRUCTION: {
+                "finite_secret_exact_guess_success",
+                "reconstruction_success",
+                "incremental_reconstruction_success",
+            },
         }
         if self.decision_metric not in allowed[self.kind]:
             raise ValueError("policy decision metric is incompatible with its threat kind")
@@ -371,12 +479,27 @@ class AnalyzerProvenance(StrictModel):
     bound_fields: tuple[str, ...] = Field(min_length=1)
 
     @model_validator(mode="after")
-    def fields_are_safe(self) -> AnalyzerProvenance:
-        forbidden = {"analyzer", "threat_id", "provenance"}
+    def fields_are_unique(self) -> AnalyzerProvenance:
         if len(set(self.bound_fields)) != len(self.bound_fields):
             raise ValueError("provenance bound_fields must be unique")
-        if forbidden.intersection(self.bound_fields):
-            raise ValueError("provenance cannot bind framework routing fields")
+        return self
+
+
+class EvidenceContext(StrictModel):
+    release_id: str = Field(min_length=3, max_length=128, pattern=r"^[A-Za-z0-9._:-]+$")
+    release_contract_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
+    policy_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
+    artifact_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
+    interface_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
+    population_scope_id: str = Field(min_length=3, max_length=128, pattern=r"^[A-Za-z0-9._:-]+$")
+    population_scope_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
+    decision_game_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
+    observed_at: datetime
+
+    @model_validator(mode="after")
+    def observation_time_is_aware(self) -> EvidenceContext:
+        if self.observed_at.utcoffset() is None:
+            raise ValueError("evidence context observed_at must include a timezone offset")
         return self
 
 
@@ -391,6 +514,7 @@ class TreeLinkageInput(StrictModel):
     recipient_has_target_signal: bool
     observed_interface_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
     complete_interface_coverage: bool
+    evidence_context: EvidenceContext
     provenance: AnalyzerProvenance
 
     @model_validator(mode="after")
@@ -422,6 +546,7 @@ class DpInput(StrictModel):
     fpr: float | None = Field(default=None, ge=0.0, le=1.0)
     secret_cardinality: int | None = Field(default=None, ge=2)
     pairwise_secret_relation_validated: bool = False
+    evidence_context: EvidenceContext
     provenance: AnalyzerProvenance
 
 
@@ -448,6 +573,7 @@ class AttackInput(StrictModel):
     false_positives: int | None = Field(default=None, ge=0)
     nonmember_trials: int | None = Field(default=None, gt=0)
     target_fpr: float | None = Field(default=None, gt=0.0, lt=1.0)
+    evidence_context: EvidenceContext
     provenance: AnalyzerProvenance
 
     @model_validator(mode="after")
@@ -472,6 +598,7 @@ class PopulationInput(StrictModel):
     fitted_joint_model: bool
     heldout_validated: bool
     multiplicity_adjusted: bool
+    evidence_context: EvidenceContext
     provenance: AnalyzerProvenance
 
 
@@ -501,6 +628,7 @@ class ControlledInferenceInput(StrictModel):
     ground_truth_verified: bool
     training_membership_verified: bool = False
     success_definition: str = Field(min_length=1, max_length=2048)
+    evidence_context: EvidenceContext
     provenance: AnalyzerProvenance
 
     @model_validator(mode="after")
@@ -523,7 +651,7 @@ AnalyzerInput = Annotated[
 
 
 class AssessmentRequest(StrictModel):
-    schema_version: Literal["2.0"] = "2.0"
+    schema_version: Literal["3.0"] = "3.0"
     policy: PolicyReference
     release: ReleaseContract
     population_scopes: tuple[PopulationScope, ...]
@@ -553,6 +681,16 @@ class AssessmentRequest(StrictModel):
         ]
         if mismatches:
             raise ValueError(f"analyzer inputs use the wrong population scope: {sorted(set(mismatches))}")
+        context_mismatches = [
+            value.threat_id
+            for value in self.analyzer_inputs
+            if value.evidence_context.population_scope_id != value.population_scope_id
+        ]
+        if context_mismatches:
+            raise ValueError(
+                "analyzer evidence context uses the wrong population scope: "
+                f"{sorted(set(context_mismatches))}"
+            )
         if self.release.expires_at and self.release.expires_at <= datetime.now(timezone.utc):
             raise ValueError("release contract is already expired")
         return self
@@ -562,6 +700,10 @@ class EvidenceRecord(StrictModel):
     evidence_id: str
     threat_id: str
     analyzer: str
+    release_id: str = Field(min_length=3, max_length=128, pattern=r"^[A-Za-z0-9._:-]+$")
+    release_contract_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
+    policy_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
+    observed_at: datetime
     evidence_class: EvidenceClass
     coverage: EvidenceCoverage = EvidenceCoverage.SCREEN_ONLY
     population_scope_id: str | None = Field(default=None, pattern=r"^[A-Za-z0-9._:-]+$")
@@ -583,6 +725,16 @@ class EvidenceRecord(StrictModel):
 
     @model_validator(mode="after")
     def evidence_semantics_are_consistent(self) -> EvidenceRecord:
+        if self.observed_at.utcoffset() is None:
+            raise ValueError("evidence observed_at must include a timezone offset")
+        if self.evidence_class is EvidenceClass.SCREEN and (self.can_block or self.can_clear):
+            raise ValueError("screen evidence cannot block or clear")
+        if self.evidence_class is EvidenceClass.FLOOR and self.can_clear:
+            raise ValueError("floor evidence cannot clear")
+        if self.evidence_class is EvidenceClass.CEILING and self.can_block:
+            raise ValueError("ceiling evidence cannot block")
+        if self.realizability is Realizability.AUDITOR_ONLY and self.can_clear:
+            raise ValueError("auditor-only evidence cannot clear")
         if self.can_clear and self.upper is None:
             raise ValueError("evidence that can clear must provide an upper bound")
         if self.can_clear and self.coverage is not EvidenceCoverage.COMPLETE_INTERFACE:
@@ -612,6 +764,8 @@ class ThreatDecision(StrictModel):
     decision_game_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
     assessed_interface_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
     assessed_artifact_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
+    assessed_release_contract_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
+    assessed_policy_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
     decision_metric: DecisionMetric
     kind: ThreatKind
     mandatory: bool
@@ -625,7 +779,7 @@ class ThreatDecision(StrictModel):
 
 
 class AssessmentReport(StrictModel):
-    schema_version: Literal["2.0"] = "2.0"
+    schema_version: Literal["3.0"] = "3.0"
     assessment_id: str
     release_id: str
     policy_id: str
@@ -635,6 +789,8 @@ class AssessmentReport(StrictModel):
     request_sha256: str
     artifact_sha256: str
     release_contract_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
+    release_model_family: str = Field(min_length=1, max_length=128)
+    release_model_profile: ModelProfile
     release_interface: InterfaceContract
     release_expires_at: datetime | None = None
     policy_expires_at: datetime | None = None

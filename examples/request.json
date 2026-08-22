@@ -1,5 +1,5 @@
 {
-  "schema_version": "2.0",
+  "schema_version": "3.0",
   "policy": {
     "policy_id": "whole-government-model-release-demo",
     "policy_version": "1.0.0",
@@ -12,6 +12,15 @@
     "recipient": "Approved research partner",
     "purpose": "Demonstrate fail-closed model release assurance",
     "model_family": "tree_ensemble",
+    "model_profile": {
+      "task": "classification",
+      "input_modalities": ["tabular"],
+      "output_modalities": ["tabular"],
+      "training_paradigm": "supervised",
+      "component_model_families": [],
+      "generative": false,
+      "stateful": false
+    },
     "protected_unit": "person",
     "artifact_path": "artifacts/demo-tree.json",
     "artifact_sha256": "2f42b587627c5b6c4447d781b57a47082743f029b475f560a574553abcedfdd5",
@@ -111,12 +120,23 @@
       "recipient_has_target_signal": true,
       "observed_interface_sha256": "d7ca53bb8dbf0efb85abf373dba00fdb285764d783856f51b27658d49e65d111",
       "complete_interface_coverage": true,
+      "evidence_context": {
+        "release_id": "whole-government-demo-tree-v1",
+        "release_contract_sha256": "118a1d72acd73341ce4d6cf69f761bcd23e6141b40f42e215b7a560f4cc6f670",
+        "policy_sha256": "ef0780f17ae1f732296ef53c4040799792ec907abbb6ab69950f1d045a0d3316",
+        "artifact_sha256": "2f42b587627c5b6c4447d781b57a47082743f029b475f560a574553abcedfdd5",
+        "interface_sha256": "d7ca53bb8dbf0efb85abf373dba00fdb285764d783856f51b27658d49e65d111",
+        "population_scope_id": "service-participants-2026",
+        "population_scope_sha256": "d0ceafb482b5ed133cd89c765ec4e9d228f4c14bf07fac3f4aa67297a79ed5e8",
+        "decision_game_sha256": "4bb158d840ec659005d778c0443f537245d03ba7dfdef279ff98e11f5e271430",
+        "observed_at": "2026-08-18T00:00:00Z"
+      },
       "provenance": {
         "tool": "mra-demo-tree-export",
         "tool_version": "1.0",
         "source_path": "evidence/tree-linkage.json",
-        "source_sha256": "0d3bfe44915660b26210757bd13d6000945eaeb7ba48932a1851b960a3fd7f0d",
-        "bound_fields": ["population_scope_id", "candidate_ids", "observations", "recipient_has_candidate_roster", "recipient_has_target_signal", "observed_interface_sha256", "complete_interface_coverage"]
+        "source_sha256": "fc467fadcffd2fd6ca2da7c343bedb0ea3eaa6080efc1d3139796bfc00630cb6",
+        "bound_fields": ["analyzer", "threat_id", "population_scope_id", "candidate_ids", "observations", "prior", "recipient_has_candidate_roster", "recipient_has_target_signal", "observed_interface_sha256", "complete_interface_coverage", "evidence_context"]
       }
     },
     {
@@ -131,12 +151,23 @@
       "accountant_replayed": true,
       "complete_pipeline": true,
       "fpr": 0.001,
+      "evidence_context": {
+        "release_id": "whole-government-demo-tree-v1",
+        "release_contract_sha256": "118a1d72acd73341ce4d6cf69f761bcd23e6141b40f42e215b7a560f4cc6f670",
+        "policy_sha256": "ef0780f17ae1f732296ef53c4040799792ec907abbb6ab69950f1d045a0d3316",
+        "artifact_sha256": "2f42b587627c5b6c4447d781b57a47082743f029b475f560a574553abcedfdd5",
+        "interface_sha256": "d7ca53bb8dbf0efb85abf373dba00fdb285764d783856f51b27658d49e65d111",
+        "population_scope_id": "service-participants-2026",
+        "population_scope_sha256": "d0ceafb482b5ed133cd89c765ec4e9d228f4c14bf07fac3f4aa67297a79ed5e8",
+        "decision_game_sha256": "686901249c969d5c1a631f1a617c319f9c235842745ea34c6956b6c5c2fef38c",
+        "observed_at": "2026-08-18T00:00:00Z"
+      },
       "provenance": {
         "tool": "mra-demo-accountant",
         "tool_version": "1.0",
         "source_path": "evidence/dp-accountant.json",
-        "source_sha256": "bc405852d3c20f0d3c85869b59a4e173622b5b07f6fc7e31fd70f00f80e01f67",
-        "bound_fields": ["population_scope_id", "epsilon", "delta", "adjacency", "protected_unit", "accountant", "accountant_replayed", "complete_pipeline"]
+        "source_sha256": "53a984341cdd088db1cad52fea1370acf5527fcad8a4548c28cdf1337177aadc",
+        "bound_fields": ["analyzer", "threat_id", "population_scope_id", "epsilon", "delta", "adjacency", "protected_unit", "accountant", "accountant_replayed", "complete_pipeline", "fpr", "secret_cardinality", "pairwise_secret_relation_validated", "evidence_context"]
       }
     },
     {
@@ -152,12 +183,23 @@
       "audit_disjoint": true,
       "raw_counts_retained": true,
       "threshold_pre_registered": true,
+      "evidence_context": {
+        "release_id": "whole-government-demo-tree-v1",
+        "release_contract_sha256": "118a1d72acd73341ce4d6cf69f761bcd23e6141b40f42e215b7a560f4cc6f670",
+        "policy_sha256": "ef0780f17ae1f732296ef53c4040799792ec907abbb6ab69950f1d045a0d3316",
+        "artifact_sha256": "2f42b587627c5b6c4447d781b57a47082743f029b475f560a574553abcedfdd5",
+        "interface_sha256": "d7ca53bb8dbf0efb85abf373dba00fdb285764d783856f51b27658d49e65d111",
+        "population_scope_id": "service-participants-2026",
+        "population_scope_sha256": "d0ceafb482b5ed133cd89c765ec4e9d228f4c14bf07fac3f4aa67297a79ed5e8",
+        "decision_game_sha256": "686901249c969d5c1a631f1a617c319f9c235842745ea34c6956b6c5c2fef38c",
+        "observed_at": "2026-08-18T00:00:00Z"
+      },
       "provenance": {
         "tool": "mra-demo-attack",
         "tool_version": "1.0",
         "source_path": "evidence/attack-counts.json",
-        "source_sha256": "bdf0cc12afa9140f1edfac4fa5923f184d7aae62fd98f7a26b21889f14507cc9",
-        "bound_fields": ["population_scope_id", "attack_name", "metric", "successes", "trials", "calibration_disjoint", "audit_disjoint", "raw_counts_retained", "threshold_pre_registered"]
+        "source_sha256": "b90fb4f93fe83848b37c8f24048929dd28dcd5757cbe3f352a56cf3e83acd22f",
+        "bound_fields": ["analyzer", "threat_id", "population_scope_id", "attack_name", "metric", "successes", "trials", "confidence", "comparison_family_size", "calibration_disjoint", "audit_disjoint", "raw_counts_retained", "threshold_pre_registered", "false_positives", "nonmember_trials", "target_fpr", "evidence_context"]
       }
     }
   ]

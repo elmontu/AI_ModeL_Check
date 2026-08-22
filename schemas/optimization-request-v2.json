@@ -259,6 +259,7 @@
             "aggregate",
             "label",
             "score",
+            "text",
             "embedding",
             "gradient",
             "weights",
@@ -377,6 +378,7 @@
               }
             ]
           },
+          "minProperties": 1,
           "title": "Decoding Parameters",
           "type": "object"
         },

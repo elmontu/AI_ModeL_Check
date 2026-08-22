@@ -1,4 +1,6 @@
 {
+  "analyzer": "dp",
+  "threat_id": "membership-person",
   "population_scope_id": "service-participants-2026",
   "epsilon": 0.2,
   "delta": 0.000001,
@@ -6,5 +8,19 @@
   "protected_unit": "person",
   "accountant": "demonstration accountant",
   "accountant_replayed": true,
-  "complete_pipeline": true
+  "complete_pipeline": true,
+  "fpr": 0.001,
+  "secret_cardinality": null,
+  "pairwise_secret_relation_validated": false,
+  "evidence_context": {
+    "release_id": "whole-government-demo-tree-v1",
+    "release_contract_sha256": "118a1d72acd73341ce4d6cf69f761bcd23e6141b40f42e215b7a560f4cc6f670",
+    "policy_sha256": "ef0780f17ae1f732296ef53c4040799792ec907abbb6ab69950f1d045a0d3316",
+    "artifact_sha256": "2f42b587627c5b6c4447d781b57a47082743f029b475f560a574553abcedfdd5",
+    "interface_sha256": "d7ca53bb8dbf0efb85abf373dba00fdb285764d783856f51b27658d49e65d111",
+    "population_scope_id": "service-participants-2026",
+    "population_scope_sha256": "d0ceafb482b5ed133cd89c765ec4e9d228f4c14bf07fac3f4aa67297a79ed5e8",
+    "decision_game_sha256": "686901249c969d5c1a631f1a617c319f9c235842745ea34c6956b6c5c2fef38c",
+    "observed_at": "2026-08-18T00:00:00Z"
+  }
 }

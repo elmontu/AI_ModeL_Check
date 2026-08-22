@@ -4,7 +4,7 @@ The repository contains several independently versioned machine contracts. A sch
 
 ## Current contracts
 
-- `assessment-request-v2.json` and `assessment-report-v2.json`
+- `assessment-request-v3.json` and `assessment-report-v3.json`
 - `optimization-request-v2.json` and `optimization-report-v2.json`
 - `signed-optimization-manifest-v2.json`
 - `incomplete-portfolio-certificate-v1.1.json`
@@ -12,6 +12,8 @@ The repository contains several independently versioned machine contracts. A sch
 
 ## Compatibility contracts
 
-The assessment, optimization, policy-bundle, and signed-manifest `v1` files are retained for provenance and compatibility. They do not override the current v2 assessment and optimization models in `src/model_release_assurance/`.
+The assessment v1/v2, optimization v1, policy-bundle v1, and signed-manifest v1 files are retained for provenance and compatibility. They do not override the current v3 assessment and v2 optimization models in `src/model_release_assurance/`.
+
+Assessment v3 adds the structured model profile and requires every analyzer input/evidence record to carry the source-observed release/policy/artifact/interface/population/game context. Assessment v2 evidence must be recollected or migrated by an approved worker; the core must not invent the missing source observations.
 
 Generate a current schema with the CLI and name the output after the model's `schema_version`; do not overwrite an older versioned file with a newer contract.

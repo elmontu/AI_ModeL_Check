@@ -20,6 +20,17 @@ class ProtocolFeasibilityBenchmarkTests(unittest.TestCase):
         raw, summary, analysis = MODULE.run_benchmark(
             seeds=(20260815,),
             trials_per_world=100,
+            retained_evidence={
+                "datasets": 1,
+                "total_trained_ml_artifacts": 1,
+                "tiers": [{"tier": "synthetic"}],
+                "all_tiers_complete_and_valid": True,
+                "decision_oracles": {
+                    "unexpected_decision_failures": 0,
+                    "executable_oracle_checks": 1,
+                    "executable_oracle_checks_passed": 1,
+                },
+            },
         )
         self.assertEqual(summary["monte_carlo_rows"], 16)
         self.assertEqual(summary["monte_carlo_trials"], 1600)

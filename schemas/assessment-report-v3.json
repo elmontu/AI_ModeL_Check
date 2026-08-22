@@ -1,5 +1,23 @@
 {
   "$defs": {
+    "DataModality": {
+      "enum": [
+        "tabular",
+        "text",
+        "image",
+        "audio",
+        "video",
+        "time_series",
+        "graph",
+        "geospatial",
+        "embedding",
+        "action",
+        "multimodal",
+        "custom"
+      ],
+      "title": "DataModality",
+      "type": "string"
+    },
     "EvidenceClass": {
       "enum": [
         "exact",
@@ -137,6 +155,16 @@
           "title": "Metric",
           "type": "string"
         },
+        "observed_at": {
+          "format": "date-time",
+          "title": "Observed At",
+          "type": "string"
+        },
+        "policy_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Policy Sha256",
+          "type": "string"
+        },
         "population_scope_id": {
           "anyOf": [
             {
@@ -165,6 +193,18 @@
         },
         "realizability": {
           "$ref": "#/$defs/Realizability"
+        },
+        "release_contract_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Release Contract Sha256",
+          "type": "string"
+        },
+        "release_id": {
+          "maxLength": 128,
+          "minLength": 3,
+          "pattern": "^[A-Za-z0-9._:-]+$",
+          "title": "Release Id",
+          "type": "string"
         },
         "threat_id": {
           "title": "Threat Id",
@@ -203,6 +243,10 @@
         "evidence_id",
         "threat_id",
         "analyzer",
+        "release_id",
+        "release_contract_sha256",
+        "policy_sha256",
+        "observed_at",
         "evidence_class",
         "metric",
         "realizability",
@@ -522,6 +566,92 @@
       "title": "LlmProtocolContract",
       "type": "object"
     },
+    "ModelProfile": {
+      "additionalProperties": false,
+      "properties": {
+        "component_model_families": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Component Model Families",
+          "type": "array"
+        },
+        "custom_task_definition": {
+          "anyOf": [
+            {
+              "maxLength": 2048,
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Custom Task Definition"
+        },
+        "generative": {
+          "default": false,
+          "title": "Generative",
+          "type": "boolean"
+        },
+        "input_modalities": {
+          "items": {
+            "$ref": "#/$defs/DataModality"
+          },
+          "minItems": 1,
+          "title": "Input Modalities",
+          "type": "array"
+        },
+        "output_modalities": {
+          "items": {
+            "$ref": "#/$defs/DataModality"
+          },
+          "minItems": 1,
+          "title": "Output Modalities",
+          "type": "array"
+        },
+        "stateful": {
+          "default": false,
+          "title": "Stateful",
+          "type": "boolean"
+        },
+        "task": {
+          "$ref": "#/$defs/ModelTask"
+        },
+        "training_paradigm": {
+          "$ref": "#/$defs/TrainingParadigm"
+        }
+      },
+      "required": [
+        "task",
+        "input_modalities",
+        "output_modalities",
+        "training_paradigm"
+      ],
+      "title": "ModelProfile",
+      "type": "object"
+    },
+    "ModelTask": {
+      "enum": [
+        "classification",
+        "regression",
+        "ranking",
+        "recommendation",
+        "forecasting",
+        "clustering",
+        "anomaly_detection",
+        "representation",
+        "generation",
+        "retrieval",
+        "control",
+        "decision_support",
+        "custom"
+      ],
+      "title": "ModelTask",
+      "type": "string"
+    },
     "OverallVerdict": {
       "enum": [
         "clear",
@@ -776,6 +906,16 @@
           "title": "Assessed Interface Sha256",
           "type": "string"
         },
+        "assessed_policy_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Assessed Policy Sha256",
+          "type": "string"
+        },
+        "assessed_release_contract_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Assessed Release Contract Sha256",
+          "type": "string"
+        },
         "decision_game_sha256": {
           "pattern": "^[0-9a-f]{64}$",
           "title": "Decision Game Sha256",
@@ -862,6 +1002,8 @@
         "decision_game_sha256",
         "assessed_interface_sha256",
         "assessed_artifact_sha256",
+        "assessed_release_contract_sha256",
+        "assessed_policy_sha256",
         "decision_metric",
         "kind",
         "mandatory",
@@ -884,6 +1026,20 @@
         "reconstruction"
       ],
       "title": "ThreatKind",
+      "type": "string"
+    },
+    "TrainingParadigm": {
+      "enum": [
+        "supervised",
+        "semi_supervised",
+        "self_supervised",
+        "unsupervised",
+        "reinforcement_learning",
+        "in_context_or_prompted",
+        "hybrid",
+        "custom"
+      ],
+      "title": "TrainingParadigm",
       "type": "string"
     },
     "Verdict": {
@@ -996,13 +1152,22 @@
     "release_interface": {
       "$ref": "#/$defs/InterfaceContract"
     },
+    "release_model_family": {
+      "maxLength": 128,
+      "minLength": 1,
+      "title": "Release Model Family",
+      "type": "string"
+    },
+    "release_model_profile": {
+      "$ref": "#/$defs/ModelProfile"
+    },
     "request_sha256": {
       "title": "Request Sha256",
       "type": "string"
     },
     "schema_version": {
-      "const": "2.0",
-      "default": "2.0",
+      "const": "3.0",
+      "default": "3.0",
       "title": "Schema Version",
       "type": "string"
     }
@@ -1017,6 +1182,8 @@
     "request_sha256",
     "artifact_sha256",
     "release_contract_sha256",
+    "release_model_family",
+    "release_model_profile",
     "release_interface",
     "population_scope_sha256s",
     "population_scopes",

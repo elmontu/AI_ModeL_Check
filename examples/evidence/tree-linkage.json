@@ -1,9 +1,23 @@
 {
+  "analyzer": "tree_linkage",
+  "threat_id": "linkage-person",
   "population_scope_id": "service-participants-2026",
   "candidate_ids": ["a", "b", "c", "d"],
   "observations": ["L1", "L1", "L2", "L2"],
+  "prior": null,
   "recipient_has_candidate_roster": true,
   "recipient_has_target_signal": true,
   "observed_interface_sha256": "d7ca53bb8dbf0efb85abf373dba00fdb285764d783856f51b27658d49e65d111",
-  "complete_interface_coverage": true
+  "complete_interface_coverage": true,
+  "evidence_context": {
+    "release_id": "whole-government-demo-tree-v1",
+    "release_contract_sha256": "118a1d72acd73341ce4d6cf69f761bcd23e6141b40f42e215b7a560f4cc6f670",
+    "policy_sha256": "ef0780f17ae1f732296ef53c4040799792ec907abbb6ab69950f1d045a0d3316",
+    "artifact_sha256": "2f42b587627c5b6c4447d781b57a47082743f029b475f560a574553abcedfdd5",
+    "interface_sha256": "d7ca53bb8dbf0efb85abf373dba00fdb285764d783856f51b27658d49e65d111",
+    "population_scope_id": "service-participants-2026",
+    "population_scope_sha256": "d0ceafb482b5ed133cd89c765ec4e9d228f4c14bf07fac3f4aa67297a79ed5e8",
+    "decision_game_sha256": "4bb158d840ec659005d778c0443f537245d03ba7dfdef279ff98e11f5e271430",
+    "observed_at": "2026-08-18T00:00:00Z"
+  }
 }

@@ -15,7 +15,7 @@ from cryptography.exceptions import InvalidSignature
 from pydantic import BaseModel
 
 from .errors import IntegrityError
-from .models import AssessmentReport, ReleaseContract, SignedManifest
+from .models import AssessmentReport, AssessmentRequest, ReleaseContract, SignedManifest
 
 
 def canonical_json_bytes(value: BaseModel | dict[str, Any]) -> bytes:
@@ -76,19 +76,46 @@ def verify_source_file(source_path: str, expected_sha256: str, base_dir: Path) -
     return resolved
 
 
-def verify_provenance_binding(value: BaseModel, source_path: Path, bound_fields: tuple[str, ...]) -> None:
+def verify_provenance_binding(
+    value: BaseModel,
+    source_path: Path,
+    bound_fields: tuple[str, ...],
+    *,
+    require_complete: bool = False,
+) -> None:
     try:
         source = json.loads(source_path.read_text(encoding="utf-8"))
     except (UnicodeDecodeError, json.JSONDecodeError) as exc:
         raise IntegrityError(f"evidence source is not valid UTF-8 JSON: {source_path}") from exc
     if not isinstance(source, dict):
         raise IntegrityError("evidence source must be a JSON object")
-    claimed = value.model_dump(mode="json", exclude_none=True)
+    claimed = value.model_dump(
+        mode="json",
+        exclude={"provenance"} if require_complete else None,
+        exclude_none=not require_complete,
+    )
+    if require_complete:
+        required_fields = set(claimed)
+        supplied_fields = set(bound_fields)
+        if supplied_fields != required_fields:
+            missing = sorted(required_fields - supplied_fields)
+            extra = sorted(supplied_fields - required_fields)
+            raise IntegrityError(
+                "provenance bound_fields must equal the framework-owned analyzer payload; "
+                f"missing={missing}, extra={extra}"
+            )
+        if set(source) != required_fields:
+            missing = sorted(required_fields - set(source))
+            extra = sorted(set(source) - required_fields)
+            raise IntegrityError(
+                "evidence source must contain exactly the framework-owned analyzer payload; "
+                f"missing={missing}, extra={extra}"
+            )
     for field in bound_fields:
         if field not in claimed:
-            raise IntegrityError(f"bound field {field!r} is absent from analyzer input")
+            raise IntegrityError(f"bound field {field!r} is absent from the claimed payload")
         if field not in source:
-            raise IntegrityError(f"bound field {field!r} is absent from evidence source")
+            raise IntegrityError(f"bound field {field!r} is absent from the evidence source")
         if claimed[field] != source[field]:
             raise IntegrityError(f"bound field {field!r} differs between analyzer input and evidence source")
 
@@ -161,9 +188,26 @@ def verify_canonical_signature(
 
 def build_signed_manifest(
     report: AssessmentReport,
-    release: ReleaseContract,
+    request: AssessmentRequest,
     private_key_path: Path,
 ) -> SignedManifest:
+    release = request.release
+    if report.request_sha256 != sha256_bytes(canonical_json_bytes(request)):
+        raise IntegrityError("report does not bind the supplied assessment request")
+    if report.release_contract_sha256 != sha256_bytes(canonical_json_bytes(release)):
+        raise IntegrityError("report does not bind the supplied release contract")
+    report_bindings = {
+        "release_id": release.release_id,
+        "artifact_sha256": release.artifact_sha256,
+        "release_interface": release.interface,
+        "release_expires_at": release.expires_at,
+        "policy_id": request.policy.policy_id,
+        "policy_version": request.policy.policy_version,
+        "policy_sha256": request.policy.policy_sha256,
+    }
+    for field, expected in report_bindings.items():
+        if getattr(report, field) != expected:
+            raise IntegrityError(f"report {field} does not match the assessment request")
     private_key = _load_private(private_key_path)
     unsigned = {
         "schema_version": "1.0",
@@ -181,8 +225,8 @@ def build_signed_manifest(
         "signature_algorithm": "Ed25519",
         "canonicalization": "MRA-PY-JSON-1",
     }
-    if release.expires_at is not None:
-        unsigned["expires_at"] = release.expires_at
+    if report.release_expires_at is not None:
+        unsigned["expires_at"] = report.release_expires_at
     signature = private_key.sign(canonical_json_bytes(unsigned))
     return SignedManifest(**unsigned, signature_b64=base64.b64encode(signature).decode("ascii"))
 
@@ -204,10 +248,13 @@ def verify_signed_manifest(
         "artifact_sha256": report.artifact_sha256,
         "request_sha256": report.request_sha256,
         "overall_verdict": report.overall_verdict,
+        "created_at": report.created_at,
     }
     for field, expected in expected_bindings.items():
         if getattr(manifest, field) != expected:
             raise IntegrityError(f"manifest {field} does not match the report")
+    if manifest.expires_at != report.release_expires_at:
+        raise IntegrityError("manifest expiry does not match the report release expiry")
     if manifest.report_sha256 != sha256_bytes(canonical_json_bytes(report)):
         raise IntegrityError("manifest does not bind this report")
     if manifest.expires_at is not None and manifest.expires_at <= datetime.now(timezone.utc):

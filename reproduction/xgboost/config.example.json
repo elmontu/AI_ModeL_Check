@@ -1,0 +1,58 @@
+{
+  "schema_version": "1.1",
+  "experiment_id": "local-xgboost-classification-v1",
+  "dataset": {
+    "path": "../../data/classification.parquet",
+    "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+    "target_column": "target"
+  },
+  "master_seed": 42,
+  "replicate_seeds": [
+    42
+  ],
+  "row_cap": 20000,
+  "split_fractions": {
+    "target_train": 0.5,
+    "reference_train": 0.2,
+    "attack_calibration": 0.1,
+    "attack_audit_nonmember": 0.1,
+    "utility_test": 0.1
+  },
+  "model": {
+    "n_estimators": 100,
+    "max_depth": 4,
+    "learning_rate": 0.05,
+    "min_child_weight": 1,
+    "subsample": 1.0,
+    "colsample_bytree": 1.0,
+    "reg_alpha": 0.0,
+    "reg_lambda": 1.0,
+    "gamma": 0.0,
+    "max_bin": 256
+  },
+  "attack": {
+    "target_fpr": 0.01,
+    "confidence": 0.95,
+    "membership_priors": [
+      0.5,
+      0.1,
+      0.01,
+      0.001
+    ]
+  },
+  "decision_game": {
+    "game_id": "replace-approved-membership-game-id",
+    "threat_contract_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+    "population_scope_id": "replace-approved-population-scope-id",
+    "protected_unit": "record",
+    "attacker_observation": "class_probabilities_and_true_label",
+    "true_label_known": true,
+    "candidate_population": "rows selected by deterministic row-cap stratified sampling from the hash-bound dataset",
+    "candidate_sampling": "target members, calibration nonmembers, and audit nonmembers from deterministic stratified disjoint five-way splits",
+    "reference_data_relationship": "disjoint same-dataset reference training split equalized in size with target training",
+    "model_knowledge": "xgboost_family_and_registered_hyperparameters",
+    "threshold_selection": "nonmember_calibration_only_fixed_target_fpr",
+    "recipient_access": "full_artifact",
+    "query_budget": null
+  }
+}

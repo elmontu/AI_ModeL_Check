@@ -232,6 +232,7 @@ def run_benchmark(
     *,
     seeds: tuple[int, ...] = DEFAULT_SEEDS,
     trials_per_world: int = DEFAULT_TRIALS_PER_WORLD,
+    retained_evidence: dict[str, Any] | None = None,
 ) -> tuple[dict[str, Any], dict[str, Any], dict[str, Any]]:
     q_values = (
         Fraction(0),
@@ -256,7 +257,7 @@ def run_benchmark(
         "trials_per_world_per_seed": trials_per_world,
         "monte_carlo_rows": monte_carlo_rows(q_values, seeds, trials_per_world),
     }
-    retained = retained_evidence_audit()
+    retained = retained_evidence if retained_evidence is not None else retained_evidence_audit()
     analysis = {
         "benchmark": "finite_protocol_feasibility",
         "claim_boundary": (

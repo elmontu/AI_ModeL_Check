@@ -13,6 +13,7 @@ from ..models import (
     ThreatKind,
 )
 from .attack import clopper_pearson_lower, clopper_pearson_upper
+from .base import evidence_context_fields
 
 
 class ControlledInferenceAnalyzer:
@@ -29,6 +30,11 @@ class ControlledInferenceAnalyzer:
     ) -> tuple[EvidenceRecord, ...]:
         if not isinstance(value, ControlledInferenceInput):
             raise AnalyzerError("controlled inference analyzer received an incompatible input")
+        if release.interface.protocol_type == "interactive_llm":
+            raise AnalyzerError(
+                "generic controlled-inference evidence cannot validate an interactive LLM; "
+                "a dedicated transcript-bound LLM analyzer is required"
+            )
         if value.metric != threat.decision_metric:
             raise ValueError("controlled inference metric does not match the threat contract")
         if threat.kind not in (ThreatKind.ATTRIBUTE, ThreatKind.RECONSTRUCTION):
@@ -85,6 +91,7 @@ class ControlledInferenceAnalyzer:
             "controlled floor invalid because disjoint attack training/audit, paired raw counts, same-side-information comparator, pre-registration, ground truth, or reconstruction membership verification is missing",
         )
         return (EvidenceRecord(
+            **evidence_context_fields(value.evidence_context),
             evidence_id=f"{threat.threat_id}:controlled:{value.attack_name}",
             threat_id=threat.threat_id,
             analyzer=self.name,

@@ -14,6 +14,7 @@ from ..models import (
     ReleaseContract,
     ThreatContract,
 )
+from .base import evidence_context_fields
 
 
 def wilson_lower(successes: int, trials: int, confidence: float) -> float:
@@ -108,9 +109,16 @@ class AttackAnalyzer:
     ) -> tuple[EvidenceRecord, ...]:
         if not isinstance(value, AttackInput):
             raise AnalyzerError("attack analyzer received an incompatible input")
+        if release.interface.protocol_type == "interactive_llm":
+            raise AnalyzerError(
+                "generic attack evidence cannot validate an interactive LLM; "
+                "a dedicated transcript-bound LLM analyzer is required"
+            )
         operating_point_attained = True
+        bounds_per_comparison = 2 if value.metric == "membership_tpr_at_fpr" else 1
+        simultaneous_bound_count = value.comparison_family_size * bounds_per_comparison
         per_comparison_confidence = 1.0 - (
-            (1.0 - value.confidence) / value.comparison_family_size
+            (1.0 - value.confidence) / simultaneous_bound_count
         )
         fpr_upper = None
         if value.metric == "membership_tpr_at_fpr":
@@ -140,6 +148,7 @@ class AttackAnalyzer:
             "attack floor invalid because calibration/audit separation, conservative operating-point attainment, threshold pre-registration, or raw counts are missing",
         )
         return (EvidenceRecord(
+            **evidence_context_fields(value.evidence_context),
             evidence_id=f"{threat.threat_id}:attack:{value.attack_name}",
             threat_id=threat.threat_id,
             analyzer=self.name,
@@ -157,6 +166,7 @@ class AttackAnalyzer:
                 f"population_scope_id={value.population_scope_id}",
                 f"exact one-sided Clopper-Pearson confidence={value.confidence}",
                 f"comparison family size={value.comparison_family_size}",
+                f"simultaneous bound count={simultaneous_bound_count}",
             ),
             limitations=limitations,
             details={
@@ -167,6 +177,8 @@ class AttackAnalyzer:
                 "confidence": value.confidence,
                 "per_comparison_confidence": per_comparison_confidence,
                 "comparison_family_size": value.comparison_family_size,
+                "bounds_per_comparison": bounds_per_comparison,
+                "simultaneous_bound_count": simultaneous_bound_count,
                 "false_positives": value.false_positives,
                 "nonmember_trials": value.nonmember_trials,
                 "target_fpr": value.target_fpr,

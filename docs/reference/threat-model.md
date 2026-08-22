@@ -45,7 +45,7 @@ Optimization requests declare a trust profile. `cooperative` treats hash-bound s
 | Threat | Core control | Required deployment control |
 |---|---|---|
 | Artifact substitution | SHA-256 binding and signed manifest | canonical upload, immutable storage, malware scan, release-time hash check |
-| Evidence substitution | source hash plus field binding | worker attestation, immutable logs, approved adapter images |
+| Evidence substitution or rebinding | complete source payload plus pre-analysis release/policy/artifact/interface/population/game context | worker attestation, immutable logs, approved adapter images |
 | Metric confusion | machine-readable decision metric | policy review and versioned metric catalogue |
 | Population-scope substitution | threat/analyzer scope identifiers and signed request/report binding | authoritative scope registry, dated population evidence, profile approval |
 | Missing evidence treated as safe | fail-closed trivial ceiling | UI must preserve `inconclusive` without override-by-default |
@@ -68,6 +68,7 @@ Optimization requests declare a trust profile. `cooperative` treats hash-bound s
 | Utility substitution | utility certificate binds configuration, artifact, interface, population snapshots, and evaluation split | immutable split registry and reproducible utility worker |
 | Search theatre | `reject` requires a hash-bound enumeration certificate | approved configuration generator and independently replayed completeness certificate |
 | Interactive LLM under-modelling | complete LLM protocol contract is accepted but cannot clear through one-shot analyzers | transcript-level accountant/interactive-channel analyzer covering tools, RAG, memory, updates, and concurrency |
+| Unsupported model-family coercion | 20-category catalog routes unknown families to custom review and never clears | approve family-specific workers and modality/protocol threat profiles |
 
 ## Explicit non-claims
 

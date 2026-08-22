@@ -117,16 +117,7 @@ class CliTests(unittest.TestCase):
     def test_full_cli_flow(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             temp = Path(directory)
-            raw = json.loads((ROOT / "examples" / "request.json").read_text())
-            raw["policy"]["policy_path"] = str(ROOT / "examples" / "policy.json")
-            raw["release"]["artifact_path"] = str(ROOT / "examples" / "artifacts" / "demo-tree.json")
-            raw["release"]["artifact_sha256"] = sha256_file(Path(raw["release"]["artifact_path"]))
-            for analyzer in raw["analyzer_inputs"]:
-                analyzer["provenance"]["source_path"] = str(
-                    ROOT / "examples" / analyzer["provenance"]["source_path"]
-                )
-            request = temp / "request.json"
-            request.write_text(json.dumps(raw))
+            request = ROOT / "examples" / "request.json"
             report = temp / "report.json"
             audit = temp / "audit.sqlite3"
             private = temp / "private.pem"

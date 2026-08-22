@@ -22,7 +22,7 @@ An agency, ministry, programme, regulator, statutory board, or participating org
 
 ### 4. Release contract
 
-The release contract binds one artifact and interface to a recipient, purpose, protected unit, population scope, prior, side information, success metric, threshold, evidence, and expiry. A material change creates a new assessment.
+The release contract binds one artifact and interface to a recipient, purpose, model family, structured task/modality/training profile, protected unit, population scope, prior, side information, success metric, threshold, evidence, and expiry. The all-model catalog routes family-specific work but never supplies evidence. A material change creates a new assessment.
 
 ## Population patterns
 

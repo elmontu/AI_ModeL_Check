@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import uuid
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 from .analyzers import AttackAnalyzer, ControlledInferenceAnalyzer, DpAnalyzer, PopulationAnalyzer, TreeLinkageAnalyzer
@@ -14,7 +14,7 @@ from .integrity import (
     verify_release_artifact,
     verify_source_file,
 )
-from .models import AssessmentReport, AssessmentRequest, EvidenceRecord, PolicyBundle
+from .models import AssessmentReport, AssessmentRequest, EvidenceContext, EvidenceRecord, PolicyBundle
 from .version import VERSION
 
 
@@ -40,25 +40,46 @@ class AssuranceEngine:
         threat_by_id = {threat.threat_id: threat for threat in request.threats}
         scope_by_id = {scope.scope_id: scope for scope in request.population_scopes}
         records: list[EvidenceRecord] = []
+        release_contract_sha256 = sha256_bytes(canonical_json_bytes(request.release))
+        interface_sha256 = sha256_bytes(canonical_json_bytes(request.release.interface))
         for value in request.analyzer_inputs:
             source_path = verify_source_file(value.provenance.source_path, value.provenance.source_sha256, base_dir)
-            verify_provenance_binding(value, source_path, value.provenance.bound_fields)
+            verify_provenance_binding(
+                value,
+                source_path,
+                value.provenance.bound_fields,
+                require_complete=True,
+            )
             matches = [analyzer for analyzer in self.analyzers if analyzer.supports(value)]
             if len(matches) != 1:
                 raise ValueError(f"expected one analyzer for {value.analyzer}, found {len(matches)}")
             threat = threat_by_id[value.threat_id]
             scope = scope_by_id[threat.population_scope_id]
-            bindings = {
-                "population_scope_id": scope.scope_id,
-                "population_scope_sha256": population_scope_sha256(scope),
-                "decision_game_sha256": decision_game_sha256(threat, scope),
-                "interface_sha256": sha256_bytes(canonical_json_bytes(request.release.interface)),
-                "artifact_sha256": request.release.artifact_sha256,
-            }
-            records.extend(
-                record.model_copy(update=bindings)
-                for record in matches[0].analyze(request.release, threat, value)
+            expected_context = EvidenceContext(
+                release_id=request.release.release_id,
+                release_contract_sha256=release_contract_sha256,
+                policy_sha256=request.policy.policy_sha256,
+                artifact_sha256=request.release.artifact_sha256,
+                interface_sha256=interface_sha256,
+                population_scope_id=scope.scope_id,
+                population_scope_sha256=population_scope_sha256(scope),
+                decision_game_sha256=decision_game_sha256(threat, scope),
+                observed_at=value.evidence_context.observed_at,
             )
+            if value.evidence_context != expected_context:
+                raise ValueError(
+                    f"analyzer evidence context does not match release, policy, population, or decision game for {value.threat_id}"
+                )
+            now = datetime.now(timezone.utc)
+            if value.evidence_context.observed_at > now + timedelta(minutes=5):
+                raise ValueError("evidence observed_at is implausibly in the future")
+            if value.evidence_context.observed_at < policy.effective_from:
+                raise ValueError("evidence predates the effective policy")
+            if policy.expires_at is not None and value.evidence_context.observed_at >= policy.expires_at:
+                raise ValueError("evidence was observed after policy expiry")
+            if request.release.expires_at is not None and value.evidence_context.observed_at >= request.release.expires_at:
+                raise ValueError("evidence was observed after release-contract expiry")
+            records.extend(matches[0].analyze(request.release, threat, value))
 
         evidence = tuple(records)
         evidence_ids = [record.evidence_id for record in evidence]
@@ -70,6 +91,7 @@ class AssuranceEngine:
                 scope_by_id[threat.population_scope_id],
                 request.release,
                 evidence,
+                request.policy.policy_sha256,
             )
             for threat in request.threats
         )
@@ -85,7 +107,9 @@ class AssuranceEngine:
             created_at=created_at,
             request_sha256=request_hash,
             artifact_sha256=request.release.artifact_sha256,
-            release_contract_sha256=sha256_bytes(canonical_json_bytes(request.release)),
+            release_contract_sha256=release_contract_sha256,
+            release_model_family=request.release.model_family,
+            release_model_profile=request.release.model_profile,
             release_interface=request.release.interface,
             release_expires_at=request.release.expires_at,
             policy_expires_at=policy.expires_at,

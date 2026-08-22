@@ -7,19 +7,19 @@ help:
 	@echo "Targets: compile, test, schemas, check, build, clean"
 
 compile:
-	$(PYTHON) -m compileall -q src tests
+	$(PYTHON) -m compileall -q src tests scripts
 
 test:
 	PYTHONPATH=src $(PYTHON) -m unittest discover -s tests -v
 
 schemas:
 	mkdir -p $(SCHEMA_TMP)
-	PYTHONPATH=src $(PYTHON) -m model_release_assurance schema --output $(SCHEMA_TMP)/assessment-request-v2.json
-	diff -u schemas/assessment-request-v2.json $(SCHEMA_TMP)/assessment-request-v2.json
+	PYTHONPATH=src $(PYTHON) -m model_release_assurance schema --output $(SCHEMA_TMP)/assessment-request-v3.json
+	diff -u schemas/assessment-request-v3.json $(SCHEMA_TMP)/assessment-request-v3.json
 	PYTHONPATH=src $(PYTHON) -m model_release_assurance schema --kind policy --output $(SCHEMA_TMP)/policy-bundle-v1.json
 	diff -u schemas/policy-bundle-v1.json $(SCHEMA_TMP)/policy-bundle-v1.json
-	PYTHONPATH=src $(PYTHON) -m model_release_assurance schema --kind report --output $(SCHEMA_TMP)/assessment-report-v2.json
-	diff -u schemas/assessment-report-v2.json $(SCHEMA_TMP)/assessment-report-v2.json
+	PYTHONPATH=src $(PYTHON) -m model_release_assurance schema --kind report --output $(SCHEMA_TMP)/assessment-report-v3.json
+	diff -u schemas/assessment-report-v3.json $(SCHEMA_TMP)/assessment-report-v3.json
 	PYTHONPATH=src $(PYTHON) -m model_release_assurance schema --kind optimization --output $(SCHEMA_TMP)/optimization-request-v2.json
 	diff -u schemas/optimization-request-v2.json $(SCHEMA_TMP)/optimization-request-v2.json
 	PYTHONPATH=src $(PYTHON) -m model_release_assurance schema --kind optimization-report --output $(SCHEMA_TMP)/optimization-report-v2.json

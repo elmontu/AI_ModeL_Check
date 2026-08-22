@@ -9,10 +9,10 @@ It does not load untrusted model binaries, operate a release gateway, own an aut
 ## Decision flow
 
 ```text
-release request + policy + evidence
+release request + policy + source-observed evidence context
                  |
                  v
-        schema and hash validation
+  schema, model-family and hash validation
                  |
                  v
         evidence classification
@@ -40,6 +40,7 @@ release request + policy + evidence
 | Module | Responsibility |
 |---|---|
 | `models.py` | Versioned request, policy, evidence, and report contracts |
+| `model_coverage.py` | Governed all-model catalog, alias routing, and non-clearing coverage review |
 | `engine.py` | Assessment orchestration and fail-closed verdicts |
 | `optimizer.py` | Feasible release-configuration selection |
 | `decision.py` | Evidence classification and decision rules |
@@ -54,7 +55,7 @@ release request + policy + evidence
 
 ## Trust boundaries
 
-The core accepts inert JSON and referenced evidence files. Potentially hostile model parsing and empirical attacks belong in separate sandboxed workers. A production orchestrator must bind worker output to immutable artifacts, approved analyzer versions, population snapshots, policy versions, and the current portfolio-registry head.
+The core accepts inert JSON and referenced evidence files. Assessment v3 requires workers to place release-contract, policy, artifact, interface, population and decision-game hashes in the source payload before analysis. The engine verifies that context and analyzers copy it into evidence records without restamping. Potentially hostile model parsing and empirical attacks belong in separate sandboxed workers. Production must also attest the worker identity/version and bind the current portfolio-registry head.
 
 Final authorization must be committed atomically with the portfolio-state update. A read-evaluate-write sequence without transactional locking can approve individually valid releases against the same stale state.
 

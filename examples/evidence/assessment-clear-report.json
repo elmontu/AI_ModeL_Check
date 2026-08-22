@@ -1,14 +1,28 @@
 {
-  "schema_version": "2.0",
-  "assessment_id": "f3b67ada-4b2e-5f3a-a1a6-31a3f0b6ea0d",
+  "schema_version": "3.0",
+  "assessment_id": "aed05038-0a1f-5d7f-9155-92ffbc459d6e",
   "release_id": "whole-government-demo-tree-v1",
   "policy_id": "whole-government-model-release-demo",
   "policy_version": "1.0.0",
   "policy_sha256": "ef0780f17ae1f732296ef53c4040799792ec907abbb6ab69950f1d045a0d3316",
-  "created_at": "2026-08-12T17:13:38.572818Z",
-  "request_sha256": "3141730ee2a77ba9a8b6d8569ac02993afc0f3b645b2c9ece5baa42be9aa5f2b",
+  "created_at": "2026-08-22T11:06:59.289553Z",
+  "request_sha256": "76cc48202796e3976754054f5aeba5d8334253a04d1e96c54dd1a0476f316232",
   "artifact_sha256": "2f42b587627c5b6c4447d781b57a47082743f029b475f560a574553abcedfdd5",
-  "release_contract_sha256": "55fcc0540a35e602fe29f9486b9bd5d8a7ef982e511a4ee9ebbc64cd8cee6895",
+  "release_contract_sha256": "118a1d72acd73341ce4d6cf69f761bcd23e6141b40f42e215b7a560f4cc6f670",
+  "release_model_family": "tree_ensemble",
+  "release_model_profile": {
+    "task": "classification",
+    "input_modalities": [
+      "tabular"
+    ],
+    "output_modalities": [
+      "tabular"
+    ],
+    "training_paradigm": "supervised",
+    "component_model_families": [],
+    "generative": false,
+    "stateful": false
+  },
   "release_interface": {
     "protocol_type": "predictive",
     "access": "full_artifact",
@@ -66,6 +80,10 @@
       "evidence_id": "linkage-person:tree:absolute",
       "threat_id": "linkage-person",
       "analyzer": "tree_linkage",
+      "release_id": "whole-government-demo-tree-v1",
+      "release_contract_sha256": "118a1d72acd73341ce4d6cf69f761bcd23e6141b40f42e215b7a560f4cc6f670",
+      "policy_sha256": "ef0780f17ae1f732296ef53c4040799792ec907abbb6ab69950f1d045a0d3316",
+      "observed_at": "2026-08-18T00:00:00Z",
       "evidence_class": "exact",
       "coverage": "complete_interface",
       "population_scope_id": "service-participants-2026",
@@ -96,7 +114,7 @@
         "occupied_cells": 2,
         "minimum_cell_size": 2,
         "singleton_fraction": 0.0,
-        "source_sha256": "0d3bfe44915660b26210757bd13d6000945eaeb7ba48932a1851b960a3fd7f0d",
+        "source_sha256": "fc467fadcffd2fd6ca2da7c343bedb0ea3eaa6080efc1d3139796bfc00630cb6",
         "tool": "mra-demo-tree-export",
         "tool_version": "1.0"
       }
@@ -105,6 +123,10 @@
       "evidence_id": "linkage-person:tree:incremental",
       "threat_id": "linkage-person",
       "analyzer": "tree_linkage",
+      "release_id": "whole-government-demo-tree-v1",
+      "release_contract_sha256": "118a1d72acd73341ce4d6cf69f761bcd23e6141b40f42e215b7a560f4cc6f670",
+      "policy_sha256": "ef0780f17ae1f732296ef53c4040799792ec907abbb6ab69950f1d045a0d3316",
+      "observed_at": "2026-08-18T00:00:00Z",
       "evidence_class": "exact",
       "coverage": "complete_interface",
       "population_scope_id": "service-participants-2026",
@@ -135,7 +157,7 @@
         "occupied_cells": 2,
         "minimum_cell_size": 2,
         "singleton_fraction": 0.0,
-        "source_sha256": "0d3bfe44915660b26210757bd13d6000945eaeb7ba48932a1851b960a3fd7f0d",
+        "source_sha256": "fc467fadcffd2fd6ca2da7c343bedb0ea3eaa6080efc1d3139796bfc00630cb6",
         "tool": "mra-demo-tree-export",
         "tool_version": "1.0"
       }
@@ -144,6 +166,10 @@
       "evidence_id": "linkage-person:tree:worst-observation",
       "threat_id": "linkage-person",
       "analyzer": "tree_linkage",
+      "release_id": "whole-government-demo-tree-v1",
+      "release_contract_sha256": "118a1d72acd73341ce4d6cf69f761bcd23e6141b40f42e215b7a560f4cc6f670",
+      "policy_sha256": "ef0780f17ae1f732296ef53c4040799792ec907abbb6ab69950f1d045a0d3316",
+      "observed_at": "2026-08-18T00:00:00Z",
       "evidence_class": "exact",
       "coverage": "complete_interface",
       "population_scope_id": "service-participants-2026",
@@ -157,7 +183,7 @@
       "upper": 0.5,
       "baseline": 0.25,
       "realizability": "recipient_realizable",
-      "can_clear": false,
+      "can_clear": true,
       "can_block": true,
       "assumptions": [
         "population_scope_id=service-participants-2026",
@@ -174,7 +200,7 @@
         "occupied_cells": 2,
         "minimum_cell_size": 2,
         "singleton_fraction": 0.0,
-        "source_sha256": "0d3bfe44915660b26210757bd13d6000945eaeb7ba48932a1851b960a3fd7f0d",
+        "source_sha256": "fc467fadcffd2fd6ca2da7c343bedb0ea3eaa6080efc1d3139796bfc00630cb6",
         "tool": "mra-demo-tree-export",
         "tool_version": "1.0"
       }
@@ -183,6 +209,10 @@
       "evidence_id": "membership-person:dp:roc",
       "threat_id": "membership-person",
       "analyzer": "dp",
+      "release_id": "whole-government-demo-tree-v1",
+      "release_contract_sha256": "118a1d72acd73341ce4d6cf69f761bcd23e6141b40f42e215b7a560f4cc6f670",
+      "policy_sha256": "ef0780f17ae1f732296ef53c4040799792ec907abbb6ab69950f1d045a0d3316",
+      "observed_at": "2026-08-18T00:00:00Z",
       "evidence_class": "ceiling",
       "coverage": "complete_interface",
       "population_scope_id": "service-participants-2026",
@@ -210,13 +240,17 @@
         "fpr": 0.001,
         "bound_1": 0.0012224027581601699,
         "bound_2": 0.1820887964058493,
-        "source_sha256": "bc405852d3c20f0d3c85869b59a4e173622b5b07f6fc7e31fd70f00f80e01f67"
+        "source_sha256": "53a984341cdd088db1cad52fea1370acf5527fcad8a4548c28cdf1337177aadc"
       }
     },
     {
       "evidence_id": "membership-person:dp:equal-prior",
       "threat_id": "membership-person",
       "analyzer": "dp",
+      "release_id": "whole-government-demo-tree-v1",
+      "release_contract_sha256": "118a1d72acd73341ce4d6cf69f761bcd23e6141b40f42e215b7a560f4cc6f670",
+      "policy_sha256": "ef0780f17ae1f732296ef53c4040799792ec907abbb6ab69950f1d045a0d3316",
+      "observed_at": "2026-08-18T00:00:00Z",
       "evidence_class": "ceiling",
       "coverage": "complete_interface",
       "population_scope_id": "service-participants-2026",
@@ -241,13 +275,17 @@
       "limitations": [],
       "details": {
         "population_scope_id": "service-participants-2026",
-        "source_sha256": "bc405852d3c20f0d3c85869b59a4e173622b5b07f6fc7e31fd70f00f80e01f67"
+        "source_sha256": "53a984341cdd088db1cad52fea1370acf5527fcad8a4548c28cdf1337177aadc"
       }
     },
     {
       "evidence_id": "membership-person:attack:calibrated-loss",
       "threat_id": "membership-person",
       "analyzer": "attack",
+      "release_id": "whole-government-demo-tree-v1",
+      "release_contract_sha256": "118a1d72acd73341ce4d6cf69f761bcd23e6141b40f42e215b7a560f4cc6f670",
+      "policy_sha256": "ef0780f17ae1f732296ef53c4040799792ec907abbb6ab69950f1d045a0d3316",
+      "observed_at": "2026-08-18T00:00:00Z",
       "evidence_class": "floor",
       "coverage": "named_projection",
       "population_scope_id": "service-participants-2026",
@@ -264,7 +302,8 @@
       "assumptions": [
         "population_scope_id=service-participants-2026",
         "exact one-sided Clopper-Pearson confidence=0.95",
-        "comparison family size=1"
+        "comparison family size=1",
+        "simultaneous bound count=1"
       ],
       "limitations": [],
       "details": {
@@ -275,12 +314,14 @@
         "confidence": 0.95,
         "per_comparison_confidence": 0.95,
         "comparison_family_size": 1,
+        "bounds_per_comparison": 1,
+        "simultaneous_bound_count": 1,
         "false_positives": null,
         "nonmember_trials": null,
         "target_fpr": null,
         "one_sided_fpr_upper": null,
         "operating_point_attained": true,
-        "source_sha256": "bdf0cc12afa9140f1edfac4fa5923f184d7aae62fd98f7a26b21889f14507cc9",
+        "source_sha256": "b90fb4f93fe83848b37c8f24048929dd28dcd5757cbe3f352a56cf3e83acd22f",
         "tool": "mra-demo-attack",
         "tool_version": "1.0"
       }
@@ -294,6 +335,8 @@
       "decision_game_sha256": "4bb158d840ec659005d778c0443f537245d03ba7dfdef279ff98e11f5e271430",
       "assessed_interface_sha256": "d7ca53bb8dbf0efb85abf373dba00fdb285764d783856f51b27658d49e65d111",
       "assessed_artifact_sha256": "2f42b587627c5b6c4447d781b57a47082743f029b475f560a574553abcedfdd5",
+      "assessed_release_contract_sha256": "118a1d72acd73341ce4d6cf69f761bcd23e6141b40f42e215b7a560f4cc6f670",
+      "assessed_policy_sha256": "ef0780f17ae1f732296ef53c4040799792ec907abbb6ab69950f1d045a0d3316",
       "decision_metric": "incremental_bayes_linkage_success",
       "kind": "linkage",
       "mandatory": true,
@@ -317,6 +360,8 @@
       "decision_game_sha256": "686901249c969d5c1a631f1a617c319f9c235842745ea34c6956b6c5c2fef38c",
       "assessed_interface_sha256": "d7ca53bb8dbf0efb85abf373dba00fdb285764d783856f51b27658d49e65d111",
       "assessed_artifact_sha256": "2f42b587627c5b6c4447d781b57a47082743f029b475f560a574553abcedfdd5",
+      "assessed_release_contract_sha256": "118a1d72acd73341ce4d6cf69f761bcd23e6141b40f42e215b7a560f4cc6f670",
+      "assessed_policy_sha256": "ef0780f17ae1f732296ef53c4040799792ec907abbb6ab69950f1d045a0d3316",
       "decision_metric": "equal_prior_membership_success",
       "kind": "membership",
       "mandatory": true,
@@ -336,5 +381,5 @@
     }
   ],
   "overall_verdict": "clear",
-  "engine_version": "0.4.0"
+  "engine_version": "0.6.0"
 }
