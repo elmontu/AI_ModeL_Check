@@ -4,7 +4,7 @@ Model Release Assurance (MRA) is a Python reference implementation for evaluatin
 
 MRA is sector-neutral and supports protected units such as people, households, organizations, programmes, transactions, devices, and events.
 
-> **Status:** offline reference implementation, version 0.7.0, implementing MRAP conformance levels 0--2 only. It cannot issue a production authorization.
+> **Status:** offline reference implementation, version 0.7.0, implementing MRAP conformance levels 0--2 only. It includes a machine-checked protocol core but cannot issue a production authorization.
 
 The `0.x` series is an alpha interface: decision invariants are tested, but schemas and APIs may change between minor versions. See the [changelog](CHANGELOG.md), [support policy](SUPPORT.md), and [release process](docs/releasing.md).
 
@@ -31,10 +31,24 @@ DRAFT -> REGISTERED -> PLAN_FROZEN -> EVIDENCE_FROZEN
 
 Only the atomic registry transition from `COMMIT_PENDING` to `AUTHORIZED` creates an authorization. Assessment and optimization reports are necessary predecessors, never substitute authorizations. See the [normative protocol](docs/model-release-assurance-protocol.md) for the actors, messages, gates, proofs, failure paths, and production conformance requirements.
 
+## Formally verified core
+
+The repository contains a Lean 4 proof of a deliberately scoped security, ideal-deployment, and statistical core. For every state reachable in the abstract role-indexed transition system, an active release implies that all registered gates passed, an authorization request and atomic commit occurred, the committed head advanced, the deployed artifact and interface match the registered release, and modelled time has not expired. Authenticated envelopes are composed with the lifecycle transition they authorize; replay, known compromise, expiry and binding mismatch are rejected in the symbolic model. An ideal atomic registry/gateway model additionally proves executable commit–activate–serve behavior and fail-closed denial for stale commits, substitution, stale gateway observations, expiry, suspension, and revocation. A separate theorem verifies a reconciled per-component finite-rational error budget without assuming independence, and valid lifecycle/deployment witnesses establish non-vacuity.
+
+This does **not** prove that the model is safe or that Python, PostgreSQL, a network gateway, cryptography, policy, evidence, or a deployment platform refines the formal model. It proves the protocol logic under explicitly ideal atomicity, authenticity, clock, and faithful-execution assumptions. The exact theorem inventory, adversary boundary, trusted base, reproduction procedure, correspondence guard and non-claims are in [Formally verified protocol core](docs/formal-verification.md).
+
+The claim is scoped this way to avoid a circular proof: assuming every scientific and implementation gate is sound and then proving that their conjunction is sound would add little assurance. The machine-checked layer instead proves trace properties directly; empirical adequacy and implementation refinement remain separately reviewable obligations.
+
+```bash
+python scripts/verify_formal_protocol.py
+python scripts/evaluate_protocol_mutations.py
+```
+
 ## Repository layout
 
 ```text
 src/model_release_assurance/   Python package and CLI
+formal/lean/                   Lean transition semantics and machine-checked proofs
 schemas/                       versioned JSON contracts
 examples/                      executable requests, evidence, and policies
 tests/                         unit, replay, and integration tests
@@ -157,12 +171,24 @@ Generate the machine contract for a complete MRAP transcript and structurally re
 
 ```bash
 mra schema --kind release-protocol-run \
-  --output schemas/release-protocol-run-v1.json
+  --output schemas/release-protocol-run-v1.1.json
 mra release-protocol-verify path/to/release-protocol-run.json \
   --artifact-base path/to/protocol-artifacts
 ```
 
 Structural replay checks lifecycle transitions, the event hash chain, role-qualified artifacts, clearance preconditions, atomic-commit assertions, deployment bindings, expiry, and monitoring. It does not authenticate the actors or replace the registry and gateway services required by MRAP-L3/L4.
+
+For contract 1.1, set `verification_profile` to `authenticated_v1`, sign every event and artifact declaration, and supply an external JSON trust store. Relative key paths are resolved from the trust-store file:
+
+```bash
+mra release-protocol-verify path/to/release-protocol-run.json \
+  --artifact-base path/to/protocol-artifacts \
+  --trust-store path/to/trust-store.json \
+  --require-authenticated \
+  --compromised-key-id 0123456789abcdef01234567
+```
+
+Authenticated replay verifies domain-separated, release-bound Ed25519 signatures and rejects supplied compromised keys. `--require-authenticated` is the caller's anti-downgrade policy; without it, a deliberately structural transcript remains accepted only at the structural assurance level. The command is still an offline verifier, not an identity provider, authoritative registry, serving gateway, scientific-evidence validator, or production authorization issuer. See the [protocol evaluation](docs/protocol-evaluation.md) and [XGBoost/LLM instantiations](docs/protocol-case-studies.md).
 
 Solve and replay an incomplete-portfolio certificate:
 
@@ -196,10 +222,16 @@ The [literature-driven check critique](docs/check-critique-2026-08-22.md) maps t
 
 ## Development
 
-The standard local verification command is:
+The Python, schema and executable-regression command is:
 
 ```bash
 make check
+```
+
+With the pinned Lean toolchain installed, run the complete repository check:
+
+```bash
+make verify
 ```
 
 Run the test suite:
@@ -215,7 +247,7 @@ Run a source compilation check:
 PYTHONPATH=src python -m compileall -q src tests
 ```
 
-The GitHub Actions workflow runs both checks and verifies that committed JSON schemas match the current models.
+The GitHub Actions workflow runs Python/schema checks and the independent Lean build, theorem-inventory and axiom audit.
 
 ## Protocol conformance and production boundary
 

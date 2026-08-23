@@ -1,4 +1,4 @@
-"""Normative model-release lifecycle transcript and structural verifier.
+"""Normative model-release lifecycle transcript verifier.
 
 The finite protocol-feasibility solver answers whether a declared family of
 evidence laws can support a sound and live gate.  This module answers a
@@ -7,11 +7,12 @@ end-to-end lifecycle from registration through evidence, assessment,
 authorization, atomic portfolio commit, deployment, monitoring, and terminal
 action.
 
-The verifier checks typed state transitions, hash chaining, role separation,
-artifact digests, and fail-closed authorization preconditions.  It does not
-authenticate actors or prove that referenced evidence is scientifically true;
-production must verify signatures and identities in separately protected
-services.
+The structural profile checks typed state transitions, hash chaining, role
+separation, artifact digests, and fail-closed authorization preconditions.  The
+authenticated profile additionally verifies trust-anchored Ed25519 signatures
+over domain-separated, release-bound events and artifacts.  Neither profile
+proves that referenced evidence is scientifically true or replaces protected
+production identity, registry, gateway, and key-management services.
 """
 
 from __future__ import annotations
@@ -20,12 +21,18 @@ from datetime import datetime, timezone
 from decimal import Decimal
 from enum import StrEnum
 from pathlib import Path
-from typing import Literal
+from typing import Literal, Mapping
 
 from pydantic import Field, model_validator
 
 from .errors import IntegrityError
-from .integrity import canonical_json_bytes, sha256_bytes, verify_source_file
+from .integrity import (
+    canonical_json_bytes,
+    sha256_bytes,
+    sign_canonical,
+    verify_canonical_signature,
+    verify_source_file,
+)
 from .models import OverallVerdict, StrictModel
 from .optimizer import OptimizationOutcome
 
@@ -115,6 +122,18 @@ class MonitoringOutcome(StrEnum):
     EXPIRE = "expire"
 
 
+class ReleaseProtocolVerificationProfile(StrEnum):
+    STRUCTURAL = "structural_v1"
+    AUTHENTICATED = "authenticated_v1"
+
+
+class ReleaseProtocolSignature(StrictModel):
+    signer_key_id: str = Field(pattern=r"^[0-9a-f]{24}$")
+    signature_algorithm: Literal["Ed25519"] = "Ed25519"
+    canonicalization: Literal["MRA-PY-JSON-1"] = "MRA-PY-JSON-1"
+    signature_b64: str = Field(min_length=1)
+
+
 class ReleaseProtocolActor(StrictModel):
     actor_id: str = Field(min_length=3, max_length=128, pattern=r"^[A-Za-z0-9._:-]+$")
     role: ReleaseProtocolRole
@@ -128,6 +147,7 @@ class ReleaseProtocolArtifact(StrictModel):
     path: str = Field(min_length=1)
     sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
     producer_actor_id: str = Field(min_length=3, max_length=128, pattern=r"^[A-Za-z0-9._:-]+$")
+    signature: ReleaseProtocolSignature | None = None
 
     @model_validator(mode="after")
     def path_is_confined_to_the_protocol_bundle(self) -> ReleaseProtocolArtifact:
@@ -146,6 +166,7 @@ class ReleaseProtocolEvent(StrictModel):
     actor_role: ReleaseProtocolRole
     previous_event_sha256: str | None = Field(default=None, pattern=r"^[0-9a-f]{64}$")
     artifacts: tuple[ReleaseProtocolArtifact, ...] = ()
+    signature: ReleaseProtocolSignature | None = None
 
     mandatory_evidence_complete: bool | None = None
     selection_coverage_valid: bool | None = None
@@ -166,6 +187,8 @@ class ReleaseProtocolEvent(StrictModel):
     authorization_expires_at: datetime | None = None
     expected_registry_head_sha256: str | None = Field(default=None, pattern=r"^[0-9a-f]{64}$")
     committed_registry_head_sha256: str | None = Field(default=None, pattern=r"^[0-9a-f]{64}$")
+    expected_registry_sequence: int | None = Field(default=None, ge=0)
+    committed_registry_sequence: int | None = Field(default=None, ge=1)
     atomic_compare_and_swap_succeeded: bool | None = None
     deployed_artifact_sha256: str | None = Field(default=None, pattern=r"^[0-9a-f]{64}$")
     deployed_interface_sha256: str | None = Field(default=None, pattern=r"^[0-9a-f]{64}$")
@@ -184,6 +207,9 @@ class ReleaseProtocolEvent(StrictModel):
         artifact_ids = [artifact.artifact_id for artifact in self.artifacts]
         if len(artifact_ids) != len(set(artifact_ids)):
             raise ValueError("event artifact identifiers must be unique")
+        artifact_kinds = [artifact.kind for artifact in self.artifacts]
+        if len(artifact_kinds) != len(set(artifact_kinds)):
+            raise ValueError("event artifact kinds must be unique; use one manifest per kind")
 
         payload_fields = {
             "mandatory_evidence_complete",
@@ -198,6 +224,8 @@ class ReleaseProtocolEvent(StrictModel):
             "authorization_expires_at",
             "expected_registry_head_sha256",
             "committed_registry_head_sha256",
+            "expected_registry_sequence",
+            "committed_registry_sequence",
             "atomic_compare_and_swap_succeeded",
             "deployed_artifact_sha256",
             "deployed_interface_sha256",
@@ -223,6 +251,8 @@ class ReleaseProtocolEvent(StrictModel):
             ReleaseProtocolEventType.COMMIT_PORTFOLIO: {
                 "expected_registry_head_sha256",
                 "committed_registry_head_sha256",
+                "expected_registry_sequence",
+                "committed_registry_sequence",
                 "atomic_compare_and_swap_succeeded",
             },
             ReleaseProtocolEventType.ACTIVATE_DEPLOYMENT: {
@@ -250,8 +280,11 @@ class ReleaseProtocolEvent(StrictModel):
 
 
 class ReleaseProtocolRun(StrictModel):
-    schema_version: Literal["1.0"] = "1.0"
+    schema_version: Literal["1.1"] = "1.1"
     protocol_id: Literal["MRAP/1.0"] = "MRAP/1.0"
+    verification_profile: ReleaseProtocolVerificationProfile = (
+        ReleaseProtocolVerificationProfile.STRUCTURAL
+    )
     release_id: str = Field(min_length=3, max_length=128, pattern=r"^[A-Za-z0-9._:-]+$")
     release_instance_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
     artifact_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
@@ -259,6 +292,7 @@ class ReleaseProtocolRun(StrictModel):
     policy_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
     population_scope_sha256s: dict[str, str] = Field(min_length=1)
     registered_portfolio_head_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
+    registered_portfolio_sequence: int = Field(ge=0)
     actors: tuple[ReleaseProtocolActor, ...]
     events: tuple[ReleaseProtocolEvent, ...] = Field(min_length=1)
     claimed_state: ReleaseProtocolState
@@ -417,6 +451,86 @@ def release_protocol_event_sha256(event: ReleaseProtocolEvent) -> str:
     return sha256_bytes(canonical_json_bytes(event))
 
 
+def release_protocol_artifact_signature_payload(
+    run: ReleaseProtocolRun,
+    event: ReleaseProtocolEvent,
+    artifact: ReleaseProtocolArtifact,
+) -> dict[str, object]:
+    """Return the domain-separated payload signed by an artifact producer."""
+    return {
+        "domain": "MRAP/1.0:artifact-signature:v1",
+        "schema_version": run.schema_version,
+        "protocol_id": run.protocol_id,
+        "verification_profile": run.verification_profile,
+        "release_id": run.release_id,
+        "release_instance_sha256": run.release_instance_sha256,
+        "event_id": event.event_id,
+        "event_type": event.event_type,
+        "artifact": artifact.model_dump(mode="json", exclude={"signature"}, exclude_none=True),
+    }
+
+
+def release_protocol_event_signature_payload(
+    run: ReleaseProtocolRun,
+    event: ReleaseProtocolEvent,
+) -> dict[str, object]:
+    """Return the domain-separated payload signed by a protocol event actor."""
+    return {
+        "domain": "MRAP/1.0:event-signature:v1",
+        "schema_version": run.schema_version,
+        "protocol_id": run.protocol_id,
+        "verification_profile": run.verification_profile,
+        "release_id": run.release_id,
+        "release_instance_sha256": run.release_instance_sha256,
+        "artifact_sha256": run.artifact_sha256,
+        "interface_sha256": run.interface_sha256,
+        "registered_portfolio_head_sha256": run.registered_portfolio_head_sha256,
+        "registered_portfolio_sequence": run.registered_portfolio_sequence,
+        "event": event.model_dump(mode="json", exclude={"signature"}, exclude_none=True),
+    }
+
+
+def sign_release_protocol_artifact(
+    run: ReleaseProtocolRun,
+    event: ReleaseProtocolEvent,
+    artifact: ReleaseProtocolArtifact,
+    private_key_path: Path,
+) -> ReleaseProtocolArtifact:
+    """Bind an artifact declaration to its release, event, producer, and bytes."""
+    signer_id, signature_b64 = sign_canonical(
+        release_protocol_artifact_signature_payload(run, event, artifact),
+        private_key_path,
+    )
+    return artifact.model_copy(
+        update={
+            "signature": ReleaseProtocolSignature(
+                signer_key_id=signer_id,
+                signature_b64=signature_b64,
+            )
+        }
+    )
+
+
+def sign_release_protocol_event(
+    run: ReleaseProtocolRun,
+    event: ReleaseProtocolEvent,
+    private_key_path: Path,
+) -> ReleaseProtocolEvent:
+    """Bind an event to the complete release context and signed artifact set."""
+    signer_id, signature_b64 = sign_canonical(
+        release_protocol_event_signature_payload(run, event),
+        private_key_path,
+    )
+    return event.model_copy(
+        update={
+            "signature": ReleaseProtocolSignature(
+                signer_key_id=signer_id,
+                signature_b64=signature_b64,
+            )
+        }
+    )
+
+
 def _transition_error(
     reasons: list[str],
     event: ReleaseProtocolEvent,
@@ -432,19 +546,71 @@ def _transition_error(
     return False
 
 
+def _verify_protocol_signature(
+    *,
+    label: str,
+    payload: dict[str, object],
+    signature: ReleaseProtocolSignature | None,
+    expected_key_id: str,
+    trusted_public_keys: Mapping[str, Path],
+    compromised_key_ids: frozenset[str],
+    reasons: list[str],
+) -> None:
+    if signature is None:
+        reasons.append(f"{label} has no authenticated signature")
+        return
+    if signature.signer_key_id != expected_key_id:
+        reasons.append(f"{label} signature does not match its designated actor key")
+        return
+    if signature.signer_key_id in compromised_key_ids:
+        reasons.append(f"{label} was signed by a revoked or compromised key")
+        return
+    public_key_path = trusted_public_keys.get(signature.signer_key_id)
+    if public_key_path is None:
+        reasons.append(f"{label} signer is absent from the external trust store")
+        return
+    try:
+        verify_canonical_signature(
+            payload,
+            signer_id=signature.signer_key_id,
+            signature_b64=signature.signature_b64,
+            public_key_path=public_key_path,
+        )
+    except (IntegrityError, OSError, ValueError) as exc:
+        reasons.append(f"{label} signature verification failed: {exc}")
+
+
 def verify_release_protocol_run(
     run: ReleaseProtocolRun,
     base_dir: Path,
     *,
     verify_artifact_files: bool = True,
     as_of: datetime | None = None,
+    trusted_public_keys: Mapping[str, Path] | None = None,
+    compromised_key_ids: frozenset[str] = frozenset(),
+    required_profile: ReleaseProtocolVerificationProfile | None = None,
 ) -> ReleaseProtocolVerification:
     """Replay the complete lifecycle transcript without mutating external state."""
     verification_time = as_of or datetime.now(timezone.utc)
     if verification_time.utcoffset() is None:
         raise ValueError("protocol verification time must include a timezone offset")
     reasons: list[str] = []
+    if required_profile is not None and run.verification_profile is not required_profile:
+        reasons.append(
+            f"verification policy requires profile {required_profile.value}; "
+            f"transcript declares {run.verification_profile.value}"
+        )
     actors = {actor.actor_id: actor for actor in run.actors}
+    trust_store = trusted_public_keys or {}
+    authenticated = (
+        run.verification_profile is ReleaseProtocolVerificationProfile.AUTHENTICATED
+    )
+    if authenticated:
+        key_ids = [actor.key_id for actor in run.actors]
+        if len(key_ids) != len(set(key_ids)):
+            reasons.append(
+                "authenticated profile requires a distinct trust-anchored key for every actor"
+            )
     event_hashes: list[str] = []
     previous_hash: str | None = None
     previous_time: datetime | None = None
@@ -476,6 +642,16 @@ def verify_release_protocol_run(
         actor = actors.get(event.actor_id)
         if actor is None or actor.role is not event.actor_role:
             reasons.append(f"event {event.event_id} does not match its designated actor and role")
+        elif authenticated:
+            _verify_protocol_signature(
+                label=f"event {event.event_id}",
+                payload=release_protocol_event_signature_payload(run, event),
+                signature=event.signature,
+                expected_key_id=actor.key_id,
+                trusted_public_keys=trust_store,
+                compromised_key_ids=compromised_key_ids,
+                reasons=reasons,
+            )
         if event.actor_role not in _EVENT_ROLES[event.event_type]:
             reasons.append(
                 f"role {event.actor_role.value} cannot perform event {event.event_type.value}"
@@ -493,6 +669,12 @@ def verify_release_protocol_run(
                 f"event {event.event_id} omits required artifacts: "
                 f"{sorted(kind.value for kind in missing)}"
             )
+        unexpected = kinds - _REQUIRED_ARTIFACTS[event.event_type]
+        if unexpected:
+            reasons.append(
+                f"event {event.event_id} contains artifacts for another event type: "
+                f"{sorted(kind.value for kind in unexpected)}"
+            )
         for artifact in event.artifacts:
             producer = actors.get(artifact.producer_actor_id)
             if producer is None:
@@ -503,6 +685,16 @@ def verify_release_protocol_run(
                 reasons.append(
                     f"artifact {artifact.artifact_id} cannot be produced by role "
                     f"{producer.role.value}"
+                )
+            elif authenticated:
+                _verify_protocol_signature(
+                    label=f"artifact {artifact.artifact_id}",
+                    payload=release_protocol_artifact_signature_payload(run, event, artifact),
+                    signature=artifact.signature,
+                    expected_key_id=producer.key_id,
+                    trusted_public_keys=trust_store,
+                    compromised_key_ids=compromised_key_ids,
+                    reasons=reasons,
                 )
             if verify_artifact_files:
                 try:
@@ -644,6 +836,10 @@ def verify_release_protocol_run(
             if not _transition_error(reasons, event, state, (ReleaseProtocolState.COMMIT_PENDING,)):
                 if event.expected_registry_head_sha256 != run.registered_portfolio_head_sha256:
                     reasons.append(f"event {event.event_id} compares against the wrong portfolio head")
+                if event.expected_registry_sequence != run.registered_portfolio_sequence:
+                    reasons.append(
+                        f"event {event.event_id} compares against the wrong portfolio sequence"
+                    )
                 if event.atomic_compare_and_swap_succeeded is not True:
                     reasons.append(f"event {event.event_id} lacks a successful atomic compare-and-swap")
                 if event.committed_registry_head_sha256 in (
@@ -651,6 +847,14 @@ def verify_release_protocol_run(
                     run.registered_portfolio_head_sha256,
                 ):
                     reasons.append(f"event {event.event_id} does not establish a new portfolio head")
+                if (
+                    event.committed_registry_sequence is None
+                    or event.expected_registry_sequence is None
+                    or event.committed_registry_sequence <= event.expected_registry_sequence
+                ):
+                    reasons.append(
+                        f"event {event.event_id} does not strictly advance the append-only portfolio sequence"
+                    )
                 if authorization_expiry is None or event.occurred_at >= authorization_expiry:
                     reasons.append(f"event {event.event_id} commits an absent or expired request")
                 next_committed_registry_head = event.committed_registry_head_sha256
@@ -673,12 +877,17 @@ def verify_release_protocol_run(
             if not _transition_error(reasons, event, state, (ReleaseProtocolState.ACTIVE,)):
                 if event.monitoring_outcome is None:
                     reasons.append(f"event {event.event_id} omits the monitoring outcome")
+                elif event.monitoring_outcome in (
+                    MonitoringOutcome.REVOKE,
+                    MonitoringOutcome.EXPIRE,
+                ):
+                    reasons.append(
+                        f"event {event.event_id} must use a role-authorized revoke or expire event"
+                    )
                 else:
                     next_state = {
                         MonitoringOutcome.CONTINUE: ReleaseProtocolState.ACTIVE,
                         MonitoringOutcome.SUSPEND: ReleaseProtocolState.SUSPENDED,
-                        MonitoringOutcome.REVOKE: ReleaseProtocolState.REVOKED,
-                        MonitoringOutcome.EXPIRE: ReleaseProtocolState.EXPIRED,
                     }[event.monitoring_outcome]
 
         elif event.event_type is ReleaseProtocolEventType.SUSPEND_RELEASE:
@@ -690,7 +899,11 @@ def verify_release_protocol_run(
         elif event.event_type is ReleaseProtocolEventType.REVOKE_RELEASE:
             if not _transition_error(
                 reasons, event, state,
-                (ReleaseProtocolState.ACTIVE, ReleaseProtocolState.SUSPENDED),
+                (
+                    ReleaseProtocolState.AUTHORIZED,
+                    ReleaseProtocolState.ACTIVE,
+                    ReleaseProtocolState.SUSPENDED,
+                ),
             ):
                 if not event.reason:
                     reasons.append(f"event {event.event_id} omits the revocation reason")
@@ -705,6 +918,10 @@ def verify_release_protocol_run(
                     ReleaseProtocolState.SUSPENDED,
                 ),
             ):
+                if authorization_expiry is None or event.occurred_at < authorization_expiry:
+                    reasons.append(
+                        f"event {event.event_id} attempts expiry before the authorization deadline"
+                    )
                 next_state = ReleaseProtocolState.EXPIRED
 
         elif event.event_type is ReleaseProtocolEventType.ABORT_RELEASE:

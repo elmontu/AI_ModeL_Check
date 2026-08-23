@@ -45,7 +45,9 @@ register -> freeze plan -> freeze evidence -> assess -> optimize
         -> gateway activation -> monitor -> suspend / expire / revoke
 ```
 
-`release_protocol.py` can structurally replay this lifecycle as a hash-chained transcript. The authoritative registry, authenticated actors, gateway and monitor remain external production components.
+`release_protocol.py` can replay this lifecycle as a hash-chained transcript. Its structural profile checks state and binding rules; its authenticated profile additionally verifies release-bound Ed25519 event/artifact signatures against an external trust store and supplied compromise list. The authoritative identity system, registry, gateway and monitor remain external production components.
+
+The independent `formal/lean` package is organized as the reusable `MRAP` protocol library. Its public umbrella exports lifecycle, symbolic authenticated-message, ideal atomic registry/gateway, and finite-statistical semantics; mutation witnesses and the axiom-audit entry point remain outside that public surface. It proves authorization integrity, message replay/binding properties, stale-head exclusion, role authorization, executable commit–activate–serve behavior, fail-closed substitution/expiry/revocation behavior, non-vacuity and a per-component finite statistical union bound. A checked correspondence manifest prevents vocabulary and permission drift, but neither the Python verifier nor a concrete registry/gateway has been proved to refine that specification; the formal theorem therefore applies directly to the Lean model, while implementation conformance remains test-based or external.
 
 ## Package map
 
@@ -61,10 +63,11 @@ register -> freeze plan -> freeze evidence -> assess -> optimize
 | `incomplete_portfolio.py` | Finite incomplete-portfolio solver and replay verifier |
 | `portfolio_statistics.py` | Simultaneous marginal evidence generation and verification |
 | `protocol_feasibility.py` | Finite protocol solver and exact certificate replay |
-| `release_protocol.py` | Typed MRAP/1.0 transcript, state machine, artifact-role checks, and structural replay |
+| `release_protocol.py` | Typed MRAP/1.0 transcript, state machine, artifact-role checks, structural replay, and trust-anchored authenticated replay |
 | `integrity.py` | Hashing and Ed25519 manifests |
 | `audit.py` | Hash-chained SQLite audit records |
 | `cli.py` | Command-line interface |
+| `formal/lean/` | Lean 4 lifecycle/message and ideal-deployment semantics, composed reachability, CAS, serving-denial, non-vacuity and finite statistical proofs |
 
 ## Trust boundaries
 

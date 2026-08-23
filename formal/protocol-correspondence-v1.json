@@ -1,0 +1,92 @@
+{
+  "schema_version": "1.0",
+  "python_contract_version": "1.1",
+  "lean_toolchain": "leanprover/lean4:v4.32.1",
+  "roles": {
+    "model_owner": "modelOwner",
+    "policy_authority": "policyAuthority",
+    "population_steward": "populationSteward",
+    "configuration_generator": "configurationGenerator",
+    "evidence_authority": "evidenceAuthority",
+    "independent_assessor": "independentAssessor",
+    "optimization_authority": "optimizationAuthority",
+    "authorization_authority": "authorizationAuthority",
+    "portfolio_registry": "portfolioRegistry",
+    "deployment_gateway": "deploymentGateway",
+    "monitoring_authority": "monitoringAuthority",
+    "incident_authority": "incidentAuthority"
+  },
+  "states": {
+    "draft": "draft",
+    "registered": "registered",
+    "plan_frozen": "planFrozen",
+    "evidence_frozen": "evidenceFrozen",
+    "assessed": "assessed",
+    "optimized": "optimized",
+    "commit_pending": "commitPending",
+    "authorized": "authorized",
+    "active": "active",
+    "suspended": "suspended",
+    "revoked": "revoked",
+    "expired": "expired",
+    "redesign_required": "redesignRequired",
+    "rejected": "rejected",
+    "aborted": "aborted"
+  },
+  "events": {
+    "register_scope": {
+      "lean_actions": ["register"],
+      "python_roles": ["model_owner"]
+    },
+    "approve_evidence_plan": {
+      "lean_actions": ["freezePlan"],
+      "python_roles": ["independent_assessor"]
+    },
+    "close_evidence": {
+      "lean_actions": ["closeEvidence"],
+      "python_roles": ["evidence_authority"]
+    },
+    "record_assessment": {
+      "lean_actions": ["assess"],
+      "python_roles": ["independent_assessor"]
+    },
+    "record_selection": {
+      "lean_actions": ["optimize", "redesign", "reject"],
+      "python_roles": ["optimization_authority"]
+    },
+    "submit_authorization": {
+      "lean_actions": ["submitAuthorization"],
+      "python_roles": ["authorization_authority"]
+    },
+    "commit_portfolio": {
+      "lean_actions": ["commitAuthorization"],
+      "python_roles": ["portfolio_registry"]
+    },
+    "activate_deployment": {
+      "lean_actions": ["activate"],
+      "python_roles": ["deployment_gateway"]
+    },
+    "review_monitoring": {
+      "lean_actions": ["monitor", "suspend"],
+      "python_roles": ["monitoring_authority"]
+    },
+    "suspend_release": {
+      "lean_actions": ["suspend"],
+      "python_roles": ["incident_authority", "monitoring_authority"]
+    },
+    "revoke_release": {
+      "lean_actions": ["revoke"],
+      "python_roles": ["authorization_authority", "incident_authority"]
+    },
+    "expire_release": {
+      "lean_actions": ["expire"],
+      "python_roles": ["authorization_authority", "deployment_gateway"]
+    },
+    "abort_release": {
+      "lean_actions": ["abort"],
+      "python_roles": ["authorization_authority", "independent_assessor", "model_owner", "portfolio_registry"]
+    }
+  },
+  "lean_environment_actions": ["externalCommit"],
+  "claim": "drift guard only; this manifest and its tests are not a semantic refinement proof"
+}

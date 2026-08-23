@@ -1,0 +1,42 @@
+import MRAP
+import MRAP.Mutants
+
+#print axioms MRAP.reachable_authorization_integrity
+#print axioms MRAP.active_implies_committed_clear_and_bound
+#print axioms MRAP.step_preserves_release_identity
+#print axioms MRAP.terminal_release_phase_is_absorbing
+#print axioms MRAP.stale_head_second_commit_fails
+#print axioms MRAP.every_step_is_role_authorized
+#print axioms MRAP.reachable_registry_head_never_decreases
+#print axioms MRAP.valid_active_trace_exists
+#print axioms MRAP.Deployment.commit_succeeds_iff_admissible
+#print axioms MRAP.Deployment.successful_commit_is_atomic_and_bound
+#print axioms MRAP.Deployment.committed_request_replay_is_rejected
+#print axioms MRAP.Deployment.used_nonce_commit_is_rejected
+#print axioms MRAP.Deployment.stale_concurrent_commit_is_rejected
+#print axioms MRAP.Deployment.activation_succeeds_iff_current_record_admissible
+#print axioms MRAP.Deployment.successful_activation_can_serve
+#print axioms MRAP.Deployment.can_serve_implies_current_live_bound_authorization
+#print axioms MRAP.Deployment.artifact_substitution_cannot_be_served
+#print axioms MRAP.Deployment.interface_substitution_cannot_be_served
+#print axioms MRAP.Deployment.stale_gateway_cannot_serve
+#print axioms MRAP.Deployment.expired_lease_cannot_serve
+#print axioms MRAP.Deployment.authorization_deadline_cannot_serve
+#print axioms MRAP.Deployment.revocation_stops_existing_gateway
+#print axioms MRAP.Deployment.suspension_stops_existing_gateway
+#print axioms MRAP.Deployment.reachable_active_has_serving_realization
+#print axioms MRAP.Deployment.ideal_commit_and_activation_are_executable
+#print axioms MRAP.Security.successful_acceptance_is_authenticated_authorized_and_bound
+#print axioms MRAP.Security.accepted_envelope_replay_is_rejected
+#print axioms MRAP.Security.mismatched_artifact_is_rejected
+#print axioms MRAP.Security.compromised_signer_is_rejected
+#print axioms MRAP.Security.expired_envelope_is_rejected
+#print axioms MRAP.Security.authenticated_step_requires_a_bound_message
+#print axioms MRAP.Security.authenticated_reachable_projects
+#print axioms MRAP.Security.authenticated_reachable_authorization_integrity
+#print axioms MRAP.Security.authenticated_active_implies_committed_clear_and_bound
+#print axioms MRAP.Statistics.finite_false_authorization_bound
+#print axioms MRAP.Statistics.finite_false_authorization_within_budget
+#print axioms MRAP.Statistics.rational_experiment_false_authorization_within_budget
+#print axioms MRAP.Statistics.registered_component_budget_controls_false_authorization
+#print axioms MRAP.Mutants.direct_unsafe_activation_is_rejected

@@ -55,7 +55,11 @@ from .protocol_feasibility import (
     solve_protocol_feasibility,
     verify_protocol_feasibility,
 )
-from .release_protocol import ReleaseProtocolRun, verify_release_protocol_run
+from .release_protocol import (
+    ReleaseProtocolRun,
+    ReleaseProtocolVerificationProfile,
+    verify_release_protocol_run,
+)
 
 
 def _read_json(path: Path) -> dict:
@@ -168,7 +172,7 @@ def build_parser() -> argparse.ArgumentParser:
 
     release_protocol_verify = subparsers.add_parser(
         "release-protocol-verify",
-        help="structurally replay an MRAP/1.0 lifecycle transcript",
+        help="replay an MRAP/1.0 transcript under its structural or authenticated profile",
     )
     release_protocol_verify.add_argument("transcript", type=Path)
     release_protocol_verify.add_argument(
@@ -185,6 +189,22 @@ def build_parser() -> argparse.ArgumentParser:
         "--as-of",
         type=datetime.fromisoformat,
         help="timezone-aware status-verification time (default: current UTC time)",
+    )
+    release_protocol_verify.add_argument(
+        "--trust-store",
+        type=Path,
+        help="JSON object mapping trusted signer-key IDs to PEM public-key paths",
+    )
+    release_protocol_verify.add_argument(
+        "--compromised-key-id",
+        action="append",
+        default=[],
+        help="reject a signer key as revoked/compromised; may be repeated",
+    )
+    release_protocol_verify.add_argument(
+        "--require-authenticated",
+        action="store_true",
+        help="reject structural transcripts to prevent verification-profile downgrade",
     )
     portfolio_verify.add_argument(
         "--skip-evidence-files",
@@ -425,6 +445,22 @@ def main(argv: list[str] | None = None) -> int:
             )
         elif args.command == "release-protocol-verify":
             run = ReleaseProtocolRun.model_validate(_read_json(args.transcript))
+            trusted_public_keys: dict[str, Path] = {}
+            if args.trust_store is not None:
+                trust_raw = _read_json(args.trust_store)
+                if not isinstance(trust_raw, dict) or not all(
+                    isinstance(key, str) and isinstance(value, str)
+                    for key, value in trust_raw.items()
+                ):
+                    raise AssuranceError("protocol trust store must map string key IDs to string paths")
+                trusted_public_keys = {
+                    key: (
+                        Path(value)
+                        if Path(value).is_absolute()
+                        else args.trust_store.parent / value
+                    )
+                    for key, value in trust_raw.items()
+                }
             verification = verify_release_protocol_run(
                 run,
                 args.artifact_base
@@ -432,17 +468,35 @@ def main(argv: list[str] | None = None) -> int:
                 else args.transcript.parent,
                 verify_artifact_files=not args.skip_artifact_files,
                 as_of=args.as_of,
+                trusted_public_keys=trusted_public_keys,
+                compromised_key_ids=frozenset(args.compromised_key_id),
+                required_profile=(
+                    ReleaseProtocolVerificationProfile.AUTHENTICATED
+                    if args.require_authenticated
+                    else None
+                ),
             )
             if not verification.valid:
                 raise AssuranceError(
-                    "release-protocol transcript failed structural replay: "
+                    "release-protocol transcript failed verification: "
                     + "; ".join(verification.reasons)
                 )
+            profile_label = (
+                "authenticated_verified"
+                if run.verification_profile.value == "authenticated_v1"
+                else "structurally_verified"
+            )
+            limitation = (
+                "authenticated replay validates trust-anchored signatures but does not issue "
+                "a production authorization"
+                if profile_label == "authenticated_verified"
+                else "structural replay does not authenticate actors or issue a production authorization"
+            )
             print(
-                f"structurally_verified state={verification.final_state.value} "
+                f"{profile_label} state={verification.final_state.value} "
                 f"authorization_recorded={str(verification.authorization_issued).lower()} "
                 f"active={str(verification.deployment_active).lower()}; "
-                "structural replay does not authenticate actors or issue a production authorization"
+                f"{limitation}"
             )
         elif args.command == "portfolio-multinomial-generate":
             request = MultinomialEvidenceRequest.model_validate(_read_json(args.request))

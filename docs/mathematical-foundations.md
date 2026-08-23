@@ -3,7 +3,7 @@
 **Framework version:** 0.7.0
 **Scope:** proof layer for [MRAP/1.0](model-release-assurance-protocol.md): finite release experiments, evidence-gate feasibility, incomplete portfolios, binomial evidence, and pairwise differential-privacy consequences
 
-This document is the mathematical appendix to the normative [Model Release Assurance Protocol](model-release-assurance-protocol.md). It is not itself a lifecycle protocol and none of its certificates is a production authorization. MRAP/1.0 defines the actors, signed messages, state machine, atomic registry transition, gateway enforcement, monitoring, and end-to-end conditional safety theorem.
+This document is the mathematical appendix to the candidate normative [Model Release Assurance Protocol](model-release-assurance-protocol.md). It is not itself a lifecycle protocol and none of its certificates is a production authorization. MRAP/1.0 defines the actors, signed messages, state machine, atomic registry transition, gateway enforcement and monitoring. Its authorization-integrity and finite statistical-accounting core is machine checked; the broader active-implies-acceptable statement remains a conditional engineering corollary with explicit adequacy and implementation-refinement obligations.
 
 The appendix separates four kinds of statement that must not be conflated:
 
@@ -147,7 +147,7 @@ and the statistical gate returns `CLEAR` only when \(U_t\le\tau_t\) for every \(
 
 **Proof.** On the simultaneous-coverage event, clearance implies \(\theta_t\le U_t\le\tau_t\) for all mandatory threats. A false statistical clearance can therefore occur only when simultaneous coverage fails. \(\square\)
 
-This is an inner-gate theorem, not the end-to-end protocol theorem. It provides no protection when the threat set is incomplete, the observation channel is wrong, the sampling model fails, the prior is unanchored, the candidate was selected outside the covered family, or the evidence source is false. MRAP/1.0 Section 13 composes the declared statistical families with registry and gateway invariants.
+This is an inner-gate theorem, not a proof of end-to-end deployment safety. It provides no protection when the threat set is incomplete, the observation channel is wrong, the sampling model fails, the prior is unanchored, the candidate was selected outside the covered family, or the evidence source is false. MRAP/1.0 Section 13 states the machine-checked finite bound and the additional assumptions needed to compose declared statistical families with registry and gateway invariants.
 
 ### Selection requirement
 

@@ -1,10 +1,10 @@
 PYTHON ?= python3
 SCHEMA_TMP ?= /tmp/model-release-assurance-schemas
 
-.PHONY: help compile test schemas check build clean
+.PHONY: help compile test schemas formal check verify build clean
 
 help:
-	@echo "Targets: compile, test, schemas, check, build, clean"
+	@echo "Targets: compile, test, schemas, formal, check, verify, build, clean"
 
 compile:
 	$(PYTHON) -m compileall -q src tests scripts
@@ -28,10 +28,15 @@ schemas:
 	diff -u schemas/signed-optimization-manifest-v2.json $(SCHEMA_TMP)/signed-optimization-manifest-v2.json
 	PYTHONPATH=src $(PYTHON) -m model_release_assurance schema --kind manifest --output $(SCHEMA_TMP)/signed-manifest-v1.json
 	diff -u schemas/signed-manifest-v1.json $(SCHEMA_TMP)/signed-manifest-v1.json
-	PYTHONPATH=src $(PYTHON) -m model_release_assurance schema --kind release-protocol-run --output $(SCHEMA_TMP)/release-protocol-run-v1.json
-	diff -u schemas/release-protocol-run-v1.json $(SCHEMA_TMP)/release-protocol-run-v1.json
+	PYTHONPATH=src $(PYTHON) -m model_release_assurance schema --kind release-protocol-run --output $(SCHEMA_TMP)/release-protocol-run-v1.1.json
+	diff -u schemas/release-protocol-run-v1.1.json $(SCHEMA_TMP)/release-protocol-run-v1.1.json
+
+formal:
+	$(PYTHON) scripts/verify_formal_protocol.py
 
 check: compile test schemas
+
+verify: check formal
 
 build:
 	$(PYTHON) -m build

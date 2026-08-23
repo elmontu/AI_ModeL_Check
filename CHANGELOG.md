@@ -6,17 +6,27 @@ All user-visible changes to Model Release Assurance are recorded here. The proje
 
 ### Added
 
+- A pinned Lean 4 formalization of the MRAP role-indexed transition system with machine-checked authorization-integrity, release-binding, role-authorization, compare-and-swap and finite false-authorization-budget theorems.
+- Compiled negative witnesses, a reproducible proof/axiom audit wrapper, and a dedicated CI proof job that rejects proof placeholders and unapproved axioms.
 - A formal mathematical-foundations document with explicit finite decision games, Blackwell transfer, simultaneous-coverage authorization, soundness–liveness protocols, incomplete-portfolio optimization, differential-privacy bounds, proofs, assumptions, and non-claims.
 - Mathematical regression tests for arbitrary-prior finite-secret DP bounds and stable large-epsilon evaluation.
 - A normative MRAP/1.0 lifecycle protocol with explicit authorities, signed message semantics, immutable instances, admissibility gates, a state machine, atomic portfolio authorization, gateway activation, monitoring, revocation, recovery, security theorems, and conformance levels.
 - A typed lifecycle transcript and fail-closed structural verifier covering role-qualified artifact production, exact-decimal error spending, event hash chaining, assessment/selection gates, compare-and-swap authorization, deployment binding, expiry, monitoring, suspension, revocation, and abort behavior.
 - A `release-protocol-verify` command and versioned `ReleaseProtocolRun` JSON Schema.
+- A contract-1.1 authenticated transcript profile with external Ed25519 trust anchors, release-bound event/artifact signatures, known-compromise rejection, and monotonically increasing registry sequences.
+- Composed Lean authenticated-message/lifecycle semantics, replay/binding/compromise/expiry theorems, a non-vacuous valid activation trace, and a proof-carrying per-component statistical budget ledger.
+- An ideal Lean deployment functionality with atomic authorization commits, measured gateway activation, bounded per-request serving, lifecycle realization, and machine-checked replay, concurrency, substitution, expiry, suspension, and revocation denial theorems.
+- A standalone `mrap-protocol` Lean package with a stable `MRAP` public umbrella and audit-only mutation/theorem-inventory modules kept outside the exported protocol surface.
+- A checked Python-to-Lean role/state/action correspondence manifest and a reproducible adversarial mutation evaluation covering nineteen unsafe transcript classes.
 
 ### Fixed
 
+- Removed monitoring-authority privilege escalation through monitoring outcomes; revocation and expiry now require their dedicated role-authorized events.
+- Replaced hash-inequality-only registry freshness with explicit append-only sequence advancement and added authenticated CLI replay coverage.
 - Replaced the finite-secret DP ceiling's silent uniform-prior assumption with a proved bound using a policy-bound, source-validated upper bound on maximum secret-prior mass.
 - Required pairwise DP across every finite-secret alternative and a source-bound validation flag for the numerical prior cap before the evidence may clear.
 - Rewrote DP probability formulas into algebraically equivalent inverse-exponential forms that do not overflow for large finite epsilon.
+- Extended the proof/axiom audit parser to recognize declarations whose kernel audit reports no axiom dependencies.
 
 ## [0.6.0] - 2026-08-22
 

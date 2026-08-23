@@ -3,13 +3,17 @@ from __future__ import annotations
 import unittest
 from contextlib import redirect_stderr, redirect_stdout
 from datetime import datetime, timedelta, timezone
+from decimal import Decimal
 from io import StringIO
+import json
 from pathlib import Path
 from tempfile import TemporaryDirectory
 
+from cryptography.hazmat.primitives import serialization
 from pydantic import ValidationError
 
 from model_release_assurance.cli import main as cli_main
+from model_release_assurance.integrity import generate_ed25519_keypair, signer_key_id
 from model_release_assurance.models import OverallVerdict
 from model_release_assurance.optimizer import OptimizationOutcome
 from model_release_assurance.release_protocol import (
@@ -22,8 +26,11 @@ from model_release_assurance.release_protocol import (
     ReleaseProtocolEventType,
     ReleaseProtocolRole,
     ReleaseProtocolRun,
+    ReleaseProtocolVerificationProfile,
     ReleaseProtocolState,
     release_protocol_event_sha256,
+    sign_release_protocol_artifact,
+    sign_release_protocol_event,
     verify_release_protocol_run,
 )
 
@@ -208,6 +215,8 @@ class ReleaseProtocolTests(unittest.TestCase):
             ),
             expected_registry_head_sha256=_digest(5),
             committed_registry_head_sha256=_digest(6),
+            expected_registry_sequence=5,
+            committed_registry_sequence=6,
             atomic_compare_and_swap_succeeded=True,
         )
         add(
@@ -231,6 +240,7 @@ class ReleaseProtocolTests(unittest.TestCase):
             policy_sha256=_digest(4),
             population_scope_sha256s={"people": _digest(7)},
             registered_portfolio_head_sha256=_digest(5),
+            registered_portfolio_sequence=5,
             actors=self.actors,
             events=tuple(events),
             claimed_state=claimed_state,
@@ -243,6 +253,214 @@ class ReleaseProtocolTests(unittest.TestCase):
             verify_artifact_files=False,
             as_of=self.base_time + timedelta(minutes=10),
         )
+
+    @staticmethod
+    def rechain(events: list[ReleaseProtocolEvent]) -> None:
+        previous_hash: str | None = None
+        for index, event in enumerate(events):
+            event = event.model_copy(update={"previous_event_sha256": previous_hash})
+            events[index] = event
+            previous_hash = release_protocol_event_sha256(event)
+
+    def append_event(
+        self,
+        events: list[ReleaseProtocolEvent],
+        *,
+        event_type: ReleaseProtocolEventType,
+        role: ReleaseProtocolRole,
+        artifacts: tuple[ReleaseProtocolArtifact, ...],
+        **payload: object,
+    ) -> None:
+        sequence = len(events) + 1
+        previous_hash = release_protocol_event_sha256(events[-1]) if events else None
+        events.append(
+            ReleaseProtocolEvent(
+                sequence=sequence,
+                event_id=f"event:mutation:{sequence}",
+                event_type=event_type,
+                occurred_at=self.base_time + timedelta(minutes=sequence),
+                actor_id=self.actor_ids[role],
+                actor_role=role,
+                previous_event_sha256=previous_hash,
+                artifacts=artifacts,
+                **payload,
+            )
+        )
+
+    def authenticated_run(
+        self,
+        directory: Path,
+    ) -> tuple[ReleaseProtocolRun, dict[str, Path]]:
+        base = self.happy_run()
+        private_by_actor: dict[str, Path] = {}
+        trust_store: dict[str, Path] = {}
+        actors: list[ReleaseProtocolActor] = []
+        for index, actor in enumerate(base.actors):
+            private_path = directory / f"actor-{index}.private.pem"
+            public_path = directory / f"actor-{index}.public.pem"
+            generate_ed25519_keypair(private_path, public_path)
+            public_key = serialization.load_pem_public_key(public_path.read_bytes())
+            key_id = signer_key_id(public_key)
+            private_by_actor[actor.actor_id] = private_path
+            trust_store[key_id] = public_path
+            actors.append(actor.model_copy(update={"key_id": key_id}))
+
+        run = base.model_copy(
+            update={
+                "actors": tuple(actors),
+                "verification_profile": ReleaseProtocolVerificationProfile.AUTHENTICATED,
+            }
+        )
+        previous_hash: str | None = None
+        signed_events: list[ReleaseProtocolEvent] = []
+        for event in base.events:
+            unsigned_event = event.model_copy(
+                update={"previous_event_sha256": previous_hash, "signature": None}
+            )
+            signed_artifacts = tuple(
+                sign_release_protocol_artifact(
+                    run,
+                    unsigned_event,
+                    artifact.model_copy(update={"signature": None}),
+                    private_by_actor[artifact.producer_actor_id],
+                )
+                for artifact in unsigned_event.artifacts
+            )
+            unsigned_event = unsigned_event.model_copy(update={"artifacts": signed_artifacts})
+            signed_event = sign_release_protocol_event(
+                run,
+                unsigned_event,
+                private_by_actor[unsigned_event.actor_id],
+            )
+            signed_events.append(signed_event)
+            previous_hash = release_protocol_event_sha256(signed_event)
+        return run.model_copy(update={"events": tuple(signed_events)}), trust_store
+
+    def test_authenticated_profile_verifies_every_actor_and_artifact(self) -> None:
+        with TemporaryDirectory() as directory:
+            run, trust_store = self.authenticated_run(Path(directory))
+            result = verify_release_protocol_run(
+                run,
+                Path("."),
+                verify_artifact_files=False,
+                as_of=self.base_time + timedelta(minutes=10),
+                trusted_public_keys=trust_store,
+            )
+        self.assertTrue(result.valid, result.reasons)
+        self.assertTrue(result.deployment_active)
+
+    def test_authenticated_profile_rejects_event_tampering(self) -> None:
+        with TemporaryDirectory() as directory:
+            run, trust_store = self.authenticated_run(Path(directory))
+            events = list(run.events)
+            events[1] = events[1].model_copy(
+                update={"assurance_alpha_budget": Decimal("0.049")}
+            )
+            result = verify_release_protocol_run(
+                run.model_copy(update={"events": tuple(events)}),
+                Path("."),
+                verify_artifact_files=False,
+                as_of=self.base_time + timedelta(minutes=10),
+                trusted_public_keys=trust_store,
+            )
+        self.assertFalse(result.valid)
+        self.assertTrue(any("signature verification failed" in reason for reason in result.reasons))
+
+    def test_authenticated_profile_rejects_artifact_tampering(self) -> None:
+        with TemporaryDirectory() as directory:
+            run, trust_store = self.authenticated_run(Path(directory))
+            events = list(run.events)
+            artifacts = list(events[0].artifacts)
+            artifacts[0] = artifacts[0].model_copy(update={"sha256": _digest(999)})
+            events[0] = events[0].model_copy(update={"artifacts": tuple(artifacts)})
+            result = verify_release_protocol_run(
+                run.model_copy(update={"events": tuple(events)}),
+                Path("."),
+                verify_artifact_files=False,
+                as_of=self.base_time + timedelta(minutes=10),
+                trusted_public_keys=trust_store,
+            )
+        self.assertFalse(result.valid)
+        self.assertTrue(any("artifact" in reason and "signature" in reason for reason in result.reasons))
+
+    def test_authenticated_profile_rejects_cross_release_replay(self) -> None:
+        with TemporaryDirectory() as directory:
+            run, trust_store = self.authenticated_run(Path(directory))
+            result = verify_release_protocol_run(
+                run.model_copy(update={"release_id": "release:replayed"}),
+                Path("."),
+                verify_artifact_files=False,
+                as_of=self.base_time + timedelta(minutes=10),
+                trusted_public_keys=trust_store,
+            )
+        self.assertFalse(result.valid)
+        self.assertTrue(any("signature verification failed" in reason for reason in result.reasons))
+
+    def test_authenticated_profile_rejects_compromised_key(self) -> None:
+        with TemporaryDirectory() as directory:
+            run, trust_store = self.authenticated_run(Path(directory))
+            compromised = frozenset({run.actors[0].key_id})
+            result = verify_release_protocol_run(
+                run,
+                Path("."),
+                verify_artifact_files=False,
+                as_of=self.base_time + timedelta(minutes=10),
+                trusted_public_keys=trust_store,
+                compromised_key_ids=compromised,
+            )
+        self.assertFalse(result.valid)
+        self.assertTrue(any("compromised key" in reason for reason in result.reasons))
+
+    def test_authenticated_profile_rejects_untrusted_signers(self) -> None:
+        with TemporaryDirectory() as directory:
+            run, _trust_store = self.authenticated_run(Path(directory))
+            result = verify_release_protocol_run(
+                run,
+                Path("."),
+                verify_artifact_files=False,
+                as_of=self.base_time + timedelta(minutes=10),
+            )
+        self.assertFalse(result.valid)
+        self.assertTrue(any("external trust store" in reason for reason in result.reasons))
+
+    def test_registry_sequence_must_strictly_advance(self) -> None:
+        run = self.happy_run()
+        events = list(run.events)
+        commit_index = next(
+            index
+            for index, event in enumerate(events)
+            if event.event_type is ReleaseProtocolEventType.COMMIT_PORTFOLIO
+        )
+        events[commit_index] = events[commit_index].model_copy(
+            update={"committed_registry_sequence": 5}
+        )
+        self.rechain(events)
+        result = self.replay(run.model_copy(update={"events": tuple(events)}))
+        self.assertFalse(result.valid)
+        self.assertTrue(any("strictly advance" in reason for reason in result.reasons))
+
+    def test_monitoring_report_cannot_self_authorize_revocation(self) -> None:
+        run = self.happy_run()
+        events = list(run.events)
+        self.append_event(
+            events,
+            event_type=ReleaseProtocolEventType.REVIEW_MONITORING,
+            role=ReleaseProtocolRole.MONITORING_AUTHORITY,
+            artifacts=(
+                self.artifact(
+                    ReleaseProtocolArtifactKind.MONITORING_REPORT,
+                    ReleaseProtocolRole.MONITORING_AUTHORITY,
+                ),
+            ),
+            monitoring_outcome=MonitoringOutcome.REVOKE,
+        )
+        result = self.replay(
+            run.model_copy(
+                update={"events": tuple(events), "claimed_state": ReleaseProtocolState.REVOKED}
+            )
+        )
+        self.assertFalse(result.valid)
+        self.assertTrue(any("role-authorized revoke" in reason for reason in result.reasons))
 
     def test_complete_lifecycle_reaches_active(self) -> None:
         verification = self.replay(self.happy_run())
@@ -271,6 +489,80 @@ class ReleaseProtocolTests(unittest.TestCase):
         self.assertEqual(exit_code, 0, stderr.getvalue())
         self.assertIn("structurally_verified state=active", stdout.getvalue())
         self.assertIn("does not authenticate actors", stdout.getvalue())
+
+    def test_cli_authenticates_a_complete_transcript_against_external_trust(self) -> None:
+        with TemporaryDirectory() as directory:
+            base = Path(directory)
+            run, trust_store = self.authenticated_run(base)
+            transcript = base / "release-protocol-run.json"
+            transcript.write_text(run.model_dump_json(indent=2), encoding="utf-8")
+            trust_path = base / "trust-store.json"
+            trust_path.write_text(
+                json.dumps({key_id: path.name for key_id, path in trust_store.items()}),
+                encoding="utf-8",
+            )
+            stdout = StringIO()
+            stderr = StringIO()
+            with redirect_stdout(stdout), redirect_stderr(stderr):
+                exit_code = cli_main(
+                    [
+                        "release-protocol-verify",
+                        str(transcript),
+                        "--trust-store",
+                        str(trust_path),
+                        "--skip-artifact-files",
+                        "--as-of",
+                        (self.base_time + timedelta(minutes=10)).isoformat(),
+                    ]
+                )
+        self.assertEqual(exit_code, 0, stderr.getvalue())
+        self.assertIn("authenticated_verified state=active", stdout.getvalue())
+        self.assertIn("does not issue a production authorization", stdout.getvalue())
+
+    def test_cli_rejects_a_non_object_trust_store_cleanly(self) -> None:
+        with TemporaryDirectory() as directory:
+            base = Path(directory)
+            run = self.happy_run().model_copy(
+                update={"verification_profile": ReleaseProtocolVerificationProfile.AUTHENTICATED}
+            )
+            transcript = base / "release-protocol-run.json"
+            transcript.write_text(run.model_dump_json(indent=2), encoding="utf-8")
+            trust_path = base / "trust-store.json"
+            trust_path.write_text("[]", encoding="utf-8")
+            stderr = StringIO()
+            with redirect_stderr(stderr):
+                exit_code = cli_main(
+                    [
+                        "release-protocol-verify",
+                        str(transcript),
+                        "--trust-store",
+                        str(trust_path),
+                        "--skip-artifact-files",
+                    ]
+                )
+        self.assertEqual(exit_code, 2)
+        self.assertIn("trust store must map", stderr.getvalue())
+
+    def test_caller_can_forbid_authenticated_profile_downgrade(self) -> None:
+        with TemporaryDirectory() as directory:
+            transcript = Path(directory) / "release-protocol-run.json"
+            transcript.write_text(
+                self.happy_run().model_dump_json(indent=2), encoding="utf-8"
+            )
+            stderr = StringIO()
+            with redirect_stderr(stderr):
+                exit_code = cli_main(
+                    [
+                        "release-protocol-verify",
+                        str(transcript),
+                        "--require-authenticated",
+                        "--skip-artifact-files",
+                        "--as-of",
+                        (self.base_time + timedelta(minutes=10)).isoformat(),
+                    ]
+                )
+        self.assertEqual(exit_code, 2)
+        self.assertIn("requires profile authenticated_v1", stderr.getvalue())
 
     def test_failed_atomic_commit_cannot_authorize_or_activate(self) -> None:
         run = self.happy_run()
@@ -328,6 +620,46 @@ class ReleaseProtocolTests(unittest.TestCase):
         self.assertEqual(verification.final_state, ReleaseProtocolState.DRAFT)
         self.assertTrue(any("cannot be produced" in reason for reason in verification.reasons))
 
+    def test_unexpected_artifact_kind_is_rejected(self) -> None:
+        run = self.happy_run()
+        events = list(run.events)
+        events[0] = events[0].model_copy(
+            update={
+                "artifacts": events[0].artifacts
+                + (
+                    self.artifact(
+                        ReleaseProtocolArtifactKind.INCIDENT_RECORD,
+                        ReleaseProtocolRole.INCIDENT_AUTHORITY,
+                    ),
+                )
+            }
+        )
+        self.rechain(events)
+        verification = self.replay(run.model_copy(update={"events": tuple(events)}))
+        self.assertFalse(verification.valid)
+        self.assertTrue(any("another event type" in reason for reason in verification.reasons))
+
+    def test_duplicate_artifact_kind_is_rejected(self) -> None:
+        with self.assertRaisesRegex(ValidationError, "artifact kinds must be unique"):
+            ReleaseProtocolEvent(
+                sequence=1,
+                event_id="event:duplicate-kind",
+                event_type=ReleaseProtocolEventType.CLOSE_EVIDENCE,
+                occurred_at=self.base_time,
+                actor_id=self.actor_ids[ReleaseProtocolRole.EVIDENCE_AUTHORITY],
+                actor_role=ReleaseProtocolRole.EVIDENCE_AUTHORITY,
+                artifacts=(
+                    self.artifact(
+                        ReleaseProtocolArtifactKind.EVIDENCE_BUNDLE,
+                        ReleaseProtocolRole.EVIDENCE_AUTHORITY,
+                    ),
+                    self.artifact(
+                        ReleaseProtocolArtifactKind.EVIDENCE_BUNDLE,
+                        ReleaseProtocolRole.EVIDENCE_AUTHORITY,
+                    ),
+                ),
+            )
+
     def test_monitoring_can_suspend_an_active_release(self) -> None:
         active = self.happy_run()
         event = ReleaseProtocolEvent(
@@ -355,6 +687,52 @@ class ReleaseProtocolTests(unittest.TestCase):
         verification = self.replay(suspended)
         self.assertTrue(verification.valid, verification.reasons)
         self.assertEqual(verification.final_state, ReleaseProtocolState.SUSPENDED)
+        self.assertFalse(verification.deployment_active)
+
+    def test_early_expiry_event_is_rejected(self) -> None:
+        active = self.happy_run()
+        events = list(active.events)
+        self.append_event(
+            events,
+            event_type=ReleaseProtocolEventType.EXPIRE_RELEASE,
+            role=ReleaseProtocolRole.DEPLOYMENT_GATEWAY,
+            artifacts=(
+                self.artifact(
+                    ReleaseProtocolArtifactKind.DECOMMISSION_RECORD,
+                    ReleaseProtocolRole.DEPLOYMENT_GATEWAY,
+                ),
+            ),
+        )
+        verification = self.replay(
+            active.model_copy(
+                update={"events": tuple(events), "claimed_state": ReleaseProtocolState.EXPIRED}
+            )
+        )
+        self.assertFalse(verification.valid)
+        self.assertTrue(any("before the authorization deadline" in reason for reason in verification.reasons))
+
+    def test_authorized_release_can_be_revoked_before_activation(self) -> None:
+        run = self.happy_run()
+        events = list(run.events[:7])
+        self.append_event(
+            events,
+            event_type=ReleaseProtocolEventType.REVOKE_RELEASE,
+            role=ReleaseProtocolRole.INCIDENT_AUTHORITY,
+            artifacts=(
+                self.artifact(
+                    ReleaseProtocolArtifactKind.INCIDENT_RECORD,
+                    ReleaseProtocolRole.INCIDENT_AUTHORITY,
+                ),
+            ),
+            reason="incident detected before gateway activation",
+        )
+        verification = self.replay(
+            run.model_copy(
+                update={"events": tuple(events), "claimed_state": ReleaseProtocolState.REVOKED}
+            )
+        )
+        self.assertTrue(verification.valid, verification.reasons)
+        self.assertEqual(verification.final_state, ReleaseProtocolState.REVOKED)
         self.assertFalse(verification.deployment_active)
 
     def test_all_protocol_roles_are_required(self) -> None:

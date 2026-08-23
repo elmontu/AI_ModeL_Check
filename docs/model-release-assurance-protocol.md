@@ -1,13 +1,13 @@
 # Model Release Assurance Protocol (MRAP/1.0)
 
-**Status:** normative protocol specification for production integration
+**Status:** candidate normative specification with a machine-checked authorization-integrity and finite statistical-accounting core
 
 **Framework version:** 0.7.0
 **Implementation status:** the repository implements conformance levels 0--2 only; it cannot issue an MRAP production authorization
 
 ## 1. Purpose and normative boundary
 
-MRAP is the end-to-end protocol by which a proposed model release becomes an active, time-limited release. It defines the participants, immutable objects, signed messages, state machine, admissibility gates, atomic registry operation, gateway behavior, monitoring, and formal assurance claim.
+MRAP specifies the end-to-end process by which a proposed model release may become an active, time-limited release. It defines the participants, immutable objects, signed messages, state machine, admissibility gates, atomic registry operation, gateway behavior, monitoring, and scoped assurance claims. Only the authorization-integrity and finite statistical-accounting core identified in Section 13 is machine checked; the entire engineering protocol is not formally verified.
 
 The words **MUST**, **MUST NOT**, **REQUIRED**, **SHOULD**, and **MAY** have the meanings in [RFC 2119](https://www.rfc-editor.org/rfc/rfc2119) and [RFC 8174](https://www.rfc-editor.org/rfc/rfc8174) when written in capitals.
 
@@ -23,14 +23,16 @@ Fix a real deployment world \(\omega\), authoritative pre-release state \(\Sigma
 \mathsf{Accept}(\Sigma_n,I,c,\omega)\in\{0,1\}.
 \]
 
-It is true only when every mandatory privacy, security, utility, fairness, legal, operational, population, transfer, and cumulative-portfolio obligation is satisfied for the exact bytes and complete interface that a recipient can observe. The primary safety property is
+It is true only when every mandatory privacy, security, utility, fairness, legal, operational, population, transfer, and cumulative-portfolio obligation is satisfied for the exact bytes and complete interface that a recipient can observe. The desired substantive safety property is
 
 \[
 \mathsf{Active}(I,c)\Longrightarrow
 \mathsf{Accept}(\Sigma_n,I,c,\omega),
 \]
 
-except with the explicitly budgeted statistical failure probability and negligible cryptographic failure described in Section 13.
+subject to the explicitly budgeted statistical failure probability, cryptographic assumptions, infrastructure assumptions, and adequacy of the policy/world model. This substantive property is an assurance objective, not an unconditional machine-checked theorem.
+
+The machine-checked security property is narrower: within the formal transition semantics, any reachable `ACTIVE` state must have passed the registered evidence and selection predicates, completed a successful compare-and-swap authorization commit, retained exact artifact/interface identity, and remained inside its modelled authorization lifetime. Section 13 states the exact theorem and the boundary between this invariant and the substantive objective.
 
 MRAP also aims for conditional liveness: a complete, valid instance containing a certified feasible candidate should reach `ACTIVE` when required services are available and the registry head remains stable. Safety takes priority over liveness. Missing, stale, contradictory, unverifiable, or out-of-scope input produces refusal, reassessment, or redesign.
 
@@ -69,7 +71,7 @@ MRAP relies on these explicit assumptions:
 6. formal certificates and exact/outward-rounded replay procedures are sound for their encoded premises; and
 7. the policy, threat set, population definition, release interface, world model, and evidence assumptions are complete and correct enough for the claimed scope.
 
-Cryptographic binding proves which bytes an actor signed. It does not prove that the evidence is true, that the world model is complete, or that the policy is ethically or legally adequate. Section 16 records further non-claims.
+Cryptographic binding proves which bytes an actor signed. It does not prove that the evidence is true, that the world model is complete, or that the policy is ethically or legally adequate. Section 17 records further non-claims.
 
 ## 5. Cryptographic object model
 
@@ -352,61 +354,112 @@ Every conforming implementation preserves these invariants:
 
 ## 13. Formal protocol guarantees
 
-### Definition 1: good execution event
+The authoritative proof scope is [`formal/lean`](../formal/lean/) and the exact interpretation is documented in [Formally verified protocol core](formal-verification.md). Lean checks unbounded inductive reachability over the abstract transition relation, not a finite collection of example traces.
+
+The proof target is deliberately authorization integrity rather than an unconditional `ACTIVE`-implies-acceptable theorem. The latter would be circular if its proof assumed that the policy, evidence, threat catalogue, registry, gateway and every deterministic gate were already complete and sound. The formal model therefore discharges trace-level obligations it can state without those assumptions, while the conditional engineering corollary below retains the external scientific and implementation obligations explicitly. Exact finite rational weights were chosen for the statistical core so error-ledger arithmetic is reproducible and free of floating-point or independence assumptions. The full rationale is recorded in the formal-verification document.
+
+### Machine-checked Theorem FV-AUTH-1: authorization integrity
+
+Let `Reachable initial current` be the inductively generated set of states starting from an `Initial` state and using only the role-indexed `Step` relation. The Lean theorem `reachable_authorization_integrity` proves that every such state satisfies `AuthorizationIntegrity`.
+
+Consequently, `active_implies_committed_clear_and_bound` proves that a reachable `ACTIVE` state has all registered evidence, coverage, control, assessment and selection predicates; an authorization request; a successful atomic commit; an issued authorization; a committed head different from the registered predecessor; deployed artifact and interface values identical to the registered values; and a modelled clock strictly before expiry.
+
+This is an abstract authorization-integrity theorem. Step constructors assume the effects attributed to authenticated roles, the registry and gateway. It does not prove those implementations or the scientific truth of a gate.
+
+`valid_active_trace_exists` constructs a complete valid trace to `ACTIVE` in the kernel. This is a non-vacuity result: it shows that the safety invariant is not true merely because activation is unreachable. It is not a real-service liveness guarantee.
+
+### Machine-checked Theorems FV-MSG/FV-COMP: authenticated execution
+
+`EnvelopeAdmissible` requires a symbolic authenticated message to carry an authorized role/action pair, exact release/artifact/interface/registry-head bindings, an unused nonce, a non-future issue time and a live expiry. Lean proves that accepted messages have all of these properties and that replay, artifact mismatch, known signer compromise and expiry are rejected.
+
+The message model is connected to the lifecycle model by `AuthenticatedStep`: its admissible envelope supplies the role and action indices of the exact `Step` performed, and the consumed nonce is recorded. `authenticated_reachable_projects` proves that every trace in this composed semantics projects to a lifecycle trace. `authenticated_reachable_authorization_integrity` and `authenticated_active_implies_committed_clear_and_bound` therefore carry the lifecycle safety theorem into the authenticated semantics.
+
+The envelope's `authenticated` flag abstracts a successful approved cryptographic verification. These theorems do not verify Ed25519, Python canonicalization, certificate issuance, key storage or compromise discovery. Unknown key compromise remains outside the claim.
+
+### Machine-checked Theorem FV-RBAC-1: transition authorization
+
+`every_step_is_role_authorized` proves that every constructible transition is permitted for its role/action index. This excludes role-confused transitions inside the model. It does not prove real credential issuance, key custody, identity federation or resistance to principal compromise.
+
+### Machine-checked Theorem FV-CAS-1: stale-head exclusion
+
+`stale_head_second_commit_fails` proves for the specified compare-and-swap function that, after one successful commit strictly advances an append-only registry head, another request using the old expected head returns failure. Strict advancement rules out ABA reuse of an earlier head. Applying this result to a service requires a refinement argument from that service to the specified linearizable operation; MRAP does not currently provide that refinement proof.
+
+### Machine-checked Theorems FV-DEP: ideal deployment
+
+`MRAP.Deployment` specifies the mathematically relevant deployment as an ideal
+functionality. Its atomic `commit` checks the expected head and sequence,
+strict head advancement, nonce freshness, cleared gates, and a live deadline,
+then binds one authorization record and receipt to the release, artifact,
+interface, predecessor, sequence, expiry, and nonce. `activate` checks that the
+record is current and authorized, rechecks measured artifact/interface
+identifiers, and creates a gateway lease bounded by the authorization expiry.
+`CanServe` is a per-request predicate that requires a current active record,
+exact bindings, matching observed head and sequence, and live lease and
+authorization deadlines.
+
+The kernel checks the following consequences:
+
+1. commit succeeds exactly when its admissibility predicate holds, and every
+   success is atomic, bound, sequence-advancing, and nonce-consuming;
+2. replaying a committed request, reusing a consumed nonce, and a concurrent
+   request using the stale predecessor are rejected;
+3. activation succeeds exactly when the current authorization, measurements,
+   and time bounds are admissible; every success can serve, while every serving
+   state has a current active gate-cleared authorization with exact bindings;
+4. artifact or interface substitution, a stale gateway observation, lease
+   expiry, and authorization expiry cannot serve;
+5. suspension or revocation invalidates an existing gateway; and
+6. every reachable unexpired lifecycle `ACTIVE` state has a serving ideal
+   realization, with a separate concrete executable commit–activate–serve
+   witness establishing non-vacuity.
+
+These are universal theorems about the ideal semantics, not tests of selected
+traces. Their assumptions are also the refinement contract: registry updates
+are atomic and durable, observations and time are authentic, identifiers
+faithfully represent the served bytes/interface, and gateways enforce
+`CanServe` for every request. No theorem here proves PostgreSQL transactions,
+distributed consensus, networking, clock fidelity, Ed25519, Python, or a real
+gateway implementation.
+
+### Machine-checked Theorem FV-STAT-1: finite false-authorization budget
+
+For finite rational experiments represented using a positive common denominator, `finite_false_authorization_bound` proves
+
+\[
+\Pr(A)\leq\sum_{j\in J_N}\Pr(F_j),
+\]
+
+where `SoundOutcome.sound` supplies the premise that each false-authorization outcome \(A\) belongs to at least one registered component failure event \(F_j\). `finite_false_authorization_within_budget` then proves \(\Pr(A)\leq\alpha\) whenever the summed component mass is at most the allocated budget. `registered_component_budget_controls_false_authorization` strengthens the accounting interface: each registered component carries its own failure mass, allocation and within-allocation proof; the component ledger must reconcile exactly with the modeled failure table; the allocations must fit the total budget; and the total budget must fit the probability denominator. No independence assumption is used.
+
+The inclusion \(A\subseteq\bigcup_jF_j\), the mapping from an empirical procedure to each \(F_j\), and its advertised coverage are external proof obligations. The theorem must not be read as manufacturing statistical validity from an arbitrary test.
+
+### Conditional engineering corollary (not machine checked)
 
 For a horizon of \(N\) committed releases, define
 
 \[
 \mathcal E_N=
 \left(\bigcap_{j\in J_N}\mathcal C_j\right)
-\cap\mathcal C_{\mathrm{formal}}
+\cap\mathcal C_{\mathrm{adequacy}}
 \cap\mathcal C_{\mathrm{binding}}
 \cap\mathcal C_{\mathrm{registry}}
-\cap\mathcal C_{\mathrm{gateway}},
+\cap\mathcal C_{\mathrm{gateway}}.
 \]
 
-where \(\mathcal C_j\) is statistical family's simultaneous-coverage event and the other events mean, respectively, that encoded formal premises are true and replay is sound, bindings/signatures are not forged or collided, the registry is linearizable, and the gateway faithfully enforces live registry state.
-
-### Theorem 1: end-to-end conditional safety
-
-Assume the policy/world/acceptability model is complete for the claimed scope and every deterministic gate is sound. On \(\mathcal E_N\), every release that reaches `ACTIVE` during the first \(N\) commits satisfies \(\mathsf{Accept}\) against its actual predecessor state.
-
-**Proof.** Consider the first active unacceptable release. Gateway fidelity gives a matching, live authorization record. Registry integrity gives a unique committed predecessor and shows that `G0`--`G12` passed for the same immutable instance and configuration. On every \(\mathcal C_j\), simultaneous statistical ceilings cover all adaptively selected mandatory risks. Sound formal replay, transfer, and portfolio gates therefore make all mandatory risk and utility predicates true for the complete new portfolio. This is exactly \(\mathsf{Accept}\), contradicting unacceptability. \(\square\)
-
-### Corollary 1: quantitative failure bound
-
-If \(\Pr(\mathcal C_j^c)\le\alpha_j\) and the total computational probability/advantage of an accepted signature forgery, hash collision, registry violation, or gateway attestation forgery across the horizon is at most \(\nu_N(\kappa)\), then
+If the acceptability predicate and threat model are complete for the claim; every deterministic and scientific gate is sound; statistical failure events cover every way an unacceptable release could nevertheless clear; cryptographic binding holds; and the registry and gateway refine their abstract specifications, then an active release is acceptable on \(\mathcal E_N\). If \(\Pr(\mathcal C_j^c)\leq\alpha_j\) and the combined computational failure advantage is at most \(\nu_N(\kappa)\), the ordinary union bound gives
 
 \[
 \Pr[\exists\text{ active unacceptable release among the first }N]
-\le \sum_{j\in J_N}\alpha_j+\nu_N(\kappa).
+\leq \sum_{j\in J_N}\alpha_j+\nu_N(\kappa).
 \]
 
-This is a union-bound guarantee, not independence. It is conditional on the substantive modelling premises; no numerical \(\alpha\) covers omitted threats or a false population model.
+This paragraph is a conditional assurance-case argument, not a Lean theorem. In particular, its adequacy and refinement premises are substantial and cannot be discharged by hashes, signatures or successful compilation.
 
-### Theorem 2: stale-head exclusion and atomicity
+### Remaining proof obligations
 
-If `PR.Commit` is linearizable compare-and-swap, two commit requests with the same expected head cannot both succeed with different state deltas.
+Portfolio preservation and distributed conditional liveness remain mathematical proof sketches, not machine-checked claims. The formal non-vacuity witnesses show that valid abstract lifecycle and ideal commit–activate–serve executions exist; they do not establish real-service progress. A production claim still requires verified or independently validated refinement of message parsing, signature and canonicalization checks, concrete registry/gateway behavior, time/expiry behavior, and the Python transcript verifier to the formal semantics.
 
-**Proof.** Linearizability orders the operations. The first success changes the head. The second operation then observes a head unequal to its expected head and aborts. \(\square\)
-
-### Theorem 3: portfolio preservation
-
-Suppose \(\Sigma_0\) satisfies every state invariant and each successful commit verifies the complete proposed \(\Sigma_{n+1}\), rather than only the new marginal release, before atomically installing it. Then every committed state satisfies the invariant on the good execution event.
-
-**Proof.** By induction. The base case is assumed. The transition gate establishes the invariant for the complete successor state; atomicity prevents an unchecked interleaving. \(\square\)
-
-### Theorem 4: conditional liveness
-
-Suppose a frozen instance contains a candidate with strict certified margins on every mandatory constraint, all required evidence and governance approvals are valid and live, services eventually respond, and the registry head remains stable during commit. Then the deterministic reference protocol reaches `ACTIVE`.
-
-**Proof sketch.** Each finite validation terminates and passes by premise; the feasible set is nonempty; the deterministic tie-break selects a member; stable-head CAS succeeds; faithful gateway verification activates it. This is relative liveness, not a claim that feasible evidence or a stable distributed service always exists. \(\square\)
-
-### Proposition 1: revocation limitation
-
-A faithful gateway prevents new authorized observations after suspension, expiry, or revocation takes effect. It cannot retract bytes, outputs, or information already received. Consequently release policy MUST bound authorization lifetime and cumulative exposure before activation.
-
-The protocol is not claimed to realize an ideal functionality under universal composition. Such a claim would require a simulator, corruption model, setup assumptions, environment, leakage function, and composition proof in a framework such as Canetti's [universally composable security](https://doi.org/10.1109/SFCS.2001.959888). The theorems above are trace and invariant results under enumerated premises.
+A faithful gateway can prevent new authorized observations after suspension, expiry or revocation takes effect, but cannot retract prior disclosures. The protocol is not claimed to realize an ideal functionality under universal composition.
 
 ## 14. Failure, recovery, and change rules
 
@@ -437,22 +490,25 @@ Watermark and canary tests remain scheme- and protocol-specific evidence. They d
 
 | Level | Required capability | Repository status |
 |---|---|---|
-| `MRAP-L0 Mathematical` | Replay finite decision, transfer, evidence-gate and portfolio certificates | Implemented for documented finite cases |
+| `MRAP-L0 Mathematical` | Replay finite decision, transfer, evidence-gate and portfolio certificates | Implemented for documented finite cases; authorization-integrity and finite union-bound cores are machine checked in Lean |
 | `MRAP-L1 Assessment` | Validate immutable request/evidence context and emit typed per-threat reports | Implemented as an offline reference with stated arithmetic/analyzer limits |
 | `MRAP-L2 Selection` | Deterministically evaluate submitted configurations and sign a bound optimization result | Implemented; signatures protect integrity, not evidence truth |
-| `MRAP-L3 Authorization` | Authenticated roles, exact critical replay, authoritative linearizable registry, atomic portfolio/budget commit, durable authorization receipt | Not implemented |
+| `MRAP-L3 Authorization` | Authenticated roles, exact critical replay, authoritative linearizable registry, atomic portfolio/budget commit, durable authorization receipt | Authenticated offline transcript replay is implemented; authoritative identity/registry service and durable authorization issuance are not |
 | `MRAP-L4 Enforcement` | Gateway byte/interface enforcement, leases, revocation, monitoring, incident and transparency operations | Not implemented |
 
-Only a deployment conforming to all five levels may describe a release as authorized under MRAP/1.0. The current CLI outputs MUST be described as offline assessments, selections, certificates, or structural transcript replays. They MUST NOT be relabelled `AuthorizationReceipt` or used directly by a serving gateway.
+Only a deployment conforming to all five levels may describe a release as authorized under MRAP/1.0. The current CLI outputs MUST be described as offline assessments, selections, certificates, or structural/authenticated transcript replays. They MUST NOT be relabelled `AuthorizationReceipt` or used directly by a serving gateway.
 
-The repository includes a typed `ReleaseProtocolRun` and `release-protocol-verify` command. It replays the normative state machine, actor/role permissions, artifact-producer roles, exact-decimal assurance spending, event hash chain, assessment/selection preconditions, atomic compare-and-swap assertion, deployment digest equality, expiry, monitoring, suspension, revocation, and abort behavior. By default it also rehashes every referenced artifact file. This is a conformance harness, not the authoritative protocol service: it does not authenticate actors, verify MRAP message signatures or attestations, contact a linearizable registry, enforce a gateway, or establish that the scientific contents of an artifact are true.
+The repository includes a typed `ReleaseProtocolRun` contract version 1.1 and `release-protocol-verify` command. It replays the normative state machine, actor/role permissions, artifact-producer roles, exact-decimal assurance spending, event hash chain, assessment/selection preconditions, strict registry-sequence advancement, atomic compare-and-swap assertion, deployment digest equality, expiry, monitoring, suspension, revocation, and abort behavior. By default it also rehashes every referenced artifact file. The `structural_v1` profile does not authenticate actors. The `authenticated_v1` profile verifies domain-separated release-bound Ed25519 signatures for every event and artifact declaration against an external public-key trust store and rejects supplied compromised-key identifiers.
 
-Supply-chain attestations SHOULD link each independent actor's materials and products in the spirit of [in-toto](https://www.usenix.org/conference/usenixsecurity19/presentation/torres-arias), while the registry separately enforces model-release policy and state. NIST's [AI Risk Management Framework](https://doi.org/10.6028/NIST.AI.100-1) motivates lifecycle-wide governance and monitoring, but MRAP's typed messages and safety theorem are project-specific.
+Both profiles remain conformance harnesses rather than an authoritative protocol service: they do not issue credentials, discover compromise, contact or implement a linearizable registry, enforce a gateway, verify remote attestations, or establish that the scientific contents of an artifact are true. A correspondence manifest prevents silent role/state/action drift, and adversarial mutation tests exercise concrete rejection behavior, but the Python verifier has not been proved to refine the Lean model.
+
+Supply-chain attestations SHOULD link each independent actor's materials and products in the spirit of [in-toto](https://www.usenix.org/conference/usenixsecurity19/presentation/torres-arias), while the registry separately enforces model-release policy and state. NIST's [AI Risk Management Framework](https://doi.org/10.6028/NIST.AI.100-1) motivates lifecycle-wide governance and monitoring, but MRAP's typed messages, scoped formal invariants and conditional assurance argument are project-specific.
 
 ## 17. Explicit non-claims
 
 MRAP/1.0 does not prove:
 
+- equivalence between the Lean transition system and the Python verifier or any production implementation;
 - completeness or correctness of a policy, world set, population, prior, threat catalogue, causal model, or acceptability predicate;
 - truth of evidence merely because it is hashed, signed, attested, or logged;
 - safety for an interface, recipient, population, time period, or related-release portfolio not bound into the instance;

@@ -256,6 +256,16 @@ class LlmAuditProfileTests(unittest.TestCase):
         with self.assertRaisesRegex(ProfileValidationError, "exceeds"):
             validate_profile(excessive_concurrency, collection_ready=True)
 
+        compromised_key = self.ready_profile()
+        compromised_key["watermark_study"]["detector"]["compromise_status"] = "compromised"
+        with self.assertRaisesRegex(ProfileValidationError, "must be uncompromised"):
+            validate_profile(compromised_key, collection_ready=True)
+
+        revoked_key = self.ready_profile()
+        revoked_key["watermark_study"]["detector"]["revocation_status"] = "revoked"
+        with self.assertRaisesRegex(ProfileValidationError, "must be active"):
+            validate_profile(revoked_key, collection_ready=True)
+
     def test_calibration_decision_rule_cannot_be_reversed(self) -> None:
         reversed_rule = copy.deepcopy(self.profile)
         reversed_rule["watermark_study"]["hypotheses"]["null_calibration"][

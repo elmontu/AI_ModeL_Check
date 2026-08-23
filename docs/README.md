@@ -5,6 +5,9 @@ This directory contains operational and engineering documentation for the MRA re
 ## Start here
 
 - [Normative MRAP/1.0 protocol](model-release-assurance-protocol.md): roles, messages, states, gates, atomic authorization, enforcement, monitoring, proofs, and conformance boundary.
+- [Formally verified protocol core](formal-verification.md): Lean semantics, theorem inventory, finite statistical bound, trusted base, reproduction, correspondence gap, and non-claims.
+- [Protocol adversarial evaluation](protocol-evaluation.md): positive controls, unsafe transcript mutations, reproduction, and limits of the mutation score.
+- [Protocol instantiation case studies](protocol-case-studies.md): reproducible XGBoost, LLM, and authenticated-lifecycle examples with claim boundaries.
 - [Architecture](architecture.md): components, data flow, trust boundaries, and package map.
 - [Mathematical foundations](mathematical-foundations.md): formal decision games, theorems, proofs, statistical guarantees, implementation correspondence, and non-claims.
 - [Threat model](reference/threat-model.md): protected assets, actors, adversary knowledge, threats, and controls.

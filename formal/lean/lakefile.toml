@@ -1,0 +1,6 @@
+name = "mrap-protocol"
+version = "1.0.0"
+defaultTargets = ["MRAP"]
+
+[[lean_lib]]
+name = "MRAP"
