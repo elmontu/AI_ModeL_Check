@@ -151,6 +151,10 @@
       "accountant_replayed": true,
       "complete_pipeline": true,
       "fpr": 0.001,
+      "secret_cardinality": null,
+      "maximum_secret_prior": null,
+      "pairwise_secret_relation_validated": false,
+      "secret_prior_bound_validated": false,
       "evidence_context": {
         "release_id": "whole-government-demo-tree-v1",
         "release_contract_sha256": "118a1d72acd73341ce4d6cf69f761bcd23e6141b40f42e215b7a560f4cc6f670",
@@ -166,8 +170,8 @@
         "tool": "mra-demo-accountant",
         "tool_version": "1.0",
         "source_path": "evidence/dp-accountant.json",
-        "source_sha256": "53a984341cdd088db1cad52fea1370acf5527fcad8a4548c28cdf1337177aadc",
-        "bound_fields": ["analyzer", "threat_id", "population_scope_id", "epsilon", "delta", "adjacency", "protected_unit", "accountant", "accountant_replayed", "complete_pipeline", "fpr", "secret_cardinality", "pairwise_secret_relation_validated", "evidence_context"]
+        "source_sha256": "4cdaf1c5369dd3bf5427c8e5706cf512482025841a2f68469985009faf2c9fe6",
+        "bound_fields": ["analyzer", "threat_id", "population_scope_id", "epsilon", "delta", "adjacency", "protected_unit", "accountant", "accountant_replayed", "complete_pipeline", "fpr", "secret_cardinality", "maximum_secret_prior", "pairwise_secret_relation_validated", "secret_prior_bound_validated", "evidence_context"]
       }
     },
     {

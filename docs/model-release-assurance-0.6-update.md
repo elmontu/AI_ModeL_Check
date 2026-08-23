@@ -58,13 +58,14 @@ Accordingly, `previous_release_ids` is not descriptive metadata. Production asse
 
 ## Remaining high-priority work
 
-1. Add numeric prior validation for finite-secret DP ceilings or implement a proved arbitrary-prior bound.
-2. Replace clearance-boundary floating-point comparisons with outward interval/rational arithmetic or a certified decision margin.
-3. Replay the configuration generator before allowing a certified exhaustive `reject`.
-4. Add independently operated interface inventory and positive-control workers.
-5. Implement modality-specific workers in risk order rather than claiming universal empirical coverage.
-6. Connect `previous_release_ids` to a transactionally locked portfolio registry.
-7. Build production trust infrastructure and obtain external accreditation.
+Version 0.7.0 resolves the finite-secret DP prior gap with a proved arbitrary-prior-mass bound and source validation, and moves the individual proofs under the normative MRAP/1.0 lifecycle. The remaining priorities are:
+
+1. Replace clearance-boundary floating-point comparisons with outward interval/rational arithmetic or a certified decision margin.
+2. Replay the configuration generator before allowing a certified exhaustive `reject`.
+3. Add independently operated interface inventory and positive-control workers.
+4. Implement modality-specific workers in risk order rather than claiming universal empirical coverage.
+5. Connect `previous_release_ids` to a transactionally locked portfolio registry.
+6. Build production trust infrastructure and obtain external accreditation.
 
 ## Revised conclusion
 

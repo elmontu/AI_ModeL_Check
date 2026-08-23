@@ -28,6 +28,8 @@ schemas:
 	diff -u schemas/signed-optimization-manifest-v2.json $(SCHEMA_TMP)/signed-optimization-manifest-v2.json
 	PYTHONPATH=src $(PYTHON) -m model_release_assurance schema --kind manifest --output $(SCHEMA_TMP)/signed-manifest-v1.json
 	diff -u schemas/signed-manifest-v1.json $(SCHEMA_TMP)/signed-manifest-v1.json
+	PYTHONPATH=src $(PYTHON) -m model_release_assurance schema --kind release-protocol-run --output $(SCHEMA_TMP)/release-protocol-run-v1.json
+	diff -u schemas/release-protocol-run-v1.json $(SCHEMA_TMP)/release-protocol-run-v1.json
 
 check: compile test schemas
 

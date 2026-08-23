@@ -373,6 +373,13 @@ class PolicyRule(StrictModel):
             target = self.metric_parameters.get("target_fpr")
             if target is None or not 0.0 < target < 1.0:
                 raise ValueError("membership_tpr_at_fpr policy requires target_fpr")
+        if self.decision_metric == "finite_secret_exact_guess_success":
+            prior_cap = self.metric_parameters.get("maximum_secret_prior")
+            if prior_cap is None or not 0.0 < prior_cap < 1.0:
+                raise ValueError(
+                    "finite_secret_exact_guess_success policy requires "
+                    "maximum_secret_prior in (0,1)"
+                )
         if any(not 0.0 <= value <= 1.0 for value in self.metric_parameters.values()):
             raise ValueError("policy metric parameters must be probabilities in [0,1]")
         return self
@@ -461,6 +468,13 @@ class ThreatContract(StrictModel):
             target = self.metric_parameters.get("target_fpr")
             if target is None or not 0.0 < target < 1.0:
                 raise ValueError("membership_tpr_at_fpr requires metric_parameters.target_fpr in (0,1)")
+        if self.decision_metric == "finite_secret_exact_guess_success":
+            prior_cap = self.metric_parameters.get("maximum_secret_prior")
+            if prior_cap is None or not 0.0 < prior_cap < 1.0:
+                raise ValueError(
+                    "finite_secret_exact_guess_success requires "
+                    "metric_parameters.maximum_secret_prior in (0,1)"
+                )
         if any(not 0.0 <= value <= 1.0 for value in self.metric_parameters.values()):
             raise ValueError("metric parameters must be probabilities in [0,1]")
         if self.kind is ThreatKind.LINKAGE:
@@ -545,9 +559,34 @@ class DpInput(StrictModel):
     complete_pipeline: bool
     fpr: float | None = Field(default=None, ge=0.0, le=1.0)
     secret_cardinality: int | None = Field(default=None, ge=2)
+    maximum_secret_prior: float | None = Field(default=None, gt=0.0, lt=1.0)
     pairwise_secret_relation_validated: bool = False
+    secret_prior_bound_validated: bool = False
     evidence_context: EvidenceContext
     provenance: AnalyzerProvenance
+
+    @model_validator(mode="after")
+    def finite_secret_inputs_are_coherent(self) -> DpInput:
+        finite_fields_present = (
+            self.maximum_secret_prior is not None
+            or self.pairwise_secret_relation_validated
+            or self.secret_prior_bound_validated
+        )
+        if self.secret_cardinality is None:
+            if finite_fields_present:
+                raise ValueError(
+                    "finite-secret DP fields require secret_cardinality"
+                )
+            return self
+        if self.maximum_secret_prior is None:
+            raise ValueError(
+                "finite-secret DP evidence requires maximum_secret_prior"
+            )
+        if self.maximum_secret_prior + 1e-15 < 1.0 / self.secret_cardinality:
+            raise ValueError(
+                "maximum_secret_prior cannot be below 1 / secret_cardinality"
+            )
+        return self
 
 
 class AttackInput(StrictModel):

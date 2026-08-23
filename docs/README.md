@@ -4,7 +4,9 @@ This directory contains operational and engineering documentation for the MRA re
 
 ## Start here
 
+- [Normative MRAP/1.0 protocol](model-release-assurance-protocol.md): roles, messages, states, gates, atomic authorization, enforcement, monitoring, proofs, and conformance boundary.
 - [Architecture](architecture.md): components, data flow, trust boundaries, and package map.
+- [Mathematical foundations](mathematical-foundations.md): formal decision games, theorems, proofs, statistical guarantees, implementation correspondence, and non-claims.
 - [Threat model](reference/threat-model.md): protected assets, actors, adversary knowledge, threats, and controls.
 - [Adaptation profiles](reference/adaptation-profiles.md): whole-of-government baseline and adopter-specific configuration.
 - [Production roadmap](reference/production-roadmap.md): work required to deploy the offline core as an accredited service.

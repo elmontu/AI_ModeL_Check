@@ -11,7 +11,9 @@
   "complete_pipeline": true,
   "fpr": 0.001,
   "secret_cardinality": null,
+  "maximum_secret_prior": null,
   "pairwise_secret_relation_validated": false,
+  "secret_prior_bound_validated": false,
   "evidence_context": {
     "release_id": "whole-government-demo-tree-v1",
     "release_contract_sha256": "118a1d72acd73341ce4d6cf69f761bcd23e6141b40f42e215b7a560f4cc6f670",

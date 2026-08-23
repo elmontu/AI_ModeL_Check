@@ -4,6 +4,8 @@
 
 MRA is an offline assurance core. It validates a release contract, evaluates bound evidence, selects among submitted release configurations, emits a typed report, and optionally appends that report to a hash-chained audit database.
 
+The core occupies the assessment and selection stages of the normative [MRAP/1.0 lifecycle](model-release-assurance-protocol.md). Reports produced here are inputs to that protocol, not authorizations.
+
 It does not load untrusted model binaries, operate a release gateway, own an authoritative portfolio registry, or provide production identity, key management, storage, and monitoring.
 
 ## Decision flow
@@ -32,8 +34,18 @@ release request + policy + source-observed evidence context
  least-informative feasible selection
                  |
                  v
- typed report + optional signature + audit event
+typed report + optional signature + audit event
 ```
+
+The enclosing lifecycle is:
+
+```text
+register -> freeze plan -> freeze evidence -> assess -> optimize
+        -> submit authorization -> atomic portfolio commit
+        -> gateway activation -> monitor -> suspend / expire / revoke
+```
+
+`release_protocol.py` can structurally replay this lifecycle as a hash-chained transcript. The authoritative registry, authenticated actors, gateway and monitor remain external production components.
 
 ## Package map
 
@@ -49,6 +61,7 @@ release request + policy + source-observed evidence context
 | `incomplete_portfolio.py` | Finite incomplete-portfolio solver and replay verifier |
 | `portfolio_statistics.py` | Simultaneous marginal evidence generation and verification |
 | `protocol_feasibility.py` | Finite protocol solver and exact certificate replay |
+| `release_protocol.py` | Typed MRAP/1.0 transcript, state machine, artifact-role checks, and structural replay |
 | `integrity.py` | Hashing and Ed25519 manifests |
 | `audit.py` | Hash-chained SQLite audit records |
 | `cli.py` | Command-line interface |

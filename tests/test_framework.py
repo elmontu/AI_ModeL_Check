@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import math
 import sqlite3
 import tempfile
 import unittest
@@ -15,6 +16,12 @@ from model_release_assurance.analyzers.attack import (
     wilson_lower,
 )
 from model_release_assurance.analyzers.controlled_inference import ControlledInferenceAnalyzer
+from model_release_assurance.analyzers.dp import (
+    DpAnalyzer,
+    equal_prior_membership_ceiling,
+    finite_secret_exact_guess_ceiling,
+    membership_roc_ceiling,
+)
 from model_release_assurance.analyzers.tree import TreeLinkageAnalyzer
 from model_release_assurance.audit import AuditStore
 from model_release_assurance.decision import decision_game_sha256, decide_threat, population_scope_sha256
@@ -30,6 +37,7 @@ from model_release_assurance.models import (
     AssessmentRequest,
     AttackInput,
     ControlledInferenceInput,
+    DpInput,
     EvidenceClass,
     EvidenceRecord,
     InterfaceContract,
@@ -296,6 +304,34 @@ class ContractTests(unittest.TestCase):
             })
             self.assertEqual(rule.decision_metric, metric)
 
+    def test_finite_secret_contract_requires_a_policy_bound_prior_cap(self) -> None:
+        raw = {
+            "threat_id": "attribute-secret",
+            "kind": "attribute",
+            "mandatory": True,
+            "decision_metric": "finite_secret_exact_guess_success",
+            "tolerance": 0.4,
+            "tolerance_basis": "absolute",
+        }
+        with self.assertRaisesRegex(ValidationError, "maximum_secret_prior"):
+            PolicyRule.model_validate(raw)
+        rule = PolicyRule.model_validate({
+            **raw,
+            "metric_parameters": {"maximum_secret_prior": 0.4},
+        })
+        self.assertEqual(rule.metric_parameters["maximum_secret_prior"], 0.4)
+
+    def test_finite_secret_dp_input_rejects_an_impossible_prior_cap(self) -> None:
+        raw = load_example()["analyzer_inputs"][1]
+        raw.update(
+            secret_cardinality=4,
+            maximum_secret_prior=0.2,
+            pairwise_secret_relation_validated=True,
+            secret_prior_bound_validated=True,
+        )
+        with self.assertRaisesRegex(ValidationError, "1 / secret_cardinality"):
+            DpInput.model_validate(raw)
+
 
 class EngineTests(unittest.TestCase):
     def test_end_to_end_clear(self) -> None:
@@ -483,6 +519,78 @@ class MathTests(unittest.TestCase):
             0.009291587489802085,
             places=12,
         )
+
+    def test_dp_probability_bounds_are_stable_for_large_epsilon(self) -> None:
+        roc, first, second = membership_roc_ceiling(1000.0, 1e-6, 1e-3)
+        self.assertEqual(first, 1.0)
+        self.assertEqual(second, 1.0)
+        self.assertEqual(roc, 1.0)
+        self.assertEqual(equal_prior_membership_ceiling(1000.0, 1e-6), 1.0)
+        self.assertEqual(
+            finite_secret_exact_guess_ceiling(1000.0, 1e-6, 0.25),
+            1.0,
+        )
+
+    def test_finite_secret_dp_ceiling_generalizes_the_uniform_bound(self) -> None:
+        epsilon = 0.2
+        delta = 1e-6
+        uniform = finite_secret_exact_guess_ceiling(epsilon, delta, 0.25)
+        old_uniform_formula = (
+            math.exp(epsilon) + 3 * delta
+        ) / (
+            math.exp(epsilon) + 3
+        )
+        self.assertAlmostEqual(uniform, old_uniform_formula, places=14)
+        self.assertGreater(
+            finite_secret_exact_guess_ceiling(epsilon, delta, 0.7),
+            uniform,
+        )
+
+    def test_finite_secret_dp_ceiling_requires_pairwise_dp_and_validated_prior(self) -> None:
+        raw = load_example()
+        release = AssessmentRequest.model_validate(raw).release
+        threat_raw = raw["threats"][0]
+        threat_raw.update(
+            kind="attribute",
+            secret="one of four registered secret states",
+            prior="registered population prior with maximum mass at most 0.4",
+            success_metric="exact secret-state recovery",
+            decision_metric="finite_secret_exact_guess_success",
+            metric_parameters={"maximum_secret_prior": 0.4},
+            tolerance=0.5,
+            tolerance_basis="absolute",
+            candidate_set=None,
+            target_signal_source=None,
+            realizability="not_applicable",
+        )
+        threat = ThreatContract.model_validate(threat_raw)
+        dp_raw = raw["analyzer_inputs"][1]
+        dp_raw.update(
+            threat_id=threat.threat_id,
+            fpr=None,
+            secret_cardinality=4,
+            maximum_secret_prior=0.4,
+            pairwise_secret_relation_validated=True,
+            secret_prior_bound_validated=True,
+        )
+        value = DpInput.model_validate(dp_raw)
+        evidence = DpAnalyzer().analyze(release, threat, value)[0]
+        self.assertEqual(evidence.evidence_class, EvidenceClass.CEILING)
+        self.assertTrue(evidence.can_clear)
+        self.assertAlmostEqual(
+            evidence.upper,
+            finite_secret_exact_guess_ceiling(value.epsilon, value.delta, 0.4),
+        )
+
+        unvalidated = value.model_copy(update={"secret_prior_bound_validated": False})
+        screen = DpAnalyzer().analyze(release, threat, unvalidated)[0]
+        self.assertEqual(screen.evidence_class, EvidenceClass.SCREEN)
+        self.assertFalse(screen.can_clear)
+
+        excessive_prior = value.model_copy(update={"maximum_secret_prior": 0.5})
+        mismatch = DpAnalyzer().analyze(release, threat, excessive_prior)[0]
+        self.assertEqual(mismatch.evidence_class, EvidenceClass.SCREEN)
+        self.assertFalse(mismatch.can_clear)
 
     def test_low_fpr_requires_conservative_attainment(self) -> None:
         raw = load_example()

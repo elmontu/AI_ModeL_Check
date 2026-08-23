@@ -2,6 +2,22 @@
 
 All user-visible changes to Model Release Assurance are recorded here. The project follows semantic versioning while it remains in the `0.x` alpha series; minor releases may change public contracts when the migration is documented.
 
+## [0.7.0] - 2026-08-23
+
+### Added
+
+- A formal mathematical-foundations document with explicit finite decision games, Blackwell transfer, simultaneous-coverage authorization, soundness–liveness protocols, incomplete-portfolio optimization, differential-privacy bounds, proofs, assumptions, and non-claims.
+- Mathematical regression tests for arbitrary-prior finite-secret DP bounds and stable large-epsilon evaluation.
+- A normative MRAP/1.0 lifecycle protocol with explicit authorities, signed message semantics, immutable instances, admissibility gates, a state machine, atomic portfolio authorization, gateway activation, monitoring, revocation, recovery, security theorems, and conformance levels.
+- A typed lifecycle transcript and fail-closed structural verifier covering role-qualified artifact production, exact-decimal error spending, event hash chaining, assessment/selection gates, compare-and-swap authorization, deployment binding, expiry, monitoring, suspension, revocation, and abort behavior.
+- A `release-protocol-verify` command and versioned `ReleaseProtocolRun` JSON Schema.
+
+### Fixed
+
+- Replaced the finite-secret DP ceiling's silent uniform-prior assumption with a proved bound using a policy-bound, source-validated upper bound on maximum secret-prior mass.
+- Required pairwise DP across every finite-secret alternative and a source-bound validation flag for the numerical prior cap before the evidence may clear.
+- Rewrote DP probability formulas into algebraically equivalent inverse-exponential forms that do not overflow for large finite epsilon.
+
 ## [0.6.0] - 2026-08-22
 
 ### Added

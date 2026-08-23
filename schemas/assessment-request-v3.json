@@ -388,6 +388,20 @@
           "default": null,
           "title": "Fpr"
         },
+        "maximum_secret_prior": {
+          "anyOf": [
+            {
+              "exclusiveMaximum": 1.0,
+              "exclusiveMinimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Maximum Secret Prior"
+        },
         "pairwise_secret_relation_validated": {
           "default": false,
           "title": "Pairwise Secret Relation Validated",
@@ -417,6 +431,11 @@
           ],
           "default": null,
           "title": "Secret Cardinality"
+        },
+        "secret_prior_bound_validated": {
+          "default": false,
+          "title": "Secret Prior Bound Validated",
+          "type": "boolean"
         },
         "threat_id": {
           "title": "Threat Id",

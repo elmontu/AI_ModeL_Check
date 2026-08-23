@@ -7,6 +7,7 @@ The repository contains several independently versioned machine contracts. A sch
 - `assessment-request-v3.json` and `assessment-report-v3.json`
 - `optimization-request-v2.json` and `optimization-report-v2.json`
 - `signed-optimization-manifest-v2.json`
+- `release-protocol-run-v1.json`, the structural MRAP/1.0 lifecycle transcript contract
 - `incomplete-portfolio-certificate-v1.1.json`
 - the `v1` protocol-feasibility and portfolio-multinomial schema families, whose current contract version is 1.x
 

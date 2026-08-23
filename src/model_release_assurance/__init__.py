@@ -57,6 +57,21 @@ from .protocol_feasibility import (
     robustly_releasable_configurations,
     verify_protocol_feasibility,
 )
+from .release_protocol import (
+    ControlStatus,
+    MonitoringOutcome,
+    ReleaseProtocolActor,
+    ReleaseProtocolArtifact,
+    ReleaseProtocolArtifactKind,
+    ReleaseProtocolEvent,
+    ReleaseProtocolEventType,
+    ReleaseProtocolRole,
+    ReleaseProtocolRun,
+    ReleaseProtocolState,
+    ReleaseProtocolVerification,
+    release_protocol_event_sha256,
+    verify_release_protocol_run,
+)
 
 __all__ = [
     "AssuranceEngine",
@@ -106,5 +121,18 @@ __all__ = [
     "robustly_releasable_configurations",
     "solve_protocol_feasibility",
     "verify_protocol_feasibility",
+    "ControlStatus",
+    "MonitoringOutcome",
+    "ReleaseProtocolActor",
+    "ReleaseProtocolArtifact",
+    "ReleaseProtocolArtifactKind",
+    "ReleaseProtocolEvent",
+    "ReleaseProtocolEventType",
+    "ReleaseProtocolRole",
+    "ReleaseProtocolRun",
+    "ReleaseProtocolState",
+    "ReleaseProtocolVerification",
+    "release_protocol_event_sha256",
+    "verify_release_protocol_run",
 ]
 __version__ = VERSION

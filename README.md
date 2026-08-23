@@ -1,16 +1,16 @@
 # Model Release Assurance
 
-Model Release Assurance (MRA) is a Python reference implementation for evaluating and authorizing model-release contracts. It binds a model artifact to its interface, recipient, population, controls, utility requirements, evidence, and related releases before returning a typed decision.
+Model Release Assurance (MRA) is a Python reference implementation for evaluating model-release contracts and selecting among candidate configurations. The normative [Model Release Assurance Protocol (MRAP/1.0)](docs/model-release-assurance-protocol.md) defines the larger process by which an assessed configuration may become an authorized and active release.
 
 MRA is sector-neutral and supports protected units such as people, households, organizations, programmes, transactions, devices, and events.
 
-> **Status:** offline reference implementation, version 0.6.0. It is not an accredited production authorization service.
+> **Status:** offline reference implementation, version 0.7.0, implementing MRAP conformance levels 0--2 only. It cannot issue a production authorization.
 
 The `0.x` series is an alpha interface: decision invariants are tested, but schemas and APIs may change between minor versions. See the [changelog](CHANGELOG.md), [support policy](SUPPORT.md), and [release process](docs/releasing.md).
 
-## Decisions
+## Assessment decisions
 
-The engine returns one of four outcomes:
+The offline engine returns one of four recommendations:
 
 - `release_as_proposed`: every mandatory requirement is satisfied;
 - `release_with_controls`: a restricted configuration satisfies the policy;
@@ -18,6 +18,18 @@ The engine returns one of four outcomes:
 - `reject`: a replayable exhaustive-search certificate shows that no submitted option can satisfy the policy.
 
 Missing, stale, mismatched, underpowered, or unassessed evidence never becomes evidence of safety.
+
+These outcomes are not protocol states and do not permit serving a model. Under MRAP/1.0, authorization requires a separate authenticated authority, a linearizable atomic portfolio/budget commit, and an independently verified registry receipt. Activation then requires a gateway to rehash and enforce the exact approved bytes, interface, controls, expiry, and revocation status.
+
+## MRAP/1.0 lifecycle at a glance
+
+```text
+DRAFT -> REGISTERED -> PLAN_FROZEN -> EVIDENCE_FROZEN
+      -> ASSESSED -> OPTIMIZED -> COMMIT_PENDING
+      -> AUTHORIZED -> ACTIVE -> SUSPENDED / EXPIRED / REVOKED
+```
+
+Only the atomic registry transition from `COMMIT_PENDING` to `AUTHORIZED` creates an authorization. Assessment and optimization reports are necessary predecessors, never substitute authorizations. See the [normative protocol](docs/model-release-assurance-protocol.md) for the actors, messages, gates, proofs, failure paths, and production conformance requirements.
 
 ## Repository layout
 
@@ -66,7 +78,7 @@ mra model-coverage --json
 mra model-coverage examples/request.json --json
 ```
 
-See the [all-model coverage matrix](docs/model-family-coverage.md) and the [0.6 framework update](docs/model-release-assurance-0.6-update.md). Unknown families route to custom review, and unsupported interactive protocols remain inconclusive.
+Start with the [normative MRAP/1.0 protocol](docs/model-release-assurance-protocol.md), then use the [mathematical appendix](docs/mathematical-foundations.md), [all-model coverage matrix](docs/model-family-coverage.md), and [0.6 framework update](docs/model-release-assurance-0.6-update.md). Unknown families route to custom review, and unsupported interactive protocols remain inconclusive.
 
 ### Coverage is not clearance
 
@@ -82,7 +94,7 @@ Recommended threats that are absent from a request appear as policy-review advis
 
 ### Assessment schema 3.0
 
-Version 0.6 uses the breaking assessment v3 contract:
+Assessment v3, introduced in version 0.6 and retained in 0.7, is the current contract:
 
 - every release requires a structured `model_profile` describing its task, modalities, training paradigm, components, generative behavior and state;
 - every analyzer source requires an `evidence_context` observed before analysis and binding the release contract, policy, artifact, interface, population, decision game and observation time; and
@@ -130,7 +142,7 @@ mra optimize examples/optimization-request.json \
   --audit-db output/audit/mra.sqlite3
 ```
 
-Solve and independently replay a finite protocol certificate:
+Analyze and independently replay a finite evidence-gate frontier:
 
 ```bash
 mra protocol-solve examples/protocol-feasibility-problem.json \
@@ -138,6 +150,19 @@ mra protocol-solve examples/protocol-feasibility-problem.json \
 mra protocol-verify output/assessments/demo-protocol-certificate.json \
   --problem examples/protocol-feasibility-problem.json
 ```
+
+Despite the historical command name, this is a design-time feasibility certificate for a finite evidence gate. It does not run the MRAP lifecycle and is not an authorization.
+
+Generate the machine contract for a complete MRAP transcript and structurally replay a transcript produced by the protocol participants:
+
+```bash
+mra schema --kind release-protocol-run \
+  --output schemas/release-protocol-run-v1.json
+mra release-protocol-verify path/to/release-protocol-run.json \
+  --artifact-base path/to/protocol-artifacts
+```
+
+Structural replay checks lifecycle transitions, the event hash chain, role-qualified artifacts, clearance preconditions, atomic-commit assertions, deployment bindings, expiry, and monitoring. It does not authenticate the actors or replace the registry and gateway services required by MRAP-L3/L4.
 
 Solve and replay an incomplete-portfolio certificate:
 
@@ -155,12 +180,13 @@ mra portfolio-verify output/assessments/demo-portfolio-certificate.json \
 - Clearance requires an applicable exact value, verified upper bound, accountant, or replayable certificate.
 - Every analyzer source carries a pre-analysis evidence context binding the release contract, policy, artifact, interface, population and decision game; results copy those bindings without restamping.
 - Evaluated-to-released transfer requires direct reassessment or a verified information-reduction certificate in the safe direction.
+- Finite-secret DP clearance requires a policy-bound maximum prior-mass cap, validated prior evidence, and pairwise DP over every secret alternative.
 - Utility is enforced before selecting a least-informative feasible release.
 - Portfolio dependence must be assessed directly, composed analytically, or bounded by a replayable incomplete-portfolio certificate.
 - `unassessed` and `inconclusive` states cannot authorize release.
 - Signatures protect integrity and non-repudiation; they do not validate the truth of submitted evidence.
 
-See [architecture](docs/architecture.md), [threat model](docs/reference/threat-model.md), and [production roadmap](docs/reference/production-roadmap.md).
+See the [normative protocol](docs/model-release-assurance-protocol.md), [mathematical appendix](docs/mathematical-foundations.md), [architecture](docs/architecture.md), [threat model](docs/reference/threat-model.md), and [production roadmap](docs/reference/production-roadmap.md).
 
 The [2026-08-22 framework audit](docs/audit-2026-08-22.md) records the production-boundary findings. Version 0.6 resolves its signing, claimant-selected payload and source-originated release-binding defects. The repository remains non-production because dedicated analyzers, exact clearance-boundary arithmetic, trusted workers, registry/gateway enforcement and accreditation are still incomplete.
 
@@ -191,9 +217,9 @@ PYTHONPATH=src python -m compileall -q src tests
 
 The GitHub Actions workflow runs both checks and verifies that committed JSON schemas match the current models.
 
-## Production boundary
+## Protocol conformance and production boundary
 
-The repository supplies an offline decision core. A production deployment also needs authoritative identity and separation of duties, isolated analyzer workers, managed keys and storage, monitoring and incident response, a transactionally locked portfolio registry, population validation, independent security review, and institutional accreditation.
+The repository supplies the mathematical, assessment, and selection layers (`MRAP-L0` through `MRAP-L2`). It does not implement atomic authorization (`MRAP-L3`) or gateway enforcement and monitoring (`MRAP-L4`). A production deployment also needs authoritative identity and separation of duties, isolated analyzer workers, managed keys and storage, exact or outward-rounded clearance replay, a linearizable portfolio registry, gateway leases and revocation, population validation, independent security review, and institutional accreditation.
 
 Interactive LLM services require transcript-level analysis covering prompts, retrieval, tools, memory, updates, concurrency, and query budgets. One-shot attack results are not sufficient to authorize such a service.
 

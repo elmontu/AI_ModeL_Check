@@ -3,6 +3,7 @@ from __future__ import annotations
 import argparse
 import json
 import sys
+from datetime import datetime
 from pathlib import Path
 
 from pydantic import ValidationError
@@ -54,6 +55,7 @@ from .protocol_feasibility import (
     solve_protocol_feasibility,
     verify_protocol_feasibility,
 )
+from .release_protocol import ReleaseProtocolRun, verify_release_protocol_run
 
 
 def _read_json(path: Path) -> dict:
@@ -163,6 +165,27 @@ def build_parser() -> argparse.ArgumentParser:
         type=int,
         default=1_000_000,
     )
+
+    release_protocol_verify = subparsers.add_parser(
+        "release-protocol-verify",
+        help="structurally replay an MRAP/1.0 lifecycle transcript",
+    )
+    release_protocol_verify.add_argument("transcript", type=Path)
+    release_protocol_verify.add_argument(
+        "--artifact-base",
+        type=Path,
+        help="directory for relative protocol-artifact paths (default: transcript directory)",
+    )
+    release_protocol_verify.add_argument(
+        "--skip-artifact-files",
+        action="store_true",
+        help="replay states without checking artifact files; not conformance-grade",
+    )
+    release_protocol_verify.add_argument(
+        "--as-of",
+        type=datetime.fromisoformat,
+        help="timezone-aware status-verification time (default: current UTC time)",
+    )
     portfolio_verify.add_argument(
         "--skip-evidence-files",
         action="store_true",
@@ -211,6 +234,7 @@ def build_parser() -> argparse.ArgumentParser:
             "portfolio-error-budget", "portfolio-multinomial-request",
             "portfolio-multinomial-evidence", "portfolio-specification",
             "protocol-problem", "protocol-certificate",
+            "release-protocol-run",
         ),
         default="request",
     )
@@ -280,6 +304,7 @@ def main(argv: list[str] | None = None) -> int:
                 "portfolio-specification": IncompletePortfolioSpecification,
                 "protocol-problem": ProtocolFeasibilityProblem,
                 "protocol-certificate": ProtocolFeasibilityCertificate,
+                "release-protocol-run": ReleaseProtocolRun,
             }
             args.output.parent.mkdir(parents=True, exist_ok=True)
             _write_text_lf(
@@ -397,6 +422,27 @@ def main(argv: list[str] | None = None) -> int:
                 f"exact_upper={verification.exact_upper_numerator}/"
                 f"{verification.exact_upper_denominator}; "
                 "finite-model result is not a production release authorization"
+            )
+        elif args.command == "release-protocol-verify":
+            run = ReleaseProtocolRun.model_validate(_read_json(args.transcript))
+            verification = verify_release_protocol_run(
+                run,
+                args.artifact_base
+                if args.artifact_base is not None
+                else args.transcript.parent,
+                verify_artifact_files=not args.skip_artifact_files,
+                as_of=args.as_of,
+            )
+            if not verification.valid:
+                raise AssuranceError(
+                    "release-protocol transcript failed structural replay: "
+                    + "; ".join(verification.reasons)
+                )
+            print(
+                f"structurally_verified state={verification.final_state.value} "
+                f"authorization_recorded={str(verification.authorization_issued).lower()} "
+                f"active={str(verification.deployment_active).lower()}; "
+                "structural replay does not authenticate actors or issue a production authorization"
             )
         elif args.command == "portfolio-multinomial-generate":
             request = MultinomialEvidenceRequest.model_validate(_read_json(args.request))

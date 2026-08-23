@@ -169,7 +169,7 @@ Signed generation logs or content credentials can provide a separate authenticat
 | Low-FPR simultaneous inference | Core and XGBoost now divide alpha across TPR/FPR bounds and declared comparisons | Retain tail-sample refusal; future subgroup and LLM families need dedicated contracts |
 | Realistic membership priors and tail heterogeneity | XGBoost now emits preregistered-prior PPV plus descriptive class/score tails | Add preregistered, adequately powered subgroup families before inferential tail claims |
 | Strong, varied membership attacks | Reference-loss screen only | Add multi-reference LiRA-style, reference-mismatch, label-only, and full-artifact profiles |
-| Formal DP plus implementation audit | Core has accountant and attack paths, but artifact/interface/game provenance still has a critical gap | Complete release binding before using DP for production clearance; add randomized-canary replay tests |
+| Formal DP plus implementation audit | Core has source-bound accountant and attack paths; 0.7.0 also binds the finite-secret prior-mass cap and pairwise-DP premise | Add independently operated accountant replay and randomized-canary replay tests |
 | Three distinct canary modes | Separated in the lintable profile; no evidence analyzer exists | Version separate exposure, randomized IN/OUT, and naturalistic extraction schemas/workers |
 | Watermark null calibration and adaptive attack suite | Required by profile 1.1 and its linter; no detector/attack worker exists | Implement replayable scoring, calibration, quality, power, and attack-matrix evidence |
 | Complete interactive transcript assurance | Explicitly refused by optimizer | Retain refusal until a versioned transcript/channel analyzer exists |
