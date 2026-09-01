@@ -1,0 +1,21 @@
+{
+  "kind": "lstm",
+  "description": "Tiny scalar recurrent sequence classifier for workflow testing only",
+  "model": {
+    "forget_x": 0.0,
+    "forget_h": 0.0,
+    "input_x": 1.0,
+    "input_h": 0.0,
+    "cell_x": 2.0,
+    "cell_h": 0.0,
+    "output_x": 0.0,
+    "output_h": 0.0,
+    "classifier_weight": 1.0,
+    "classifier_bias": 0.0
+  },
+  "holdout_cases": [
+    {"case_id": "positive-trend", "input": [0.1, 0.4, 0.8], "expected": 1},
+    {"case_id": "negative-trend", "input": [-0.1, -0.4, -0.8], "expected": 0},
+    {"case_id": "late-positive", "input": [-0.2, -0.1, 0.9], "expected": 1}
+  ]
+}

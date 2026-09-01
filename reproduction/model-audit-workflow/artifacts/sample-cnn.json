@@ -1,0 +1,15 @@
+{
+  "kind": "cnn",
+  "description": "Tiny deterministic edge detector for workflow testing only",
+  "model": {
+    "kernel": [[1.0, -1.0], [1.0, -1.0]],
+    "convolution_bias": 0.0,
+    "output_weight": 1.0,
+    "output_bias": -0.5
+  },
+  "holdout_cases": [
+    {"case_id": "vertical-edge", "input": [[1, 0, 0], [1, 0, 0], [1, 0, 0]], "expected": 1},
+    {"case_id": "flat", "input": [[0, 0, 0], [0, 0, 0], [0, 0, 0]], "expected": 0},
+    {"case_id": "reverse-edge", "input": [[0, 1, 1], [0, 1, 1], [0, 1, 1]], "expected": 0}
+  ]
+}

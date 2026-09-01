@@ -283,6 +283,9 @@ In particular, the machine-checked core:
   deployment platform (the ideal registry/gateway semantics are verified, but
   concrete implementations and the Python mutation tests are not Lean proofs
   of refinement);
+- does not machine-check the supplemental strategic stress-test theorems in the
+  mathematical appendix or validate their real-world payoff, detection,
+  enforcement, effort, behavioral, or causal premises;
 - does not prove liveness, distributed availability, universal composability,
   real-time clock fidelity, reliable compromise detection, or security after
   an unknown key compromise; and

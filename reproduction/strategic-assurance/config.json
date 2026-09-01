@@ -1,0 +1,304 @@
+{
+  "schema_version": "1.0",
+  "assessment_id": "synthetic-health-strategic-stress-v1",
+  "assessment_time": "2026-08-26T00:00:00Z",
+  "governance_role": "supplemental_strategic_stress_test",
+  "governance_context": {
+    "accountable_model_owner": "synthetic_hospital_model_office",
+    "decision_authority": "synthetic_hospital_release_committee",
+    "independent_review_body": "synthetic_external_assurance_panel",
+    "affected_party_groups": [
+      "patients_represented_in_source_data",
+      "patients_affected_by_downstream_research",
+      "approved_research_users"
+    ],
+    "governance_objective": "Decide whether the exact synthetic-health model and bounded interface may be released for the registered research purpose under non-compensable privacy, safety, legal, utility, accountability, and lifecycle conditions.",
+    "conflict_of_interest_controls": [
+      "model owner cannot approve its own assessment",
+      "independent reviewer reports adverse findings directly to the decision authority",
+      "strategic certificate cannot override a failed or inconclusive mandatory gate"
+    ],
+    "contestation_process": "Affected-party representatives and accountable owners may submit recorded objections; reconsideration creates a new decision instance and cannot rewrite the prior record.",
+    "incident_and_retirement_authority": "synthetic_hospital_incident_and_retirement_board"
+  },
+  "players": [
+    "hospital_release_authority",
+    "model_submitter",
+    "independent_assessor",
+    "approved_research_recipient",
+    "anonymous_external_attacker"
+  ],
+  "timing": [
+    "authority commits to audit probabilities, consequences, and release controls",
+    "submitter chooses documented compliance or a registered shortcut",
+    "assessor chooses low or high evidence-review effort",
+    "registry accepts or refuses using the audit result and mandatory hard gates",
+    "recipient observes the released interface and chooses abstention or an attack"
+  ],
+  "information_structure": [
+    "the registered audit policy is observable before submitter action",
+    "the assessor observes the evidence plan before choosing effort",
+    "the recipient observes the released interface and monitoring policy",
+    "private actor type is represented by a registered finite type"
+  ],
+  "collusion_scope": "The synthetic experiment treats submitter, assessor, approved recipient, and anonymous attacker as separate types; coalition payoffs remain outside this one-shot experiment.",
+  "response_model": "worst_case_best_response",
+  "follower_tie_rule": "pessimistic",
+  "material_types_complete": true,
+  "omitted_material_types": [],
+  "submitter_types": [
+    {
+      "type_id": "adverse-result-omission",
+      "description": "A schedule-pressured team may omit an adverse privacy result before release.",
+      "net_violation_gain": {
+        "lower": {"numerator": 8, "denominator": 1},
+        "upper": {"numerator": 12, "denominator": 1},
+        "unit": "SGD",
+        "provenance_id": "ev.synthetic.audit-values",
+        "claim_id": "submitter.g.omission"
+      }
+    },
+    {
+      "type_id": "control-shortcut",
+      "description": "A team may skip a registered control to avoid delay and implementation cost.",
+      "net_violation_gain": {
+        "lower": {"numerator": 5, "denominator": 1},
+        "upper": {"numerator": 10, "denominator": 1},
+        "unit": "SGD",
+        "provenance_id": "ev.synthetic.audit-values",
+        "claim_id": "submitter.g.shortcut"
+      }
+    }
+  ],
+  "audit_policy": {
+    "policy_id": "synthetic-health-audit-v1",
+    "detection_probability": {
+      "lower": {"numerator": 3, "denominator": 5},
+      "upper": {"numerator": 7, "denominator": 10},
+      "provenance_id": "ev.synthetic.audit-probabilities",
+      "claim_id": "audit.q"
+    },
+    "consequence": {
+      "lower": {"numerator": 24, "denominator": 1},
+      "upper": {"numerator": 30, "denominator": 1},
+      "unit": "SGD",
+      "provenance_id": "ev.synthetic.audit-values",
+      "claim_id": "audit.f"
+    },
+    "strict_margin": {
+      "value": {"numerator": 1, "denominator": 1},
+      "unit": "SGD"
+    },
+    "commitment_observable": true,
+    "consequence_enforceable": true
+  },
+  "assessor_contract": {
+    "contract_id": "synthetic-independent-review-v1",
+    "low_effort_validation_probability": {
+      "lower": {"numerator": 1, "denominator": 2},
+      "upper": {"numerator": 3, "denominator": 5},
+      "provenance_id": "ev.synthetic.audit-probabilities",
+      "claim_id": "assessor.sl"
+    },
+    "high_effort_validation_probability": {
+      "lower": {"numerator": 4, "denominator": 5},
+      "upper": {"numerator": 9, "denominator": 10},
+      "provenance_id": "ev.synthetic.audit-probabilities",
+      "claim_id": "assessor.sh"
+    },
+    "validation_reward": {
+      "lower": {"numerator": 30, "denominator": 1},
+      "upper": {"numerator": 35, "denominator": 1},
+      "unit": "SGD",
+      "provenance_id": "ev.synthetic.audit-values",
+      "claim_id": "assessor.reward"
+    },
+    "low_effort_cost": {
+      "lower": {"numerator": 2, "denominator": 1},
+      "upper": {"numerator": 3, "denominator": 1},
+      "unit": "SGD",
+      "provenance_id": "ev.synthetic.audit-values",
+      "claim_id": "assessor.kl"
+    },
+    "high_effort_cost": {
+      "lower": {"numerator": 5, "denominator": 1},
+      "upper": {"numerator": 6, "denominator": 1},
+      "unit": "SGD",
+      "provenance_id": "ev.synthetic.audit-values",
+      "claim_id": "assessor.kh"
+    },
+    "strict_margin": {
+      "value": {"numerator": 1, "denominator": 1},
+      "unit": "SGD"
+    },
+    "scoring_event_observable": true
+  },
+  "attack_options": [
+    {
+      "option_id": "registered-membership-inference",
+      "recipient_type": "approved_researcher",
+      "jurisdiction": "SG",
+      "threat_mapping": "Membership inference through a bounded authenticated research API.",
+      "information_experiment_id": "synthetic-health-bounded-channel",
+      "decision_problem_id": "membership-success",
+      "information_value": {
+        "lower": {"numerator": 1, "denominator": 5},
+        "upper": {"numerator": 1, "denominator": 4},
+        "provenance_id": "ev.synthetic.attack-probabilities",
+        "claim_id": "approved.v"
+      },
+      "value_scale": {
+        "lower": {"numerator": 20, "denominator": 1},
+        "upper": {"numerator": 24, "denominator": 1},
+        "unit": "SGD",
+        "provenance_id": "ev.synthetic.attack-values",
+        "claim_id": "approved.lambda"
+      },
+      "attack_cost": {
+        "lower": {"numerator": 7, "denominator": 1},
+        "upper": {"numerator": 9, "denominator": 1},
+        "unit": "SGD",
+        "provenance_id": "ev.synthetic.attack-values",
+        "claim_id": "approved.cost"
+      },
+      "detection_probability": {
+        "lower": {"numerator": 4, "denominator": 5},
+        "upper": {"numerator": 9, "denominator": 10},
+        "provenance_id": "ev.synthetic.attack-probabilities",
+        "claim_id": "approved.d"
+      },
+      "consequence": {
+        "lower": {"numerator": 10, "denominator": 1},
+        "upper": {"numerator": 12, "denominator": 1},
+        "unit": "SGD",
+        "provenance_id": "ev.synthetic.attack-values",
+        "claim_id": "approved.p"
+      },
+      "strict_abstention_margin": {
+        "value": {"numerator": 1, "denominator": 1},
+        "unit": "SGD"
+      },
+      "consequence_enforceable": true,
+      "risk_neutral_expected_utility": true
+    },
+    {
+      "option_id": "anonymous-external-inference",
+      "recipient_type": "anonymous_external_attacker",
+      "jurisdiction": "unresolved",
+      "threat_mapping": "Inference against a public or indirectly exposed endpoint where monetary or contractual consequences cannot be collected.",
+      "information_experiment_id": "synthetic-health-public-channel",
+      "decision_problem_id": "membership-success",
+      "information_value": {
+        "lower": {"numerator": 7, "denominator": 20},
+        "upper": {"numerator": 9, "denominator": 20},
+        "provenance_id": "ev.synthetic.attack-probabilities",
+        "claim_id": "anonymous.v"
+      },
+      "value_scale": {
+        "lower": {"numerator": 20, "denominator": 1},
+        "upper": {"numerator": 25, "denominator": 1},
+        "unit": "SGD",
+        "provenance_id": "ev.synthetic.attack-values",
+        "claim_id": "anonymous.lambda"
+      },
+      "attack_cost": {
+        "lower": {"numerator": 2, "denominator": 1},
+        "upper": {"numerator": 4, "denominator": 1},
+        "unit": "SGD",
+        "provenance_id": "ev.synthetic.attack-values",
+        "claim_id": "anonymous.cost"
+      },
+      "detection_probability": {
+        "lower": {"numerator": 7, "denominator": 10},
+        "upper": {"numerator": 9, "denominator": 10},
+        "provenance_id": "ev.synthetic.attack-probabilities",
+        "claim_id": "anonymous.d"
+      },
+      "consequence": {
+        "lower": {"numerator": 0, "denominator": 1},
+        "upper": {"numerator": 0, "denominator": 1},
+        "unit": "SGD",
+        "provenance_id": "ev.synthetic.attack-values",
+        "claim_id": "anonymous.p"
+      },
+      "strict_abstention_margin": {
+        "value": {"numerator": 1, "denominator": 1},
+        "unit": "SGD"
+      },
+      "consequence_enforceable": false,
+      "risk_neutral_expected_utility": true
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "ev.synthetic.audit-probabilities",
+      "kind": "synthetic_assumption",
+      "source": "preregistered synthetic stress-test ranges in this configuration",
+      "source_sha256": null,
+      "population": "illustrative synthetic-health release participants; no real organization",
+      "collected_at": "2026-08-25T00:00:00Z",
+      "method": "exact rational intervals chosen to exercise supported, strict-tie, and adverse-endpoint branches",
+      "uncertainty_method": "rectangular synthetic uncertainty set; not a confidence interval",
+      "unit": "probability",
+      "supports": ["audit.q", "assessor.sl", "assessor.sh"],
+      "positive_control_id": "pc.synthetic.audit-detection",
+      "deployment_eligible": false
+    },
+    {
+      "evidence_id": "ev.synthetic.audit-values",
+      "kind": "synthetic_assumption",
+      "source": "preregistered synthetic stress-test ranges in this configuration",
+      "source_sha256": null,
+      "population": "illustrative synthetic-health release participants; no real organization",
+      "collected_at": "2026-08-25T00:00:00Z",
+      "method": "exact rational payoff and effort intervals selected before experiment execution",
+      "uncertainty_method": "rectangular synthetic uncertainty set; not empirical valuation",
+      "unit": "SGD",
+      "supports": [
+        "submitter.g.omission",
+        "submitter.g.shortcut",
+        "audit.f",
+        "assessor.reward",
+        "assessor.kl",
+        "assessor.kh"
+      ],
+      "positive_control_id": null,
+      "deployment_eligible": false
+    },
+    {
+      "evidence_id": "ev.synthetic.attack-probabilities",
+      "kind": "synthetic_assumption",
+      "source": "preregistered synthetic stress-test ranges in this configuration",
+      "source_sha256": null,
+      "population": "illustrative approved and anonymous recipient classes; no observed attackers",
+      "collected_at": "2026-08-25T00:00:00Z",
+      "method": "exact rational information-value and detection intervals chosen for algebraic stress testing",
+      "uncertainty_method": "rectangular synthetic uncertainty set; not a behavioural estimate",
+      "unit": "probability",
+      "supports": ["approved.v", "approved.d", "anonymous.v", "anonymous.d"],
+      "positive_control_id": "pc.synthetic.attack-monitor",
+      "deployment_eligible": false
+    },
+    {
+      "evidence_id": "ev.synthetic.attack-values",
+      "kind": "synthetic_assumption",
+      "source": "preregistered synthetic stress-test ranges in this configuration",
+      "source_sha256": null,
+      "population": "illustrative approved and anonymous recipient classes; no observed attackers",
+      "collected_at": "2026-08-25T00:00:00Z",
+      "method": "exact rational value, effort-cost, and enforceability ranges fixed before execution",
+      "uncertainty_method": "rectangular synthetic uncertainty set; zero consequence encodes non-enforceability",
+      "unit": "SGD",
+      "supports": [
+        "approved.lambda",
+        "approved.cost",
+        "approved.p",
+        "anonymous.lambda",
+        "anonymous.cost",
+        "anonymous.p"
+      ],
+      "positive_control_id": null,
+      "deployment_eligible": false
+    }
+  ]
+}

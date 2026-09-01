@@ -1,0 +1,39 @@
+{
+  "schema_version": "1.0",
+  "workflow_id": "sample-four-family-model-audit-v1",
+  "experimental_only": true,
+  "models": [
+    {
+      "experiment_id": "sample-cnn-vision-v1",
+      "kind": "cnn",
+      "model_family": "cnn",
+      "artifact_path": "artifacts/sample-cnn.json",
+      "artifact_sha256": "b6b6c60388a836431d7601ecd7e27607b16b5a9b0f533af6de5704fe40c1f584",
+      "purpose": "Exercise vision-model inference and fail-closed modality-specific audit routing"
+    },
+    {
+      "experiment_id": "sample-lstm-timeseries-v1",
+      "kind": "lstm",
+      "model_family": "time_series",
+      "artifact_path": "artifacts/sample-lstm.json",
+      "artifact_sha256": "432fee6d61f1e097b054b1ae6b3a7d6faacef83e2c36fe45ac8e55bd3481a715",
+      "purpose": "Exercise recurrent sequence inference and fail-closed sequence-worker routing"
+    },
+    {
+      "experiment_id": "sample-xgboost-tabular-v1",
+      "kind": "xgboost",
+      "model_family": "xgboost",
+      "artifact_path": "artifacts/sample-xgboost.json",
+      "artifact_sha256": "a4fcc38f499028a612c54f036599532cccd4d4c983c6317df12a2176b1baca56",
+      "purpose": "Exercise additive-tree inference and route to the existing XGBoost screening worker"
+    },
+    {
+      "experiment_id": "sample-llm-next-token-v1",
+      "kind": "llm",
+      "model_family": "llm",
+      "artifact_path": "artifacts/sample-llm.json",
+      "artifact_sha256": "b587f3f6d3d92c0ebf4d2d021acddbd1021f261dd10ed6b9a127e649c0ef9425",
+      "purpose": "Exercise text generation and fail-closed interactive transcript audit routing"
+    }
+  ]
+}

@@ -1,10 +1,10 @@
 # OpenML benchmark package
 
-This package defines a provenance-complete OpenML benchmark run. It does not claim to reconstruct unavailable historical model artifacts.
+This package specifies a provenance-complete OpenML benchmark run design. It does not by itself prove that a run completed or reconstruct unavailable historical model artifacts.
 
-The benchmark corpus is OpenML-CC18, suite 99. Suite membership, dataset IDs and versions, OpenML checksums, downloaded snapshot hashes, targets, dimensions, class counts, missingness, and software versions are frozen in `manifests/`.
+The benchmark corpus is OpenML-CC18, suite 99. The retained manifest records suite membership, dataset IDs and versions, source checksums, targets, dimensions, class counts, missingness, and software-version fields.
 
-Raw snapshots, OpenML caches, trained models, and run outputs are intentionally ignored by Git because of their size. Their cryptographic hashes remain in retained manifests.
+Raw snapshots, OpenML caches, trained models, and run outputs are ignored by Git because of their size and are absent from the current checkout. A publishable replay must regenerate or restore them and bind their cryptographic hashes in the final study seal.
 
 ## Reproduction stages
 
@@ -32,7 +32,7 @@ python3 \
   --output-md output/reproduction/reports/openml-structural-results.md
 ```
 
-Run the frozen tree attack/capacity subset and verify every retained model,
+Run the frozen tree attack/capacity subset and verify every generated model,
 score table, complete target/reference cell histogram, and raw count:
 
 ```bash
@@ -122,39 +122,31 @@ python3 \
   --suite-manifest reproduction/openml/manifests/suite-99-datasets.json
 ```
 
-## Evidence tiers
+## Registered evidence tiers
 
-- Broad structural tier: every eligible dataset in the frozen 72-dataset suite.
-- Repeated capacity tier: a deterministic, size/class/feature-stratified subset selected before outcomes are observed; complete target and reference leaf-signature histograms are retained for every capacity.
-- Attack tier: pre-declared datasets and capacities with raw member/nonmember scores and TP/FP/TN/FN counts.
-- Neural tier: a pre-declared subset with independently fitted non-private MLP pipelines, repeated seeds, utility, and empirical attacks.
-- DP tier: shallow MLPs trained with independent Poisson sampling, per-example clipping, and Gaussian noise at two budgets, with sealed ledgers and a separate exact integer-order RDP replay. Public benchmark preprocessing is explicitly outside the private mechanism; production data-dependent preprocessing must be privatized or composed.
+- Broad structural tier: the registered design covers every eligible dataset in the 72-dataset suite manifest.
+- Repeated capacity tier: the design selects a deterministic, size/class/feature-stratified subset before outcomes are observed and requires complete target and reference leaf-signature histograms for every capacity.
+- Attack tier: the design pre-declares datasets and capacities and requires raw member/nonmember scores and TP/FP/TN/FN counts.
+- Neural tier: the design pre-declares a subset with independently fitted non-private MLP pipelines, repeated seeds, utility, and empirical attacks.
+- DP tier: the design specifies shallow MLPs trained with independent Poisson sampling, per-example clipping, and Gaussian noise at two budgets, with sealed ledgers and a separate exact integer-order RDP replay. Public benchmark preprocessing is explicitly outside the private mechanism; production data-dependent preprocessing must be privatized or composed.
 - Multi-shadow tier: 15 shadow models per target with exact regular in/out assignment and a per-record Gaussian likelihood-ratio score. This is LiRA-style, not the complete augmented online LiRA protocol.
 - Controlled-inference tier: same-side-information no-model and model-enhanced attacks for attribute inference and one-feature reconstruction, with direct ground-truth scoring and multiplicity adjustment.
-- Finite-population tier: complete benchmark-population histograms, probability samples without replacement, exact simultaneous hypergeometric lower bounds, and a deliberately biased invalid-design control.
-- Decision-theory witness tier: an all-dataset search over retained composition rosters for decision-metric reversals, population-anchor reversals, and assessed/released-interface separation witnesses, followed by independent raw-row replay.
-- Composition tier: all 72 datasets, with three releases evaluated on the exact intersection of their sealed target-training rosters.
-- Metadata-adversary sensitivity tier: all 96 tree release configurations, with a metadata-only no-model baseline and combined model-plus-metadata attack. The adversary receives exact full-source and target-training summaries, including minima, maxima, range, mean, median, standard deviation, variance, quartiles/IQR, MAD, missingness, cardinalities, and categorical/class frequencies.
+- Finite-population tier: the design requires complete benchmark-population histograms, probability samples without replacement, exact simultaneous hypergeometric lower bounds, and a deliberately biased invalid-design control.
+- Decision-theory witness tier: the planned all-dataset search uses composition rosters to find decision-metric reversals, population-anchor reversals, and assessed/released-interface separation witnesses, followed by independent raw-row replay.
+- Composition tier: the design registers all 72 datasets and evaluates three releases on the exact intersection of their sealed target-training rosters.
+- Metadata-adversary sensitivity tier: the design registers 96 tree release configurations, a metadata-only no-model baseline, and a combined model-plus-metadata attack. The registered adversary receives exact full-source and target-training summaries, including minima, maxima, range, mean, median, standard deviation, variance, quartiles/IQR, MAD, missingness, cardinalities, and categorical/class frequencies.
 
 Any exclusion must be recorded with a machine-readable reason; a failed dataset is never silently dropped.
 
-## Completed benchmark corpus
+## Current retained status and provisional run ledger
 
-- 72/72 OpenML-CC18 datasets frozen and processed; 874,726 source rows.
-- 216/216 broad tree runs, each with a complete cell histogram and three pre-declared seeds.
-- 96/96 tree capacity/attack configurations, representing 192 independently trained target/reference models.
-- 24/24 MLP target/reference pairs over eight datasets and three seeds, representing 48 neural models.
-- 72/72 three-release composition analyses, reusing the 216 broad tree artifacts.
-- 96/96 exact-metadata sensitivity runs and 192 attack evaluations; these are explicitly post-hoc.
-- 48/48 DP-SGD dataset-seed-budget runs, including target/reference mechanisms and matched non-private controls; every accountant ledger replayed.
-- 8/8 multi-shadow targets and 120 shadow models.
-- 16/16 controlled attribute and 16/16 partial-reconstruction runs.
-- 72/72 finite benchmark populations with complete truth and exact simultaneous bounds.
-- 72/72 composition populations searched for non-degenerate decision-theory witnesses; 84 metric reversals, 206 anchor reversals, and 105 substitution separations found, with the selected witnesses independently replayed.
+The current checkout verifies only that the suite manifest records 72 OpenML-CC18 dataset entries and 874,726 source rows. It does not retain the raw dataset snapshots, generated model/run artifacts, witness summaries, raw witness rows, or top-level study seal needed to verify completed-run claims.
 
-The baseline tiers trained 456 release-model artifacts. The additional tiers trained 144 DP models, 48 matched non-private controls, 120 shadow models, and 64 controlled-inference attack models. These runs are independently generated and do not reconstruct unavailable historical artifacts.
+Earlier working records listed 216 broad tree runs, 96 tree capacity/attack configurations, 24 MLP target/reference pairs, 72 composition analyses, 96 metadata-sensitivity runs, 48 DP-SGD configurations, eight multi-shadow targets with 120 shadow models, 16 controlled-attribute runs, 16 partial-reconstruction runs, and 72 finite benchmark populations. They also listed 84 decision-metric reversals, 206 population-anchor reversals, and 105 interface-substitution separations. These are provisional prior-run configuration counts, not independent cases or unique-dataset counts. They have not been independently verified from the current artifact and must not be cited as results.
 
-Build and replay the decision-theory witnesses from the retained models and raw rosters:
+Before reporting any quantitative finding, reconstruct the registered inputs, rerun every tier, archive the generated outputs and environment records, replay selected witnesses from hash-checked raw rows, and create a binding study seal.
+
+After the registered models and raw rosters have been regenerated, build and replay the decision-theory witnesses:
 
 ```bash
 python3 \

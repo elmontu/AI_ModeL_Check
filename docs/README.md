@@ -9,7 +9,10 @@ This directory contains operational and engineering documentation for the MRA re
 - [Protocol adversarial evaluation](protocol-evaluation.md): positive controls, unsafe transcript mutations, reproduction, and limits of the mutation score.
 - [Protocol instantiation case studies](protocol-case-studies.md): reproducible XGBoost, LLM, and authenticated-lifecycle examples with claim boundaries.
 - [Architecture](architecture.md): components, data flow, trust boundaries, and package map.
-- [Mathematical foundations](mathematical-foundations.md): formal decision games, theorems, proofs, statistical guarantees, implementation correspondence, and non-claims.
+- [Model-governance core](governance-core.md): institutional authority, accountability, independent challenge, affected parties, contestation, lifecycle, and the boundary around strategic stress tests.
+- [Mathematical foundations](mathematical-foundations.md): Bayesian release decisions, optional strategic stress tests, theorems, proofs, statistical guarantees, implementation correspondence, and non-claims.
+- [Game-theory literature review](game-theory-literature-review.md): primary-source audit/security/strategic-ML review, claim ledger, transfer limits, hallucination controls, and the deliberately limited role of strategic stress testing in governance.
+- [Executable strategic assurance](strategic-assurance.md): optional exact-rational incentive stress tests, provenance validation, pessimistic ties, adversarial tests, and the seeded synthetic experiment.
 - [Threat model](reference/threat-model.md): protected assets, actors, adversary knowledge, threats, and controls.
 - [Adaptation profiles](reference/adaptation-profiles.md): whole-of-government baseline and adopter-specific configuration.
 - [Production roadmap](reference/production-roadmap.md): work required to deploy the offline core as an accredited service.

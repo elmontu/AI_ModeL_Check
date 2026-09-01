@@ -18,6 +18,11 @@ All user-visible changes to Model Release Assurance are recorded here. The proje
 - An ideal Lean deployment functionality with atomic authorization commits, measured gateway activation, bounded per-request serving, lifecycle realization, and machine-checked replay, concurrency, substitution, expiry, suspension, and revocation denial theorems.
 - A standalone `mrap-protocol` Lean package with a stable `MRAP` public umbrella and audit-only mutation/theorem-inventory modules kept outside the exported protocol surface.
 - A checked Python-to-Lean role/state/action correspondence manifest and a reproducible adversarial mutation evaluation covering nineteen unsafe transcript classes.
+- A primary-source game-theory review and machine-readable claim ledger with source/inference/proposal labels, transfer limits, pessimistic tie handling, and regression-tested hallucination controls.
+- A scoped supplemental strategic stress test separating Bayesian leakage from submitter incentives, assessor effort, attacker effort, robust deterrence, and real-world parameter provenance without treating governance as a game.
+- An exact-rational strategic assurance library with replayable submitter, assessor, attacker, and Blackwell-control certificates; explicit mathematical-versus-deployment statuses; and fail-closed evidence, unit, positive-control, tie, completeness, and enforceability checks.
+- A seeded synthetic health-release stress experiment with adverse-endpoint sampling, exact deterrence frontiers, certificate replay, and a negative control showing that monitoring cannot deter an attacker when enforceable consequence is zero.
+- An explicit institutional governance core covering purpose, authority, accountable ownership, independent challenge, affected parties, conflict controls, contestation, reasoned decisions, lifecycle enforcement, and retirement; strategic analysis is now formally marked as a supplemental stress test with no governance-decision, authorization, or gate-override effect.
 
 ### Fixed
 

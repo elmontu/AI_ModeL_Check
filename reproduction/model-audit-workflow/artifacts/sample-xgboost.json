@@ -1,0 +1,17 @@
+{
+  "kind": "xgboost",
+  "description": "Tiny additive stump ensemble for workflow testing only",
+  "model": {
+    "base_score": -0.2,
+    "stumps": [
+      {"feature": 0, "threshold": 0.5, "left": -0.6, "right": 0.7},
+      {"feature": 1, "threshold": 0.5, "left": -0.3, "right": 0.5}
+    ]
+  },
+  "holdout_cases": [
+    {"case_id": "both-low", "input": [0.1, 0.1], "expected": 0},
+    {"case_id": "first-high", "input": [0.9, 0.1], "expected": 1},
+    {"case_id": "both-high", "input": [0.9, 0.9], "expected": 1},
+    {"case_id": "second-only", "input": [0.1, 0.9], "expected": 0}
+  ]
+}

@@ -39,9 +39,12 @@ This does **not** prove that the model is safe or that Python, PostgreSQL, a net
 
 The claim is scoped this way to avoid a circular proof: assuming every scientific and implementation gate is sound and then proving that their conjunction is sound would add little assurance. The machine-checked layer instead proves trace properties directly; empirical adequacy and implementation refinement remain separately reviewable obligations.
 
+MRAP is first an institutional [model-governance protocol](docs/governance-core.md): it governs legitimate purpose, authority, accountable ownership, independent challenge, affected-party consideration, non-compensable evidence, reasoned decisions, exact deployment binding, contestation, incidents, and retirement. The mathematical appendix separately distinguishes fixed-channel Bayesian release decisions from an optional strategic stress test. The exact-rational [`strategic_assurance`](docs/strategic-assurance.md) library can expose selective-disclosure, review-effort, or enforcement weaknesses, but its certificates have no governance-decision or authorization effect and cannot override a mandatory gate. See the [primary-source game-theory review](docs/game-theory-literature-review.md) and its machine-readable claim ledger.
+
 ```bash
 python scripts/verify_formal_protocol.py
 python scripts/evaluate_protocol_mutations.py
+python scripts/run_strategic_assurance_experiment.py
 ```
 
 ## Repository layout

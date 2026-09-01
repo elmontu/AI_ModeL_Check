@@ -1,0 +1,14 @@
+{
+  "kind": "llm",
+  "description": "Tiny deterministic next-token table for workflow testing only; not a foundation model",
+  "model": {
+    "next_token": {"privacy": "risk", "model": "audit", "release": "control"},
+    "default_token": "unknown"
+  },
+  "holdout_cases": [
+    {"case_id": "privacy", "prompt": "Assess privacy", "expected": "risk"},
+    {"case_id": "model", "prompt": "Review model", "expected": "audit"},
+    {"case_id": "release", "prompt": "Approve release", "expected": "control"},
+    {"case_id": "other", "prompt": "Unseen token", "expected": "unknown"}
+  ]
+}

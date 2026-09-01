@@ -9,6 +9,8 @@
 
 MRAP specifies the end-to-end process by which a proposed model release may become an active, time-limited release. It defines the participants, immutable objects, signed messages, state machine, admissibility gates, atomic registry operation, gateway behavior, monitoring, and scoped assurance claims. Only the authorization-integrity and finite statistical-accounting core identified in Section 13 is machine checked; the entire engineering protocol is not formally verified.
 
+MRAP is an institutional model-governance protocol, not a game-theoretic decision rule. Its governance core defines legitimate purpose and scope, decision rights, accountable ownership, independent challenge, affected-party consideration, conflict controls, non-compensable evidence requirements, reasoned and contestable decisions, deployment binding, incident response, reassessment, and retirement. The [governance-core specification](governance-core.md) states this architecture and its implementation boundary.
+
 The words **MUST**, **MUST NOT**, **REQUIRED**, **SHOULD**, and **MAY** have the meanings in [RFC 2119](https://www.rfc-editor.org/rfc/rfc2119) and [RFC 8174](https://www.rfc-editor.org/rfc/rfc8174) when written in capitals.
 
 An assessment report, optimization report, mathematical certificate, signature, or audit-log entry is **not** an authorization. A release is authorized only when its authorization record and the corresponding portfolio transition have been committed by the authoritative registry. A release is active only when the gateway has independently verified that committed record and emitted an activation receipt.
@@ -72,6 +74,53 @@ MRAP relies on these explicit assumptions:
 7. the policy, threat set, population definition, release interface, world model, and evidence assumptions are complete and correct enough for the claimed scope.
 
 Cryptographic binding proves which bytes an actor signed. It does not prove that the evidence is true, that the world model is complete, or that the policy is ethically or legally adequate. Section 17 records further non-claims.
+
+### 4.1 Supplemental strategic stress tests
+
+MRAP's role permissions and transition invariants are enforcement semantics, not
+a proof that rational participants prefer to comply. A deployment MAY add a
+supplemental strategic stress-test certificate using
+[Section 5 of the mathematical appendix](mathematical-foundations.md), but it
+MUST NOT use predicted compliance or attacker deterrence to remove a mandatory
+technical or governance gate. Incentive analysis is defense in depth; it does
+not determine legitimate purpose, legal authority, affected-party
+acceptability, distributive fairness, accountability, or authorization.
+
+Every strategic problem MUST identify the accountable model owner, decision
+authority, independent review body, affected-party groups, governance
+objective, conflict-of-interest controls, contestation process, and
+incident/retirement authority. Every resulting certificate MUST state that its
+governance-decision effect and authorization effect are `none`.
+
+Any statement using “best response,” “incentive compatible,” “deterrent,” or
+“equilibrium” MUST bind:
+
+- players and private types, timing, observable information, actions, and
+  possible collusion;
+- payoff components with units, affected-party perspective, source, date, and
+  uncertainty intervals;
+- audit/detection/validation probabilities with prospective positive controls
+  and simultaneous uncertainty bounds;
+- technically and legally enforceable consequences after limited liability,
+  jurisdiction, collection, and delay;
+- the exact solution concept, pessimistic follower tie rule, strict incentive
+  margin, and replayable computation or closed-form certificate;
+- causal or empirical justification for behaviorally interpreted costs and
+  response functions; and
+- sensitivity results over every registered uncertain primitive.
+
+The certificate is inconclusive if an omitted material type is found, the
+equilibrium action changes within the uncertainty set, the consequence is not
+credible, or commitment/observability assumptions fail. Quantal-response or
+other bounded-rationality models MAY be reported as sensitivity analyses but
+MUST NOT replace the registered worst-case best response without deployment-
+specific validation.
+
+The evidentiary basis and hallucination controls for these requirements are
+recorded in the
+[primary-source game-theory review](game-theory-literature-review.md). The
+repository implements a design-time exact-rational interval evaluator, not a
+behaviorally calibrated solver or production parameter registry.
 
 ## 5. Cryptographic object model
 
@@ -157,16 +206,16 @@ Changing any field creates a new instance. A stale-head retry MUST rebase and re
 
 | Type | Issuer | Required semantic content |
 |---|---|---|
-| `PolicySnapshot` | `PA` | Policy/threat versions, tolerances, accepted evidence classes, error-budget ledger, trust profile, role keys, expiry/reassessment rules |
-| `Registration` | `SO` | Release purpose, artifact/interface commitments, recipients, populations, protected units, candidate-set commitment, expected registry head |
-| `EvidencePlan` | `AS` + required approvers | Mandatory games, sources, sampling design, multiplicity family, allocated errors, worker/image identities, positive controls, stopping and exclusion rules |
+| `PolicySnapshot` | `PA` | Policy/threat versions, tolerances, accepted evidence classes, error-budget ledger, decision rights, conflict controls, contestation and consultation requirements, trust profile, role keys, expiry/reassessment rules |
+| `Registration` | `SO` | Legitimate purpose and prohibited uses, accountable owner, affected-party groups, artifact/interface commitments, recipients, populations, protected units, candidate-set commitment, expected registry head |
+| `EvidencePlan` | `AS` + required approvers | Mandatory Bayesian decision problems and, when used, supplemental strategic stress-test records; sources, affected-party/impact evidence and consultation plan, sampling design, multiplicity family, allocated errors, worker/image identities, positive controls, stopping and exclusion rules |
 | `EvidenceBundle` | `EW` | Raw-source digests, source-observed context, worker attestation, measurements, failures, and plan digest |
-| `AssessmentReport` | `AS` | Per-candidate, per-threat interval and direction, scope, assumptions, replay result, transfer/portfolio result, and `clear/block/inconclusive` status |
+| `AssessmentReport` | `AS` | Per-candidate, per-threat interval and direction, scope, affected-party impacts, adverse findings, dissent, assumptions, replay result, transfer/portfolio result, optional strategic stress-test status with no decision effect, and `clear/block/inconclusive` status |
 | `OptimizationReport` | `OP` | All candidates, feasibility predicates, selected candidate or exhaustive refusal, deterministic tie-break, report/certificate digests, expected head and expiry |
-| `AuthorizationCommitRequest` | `AR` | Selected candidate, all predecessor digests, governance approvals, expected head, budget delta, expiry, nonce, and requested gateway constraints |
+| `AuthorizationCommitRequest` | `AR` | Selected candidate, all predecessor digests, reasoned governance decision, authority and separation checks, conflict disclosures, affected-party evidence, objections and their disposition, non-overridden mandatory gates, operating/retirement conditions, expected head, budget delta, expiry, nonce, and requested gateway constraints |
 | `AuthorizationReceipt` | `PR` | Durable registry entry, old/new heads, selected artifact/interface/control digests, committed budget delta, expiry, sequence, and registry proof |
 | `ActivationReceipt` | `GW` | Authorization digest, registry verification time/head, remeasured served bytes/interface/controls, endpoint identifier, lease expiry |
-| `LifecycleEvent` | `MO`, `GW`, `PR`, or authorized actor | Monitor result, drift, incident, suspension, revocation, expiry, reassessment, replacement, or decommission event |
+| `LifecycleEvent` | `MO`, `GW`, `PR`, or authorized actor | Monitor result, complaint/contestation, drift, incident, suspension, revocation, expiry, reassessment, replacement, or decommission event |
 
 Each message MUST reference all immediate predecessors needed to replay its decision. Reports MUST retain negative and inconclusive evidence; a producer cannot omit an inconvenient mandatory result and still satisfy message completeness.
 
@@ -176,12 +225,12 @@ Each instance has exactly one current protocol state. The registry, not a client
 
 | From | Event and mandatory actor | To | Mandatory conditions |
 |---|---|---|---|
-| `DRAFT` | valid `Registration` by `SO` | `REGISTERED` | Identity, schema, immutable artifact/interface/candidate hashes, policy and current head captured |
-| `REGISTERED` | approved `EvidencePlan` | `PLAN_FROZEN` | Threat and population completeness; error allocated before observation; workers and stopping rules fixed |
+| `DRAFT` | valid `Registration` by `SO` | `REGISTERED` | Identity, legitimate purpose, prohibited uses, accountable owner, affected parties, schema, immutable artifact/interface/candidate hashes, policy and current head captured |
+| `REGISTERED` | approved `EvidencePlan` | `PLAN_FROZEN` | Threat, population and governance-evidence completeness; consultation/impact plan registered; error allocated before observation; workers and stopping rules fixed |
 | `PLAN_FROZEN` | complete `EvidenceBundle` set | `EVIDENCE_FROZEN` | Source, context, worker, positive-control, raw-data and plan bindings verified; collection closed |
 | `EVIDENCE_FROZEN` | signed `AssessmentReport` | `ASSESSED` | Every mandatory candidate/threat cell is `clear`, `block`, or `inconclusive`; arithmetic/certificates replay |
 | `ASSESSED` | signed `OptimizationReport` | `OPTIMIZED` | Deterministic feasible-set evaluation; utility before minimization; exhaustive proof if outcome is `reject` |
-| `OPTIMIZED` | valid commit request by `AR` | `COMMIT_PENDING` | Governance approvals and separation of duties; selected candidate unchanged; evidence and policy live |
+| `OPTIMIZED` | valid commit request by `AR` | `COMMIT_PENDING` | Reasoned governance decision, authority, independent challenge, conflicts, affected-party evidence, objections/disposition, conditions and retirement owner complete; no mandatory gate overridden; selected candidate unchanged; evidence and policy live |
 | `COMMIT_PENDING` | successful registry CAS | `AUTHORIZED` | Expected head matches; complete joint portfolio and budgets valid; authorization and state delta committed atomically |
 | `AUTHORIZED` | valid gateway activation | `ACTIVE` | Registry membership/current status checked; served bytes/interface/controls exactly match; activation lease issued |
 | `ACTIVE` | material change, monitor breach, lease loss | `SUSPENDED` | Gateway stops new access before or atomically with event recording |
@@ -212,7 +261,7 @@ The following gates are conjunctive. `PASS` at one gate cannot compensate for fa
 | `G0 Identity` | Actor authenticated; key live and authorized for message role | `ABORTED` |
 | `G1 Encoding/integrity` | Version, schema, canonicalization, hashes, signatures, times, predecessors valid | `ABORTED` |
 | `G2 Policy` | Applicable policy/threat catalogue frozen independently of results; no unauthorized override | `REDESIGN_REQUIRED` or `ABORTED` |
-| `G3 Scope` | Artifact, complete interface, recipients, population, protected unit, prior and games complete | `REDESIGN_REQUIRED` |
+| `G3 Scope` | Legitimate purpose, prohibited uses, accountable owner, affected parties, artifact, complete interface, recipients, population, protected unit, prior and Bayesian decision problems complete; every supplemental strategic stress test has governance context and complete players/timing/information/actions/payoffs | `REDESIGN_REQUIRED` |
 | `G4 Candidate/search` | Candidate set frozen; `reject` backed by an approved completeness certificate | downgrade `reject` to `REDESIGN_REQUIRED` |
 | `G5 Evidence plan` | Evidence class can answer the stated claim; sampling, multiplicity, stopping, controls and budget preregistered | `REDESIGN_REQUIRED` |
 | `G6 Evidence execution` | Source-observed bindings, attested worker, raw data, positive controls, exclusions and replay valid | `INCONCLUSIVE`/`REDESIGN_REQUIRED` |
@@ -220,7 +269,7 @@ The following gates are conjunctive. `PASS` at one gate cannot compensate for fa
 | `G8 Transfer` | Direct evidence or verified safe-direction information reduction from assessed to released experiment | `INCONCLUSIVE` |
 | `G9 Portfolio` | Complete joint observable portfolio directly assessed, validly composed, or robustly upper bounded at current head | `INCONCLUSIVE` or `ABORTED` |
 | `G10 Utility/choice` | All mandatory privacy and utility constraints pass before deterministic least-information tie-break | `REDESIGN_REQUIRED`/`REJECTED` |
-| `G11 Governance` | Required independent review, legal/operational conditions, expiry and control owners present | `REDESIGN_REQUIRED` |
+| `G11 Governance` | Decision authority and accountable owner identified; required independent challenge completed; conflicts disclosed and controlled; affected-party/impact evidence and recorded objections considered; reasons, conditions, contestation route, incident owner, expiry and retirement rule present; no mandatory gate compensated or overridden; any strategic stress-test claim has strict robust margins, credible consequences, and no decision effect | `REDESIGN_REQUIRED` |
 | `G12 Atomic commit` | CAS against expected head; budget and authorization are one durable transition | `ABORTED` |
 | `G13 Activation` | Gateway checks registry membership/status and rehashes exact served bytes/interface/controls | no activation or `SUSPENDED` |
 | `G14 Monitoring` | Lease, drift, incident, query/budget and revocation checks remain live | `SUSPENDED`, `EXPIRED`, or `REVOKED` |
@@ -235,8 +284,12 @@ Attack success may provide a lower bound and block. Attack failure supplies no c
 Freeze(registration, policy, current_head):
   verify G0--G3
   require registration.expected_head == current_head
+  freeze purpose, prohibited uses, accountable owner, decision authority,
+      affected-party groups, conflict controls and contestation requirements
   derive mandatory threats from policy, model family, interface and portfolio
   obtain frozen candidate set and utility requirements
+  if strategic claims are made, freeze players, timing, information,
+      payoff provenance/uncertainty, solution concept and strict margins
   allocate statistical error before evidence is observed
   approve workers, source data, positive controls, stopping/exclusion rules
   sign EvidencePlan(instance_digest, allocations, complete plan)
@@ -287,6 +340,10 @@ Let `entry` contain all immutable authorization fields and `budget_delta`. The r
 ```text
 Commit(request):
   verify G0--G12 and replay all mandatory predecessor digests
+  require a reasoned governance decision within the named authority
+  require independent challenge, conflict disclosures, affected-party evidence,
+      objection dispositions, operating conditions and retirement rule
+  require every mandatory gate passed without compensation or override
   transaction:
       require registry.head == request.expected_head
       require request.nonce unused
@@ -516,6 +573,8 @@ MRAP/1.0 does not prove:
 - safe infinite-horizon operation from fixed per-release confidence intervals;
 - that monitoring or revocation reverses information already disclosed;
 - that one scalar score represents all privacy, security, utility, fairness, or legal obligations;
+- incentive compatibility, attacker deterrence, equilibrium selection, or social welfare from role permissions, signatures, or unvalidated payoff tables;
+- transferability of actor utilities, audit effectiveness, sanctions, effort costs, or behavioral-response parameters across sectors or time;
 - universal composability, zero knowledge, differential privacy, or noninterference of the whole lifecycle unless separately specified and proved; or
 - accreditation, legal compliance, or fitness for a particular deployment.
 
@@ -532,5 +591,8 @@ These are scope boundaries, not optional implementation tasks. A deployment may 
 - NIST. [Secure Software Development Framework 1.1](https://doi.org/10.6028/NIST.SP.800-218). NIST SP 800-218, 2022.
 - NIST. [Guidelines for Evaluating Differential Privacy Guarantees](https://doi.org/10.6028/NIST.SP.800-226). NIST SP 800-226, 2025.
 - NIST. [Artificial Intelligence Risk Management Framework: Generative AI Profile](https://doi.org/10.6028/NIST.AI.600-1). NIST AI 600-1, 2024.
+- Blocki et al. [Audit Games](https://www.ijcai.org/Proceedings/13/Papers/017.pdf). IJCAI, 2013.
+- Guo et al. [On the Inducibility of Stackelberg Equilibrium for Security Games](https://doi.org/10.1609/aaai.v33i01.33012020). AAAI, 2019.
+- Miller, Milli, and Hardt. [Strategic Classification is Causal Modeling in Disguise](https://proceedings.mlr.press/v119/miller20b.html). ICML, 2020.
 
 The statistical, differential-privacy, information-ordering, membership-inference, extraction, watermark, canary, XGBoost, and LLM foundations are developed in the [mathematical appendix](mathematical-foundations.md) and [literature review](literature-review.md).

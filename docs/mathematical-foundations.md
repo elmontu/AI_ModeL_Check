@@ -1,7 +1,7 @@
 # Proof obligations and mathematical appendix
 
 **Framework version:** 0.7.0
-**Scope:** proof layer for [MRAP/1.0](model-release-assurance-protocol.md): finite release experiments, evidence-gate feasibility, incomplete portfolios, binomial evidence, and pairwise differential-privacy consequences
+**Scope:** proof layer for [MRAP/1.0](model-release-assurance-protocol.md): finite release experiments, evidence-gate feasibility, optional strategic governance stress tests, incomplete portfolios, binomial evidence, and pairwise differential-privacy consequences
 
 This document is the mathematical appendix to the candidate normative [Model Release Assurance Protocol](model-release-assurance-protocol.md). It is not itself a lifecycle protocol and none of its certificates is a production authorization. MRAP/1.0 defines the actors, signed messages, state machine, atomic registry transition, gateway enforcement and monitoring. Its authorization-integrity and finite statistical-accounting core is machine checked; the broader active-implies-acceptable statement remains a conditional engineering corollary with explicit adequacy and implementation-refinement obligations.
 
@@ -14,7 +14,15 @@ The appendix separates four kinds of statement that must not be conflated:
 
 The implementation is an offline reference system. A theorem below is usable at an MRAP evidence gate only when every premise is bound to the released artifact, interface, population, policy, evidence source, decision game, cumulative portfolio, and immutable protocol instance.
 
-## 1. Finite decision games
+## 1. Finite Bayesian release decision problems
+
+The phrase “decision game” is used in statistical decision theory, but the
+object in this section has one optimizing decision maker facing an exogenous
+experiment. It is not a multi-player strategic game and has no Nash,
+Stackelberg, or sequential equilibrium. Section 5 adds a separate supplemental strategic
+layer with explicit players, timing, payoffs, information, and a pessimistic
+solution concept. The distinction follows the primary-source review in
+[Game theory for model-release assurance](game-theory-literature-review.md).
 
 ### Definition 1: release experiment
 
@@ -27,7 +35,7 @@ Let
 
 The channel is the complete observable release protocol for the declared recipient. It is not merely the model file: preprocessing, endpoint behavior, explanations, retrieval, tools, state, related releases, and query budgets are part of \(K\) when observable.
 
-### Definition 2: bounded decision problem
+### Definition 2: bounded Bayesian decision problem
 
 Let \(\pi\in\Delta(\Omega)\) be the population-anchored prior, \(\mathcal A\) a finite action set, and \(g:\Omega\times\mathcal A\to[0,1]\) a bounded gain. A randomized decoder is a channel \(D:\mathcal Y\rightsquigarrow\mathcal A\). Its value is
 
@@ -220,7 +228,288 @@ Let two worlds have disjoint acceptable sets. If a gate has \(u_{w_i}\le\alpha\)
 
 This proposition explains why refusal is sometimes unavoidable: sufficiently similar evidence laws cannot support both high liveness and low unsafe-release probability when the worlds demand incompatible actions.
 
-## 5. Incomplete release portfolios
+## 5. Supplemental strategic stress tests for governance
+
+This section supplies a deliberately small strategic stress test. It is a design-time
+certificate for deployments that make incentive or deterrence claims; it is
+not required merely to use the Bayesian leakage value in Section 1. The model
+is motivated by Stackelberg audit games, strategic classification,
+principal–agent information acquisition, limited-surveillance security games,
+and the failure of optimistic follower tie-breaking documented in the
+[review](game-theory-literature-review.md). It is not the governance core and
+does not decide legitimate purpose, authority, affected-party acceptability,
+accountability, contestation, or authorization. Those are institutional
+requirements of the [governance core](governance-core.md).
+
+### 5.1 Timing, players, and information
+
+Let the release authority \(R\) commit publicly to a policy
+
+\[
+p=(c,q,F),
+\]
+
+where \(c\in\mathcal C\) is a release/control configuration, \(q\in[0,1]\) is
+the effective probability that a material violation is detected before it can
+produce the modeled harm, and \(F\ge0\) is the enforceable consequence imposed
+when that violation is detected. The consequence may include a contractual
+penalty, lost release benefit, mandatory remediation, or another application-
+specific cost; MRAP does not assume that arbitrary monetary fines are lawful or
+collectable.
+
+A submitter has private type \(\theta\in\Theta\) and then chooses
+\(a\in\{C,V\}\), where \(C\) means comply with the registered evidence/control
+obligations and \(V\) means a material violation such as suppressing an adverse
+result, using a cheaper unapproved control, or substituting an unaudited model.
+Let \(G_\theta\ge0\) be the submitter's private incremental benefit from \(V\)
+relative to \(C\), before detection consequences. The payoff difference is
+
+\[
+U_S(V\mid p,\theta)-U_S(C\mid p,\theta)=G_\theta-qF.
+\]
+
+This is an expected-utility abstraction. It requires risk neutrality over the
+registered range; risk aversion, limited liability, non-monetary motives, and
+probability weighting need separate models. The authority observes neither
+\(\theta\) nor \(G_\theta\) exactly. It registers either a type distribution
+\(\mu\) for a Bayesian analysis or an uncertainty interval
+\(G_\theta\in[G_\theta^-,G_\theta^+]\) for robust assurance.
+
+### Strategic theorem GT-1: strict robust deterrence
+
+Fix a positive incentive margin \(\delta>0\). If
+
+\[
+qF\ge \sup_{\theta\in\Theta}G_\theta^+ + \delta,
+\]
+
+then \(C\) is the unique best response of every registered submitter type for
+every gain value in its uncertainty interval.
+
+**Proof.** For every admissible type and gain,
+
+\[
+U_S(V\mid p,\theta)-U_S(C\mid p,\theta)
+=G_\theta-qF\le-\delta<0.
+\]
+
+Thus violation has strictly lower expected utility. \(\square\)
+
+If \(\delta=0\), compliance is only weakly optimal at the boundary. MRAP does
+not resolve that tie in the authority's favor. Conversely, if a registered type
+can attain \(G_\theta>qF\), violation is its strict best response. These two
+facts make the deterrence claim falsifiable instead of assuming compliance.
+
+The detection probability in this theorem is the end-to-end probability of
+detecting the defined violation in time, not the fraction of files nominally
+sampled. If only \(q\in[q^-,q^+]\) is justified, the robust condition uses
+\(q^-F\). If \(F\) is capped or enforcement is uncertain, the registered
+effective consequence must be reduced accordingly.
+
+### 5.2 Pessimistic authority objective
+
+Let \(A(p)\) be the authority's audit, control, delay, enforcement, and
+false-positive cost. Let \(H_\theta(c)\) be the harm when type \(\theta\)
+violates under configuration \(c\) and the violation is not stopped. A minimal
+authority loss is
+
+\[
+L_R(p,\theta,a)
+=A(p)+\mathbf 1\{a=V\}(1-q)H_\theta(c).
+\]
+
+Define the submitter best-response correspondence
+
+\[
+BR_\theta(p)=\arg\max_{a\in\{C,V\}}U_S(a\mid p,\theta).
+\]
+
+MRAP's robust leader problem is the pessimistic Stackelberg program
+
+\[
+\min_{p\in\mathcal P}
+\sup_{\theta\in\Theta}
+\sup_{a\in BR_\theta(p)}L_R(p,\theta,a),
+\]
+
+where \(\mathcal P\) contains only technically feasible, legally authorized,
+budget-compatible policies. Taking the worst loss over tied best responses
+avoids the strong-Stackelberg assumption that the submitter breaks a tie in the
+authority's favor. A Bayesian version may average over a validated \(\mu\), but
+an average-case policy cannot replace a mandatory worst-type constraint when a
+rare type can cause an unacceptable release.
+
+This program is a specification, not a claim that its inputs are already known
+or that its optimum is unique. A solution certificate must enumerate the finite
+policy/type/action sets or provide independently replayable bounds.
+
+### 5.3 Costly assessor effort
+
+Let an assessor choose effort \(e\in\{L,H\}\) with costs \(k_L<k_H\). Suppose a
+later independently verifiable scoring event occurs with probabilities
+\(s_L<s_H\), and a contract pays reward \(R\ge0\) on that event. The assessor's
+expected payoff difference is
+
+\[
+U_A(H)-U_A(L)=(s_H-s_L)R-(k_H-k_L).
+\]
+
+### Strategic theorem GT-2: high-effort incentive threshold
+
+High effort is the unique best response exactly when
+
+\[
+(s_H-s_L)R>k_H-k_L.
+\]
+
+It is weakly optimal at equality and is not optimal when the inequality is
+reversed.
+
+**Proof.** Substitute the two expected rewards and compare their difference.
+\(\square\)
+
+This theorem does not prove truthful reporting. It applies only when the scoring
+event is externally verifiable and the effort-to-score probabilities are
+validated. When the authority never learns enough to score the report, this
+contract model cannot be invoked. More elaborate proper-scoring or peer-
+prediction mechanisms require their own assumptions and proofs.
+
+### 5.4 Release controls and strategic attack effort
+
+After observing the released configuration, a risk-neutral attacker chooses
+either abstention \(0\) or an attack option \(z\in\mathcal Z\), where
+\(\mathcal Z\) is finite and nonempty. Option \(z\) registers a
+prior \(\pi_z\), bounded gain \(g_z\), economic or operational value scale
+\(\lambda_z\ge0\), effort/query/data cost \(C_z(c)\), effective detection
+probability \(d_z(c)\), and enforceable consequence \(P_z\ge0\). Its inner
+optimal decoding value is the Section 1 quantity
+\(V_{g_z}(\pi_z,K_c)\). The outer strategic payoff is
+
+\[
+U_T(z\mid c)
+=\lambda_z V_{g_z}(\pi_z,K_c)
+-C_z(c)-d_z(c)P_z,
+\qquad U_T(0\mid c)=0.
+\]
+
+The normalized decision gain and the value scale are separate. A success
+probability does not become a monetary loss merely by multiplying it by an
+unvalidated number.
+
+### Strategic theorem GT-3: attack abstention condition
+
+Abstention is a best response if and only if
+
+\[
+\max_{z\in\mathcal Z}U_T(z\mid c)\le0.
+\]
+
+It is the unique best response when the maximum is strictly negative.
+
+**Proof.** Abstention has payoff zero. It is weakly (strictly) preferred to all
+finite alternatives exactly under the displayed weak (strict) inequalities.
+\(\square\)
+
+This condition is a deterrence statement, not a privacy ceiling. An attacker
+with different values, costs, jurisdiction, or detection exposure is a
+different registered type.
+
+### Strategic theorem GT-4: Blackwell-safe control improvement
+
+Consider two configurations \(c_1,c_2\). For attack option \(z\), suppose
+
+1. \(K_{c_2}\succeq_B K_{c_1}\), so \(c_1\) is no more informative;
+2. \(\lambda_z\ge0\); and
+3. \(C_z(c_1)+d_z(c_1)P_z\ge C_z(c_2)+d_z(c_2)P_z\).
+
+Then
+
+\[
+U_T(z\mid c_1)\le U_T(z\mid c_2).
+\]
+
+**Proof.** Theorem 1 gives
+\(V_{g_z}(\pi_z,K_{c_1})\le V_{g_z}(\pi_z,K_{c_2})\). Multiplication by
+\(\lambda_z\ge0\) preserves the inequality. The assumed non-information burden
+is no smaller under \(c_1\); subtracting it completes the result. \(\square\)
+
+This theorem is the formal bridge between the existing information ordering
+and the supplemental strategic stress-test layer. It does not rank configurations when a less
+informative interface is cheaper to attack, less detectable, or available to a
+different recipient.
+
+### 5.5 Real-world parameter contract
+
+Every supplemental strategic certificate must bind the following record:
+
+| Primitive | Required real-world basis | Fail-closed rule |
+|---|---|---|
+| Governance context | accountable owner, decision authority, independent reviewer, affected parties, governance objective, conflict controls, contestation, and incident/retirement authority | certificate has no governance-decision or authorization effect and cannot override a gate |
+| Players/types | named organizations, recipient classes, jurisdictions, capabilities, and possible collusion | omitted material type makes the game incomplete |
+| Timing/information | what each player observes before acting, including public policy and audit leakage | do not use a Stackelberg solution if commitment or observability is absent |
+| \(G_\theta,k_e,C_z\) | accounting, measured effort, elicitation, incident data, or preregistered range with units | unsupported point values become uncertainty intervals |
+| \(q,d_z,s_e\) | positive controls and prospective detection/validation experiments with simultaneous uncertainty bounds | use the adverse endpoint, not the point estimate |
+| \(F,P_z\) | enforceable contractual, legal, technical, or access consequence after collection/jurisdiction limits | unenforceable consequences have zero deterrence credit |
+| \(H_\theta,\lambda_z\) | policy-approved valuation model with affected-party perspective and sensitivity range | normalized risk scores are not monetary values |
+| Response model | best response as the conservative baseline; any quantal/behavioral response separately fitted and validated | bounded-rational results are sensitivity evidence only |
+| Equilibrium | exact solution concept, tie rule, existence/computation certificate, and robustness region | equilibrium-sensitive release remains inconclusive |
+
+For a health-data model release, for example, a hospital release committee can
+be the leader; the submitting team can choose documented compliance or a
+defined shortcut; an independent assessor can choose costly review effort; and
+recipient classes can choose query and inference attacks. This mapping is
+real-world interpretable only after the hospital supplies defensible ranges for
+the benefit of the shortcut, effective audit detection, enforceable
+consequences, assessor effort/validation, attack resources, and harm. MRAP does
+not invent those values. If the strict deterrence or release conclusion changes
+within their registered intervals, the result is “inconclusive.”
+
+#### Worked deployment mapping: synthetic health-model release
+
+Consider a hospital preparing a synthetic-health model for controlled research
+access. This is an illustrative mapping, not an empirical claim about any named
+hospital or jurisdiction.
+
+| Stage | Strategic primitive | Defensible evidence | Critical interpretation |
+|---|---|---|---|
+| Submitter may omit an adverse privacy result | \(G_\theta^+\) | maximum documented schedule saving, avoided control cost, and incentive payment attributable to that omission | use the upper bound; do not infer motive from salary alone |
+| Independent rerun may detect the omission before release | \(q^-\) | lower simultaneous confidence bound from blinded planted-violation exercises using the actual review process | nominal audit coverage is not detection probability |
+| Detection causes loss/remediation | \(F^-\) | minimum enforceable lost launch benefit plus mandatory remediation after legal and limited-liability review | reputational harm receives no credit unless its lower bound is justified |
+| Assessor chooses review effort | \(s_H-s_L,k_H-k_L\) | randomized quality-control study or adjudicated historical tasks, with labor/time accounting | if no later scoring event exists, GT-2 is inapplicable |
+| Research recipient chooses an inference attack | \(\lambda_z,C_z,d_z,P_z\) | registered value range, measured query/compute/data costs, monitor positive controls, and enforceability analysis | an anonymous or foreign attacker may have \(P_z=0\) |
+
+The submitter deterrence claim clears only if the adverse-endpoint calculation
+\(q^-F^-\ge G_\theta^++\delta\) holds for every material submitter type. If it
+fails, MRAP does not assume honesty; it retains independent replay, immutable
+evidence closure, and gateway binding.
+
+For an attacker against whom no consequence can be enforced, \(P_z=0\), so
+
+\[
+U_T(z\mid c)=\lambda_zV_{g_z}(\pi_z,K_c)-C_z(c).
+\]
+
+Detection by itself then supplies no deterrence in this utility model. It helps
+only if it stops access, raises attack cost, reduces the observable channel, or
+creates a genuinely enforceable consequence. Thus a public or cross-border
+health-model endpoint will often require information-reducing controls and
+strict query enforcement rather than a claim that monitoring will deter a
+rational attacker.
+
+This mapping demonstrates why one payoff table cannot cover the submitting
+team, assessor, approved researcher, anonymous external attacker, and colluding
+recipient. They require separate types, information sets, costs, and
+enforcement assumptions.
+
+### 5.6 Scope boundaries
+
+This one-shot model does not establish performative stability, repeated-game
+reputation, learning across releases, coalition-proofness, bribery resistance,
+risk-sensitive utility, behavioral transportability, or social welfare. A
+repeated or performative claim must define the response transition law, horizon,
+discounting, learning rule, and its own equilibrium or stability concept.
+
+## 6. Incomplete release portfolios
 
 For releases \(j=1,\ldots,k\), marginal channels do not determine the joint transcript channel. Let \(K\) denote a candidate joint channel over \(\mathcal Y_1\times\cdots\times\mathcal Y_k\), and let \(\Gamma\) be the ambiguity polytope defined by normalization, non-negativity, marginal intervals, coupling assumptions, and registered joint-event constraints.
 
@@ -284,7 +573,7 @@ the chain rule and union bound give
 
 Independence is not required, but the conditional guarantees and ledger must be real.
 
-## 6. Differential-privacy consequences
+## 7. Differential-privacy consequences
 
 Let \(P_s\) be the complete output law conditional on secret state \(s\in\Omega\). The finite-secret result requires the symmetric pairwise condition
 
@@ -383,7 +672,7 @@ The 0.7.0 implementation requires `metric_parameters.maximum_secret_prior` in th
 
 which does not overflow at large finite \(\epsilon\). The previous cardinality-only formula silently assumed a uniform prior and is no longer clearance-valid without the numerical prior premise.
 
-## 7. Binomial and low-FPR evidence
+## 8. Binomial and low-FPR evidence
 
 For \(X\sim\mathrm{Binomial}(n,p)\) and observed \(X=k\), the one-sided Clopper–Pearson limits invert exact binomial tests. With tail error \(\gamma\),
 
@@ -411,7 +700,7 @@ At target FPR \(q\), an empirical operating point is accepted only when its FPR 
 
 The binomial model requires independent Bernoulli trials, or a separately justified model for dependence. Repeated prompts, clustered people, adaptive thresholds, and reused records do not become independent trials by being placed in separate rows.
 
-## 8. Implementation correspondence
+## 9. Implementation correspondence
 
 | Mathematical object | Implementation | Status |
 |---|---|---|
@@ -425,8 +714,9 @@ The binomial model requires independent Bernoulli trials, or a separately justif
 | Membership and finite-secret DP ceilings | `analyzers/dp.py` | Stable formulas; prior cap and pairwise premises required |
 | Empirical attack floors | `analyzers/attack.py`, `controlled_inference.py` | May block; cannot clear |
 | XGBoost and LLM tests | experiment/linter scripts | Screens only; no general theorem |
+| Supplemental Stackelberg audit/release and attack-effort stress test | `strategic_assurance.py` and `run_strategic_assurance_experiment.py` | Exact-rational adverse-endpoint certificates, governance-context binding, no-decision/no-authorization markers, provenance checks, replay, and synthetic stress test implemented; no behavioral calibration or production parameter registry |
 
-## 9. Explicit non-claims and open proof obligations
+## 10. Explicit non-claims and open proof obligations
 
 The current repository does **not** prove:
 
@@ -437,6 +727,8 @@ The current repository does **not** prove:
 - independence or exchangeability of empirical audit trials without a valid collection design;
 - safe composition for an interactive LLM with unmodelled retrieval, tools, memory, updates, concurrency, or lifetime transcripts;
 - scalable exact portfolio optimization beyond the configured finite decoder limit;
+- incentive compatibility, deterrence, equilibrium selection, or social welfare without a complete and validated Section 5 game record;
+- transportability of payoff, detection, effort, or bounded-rationality parameters across actors, sectors, populations, or time;
 - exhaustive configuration search unless the generator and enumeration certificate are replayed; or
 - production authorization, key custody, identity, atomic portfolio commits, monitoring, or accreditation.
 
@@ -453,5 +745,9 @@ Unsupported premises produce `inconclusive`, not a mathematical presumption of s
 - Dwork and Roth. [The Algorithmic Foundations of Differential Privacy](https://doi.org/10.1561/0400000042). *Foundations and Trends in Theoretical Computer Science*, 2014.
 - Dong, Roth, and Su. [Gaussian Differential Privacy](https://doi.org/10.1111/rssb.12454). *JRSS B*, 2022.
 - Berk, Brown, Buja, Zhang, and Zhao. [Valid Post-Selection Inference](https://doi.org/10.1214/12-AOS1077). *Annals of Statistics*, 2013.
+- Blocki, Christin, Datta, Procaccia, and Sinha. [Audit Games](https://www.ijcai.org/Proceedings/13/Papers/017.pdf). *IJCAI*, 2013.
+- Guo, Gan, Fang, Tran-Thanh, Tambe, and An. [On the Inducibility of Stackelberg Equilibrium for Security Games](https://doi.org/10.1609/aaai.v33i01.33012020). *AAAI*, 2019.
+- Miller, Milli, and Hardt. [Strategic Classification is Causal Modeling in Disguise](https://proceedings.mlr.press/v119/miller20b.html). *ICML*, 2020.
+- Chen, Wu, Wu, and Yang. [Learning to Incentivize Information Acquisition](https://proceedings.mlr.press/v202/chen23ah.html). *ICML*, 2023.
 
 The broader model-release, attack, LLM, watermarking, and canary evidence base is reviewed in [the literature review](literature-review.md).

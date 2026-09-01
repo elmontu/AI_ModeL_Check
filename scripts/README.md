@@ -8,6 +8,7 @@ The scripts in this directory are optional benchmark and evidence-generation uti
 
 - `run_v05_prospective_study.py` and `analyze_v05_prospective_study.py`: fixed-frame release-allocation benchmark.
 - `run_protocol_feasibility_benchmark.py` and `analyze_protocol_feasibility_benchmark.py`: finite protocol solver stress tests.
+- `run_strategic_assurance_experiment.py`: optional governance stress test with exact-rational certificate replay, interval sampling, strict-tie negative control, deterrence frontier, zero-enforcement monitoring test, and explicit no-governance-decision/no-authorization scope.
 - `run_portfolio_stochastic_benchmark.py` and `analyze_portfolio_stochastic_benchmark.py`: incomplete-portfolio statistical stress tests.
 - `run_openml_*` and `analyze_openml_*`: optional OpenML evidence tiers.
 - `run_xgboost_audit.py`: local CSV/Parquet XGBoost classification, utility, structural, and membership audit worker.

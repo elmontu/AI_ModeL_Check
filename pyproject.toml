@@ -38,6 +38,12 @@ experiments = [
   "scipy>=1.13",
   "xgboost>=2.1",
 ]
+mcp = [
+  "mcp>=2,<3",
+]
+privacy-experiments = [
+  "torch>=2.13",
+]
 
 [project.scripts]
 mra = "model_release_assurance.cli:main"
