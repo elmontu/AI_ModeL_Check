@@ -24,7 +24,7 @@
       "kind": "xgboost",
       "model_family": "xgboost",
       "artifact_path": "artifacts/sample-xgboost.json",
-      "artifact_sha256": "a4fcc38f499028a612c54f036599532cccd4d4c983c6317df12a2176b1baca56",
+      "artifact_sha256": "f09165ad8683ee1b781b47c3f9c29a4293885c794447c1777e22e6e0c2726a4d",
       "purpose": "Exercise additive-tree inference and route to the existing XGBoost screening worker"
     },
     {

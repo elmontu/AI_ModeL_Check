@@ -1,6 +1,6 @@
 # Model-family coverage
 
-Model Release Assurance is architecture-neutral at the decision layer, but evidence is never architecture-neutral. Version 0.6 therefore separates three questions:
+Model Release Assurance is architecture-neutral at the decision layer, but evidence is never architecture-neutral. The current framework separates three questions:
 
 1. Can the release contract describe the model, task, modalities, interface, population, and portfolio?
 2. Are the relevant privacy threats declared for that family and release surface?
@@ -39,7 +39,7 @@ The catalog is intentionally broad enough to route classical, deep, generative, 
 
 ## Structured model profile
 
-Assessment v3 requires `ReleaseContract.model_profile`, which records:
+Assessment v4 requires `ReleaseContract.model_profile`, which records:
 
 - task: classification, regression, ranking, recommendation, forecasting, clustering, anomaly detection, representation, generation, retrieval, control, decision support, or a defined custom task;
 - input and output modalities;
@@ -48,7 +48,7 @@ Assessment v3 requires `ReleaseContract.model_profile`, which records:
 - whether the system is generative; and
 - whether it is stateful.
 
-Interactive LLM contracts must have a generative text profile. Stateful profiles require an adaptive-query interface. Historical v2 contracts remain separate compatibility artifacts; the v3 core does not infer a missing profile.
+Interactive LLM contracts must have a generative text profile. Stateful profiles require an adaptive-query interface. Superseded schemas remain separate historical artifacts; the v4 core does not infer a missing profile.
 
 ## Command-line review
 
@@ -64,7 +64,16 @@ Review a request:
 mra model-coverage examples/request.json --json
 ```
 
-The result reports the resolved family, declared and recommended threat kinds, structured profile, number of related releases, required dedicated workers, and `coverage_ready`. Missing recommended threats are explicit policy-review advisories rather than automatically invented mandatory harms; policy owners must justify why an omitted secret is out of scope. Unknown family names route to `custom_review_required`; they are not silently treated as ordinary predictors.
+The result reports the resolved family, declared and recommended threat kinds, structured profile,
+submitter-declared lineage count, the unconditional need for an authoritative portfolio registry,
+`default_clearing_paths` per declared threat,
+`threats_without_default_clearing_path`, required dedicated workers, and `coverage_ready`. It emits no
+coverage percentage or safety score and always emits `can_clear: false`. A listed path means only that
+the shipped analyzer could produce decision-bearing upper evidence if all preconditions and the policy
+tolerance are satisfied; it is not a verdict. Missing recommended threats are explicit policy-review
+advisories rather than automatically invented mandatory harms; policy owners must justify why an
+omitted secret is out of scope. Unknown family names route to `custom_review_required`; they are not
+silently treated as ordinary predictors.
 
 ## Universal assessment sequence
 
@@ -80,18 +89,12 @@ For every model family:
 8. apply utility before information minimization; and
 9. authorize only the exact hash-bound release and controls that passed the final gate.
 
-## Cumulative-release finding supplied with the update
-
-The supplied synthetic Singapore health experiment is a useful portfolio red-team case. Under one fixed synthetic cohort, deliberately overfitting tree models, and a strong probability/counterfactual interface, equal-prior Gaussian LiRA success rose from 60.35% with one model to 70.82% with eight. Counterfactual diabetes balanced accuracy rose from 79.56% to 98.73%. The result is constructive, not representative: it uses synthetic data, one seed/order, a strong interface, and deliberately high-capacity models.
-
-Those values are transcribed from the supplied report. Its referenced data, runner, raw predictions and manifest are not present in this repository, so this update does not claim to have independently replayed them.
-
-The framework-level consequence is nevertheless general. A later model about the same protected population and secret cannot be assessed as an isolated file. The joint observation contains earlier prefixes as projections, and combined releases can disclose more even when each marginal release appears weak. This portfolio rule applies to every catalog family, including embeddings, forecasts, recommenders, APIs, fine-tunes and model updates.
-
 ## Honest support boundary
 
 - The core contracts, evidence directions, decision rules, integrity checks and portfolio mathematics apply across families.
-- The tree, DP, generic attack, controlled-inference and population analyzers remain the only core analyzers.
+- In the shipped roster, only an end-to-end DP ceiling and recipient-realizable tree-linkage exact evidence under complete declared-interface coverage can clear. Attack and controlled-inference/canary evidence are floors, and watermark/population evidence are screens.
+- A non-DP neural release therefore has no default clearing route for ordinary membership, attribute, or reconstruction threats; it is inconclusive unless an approved new ceiling/exact-evidence worker is added. This is an explicit adoption limitation, not evidence that the model is unsafe.
+- Even the two default paths establish only a single-release result against the declared interface. Portfolio optimization and live gateway conformance remain mandatory external stages.
 - The XGBoost worker is a strong screening workflow, not a universal tree-privacy certificate.
 - The LLM profile is a preregistration linter and emits no scientific evidence.
 - Most vision, audio, graph, recommender, generative-media, RL and composite releases still require dedicated workers.

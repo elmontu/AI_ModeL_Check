@@ -88,5 +88,65 @@
     }
   },
   "lean_environment_actions": ["externalCommit"],
+  "runtime_obligations": {
+    "authorization_integrity": {
+      "lean_claim_ids": ["FV-AUTH-1", "FV-AUTH-2", "FV-COMP-2", "FV-COMP-3"],
+      "python_violation": "A supplied transcript reaches AUTHORIZED or ACTIVE without complete evidence, a clear assessment, a releasable selection, a successful portfolio commit, or exact release bindings.",
+      "python_tests": [
+        "tests/test_release_protocol.py::test_incomplete_evidence_cannot_progress",
+        "tests/test_release_protocol.py::test_failed_atomic_commit_cannot_authorize_or_activate",
+        "tests/test_release_protocol.py::test_complete_lifecycle_reaches_active"
+      ],
+      "coverage": "partial_reference_verifier_regression",
+      "external_gap": "The tests exercise the offline transcript verifier, not a concrete authority, registry, or serving gateway."
+    },
+    "identity_roles_and_terminal_state": {
+      "lean_claim_ids": ["FV-ID-1", "FV-TERM-1", "FV-RBAC-1"],
+      "python_violation": "An event changes the registered release identity, uses a producer/actor outside its permitted role, or reopens an absorbing lifecycle state.",
+      "python_tests": [
+        "tests/test_release_protocol.py::test_wrong_artifact_producer_role_is_detected",
+        "tests/test_release_protocol.py::test_monitoring_report_cannot_self_authorize_revocation",
+        "tests/test_release_protocol.py::test_event_rejects_payload_fields_from_another_message_type"
+      ],
+      "coverage": "partial_reference_verifier_regression",
+      "external_gap": "Identity-provider enrollment, real role assignment, and infrastructure state transitions are not covered."
+    },
+    "registry_and_gateway": {
+      "lean_claim_ids": ["FV-CAS-1", "FV-REG-1", "FV-DEP-COMMIT-1", "FV-DEP-COMMIT-2", "FV-DEP-ACT-1", "FV-DEP-BIND-1", "FV-DEP-TIME-1", "FV-DEP-STOP-1", "FV-DEP-REAL-1"],
+      "python_violation": "A stale/replayed registry request commits, a sequence does not advance, or a substituted/expired/revoked deployment is reported as serving.",
+      "python_tests": [
+        "tests/test_release_protocol.py::test_registry_sequence_must_advance_by_one",
+        "tests/test_release_protocol.py::test_registry_sequence_cannot_jump_forward",
+        "tests/test_release_protocol.py::test_registry_head_is_recomputed_from_commitment",
+        "tests/test_release_protocol.py::test_current_status_replay_rejects_an_expired_active_claim",
+        "tests/test_release_protocol.py::test_authorized_release_can_be_revoked_before_activation"
+      ],
+      "coverage": "declaration_replay_only",
+      "external_gap": "The repository has no concrete linearizable registry or request-serving gateway, so infrastructure refinement remains untested."
+    },
+    "authenticated_messages": {
+      "lean_claim_ids": ["FV-MSG-1", "FV-MSG-2", "FV-MSG-3", "FV-COMP-1"],
+      "python_violation": "Tampered, cross-release, expired, untrusted, compromised, or profile-downgraded declarations are accepted.",
+      "python_tests": [
+        "tests/test_release_protocol.py::test_authenticated_profile_rejects_event_tampering",
+        "tests/test_release_protocol.py::test_authenticated_profile_rejects_cross_release_replay",
+        "tests/test_release_protocol.py::test_authenticated_profile_rejects_compromised_key",
+        "tests/test_release_protocol.py::test_caller_can_forbid_authenticated_profile_downgrade"
+      ],
+      "coverage": "partial_reference_verifier_regression",
+      "external_gap": "Ed25519 implementation assurance, key custody, enrollment, revocation distribution, and compromise detection are external."
+    },
+    "statistical_budget": {
+      "lean_claim_ids": ["FV-STAT-1", "FV-STAT-2", "FV-STAT-3", "FV-STAT-4"],
+      "python_violation": "A clearance-critical certificate exceeds its registered additive error budget or silently assumes independence/coverage not present in the approved problem.",
+      "python_tests": [
+        "tests/test_protocol_feasibility.py::test_failure_budget_is_additive_without_independence",
+        "tests/test_protocol_feasibility.py::test_out_of_domain_acceptability_entry_is_rejected",
+        "tests/test_protocol_feasibility.py::test_tampered_protocol_certificate_fails_exact_replay"
+      ],
+      "coverage": "related_runtime_property_not_refinement",
+      "external_gap": "The Python finite solver is not proved to refine the Lean experiment; scientific adequacy and registered-event coverage remain premises."
+    }
+  },
   "claim": "drift guard only; this manifest and its tests are not a semantic refinement proof"
 }

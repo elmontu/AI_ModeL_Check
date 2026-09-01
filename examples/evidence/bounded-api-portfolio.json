@@ -6,7 +6,10 @@
     "service-participants-2026|membership-person"
   ],
   "registry_head_sha256": "1111111111111111111111111111111111111111111111111111111111111111",
-  "registered_release_ids": [],
+  "registry_sequence": 0,
+  "registered_release_ids": [
+    "whole-government-demo-tree-v1"
+  ],
   "method": "direct finite joint-channel replay over the registered demonstration releases",
   "joint_upper_bounds": {
     "service-participants-2026|linkage-person": 0.0,

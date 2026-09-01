@@ -1,0 +1,145 @@
+{
+  "$defs": {
+    "AssessmentCompositionScope": {
+      "enum": [
+        "single_release_no_portfolio"
+      ],
+      "title": "AssessmentCompositionScope",
+      "type": "string"
+    },
+    "InterfaceAssurance": {
+      "enum": [
+        "declared_interface_only"
+      ],
+      "title": "InterfaceAssurance",
+      "type": "string"
+    },
+    "OverallVerdict": {
+      "enum": [
+        "clear",
+        "block",
+        "inconclusive"
+      ],
+      "title": "OverallVerdict",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "artifact_sha256": {
+      "title": "Artifact Sha256",
+      "type": "string"
+    },
+    "assessment_id": {
+      "title": "Assessment Id",
+      "type": "string"
+    },
+    "authorization_eligible": {
+      "const": false,
+      "default": false,
+      "title": "Authorization Eligible",
+      "type": "boolean"
+    },
+    "canonicalization": {
+      "const": "MRA-PY-JSON-1",
+      "default": "MRA-PY-JSON-1",
+      "title": "Canonicalization",
+      "type": "string"
+    },
+    "composition_scope": {
+      "$ref": "#/$defs/AssessmentCompositionScope"
+    },
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    },
+    "expires_at": {
+      "anyOf": [
+        {
+          "format": "date-time",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Expires At"
+    },
+    "interface_assurance": {
+      "$ref": "#/$defs/InterfaceAssurance"
+    },
+    "overall_verdict": {
+      "$ref": "#/$defs/OverallVerdict"
+    },
+    "policy_id": {
+      "title": "Policy Id",
+      "type": "string"
+    },
+    "policy_sha256": {
+      "title": "Policy Sha256",
+      "type": "string"
+    },
+    "policy_version": {
+      "title": "Policy Version",
+      "type": "string"
+    },
+    "release_id": {
+      "title": "Release Id",
+      "type": "string"
+    },
+    "release_interface_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Release Interface Sha256",
+      "type": "string"
+    },
+    "report_sha256": {
+      "title": "Report Sha256",
+      "type": "string"
+    },
+    "request_sha256": {
+      "title": "Request Sha256",
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "2.0",
+      "default": "2.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "signature_algorithm": {
+      "const": "Ed25519",
+      "default": "Ed25519",
+      "title": "Signature Algorithm",
+      "type": "string"
+    },
+    "signature_b64": {
+      "title": "Signature B64",
+      "type": "string"
+    },
+    "signer_key_id": {
+      "title": "Signer Key Id",
+      "type": "string"
+    }
+  },
+  "required": [
+    "assessment_id",
+    "release_id",
+    "policy_id",
+    "policy_version",
+    "policy_sha256",
+    "artifact_sha256",
+    "release_interface_sha256",
+    "request_sha256",
+    "report_sha256",
+    "overall_verdict",
+    "composition_scope",
+    "interface_assurance",
+    "created_at",
+    "signer_key_id",
+    "signature_b64"
+  ],
+  "title": "SignedManifest",
+  "type": "object"
+}

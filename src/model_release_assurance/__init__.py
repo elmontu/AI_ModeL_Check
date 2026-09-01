@@ -1,5 +1,6 @@
-"""Production core for Model Release Assurance."""
+"""Offline reference core for Model Release Assurance."""
 
+from .audit import AuditCheckpoint, AuditEventReceipt, AuditRun, AuditVerification
 from .engine import AssuranceEngine
 from .incomplete_portfolio import (
     AnalyticPortfolioEvidenceEntry,
@@ -21,19 +22,51 @@ from .incomplete_portfolio import (
     verify_portfolio_problem_evidence,
     verified_upper_fraction,
 )
-from .models import AssessmentRequest, AssessmentReport
+from .models import (
+    AnalyzerRequirement,
+    AssessmentCompositionScope,
+    AssessmentRequest,
+    AssessmentReport,
+    AssessmentScope,
+    EvidenceConsistency,
+    EvidenceProducer,
+    InterfaceAssurance,
+    LlmCanaryInput,
+    LlmWatermarkInput,
+)
 from .model_coverage import (
     MODEL_FAMILY_CATALOG,
     assess_request_model_coverage,
     resolve_model_family,
 )
 from .optimizer import (
+    OptimizationCompositionScope,
     OptimizationRequest,
     OptimizationReport,
+    PortfolioRegistrySnapshot,
     ReleaseOptimizer,
+    SelectionCriterion,
+    SelectionPolicy,
     SignedOptimizationManifest,
 )
 from .version import VERSION
+from .empirical_workflow import EmpiricalWorkflowConfig, run_empirical_xgboost_mlp_workflow
+from .red_team import (
+    RedTeamConfig,
+    RedTeamTarget,
+    RedTeamToolRegistry,
+    StructuralDisclosureTool,
+    WorstCaseMembershipTool,
+    default_red_team_tool_registry,
+)
+from .services import (
+    AnalyzerServiceDescriptor,
+    AnalyzerServiceRegistry,
+    LocalAnalyzerService,
+    McpAnalyzerService,
+    ServiceTransport,
+    default_analyzer_service_registry,
+)
 from .portfolio_statistics import (
     AssuranceErrorBudget,
     IncompletePortfolioSpecification,
@@ -99,8 +132,34 @@ from .strategic_assurance import (
 
 __all__ = [
     "AssuranceEngine",
+    "AuditCheckpoint",
+    "AuditEventReceipt",
+    "AuditRun",
+    "AuditVerification",
     "AssessmentRequest",
     "AssessmentReport",
+    "AssessmentScope",
+    "AssessmentCompositionScope",
+    "InterfaceAssurance",
+    "EvidenceConsistency",
+    "EvidenceProducer",
+    "AnalyzerRequirement",
+    "EmpiricalWorkflowConfig",
+    "run_empirical_xgboost_mlp_workflow",
+    "RedTeamConfig",
+    "RedTeamTarget",
+    "RedTeamToolRegistry",
+    "StructuralDisclosureTool",
+    "WorstCaseMembershipTool",
+    "default_red_team_tool_registry",
+    "AnalyzerServiceDescriptor",
+    "AnalyzerServiceRegistry",
+    "LocalAnalyzerService",
+    "McpAnalyzerService",
+    "ServiceTransport",
+    "default_analyzer_service_registry",
+    "LlmCanaryInput",
+    "LlmWatermarkInput",
     "MODEL_FAMILY_CATALOG",
     "AnalyticPortfolioEvidenceEntry",
     "AssuranceErrorBudget",
@@ -115,7 +174,11 @@ __all__ = [
     "RationalUpperAudit",
     "OptimizationRequest",
     "OptimizationReport",
+    "OptimizationCompositionScope",
+    "PortfolioRegistrySnapshot",
     "ReleaseOptimizer",
+    "SelectionCriterion",
+    "SelectionPolicy",
     "SignedOptimizationManifest",
     "StatisticalCoverage",
     "MultinomialCountsFile",

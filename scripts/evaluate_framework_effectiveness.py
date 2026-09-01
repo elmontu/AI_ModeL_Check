@@ -26,6 +26,7 @@ from model_release_assurance.models import (
     AttackInput,
     ControlledInferenceInput,
     DpInput,
+    EvidenceProducer,
     EvidenceContext,
     EvidenceClass,
     InterfaceContract,
@@ -43,6 +44,8 @@ from model_release_assurance.models import (
 )
 from model_release_assurance.portfolio import joint_uniform_linkage_value
 
+
+ROOT = Path(__file__).resolve().parents[1]
 
 REPORTED_DATASETS = (
     ("adult", 20_000, 13, 1, 0.626),
@@ -106,6 +109,13 @@ def provenance() -> AnalyzerProvenance:
     return AnalyzerProvenance(
         tool="effectiveness-simulator",
         tool_version="1.0",
+        producer=EvidenceProducer(
+            service_id="mra.evaluation.effectiveness-simulator",
+            service_version="1.0.0",
+            implementation_sha256="0" * 64,
+            configuration_sha256="1" * 64,
+        ),
+        configuration_path="simulation-config.json",
         source_path="simulation.json",
         source_sha256="0" * 64,
         bound_fields=("population_scope_id",),
@@ -128,7 +138,9 @@ def release(protected_unit: str = "person", family: str = "tree_ensemble") -> Re
         protected_unit=protected_unit,
         artifact_path="simulation.bin",
         artifact_sha256="0" * 64,
-        interface=InterfaceContract(access="full_artifact"),
+        interface=InterfaceContract.model_validate(
+            json.loads((ROOT / "examples" / "request.json").read_text(encoding="utf-8"))["release"]["interface"]
+        ),
     )
 
 

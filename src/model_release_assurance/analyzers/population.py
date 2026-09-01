@@ -11,11 +11,13 @@ from ..models import (
     ReleaseContract,
     ThreatContract,
 )
-from .base import evidence_context_fields
+from .base import evidence_context_fields, evidence_producer_fields
 
 
 class PopulationAnalyzer:
     name = "population"
+    can_clear = False
+    can_block = False
 
     def supports(self, value: AnalyzerInput) -> bool:
         return isinstance(value, PopulationInput)
@@ -33,6 +35,7 @@ class PopulationAnalyzer:
         # This is a population uniqueness screen, not a universal probability ceiling.
         return (EvidenceRecord(
             **evidence_context_fields(value.evidence_context),
+            **evidence_producer_fields(value.provenance),
             evidence_id=f"{threat.threat_id}:population:match-count",
             threat_id=threat.threat_id,
             analyzer=self.name,

@@ -175,7 +175,7 @@ Signed generation logs or content credentials can provide a separate authenticat
 | Complete interactive transcript assurance | Explicitly refused by optimizer | Retain refusal until a versioned transcript/channel analyzer exists |
 | Portfolio/lifetime composition | Present for finite mechanisms, not a complete LLM service | Bind updates, memory, RAG, tools, concurrent sessions, retention, and all related releases |
 
-Version 0.6 resolves the audit's critical evidence-rebinding defect with a source-observed context checked before analysis. The next priority is trustworthy family-specific collection: a cryptographically bound envelope cannot make an incomplete or methodologically invalid experiment true.
+The core prevents evidence rebinding by checking source-observed context before analysis. The next priority is trustworthy family-specific collection: a cryptographically bound envelope cannot make an incomplete or methodologically invalid experiment true.
 
 ## Research gaps relevant to the roadmap
 

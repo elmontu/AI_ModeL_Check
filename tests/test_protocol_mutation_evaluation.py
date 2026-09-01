@@ -17,8 +17,8 @@ class ProtocolMutationEvaluationTests(unittest.TestCase):
     def test_all_unsafe_mutants_are_rejected_without_breaking_controls(self) -> None:
         report = MODULE.evaluate()
         self.assertTrue(report["controls_passed"])
-        self.assertEqual(report["unsafe_mutant_count"], 19)
-        self.assertEqual(report["unsafe_mutants_rejected"], 19)
+        self.assertEqual(report["unsafe_mutant_count"], 21)
+        self.assertEqual(report["unsafe_mutants_rejected"], 21)
         self.assertEqual(report["mutation_score"], 1.0)
         self.assertTrue(report["valid"])
 

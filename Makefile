@@ -1,10 +1,17 @@
 PYTHON ?= python3
-SCHEMA_TMP ?= /tmp/model-release-assurance-schemas
 
-.PHONY: help compile test schemas formal check verify build clean
+.PHONY: help compile test schemas links formal check verify build clean
 
 help:
-	@echo "Targets: compile, test, schemas, formal, check, verify, build, clean"
+	@echo "compile  Compile Python sources and tests"
+	@echo "test     Run the complete Python test suite"
+	@echo "schemas  Replay current JSON Schemas and their byte manifest"
+	@echo "links    Check local links in repository Markdown files"
+	@echo "formal   Verify the Lean build and theorem boundary"
+	@echo "check    Run compile, test, schema, and Markdown-link checks"
+	@echo "verify   Run check plus formal verification"
+	@echo "build    Build Python distribution artifacts"
+	@echo "clean    Remove local build and Python cache artifacts (keeps output/)"
 
 compile:
 	$(PYTHON) -m compileall -q src tests scripts
@@ -13,28 +20,15 @@ test:
 	PYTHONPATH=src $(PYTHON) -m unittest discover -s tests -v
 
 schemas:
-	mkdir -p $(SCHEMA_TMP)
-	PYTHONPATH=src $(PYTHON) -m model_release_assurance schema --output $(SCHEMA_TMP)/assessment-request-v3.json
-	diff -u schemas/assessment-request-v3.json $(SCHEMA_TMP)/assessment-request-v3.json
-	PYTHONPATH=src $(PYTHON) -m model_release_assurance schema --kind policy --output $(SCHEMA_TMP)/policy-bundle-v1.json
-	diff -u schemas/policy-bundle-v1.json $(SCHEMA_TMP)/policy-bundle-v1.json
-	PYTHONPATH=src $(PYTHON) -m model_release_assurance schema --kind report --output $(SCHEMA_TMP)/assessment-report-v3.json
-	diff -u schemas/assessment-report-v3.json $(SCHEMA_TMP)/assessment-report-v3.json
-	PYTHONPATH=src $(PYTHON) -m model_release_assurance schema --kind optimization --output $(SCHEMA_TMP)/optimization-request-v2.json
-	diff -u schemas/optimization-request-v2.json $(SCHEMA_TMP)/optimization-request-v2.json
-	PYTHONPATH=src $(PYTHON) -m model_release_assurance schema --kind optimization-report --output $(SCHEMA_TMP)/optimization-report-v2.json
-	diff -u schemas/optimization-report-v2.json $(SCHEMA_TMP)/optimization-report-v2.json
-	PYTHONPATH=src $(PYTHON) -m model_release_assurance schema --kind optimization-manifest --output $(SCHEMA_TMP)/signed-optimization-manifest-v2.json
-	diff -u schemas/signed-optimization-manifest-v2.json $(SCHEMA_TMP)/signed-optimization-manifest-v2.json
-	PYTHONPATH=src $(PYTHON) -m model_release_assurance schema --kind manifest --output $(SCHEMA_TMP)/signed-manifest-v1.json
-	diff -u schemas/signed-manifest-v1.json $(SCHEMA_TMP)/signed-manifest-v1.json
-	PYTHONPATH=src $(PYTHON) -m model_release_assurance schema --kind release-protocol-run --output $(SCHEMA_TMP)/release-protocol-run-v1.1.json
-	diff -u schemas/release-protocol-run-v1.1.json $(SCHEMA_TMP)/release-protocol-run-v1.1.json
+	PYTHONPATH=src $(PYTHON) scripts/generate_schema_manifest.py --check
 
 formal:
 	$(PYTHON) scripts/verify_formal_protocol.py
 
-check: compile test schemas
+links:
+	$(PYTHON) scripts/check_markdown_links.py
+
+check: compile test schemas links
 
 verify: check formal
 
@@ -42,4 +36,4 @@ build:
 	$(PYTHON) -m build
 
 clean:
-	$(PYTHON) -c "from pathlib import Path; [path.unlink() for path in Path('.').rglob('*.py[co]')]"
+	$(PYTHON) -c "import shutil; from pathlib import Path; [path.unlink() for path in Path('.').rglob('*.py[co]')]; [shutil.rmtree(path) for path in Path('.').rglob('__pycache__') if path.is_dir()]; [shutil.rmtree(path, ignore_errors=True) for path in (Path('build'), Path('dist'), Path('src/model_release_assurance.egg-info'))]"

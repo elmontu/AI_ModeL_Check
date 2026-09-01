@@ -13,11 +13,13 @@ from ..models import (
     ThreatKind,
 )
 from .attack import clopper_pearson_lower, clopper_pearson_upper
-from .base import evidence_context_fields
+from .base import evidence_context_fields, evidence_producer_fields
 
 
 class ControlledInferenceAnalyzer:
     name = "controlled_inference"
+    can_clear = False
+    can_block = True
 
     def supports(self, value: AnalyzerInput) -> bool:
         return isinstance(value, ControlledInferenceInput)
@@ -92,6 +94,7 @@ class ControlledInferenceAnalyzer:
         )
         return (EvidenceRecord(
             **evidence_context_fields(value.evidence_context),
+            **evidence_producer_fields(value.provenance),
             evidence_id=f"{threat.threat_id}:controlled:{value.attack_name}",
             threat_id=threat.threat_id,
             analyzer=self.name,

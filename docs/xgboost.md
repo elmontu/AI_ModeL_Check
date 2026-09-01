@@ -86,4 +86,4 @@ The field `certified_tpr_floor_at_controlled_fpr` is specifically the simultaneo
 - Load `joblib` only in an isolated, trusted worker and only after verifying its recorded hash.
 - Do not extract or load the release ZIP, UBJ, or `joblib` files in the MRA decision core.
 - The generated release artifact is not a complete assessment request. Interface, recipient, population, policy, portfolio, and decision-game bindings still need explicit contracts and independently validated evidence.
-- Version 0.6 resolves the core evidence-context provenance finding, but this worker remains a screen and the repository still lacks production trust infrastructure; do not use it as a production authorization gate.
+- The core now enforces source-observed evidence context, but this worker remains a screen and the repository still lacks production trust infrastructure; do not use it as a production authorization gate.

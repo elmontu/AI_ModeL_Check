@@ -1,0 +1,32 @@
+{
+  "schema_version": "1.0",
+  "workflow_id": "empirical-xgboost-mlp-v1",
+  "seed": 20260901,
+  "replicates": 3,
+  "samples_per_replicate": 1200,
+  "features": 20,
+  "informative_features": 10,
+  "redundant_features": 4,
+  "test_fraction": 0.3,
+  "familywise_alpha": 0.05,
+  "xgboost_parameters": {
+    "n_estimators": 80,
+    "max_depth": 3,
+    "learning_rate": 0.08,
+    "subsample": 0.9,
+    "colsample_bytree": 0.9,
+    "tree_method": "hist",
+    "eval_metric": "logloss"
+  },
+  "mlp_parameters": {
+    "hidden_layer_sizes": [32, 16],
+    "activation": "relu",
+    "solver": "adam",
+    "alpha": 0.0001,
+    "batch_size": 64,
+    "learning_rate_init": 0.001,
+    "max_iter": 300,
+    "validation_fraction": 0.15,
+    "n_iter_no_change": 20
+  }
+}

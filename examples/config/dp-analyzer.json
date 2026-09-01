@@ -1,0 +1,8 @@
+{
+  "analyzer": "dp",
+  "configuration_version": "1.0.0",
+  "accountant_replay": "source-bound declared accountant",
+  "pipeline_rule": "complete pipeline and protected-unit match required",
+  "membership_bounds": "symmetric epsilon-delta DP",
+  "finite_secret_rule": "pairwise secret relation plus validated maximum prior mass"
+}

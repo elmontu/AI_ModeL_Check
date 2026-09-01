@@ -2,6 +2,78 @@
 
 All user-visible changes to Model Release Assurance are recorded here. The project follows semantic versioning while it remains in the `0.x` alpha series; minor releases may change public contracts when the migration is documented.
 
+## [Unreleased]
+
+### Added
+
+- A standalone integrated system audit specification consolidating the complete architecture, normative MRAP roles/messages/states/gates, current release contracts and pipelines, evidence semantics, threat and formal boundaries, production obligations, pass/fail rules, and an auditor checklist.
+- Assessment request/report 4.0, policy 2.0, signed assessment manifest 2.0, optimization request/report 3.0, and signed optimization manifest 3.0 contracts.
+- Machine-readable assessment scope (`single_release_no_portfolio`, `declared_interface_only`, live-interface false, authorization-ineligible) and optimization bindings for the active policy, declared hash-bound portfolio-registry snapshot, exact covered releases, and versioned ordered selection policy.
+- Typed evidence-producer service/version and implementation/configuration digests, with policy minimum versions, digest allowlists, required-analyzer rules, and fail-closed stale-producer rejection.
+- Two-phase assessment/optimization audit events (intent plus completed/failed), orphan detection, ledger identity, contiguous sequence/tail checks, structured verification, and externally anchorable ledger checkpoints.
+- Machine-readable release-protocol verification results recording the profile, run hash,
+  verification time, artifact/signature verification booleans, skipped checks, and degradations.
+- Required structured interface declarations for output/download/summary, serialization, timing,
+  error/status, execution-state/concurrency, and side/local/administrator access channels.
+- Deterministic runtime identities on assessment, optimization, lifecycle, and audit verification
+  outputs, including package-source and transparent algorithm-profile digests.
+- A centralized 21-contract schema registry and deterministic exact-byte current-schema manifest;
+  trusted release signing/attestation remains an external protected-identity operation.
+- A retained twelve-case post-critique control evaluation covering interface completeness, future
+  registry times, selection-policy authorization, evidence disposition, manifest interface binding,
+  audit splicing, state-head replay, runtime attribution, CLI verdict semantics, and binary64 drift.
+- An executable theorem-to-runtime obligation map naming concrete Python violation behavior, regression tests, coverage status, and external refinement gaps.
+- Dedicated, transcript-bound interactive-LLM analyzers for output-watermark screens and randomized synthetic-canary attack floors.
+- Canary evidence supports low-FPR and equal-prior membership games plus exact reconstruction, while contamination, protocol-binding, preregistration, or recipient-realizability failures downgrade the result to a non-decision-bearing screen.
+- Watermark evidence is always provenance-triage screen evidence and can neither block nor clear a privacy threat; null watermark and canary results never clear a release.
+- A transport-neutral analyzer-service registry, in-process compatibility adapter, versioned MCP adapter contract, capability discovery tool, and engine-side validation of remote evidence identity, bindings and decision authority.
+- An explicit manifest-validation, artifact-integrity, model-execution, assurance-routing and decision-aggregation workflow with replaceable MCP-ready model workers, including deterministic XGBoost and MLP test models.
+- A bounded empirical workflow that trains native XGBoost and scikit-learn MLP classifiers on independently seeded synthetic datasets, evaluates disjoint stratified holdouts, and reports Bonferroni-corrected exact one-sided confidence intervals without creating clearance evidence.
+- Corrected the deterministic additive-stump fixture to identify it as a workflow proxy rather than a trained native XGBoost model.
+- Integrated a red-team stage with independently trained shadow-model membership attacks, Gaussian feature corruption and exhaustive single-feature occlusion probes; outputs remain non-clearing and require complete assessment bindings before any attack floor may block.
+- Added an independently implemented, MIT-attributed SACRO-ML-inspired target/tool registry with aggregate structural disclosure indicators, repeated worst-case probability membership attacks, dummy baselines, low-FPR simultaneous bounds, standardized reports and MCP-ready discovery metadata.
+
+### Changed
+
+- Default analyzer-service capabilities are derived from implemented behavior and cannot be widened by adapter configuration; only DP ceilings and recipient-realizable tree exact evidence currently provide shipped clearing paths.
+- `model-coverage` names per-threat candidate clearing paths and unmet clearing-path threats without emitting a percentage or safety score.
+- CLI assessment/optimization now requires an audit database; after request parsing/validation,
+  intent is appended before analyzer/optimizer execution and completion before report output. Missing,
+  malformed, or schema-invalid requests fail before the current audit-ingress boundary.
+- Removed the rejected `adversarial_supply_chain` enum value; supported trust profiles are cooperative and separated-assessor, and signatures continue to establish only byte/key binding.
+- Clarified the offline product scope and repository organization, exposed CLI version information, replayed every current schema in checks, and aligned contributor and release verification dependencies.
+- Added GitHub project links, current issue/PR routing, Markdown-link verification, wheel smoke tests, annotated-tag/main-branch/version guards, and a formal proof gate for tagged releases.
+- Rebuilt the reference architecture as a full software view covering runtime units, entry points, analyzer semantics, workflows, storage, release contracts, external training/export integration, deployment tiers, CI/release automation, observability, trust boundaries, and failure recovery; it also distinguishes the reviewer MCP server from the prospective analyzer adapter and current contracts from target integration gaps.
+- The active policy now allowlists the canonical selection-policy digest; other selection-stage
+  inputs remain caller-supplied and require authenticated authorities in production.
+- Assessment and optimization reports now expose their emitting implementation/runtime profile;
+  ordinary binary64 clearance comparisons are explicitly ineligible for unresolved MRAP G7 claims.
+
+### Removed
+
+- Removed the dated framework audit/corrigendum documents and the frozen Version 0.5 prospective-study runner, analyzer, configuration, test, and seal requirements. Superseded schemas remain historical structural records for provenance and external schema validation; the current CLI accepts only current contract versions.
+
+### Fixed
+
+- Contradictory upper evidence can no longer weaken a validated over-tolerance floor from `block` to `inconclusive`; reports distinguish contradictory from insufficient evidence and identify the conflicting evidence records.
+- Direct-joint portfolio evidence can no longer claim an assessed empty release set, and optimization requires exact coverage of the authoritative active registry snapshot plus the candidate.
+- Release-protocol CLI machine output no longer hides structural-profile or skipped-artifact verification degradation.
+- Audit-event v2 hashing now binds ledger, operation, release/instance identity, canonical payload,
+  predecessor, timestamp, and hash format; legacy rows require explicit opt-in.
+- Registry-commit replay now requires a one-step append and recomputes a release-bound
+  `MRAP-STATE-1` commitment instead of accepting an arbitrary new head.
+- Threat decisions name every excluded evidence identifier, report validation checks the complete
+  included/excluded partition, and signed assessment manifests bind the interface hash directly.
+- Future-dated portfolio snapshots and active-policy-unapproved selection rules fail closed.
+
+### Known limitations
+
+- The gateway/live-interface conformance service, immutable audit anchor, bundle-content verifier, retained-records system, and adversarial-supply-chain execution environment remain adopter-owned production components.
+- Superseded JSON Schemas are retained for structural provenance, but the current CLI is not yet a version-dispatched historical verifier; preserve matching released wheels, locks, trust metadata, and replay fixtures for long retention.
+- Registry semantic-delta completeness, authoritative inclusion/CAS, live gateway enforcement,
+  trusted-build attestation, selection-input issuer authentication, and cross-release budget custody
+  remain external. Ordinary binary64 decision boundaries remain a current MRAP G7 blocker.
+
 ## [0.7.0] - 2026-08-23
 
 ### Added

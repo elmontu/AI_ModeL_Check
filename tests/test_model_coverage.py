@@ -50,11 +50,33 @@ class ModelCoverageTests(unittest.TestCase):
         self.assertEqual(result["resolved_family"]["family_id"], "tree_ensemble")
         self.assertFalse(result["can_clear"])
         self.assertTrue(result["coverage_ready"])
+        self.assertTrue(result["portfolio_assessment_required"])
+        self.assertTrue(result["authoritative_portfolio_registry_required"])
         self.assertIn("attribute", result["missing_recommended_threats"])
         self.assertIn("reconstruction", result["missing_recommended_threats"])
+        self.assertFalse(result["threats_without_default_clearing_path"])
+        self.assertTrue(all(result["default_clearing_paths"].values()))
+        self.assertFalse(any("percent" in key or "fraction" in key for key in result))
         self.assertTrue(result["advisories"])
 
-    def test_assessment_v3_requires_a_structured_model_profile(self) -> None:
+    def test_non_dp_neural_request_names_missing_default_clearing_paths(self) -> None:
+        raw = json.loads((ROOT / "examples" / "request.json").read_text())
+        raw["release"]["model_family"] = "mlp"
+        raw["release"]["model_profile"]["component_model_families"] = ["mlp"]
+        raw["analyzer_inputs"] = [
+            value for value in raw["analyzer_inputs"] if value["analyzer"] == "attack"
+        ]
+        request = AssessmentRequest.model_validate(raw)
+        result = assess_request_model_coverage(request)
+        self.assertEqual(
+            result["threats_without_default_clearing_path"],
+            ["linkage-person", "membership-person"],
+        )
+        self.assertTrue(
+            all(not paths for paths in result["default_clearing_paths"].values())
+        )
+
+    def test_assessment_v4_requires_a_structured_model_profile(self) -> None:
         raw = json.loads((ROOT / "examples" / "request.json").read_text())
         raw["release"].pop("model_profile")
         with self.assertRaises(ValidationError):

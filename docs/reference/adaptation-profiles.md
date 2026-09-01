@@ -2,15 +2,15 @@
 
 ## Purpose
 
-Model Release Assurance is a whole-of-government framework, not a health-service product. The trusted core is shared; policy, population evidence, operational integrations, and tolerances are adapted without changing the meaning of evidence or weakening fail-closed rules.
+Model Release Assurance is sector-neutral. Its trusted core can be shared across organizations and domains; policy, population evidence, operational integrations, and tolerances are adapted without changing the meaning of evidence or weakening fail-closed rules.
 
 The runtime engine evaluates a single resolved, hash-bound policy bundle. Profile inheritance is a governance and policy-service operation: the resolver must retain all mandatory parent rules, record provenance for every override, and seal the effective bundle before a release submitter can reference it.
 
 ## Four layers
 
-### 1. Whole-of-government baseline
+### 1. Common baseline
 
-The central baseline fixes schema rules, evidence classes, integrity controls, minimum threat coverage, separation of policy from submissions, signing requirements, audit semantics, and the rule that attack floors cannot clear a release.
+The common baseline fixes schema rules, evidence classes, integrity controls, minimum threat coverage, separation of policy from submissions, signing requirements, audit semantics, and the rule that attack floors cannot clear a release.
 
 ### 2. Domain and population profile
 
@@ -18,7 +18,7 @@ This layer declares additional threats, protected-unit conventions, authoritativ
 
 ### 3. Adopter profile
 
-An agency, ministry, programme, regulator, statutory board, or participating organization identifies its legal authority, accountable roles, approved analyzers, recipient classes, risk tolerances, retention rules, and incident process. It may strengthen the baseline but cannot reinterpret an empirical floor as a ceiling or omit mandatory central threats.
+An organization, programme, company, agency, ministry, regulator, or other adopter identifies its legal authority, accountable roles, approved analyzers, recipient classes, risk tolerances, retention rules, and incident process. It may strengthen the baseline but cannot reinterpret an empirical floor as a ceiling or omit mandatory baseline threats.
 
 ### 4. Release contract
 
@@ -37,10 +37,10 @@ The release contract binds one artifact and interface to a recipient, purpose, m
 
 Population size is context, not a privacy guarantee. A large national denominator does not protect a rare subgroup, and a modeled match count does not prove anonymity. Threat games and validation must use the population actually reachable by the declared recipient.
 
-## MOH adaptation example
+## Public-sector health example
 
-MOH would supply a health-sector/adopter profile defining, for example, person or episode protected units, health-specific harms, authorised recipient classes, health-data retention controls, relevant population registers, and stricter tolerances where appropriate. The common engine, evidence semantics, cryptographic bindings, and decision rules remain unchanged. Other ministries or organization-focused programmes create parallel profiles against the same baseline.
+A ministry of health could supply a health-sector adopter profile defining, for example, person or episode protected units, health-specific harms, authorised recipient classes, health-data retention controls, relevant population registers, and stricter tolerances where appropriate. This is one adopter example, not the product boundary. Public- and private-sector adopters can create parallel profiles against the same baseline while leaving the common engine, evidence semantics, cryptographic bindings, and decision rules unchanged.
 
 ## Change control
 
-Central baseline changes require shared governance and compatibility review. Profile changes require the owning authority and independent assurance review. Changes to population definition, size basis, reference date, recipient, interface, protected unit, or threat tolerance invalidate reuse of the previous release decision unless an approved composition rule explicitly applies.
+Common-baseline changes require project governance and compatibility review. Profile changes require the owning authority and independent assurance review. Changes to population definition, size basis, reference date, recipient, interface, protected unit, or threat tolerance invalidate reuse of the previous release decision unless an approved composition rule explicitly applies.

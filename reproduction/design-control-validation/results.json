@@ -1,0 +1,135 @@
+{
+  "all_expected_controls_observed": true,
+  "case_count": 12,
+  "cases": [
+    {
+      "control_id": "complete_interface_contract",
+      "detail": "----------------------------------------------------------------------\nRan 1 test in 0.002s\n\nOK",
+      "passed": true,
+      "test": "tests.test_framework.ContractTests.test_complete_interface_requires_every_structured_channel_declaration",
+      "test_count": 1
+    },
+    {
+      "control_id": "future_registry_snapshot",
+      "detail": "----------------------------------------------------------------------\nRan 1 test in 0.003s\n\nOK",
+      "passed": true,
+      "test": "tests.test_decision_theory.ReleaseOptimizerTests.test_future_dated_portfolio_registry_snapshot_is_rejected",
+      "test_count": 1
+    },
+    {
+      "control_id": "selection_policy_allowlist",
+      "detail": "----------------------------------------------------------------------\nRan 1 test in 0.003s\n\nOK",
+      "passed": true,
+      "test": "tests.test_contract_v4.OptimizationContractV3Tests.test_selection_policy_must_be_authorized_by_active_policy",
+      "test_count": 1
+    },
+    {
+      "control_id": "evidence_disposition",
+      "detail": "----------------------------------------------------------------------\nRan 1 test in 0.070s\n\nOK",
+      "passed": true,
+      "test": "tests.test_contract_v4.AssessmentContractV4Tests.test_report_dispositions_name_every_included_and_excluded_record",
+      "test_count": 1
+    },
+    {
+      "control_id": "signed_interface_binding",
+      "detail": "----------------------------------------------------------------------\nRan 1 test in 0.060s\n\nOK",
+      "passed": true,
+      "test": "tests.test_contract_v4.AssessmentContractV4Tests.test_report_and_manifest_expose_non_authorizing_scope",
+      "test_count": 1
+    },
+    {
+      "control_id": "audit_metadata_binding",
+      "detail": "----------------------------------------------------------------------\nRan 1 test in 0.029s\n\nOK",
+      "passed": true,
+      "test": "tests.test_audit_v2.AuditV2Tests.test_domain_hash_binds_ledger_and_rejects_metadata_tampering",
+      "test_count": 1
+    },
+    {
+      "control_id": "audit_splice_resistance",
+      "detail": "----------------------------------------------------------------------\nRan 1 test in 0.061s\n\nOK",
+      "passed": true,
+      "test": "tests.test_audit_v2.AuditV2Tests.test_spliced_events_and_fresh_ledger_impersonation_fail",
+      "test_count": 1
+    },
+    {
+      "control_id": "registry_sequence_contiguity",
+      "detail": "----------------------------------------------------------------------\nRan 1 test in 0.006s\n\nOK",
+      "passed": true,
+      "test": "tests.test_release_protocol.ReleaseProtocolTests.test_registry_sequence_cannot_jump_forward",
+      "test_count": 1
+    },
+    {
+      "control_id": "registry_head_replay",
+      "detail": "----------------------------------------------------------------------\nRan 1 test in 0.006s\n\nOK",
+      "passed": true,
+      "test": "tests.test_release_protocol.ReleaseProtocolTests.test_registry_head_is_recomputed_from_commitment",
+      "test_count": 1
+    },
+    {
+      "control_id": "runtime_identity_replay",
+      "detail": "----------------------------------------------------------------------\nRan 1 test in 0.005s\n\nOK",
+      "passed": true,
+      "test": "tests.test_runtime_identity.RuntimeIdentityTests.test_package_source_digest_and_profile_are_deterministic",
+      "test_count": 1
+    },
+    {
+      "control_id": "cli_block_outcome",
+      "detail": "----------------------------------------------------------------------\nRan 1 test in 0.747s\n\nOK",
+      "passed": true,
+      "test": "tests.test_cli.CliTests.test_block_is_a_successful_cli_domain_outcome",
+      "test_count": 1
+    },
+    {
+      "control_id": "binary64_boundary_diagnostic",
+      "detail": "----------------------------------------------------------------------\nRan 1 test in 0.002s\n\nOK",
+      "passed": true,
+      "test": "tests.test_critique_regressions.ContradictoryEvidenceRegressionTests.test_binary64_boundary_is_an_explicit_conformance_gap",
+      "test_count": 1
+    }
+  ],
+  "discovered_test_count": 12,
+  "evaluation_id": "post-critique-design-control-regressions-v1",
+  "external_controls_not_tested": [
+    "authoritative registry completeness and linearizable inclusion",
+    "trusted build allowlists, SBOM custody, and release attestation",
+    "selection-stage issuer authentication beyond policy preference allowlisting",
+    "live gateway conformance and enforcement",
+    "scientific adequacy of model-risk evidence"
+  ],
+  "generated_at": "2026-09-01T17:10:31.707636+00:00",
+  "known_gap_observations": [
+    {
+      "computed_boundary": "0.6000000000000001",
+      "computed_boundary_expression": "0.2 + 0.4",
+      "computed_boundary_hex": "0x1.3333333333334p-1",
+      "disposition": "Present conformance blocker for ordinary clearance boundaries; the optimizer does not invoke SciPy, and this observation is not a risk rate.",
+      "gap_id": "MRAP-G7-BINARY64",
+      "literal_boundary": "0.6",
+      "literal_boundary_hex": "0x1.3333333333333p-1",
+      "representation_sensitive": true
+    }
+  ],
+  "non_claim": "Passing cases demonstrate the enumerated executable regressions only. They do not authorize a release or estimate unobserved defect coverage.",
+  "passed_case_count": 12,
+  "runtime_identity": {
+    "algorithm_profile": {
+      "aggregation": "raw pass counts only",
+      "case_execution": "named unittest regressions",
+      "safety_score_emitted": false
+    },
+    "algorithm_profile_sha256": "11e163fd81e2396dc9314eb42c0ef1739373e6ef02c5090b0acfc047d20421f0",
+    "component_id": "design_control_evaluator",
+    "component_version": "DesignControlEvaluation/1.0",
+    "dependency_versions": {
+      "cryptography": "48.0.1",
+      "pydantic": "2.13.4"
+    },
+    "package_name": "model-release-assurance",
+    "package_source_sha256": "7d3ae8db4a02064ee7175bf4459aabf1344fb9b7dd5300278f78cec862944b47",
+    "package_version": "0.7.0",
+    "python_implementation": "CPython",
+    "python_version": "3.12.13",
+    "schema_version": "1.0"
+  },
+  "schema_version": "1.0"
+}

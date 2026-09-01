@@ -1,0 +1,23 @@
+{
+  "schema_version": "1.0",
+  "workflow_id": "sample-xgboost-mlp-service-workflow-v1",
+  "experimental_only": true,
+  "models": [
+    {
+      "experiment_id": "sample-xgboost-tabular-v1",
+      "kind": "xgboost",
+      "model_family": "xgboost",
+      "artifact_path": "artifacts/sample-xgboost.json",
+      "artifact_sha256": "f09165ad8683ee1b781b47c3f9c29a4293885c794447c1777e22e6e0c2726a4d",
+      "purpose": "Exercise the replaceable XGBoost model worker and assurance routing"
+    },
+    {
+      "experiment_id": "sample-mlp-tabular-v1",
+      "kind": "mlp",
+      "model_family": "mlp",
+      "artifact_path": "artifacts/sample-mlp.json",
+      "artifact_sha256": "d3476cd868ded959a26c4a50376f52b5d3b6a0d9c43c7963ed75ce09292e7b24",
+      "purpose": "Exercise the replaceable MLP model worker and assurance routing"
+    }
+  ]
+}

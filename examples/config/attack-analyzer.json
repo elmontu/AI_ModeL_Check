@@ -1,0 +1,10 @@
+{
+  "analyzer": "attack",
+  "configuration_version": "1.0.0",
+  "attack_family": "precomputed recipient-realizable attack counts",
+  "shadow_model_count": 0,
+  "random_seed": "not_applicable_to_count_replay",
+  "threshold_calibration": "source-declared preregistered threshold",
+  "uncertainty": "multiplicity-adjusted one-sided Clopper-Pearson lower bound",
+  "authority": "floor_only"
+}

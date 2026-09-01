@@ -2,11 +2,11 @@
 
 ## Supported versions
 
-The current `0.5.x` line is an offline reference release. Security fixes are applied to the latest commit only until a stable release process is established.
+The current `0.7.x` line is an offline reference release. Security fixes are applied to the latest commit only until a stable release process is established.
 
 ## Reporting
 
-Do not place real agency data, model artifacts, credentials, signing keys, attack outputs, or vulnerability details in a public issue. Report through the owning agency's approved security channel and include:
+Do not place confidential data, model artifacts, credentials, signing keys, attack outputs, or vulnerability details in a public issue. Use [GitHub private vulnerability reporting](https://github.com/elmontu/AI_ModeL_Check/security/advisories/new), or another private channel approved by the affected organization, and include:
 
 - affected version and deployment identifier;
 - whether confidentiality, integrity, availability, authorization, or decision correctness is affected;

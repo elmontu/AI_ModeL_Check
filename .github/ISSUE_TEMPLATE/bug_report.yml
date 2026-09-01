@@ -5,7 +5,7 @@ labels: [bug]
 body:
   - type: markdown
     attributes:
-      value: Do not include agency data, credentials, private keys, model artifacts, or vulnerability details. Follow SECURITY.md for security reports.
+      value: Do not include confidential data, credentials, private keys, model artifacts, or vulnerability details. Use GitHub private vulnerability reporting for security issues.
   - type: input
     id: version
     attributes:
@@ -17,13 +17,17 @@ body:
     attributes:
       label: Component
       options:
-        - Assessment engine
-        - Optimizer
-        - Portfolio solver
-        - Protocol solver
+        - Contracts or schemas
+        - Assessment core
+        - Selection or certificates
+        - Protocol-feasibility certificates
+        - MRAP transcript verification
+        - Lean or formal verification
         - Integrity or audit
-        - CLI or schemas
-        - Benchmark tooling
+        - CLI or packaging
+        - Evidence lab or model worker
+        - MCP or retrieval integration
+        - Documentation or CI
     validations:
       required: true
   - type: textarea

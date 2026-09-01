@@ -2,7 +2,14 @@
 
 ## Target operating model
 
-The target is an accredited, whole-of-government capability that accepts model-release packages, runs approved analyzers in isolation, evaluates evidence for every mandatory threat, selects a supportable release configuration, and issues a signed authorization bound to the committed portfolio state.
+This roadmap describes an adopter-owned production system around MRA, not a future authorization mode
+of the `mra` package. The target is an accredited capability that accepts model-release packages, runs
+approved analyzers in isolation, evaluates evidence for every mandatory threat, and selects a
+supportable release configuration. Its external authorization authority submits a signed
+`AuthorizationCommitRequest`; only a successful atomic portfolio-registry compare-and-swap emits the
+receipt and commit that create an authorization bound to committed portfolio state. The reference
+architecture is sector-neutral; each deployment supplies its own authority, policy, population, and
+accreditation profile.
 
 The same core may support person, household, organization, programme, device, transaction, event, and custom protected units. Profiles must not treat those populations as statistically interchangeable.
 
@@ -11,8 +18,8 @@ The same core may support person, household, organization, programme, device, tr
 Deliver:
 
 - named service owner, data owner, assessor, approver, and release operator;
-- central threat catalogue and mandatory-evidence rules;
-- central, domain, adopter, and release-contract policy layers;
+- baseline threat catalogue and mandatory-evidence rules;
+- baseline, domain, adopter, and release-contract policy layers;
 - deterministic profile resolution with provenance for every override;
 - independently owned tolerances and utility requirements; and
 - expiry, revocation, exception, appeal, incident, and records-management processes.
@@ -24,11 +31,16 @@ Exit gate: threats, tolerances, and utility requirements are frozen independentl
 Deliver:
 
 - immutable artifact and evidence storage;
-- approved analyzer catalogue with version pinning;
+- approved analyzer catalogue with minimum semantic versions, accepted implementation/configuration
+  digests, policy-driven invalidation, and reassessment queues when the approved adversary improves;
+- reproducible export and packaging that creates a deterministic content manifest binding the source
+  checkpoint, every weight/shard, tokenizer, preprocessing, wrappers, dependencies, runtime,
+  precision/calibration, entry points, and final deployable-bundle digest;
 - independent replay for accountants and certificates;
 - canonical population and interface registries;
 - complete configuration enumeration where `reject` is permitted; and
-- conformance fixtures for evidence direction, substitution, and portfolio handling.
+- conformance fixtures for evidence direction, substitution, portfolio handling, and gateway
+  verification of the exact same bundle/content-manifest digest.
 
 Exit gate: every analyzer passes positive controls, malformed-input tests, scope-binding tests, and replay tests.
 
@@ -41,8 +53,12 @@ Deliver:
 - malware scanning and format allowlists for submitted artifacts;
 - HSM/KMS-backed signing, rotation, and revocation;
 - encrypted storage, retention, legal hold, deletion, backup, and restore controls;
-- idempotent jobs, retry policy, cancellation, and concurrency limits; and
-- metrics, structured logs, traces, alerting, and incident runbooks.
+- immutable retention of canonical request/evidence/report/manifest or receipt, audit ledger/checkpoint,
+  trust metadata, released wheel/dependency lock, and vintage replay fixtures;
+- idempotent jobs, retry policy, cancellation, and concurrency limits;
+- metrics, structured logs, traces, alerting, and incident runbooks; and
+- a reviewer MCP principal with no signing-key, writable registry/audit, or deployment-credential
+  access, plus separately isolated execution workers.
 
 Exit gate: penetration test, restore exercise, load test, and operational-readiness review are approved.
 
@@ -54,8 +70,9 @@ Deliver a registry that:
 - stores the committed release transcript and remaining budgets;
 - supports transactionally locked read-evaluate-commit operations;
 - rejects stale registry heads and replayed authorizations;
-- supports revocation and reassessment; and
-- exports independently verifiable history.
+- supports revocation and reassessment;
+- exports independently verifiable history; and
+- externally anchors ledger/registry head, sequence, count, and identity on a governed schedule.
 
 Exit gate: concurrency tests show that no two releases can both authorize against the same stale state.
 
@@ -67,6 +84,9 @@ Deliver:
 - inclusion, coverage, nonresponse, subgroup-precision, and drift checks;
 - validated contribution bounds for grouped units;
 - complete private-pipeline accounting, including preprocessing and correlated outputs;
+- adversarial live-interface conformance tests covering labels/scores/logits, embeddings/gradients/
+  weights/files, precision/serialization, errors, timing, batching/state, retrieval/tools/memory,
+  administrative paths, and update behavior;
 - stronger domain-specific attacks with positive controls; and
 - transcript-level analysis for interactive LLM services.
 
@@ -91,3 +111,5 @@ Exit gate: independent security, statistical, legal, and operational reviewers a
 9. Final authorization is bound to configuration, population snapshots, registry head, trust profile, and expiry.
 10. Interactive LLM services require transcript-level assurance.
 11. Floating-point optimization may propose a result; exact or outward-rounded replay must verify clearance-critical certificates.
+12. A single-release assessment and its signature remain non-authorizing; authorization requires an active-policy-bound complete portfolio commit and activation requires a separate live gateway receipt.
+13. Historical records remain replayable for their full retention period using preserved versioned verifiers and trust/dependency metadata.

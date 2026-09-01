@@ -1,0 +1,183 @@
+{
+  "attestation": {
+    "committed_signature": false,
+    "release_attestation_required": true,
+    "trust_boundary": "A protected release process must sign or externally attest these exact manifest bytes; the repository does not contain a trusted private key."
+  },
+  "contracts": [
+    {
+      "declared_schema_version": "1.0",
+      "filename": "audit-checkpoint-v1.json",
+      "kind": "audit-checkpoint",
+      "model_import": "model_release_assurance.audit.AuditCheckpoint",
+      "model_title": "AuditCheckpoint",
+      "sha256": "c075efecb23b8ac9c025dfd7e95950f02c04eb5b920fa8849c9545c88cb08b78"
+    },
+    {
+      "declared_schema_version": "2.0",
+      "filename": "audit-verification-v2.json",
+      "kind": "audit-verification",
+      "model_import": "model_release_assurance.audit.AuditVerification",
+      "model_title": "AuditVerification",
+      "sha256": "95b457ed3c9255bc6b6d829b23e84fd9a8e292f19aa95c817dcd037c73858fd4"
+    },
+    {
+      "declared_schema_version": "2.0",
+      "filename": "signed-manifest-v2.json",
+      "kind": "manifest",
+      "model_import": "model_release_assurance.models.SignedManifest",
+      "model_title": "SignedManifest",
+      "sha256": "e92acdaeb993c72b7b8513b12b08dd83dcd97406973e3d81c51a5ef6c88862e4"
+    },
+    {
+      "declared_schema_version": "3.0",
+      "filename": "optimization-request-v3.json",
+      "kind": "optimization",
+      "model_import": "model_release_assurance.optimizer.OptimizationRequest",
+      "model_title": "OptimizationRequest",
+      "sha256": "590d9fbc630e35a1382e1d0826e176fcf09b9dfd2a1ec051071c286f5f622071"
+    },
+    {
+      "declared_schema_version": "3.0",
+      "filename": "signed-optimization-manifest-v3.json",
+      "kind": "optimization-manifest",
+      "model_import": "model_release_assurance.optimizer.SignedOptimizationManifest",
+      "model_title": "SignedOptimizationManifest",
+      "sha256": "fe730ba6ba76d7eb40bd400d9b004c9596d8b28c51576451e8ef9af0a1a5685e"
+    },
+    {
+      "declared_schema_version": "3.0",
+      "filename": "optimization-report-v3.json",
+      "kind": "optimization-report",
+      "model_import": "model_release_assurance.optimizer.OptimizationReport",
+      "model_title": "OptimizationReport",
+      "sha256": "487ebc355b10a6b618346039722f6eea3753a4a8511b20305704a9c7def93266"
+    },
+    {
+      "declared_schema_version": "2.0",
+      "filename": "policy-bundle-v2.json",
+      "kind": "policy",
+      "model_import": "model_release_assurance.models.PolicyBundle",
+      "model_title": "PolicyBundle",
+      "sha256": "05eda7a236e0dd899682b320ebb6834b7c952b5f609c555398a04f64cdd5a56c"
+    },
+    {
+      "declared_schema_version": "1.1",
+      "filename": "incomplete-portfolio-certificate-v1.1.json",
+      "kind": "portfolio-certificate",
+      "model_import": "model_release_assurance.incomplete_portfolio.AnalyticPortfolioEvidenceEntry",
+      "model_title": "AnalyticPortfolioEvidenceEntry",
+      "sha256": "dde2138f6ca5956bf2dcb480058fed3e44be3a33586e985f876772df78de55ac"
+    },
+    {
+      "declared_schema_version": "1.0",
+      "filename": "portfolio-error-budget-v1.json",
+      "kind": "portfolio-error-budget",
+      "model_import": "model_release_assurance.portfolio_statistics.AssuranceErrorBudget",
+      "model_title": "AssuranceErrorBudget",
+      "sha256": "53859e406ae4895d9e527dfaf181948966b416cb30b273e31973af10a2dfb362"
+    },
+    {
+      "declared_schema_version": "1.0",
+      "filename": "portfolio-multinomial-counts-v1.json",
+      "kind": "portfolio-multinomial-counts",
+      "model_import": "model_release_assurance.portfolio_statistics.MultinomialCountsFile",
+      "model_title": "MultinomialCountsFile",
+      "sha256": "173c9e397e6cc7d760ee877f6a193c5e28de0c242138f8462b1a62b826b42999"
+    },
+    {
+      "declared_schema_version": "1.0",
+      "filename": "portfolio-multinomial-evidence-v1.json",
+      "kind": "portfolio-multinomial-evidence",
+      "model_import": "model_release_assurance.portfolio_statistics.SimultaneousMultinomialEvidence",
+      "model_title": "SimultaneousMultinomialEvidence",
+      "sha256": "e15b64145efc91658251bccaa9bd776ca96c671b8880f813c2c9b08cc6ebac2b"
+    },
+    {
+      "declared_schema_version": "1.0",
+      "filename": "portfolio-multinomial-plan-v1.json",
+      "kind": "portfolio-multinomial-plan",
+      "model_import": "model_release_assurance.portfolio_statistics.MultinomialSamplingPlan",
+      "model_title": "MultinomialSamplingPlan",
+      "sha256": "758b8860a57c33da6b71921fc3612e4662032a9475bc0e248d30fa8f9b676cd8"
+    },
+    {
+      "declared_schema_version": "1.0",
+      "filename": "portfolio-multinomial-request-v1.json",
+      "kind": "portfolio-multinomial-request",
+      "model_import": "model_release_assurance.portfolio_statistics.MultinomialEvidenceRequest",
+      "model_title": "MultinomialEvidenceRequest",
+      "sha256": "5d95eae59a74d1893ffce197f29f16e0792396a7452f14a1e66a7e834868b351"
+    },
+    {
+      "declared_schema_version": "1.0",
+      "filename": "incomplete-portfolio-problem-v1.json",
+      "kind": "portfolio-problem",
+      "model_import": "model_release_assurance.incomplete_portfolio.IncompletePortfolioProblem",
+      "model_title": "IncompletePortfolioProblem",
+      "sha256": "d24e5bf82470f8985f82d9aeee885736fd557909d451db25c25777e77d33e1db"
+    },
+    {
+      "declared_schema_version": "1.0",
+      "filename": "incomplete-portfolio-specification-v1.json",
+      "kind": "portfolio-specification",
+      "model_import": "model_release_assurance.portfolio_statistics.IncompletePortfolioSpecification",
+      "model_title": "IncompletePortfolioSpecification",
+      "sha256": "f861f8e5b846a10dda430bbf3cdccd237effaac2643e8b99dd9c7053c5c6683d"
+    },
+    {
+      "declared_schema_version": "1.0",
+      "filename": "protocol-feasibility-certificate-v1.json",
+      "kind": "protocol-certificate",
+      "model_import": "model_release_assurance.protocol_feasibility.ProtocolFeasibilityCertificate",
+      "model_title": "ProtocolFeasibilityCertificate",
+      "sha256": "361a6b6f159b5860a1668dd70c10594fac142ec6cb9817e1d0ddd7806c365230"
+    },
+    {
+      "declared_schema_version": "1.0",
+      "filename": "protocol-feasibility-problem-v1.json",
+      "kind": "protocol-problem",
+      "model_import": "model_release_assurance.protocol_feasibility.ProtocolFeasibilityProblem",
+      "model_title": "ProtocolFeasibilityProblem",
+      "sha256": "dc2955ac8b0b4e1d1098e5e7aad8959b6b60e8c781ebdf61c6f15c8e08f84a2d"
+    },
+    {
+      "declared_schema_version": "1.1",
+      "filename": "release-protocol-run-v1.1.json",
+      "kind": "release-protocol-run",
+      "model_import": "model_release_assurance.release_protocol.ReleaseProtocolRun",
+      "model_title": "ReleaseProtocolRun",
+      "sha256": "9593bececcc2f6f48ed0dcb7fd9e4c6a27258cf34495ab53fa0305fcc63f3d54"
+    },
+    {
+      "declared_schema_version": "1.0",
+      "filename": "release-protocol-verification-v1.json",
+      "kind": "release-protocol-verification",
+      "model_import": "model_release_assurance.release_protocol.ReleaseProtocolVerification",
+      "model_title": "ReleaseProtocolVerification",
+      "sha256": "e75d778cefa9797f6fa5ea30c73d858c07db7db2cea69955c127ff571c8c26d4"
+    },
+    {
+      "declared_schema_version": "4.0",
+      "filename": "assessment-report-v4.json",
+      "kind": "report",
+      "model_import": "model_release_assurance.models.AssessmentReport",
+      "model_title": "AssessmentReport",
+      "sha256": "2e7d457127deb6bed608db85da5baeb03779a61a52f961b9a6b024d8c65ade74"
+    },
+    {
+      "declared_schema_version": "4.0",
+      "filename": "assessment-request-v4.json",
+      "kind": "request",
+      "model_import": "model_release_assurance.models.AssessmentRequest",
+      "model_title": "AssessmentRequest",
+      "sha256": "2d9153012864700fecc0b7e61f5edcb0e0ed108e5d7896e4173af3614c847c20"
+    }
+  ],
+  "digest_algorithm": "sha256",
+  "digest_scope": "exact_file_bytes",
+  "manifest_type": "current_schema_registry",
+  "package_name": "model-release-assurance",
+  "package_version": "0.7.0",
+  "schema_version": "1.0"
+}

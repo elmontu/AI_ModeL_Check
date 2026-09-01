@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import json
-import sqlite3
 import subprocess
 from dataclasses import asdict
 from pathlib import Path
@@ -9,26 +8,62 @@ from typing import Any
 
 from pydantic import ValidationError
 
-from .audit import GENESIS
-from .integrity import sha256_bytes
+from .audit import AuditStore
 from .experimental_workflow import run_experimental_workflow
+from .empirical_workflow import EmpiricalWorkflowConfig, run_empirical_xgboost_mlp_workflow
 from .knowledge import KnowledgeIndex
 from .model_coverage import assess_request_model_coverage
 from .models import AssessmentRequest
 from .privacy_orchestration import build_privacy_audit_plan
+from .services import AnalyzerServiceRegistry, default_analyzer_service_registry
+from .red_team import default_red_team_tool_registry
 
 
 class AssuranceToolService:
     """Assurance operations suitable for an MCP adapter.
 
-    Most operations are read-only. The experimental privacy runner may write
-    only beneath output/ and the public dataset cache; it cannot authorize,
+    Most operations are read-only. Experimental runners may execute local
+    model code; the privacy runner may write beneath output/ and the public
+    dataset cache and launch a subprocess. No operation can authorize,
     activate, sign, revoke, append audit events, or commit portfolio state.
     """
 
-    def __init__(self, repository_root: Path, index: KnowledgeIndex | None = None):
+    def __init__(
+        self,
+        repository_root: Path,
+        index: KnowledgeIndex | None = None,
+        service_registry: AnalyzerServiceRegistry | None = None,
+    ):
         self.repository_root = repository_root.resolve(strict=True)
         self.index = index or KnowledgeIndex.build(self.repository_root)
+        self.service_registry = service_registry or default_analyzer_service_registry()
+
+    def list_analyzer_services(self) -> dict[str, Any]:
+        """Discover analyzer boundaries without executing assessment work."""
+        return {
+            "contract_version": "2.0",
+            "services": [
+                descriptor.model_dump(mode="json")
+                for descriptor in self.service_registry.describe()
+            ],
+        }
+
+    def list_red_team_tools(self) -> dict[str, Any]:
+        registry = default_red_team_tool_registry()
+        return {
+            "contract_version": "1.0",
+            "tools": [
+                {
+                    "name": tool.name,
+                    "service_id": tool.service_id,
+                    "mcp_tool": tool.mcp_tool,
+                    "transport": "in_process",
+                    "can_clear": False,
+                    "can_block": False,
+                }
+                for tool in registry.tools
+            ],
+        }
 
     def search_assurance_docs(self, query: str, limit: int = 5) -> dict[str, Any]:
         return {
@@ -68,45 +103,19 @@ class AssuranceToolService:
             raise ValueError("audit database must be within the repository root")
         if resolved.suffix.lower() not in {".sqlite", ".sqlite3", ".db"}:
             raise ValueError("audit database must be a SQLite file")
-        # URI read-only mode prevents this MCP tool from creating a database,
-        # initializing tables, or mutating an existing assurance chain.
-        connection = sqlite3.connect(f"file:{resolved.as_posix()}?mode=ro", uri=True)
-        rows = None
-        try:
-            rows = connection.execute(
-                """
-                SELECT occurred_at, event_type, assessment_id, payload_json,
-                       previous_hash, event_hash
-                FROM audit_events ORDER BY sequence
-                """
-            )
-            previous = GENESIS
-            count = 0
-            for occurred_at, event_type, assessment_id, payload, stored_previous, stored_hash in rows:
-                if stored_previous != previous:
-                    raise ValueError(f"audit-chain predecessor mismatch at event {count + 1}")
-                material = json.dumps(
-                    {
-                        "occurred_at": occurred_at,
-                        "event_type": event_type,
-                        "assessment_id": assessment_id,
-                        "payload_json": payload,
-                        "previous_hash": stored_previous,
-                    },
-                    sort_keys=True,
-                    separators=(",", ":"),
-                ).encode("utf-8")
-                if sha256_bytes(material) != stored_hash:
-                    raise ValueError(f"audit-chain hash mismatch at event {count + 1}")
-                previous = stored_hash
-                count += 1
-        finally:
-            if rows is not None:
-                rows.close()
-            connection.close()
-        if require_events and count == 0:
-            raise ValueError("audit database contains no events")
-        return {"valid": True, "events": count, "path": str(resolved)}
+        verification = AuditStore.open_read_only(resolved).verify(
+            require_events=require_events,
+            require_complete=True,
+        )
+        return {
+            "valid": True,
+            "events": verification.event_count,
+            "path": str(resolved),
+            "ledger_id": str(verification.ledger_id),
+            "head_sha256": verification.head_sha256,
+            "complete": verification.complete,
+            "orphaned_run_ids": [str(value) for value in verification.orphaned_run_ids],
+        }
 
     def run_experimental_workflow(self, manifest_path: str) -> dict[str, Any]:
         candidate = Path(manifest_path)
@@ -114,6 +123,11 @@ class AssuranceToolService:
         if not resolved.is_relative_to(self.repository_root):
             raise ValueError("experimental manifest must be within the repository root")
         return run_experimental_workflow(resolved, knowledge_index=self.index)
+
+    def run_empirical_model_workflow(self, config: dict[str, Any]) -> dict[str, Any]:
+        """Run the configured XGBoost/MLP experiment; outputs are screens only."""
+        parsed = EmpiricalWorkflowConfig.model_validate(config)
+        return run_empirical_xgboost_mlp_workflow(parsed)
 
     def read_privacy_audit_report(self, report_path: str) -> dict[str, Any]:
         resolved = Path(report_path).resolve(strict=True)

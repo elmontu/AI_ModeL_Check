@@ -1,14 +1,14 @@
 {
-  "schema_version": "3.0",
-  "assessment_id": "aed05038-0a1f-5d7f-9155-92ffbc459d6e",
+  "schema_version": "4.0",
+  "assessment_id": "82bbb688-90a4-5493-b457-a446c9588259",
   "release_id": "whole-government-demo-tree-v1",
   "policy_id": "whole-government-model-release-demo",
-  "policy_version": "1.0.0",
-  "policy_sha256": "ef0780f17ae1f732296ef53c4040799792ec907abbb6ab69950f1d045a0d3316",
-  "created_at": "2026-08-22T11:06:59.289553Z",
-  "request_sha256": "76cc48202796e3976754054f5aeba5d8334253a04d1e96c54dd1a0476f316232",
+  "policy_version": "2.0.0",
+  "policy_sha256": "9e00b697be580a6921b42e1b4ddb206aba90ca4bde61cb402450fd49c246653f",
+  "created_at": "2026-09-01T17:10:08.506158Z",
+  "request_sha256": "3aadcc20c24d42d59073194c4afec6d2e5b5e20449335abd01694a716a51e738",
   "artifact_sha256": "2f42b587627c5b6c4447d781b57a47082743f029b475f560a574553abcedfdd5",
-  "release_contract_sha256": "118a1d72acd73341ce4d6cf69f761bcd23e6141b40f42e215b7a560f4cc6f670",
+  "release_contract_sha256": "3aa3db7a0601c388368283687cbb28b0fd73e1870f773712e9f349e013e6297a",
   "release_model_family": "tree_ensemble",
   "release_model_profile": {
     "task": "classification",
@@ -24,16 +24,87 @@
     "stateful": false
   },
   "release_interface": {
+    "schema_version": "2.0",
     "protocol_type": "predictive",
     "access": "full_artifact",
     "outputs": [
       "tree rules",
       "leaf signature"
     ],
+    "output_channels": {
+      "aggregates": false,
+      "labels": false,
+      "scores": false,
+      "probabilities": false,
+      "logits": false,
+      "explanations": false,
+      "text": false,
+      "embeddings": false,
+      "gradients": false,
+      "parameters": true,
+      "downloadable_files": [
+        "demo-tree.json"
+      ],
+      "shipped_summary_metadata": [
+        "leaf signature"
+      ],
+      "custom_channels": [
+        "tree rules"
+      ]
+    },
+    "precision_bits": 64,
     "adaptive_queries": false,
     "authenticated": true,
     "rate_limited": false,
+    "timing": {
+      "recipient_observable": false,
+      "includes_queue_time": false,
+      "mitigation": "not_applicable",
+      "mitigation_parameters": {}
+    },
+    "errors": {
+      "transport_status": "none",
+      "documented_status_codes": [],
+      "error_content": "none",
+      "retry_metadata": false
+    },
+    "execution": {
+      "batching": "recipient_controlled",
+      "cross_request_state": "none"
+    },
+    "access_paths": {
+      "side_channels": [],
+      "custom_side_channels": [],
+      "admin_access": "none",
+      "admin_capabilities": [],
+      "local_access": "artifact_only",
+      "local_capabilities": [
+        "read and execute the packaged model artifact"
+      ]
+    },
+    "serialization": {
+      "formats": [
+        "xgboost-json"
+      ],
+      "media_types": [
+        "application/json"
+      ],
+      "encodings": [
+        "utf-8"
+      ],
+      "compression": [],
+      "endianness": "not_applicable"
+    },
     "notes": ""
+  },
+  "assessment_scope": {
+    "composition_scope": "single_release_no_portfolio",
+    "declared_previous_release_ids": [],
+    "portfolio_assessment_required": true,
+    "interface_assurance": "declared_interface_only",
+    "live_interface_verified": false,
+    "gateway_interface_conformance_required": true,
+    "authorization_eligible": false
   },
   "policy_expires_at": "2099-01-01T00:00:00Z",
   "population_scope_sha256s": {
@@ -80,16 +151,22 @@
       "evidence_id": "linkage-person:tree:absolute",
       "threat_id": "linkage-person",
       "analyzer": "tree_linkage",
+      "producer": {
+        "service_id": "mra.analyzer.tree_linkage",
+        "service_version": "1.0.0",
+        "implementation_sha256": "a70de6be14147a550d16f7b6c46b8499fbc9a8de1b0e4c3d907e1e805360e694",
+        "configuration_sha256": "d462c2564b587a5429a5814e95f918003120cced4268db975a9fb6395a4715b3"
+      },
       "release_id": "whole-government-demo-tree-v1",
-      "release_contract_sha256": "118a1d72acd73341ce4d6cf69f761bcd23e6141b40f42e215b7a560f4cc6f670",
-      "policy_sha256": "ef0780f17ae1f732296ef53c4040799792ec907abbb6ab69950f1d045a0d3316",
+      "release_contract_sha256": "3aa3db7a0601c388368283687cbb28b0fd73e1870f773712e9f349e013e6297a",
+      "policy_sha256": "9e00b697be580a6921b42e1b4ddb206aba90ca4bde61cb402450fd49c246653f",
       "observed_at": "2026-08-18T00:00:00Z",
       "evidence_class": "exact",
       "coverage": "complete_interface",
       "population_scope_id": "service-participants-2026",
       "population_scope_sha256": "d0ceafb482b5ed133cd89c765ec4e9d228f4c14bf07fac3f4aa67297a79ed5e8",
       "decision_game_sha256": "4bb158d840ec659005d778c0443f537245d03ba7dfdef279ff98e11f5e271430",
-      "interface_sha256": "d7ca53bb8dbf0efb85abf373dba00fdb285764d783856f51b27658d49e65d111",
+      "interface_sha256": "4cde1c5e2dd0f3303c9c8e2c3c3bef3d089746a38569b1442c346d81b6e50ed8",
       "artifact_sha256": "2f42b587627c5b6c4447d781b57a47082743f029b475f560a574553abcedfdd5",
       "metric": "bayes_linkage_success",
       "value": 0.5,
@@ -114,7 +191,7 @@
         "occupied_cells": 2,
         "minimum_cell_size": 2,
         "singleton_fraction": 0.0,
-        "source_sha256": "fc467fadcffd2fd6ca2da7c343bedb0ea3eaa6080efc1d3139796bfc00630cb6",
+        "source_sha256": "ef6d44e4f49ef35848181de36c4343456cce8def28f90869018c9e97b77ff5fe",
         "tool": "mra-demo-tree-export",
         "tool_version": "1.0"
       }
@@ -123,16 +200,22 @@
       "evidence_id": "linkage-person:tree:incremental",
       "threat_id": "linkage-person",
       "analyzer": "tree_linkage",
+      "producer": {
+        "service_id": "mra.analyzer.tree_linkage",
+        "service_version": "1.0.0",
+        "implementation_sha256": "a70de6be14147a550d16f7b6c46b8499fbc9a8de1b0e4c3d907e1e805360e694",
+        "configuration_sha256": "d462c2564b587a5429a5814e95f918003120cced4268db975a9fb6395a4715b3"
+      },
       "release_id": "whole-government-demo-tree-v1",
-      "release_contract_sha256": "118a1d72acd73341ce4d6cf69f761bcd23e6141b40f42e215b7a560f4cc6f670",
-      "policy_sha256": "ef0780f17ae1f732296ef53c4040799792ec907abbb6ab69950f1d045a0d3316",
+      "release_contract_sha256": "3aa3db7a0601c388368283687cbb28b0fd73e1870f773712e9f349e013e6297a",
+      "policy_sha256": "9e00b697be580a6921b42e1b4ddb206aba90ca4bde61cb402450fd49c246653f",
       "observed_at": "2026-08-18T00:00:00Z",
       "evidence_class": "exact",
       "coverage": "complete_interface",
       "population_scope_id": "service-participants-2026",
       "population_scope_sha256": "d0ceafb482b5ed133cd89c765ec4e9d228f4c14bf07fac3f4aa67297a79ed5e8",
       "decision_game_sha256": "4bb158d840ec659005d778c0443f537245d03ba7dfdef279ff98e11f5e271430",
-      "interface_sha256": "d7ca53bb8dbf0efb85abf373dba00fdb285764d783856f51b27658d49e65d111",
+      "interface_sha256": "4cde1c5e2dd0f3303c9c8e2c3c3bef3d089746a38569b1442c346d81b6e50ed8",
       "artifact_sha256": "2f42b587627c5b6c4447d781b57a47082743f029b475f560a574553abcedfdd5",
       "metric": "incremental_bayes_linkage_success",
       "value": 0.25,
@@ -157,7 +240,7 @@
         "occupied_cells": 2,
         "minimum_cell_size": 2,
         "singleton_fraction": 0.0,
-        "source_sha256": "fc467fadcffd2fd6ca2da7c343bedb0ea3eaa6080efc1d3139796bfc00630cb6",
+        "source_sha256": "ef6d44e4f49ef35848181de36c4343456cce8def28f90869018c9e97b77ff5fe",
         "tool": "mra-demo-tree-export",
         "tool_version": "1.0"
       }
@@ -166,16 +249,22 @@
       "evidence_id": "linkage-person:tree:worst-observation",
       "threat_id": "linkage-person",
       "analyzer": "tree_linkage",
+      "producer": {
+        "service_id": "mra.analyzer.tree_linkage",
+        "service_version": "1.0.0",
+        "implementation_sha256": "a70de6be14147a550d16f7b6c46b8499fbc9a8de1b0e4c3d907e1e805360e694",
+        "configuration_sha256": "d462c2564b587a5429a5814e95f918003120cced4268db975a9fb6395a4715b3"
+      },
       "release_id": "whole-government-demo-tree-v1",
-      "release_contract_sha256": "118a1d72acd73341ce4d6cf69f761bcd23e6141b40f42e215b7a560f4cc6f670",
-      "policy_sha256": "ef0780f17ae1f732296ef53c4040799792ec907abbb6ab69950f1d045a0d3316",
+      "release_contract_sha256": "3aa3db7a0601c388368283687cbb28b0fd73e1870f773712e9f349e013e6297a",
+      "policy_sha256": "9e00b697be580a6921b42e1b4ddb206aba90ca4bde61cb402450fd49c246653f",
       "observed_at": "2026-08-18T00:00:00Z",
       "evidence_class": "exact",
       "coverage": "complete_interface",
       "population_scope_id": "service-participants-2026",
       "population_scope_sha256": "d0ceafb482b5ed133cd89c765ec4e9d228f4c14bf07fac3f4aa67297a79ed5e8",
       "decision_game_sha256": "4bb158d840ec659005d778c0443f537245d03ba7dfdef279ff98e11f5e271430",
-      "interface_sha256": "d7ca53bb8dbf0efb85abf373dba00fdb285764d783856f51b27658d49e65d111",
+      "interface_sha256": "4cde1c5e2dd0f3303c9c8e2c3c3bef3d089746a38569b1442c346d81b6e50ed8",
       "artifact_sha256": "2f42b587627c5b6c4447d781b57a47082743f029b475f560a574553abcedfdd5",
       "metric": "worst_observation_success",
       "value": 0.5,
@@ -200,7 +289,7 @@
         "occupied_cells": 2,
         "minimum_cell_size": 2,
         "singleton_fraction": 0.0,
-        "source_sha256": "fc467fadcffd2fd6ca2da7c343bedb0ea3eaa6080efc1d3139796bfc00630cb6",
+        "source_sha256": "ef6d44e4f49ef35848181de36c4343456cce8def28f90869018c9e97b77ff5fe",
         "tool": "mra-demo-tree-export",
         "tool_version": "1.0"
       }
@@ -209,20 +298,26 @@
       "evidence_id": "membership-person:dp:roc",
       "threat_id": "membership-person",
       "analyzer": "dp",
+      "producer": {
+        "service_id": "mra.analyzer.dp",
+        "service_version": "1.0.0",
+        "implementation_sha256": "79c1ef6a04200a0fa647e4aa44928ba39420abea766b4b4c4053e6fee8675900",
+        "configuration_sha256": "f4d1c3ee56b6b9eddfa5b93e55400725dfdc3df92a3a652de4f09c0ad369e12c"
+      },
       "release_id": "whole-government-demo-tree-v1",
-      "release_contract_sha256": "118a1d72acd73341ce4d6cf69f761bcd23e6141b40f42e215b7a560f4cc6f670",
-      "policy_sha256": "ef0780f17ae1f732296ef53c4040799792ec907abbb6ab69950f1d045a0d3316",
+      "release_contract_sha256": "3aa3db7a0601c388368283687cbb28b0fd73e1870f773712e9f349e013e6297a",
+      "policy_sha256": "9e00b697be580a6921b42e1b4ddb206aba90ca4bde61cb402450fd49c246653f",
       "observed_at": "2026-08-18T00:00:00Z",
       "evidence_class": "ceiling",
       "coverage": "complete_interface",
       "population_scope_id": "service-participants-2026",
       "population_scope_sha256": "d0ceafb482b5ed133cd89c765ec4e9d228f4c14bf07fac3f4aa67297a79ed5e8",
       "decision_game_sha256": "686901249c969d5c1a631f1a617c319f9c235842745ea34c6956b6c5c2fef38c",
-      "interface_sha256": "d7ca53bb8dbf0efb85abf373dba00fdb285764d783856f51b27658d49e65d111",
+      "interface_sha256": "4cde1c5e2dd0f3303c9c8e2c3c3bef3d089746a38569b1442c346d81b6e50ed8",
       "artifact_sha256": "2f42b587627c5b6c4447d781b57a47082743f029b475f560a574553abcedfdd5",
       "metric": "membership_tpr_at_fpr",
-      "value": 0.0012224027581601699,
-      "upper": 0.0012224027581601699,
+      "value": 0.0012224027581601703,
+      "upper": 0.0012224027581601703,
       "realizability": "not_applicable",
       "can_clear": true,
       "can_block": false,
@@ -238,29 +333,35 @@
       "details": {
         "population_scope_id": "service-participants-2026",
         "fpr": 0.001,
-        "bound_1": 0.0012224027581601699,
+        "bound_1": 0.0012224027581601703,
         "bound_2": 0.1820887964058493,
-        "source_sha256": "53a984341cdd088db1cad52fea1370acf5527fcad8a4548c28cdf1337177aadc"
+        "source_sha256": "be4d7e1e09d9c587081bbbc79203f8a3d26b4b617ca3b455f02ace2517db0413"
       }
     },
     {
       "evidence_id": "membership-person:dp:equal-prior",
       "threat_id": "membership-person",
       "analyzer": "dp",
+      "producer": {
+        "service_id": "mra.analyzer.dp",
+        "service_version": "1.0.0",
+        "implementation_sha256": "79c1ef6a04200a0fa647e4aa44928ba39420abea766b4b4c4053e6fee8675900",
+        "configuration_sha256": "f4d1c3ee56b6b9eddfa5b93e55400725dfdc3df92a3a652de4f09c0ad369e12c"
+      },
       "release_id": "whole-government-demo-tree-v1",
-      "release_contract_sha256": "118a1d72acd73341ce4d6cf69f761bcd23e6141b40f42e215b7a560f4cc6f670",
-      "policy_sha256": "ef0780f17ae1f732296ef53c4040799792ec907abbb6ab69950f1d045a0d3316",
+      "release_contract_sha256": "3aa3db7a0601c388368283687cbb28b0fd73e1870f773712e9f349e013e6297a",
+      "policy_sha256": "9e00b697be580a6921b42e1b4ddb206aba90ca4bde61cb402450fd49c246653f",
       "observed_at": "2026-08-18T00:00:00Z",
       "evidence_class": "ceiling",
       "coverage": "complete_interface",
       "population_scope_id": "service-participants-2026",
       "population_scope_sha256": "d0ceafb482b5ed133cd89c765ec4e9d228f4c14bf07fac3f4aa67297a79ed5e8",
       "decision_game_sha256": "686901249c969d5c1a631f1a617c319f9c235842745ea34c6956b6c5c2fef38c",
-      "interface_sha256": "d7ca53bb8dbf0efb85abf373dba00fdb285764d783856f51b27658d49e65d111",
+      "interface_sha256": "4cde1c5e2dd0f3303c9c8e2c3c3bef3d089746a38569b1442c346d81b6e50ed8",
       "artifact_sha256": "2f42b587627c5b6c4447d781b57a47082743f029b475f560a574553abcedfdd5",
       "metric": "equal_prior_membership_success",
-      "value": 0.5498344474784806,
-      "upper": 0.5498344474784806,
+      "value": 0.5498344474784805,
+      "upper": 0.5498344474784805,
       "realizability": "not_applicable",
       "can_clear": true,
       "can_block": false,
@@ -275,23 +376,29 @@
       "limitations": [],
       "details": {
         "population_scope_id": "service-participants-2026",
-        "source_sha256": "53a984341cdd088db1cad52fea1370acf5527fcad8a4548c28cdf1337177aadc"
+        "source_sha256": "be4d7e1e09d9c587081bbbc79203f8a3d26b4b617ca3b455f02ace2517db0413"
       }
     },
     {
       "evidence_id": "membership-person:attack:calibrated-loss",
       "threat_id": "membership-person",
       "analyzer": "attack",
+      "producer": {
+        "service_id": "mra.analyzer.attack",
+        "service_version": "1.0.0",
+        "implementation_sha256": "52f3fcc0b9fcba8cbcdd4cc273f5f73ddded57b99be13694195bc0a932f534e9",
+        "configuration_sha256": "d23bfa2964096be53b1f902489484b82c8e5938bc123dbbba11648eece4f4d16"
+      },
       "release_id": "whole-government-demo-tree-v1",
-      "release_contract_sha256": "118a1d72acd73341ce4d6cf69f761bcd23e6141b40f42e215b7a560f4cc6f670",
-      "policy_sha256": "ef0780f17ae1f732296ef53c4040799792ec907abbb6ab69950f1d045a0d3316",
+      "release_contract_sha256": "3aa3db7a0601c388368283687cbb28b0fd73e1870f773712e9f349e013e6297a",
+      "policy_sha256": "9e00b697be580a6921b42e1b4ddb206aba90ca4bde61cb402450fd49c246653f",
       "observed_at": "2026-08-18T00:00:00Z",
       "evidence_class": "floor",
       "coverage": "named_projection",
       "population_scope_id": "service-participants-2026",
       "population_scope_sha256": "d0ceafb482b5ed133cd89c765ec4e9d228f4c14bf07fac3f4aa67297a79ed5e8",
       "decision_game_sha256": "686901249c969d5c1a631f1a617c319f9c235842745ea34c6956b6c5c2fef38c",
-      "interface_sha256": "d7ca53bb8dbf0efb85abf373dba00fdb285764d783856f51b27658d49e65d111",
+      "interface_sha256": "4cde1c5e2dd0f3303c9c8e2c3c3bef3d089746a38569b1442c346d81b6e50ed8",
       "artifact_sha256": "2f42b587627c5b6c4447d781b57a47082743f029b475f560a574553abcedfdd5",
       "metric": "equal_prior_membership_success",
       "value": 0.52,
@@ -321,7 +428,7 @@
         "target_fpr": null,
         "one_sided_fpr_upper": null,
         "operating_point_attained": true,
-        "source_sha256": "b90fb4f93fe83848b37c8f24048929dd28dcd5757cbe3f352a56cf3e83acd22f",
+        "source_sha256": "0bffe1c684e85c367c83ec7b2d63da87a3da874de4f2aeebd987c50eb06578e5",
         "tool": "mra-demo-attack",
         "tool_version": "1.0"
       }
@@ -333,10 +440,10 @@
       "population_scope_id": "service-participants-2026",
       "population_scope_sha256": "d0ceafb482b5ed133cd89c765ec4e9d228f4c14bf07fac3f4aa67297a79ed5e8",
       "decision_game_sha256": "4bb158d840ec659005d778c0443f537245d03ba7dfdef279ff98e11f5e271430",
-      "assessed_interface_sha256": "d7ca53bb8dbf0efb85abf373dba00fdb285764d783856f51b27658d49e65d111",
+      "assessed_interface_sha256": "4cde1c5e2dd0f3303c9c8e2c3c3bef3d089746a38569b1442c346d81b6e50ed8",
       "assessed_artifact_sha256": "2f42b587627c5b6c4447d781b57a47082743f029b475f560a574553abcedfdd5",
-      "assessed_release_contract_sha256": "118a1d72acd73341ce4d6cf69f761bcd23e6141b40f42e215b7a560f4cc6f670",
-      "assessed_policy_sha256": "ef0780f17ae1f732296ef53c4040799792ec907abbb6ab69950f1d045a0d3316",
+      "assessed_release_contract_sha256": "3aa3db7a0601c388368283687cbb28b0fd73e1870f773712e9f349e013e6297a",
+      "assessed_policy_sha256": "9e00b697be580a6921b42e1b4ddb206aba90ca4bde61cb402450fd49c246653f",
       "decision_metric": "incremental_bayes_linkage_success",
       "kind": "linkage",
       "mandatory": true,
@@ -348,6 +455,12 @@
       "evidence_ids": [
         "linkage-person:tree:incremental"
       ],
+      "excluded_evidence_ids": [
+        "linkage-person:tree:absolute",
+        "linkage-person:tree:worst-observation"
+      ],
+      "evidence_consistency": "consistent",
+      "conflicting_evidence_ids": [],
       "reasons": [
         "validated ceiling 0.25 is within tolerance 0.3",
         "2 evidence record(s) did not match decision metric incremental_bayes_linkage_success"
@@ -358,22 +471,27 @@
       "population_scope_id": "service-participants-2026",
       "population_scope_sha256": "d0ceafb482b5ed133cd89c765ec4e9d228f4c14bf07fac3f4aa67297a79ed5e8",
       "decision_game_sha256": "686901249c969d5c1a631f1a617c319f9c235842745ea34c6956b6c5c2fef38c",
-      "assessed_interface_sha256": "d7ca53bb8dbf0efb85abf373dba00fdb285764d783856f51b27658d49e65d111",
+      "assessed_interface_sha256": "4cde1c5e2dd0f3303c9c8e2c3c3bef3d089746a38569b1442c346d81b6e50ed8",
       "assessed_artifact_sha256": "2f42b587627c5b6c4447d781b57a47082743f029b475f560a574553abcedfdd5",
-      "assessed_release_contract_sha256": "118a1d72acd73341ce4d6cf69f761bcd23e6141b40f42e215b7a560f4cc6f670",
-      "assessed_policy_sha256": "ef0780f17ae1f732296ef53c4040799792ec907abbb6ab69950f1d045a0d3316",
+      "assessed_release_contract_sha256": "3aa3db7a0601c388368283687cbb28b0fd73e1870f773712e9f349e013e6297a",
+      "assessed_policy_sha256": "9e00b697be580a6921b42e1b4ddb206aba90ca4bde61cb402450fd49c246653f",
       "decision_metric": "equal_prior_membership_success",
       "kind": "membership",
       "mandatory": true,
       "tolerance": 0.6,
       "tolerance_basis": "absolute",
       "lower_bound": 0.4934947780172694,
-      "upper_bound": 0.5498344474784806,
+      "upper_bound": 0.5498344474784805,
       "verdict": "clear",
       "evidence_ids": [
         "membership-person:dp:equal-prior",
         "membership-person:attack:calibrated-loss"
       ],
+      "excluded_evidence_ids": [
+        "membership-person:dp:roc"
+      ],
+      "evidence_consistency": "consistent",
+      "conflicting_evidence_ids": [],
       "reasons": [
         "validated ceiling 0.549834 is within tolerance 0.6",
         "1 evidence record(s) did not match decision metric equal_prior_membership_success"
@@ -381,5 +499,27 @@
     }
   ],
   "overall_verdict": "clear",
-  "engine_version": "0.6.0"
+  "runtime_identity": {
+    "schema_version": "1.0",
+    "package_name": "model-release-assurance",
+    "package_version": "0.7.0",
+    "package_source_sha256": "7d3ae8db4a02064ee7175bf4459aabf1344fb9b7dd5300278f78cec862944b47",
+    "component_id": "assurance_engine",
+    "component_version": "AssessmentReport/4.0",
+    "algorithm_profile": {
+      "ordinary_decision_arithmetic": "Python binary64",
+      "decision_rule": "mandatory threats clear and no threat blocks",
+      "critical_certificate_arithmetic": "analyzer-specific replay",
+      "scipy_invoked_by_assurance_engine": false,
+      "mrap_g7_exact_or_outward_clearance_eligible": false
+    },
+    "algorithm_profile_sha256": "1627b3a96b80ad9dcf969e3932c215ab7ba9c1f4cfef9f6d2369f0d1b5b3d487",
+    "python_implementation": "CPython",
+    "python_version": "3.12.13",
+    "dependency_versions": {
+      "cryptography": "48.0.1",
+      "pydantic": "2.13.4"
+    }
+  },
+  "engine_version": "0.7.0"
 }

@@ -72,17 +72,6 @@ def main() -> None:
     protocol_feasibility = json.loads(
         (ROOT / "output/reproduction/protocol-feasibility-benchmark-analysis.json").read_text()
     )
-    prospective_training = json.loads(
-        (ROOT / "output/reproduction/v05-prospective-training-summary.json").read_text()
-    )
-    prospective_decision = json.loads(
-        (ROOT / "output/reproduction/v05-prospective-decision-summary.json").read_text()
-    )
-    prospective_primary = next(
-        row
-        for row in prospective_decision["aggregate_methods"]
-        if row["method"] == "simultaneous-joint"
-    )
     runtime = json.loads(
         (ROOT / "reproduction/openml/runtime.json").read_text(encoding="utf-8")
     )
@@ -135,26 +124,6 @@ def main() -> None:
         raise RuntimeError("cannot seal: stochastic portfolio benchmark replay failed")
     if not all(protocol_feasibility["validation"].values()):
         raise RuntimeError("cannot seal: protocol-feasibility benchmark replay failed")
-    if (
-        prospective_training["failed_runs"]
-        or prospective_training["completed_runs"] != prospective_training["expected_runs"]
-    ):
-        raise RuntimeError("cannot seal: full-corpus training grid is incomplete")
-    if prospective_training["design_sha256"] != sha256_file(
-        ROOT / "reproduction/prospective-v05/config.json"
-    ):
-        raise RuntimeError("cannot seal: full-corpus design hash mismatch")
-    prospective_validation = prospective_decision["validation"]
-    if not (
-        prospective_validation["training_grid_complete"]
-        and prospective_validation["all_development_accountants_valid"]
-        and prospective_validation["all_training_accountants_valid"]
-        and prospective_validation["all_training_artifact_hashes_valid"]
-        and prospective_validation["all_training_attack_counts_valid"]
-        and prospective_validation["all_selected_privacy_budgets_valid"]
-    ):
-        raise RuntimeError("cannot seal: full-corpus validation failed")
-
     retained = [
         "reproduction/openml/config.json",
         "reproduction/openml/runtime.json",
@@ -165,7 +134,6 @@ def main() -> None:
         "reproduction/openml/inference-config.json",
         "reproduction/openml/population-validation-config.json",
         "reproduction/portfolio-stochastic/config.json",
-        "reproduction/prospective-v05/config.json",
         "reproduction/openml/manifests/suite-99-source.json",
         "reproduction/openml/manifests/suite-99-datasets.json",
         "reproduction/openml/manifests/expensive-subsets.json",
@@ -208,12 +176,9 @@ def main() -> None:
         "output/reproduction/protocol-feasibility-benchmark-raw.json",
         "output/reproduction/protocol-feasibility-benchmark-summary.json",
         "output/reproduction/protocol-feasibility-benchmark-analysis.json",
-        "output/reproduction/v05-prospective-training-summary.json",
-        "output/reproduction/v05-prospective-decision-summary.json",
-        "output/reproduction/v05-prospective-decision-analysis.json",
-        "output/reproduction/v05-prospective-decision-raw.json.gz",
         "output/evaluation/framework-effectiveness.json",
         "docs/README.md",
+        "docs/project-scope.md",
         "docs/architecture.md",
         "docs/reference/threat-model.md",
         "docs/reference/production-roadmap.md",
@@ -283,13 +248,10 @@ def main() -> None:
         "tests/test_effectiveness.py",
         "tests/test_cli.py",
         "tests/test_openml_reproduction.py",
-        "tests/test_v05_prospective_study.py",
         "scripts/fetch_openml_suite.py",
         "scripts/select_openml_subsets.py",
         "scripts/run_portfolio_stochastic_benchmark.py",
         "scripts/run_protocol_feasibility_benchmark.py",
-        "scripts/run_v05_prospective_study.py",
-        "scripts/analyze_v05_prospective_study.py",
         "scripts/evaluate_framework_effectiveness.py",
         "scripts/analyze_portfolio_stochastic_benchmark.py",
         "scripts/run_openml_structural.py",
@@ -317,10 +279,10 @@ def main() -> None:
         "requirements-experiments.txt",
     ]
     manifest = {
-        "manifest_version": 6,
-        "study": "OpenML-CC18 clean-room reproduction, finite-portfolio and protocol benchmarks, and Version 0.5 full-corpus proxy release study",
+        "manifest_version": 7,
+        "study": "OpenML-CC18 clean-room reproduction with finite-portfolio and protocol benchmarks",
         "sealed_at": "2026-08-17",
-        "claim_boundary": "new clean-room and fixed-frame proxy evidence; neither exact recovery of source-writeup artifacts nor representative government release yield",
+        "claim_boundary": "clean-room benchmark evidence; neither exact recovery of source-writeup artifacts nor representative deployment release yield",
         "source_artifacts": [],
         "dataset_corpus": {
             "suite_id": 99,
@@ -371,31 +333,6 @@ def main() -> None:
             "representative_release_yield_identified": False,
             "claim_boundary": protocol_feasibility["claim_boundary"],
         },
-        "full_corpus_proxy_study": {
-            "study_id": prospective_decision["study_id"],
-            "design_status": prospective_decision["design_status"],
-            "extension_disclosure": prospective_decision.get("extension_disclosure"),
-            "claim_boundary": prospective_decision["claim_boundary"],
-            "datasets": prospective_decision["datasets"],
-            "training_cells": prospective_decision["trained_model_cells"],
-            "trained_ml_artifacts": prospective_decision["trained_ml_artifacts"],
-            "failed_training_cells": prospective_training["failed_runs"],
-            "development_runs": prospective_decision["development_runs"],
-            "evaluation_runs": prospective_decision["evaluation_runs"],
-            "raw_decision_rows": prospective_decision["raw_decision_rows"],
-            "primary_requested_positions": prospective_primary["requested_positions"],
-            "primary_released_positions": prospective_primary["released_positions"],
-            "primary_proxy_false_clear_actions": prospective_primary[
-                "proxy_false_clear_actions"
-            ],
-            "primary_privacy_budget_violations": prospective_primary[
-                "privacy_budget_violations"
-            ],
-            "stratified_aggregate_methods": prospective_decision[
-                "stratified_aggregate_methods"
-            ],
-            "representative_government_release_yield_identified": False,
-        },
         "trained_release_or_reference_model_artifacts": (
             summaries["structural"]["completed_runs"]
             + 2 * summaries["membership"]["completed_runs"]
@@ -416,7 +353,7 @@ def main() -> None:
             "complete_private_pipeline": "The DP mechanism conditions on fixed public benchmark preprocessing and does not cover separately released confidential summaries.",
             "augmented_online_lira": "The executed 15-shadow likelihood-ratio tier is LiRA-style, not the full augmented online protocol.",
             "full_record_reconstruction": "The executed reconstruction tier recovers one declared feature, not a full row or training set.",
-            "deployment_population": "Finite-population validity is established only for enumerated OpenML snapshots, not a government adopter population.",
+            "deployment_population": "Finite-population validity is established only for enumerated OpenML snapshots, not an adopter's deployment population.",
             "production_service": "Identity, sandboxing, KMS/HSM, append-only external anchoring, portfolio locking, and accreditation are outside the clean-room study.",
         },
     }

@@ -16,11 +16,13 @@ from ..models import (
 )
 from ..integrity import canonical_json_bytes, sha256_bytes
 from ..model_coverage import resolve_model_family
-from .base import evidence_context_fields
+from .base import evidence_context_fields, evidence_producer_fields
 
 
 class TreeLinkageAnalyzer:
     name = "tree_linkage"
+    can_clear = True
+    can_block = True
 
     def supports(self, value: AnalyzerInput) -> bool:
         return isinstance(value, TreeLinkageInput)
@@ -66,6 +68,7 @@ class TreeLinkageAnalyzer:
 
         common = dict(
             **evidence_context_fields(value.evidence_context),
+            **evidence_producer_fields(value.provenance),
             threat_id=threat.threat_id,
             analyzer=self.name,
             realizability=classification,

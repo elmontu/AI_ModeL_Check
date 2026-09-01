@@ -28,6 +28,7 @@ from model_release_assurance.release_protocol import (
     ReleaseProtocolRun,
     ReleaseProtocolVerificationProfile,
     ReleaseProtocolState,
+    portfolio_registry_head_sha256,
     release_protocol_event_sha256,
     sign_release_protocol_artifact,
     sign_release_protocol_event,
@@ -200,21 +201,33 @@ class ReleaseProtocolTests(unittest.TestCase):
             ),
             authorization_expires_at=self.base_time + timedelta(days=1),
         )
+        commit_artifacts = (
+            self.artifact(
+                ReleaseProtocolArtifactKind.AUTHORIZATION_RECEIPT,
+                ReleaseProtocolRole.PORTFOLIO_REGISTRY,
+            ),
+            self.artifact(
+                ReleaseProtocolArtifactKind.PORTFOLIO_COMMIT,
+                ReleaseProtocolRole.PORTFOLIO_REGISTRY,
+            ),
+        )
+        committed_head = portfolio_registry_head_sha256(
+            previous_head_sha256=_digest(5),
+            committed_sequence=6,
+            release_id="release:example",
+            release_instance_sha256=_digest(1),
+            portfolio_commit_sha256=next(
+                artifact.sha256
+                for artifact in commit_artifacts
+                if artifact.kind is ReleaseProtocolArtifactKind.PORTFOLIO_COMMIT
+            ),
+        )
         add(
             ReleaseProtocolEventType.COMMIT_PORTFOLIO,
             ReleaseProtocolRole.PORTFOLIO_REGISTRY,
-            (
-                self.artifact(
-                    ReleaseProtocolArtifactKind.AUTHORIZATION_RECEIPT,
-                    ReleaseProtocolRole.PORTFOLIO_REGISTRY,
-                ),
-                self.artifact(
-                    ReleaseProtocolArtifactKind.PORTFOLIO_COMMIT,
-                    ReleaseProtocolRole.PORTFOLIO_REGISTRY,
-                ),
-            ),
+            commit_artifacts,
             expected_registry_head_sha256=_digest(5),
-            committed_registry_head_sha256=_digest(6),
+            committed_registry_head_sha256=committed_head,
             expected_registry_sequence=5,
             committed_registry_sequence=6,
             atomic_compare_and_swap_succeeded=True,
@@ -423,7 +436,7 @@ class ReleaseProtocolTests(unittest.TestCase):
         self.assertFalse(result.valid)
         self.assertTrue(any("external trust store" in reason for reason in result.reasons))
 
-    def test_registry_sequence_must_strictly_advance(self) -> None:
+    def test_registry_sequence_must_advance_by_one(self) -> None:
         run = self.happy_run()
         events = list(run.events)
         commit_index = next(
@@ -437,7 +450,39 @@ class ReleaseProtocolTests(unittest.TestCase):
         self.rechain(events)
         result = self.replay(run.model_copy(update={"events": tuple(events)}))
         self.assertFalse(result.valid)
-        self.assertTrue(any("strictly advance" in reason for reason in result.reasons))
+        self.assertTrue(any("advance the append-only" in reason for reason in result.reasons))
+
+    def test_registry_sequence_cannot_jump_forward(self) -> None:
+        run = self.happy_run()
+        events = list(run.events)
+        commit_index = next(
+            index
+            for index, event in enumerate(events)
+            if event.event_type is ReleaseProtocolEventType.COMMIT_PORTFOLIO
+        )
+        events[commit_index] = events[commit_index].model_copy(
+            update={"committed_registry_sequence": 999}
+        )
+        self.rechain(events)
+        result = self.replay(run.model_copy(update={"events": tuple(events)}))
+        self.assertFalse(result.valid)
+        self.assertTrue(any("advance the append-only" in reason for reason in result.reasons))
+
+    def test_registry_head_is_recomputed_from_commitment(self) -> None:
+        run = self.happy_run()
+        events = list(run.events)
+        commit_index = next(
+            index
+            for index, event in enumerate(events)
+            if event.event_type is ReleaseProtocolEventType.COMMIT_PORTFOLIO
+        )
+        events[commit_index] = events[commit_index].model_copy(
+            update={"committed_registry_head_sha256": _digest(999)}
+        )
+        self.rechain(events)
+        result = self.replay(run.model_copy(update={"events": tuple(events)}))
+        self.assertFalse(result.valid)
+        self.assertTrue(any("state-head recurrence" in reason for reason in result.reasons))
 
     def test_monitoring_report_cannot_self_authorize_revocation(self) -> None:
         run = self.happy_run()

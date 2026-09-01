@@ -23,7 +23,7 @@ from .incomplete_portfolio import (
     verify_analytic_portfolio,
     verify_portfolio_problem_evidence,
 )
-from .models import AssessmentReport, AssessmentRequest, PolicyBundle, SignedManifest
+from .models import AssessmentReport, AssessmentRequest, SignedManifest
 from .model_coverage import assess_request_model_coverage, catalog_as_dicts
 from .optimizer import (
     OptimizationReport,
@@ -34,11 +34,8 @@ from .optimizer import (
     verify_signed_optimization_manifest,
 )
 from .portfolio_statistics import (
-    AssuranceErrorBudget,
     IncompletePortfolioSpecification,
-    MultinomialCountsFile,
     MultinomialEvidenceRequest,
-    MultinomialSamplingPlan,
     SimultaneousMultinomialEvidence,
     compile_multinomial_portfolio_problem,
     generate_simultaneous_multinomial_evidence,
@@ -60,6 +57,8 @@ from .release_protocol import (
     ReleaseProtocolVerificationProfile,
     verify_release_protocol_run,
 )
+from .schema_registry import SCHEMA_REGISTRY
+from .version import VERSION
 
 
 def _read_json(path: Path) -> dict:
@@ -78,7 +77,11 @@ def _write_text_lf(path: Path, value: str) -> None:
 
 
 def build_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(prog="mra", description="Model Release Assurance engine")
+    parser = argparse.ArgumentParser(
+        prog="mra",
+        description="Offline model-release contract assessment and replay toolkit",
+    )
+    parser.add_argument("--version", action="version", version=f"%(prog)s {VERSION}")
     subparsers = parser.add_subparsers(dest="command", required=True)
 
     validate = subparsers.add_parser("validate", help="validate a release assessment contract")
@@ -94,7 +97,7 @@ def build_parser() -> argparse.ArgumentParser:
     assess = subparsers.add_parser("assess", help="run an assessment")
     assess.add_argument("request", type=Path)
     assess.add_argument("--output", type=Path, required=True)
-    assess.add_argument("--audit-db", type=Path)
+    assess.add_argument("--audit-db", type=Path, required=True)
 
     optimize = subparsers.add_parser(
         "optimize",
@@ -102,7 +105,7 @@ def build_parser() -> argparse.ArgumentParser:
     )
     optimize.add_argument("request", type=Path)
     optimize.add_argument("--output", type=Path, required=True)
-    optimize.add_argument("--audit-db", type=Path)
+    optimize.add_argument("--audit-db", type=Path, required=True)
 
     portfolio_solve = subparsers.add_parser(
         "portfolio-solve",
@@ -206,6 +209,11 @@ def build_parser() -> argparse.ArgumentParser:
         action="store_true",
         help="reject structural transcripts to prevent verification-profile downgrade",
     )
+    release_protocol_verify.add_argument(
+        "--output",
+        type=Path,
+        help="write the machine-readable verification result, including degraded checks",
+    )
     portfolio_verify.add_argument(
         "--skip-evidence-files",
         action="store_true",
@@ -243,19 +251,10 @@ def build_parser() -> argparse.ArgumentParser:
     optimize_verify.add_argument("report", type=Path)
     optimize_verify.add_argument("--public", type=Path, required=True)
 
-    schema = subparsers.add_parser("schema", help="write the versioned request JSON schema")
+    schema = subparsers.add_parser("schema", help="write a current versioned JSON schema")
     schema.add_argument(
         "--kind",
-        choices=(
-            "request", "policy", "report", "manifest", "optimization",
-            "optimization-report", "optimization-manifest", "portfolio-problem",
-            "portfolio-certificate", "portfolio-multinomial-counts",
-            "portfolio-multinomial-plan",
-            "portfolio-error-budget", "portfolio-multinomial-request",
-            "portfolio-multinomial-evidence", "portfolio-specification",
-            "protocol-problem", "protocol-certificate",
-            "release-protocol-run",
-        ),
+        choices=tuple(SCHEMA_REGISTRY),
         default="request",
     )
     schema.add_argument("--output", type=Path, required=True)
@@ -277,6 +276,18 @@ def build_parser() -> argparse.ArgumentParser:
 
     audit = subparsers.add_parser("audit-verify", help="verify the hash-chained audit database")
     audit.add_argument("audit_db", type=Path)
+    audit.add_argument("--expected-count", type=int)
+    audit.add_argument("--expected-head", dest="expected_head_sha256")
+    audit.add_argument("--expected-ledger-id")
+    audit.add_argument("--allow-orphans", action="store_true")
+    audit.add_argument("--json", action="store_true", dest="as_json")
+
+    checkpoint = subparsers.add_parser(
+        "audit-checkpoint",
+        help="export an audit ledger ID, event count, and head for external anchoring",
+    )
+    checkpoint.add_argument("audit_db", type=Path)
+    checkpoint.add_argument("--output", type=Path, required=True)
     return parser
 
 
@@ -306,44 +317,42 @@ def main(argv: list[str] | None = None) -> int:
                     f"coverage_ready={str(result['coverage_ready']).lower()}; can_clear=false"
                 )
         elif args.command == "schema":
-            schema_models = {
-                "request": AssessmentRequest,
-                "policy": PolicyBundle,
-                "report": AssessmentReport,
-                "manifest": SignedManifest,
-                "optimization": OptimizationRequest,
-                "optimization-report": OptimizationReport,
-                "optimization-manifest": SignedOptimizationManifest,
-                "portfolio-problem": IncompletePortfolioProblem,
-                "portfolio-certificate": AnalyticPortfolioEvidenceEntry,
-                "portfolio-multinomial-counts": MultinomialCountsFile,
-                "portfolio-multinomial-plan": MultinomialSamplingPlan,
-                "portfolio-error-budget": AssuranceErrorBudget,
-                "portfolio-multinomial-request": MultinomialEvidenceRequest,
-                "portfolio-multinomial-evidence": SimultaneousMultinomialEvidence,
-                "portfolio-specification": IncompletePortfolioSpecification,
-                "protocol-problem": ProtocolFeasibilityProblem,
-                "protocol-certificate": ProtocolFeasibilityCertificate,
-                "release-protocol-run": ReleaseProtocolRun,
-            }
             args.output.parent.mkdir(parents=True, exist_ok=True)
             _write_text_lf(
                 args.output,
-                json.dumps(schema_models[args.kind].model_json_schema(), indent=2, sort_keys=True) + "\n",
+                SCHEMA_REGISTRY[args.kind].rendered_bytes().decode("utf-8"),
             )
         elif args.command == "assess":
             request = AssessmentRequest.model_validate(_read_json(args.request))
-            report = AssuranceEngine().assess(request, args.request.parent)
+            audit_store = AuditStore(args.audit_db)
+            audit_run = audit_store.append_assessment_intent(request)
+            try:
+                report = AssuranceEngine().assess(request, args.request.parent)
+            except Exception as exc:
+                audit_store.append_assessment_failed(
+                    audit_run,
+                    type(exc).__name__,
+                    str(exc)[:4096],
+                )
+                raise
+            audit_store.append_assessment_completed(audit_run, report)
             _write_model(args.output, report)
-            if args.audit_db:
-                AuditStore(args.audit_db).append_report(report)
             print(report.overall_verdict)
         elif args.command == "optimize":
             request = OptimizationRequest.model_validate(_read_json(args.request))
-            report = ReleaseOptimizer().optimize(request, args.request.parent)
+            audit_store = AuditStore(args.audit_db)
+            audit_run = audit_store.append_optimization_intent(request)
+            try:
+                report = ReleaseOptimizer().optimize(request, args.request.parent)
+            except Exception as exc:
+                audit_store.append_optimization_failed(
+                    audit_run,
+                    type(exc).__name__,
+                    str(exc)[:4096],
+                )
+                raise
+            audit_store.append_optimization_completed(audit_run, report)
             _write_model(args.output, report)
-            if args.audit_db:
-                AuditStore(args.audit_db).append_optimization_report(report)
             print(report.outcome)
         elif args.command == "portfolio-solve":
             problem = IncompletePortfolioProblem.model_validate(_read_json(args.problem))
@@ -481,6 +490,8 @@ def main(argv: list[str] | None = None) -> int:
                     "release-protocol transcript failed verification: "
                     + "; ".join(verification.reasons)
                 )
+            if args.output is not None:
+                _write_model(args.output, verification)
             profile_label = (
                 "authenticated_verified"
                 if run.verification_profile.value == "authenticated_v1"
@@ -495,7 +506,9 @@ def main(argv: list[str] | None = None) -> int:
             print(
                 f"{profile_label} state={verification.final_state.value} "
                 f"authorization_recorded={str(verification.authorization_issued).lower()} "
-                f"active={str(verification.deployment_active).lower()}; "
+                f"active={str(verification.deployment_active).lower()} "
+                f"artifact_files_verified={str(verification.artifact_files_verified).lower()} "
+                f"skipped_checks={','.join(verification.skipped_checks) or 'none'}; "
                 f"{limitation}"
             )
         elif args.command == "portfolio-multinomial-generate":
@@ -588,7 +601,32 @@ def main(argv: list[str] | None = None) -> int:
         elif args.command == "audit-verify":
             if not args.audit_db.is_file():
                 raise AssuranceError("audit database does not exist")
-            print(f"verified {AuditStore(args.audit_db).verify_chain(require_events=True)} audit event(s)")
+            verification = AuditStore.open_read_only(args.audit_db).verify(
+                require_events=True,
+                require_complete=not args.allow_orphans,
+                expected_event_count=args.expected_count,
+                expected_head_sha256=args.expected_head_sha256,
+                expected_ledger_id=args.expected_ledger_id,
+            )
+            if args.as_json:
+                print(verification.model_dump_json(indent=2))
+            else:
+                print(
+                    f"verified {verification.event_count} audit event(s); "
+                    f"ledger={verification.ledger_id} head={verification.head_sha256} "
+                    f"complete={str(verification.complete).lower()}"
+                )
+        elif args.command == "audit-checkpoint":
+            if not args.audit_db.is_file():
+                raise AssuranceError("audit database does not exist")
+            _write_model(
+                args.output,
+                AuditStore.open_read_only(args.audit_db).export_checkpoint(
+                    require_events=True,
+                    require_complete=True,
+                ),
+            )
+            print("checkpoint exported; anchor it in a trusted external store")
         return 0
     except (AssuranceError, ValidationError, ValueError, RuntimeError, OSError, json.JSONDecodeError) as exc:
         print(f"error: {exc}", file=sys.stderr)

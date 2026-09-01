@@ -5,7 +5,19 @@ labels: [enhancement]
 body:
   - type: markdown
     attributes:
-      value: Do not include agency data, credentials, private model artifacts, or sensitive attack details.
+      value: Do not include confidential data, credentials, private model artifacts, or sensitive attack details.
+  - type: dropdown
+    id: scope
+    attributes:
+      label: Project area
+      options:
+        - Reference core
+        - Public contract
+        - Protocol or formal model
+        - Evidence lab
+        - Documentation, packaging, or CI
+    validations:
+      required: true
   - type: textarea
     id: problem
     attributes:

@@ -1,0 +1,206 @@
+{
+  "$defs": {
+    "AnalyzerRequirement": {
+      "additionalProperties": false,
+      "description": "Policy allowlist for one evidence producer used against one threat.",
+      "properties": {
+        "accepted_configuration_sha256s": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Accepted Configuration Sha256S",
+          "type": "array"
+        },
+        "accepted_implementation_sha256s": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Accepted Implementation Sha256S",
+          "type": "array"
+        },
+        "analyzer": {
+          "maxLength": 128,
+          "minLength": 1,
+          "title": "Analyzer",
+          "type": "string"
+        },
+        "minimum_service_version": {
+          "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$",
+          "title": "Minimum Service Version",
+          "type": "string"
+        },
+        "required": {
+          "default": true,
+          "title": "Required",
+          "type": "boolean"
+        },
+        "threat_id": {
+          "maxLength": 128,
+          "minLength": 3,
+          "pattern": "^[A-Za-z0-9._:-]+$",
+          "title": "Threat Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "threat_id",
+        "analyzer",
+        "minimum_service_version",
+        "accepted_implementation_sha256s",
+        "accepted_configuration_sha256s"
+      ],
+      "title": "AnalyzerRequirement",
+      "type": "object"
+    },
+    "PolicyRule": {
+      "additionalProperties": false,
+      "properties": {
+        "decision_metric": {
+          "enum": [
+            "bayes_linkage_success",
+            "incremental_bayes_linkage_success",
+            "worst_observation_success",
+            "membership_tpr_at_fpr",
+            "equal_prior_membership_success",
+            "finite_secret_exact_guess_success",
+            "attribute_attack_success",
+            "incremental_attribute_attack_success",
+            "reconstruction_success",
+            "incremental_reconstruction_success"
+          ],
+          "title": "Decision Metric",
+          "type": "string"
+        },
+        "kind": {
+          "$ref": "#/$defs/ThreatKind"
+        },
+        "mandatory": {
+          "title": "Mandatory",
+          "type": "boolean"
+        },
+        "metric_parameters": {
+          "additionalProperties": {
+            "type": "number"
+          },
+          "title": "Metric Parameters",
+          "type": "object"
+        },
+        "threat_id": {
+          "maxLength": 128,
+          "minLength": 3,
+          "pattern": "^[A-Za-z0-9._:-]+$",
+          "title": "Threat Id",
+          "type": "string"
+        },
+        "tolerance": {
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Tolerance",
+          "type": "number"
+        },
+        "tolerance_basis": {
+          "enum": [
+            "absolute",
+            "incremental"
+          ],
+          "title": "Tolerance Basis",
+          "type": "string"
+        }
+      },
+      "required": [
+        "threat_id",
+        "kind",
+        "mandatory",
+        "decision_metric",
+        "tolerance",
+        "tolerance_basis"
+      ],
+      "title": "PolicyRule",
+      "type": "object"
+    },
+    "ThreatKind": {
+      "enum": [
+        "linkage",
+        "membership",
+        "attribute",
+        "reconstruction"
+      ],
+      "title": "ThreatKind",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "accepted_selection_policy_sha256s": {
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Accepted Selection Policy Sha256S",
+      "type": "array"
+    },
+    "analyzer_requirements": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/AnalyzerRequirement"
+      },
+      "title": "Analyzer Requirements",
+      "type": "array"
+    },
+    "effective_from": {
+      "format": "date-time",
+      "title": "Effective From",
+      "type": "string"
+    },
+    "expires_at": {
+      "anyOf": [
+        {
+          "format": "date-time",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Expires At"
+    },
+    "policy_id": {
+      "maxLength": 128,
+      "minLength": 3,
+      "pattern": "^[A-Za-z0-9._:-]+$",
+      "title": "Policy Id",
+      "type": "string"
+    },
+    "policy_version": {
+      "maxLength": 64,
+      "minLength": 1,
+      "title": "Policy Version",
+      "type": "string"
+    },
+    "rules": {
+      "items": {
+        "$ref": "#/$defs/PolicyRule"
+      },
+      "title": "Rules",
+      "type": "array"
+    },
+    "schema_version": {
+      "const": "2.0",
+      "default": "2.0",
+      "title": "Schema Version",
+      "type": "string"
+    }
+  },
+  "required": [
+    "policy_id",
+    "policy_version",
+    "effective_from",
+    "rules",
+    "accepted_selection_policy_sha256s"
+  ],
+  "title": "PolicyBundle",
+  "type": "object"
+}

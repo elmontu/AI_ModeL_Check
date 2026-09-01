@@ -3,7 +3,10 @@ from __future__ import annotations
 import json
 import tempfile
 import unittest
+from datetime import datetime, timezone
 from pathlib import Path
+
+from pydantic import ValidationError
 
 from model_release_assurance.decision_theory import (
     DecisionProblem,
@@ -30,7 +33,11 @@ from model_release_assurance.incomplete_portfolio import (
     solve_analytic_portfolio,
 )
 from model_release_assurance.models import AssessmentRequest
-from model_release_assurance.optimizer import OptimizationRequest, ReleaseOptimizer
+from model_release_assurance.optimizer import (
+    OptimizationRequest,
+    PortfolioRegistrySnapshot,
+    ReleaseOptimizer,
+)
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -234,6 +241,33 @@ class BlackwellDecisionTheoryTests(unittest.TestCase):
 
 
 class ReleaseOptimizerTests(unittest.TestCase):
+    def test_future_dated_portfolio_registry_snapshot_is_rejected(self) -> None:
+        with tempfile.TemporaryDirectory() as directory_name:
+            directory = Path(directory_name)
+            payload = {
+                "schema_version": "1.0",
+                "registry_id": "future-registry",
+                "registry_head_sha256": "1" * 64,
+                "registry_sequence": 1,
+                "composition_domain_id": "future-composition-domain",
+                "active_release_ids": [],
+                "observed_at": "2027-01-01T00:00:00Z",
+                "expires_at": "2028-01-01T00:00:00Z",
+            }
+            source = directory / "registry.json"
+            source.write_text(json.dumps(payload) + "\n", encoding="utf-8")
+            snapshot = PortfolioRegistrySnapshot.model_validate({
+                **payload,
+                "source_path": str(source),
+                "source_sha256": sha256_file(source),
+            })
+            with self.assertRaisesRegex(ValueError, "dated in the future"):
+                ReleaseOptimizer._verify_portfolio_registry(
+                    snapshot,
+                    directory,
+                    datetime(2026, 1, 1, tzinfo=timezone.utc),
+                )
+
     def _write_clear_report(self, directory: Path):
         request = AssessmentRequest.model_validate(load_example())
         report = AssuranceEngine().assess(request, ROOT / "examples")
@@ -333,10 +367,11 @@ class ReleaseOptimizerTests(unittest.TestCase):
         ))
         portfolio_payload = {
             "status": "directly_joint_assessed",
-            "composition_domain_id": f"{identifier}-joint-domain",
+            "composition_domain_id": "unit-test-composition-domain",
             "population_secret_pairs": list(pairs),
             "registry_head_sha256": "1" * 64,
-            "registered_release_ids": [],
+            "registry_sequence": 0,
+            "registered_release_ids": [report.release_id],
             "method": "direct finite joint-channel unit-test replay",
             "joint_upper_bounds": {
                 "service-participants-2026|linkage-person": 0.0,
@@ -413,11 +448,40 @@ class ReleaseOptimizerTests(unittest.TestCase):
         configurations: list[dict],
         certificates: list[dict] | None = None,
     ) -> OptimizationRequest:
+        base = Path(configurations[0]["assessment"]["report_path"]).parent
+        selection_policy = json.loads(
+            (ROOT / "examples" / "optimization-request.json").read_text(
+                encoding="utf-8"
+            )
+        )["selection_policy"]
+        registry_payload = {
+            "schema_version": "1.0",
+            "registry_id": "unit-test-registry",
+            "registry_head_sha256": "1" * 64,
+            "registry_sequence": 0,
+            "composition_domain_id": "unit-test-composition-domain",
+            "active_release_ids": [],
+            "observed_at": "2026-01-01T00:00:00Z",
+            "expires_at": "2099-01-01T00:00:00Z",
+        }
+        registry_path = base / "portfolio-registry-snapshot.json"
+        registry_path.write_text(json.dumps(registry_payload) + "\n")
         return OptimizationRequest.model_validate({
             "optimization_id": "release-search",
+            "selection_policy": selection_policy,
             "trust_profile": "cooperative",
+            "active_policy": {
+                "policy_id": "whole-government-model-release-demo",
+                "policy_version": "2.0.0",
+                "policy_path": str(ROOT / "examples" / "policy.json"),
+                "policy_sha256": sha256_file(ROOT / "examples" / "policy.json"),
+            },
             "authorization_expires_at": "2099-01-01T00:00:00Z",
-            "portfolio_registry_head_sha256": "1" * 64,
+            "portfolio_registry": {
+                **registry_payload,
+                "source_path": str(registry_path),
+                "source_sha256": sha256_file(registry_path),
+            },
             "experiments": experiments,
             "garbling_certificates": certificates or [],
             "configurations": configurations,
@@ -591,12 +655,14 @@ class ReleaseOptimizerTests(unittest.TestCase):
             )
             candidate["portfolio"] = {
                 "status": "unassessed",
-                "composition_domain_id": "registered-domain",
+                "composition_domain_id": "unit-test-composition-domain",
                 "population_secret_pairs": [
                     "service-participants-2026|linkage-person",
                     "service-participants-2026|membership-person",
                 ],
                 "registry_head_sha256": "1" * 64,
+                "registry_sequence": 0,
+                "registered_release_ids": [report.release_id],
                 "method": "not assessed",
             }
             request = self._request(self._experiments(report), [candidate])
@@ -629,7 +695,7 @@ class ReleaseOptimizerTests(unittest.TestCase):
             ):
                 width = len(states)
                 marginal = ConditionalMarginalBounds(
-                    release_id=f"{threat_id}-registered-portfolio",
+                    release_id=report.release_id,
                     observation_ids=("constant",),
                     lower=tuple((1.0,) for _ in states),
                     upper=tuple((1.0,) for _ in states),
@@ -638,7 +704,7 @@ class ReleaseOptimizerTests(unittest.TestCase):
                         source_path=str(mechanism_path),
                         source_sha256=sha256_file(mechanism_path),
                         supports=(
-                            f"marginal:{threat_id}-registered-portfolio",
+                            f"marginal:{report.release_id}",
                             "coverage:deterministic",
                         ),
                     ),
@@ -651,30 +717,7 @@ class ReleaseOptimizerTests(unittest.TestCase):
                     decision_game_sha256=decisions[threat_id].decision_game_sha256,
                     state_ids=states,
                     prior=tuple(1.0 / width for _ in states),
-                    releases=(
-                        marginal,
-                        ConditionalMarginalBounds(
-                            release_id=(
-                                "membership-person-registered-portfolio"
-                                if threat_id == "linkage-person"
-                                else "linkage-person-registered-portfolio"
-                            ),
-                            observation_ids=("constant",),
-                            lower=tuple((1.0,) for _ in states),
-                            upper=tuple((1.0,) for _ in states),
-                            evidence=EvidenceReference(
-                                evidence_id=f"{threat_id}-second-marginal",
-                                source_path=str(mechanism_path),
-                                source_sha256=sha256_file(mechanism_path),
-                                supports=(
-                                    "marginal:membership-person-registered-portfolio"
-                                    if threat_id == "linkage-person"
-                                    else "marginal:linkage-person-registered-portfolio",
-                                    "coverage:deterministic",
-                                ),
-                            ),
-                        ),
-                    ),
+                    releases=(marginal,),
                     decision_problem=exact_guess_problem(states, f"{threat_id}-exact-guess"),
                     coupling_model=CouplingModel.ARBITRARY,
                     coverage=StatisticalCoverage.DETERMINISTIC,
@@ -707,16 +750,14 @@ class ReleaseOptimizerTests(unittest.TestCase):
 
             portfolio_payload = {
                 "status": "analytically_composed",
-                "composition_domain_id": "analytic-joint-domain",
+                "composition_domain_id": "unit-test-composition-domain",
                 "population_secret_pairs": [
                     "service-participants-2026|linkage-person",
                     "service-participants-2026|membership-person",
                 ],
                 "registry_head_sha256": "1" * 64,
-                "registered_release_ids": [
-                    "linkage-person-registered-portfolio",
-                    "membership-person-registered-portfolio",
-                ],
+                "registry_sequence": 0,
+                "registered_release_ids": [report.release_id],
                 "method": "certified incomplete-portfolio ambiguity optimization",
                 "joint_upper_bounds": {
                     "service-participants-2026|linkage-person": 0.0,
@@ -772,9 +813,8 @@ class ReleaseOptimizerTests(unittest.TestCase):
             )
             raw = self._request(self._experiments(report), [candidate]).model_dump(mode="json")
             raw["trust_profile"] = "adversarial_supply_chain"
-            request = OptimizationRequest.model_validate(raw)
-            with self.assertRaisesRegex(ValueError, "unsupported without sandboxed independent artifact replay"):
-                ReleaseOptimizer().optimize(request, directory)
+            with self.assertRaises(ValidationError):
+                OptimizationRequest.model_validate(raw)
 
 
 if __name__ == "__main__":

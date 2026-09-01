@@ -9,7 +9,7 @@ This protocol covers two different questions for an interactive LLM release:
 
 They are not substitutes. A watermark is a property of the output-generation channel; it neither shows nor prevents training-data memorization. A canary experiment probes extraction or membership leakage under one declared attack game; it says nothing about output provenance. Neither study establishes general LLM safety, authorship, copyright provenance, or the absence of undiscovered leakage.
 
-The current MRA core accepts a complete `interactive_llm` protocol contract but does not implement transcript-level interactive-channel assurance. The profile and its linter emit no audit evidence. An eventual isolated worker must emit only `floor` or `screen` evidence with `can_clear: false`. A positive recipient-realizable extraction result may block or trigger investigation. A null, weak, underpowered, unavailable, or auditor-only result is inconclusive and must never authorize a release.
+The MRA core accepts a complete `interactive_llm` protocol contract and two inert aggregate-evidence inputs. `llm_watermark` records detector results as provenance-triage screens only. `llm_canary` converts randomized member/decoy exact-extraction counts into a simultaneous recipient-realizable attack floor only when every preregistration, contamination, binding, separation and operating-point gate passes. The core does not collect transcripts or run detectors and attacks; that remains the responsibility of an isolated worker. Both analyzers set `can_clear: false`. A null, weak, underpowered, unavailable, contaminated or auditor-only result is inconclusive and must never authorize a release.
 
 Potentially hostile model loading and live API calls belong in an isolated worker outside the trusted core. The core should receive inert, hash-bound JSON and referenced evidence artifacts.
 
@@ -130,7 +130,7 @@ The worker output should include, and cryptographically bind, at least:
 - intended recipient, side information, actual query/session/concurrency counts, resets, tools/RAG/memory events, failures, retries, and any deviation from protocol;
 - metric, direction (`floor` or `screen`), simultaneous confidence level and method, lower bound where valid, coverage limitations, `can_block`, and `can_clear: false`.
 
-Verify source files and all mandatory bound fields before analysis. Version 0.6 requires source-observed release, policy, artifact, interface, population and game bindings and copies them into evidence without post-analysis restamping. A future LLM collection worker must populate that envelope and additionally bind its partitions, scheme, detector, query transcript and protocol artifacts. Until dedicated analyzers exist, this profile must not be treated as a production authorization artifact.
+Verify source files and all mandatory bound fields before analysis. The current contract requires source-observed release, policy, artifact, interface, population and game bindings and copies them into evidence without post-analysis restamping. An LLM collection worker must populate that envelope and additionally bind its preregistration, sealed assignment where applicable, detector identity and immutable transcript manifest. The dedicated analyzers verify aggregate contract semantics; they do not authenticate the worker, inspect raw transcripts, detect a watermark, execute a canary attack or create a production authorization.
 
 ## Decision semantics
 
@@ -158,4 +158,4 @@ Watermark detection should normally be routed to provenance/traceability governa
 7. Seal raw evidence, emit inert aggregate evidence with complete hashes and provenance, independently replay it, and route only `floor`/`screen` evidence with `can_clear: false`.
 8. Destroy or retain plaintext canaries and transcripts according to the approved schedule; record deletion attestations and incident actions for any confirmed exposure.
 
-The example is a lintable preregistration template, not an executable watermark/canary analyzer and not a release authorization.
+The example is a lintable preregistration template, not an executable collection worker or release authorization. After collection, a trusted isolated worker may emit `llm_watermark` or `llm_canary` assessment input using only opaque identifiers, hashes and aggregate counts; plaintext canaries and raw transcripts must remain outside the assessment request.

@@ -6,7 +6,7 @@
   "changes_information_structure": true,
   "credited_for_privacy": true,
   "artifact_sha256": "2f42b587627c5b6c4447d781b57a47082743f029b475f560a574553abcedfdd5",
-  "interface_sha256": "473daec48b65bcc6c89c0bbbac557e0619c99b9f795e6f46fdafc87781f8bc72",
+  "interface_sha256": "cdfd0beca66fca75add4570feaf641261b007753cd786718f204b94b3c58700a",
   "valid_until": "2099-01-01T00:00:00Z",
   "verification": "demonstration gateway configuration and interface conformance replay"
 }

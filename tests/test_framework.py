@@ -66,6 +66,89 @@ def make_paths_absolute(raw: dict) -> None:
         )
 
 
+def interactive_interface_raw() -> dict:
+    return {
+        "schema_version": "2.0",
+        "protocol_type": "interactive_llm",
+        "access": "text",
+        "outputs": ["text"],
+        "output_channels": {
+            "aggregates": False,
+            "labels": False,
+            "scores": False,
+            "probabilities": False,
+            "logits": False,
+            "explanations": False,
+            "text": True,
+            "embeddings": False,
+            "gradients": False,
+            "parameters": False,
+            "downloadable_files": [],
+            "shipped_summary_metadata": [],
+            "custom_channels": [],
+        },
+        "precision_bits": 16,
+        "query_budget": 100,
+        "adaptive_queries": True,
+        "authenticated": True,
+        "rate_limited": True,
+        "timing": {
+            "recipient_observable": True,
+            "measurement_resolution_milliseconds": 1.0,
+            "includes_queue_time": True,
+            "mitigation": "none",
+            "mitigation_parameters": {},
+        },
+        "errors": {
+            "transport_status": "http",
+            "documented_status_codes": ["200", "400", "401", "429", "500"],
+            "error_content": "opaque",
+            "error_schema_sha256": None,
+            "retry_metadata": True,
+        },
+        "execution": {
+            "batching": "none",
+            "maximum_batch_size": 1,
+            "maximum_concurrent_requests": 1,
+            "cross_request_state": "none",
+            "cross_request_state_ttl_seconds": None,
+        },
+        "access_paths": {
+            "side_channels": ["timing", "status_code", "error_content"],
+            "custom_side_channels": [],
+            "admin_access": "none",
+            "admin_capabilities": [],
+            "local_access": "none",
+            "local_capabilities": [],
+        },
+        "serialization": {
+            "formats": ["json"],
+            "media_types": ["application/json"],
+            "encodings": ["utf-8"],
+            "compression": [],
+            "schema_sha256": None,
+            "endianness": "not_applicable",
+        },
+        "llm_protocol": {
+            "model_provider": "test provider",
+            "model_identifier": "test model",
+            "model_version": "2026-08-13",
+            "tokenizer_sha256": "1" * 64,
+            "decoding_parameters": {"temperature": 0.0},
+            "system_prompt_sha256": "2" * 64,
+            "memory_mode": "none",
+            "logging_mode": "security_only",
+            "provider_retention_days": 0,
+            "maximum_session_tokens": 4096,
+            "maximum_lifetime_queries": 100,
+            "maximum_concurrent_sessions": 1,
+            "reset_semantics": "fresh context per authenticated session",
+            "update_policy": "versioned_reassessment_required",
+            "valid_until": "2099-01-01T00:00:00Z",
+        },
+    }
+
+
 class ContractTests(unittest.TestCase):
     def test_interactive_llm_requires_a_complete_versioned_protocol(self) -> None:
         with self.assertRaises(ValidationError):
@@ -73,30 +156,7 @@ class ContractTests(unittest.TestCase):
                 "protocol_type": "interactive_llm",
                 "access": "text",
             })
-        raw = {
-            "protocol_type": "interactive_llm",
-            "access": "text",
-            "outputs": ["text"],
-            "query_budget": 100,
-            "adaptive_queries": True,
-            "llm_protocol": {
-                "model_provider": "test provider",
-                "model_identifier": "test model",
-                "model_version": "2026-08-13",
-                "tokenizer_sha256": "1" * 64,
-                "decoding_parameters": {"temperature": 0.0},
-                "system_prompt_sha256": "2" * 64,
-                "memory_mode": "none",
-                "logging_mode": "security_only",
-                "provider_retention_days": 0,
-                "maximum_session_tokens": 4096,
-                "maximum_lifetime_queries": 100,
-                "maximum_concurrent_sessions": 1,
-                "reset_semantics": "fresh context per authenticated session",
-                "update_policy": "versioned_reassessment_required",
-                "valid_until": "2099-01-01T00:00:00Z",
-            },
-        }
+        raw = interactive_interface_raw()
         contract = InterfaceContract.model_validate(raw)
         self.assertEqual(contract.protocol_type, "interactive_llm")
         self.assertEqual(contract.access, "text")
@@ -121,6 +181,27 @@ class ContractTests(unittest.TestCase):
         with self.assertRaises(ValidationError):
             InterfaceContract.model_validate(budget_mismatch)
 
+    def test_complete_interface_requires_every_structured_channel_declaration(self) -> None:
+        raw = load_example()["release"]["interface"]
+        required_sections = (
+            "output_channels", "timing", "errors", "execution", "access_paths", "serialization",
+        )
+        for section in required_sections:
+            incomplete = json.loads(json.dumps(raw))
+            incomplete.pop(section)
+            with self.subTest(section=section), self.assertRaises(ValidationError):
+                InterfaceContract.model_validate(incomplete)
+
+        incomplete_output = json.loads(json.dumps(raw))
+        incomplete_output["output_channels"].pop("shipped_summary_metadata")
+        with self.assertRaises(ValidationError):
+            InterfaceContract.model_validate(incomplete_output)
+
+        undeclared_timing = interactive_interface_raw()
+        undeclared_timing["access_paths"]["side_channels"].remove("timing")
+        with self.assertRaises(ValidationError):
+            InterfaceContract.model_validate(undeclared_timing)
+
     def test_unknown_field_fails_closed(self) -> None:
         raw = load_example()
         raw["release"]["undeclared_control"] = True
@@ -131,30 +212,7 @@ class ContractTests(unittest.TestCase):
         raw = load_example()
         release = AssessmentRequest.model_validate(raw).release.model_copy(
             update={
-                "interface": InterfaceContract.model_validate({
-                    "protocol_type": "interactive_llm",
-                    "access": "text",
-                    "outputs": ["text"],
-                    "query_budget": 100,
-                    "adaptive_queries": True,
-                    "llm_protocol": {
-                        "model_provider": "test provider",
-                        "model_identifier": "test model",
-                        "model_version": "2026-08-13",
-                        "tokenizer_sha256": "1" * 64,
-                        "decoding_parameters": {"temperature": 0.0},
-                        "system_prompt_sha256": "2" * 64,
-                        "memory_mode": "none",
-                        "logging_mode": "security_only",
-                        "provider_retention_days": 0,
-                        "maximum_session_tokens": 4096,
-                        "maximum_lifetime_queries": 100,
-                        "maximum_concurrent_sessions": 1,
-                        "reset_semantics": "fresh context per authenticated session",
-                        "update_policy": "versioned_reassessment_required",
-                        "valid_until": "2099-01-01T00:00:00Z",
-                    },
-                })
+                "interface": InterfaceContract.model_validate(interactive_interface_raw())
             }
         )
         attack = AttackInput.model_validate(raw["analyzer_inputs"][2])
@@ -247,6 +305,7 @@ class ContractTests(unittest.TestCase):
             "evidence_id": "direction-test",
             "threat_id": "membership-person",
             "analyzer": "test",
+            "producer": load_example()["analyzer_inputs"][2]["provenance"]["producer"],
             "coverage": "complete_interface",
             "metric": "equal_prior_membership_success",
             "value": 0.5,
@@ -390,6 +449,7 @@ class EngineTests(unittest.TestCase):
             evidence_id="floor",
             threat_id=threat.threat_id,
             analyzer="attack",
+            producer=request.analyzer_inputs[2].provenance.producer,
             evidence_class=EvidenceClass.FLOOR,
             coverage="named_projection",
             metric="equal_prior_membership_success",

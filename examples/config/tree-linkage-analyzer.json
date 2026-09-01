@@ -1,0 +1,8 @@
+{
+  "analyzer": "tree_linkage",
+  "configuration_version": "1.0.0",
+  "candidate_roster_source": "source-bound demonstration roster",
+  "observation_mode": "deterministic leaf-signature equivalence classes",
+  "prior_mode": "request-declared and source-bound",
+  "complete_interface_rule": "recipient-realizable observations and exact declared-interface hash match"
+}

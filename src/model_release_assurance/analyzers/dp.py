@@ -14,7 +14,7 @@ from ..models import (
     ThreatContract,
     ThreatKind,
 )
-from .base import evidence_context_fields
+from .base import evidence_context_fields, evidence_producer_fields
 
 
 def membership_roc_ceiling(
@@ -77,6 +77,8 @@ def finite_secret_exact_guess_ceiling(
 
 class DpAnalyzer:
     name = "dp"
+    can_clear = True
+    can_block = False
 
     def supports(self, value: AnalyzerInput) -> bool:
         return isinstance(value, DpInput)
@@ -100,6 +102,7 @@ class DpAnalyzer:
         records: list[EvidenceRecord] = []
         common = dict(
             **evidence_context_fields(value.evidence_context),
+            **evidence_producer_fields(value.provenance),
             threat_id=threat.threat_id,
             analyzer=self.name,
             evidence_class=EvidenceClass.CEILING if validated else EvidenceClass.SCREEN,

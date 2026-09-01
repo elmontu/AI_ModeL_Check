@@ -14,7 +14,7 @@ from ..models import (
     ReleaseContract,
     ThreatContract,
 )
-from .base import evidence_context_fields
+from .base import evidence_context_fields, evidence_producer_fields
 
 
 def wilson_lower(successes: int, trials: int, confidence: float) -> float:
@@ -97,6 +97,8 @@ def clopper_pearson_upper(successes: int, trials: int, confidence: float) -> flo
 
 class AttackAnalyzer:
     name = "attack"
+    can_clear = False
+    can_block = True
 
     def supports(self, value: AnalyzerInput) -> bool:
         return isinstance(value, AttackInput)
@@ -149,6 +151,7 @@ class AttackAnalyzer:
         )
         return (EvidenceRecord(
             **evidence_context_fields(value.evidence_context),
+            **evidence_producer_fields(value.provenance),
             evidence_id=f"{threat.threat_id}:attack:{value.attack_name}",
             threat_id=threat.threat_id,
             analyzer=self.name,

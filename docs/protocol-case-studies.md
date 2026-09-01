@@ -46,10 +46,11 @@ event actor signs the event and signed artifact set; and the next event hashes
 the complete signed predecessor. Verification uses public keys from a separate
 trust-store file.
 
-The positive structural and authenticated controls are paired with nineteen
+The positive structural and authenticated controls are paired with twenty-one
 unsafe mutations: failed atomic commit, broken chain, incomplete evidence,
 wrong producer, path escape, expired authorization, cross-message payload,
-unsupported rejection, non-increasing registry sequence, monitoring privilege
+unsupported rejection, non-increasing or skipped registry sequence, arbitrary
+committed registry head, monitoring privilege
 escalation, event/artifact tampering, cross-release replay, known compromise,
 untrusted signer, profile downgrade, cross-event/duplicate artifacts and early
 expiry. The evaluation reports a mutation score only over this
@@ -60,7 +61,7 @@ PYTHONPATH=src python scripts/evaluate_protocol_mutations.py \
   --output output/protocol-mutation-evaluation.json
 ```
 
-Expected invariant: both valid controls pass and all nineteen unsafe variants
+Expected invariant: both valid controls pass and all twenty-one unsafe variants
 are rejected. See [Protocol adversarial evaluation](protocol-evaluation.md) for
 the interpretation and non-claim.
 

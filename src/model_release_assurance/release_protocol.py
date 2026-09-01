@@ -35,6 +35,7 @@ from .integrity import (
 )
 from .models import OverallVerdict, StrictModel
 from .optimizer import OptimizationOutcome
+from .runtime_identity import RuntimeIdentity, current_runtime_identity
 
 
 class ReleaseProtocolRole(StrEnum):
@@ -125,6 +126,16 @@ class MonitoringOutcome(StrEnum):
 class ReleaseProtocolVerificationProfile(StrEnum):
     STRUCTURAL = "structural_v1"
     AUTHENTICATED = "authenticated_v1"
+
+
+class ReleaseProtocolVerificationCheck(StrEnum):
+    ARTIFACT_FILE_DIGESTS = "artifact_file_digests"
+    AUTHENTICATED_SIGNATURES = "authenticated_signatures"
+
+
+class ReleaseProtocolVerificationDegradation(StrEnum):
+    ARTIFACT_FILE_VERIFICATION_SKIPPED = "artifact_file_verification_skipped"
+    STRUCTURAL_PROFILE_ONLY = "structural_profile_only"
 
 
 class ReleaseProtocolSignature(StrictModel):
@@ -331,12 +342,62 @@ class ReleaseProtocolRun(StrictModel):
 
 
 class ReleaseProtocolVerification(StrictModel):
+    schema_version: Literal["1.0"] = "1.0"
+    verification_profile: ReleaseProtocolVerificationProfile
+    artifact_files_verified: bool
+    authenticated_signatures_verified: bool
+    verification_time: datetime
+    run_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
+    runtime_identity: RuntimeIdentity
+    skipped_checks: frozenset[ReleaseProtocolVerificationCheck] = frozenset()
+    degradations: frozenset[ReleaseProtocolVerificationDegradation] = frozenset()
     valid: bool
     final_state: ReleaseProtocolState
     authorization_issued: bool
     deployment_active: bool
     event_sha256s: tuple[str, ...]
     reasons: tuple[str, ...]
+
+    @model_validator(mode="after")
+    def verification_scope_is_explicit(self) -> ReleaseProtocolVerification:
+        if self.verification_time.utcoffset() is None:
+            raise ValueError("protocol verification time must include a timezone offset")
+        if self.runtime_identity.component_id != "release_protocol_verifier":
+            raise ValueError("protocol verification names the wrong runtime component")
+        artifact_skipped = (
+            ReleaseProtocolVerificationCheck.ARTIFACT_FILE_DIGESTS
+            in self.skipped_checks
+        )
+        if artifact_skipped and self.artifact_files_verified:
+            raise ValueError(
+                "artifact-file verification status must agree with the explicit skip set"
+            )
+        structural = self.verification_profile is ReleaseProtocolVerificationProfile.STRUCTURAL
+        signature_skipped = (
+            ReleaseProtocolVerificationCheck.AUTHENTICATED_SIGNATURES
+            in self.skipped_checks
+        )
+        if structural != signature_skipped:
+            raise ValueError(
+                "signature verification scope must agree with the declared verification profile"
+            )
+        if structural and self.authenticated_signatures_verified:
+            raise ValueError("structural verification cannot claim authenticated signatures")
+        expected_degradations = {
+            *(
+                (ReleaseProtocolVerificationDegradation.ARTIFACT_FILE_VERIFICATION_SKIPPED,)
+                if artifact_skipped
+                else ()
+            ),
+            *(
+                (ReleaseProtocolVerificationDegradation.STRUCTURAL_PROFILE_ONLY,)
+                if structural
+                else ()
+            ),
+        }
+        if self.degradations != expected_degradations:
+            raise ValueError("verification degradations do not match the executed check scope")
+        return self
 
 
 _EVENT_ROLES: dict[ReleaseProtocolEventType, frozenset[ReleaseProtocolRole]] = {
@@ -451,6 +512,35 @@ def release_protocol_event_sha256(event: ReleaseProtocolEvent) -> str:
     return sha256_bytes(canonical_json_bytes(event))
 
 
+def portfolio_registry_head_sha256(
+    *,
+    previous_head_sha256: str,
+    committed_sequence: int,
+    release_id: str,
+    release_instance_sha256: str,
+    portfolio_commit_sha256: str,
+) -> str:
+    """Commit one release-bound portfolio delta into the registry state head.
+
+    The portfolio-commit artifact digest is a commitment to the canonical,
+    complete registry delta.  This verifier can replay the cryptographic
+    recurrence; determining whether the artifact omitted a semantic change
+    remains the responsibility of the authoritative registry and its auditor.
+    """
+    return sha256_bytes(
+        canonical_json_bytes(
+            {
+                "domain": "MRAP-STATE-1",
+                "committed_sequence": committed_sequence,
+                "previous_head_sha256": previous_head_sha256,
+                "release_id": release_id,
+                "release_instance_sha256": release_instance_sha256,
+                "portfolio_commit_sha256": portfolio_commit_sha256,
+            }
+        )
+    )
+
+
 def release_protocol_artifact_signature_payload(
     run: ReleaseProtocolRun,
     event: ReleaseProtocolEvent,
@@ -555,20 +645,20 @@ def _verify_protocol_signature(
     trusted_public_keys: Mapping[str, Path],
     compromised_key_ids: frozenset[str],
     reasons: list[str],
-) -> None:
+) -> bool:
     if signature is None:
         reasons.append(f"{label} has no authenticated signature")
-        return
+        return False
     if signature.signer_key_id != expected_key_id:
         reasons.append(f"{label} signature does not match its designated actor key")
-        return
+        return False
     if signature.signer_key_id in compromised_key_ids:
         reasons.append(f"{label} was signed by a revoked or compromised key")
-        return
+        return False
     public_key_path = trusted_public_keys.get(signature.signer_key_id)
     if public_key_path is None:
         reasons.append(f"{label} signer is absent from the external trust store")
-        return
+        return False
     try:
         verify_canonical_signature(
             payload,
@@ -578,6 +668,8 @@ def _verify_protocol_signature(
         )
     except (IntegrityError, OSError, ValueError) as exc:
         reasons.append(f"{label} signature verification failed: {exc}")
+        return False
+    return True
 
 
 def verify_release_protocol_run(
@@ -605,12 +697,25 @@ def verify_release_protocol_run(
     authenticated = (
         run.verification_profile is ReleaseProtocolVerificationProfile.AUTHENTICATED
     )
+    artifact_files_verified = verify_artifact_files
+    authenticated_signatures_verified = authenticated
+    skipped_checks: set[ReleaseProtocolVerificationCheck] = set()
+    degradations: set[ReleaseProtocolVerificationDegradation] = set()
+    if not verify_artifact_files:
+        skipped_checks.add(ReleaseProtocolVerificationCheck.ARTIFACT_FILE_DIGESTS)
+        degradations.add(
+            ReleaseProtocolVerificationDegradation.ARTIFACT_FILE_VERIFICATION_SKIPPED
+        )
+    if not authenticated:
+        skipped_checks.add(ReleaseProtocolVerificationCheck.AUTHENTICATED_SIGNATURES)
+        degradations.add(ReleaseProtocolVerificationDegradation.STRUCTURAL_PROFILE_ONLY)
     if authenticated:
         key_ids = [actor.key_id for actor in run.actors]
         if len(key_ids) != len(set(key_ids)):
             reasons.append(
                 "authenticated profile requires a distinct trust-anchored key for every actor"
             )
+            authenticated_signatures_verified = False
     event_hashes: list[str] = []
     previous_hash: str | None = None
     previous_time: datetime | None = None
@@ -642,8 +747,10 @@ def verify_release_protocol_run(
         actor = actors.get(event.actor_id)
         if actor is None or actor.role is not event.actor_role:
             reasons.append(f"event {event.event_id} does not match its designated actor and role")
+            if authenticated:
+                authenticated_signatures_verified = False
         elif authenticated:
-            _verify_protocol_signature(
+            signature_verified = _verify_protocol_signature(
                 label=f"event {event.event_id}",
                 payload=release_protocol_event_signature_payload(run, event),
                 signature=event.signature,
@@ -651,6 +758,9 @@ def verify_release_protocol_run(
                 trusted_public_keys=trust_store,
                 compromised_key_ids=compromised_key_ids,
                 reasons=reasons,
+            )
+            authenticated_signatures_verified = (
+                authenticated_signatures_verified and signature_verified
             )
         if event.actor_role not in _EVENT_ROLES[event.event_type]:
             reasons.append(
@@ -681,13 +791,17 @@ def verify_release_protocol_run(
                 reasons.append(
                     f"artifact {artifact.artifact_id} names an unknown producer actor"
                 )
+                if authenticated:
+                    authenticated_signatures_verified = False
             elif producer.role not in _ARTIFACT_PRODUCER_ROLES[artifact.kind]:
                 reasons.append(
                     f"artifact {artifact.artifact_id} cannot be produced by role "
                     f"{producer.role.value}"
                 )
+                if authenticated:
+                    authenticated_signatures_verified = False
             elif authenticated:
-                _verify_protocol_signature(
+                signature_verified = _verify_protocol_signature(
                     label=f"artifact {artifact.artifact_id}",
                     payload=release_protocol_artifact_signature_payload(run, event, artifact),
                     signature=artifact.signature,
@@ -695,6 +809,9 @@ def verify_release_protocol_run(
                     trusted_public_keys=trust_store,
                     compromised_key_ids=compromised_key_ids,
                     reasons=reasons,
+                )
+                authenticated_signatures_verified = (
+                    authenticated_signatures_verified and signature_verified
                 )
             if verify_artifact_files:
                 try:
@@ -707,6 +824,7 @@ def verify_release_protocol_run(
                     verify_source_file(artifact.path, artifact.sha256, base_dir)
                 except (IntegrityError, OSError, ValueError) as exc:
                     reasons.append(f"artifact {artifact.artifact_id} failed digest replay: {exc}")
+                    artifact_files_verified = False
 
         event_hash = release_protocol_event_sha256(event)
         event_hashes.append(event_hash)
@@ -842,19 +960,36 @@ def verify_release_protocol_run(
                     )
                 if event.atomic_compare_and_swap_succeeded is not True:
                     reasons.append(f"event {event.event_id} lacks a successful atomic compare-and-swap")
-                if event.committed_registry_head_sha256 in (
-                    None,
-                    run.registered_portfolio_head_sha256,
-                ):
-                    reasons.append(f"event {event.event_id} does not establish a new portfolio head")
                 if (
                     event.committed_registry_sequence is None
                     or event.expected_registry_sequence is None
-                    or event.committed_registry_sequence <= event.expected_registry_sequence
+                    or event.committed_registry_sequence != event.expected_registry_sequence + 1
                 ):
                     reasons.append(
-                        f"event {event.event_id} does not strictly advance the append-only portfolio sequence"
+                        f"event {event.event_id} does not advance the append-only portfolio sequence by one"
                     )
+                portfolio_commits = tuple(
+                    artifact
+                    for artifact in event.artifacts
+                    if artifact.kind is ReleaseProtocolArtifactKind.PORTFOLIO_COMMIT
+                )
+                if (
+                    event.expected_registry_head_sha256 is not None
+                    and event.committed_registry_sequence is not None
+                    and len(portfolio_commits) == 1
+                ):
+                    expected_committed_head = portfolio_registry_head_sha256(
+                        previous_head_sha256=event.expected_registry_head_sha256,
+                        committed_sequence=event.committed_registry_sequence,
+                        release_id=run.release_id,
+                        release_instance_sha256=run.release_instance_sha256,
+                        portfolio_commit_sha256=portfolio_commits[0].sha256,
+                    )
+                    if event.committed_registry_head_sha256 != expected_committed_head:
+                        reasons.append(
+                            f"event {event.event_id} portfolio head does not match the "
+                            "release-bound state-head recurrence"
+                        )
                 if authorization_expiry is None or event.occurred_at >= authorization_expiry:
                     reasons.append(f"event {event.event_id} commits an absent or expired request")
                 next_committed_registry_head = event.committed_registry_head_sha256
@@ -969,6 +1104,26 @@ def verify_release_protocol_run(
         )
 
     return ReleaseProtocolVerification(
+        verification_profile=run.verification_profile,
+        artifact_files_verified=artifact_files_verified,
+        authenticated_signatures_verified=authenticated_signatures_verified,
+        verification_time=verification_time,
+        run_sha256=sha256_bytes(canonical_json_bytes(run)),
+        runtime_identity=current_runtime_identity(
+            component_id="release_protocol_verifier",
+            component_version="ReleaseProtocolVerification/1.0",
+            algorithm_profile={
+                "artifact_contract": "ReleaseProtocolArtifact/1",
+                "event_contract": "ReleaseProtocolEvent/1",
+                "run_contract": "ReleaseProtocolRun/1.1",
+                "state_machine": "offline_declared_transition_replay_v1",
+                "state_head_recomputed": True,
+                "state_head_recurrence": "MRAP-STATE-1/release-bound-commitment-v1",
+                "state_delta_semantic_completeness_verified": False,
+            },
+        ),
+        skipped_checks=frozenset(skipped_checks),
+        degradations=frozenset(degradations),
         valid=not reasons,
         final_state=state,
         authorization_issued=authorization_issued,

@@ -5,14 +5,15 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "model-release-assurance"
 dynamic = ["version"]
-description = "Release-enabling assurance optimizer with a fail-safe gate for whole-of-government model releases"
+description = "Offline reference toolkit for validating model-release contracts, assessing bound evidence, and replaying assurance decisions"
 readme = "README.md"
 requires-python = ">=3.11"
 keywords = ["assurance", "governance", "machine-learning", "privacy", "security"]
 classifiers = [
   "Development Status :: 3 - Alpha",
   "Environment :: Console",
-  "Intended Audience :: Government",
+  "Intended Audience :: Developers",
+  "Intended Audience :: Science/Research",
   "Programming Language :: Python :: 3 :: Only",
   "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: 3.12",
@@ -47,6 +48,13 @@ privacy-experiments = [
 
 [project.scripts]
 mra = "model_release_assurance.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/elmontu/AI_ModeL_Check"
+Documentation = "https://github.com/elmontu/AI_ModeL_Check/tree/main/docs"
+Repository = "https://github.com/elmontu/AI_ModeL_Check"
+Issues = "https://github.com/elmontu/AI_ModeL_Check/issues"
+Changelog = "https://github.com/elmontu/AI_ModeL_Check/blob/main/CHANGELOG.md"
 
 [tool.setuptools]
 package-dir = {"" = "src"}

@@ -264,6 +264,25 @@ and its regression test fail when roles, phases, event/action mappings or role
 permissions drift silently. The [adversarial mutation evaluation](protocol-evaluation.md)
 then checks concrete Python rejection behavior.
 
+The correspondence artifact is JSON, not prose, and now also contains an executable
+`runtime_obligations` map. Each theorem group names (1) the Lean claim IDs, (2) what a Python-side
+violation would look like, (3) concrete regression/mutation tests, (4) the achieved coverage class,
+and (5) the remaining external gap. `test_formal_correspondence.py` fails if an obligation omits any
+of those fields or references a missing test. The principal mapping is:
+
+| Theorem group | Runtime violation represented in tests | Remaining boundary |
+|---|---|---|
+| Authorization/composition | `AUTHORIZED`/`ACTIVE` without complete gates, successful commit, or exact bindings | Offline transcript replay is not a live authority/registry/gateway |
+| Identity/RBAC/terminal state | Identity substitution, wrong actor/producer role, or illegal state reopening | Real identity enrollment and infrastructure transitions |
+| Registry/gateway | Stale/non-advancing commit or expired/revoked/substituted serving claim | No concrete linearizable registry or request-serving gateway |
+| Authenticated messages | Tamper, cross-release replay, compromise, untrusted signer, or profile downgrade accepted | Key custody, enrollment, distribution, and compromise detection |
+| Statistical budget | Additive budget/coverage/tamper violation accepted | Scientific adequacy and Python-to-Lean solver refinement |
+
+The current mutation suite is a finite registry of adversarial classes, not exhaustive property-based
+generation and not a refinement proof. Adding generative transition-sequence tests and then a verified
+parser/semantic refinement remains valid future work; the coverage labels in the JSON prevent the
+existing tests from being described as more than they are.
+
 These controls narrow the correspondence gap, but this is **not a refinement proof**
 of the Lean transition system. They do not establish semantic
 equivalence between Pydantic parsing, canonicalization, Python replay and Lean

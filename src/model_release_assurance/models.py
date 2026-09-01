@@ -1,10 +1,14 @@
 from __future__ import annotations
 
+import hashlib
+import json
 from datetime import date, datetime, timezone
 from enum import StrEnum
 from typing import Any, Annotated, Literal
 
 from pydantic import BaseModel, ConfigDict, Field, model_validator
+
+from .runtime_identity import RuntimeIdentity
 
 
 class StrictModel(BaseModel):
@@ -14,6 +18,17 @@ class StrictModel(BaseModel):
         str_strip_whitespace=True,
         allow_inf_nan=False,
     )
+
+
+def _canonical_model_sha256(value: BaseModel) -> str:
+    encoded = json.dumps(
+        value.model_dump(mode="json", exclude_none=True),
+        sort_keys=True,
+        separators=(",", ":"),
+        ensure_ascii=True,
+        allow_nan=False,
+    ).encode("utf-8")
+    return hashlib.sha256(encoded).hexdigest()
 
 
 class ThreatKind(StrEnum):
@@ -53,6 +68,12 @@ class OverallVerdict(StrEnum):
     CLEAR = "clear"
     BLOCK = "block"
     INCONCLUSIVE = "inconclusive"
+
+
+class EvidenceConsistency(StrEnum):
+    CONSISTENT = "consistent"
+    INSUFFICIENT = "insufficient"
+    CONTRADICTORY = "contradictory"
 
 
 class PopulationUnitKind(StrEnum):
@@ -266,20 +287,228 @@ class ModelProfile(StrictModel):
         return self
 
 
+class OutputChannelContract(StrictModel):
+    """Explicit inventory of every recipient-observable response or shipped output."""
+
+    aggregates: bool
+    labels: bool
+    scores: bool
+    probabilities: bool
+    logits: bool
+    explanations: bool
+    text: bool
+    embeddings: bool
+    gradients: bool
+    parameters: bool
+    downloadable_files: tuple[str, ...]
+    shipped_summary_metadata: tuple[str, ...]
+    custom_channels: tuple[str, ...]
+
+    @model_validator(mode="after")
+    def output_inventory_is_coherent(self) -> OutputChannelContract:
+        named = self.downloadable_files + self.shipped_summary_metadata + self.custom_channels
+        if len(named) != len(set(named)):
+            raise ValueError("output-channel names must be unique across file, summary, and custom channels")
+        boolean_channels = (
+            self.aggregates,
+            self.labels,
+            self.scores,
+            self.probabilities,
+            self.logits,
+            self.explanations,
+            self.text,
+            self.embeddings,
+            self.gradients,
+            self.parameters,
+        )
+        if not any(boolean_channels) and not named:
+            raise ValueError("an interface must declare at least one recipient-observable output channel")
+        return self
+
+
+class TimingChannelContract(StrictModel):
+    """Declaration of recipient-observable latency and its mitigation."""
+
+    recipient_observable: bool
+    measurement_resolution_milliseconds: float | None = Field(default=None, ge=0.0)
+    includes_queue_time: bool
+    mitigation: Literal["not_applicable", "none", "bucketed", "padded", "constant_time_target"]
+    mitigation_parameters: dict[str, str | int | float | bool]
+
+    @model_validator(mode="after")
+    def timing_declaration_is_coherent(self) -> TimingChannelContract:
+        if self.recipient_observable:
+            if self.measurement_resolution_milliseconds is None:
+                raise ValueError("observable timing requires an explicit measurement resolution")
+            if self.mitigation == "not_applicable":
+                raise ValueError("observable timing cannot use not_applicable mitigation")
+        elif (
+            self.measurement_resolution_milliseconds is not None
+            or self.includes_queue_time
+            or self.mitigation != "not_applicable"
+            or self.mitigation_parameters
+        ):
+            raise ValueError("a non-observable timing channel must be explicitly not_applicable")
+        if self.mitigation in {"bucketed", "padded", "constant_time_target"} and not self.mitigation_parameters:
+            raise ValueError("timing mitigation requires its public parameters")
+        if self.mitigation in {"not_applicable", "none"} and self.mitigation_parameters:
+            raise ValueError("timing parameters are only valid for an active mitigation")
+        return self
+
+
+class ErrorChannelContract(StrictModel):
+    """Declaration of transport status, errors, and retry signals."""
+
+    transport_status: Literal["none", "http", "grpc", "custom"]
+    documented_status_codes: tuple[str, ...]
+    error_content: Literal["none", "opaque", "structured", "free_text"]
+    error_schema_sha256: str | None = Field(default=None, pattern=r"^[0-9a-f]{64}$")
+    retry_metadata: bool
+
+    @model_validator(mode="after")
+    def error_declaration_is_coherent(self) -> ErrorChannelContract:
+        if len(self.documented_status_codes) != len(set(self.documented_status_codes)):
+            raise ValueError("documented status codes must be unique")
+        if self.transport_status == "none":
+            if self.documented_status_codes or self.error_content != "none" or self.error_schema_sha256 is not None:
+                raise ValueError("an interface without transport status cannot expose status or error content")
+            if self.retry_metadata:
+                raise ValueError("an interface without transport status cannot expose retry metadata")
+        elif not self.documented_status_codes:
+            raise ValueError("a status-bearing transport requires its documented status codes")
+        if self.error_content == "structured" and self.error_schema_sha256 is None:
+            raise ValueError("structured errors require an error-schema digest")
+        if self.error_content != "structured" and self.error_schema_sha256 is not None:
+            raise ValueError("error_schema_sha256 is only valid for structured errors")
+        return self
+
+
+class ExecutionChannelContract(StrictModel):
+    """Batch, concurrency, and cross-request-state semantics."""
+
+    batching: Literal["none", "fixed", "variable", "recipient_controlled"]
+    maximum_batch_size: int | None = Field(default=None, gt=0)
+    maximum_concurrent_requests: int | None = Field(default=None, gt=0)
+    cross_request_state: Literal["none", "session", "persistent"]
+    cross_request_state_ttl_seconds: int | None = Field(default=None, ge=0)
+
+    @model_validator(mode="after")
+    def execution_declaration_is_coherent(self) -> ExecutionChannelContract:
+        if self.batching == "none" and self.maximum_batch_size != 1:
+            raise ValueError("non-batched interfaces must declare maximum_batch_size=1")
+        if self.batching in {"fixed", "variable"} and (
+            self.maximum_batch_size is None or self.maximum_batch_size < 2
+        ):
+            raise ValueError("batched interfaces must allow a batch of at least two")
+        if self.batching == "recipient_controlled" and self.maximum_batch_size is not None:
+            raise ValueError("recipient-controlled batching must not claim an enforced maximum")
+        if self.cross_request_state == "none" and self.cross_request_state_ttl_seconds not in (None, 0):
+            raise ValueError("stateless interfaces cannot declare a positive cross-request-state TTL")
+        if self.cross_request_state == "session" and (
+            self.cross_request_state_ttl_seconds is None or self.cross_request_state_ttl_seconds <= 0
+        ):
+            raise ValueError("session state requires a positive TTL")
+        return self
+
+
+class AccessPathContract(StrictModel):
+    """Non-primary paths through which a recipient could observe or control the release."""
+
+    side_channels: tuple[
+        Literal["timing", "status_code", "error_content", "resource_usage", "cache_behavior", "logs", "telemetry", "custom"],
+        ...,
+    ]
+    custom_side_channels: tuple[str, ...]
+    admin_access: Literal["none", "read_only", "read_write", "full_control"]
+    admin_capabilities: tuple[str, ...]
+    local_access: Literal["none", "artifact_only", "sandboxed_runtime", "process", "host"]
+    local_capabilities: tuple[str, ...]
+
+    @model_validator(mode="after")
+    def access_paths_are_coherent(self) -> AccessPathContract:
+        if len(self.side_channels) != len(set(self.side_channels)):
+            raise ValueError("side-channel classes must be unique")
+        if len(self.custom_side_channels) != len(set(self.custom_side_channels)):
+            raise ValueError("custom side channels must be unique")
+        if ("custom" in self.side_channels) != bool(self.custom_side_channels):
+            raise ValueError("custom side-channel details and the custom marker must be declared together")
+        if (self.admin_access == "none") != (not self.admin_capabilities):
+            raise ValueError("admin capabilities must be empty exactly when admin access is none")
+        if (self.local_access == "none") != (not self.local_capabilities):
+            raise ValueError("local capabilities must be empty exactly when local access is none")
+        return self
+
+
+class SerializationContract(StrictModel):
+    """Wire/file representation exposed to the recipient."""
+
+    formats: tuple[str, ...] = Field(min_length=1)
+    media_types: tuple[str, ...] = Field(min_length=1)
+    encodings: tuple[str, ...] = Field(min_length=1)
+    compression: tuple[str, ...]
+    schema_sha256: str | None = Field(default=None, pattern=r"^[0-9a-f]{64}$")
+    endianness: Literal["not_applicable", "little", "big", "network", "mixed"]
+
+    @model_validator(mode="after")
+    def serialization_is_coherent(self) -> SerializationContract:
+        for label, values in (
+            ("serialization formats", self.formats),
+            ("media types", self.media_types),
+            ("encodings", self.encodings),
+            ("compression modes", self.compression),
+        ):
+            if len(values) != len(set(values)):
+                raise ValueError(f"{label} must be unique")
+        return self
+
+
 class InterfaceContract(StrictModel):
-    protocol_type: Literal["predictive", "interactive_llm"] = "predictive"
+    """Versioned, declarably complete recipient-observable release interface."""
+
+    schema_version: Literal["2.0"]
+    protocol_type: Literal["predictive", "interactive_llm"]
     access: Literal["aggregate", "label", "score", "text", "embedding", "gradient", "weights", "full_artifact"]
-    outputs: tuple[str, ...] = ()
+    outputs: tuple[str, ...] = Field(min_length=1)
+    output_channels: OutputChannelContract
     precision_bits: int | None = Field(default=None, ge=1, le=4096)
     query_budget: int | None = Field(default=None, ge=0)
-    adaptive_queries: bool = False
-    authenticated: bool = False
-    rate_limited: bool = False
+    adaptive_queries: bool
+    authenticated: bool
+    rate_limited: bool
+    timing: TimingChannelContract
+    errors: ErrorChannelContract
+    execution: ExecutionChannelContract
+    access_paths: AccessPathContract
+    serialization: SerializationContract
     llm_protocol: LlmProtocolContract | None = None
     notes: str = ""
 
     @model_validator(mode="after")
     def protocol_matches_interface(self) -> InterfaceContract:
+        if len(self.outputs) != len(set(self.outputs)):
+            raise ValueError("interface output names must be unique")
+        channel_for_access = {
+            "aggregate": self.output_channels.aggregates,
+            "label": self.output_channels.labels,
+            "score": self.output_channels.scores or self.output_channels.probabilities or self.output_channels.logits,
+            "text": self.output_channels.text,
+            "embedding": self.output_channels.embeddings,
+            "gradient": self.output_channels.gradients,
+            "weights": self.output_channels.parameters,
+            "full_artifact": self.output_channels.parameters and bool(self.output_channels.downloadable_files),
+        }
+        if not channel_for_access[self.access]:
+            raise ValueError(f"access={self.access} is inconsistent with the structured output-channel declaration")
+        expected_side_channels: set[str] = set()
+        if self.timing.recipient_observable:
+            expected_side_channels.add("timing")
+        if self.errors.transport_status != "none":
+            expected_side_channels.add("status_code")
+        if self.errors.error_content != "none":
+            expected_side_channels.add("error_content")
+        if not expected_side_channels.issubset(self.access_paths.side_channels):
+            missing = sorted(expected_side_channels - set(self.access_paths.side_channels))
+            raise ValueError(f"access-path declaration omits observable side channels: {missing}")
         if self.protocol_type == "interactive_llm" and self.llm_protocol is None:
             raise ValueError("interactive_llm interfaces require a complete LLM protocol contract")
         if self.protocol_type == "predictive" and self.llm_protocol is not None:
@@ -290,6 +519,12 @@ class InterfaceContract(StrictModel):
                 raise ValueError("interactive_llm interfaces must declare text access and text output")
             if self.query_budget != self.llm_protocol.maximum_lifetime_queries:
                 raise ValueError("interactive_llm query_budget must equal maximum_lifetime_queries")
+            if self.execution.maximum_concurrent_requests != self.llm_protocol.maximum_concurrent_sessions:
+                raise ValueError("interactive_llm concurrency must match maximum_concurrent_sessions")
+            if self.execution.cross_request_state != self.llm_protocol.memory_mode:
+                raise ValueError("interactive_llm cross-request state must match memory_mode")
+            if self.execution.cross_request_state_ttl_seconds != self.llm_protocol.memory_ttl_seconds:
+                raise ValueError("interactive_llm cross-request-state TTL must match memory_ttl_seconds")
         return self
 
 
@@ -312,6 +547,10 @@ class ReleaseContract(StrictModel):
 
     @model_validator(mode="after")
     def expiry_is_timezone_aware(self) -> ReleaseContract:
+        if len(self.previous_release_ids) != len(set(self.previous_release_ids)):
+            raise ValueError("previous release identifiers must be unique")
+        if self.release_id in self.previous_release_ids:
+            raise ValueError("a release cannot list itself in its declared lineage")
         if self.expires_at is not None and self.expires_at.utcoffset() is None:
             raise ValueError("expires_at must include a timezone offset")
         protocol = self.interface.llm_protocol
@@ -385,13 +624,42 @@ class PolicyRule(StrictModel):
         return self
 
 
+class AnalyzerRequirement(StrictModel):
+    """Policy allowlist for one evidence producer used against one threat."""
+
+    threat_id: str = Field(min_length=3, max_length=128, pattern=r"^[A-Za-z0-9._:-]+$")
+    analyzer: str = Field(min_length=1, max_length=128)
+    minimum_service_version: str = Field(pattern=r"^[0-9]+\.[0-9]+\.[0-9]+$")
+    accepted_implementation_sha256s: tuple[str, ...] = Field(min_length=1)
+    accepted_configuration_sha256s: tuple[str, ...] = Field(min_length=1)
+    required: bool = True
+
+    @model_validator(mode="after")
+    def digests_are_unique_and_valid(self) -> AnalyzerRequirement:
+        for label, values in (
+            ("implementation", self.accepted_implementation_sha256s),
+            ("configuration", self.accepted_configuration_sha256s),
+        ):
+            if len(values) != len(set(values)):
+                raise ValueError(f"accepted analyzer {label} digests must be unique")
+            if any(
+                len(value) != 64
+                or any(character not in "0123456789abcdef" for character in value)
+                for value in values
+            ):
+                raise ValueError(f"accepted analyzer {label} digests must be lowercase SHA-256 values")
+        return self
+
+
 class PolicyBundle(StrictModel):
-    schema_version: Literal["1.0"] = "1.0"
+    schema_version: Literal["2.0"] = "2.0"
     policy_id: str = Field(min_length=3, max_length=128, pattern=r"^[A-Za-z0-9._:-]+$")
     policy_version: str = Field(min_length=1, max_length=64)
     effective_from: datetime
     expires_at: datetime | None = None
     rules: tuple[PolicyRule, ...]
+    analyzer_requirements: tuple[AnalyzerRequirement, ...] = ()
+    accepted_selection_policy_sha256s: tuple[str, ...] = Field(min_length=1)
 
     @model_validator(mode="after")
     def policy_is_well_formed(self) -> PolicyBundle:
@@ -405,6 +673,29 @@ class PolicyBundle(StrictModel):
         ids = [rule.threat_id for rule in self.rules]
         if not ids or len(ids) != len(set(ids)):
             raise ValueError("policy threat identifiers must be non-empty and unique")
+        requirement_keys = [
+            (requirement.threat_id, requirement.analyzer)
+            for requirement in self.analyzer_requirements
+        ]
+        if len(requirement_keys) != len(set(requirement_keys)):
+            raise ValueError("policy analyzer requirements must be unique per threat and analyzer")
+        unknown = {
+            requirement.threat_id for requirement in self.analyzer_requirements
+        } - set(ids)
+        if unknown:
+            raise ValueError(f"analyzer requirements reference unknown policy threats: {sorted(unknown)}")
+        if len(self.accepted_selection_policy_sha256s) != len(
+            set(self.accepted_selection_policy_sha256s)
+        ):
+            raise ValueError("accepted selection-policy digests must be unique")
+        if any(
+            len(value) != 64
+            or any(character not in "0123456789abcdef" for character in value)
+            for value in self.accepted_selection_policy_sha256s
+        ):
+            raise ValueError(
+                "accepted selection-policy digests must be lowercase SHA-256 values"
+            )
         return self
 
 
@@ -485,9 +776,18 @@ class ThreatContract(StrictModel):
         return self
 
 
+class EvidenceProducer(StrictModel):
+    service_id: str = Field(min_length=3, max_length=128, pattern=r"^[A-Za-z0-9._:-]+$")
+    service_version: str = Field(pattern=r"^[0-9]+\.[0-9]+\.[0-9]+$")
+    implementation_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
+    configuration_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
+
+
 class AnalyzerProvenance(StrictModel):
     tool: str = Field(min_length=1, max_length=256)
     tool_version: str = Field(min_length=1, max_length=128)
+    producer: EvidenceProducer
+    configuration_path: str = Field(min_length=1)
     source_path: str = Field(min_length=1)
     source_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
     bound_fields: tuple[str, ...] = Field(min_length=1)
@@ -683,14 +983,96 @@ class ControlledInferenceInput(StrictModel):
         return self
 
 
+class LlmWatermarkInput(StrictModel):
+    """Transcript-bound output-watermark screen for an interactive LLM."""
+
+    analyzer: Literal["llm_watermark"] = "llm_watermark"
+    threat_id: str
+    population_scope_id: str
+    study_id: str = Field(min_length=1, max_length=256)
+    preregistration_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
+    transcript_manifest_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
+    detector_id: str = Field(min_length=1, max_length=256)
+    detector_version: str = Field(min_length=1, max_length=128)
+    opaque_key_id: str = Field(min_length=1, max_length=256)
+    detected_outputs: int = Field(ge=0)
+    eligible_outputs: int = Field(gt=0)
+    null_false_positives: int = Field(ge=0)
+    null_outputs: int = Field(gt=0)
+    confidence: float = Field(default=0.95, gt=0.5, lt=1.0)
+    comparison_family_size: int = Field(default=1, ge=1)
+    threshold_pre_registered: bool
+    calibration_disjoint: bool
+    audit_disjoint: bool
+    raw_counts_retained: bool
+    key_compromised: bool = False
+    key_revoked: bool = False
+    complete_protocol_binding: bool
+    evidence_context: EvidenceContext
+    provenance: AnalyzerProvenance
+
+    @model_validator(mode="after")
+    def counts_are_coherent(self) -> LlmWatermarkInput:
+        if self.detected_outputs > self.eligible_outputs:
+            raise ValueError("detected_outputs cannot exceed eligible_outputs")
+        if self.null_false_positives > self.null_outputs:
+            raise ValueError("null_false_positives cannot exceed null_outputs")
+        return self
+
+
+class LlmCanaryInput(StrictModel):
+    """Randomized member/decoy canary extraction evidence for an interactive LLM."""
+
+    analyzer: Literal["llm_canary"] = "llm_canary"
+    threat_id: str
+    population_scope_id: str
+    study_id: str = Field(min_length=1, max_length=256)
+    preregistration_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
+    transcript_manifest_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
+    sealed_assignment_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
+    metric: Literal[
+        "membership_tpr_at_fpr", "equal_prior_membership_success", "reconstruction_success"
+    ]
+    member_successes: int = Field(ge=0)
+    member_canaries: int = Field(gt=0)
+    decoy_successes: int = Field(ge=0)
+    nonmember_decoys: int = Field(gt=0)
+    confidence: float = Field(default=0.95, gt=0.5, lt=1.0)
+    comparison_family_size: int = Field(default=1, ge=1)
+    target_fpr: float | None = Field(default=None, gt=0.0, lt=1.0)
+    assignment_randomized: bool
+    scoring_frozen_before_unblinding: bool
+    exact_match_pre_registered: bool
+    audit_disjoint: bool
+    raw_counts_retained: bool
+    contamination_scan_passed: bool
+    complete_protocol_binding: bool
+    recipient_realizable: bool
+    evidence_context: EvidenceContext
+    provenance: AnalyzerProvenance
+
+    @model_validator(mode="after")
+    def canary_counts_are_coherent(self) -> LlmCanaryInput:
+        if self.member_successes > self.member_canaries:
+            raise ValueError("member_successes cannot exceed member_canaries")
+        if self.decoy_successes > self.nonmember_decoys:
+            raise ValueError("decoy_successes cannot exceed nonmember_decoys")
+        if self.metric == "membership_tpr_at_fpr" and self.target_fpr is None:
+            raise ValueError("membership canary evidence requires target_fpr")
+        if self.metric == "reconstruction_success" and self.target_fpr is not None:
+            raise ValueError("target_fpr is only valid for membership canary evidence")
+        return self
+
+
 AnalyzerInput = Annotated[
-    TreeLinkageInput | DpInput | AttackInput | PopulationInput | ControlledInferenceInput,
+    TreeLinkageInput | DpInput | AttackInput | PopulationInput | ControlledInferenceInput
+    | LlmWatermarkInput | LlmCanaryInput,
     Field(discriminator="analyzer"),
 ]
 
 
 class AssessmentRequest(StrictModel):
-    schema_version: Literal["3.0"] = "3.0"
+    schema_version: Literal["4.0"] = "4.0"
     policy: PolicyReference
     release: ReleaseContract
     population_scopes: tuple[PopulationScope, ...]
@@ -739,6 +1121,7 @@ class EvidenceRecord(StrictModel):
     evidence_id: str
     threat_id: str
     analyzer: str
+    producer: EvidenceProducer
     release_id: str = Field(min_length=3, max_length=128, pattern=r"^[A-Za-z0-9._:-]+$")
     release_contract_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
     policy_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
@@ -814,11 +1197,72 @@ class ThreatDecision(StrictModel):
     upper_bound: float
     verdict: Verdict
     evidence_ids: tuple[str, ...]
+    excluded_evidence_ids: tuple[str, ...] = ()
+    evidence_consistency: EvidenceConsistency
+    conflicting_evidence_ids: tuple[str, ...] = ()
     reasons: tuple[str, ...]
+
+    @model_validator(mode="after")
+    def evidence_consistency_matches_bounds(self) -> ThreatDecision:
+        contradictory = self.lower_bound > self.upper_bound + 1e-12
+        if contradictory != (self.evidence_consistency is EvidenceConsistency.CONTRADICTORY):
+            raise ValueError("evidence consistency does not match the decision bounds")
+        if self.evidence_consistency is EvidenceConsistency.CONTRADICTORY:
+            if not self.conflicting_evidence_ids:
+                raise ValueError("contradictory evidence must identify the conflicting records")
+            if not set(self.conflicting_evidence_ids).issubset(self.evidence_ids):
+                raise ValueError("conflicting evidence identifiers must belong to the decision")
+            if self.verdict is Verdict.CLEAR:
+                raise ValueError("contradictory evidence cannot clear a threat")
+        elif self.conflicting_evidence_ids:
+            raise ValueError("non-contradictory evidence cannot identify conflicting records")
+        if (
+            self.evidence_consistency is EvidenceConsistency.INSUFFICIENT
+            and self.verdict is not Verdict.INCONCLUSIVE
+        ):
+            raise ValueError("insufficient evidence must produce an inconclusive verdict")
+        if (
+            self.evidence_consistency is EvidenceConsistency.CONSISTENT
+            and self.verdict is Verdict.INCONCLUSIVE
+        ):
+            raise ValueError("a non-contradictory inconclusive verdict must be insufficient")
+        if len(self.conflicting_evidence_ids) != len(set(self.conflicting_evidence_ids)):
+            raise ValueError("conflicting evidence identifiers must be unique")
+        if len(self.evidence_ids) != len(set(self.evidence_ids)):
+            raise ValueError("decision evidence identifiers must be unique")
+        if len(self.excluded_evidence_ids) != len(set(self.excluded_evidence_ids)):
+            raise ValueError("excluded evidence identifiers must be unique")
+        if set(self.evidence_ids) & set(self.excluded_evidence_ids):
+            raise ValueError("included and excluded evidence identifiers must be disjoint")
+        return self
+
+
+class AssessmentCompositionScope(StrEnum):
+    SINGLE_RELEASE_NO_PORTFOLIO = "single_release_no_portfolio"
+
+
+class InterfaceAssurance(StrEnum):
+    DECLARED_INTERFACE_ONLY = "declared_interface_only"
+
+
+class AssessmentScope(StrictModel):
+    """Machine-readable limits on what an assessment report establishes."""
+
+    composition_scope: Literal[
+        AssessmentCompositionScope.SINGLE_RELEASE_NO_PORTFOLIO
+    ] = AssessmentCompositionScope.SINGLE_RELEASE_NO_PORTFOLIO
+    declared_previous_release_ids: tuple[str, ...] = ()
+    portfolio_assessment_required: Literal[True] = True
+    interface_assurance: Literal[
+        InterfaceAssurance.DECLARED_INTERFACE_ONLY
+    ] = InterfaceAssurance.DECLARED_INTERFACE_ONLY
+    live_interface_verified: Literal[False] = False
+    gateway_interface_conformance_required: Literal[True] = True
+    authorization_eligible: Literal[False] = False
 
 
 class AssessmentReport(StrictModel):
-    schema_version: Literal["3.0"] = "3.0"
+    schema_version: Literal["4.0"] = "4.0"
     assessment_id: str
     release_id: str
     policy_id: str
@@ -831,6 +1275,7 @@ class AssessmentReport(StrictModel):
     release_model_family: str = Field(min_length=1, max_length=128)
     release_model_profile: ModelProfile
     release_interface: InterfaceContract
+    assessment_scope: AssessmentScope
     release_expires_at: datetime | None = None
     policy_expires_at: datetime | None = None
     population_scope_sha256s: dict[str, str]
@@ -838,6 +1283,7 @@ class AssessmentReport(StrictModel):
     evidence: tuple[EvidenceRecord, ...]
     decisions: tuple[ThreatDecision, ...]
     overall_verdict: OverallVerdict
+    runtime_identity: RuntimeIdentity
     engine_version: str
 
     @model_validator(mode="after")
@@ -848,20 +1294,65 @@ class AssessmentReport(StrictModel):
         for value in (self.created_at, self.release_expires_at, self.policy_expires_at):
             if value is not None and value.utcoffset() is None:
                 raise ValueError("assessment report timestamps must include timezone offsets")
+        if self.runtime_identity.component_id != "assurance_engine":
+            raise ValueError("assessment report runtime identity must name assurance_engine")
+        if self.runtime_identity.component_version != "AssessmentReport/4.0":
+            raise ValueError("assessment report runtime identity has the wrong component version")
+        if self.runtime_identity.package_version != self.engine_version:
+            raise ValueError("assessment report engine version does not match its runtime identity")
+        evidence_ids = [record.evidence_id for record in self.evidence]
+        if len(evidence_ids) != len(set(evidence_ids)):
+            raise ValueError("assessment report evidence identifiers must be unique")
+        decision_ids = [decision.threat_id for decision in self.decisions]
+        if len(decision_ids) != len(set(decision_ids)):
+            raise ValueError("assessment report threat decisions must be unique")
+        decisions_by_threat = {decision.threat_id: decision for decision in self.decisions}
+        evidence_by_threat: dict[str, set[str]] = {}
+        for record in self.evidence:
+            evidence_by_threat.setdefault(record.threat_id, set()).add(record.evidence_id)
+        if not set(evidence_by_threat).issubset(decisions_by_threat):
+            raise ValueError("assessment report contains evidence without a threat decision")
+        interface_sha256 = _canonical_model_sha256(self.release_interface)
+        for decision in self.decisions:
+            disposition = set(decision.evidence_ids) | set(decision.excluded_evidence_ids)
+            if disposition != evidence_by_threat.get(decision.threat_id, set()):
+                raise ValueError(
+                    f"decision {decision.threat_id} does not disposition every evidence record"
+                )
+            if decision.assessed_interface_sha256 != interface_sha256:
+                raise ValueError(
+                    f"decision {decision.threat_id} does not bind the report interface"
+                )
+            if decision.assessed_artifact_sha256 != self.artifact_sha256:
+                raise ValueError(
+                    f"decision {decision.threat_id} does not bind the report artifact"
+                )
+            if decision.assessed_release_contract_sha256 != self.release_contract_sha256:
+                raise ValueError(
+                    f"decision {decision.threat_id} does not bind the report release contract"
+                )
+            if decision.assessed_policy_sha256 != self.policy_sha256:
+                raise ValueError(
+                    f"decision {decision.threat_id} does not bind the report policy"
+                )
         return self
 
 
 class SignedManifest(StrictModel):
-    schema_version: Literal["1.0"] = "1.0"
+    schema_version: Literal["2.0"] = "2.0"
     assessment_id: str
     release_id: str
     policy_id: str
     policy_version: str
     policy_sha256: str
     artifact_sha256: str
+    release_interface_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
     request_sha256: str
     report_sha256: str
     overall_verdict: OverallVerdict
+    composition_scope: AssessmentCompositionScope
+    interface_assurance: InterfaceAssurance
+    authorization_eligible: Literal[False] = False
     created_at: datetime
     expires_at: datetime | None = None
     signer_key_id: str

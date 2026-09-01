@@ -15,7 +15,7 @@ PYTHONPATH=src python scripts/evaluate_protocol_mutations.py \
   --output output/protocol-mutation-evaluation.json
 ```
 
-The suite contains two positive controls and nineteen unsafe mutants covering:
+The suite contains two positive controls and twenty-one unsafe mutants covering:
 
 - failed atomic commit;
 - broken event hash chain;
@@ -26,6 +26,8 @@ The suite contains two positive controls and nineteen unsafe mutants covering:
 - cross-message payload confusion;
 - unsupported rejection without exhaustive replay;
 - non-increasing registry sequence;
+- a forward registry-sequence jump;
+- an arbitrary committed head that does not replay from the portfolio commitment;
 - monitoring-authority privilege escalation;
 - signed-event tampering;
 - signed-artifact tampering;

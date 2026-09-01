@@ -208,18 +208,30 @@ def build_signed_manifest(
     for field, expected in report_bindings.items():
         if getattr(report, field) != expected:
             raise IntegrityError(f"report {field} does not match the assessment request")
+    release_interface_sha256 = sha256_bytes(canonical_json_bytes(release.interface))
+    if any(
+        decision.assessed_interface_sha256 != release_interface_sha256
+        for decision in report.decisions
+    ):
+        raise IntegrityError("report decisions do not bind the assessment interface")
+    if report.assessment_scope.declared_previous_release_ids != release.previous_release_ids:
+        raise IntegrityError("report composition lineage does not match the assessment request")
     private_key = _load_private(private_key_path)
     unsigned = {
-        "schema_version": "1.0",
+        "schema_version": "2.0",
         "assessment_id": report.assessment_id,
         "release_id": report.release_id,
         "policy_id": report.policy_id,
         "policy_version": report.policy_version,
         "policy_sha256": report.policy_sha256,
         "artifact_sha256": report.artifact_sha256,
+        "release_interface_sha256": release_interface_sha256,
         "request_sha256": report.request_sha256,
         "report_sha256": sha256_bytes(canonical_json_bytes(report)),
         "overall_verdict": report.overall_verdict,
+        "composition_scope": report.assessment_scope.composition_scope,
+        "interface_assurance": report.assessment_scope.interface_assurance,
+        "authorization_eligible": report.assessment_scope.authorization_eligible,
         "created_at": report.created_at,
         "signer_key_id": signer_key_id(private_key.public_key()),
         "signature_algorithm": "Ed25519",
@@ -239,6 +251,14 @@ def verify_signed_manifest(
     public_key = _load_public(public_key_path)
     if manifest.signer_key_id != signer_key_id(public_key):
         raise IntegrityError("signer key identifier mismatch")
+    release_interface_sha256 = sha256_bytes(
+        canonical_json_bytes(report.release_interface)
+    )
+    if any(
+        decision.assessed_interface_sha256 != release_interface_sha256
+        for decision in report.decisions
+    ):
+        raise IntegrityError("report decisions do not bind the report interface")
     expected_bindings = {
         "assessment_id": report.assessment_id,
         "release_id": report.release_id,
@@ -246,8 +266,12 @@ def verify_signed_manifest(
         "policy_version": report.policy_version,
         "policy_sha256": report.policy_sha256,
         "artifact_sha256": report.artifact_sha256,
+        "release_interface_sha256": release_interface_sha256,
         "request_sha256": report.request_sha256,
         "overall_verdict": report.overall_verdict,
+        "composition_scope": report.assessment_scope.composition_scope,
+        "interface_assurance": report.assessment_scope.interface_assurance,
+        "authorization_eligible": report.assessment_scope.authorization_eligible,
         "created_at": report.created_at,
     }
     for field, expected in expected_bindings.items():

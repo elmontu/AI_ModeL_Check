@@ -1,11 +1,11 @@
 from __future__ import annotations
 
 import json
-import sqlite3
 import tempfile
 import unittest
 from pathlib import Path
 
+from model_release_assurance.audit import AuditStore
 from model_release_assurance.knowledge import KnowledgeIndex
 from model_release_assurance.mcp_tools import AssuranceToolService
 from model_release_assurance.privacy_orchestration import PrivacyAuditPlan
@@ -64,25 +64,18 @@ class AssuranceToolServiceTests(unittest.TestCase):
     def test_schema_path_traversal_is_rejected(self) -> None:
         with self.assertRaises(ValueError):
             self.service.get_schema("../examples/request.json")
-        schema = self.service.get_schema("assessment-request-v3.json")
+        schema = self.service.get_schema("assessment-request-v4.json")
         self.assertEqual(schema["title"], "AssessmentRequest")
 
     def test_audit_verification_is_confined_and_read_only(self) -> None:
         with tempfile.TemporaryDirectory(dir=ROOT) as directory:
             database = Path(directory) / "empty.sqlite3"
-            connection = sqlite3.connect(database)
-            try:
-                connection.execute(
-                    """CREATE TABLE audit_events (
-                    sequence INTEGER PRIMARY KEY, occurred_at TEXT, event_type TEXT,
-                    assessment_id TEXT, payload_json TEXT, previous_hash TEXT, event_hash TEXT
-                    )"""
-                )
-                connection.commit()
-            finally:
-                connection.close()
+            AuditStore(database)
+            before = database.read_bytes()
             result = self.service.verify_audit_chain(str(database), require_events=False)
             self.assertEqual(result["events"], 0)
+            self.assertTrue(result["complete"])
+            self.assertEqual(database.read_bytes(), before)
         with tempfile.TemporaryDirectory() as outside:
             database = Path(outside) / "outside.sqlite3"
             database.touch()

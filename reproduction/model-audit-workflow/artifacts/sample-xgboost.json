@@ -1,6 +1,7 @@
 {
   "kind": "xgboost",
-  "description": "Tiny additive stump ensemble for workflow testing only",
+  "implementation": "additive_tree_proxy",
+  "description": "Tiny additive stump proxy for deterministic workflow plumbing tests; not a trained XGBoost library model",
   "model": {
     "base_score": -0.2,
     "stumps": [

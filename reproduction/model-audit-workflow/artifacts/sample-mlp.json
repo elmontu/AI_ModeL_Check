@@ -1,0 +1,16 @@
+{
+  "kind": "mlp",
+  "description": "Tiny deterministic two-layer perceptron for workflow testing only",
+  "model": {
+    "hidden_weights": [[1.0, -1.0], [-1.0, 1.0]],
+    "hidden_bias": [-0.5, -0.5],
+    "output_weights": [1.0, 1.0],
+    "output_bias": -0.1
+  },
+  "holdout_cases": [
+    {"case_id": "zero-zero", "input": [0.0, 0.0], "expected": 0},
+    {"case_id": "one-zero", "input": [1.0, 0.0], "expected": 1},
+    {"case_id": "zero-one", "input": [0.0, 1.0], "expected": 1},
+    {"case_id": "one-one", "input": [1.0, 1.0], "expected": 0}
+  ]
+}

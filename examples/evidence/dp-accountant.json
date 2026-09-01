@@ -16,10 +16,10 @@
   "secret_prior_bound_validated": false,
   "evidence_context": {
     "release_id": "whole-government-demo-tree-v1",
-    "release_contract_sha256": "118a1d72acd73341ce4d6cf69f761bcd23e6141b40f42e215b7a560f4cc6f670",
-    "policy_sha256": "ef0780f17ae1f732296ef53c4040799792ec907abbb6ab69950f1d045a0d3316",
+    "release_contract_sha256": "3aa3db7a0601c388368283687cbb28b0fd73e1870f773712e9f349e013e6297a",
+    "policy_sha256": "9e00b697be580a6921b42e1b4ddb206aba90ca4bde61cb402450fd49c246653f",
     "artifact_sha256": "2f42b587627c5b6c4447d781b57a47082743f029b475f560a574553abcedfdd5",
-    "interface_sha256": "d7ca53bb8dbf0efb85abf373dba00fdb285764d783856f51b27658d49e65d111",
+    "interface_sha256": "4cde1c5e2dd0f3303c9c8e2c3c3bef3d089746a38569b1442c346d81b6e50ed8",
     "population_scope_id": "service-participants-2026",
     "population_scope_sha256": "d0ceafb482b5ed133cd89c765ec4e9d228f4c14bf07fac3f4aa67297a79ed5e8",
     "decision_game_sha256": "686901249c969d5c1a631f1a617c319f9c235842745ea34c6956b6c5c2fef38c",

@@ -73,6 +73,20 @@ class FormalCorrespondenceTests(unittest.TestCase):
     def test_manifest_refuses_to_claim_refinement(self) -> None:
         self.assertIn("not a semantic refinement proof", self.manifest["claim"])
 
+    def test_theorem_groups_name_runtime_violations_and_live_tests(self) -> None:
+        obligations = self.manifest["runtime_obligations"]
+        self.assertGreaterEqual(len(obligations), 5)
+        for obligation in obligations.values():
+            self.assertTrue(obligation["lean_claim_ids"])
+            self.assertTrue(obligation["python_violation"])
+            self.assertTrue(obligation["python_tests"])
+            self.assertTrue(obligation["coverage"])
+            self.assertTrue(obligation["external_gap"])
+            for reference in obligation["python_tests"]:
+                path_text, test_name = reference.split("::", 1)
+                source = (ROOT / path_text).read_text(encoding="utf-8")
+                self.assertIn(f"def {test_name}(", source, reference)
+
 
 if __name__ == "__main__":
     unittest.main()

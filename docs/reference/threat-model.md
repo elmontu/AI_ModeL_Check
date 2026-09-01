@@ -38,7 +38,7 @@ Summary knowledge is not silently upgraded to row-level microdata, an identity r
 
 The decision core accepts inert JSON only. Model parsing and empirical attacks occur outside it in sandboxed workers. The core verifies artifact and evidence hashes, validates contracts, calculates evidence brackets, persists an audit event, and optionally signs the report manifest. Production identity, storage, queue, and KMS services are separate trusted components.
 
-Optimization requests declare a trust profile. `cooperative` treats hash-bound submissions as accountable assertions and is appropriate only where the submitting authority is trusted not to fabricate evidence. `separated_assessor` requires an allowlisted Ed25519-signed assessment. `adversarial_supply_chain` is rejected by the current core because artifact correctness would require sandboxed independent replay and attestation. These profiles are not interchangeable assurance levels.
+Optimization requests declare one of two supported trust profiles. `cooperative` treats hash-bound submissions as accountable assertions and is appropriate only where the submitting authority is trusted not to fabricate evidence. `separated_assessor` requires an allowlisted Ed25519-signed assessment, which establishes byte/key binding but not truth. There is no `adversarial_supply_chain` enum value: that profile would require independent sandboxed artifact replay, authenticated/attested workers, managed identity and keys, immutable custody, and separately collected evidence before it could be meaningful. These profiles are not interchangeable assurance levels.
 
 ## Primary threats and controls
 

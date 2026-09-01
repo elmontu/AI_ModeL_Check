@@ -4,6 +4,7 @@ from collections import defaultdict
 
 from .integrity import canonical_json_bytes, sha256_bytes
 from .models import (
+    EvidenceConsistency,
     EvidenceCoverage,
     EvidenceRecord,
     OverallVerdict,
@@ -56,24 +57,29 @@ def decide_threat(
         and record.interface_sha256 == interface_hash
         and record.artifact_sha256 == release.artifact_sha256
     ]
-    floors = [record.lower for record in applicable if record.can_block and record.lower is not None]
-    ceilings = [
-        record.upper
+    floor_records = [
+        record for record in applicable if record.can_block and record.lower is not None
+    ]
+    ceiling_records = [
+        record
         for record in applicable
         if record.can_clear
         and record.coverage is EvidenceCoverage.COMPLETE_INTERFACE
         and record.upper is not None
     ]
+    floors = [record.lower for record in floor_records]
+    ceilings = [record.upper for record in ceiling_records]
     lower = max(floors, default=0.0)
     upper = min(ceilings, default=1.0)
     reasons: list[str] = []
+    contradictory = lower > upper + 1e-12
 
-    if lower > upper + 1e-12:
-        verdict = Verdict.INCONCLUSIVE
-        reasons.append("validated lower and upper bounds conflict; independent review is required")
-    elif lower > threat.tolerance:
+    # A contradictory ceiling must not weaken an independently blocking floor.
+    if lower > threat.tolerance:
         verdict = Verdict.BLOCK
         reasons.append(f"validated floor {lower:.6g} exceeds tolerance {threat.tolerance:.6g}")
+    elif contradictory:
+        verdict = Verdict.INCONCLUSIVE
     elif ceilings and upper <= threat.tolerance:
         verdict = Verdict.CLEAR
         reasons.append(f"validated ceiling {upper:.6g} is within tolerance {threat.tolerance:.6g}")
@@ -85,6 +91,33 @@ def decide_threat(
             reasons.append(f"best ceiling {upper:.6g} exceeds tolerance {threat.tolerance:.6g}")
         if floors:
             reasons.append(f"best validated attack floor is {lower:.6g}")
+
+    conflicting_evidence_ids: tuple[str, ...] = ()
+    if contradictory:
+        reasons.append("validated lower and upper bounds conflict; independent review is required")
+        conflicting_evidence_ids = tuple(
+            record.evidence_id
+            for record in applicable
+            if (
+                record.can_block
+                and record.lower is not None
+                and abs(record.lower - lower) <= 1e-15
+            )
+            or (
+                record.can_clear
+                and record.coverage is EvidenceCoverage.COMPLETE_INTERFACE
+                and record.upper is not None
+                and abs(record.upper - upper) <= 1e-15
+            )
+        )
+
+    evidence_consistency = (
+        EvidenceConsistency.CONTRADICTORY
+        if contradictory
+        else EvidenceConsistency.INSUFFICIENT
+        if verdict is Verdict.INCONCLUSIVE
+        else EvidenceConsistency.CONSISTENT
+    )
 
     excluded = [record for record in records if record.threat_id == threat.threat_id and record not in applicable]
     if excluded:
@@ -108,6 +141,9 @@ def decide_threat(
         upper_bound=upper,
         verdict=verdict,
         evidence_ids=tuple(record.evidence_id for record in applicable),
+        excluded_evidence_ids=tuple(record.evidence_id for record in excluded),
+        evidence_consistency=evidence_consistency,
+        conflicting_evidence_ids=conflicting_evidence_ids,
         reasons=tuple(reasons),
     )
 

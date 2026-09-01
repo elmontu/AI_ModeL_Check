@@ -3,7 +3,7 @@ from __future__ import annotations
 import json
 import math
 from pathlib import Path
-from typing import Any, Literal
+from typing import Any, Callable, Literal, Protocol
 
 from pydantic import BaseModel, ConfigDict, Field
 
@@ -16,7 +16,7 @@ class ExperimentalModelSpec(BaseModel):
     model_config = ConfigDict(extra="forbid", frozen=True)
 
     experiment_id: str = Field(min_length=1)
-    kind: Literal["cnn", "lstm", "xgboost", "llm"]
+    kind: Literal["cnn", "lstm", "mlp", "xgboost", "llm"]
     model_family: str = Field(min_length=1)
     artifact_path: str = Field(min_length=1)
     artifact_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
@@ -35,6 +35,7 @@ class ExperimentalWorkflowSpec(BaseModel):
 _GUIDANCE_QUERIES = {
     "cnn": "vision CNN image membership inversion biometric linkage modality-specific worker",
     "lstm": "time series LSTM sequence trajectory linkage temporal reconstruction worker",
+    "mlp": "multilayer perceptron membership inference calibration attack floor",
     "xgboost": "XGBoost tree linkage membership screening worker attack floor",
     "llm": "interactive LLM transcript watermark canary extraction cannot clear",
 }
@@ -76,6 +77,17 @@ def _xgboost_predict(model: dict[str, Any], inputs: list[float]) -> int:
     return int(score >= 0.0)
 
 
+def _mlp_predict(model: dict[str, Any], inputs: list[float]) -> int:
+    hidden = [
+        max(0.0, sum(weight * value for weight, value in zip(row, inputs, strict=True)) + bias)
+        for row, bias in zip(model["hidden_weights"], model["hidden_bias"], strict=True)
+    ]
+    score = sum(
+        weight * value for weight, value in zip(model["output_weights"], hidden, strict=True)
+    ) + model["output_bias"]
+    return int(score >= 0.0)
+
+
 def _llm_predict(model: dict[str, Any], prompt: str) -> str:
     token = prompt.lower().split()[-1]
     return model["next_token"].get(token, model["default_token"])
@@ -91,6 +103,8 @@ def evaluate_sample_artifact(kind: str, artifact: dict[str, Any]) -> dict[str, A
             predicted = _cnn_predict(model, case["input"])
         elif kind == "lstm":
             predicted = _lstm_predict(model, case["input"])
+        elif kind == "mlp":
+            predicted = _mlp_predict(model, case["input"])
         elif kind == "xgboost":
             predicted = _xgboost_predict(model, case["input"])
         elif kind == "llm":
@@ -111,14 +125,76 @@ def evaluate_sample_artifact(kind: str, artifact: dict[str, Any]) -> dict[str, A
     }
 
 
+class ModelWorker(Protocol):
+    service_id: str
+    service_version: str
+    kind: str
+    mcp_tool: str
+
+    def evaluate(self, artifact: dict[str, Any]) -> dict[str, Any]: ...
+
+
+class LocalModelWorker:
+    def __init__(self, kind: str, evaluator: Callable[[str, dict[str, Any]], dict[str, Any]]):
+        self.kind = kind
+        self.service_id = f"mra.model-worker.{kind}"
+        self.service_version = "1.0"
+        self.mcp_tool = f"evaluate_{kind}_model"
+        self._evaluator = evaluator
+
+    def evaluate(self, artifact: dict[str, Any]) -> dict[str, Any]:
+        return self._evaluator(self.kind, artifact)
+
+    def describe(self) -> dict[str, Any]:
+        return {
+            "service_id": self.service_id,
+            "service_version": self.service_version,
+            "kind": self.kind,
+            "transport": "in_process",
+            "mcp_tool": self.mcp_tool,
+            "can_clear": False,
+        }
+
+
+class ModelWorkerRegistry:
+    def __init__(self, workers: tuple[ModelWorker, ...]):
+        kinds = [worker.kind for worker in workers]
+        if not workers or len(kinds) != len(set(kinds)):
+            raise ValueError("model workers must be non-empty with unique kinds")
+        self.workers = workers
+
+    def resolve(self, kind: str) -> ModelWorker:
+        matches = [worker for worker in self.workers if worker.kind == kind]
+        if len(matches) != 1:
+            raise ValueError(f"expected one model worker for {kind}, found {len(matches)}")
+        return matches[0]
+
+    def describe(self) -> list[dict[str, Any]]:
+        return [worker.describe() for worker in self.workers if isinstance(worker, LocalModelWorker)]
+
+
+def default_model_worker_registry() -> ModelWorkerRegistry:
+    return ModelWorkerRegistry(tuple(
+        LocalModelWorker(kind, evaluate_sample_artifact)
+        for kind in ("cnn", "lstm", "mlp", "xgboost", "llm")
+    ))
+
+
 def run_experimental_workflow(
     manifest_path: Path,
     *,
     knowledge_index: KnowledgeIndex,
+    worker_registry: ModelWorkerRegistry | None = None,
 ) -> dict[str, Any]:
     manifest_path = manifest_path.resolve(strict=True)
     root = manifest_path.parent
     spec = ExperimentalWorkflowSpec.model_validate_json(manifest_path.read_text(encoding="utf-8"))
+    registry = worker_registry or default_model_worker_registry()
+    stages: list[dict[str, Any]] = [{
+        "stage": "manifest_validation",
+        "status": "completed",
+        "models": len(spec.models),
+    }]
     results = []
     for item in spec.models:
         artifact_path = (root / item.artifact_path).resolve(strict=True)
@@ -130,6 +206,10 @@ def run_experimental_workflow(
         artifact = json.loads(artifact_path.read_text(encoding="utf-8"))
         if artifact.get("kind") != item.kind:
             raise ValueError(f"artifact kind mismatch for {item.experiment_id}")
+        worker = registry.resolve(item.kind)
+        functional_evaluation = worker.evaluate(artifact)
+        if functional_evaluation.get("can_clear") is not False:
+            raise ValueError("experimental model worker exceeded its non-clearing authority")
         coverage = resolve_model_family(item.model_family)
         retrieval = knowledge_index.search(_GUIDANCE_QUERIES[item.kind], limit=3)
         results.append(
@@ -139,7 +219,13 @@ def run_experimental_workflow(
                 "purpose": item.purpose,
                 "artifact_path": artifact_path.relative_to(root).as_posix(),
                 "artifact_sha256": actual_hash,
-                "functional_evaluation": evaluate_sample_artifact(item.kind, artifact),
+                "worker": {
+                    "service_id": worker.service_id,
+                    "service_version": worker.service_version,
+                    "transport": "in_process",
+                    "mcp_tool": worker.mcp_tool,
+                },
+                "functional_evaluation": functional_evaluation,
                 "assurance_routing": coverage.as_dict(),
                 "requires_dedicated_evidence": coverage.status is not CoverageStatus.GENERIC_CORE_APPLICABLE,
                 "can_clear": False,
@@ -155,10 +241,37 @@ def run_experimental_workflow(
                 ],
             }
         )
+        stages.extend((
+            {
+                "stage": "artifact_integrity",
+                "status": "completed",
+                "experiment_id": item.experiment_id,
+                "artifact_sha256": actual_hash,
+            },
+            {
+                "stage": "model_execution",
+                "status": "completed",
+                "experiment_id": item.experiment_id,
+                "service_id": worker.service_id,
+            },
+            {
+                "stage": "assurance_routing",
+                "status": "completed",
+                "experiment_id": item.experiment_id,
+                "coverage_status": coverage.status.value,
+            },
+        ))
+    stages.append({
+        "stage": "decision_aggregation",
+        "status": "completed",
+        "decision": "no_release_authorization",
+    })
     return {
         "schema_version": "1.0",
         "workflow_id": spec.workflow_id,
         "experimental_only": True,
         "decision": "no_release_authorization",
+        "services": registry.describe(),
+        "stages": stages,
         "models": results,
     }

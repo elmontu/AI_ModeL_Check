@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -16,12 +17,23 @@ from model_release_assurance.incomplete_portfolio import (
     StatisticalCoverage,
 )
 from model_release_assurance.decision_theory import exact_guess_problem
+from model_release_assurance.version import VERSION
 
 
 ROOT = Path(__file__).resolve().parents[1]
 
 
 class CliTests(unittest.TestCase):
+    def test_version_flag_reports_package_version(self) -> None:
+        result = subprocess.run(
+            [sys.executable, "-m", "model_release_assurance", "--version"],
+            cwd=ROOT,
+            text=True,
+            capture_output=True,
+        )
+        self.assertEqual(result.returncode, 0, msg=result.stderr)
+        self.assertEqual(result.stdout.strip(), f"mra {VERSION}")
+
     def test_protocol_solve_verify_and_schemas(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             temp = Path(directory)
@@ -137,6 +149,12 @@ class CliTests(unittest.TestCase):
                 self.assertEqual(result.returncode, 0, msg=result.stderr)
 
             optimization = json.loads((ROOT / "examples" / "optimization-request.json").read_text())
+            optimization["active_policy"]["policy_path"] = str(
+                ROOT / "examples" / "policy.json"
+            )
+            optimization["portfolio_registry"]["source_path"] = str(
+                ROOT / "examples" / "evidence" / "portfolio-registry-snapshot.json"
+            )
             optimization["configurations"][0]["assessment"] = {
                 "report_path": str(report),
                 "report_sha256": sha256_file(report),
@@ -178,6 +196,75 @@ class CliTests(unittest.TestCase):
                 capture_output=True,
             )
             self.assertEqual(result.returncode, 2)
+
+    def test_assess_and_optimize_require_audit_database(self) -> None:
+        base = [sys.executable, "-m", "model_release_assurance"]
+        for command in (
+            base + [
+                "assess",
+                str(ROOT / "examples" / "request.json"),
+                "--output",
+                "unused-assessment.json",
+            ],
+            base + [
+                "optimize",
+                str(ROOT / "examples" / "optimization-request.json"),
+                "--output",
+                "unused-optimization.json",
+            ],
+        ):
+            result = subprocess.run(command, cwd=ROOT, text=True, capture_output=True)
+            self.assertEqual(result.returncode, 2)
+            self.assertIn("--audit-db", result.stderr)
+
+    def test_block_is_a_successful_cli_domain_outcome(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            temp = Path(directory)
+            fixture = temp / "examples"
+            shutil.copytree(ROOT / "examples", fixture)
+            raw = json.loads(
+                (fixture / "request.json").read_text(encoding="utf-8")
+            )
+
+            attack_input = next(
+                value for value in raw["analyzer_inputs"] if value["analyzer"] == "attack"
+            )
+            attack_source = json.loads(
+                (fixture / "evidence" / "attack-counts.json").read_text(
+                    encoding="utf-8"
+                )
+            )
+            attack_input["successes"] = 900
+            attack_source["successes"] = 900
+            attack_path = fixture / "evidence" / "blocking-attack-counts.json"
+            attack_path.write_text(json.dumps(attack_source, indent=2) + "\n", encoding="utf-8")
+            attack_input["provenance"]["source_path"] = "evidence/blocking-attack-counts.json"
+            attack_input["provenance"]["source_sha256"] = sha256_file(attack_path)
+
+            request_path = fixture / "blocking-request.json"
+            report_path = temp / "blocking-report.json"
+            audit_path = temp / "audit.sqlite3"
+            request_path.write_text(json.dumps(raw, indent=2) + "\n", encoding="utf-8")
+            result = subprocess.run(
+                [
+                    sys.executable,
+                    "-m",
+                    "model_release_assurance",
+                    "assess",
+                    str(request_path),
+                    "--output",
+                    str(report_path),
+                    "--audit-db",
+                    str(audit_path),
+                ],
+                cwd=ROOT,
+                text=True,
+                capture_output=True,
+            )
+
+            self.assertEqual(result.returncode, 0, msg=result.stderr)
+            self.assertEqual(result.stdout.strip(), "block")
+            self.assertEqual(json.loads(report_path.read_text())["overall_verdict"], "block")
 
     def test_portfolio_solve_verify_and_tamper_flow(self) -> None:
         with tempfile.TemporaryDirectory() as directory:

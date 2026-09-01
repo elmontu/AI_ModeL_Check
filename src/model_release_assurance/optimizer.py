@@ -37,12 +37,16 @@ from .incomplete_portfolio import (
 )
 from .models import (
     AssessmentReport,
+    InterfaceAssurance,
     InterfaceContract,
     OverallVerdict,
+    PolicyBundle,
+    PolicyReference,
     SignedManifest,
     StrictModel,
     Verdict,
 )
+from .runtime_identity import RuntimeIdentity, current_runtime_identity
 from .version import VERSION
 
 
@@ -56,13 +60,40 @@ class OptimizationOutcome(StrEnum):
 class TrustProfile(StrEnum):
     COOPERATIVE = "cooperative"
     SEPARATED_ASSESSOR = "separated_assessor"
-    ADVERSARIAL_SUPPLY_CHAIN = "adversarial_supply_chain"
+
+
+class SelectionCriterion(StrEnum):
+    IMPLEMENTATION_COST_ASCENDING = "implementation_cost_ascending"
+    UTILITY_LOWER_BOUND_DESCENDING = "utility_lower_bound_descending"
+    PREFER_PROPOSED_CONFIGURATION = "prefer_proposed_configuration"
+    CONFIGURATION_ID_ASCENDING = "configuration_id_ascending"
+
+
+class SelectionPolicy(StrictModel):
+    """Versioned justification for choosing among Blackwell-minimal candidates."""
+
+    schema_version: Literal["1.0"] = "1.0"
+    policy_id: str = Field(min_length=3, max_length=128, pattern=r"^[A-Za-z0-9._:-]+$")
+    tie_break_order: tuple[SelectionCriterion, ...] = Field(min_length=1)
+    rationale: str = Field(min_length=1, max_length=2048)
+
+    @model_validator(mode="after")
+    def order_is_deterministic(self) -> SelectionPolicy:
+        if len(set(self.tie_break_order)) != len(self.tie_break_order):
+            raise ValueError("selection tie-break criteria must be unique")
+        if self.tie_break_order[-1] is not SelectionCriterion.CONFIGURATION_ID_ASCENDING:
+            raise ValueError("configuration_id_ascending must be the final deterministic tie-break")
+        return self
 
 
 class PortfolioAssuranceStatus(StrEnum):
     ANALYTICALLY_COMPOSED = "analytically_composed"
     DIRECTLY_JOINT_ASSESSED = "directly_joint_assessed"
     UNASSESSED = "unassessed"
+
+
+class OptimizationCompositionScope(StrEnum):
+    PORTFOLIO_REGISTRY_BOUND = "portfolio_registry_bound"
 
 
 class SearchSpaceStatus(StrEnum):
@@ -154,6 +185,7 @@ class PortfolioCertificate(StrictModel):
     composition_domain_id: str = Field(min_length=3, max_length=256)
     population_secret_pairs: tuple[str, ...] = Field(min_length=1)
     registry_head_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
+    registry_sequence: int = Field(ge=0)
     registered_release_ids: tuple[str, ...] = ()
     method: str = Field(min_length=1, max_length=2048)
     joint_upper_bounds: dict[str, float] = Field(default_factory=dict)
@@ -181,8 +213,33 @@ class PortfolioCertificate(StrictModel):
                 raise ValueError("direct joint assessment requires one replay experiment per population-secret pair")
         elif self.joint_experiment_ids:
             raise ValueError("joint experiment identifiers are only valid for direct joint assessment")
-        if self.status is PortfolioAssuranceStatus.ANALYTICALLY_COMPOSED and not self.registered_release_ids:
-            raise ValueError("analytic portfolio assessment requires the complete registered release identifiers")
+        if assessed and not self.registered_release_ids:
+            raise ValueError("assessed portfolio evidence requires the complete registered release identifiers")
+        return self
+
+
+class PortfolioRegistrySnapshot(StrictModel):
+    """Hash-bound authoritative view of releases active before the candidate."""
+
+    schema_version: Literal["1.0"] = "1.0"
+    registry_id: str = Field(min_length=3, max_length=128, pattern=r"^[A-Za-z0-9._:-]+$")
+    registry_head_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
+    registry_sequence: int = Field(ge=0)
+    composition_domain_id: str = Field(min_length=3, max_length=256)
+    active_release_ids: tuple[str, ...] = ()
+    observed_at: datetime
+    expires_at: datetime
+    source_path: str = Field(min_length=1)
+    source_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
+
+    @model_validator(mode="after")
+    def snapshot_is_coherent(self) -> PortfolioRegistrySnapshot:
+        if len(set(self.active_release_ids)) != len(self.active_release_ids):
+            raise ValueError("active portfolio release identifiers must be unique")
+        if self.observed_at.utcoffset() is None or self.expires_at.utcoffset() is None:
+            raise ValueError("portfolio registry timestamps must include timezone offsets")
+        if self.expires_at <= self.observed_at:
+            raise ValueError("portfolio registry snapshot expiry must follow observation")
         return self
 
 
@@ -236,16 +293,18 @@ class ReleaseConfiguration(StrictModel):
 
 
 class OptimizationRequest(StrictModel):
-    schema_version: Literal["2.0"] = "2.0"
+    schema_version: Literal["3.0"] = "3.0"
     optimization_id: str = Field(min_length=3, max_length=128, pattern=r"^[A-Za-z0-9._:-]+$")
     objective: str = Field(
         default="utility feasibility, then Blackwell-minimal disclosure, then cost and utility tie-breaks",
         min_length=1,
         max_length=2048,
     )
+    selection_policy: SelectionPolicy
     trust_profile: TrustProfile
+    active_policy: PolicyReference
     authorization_expires_at: datetime
-    portfolio_registry_head_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
+    portfolio_registry: PortfolioRegistrySnapshot
     experiments: tuple[FiniteExperiment, ...] = Field(min_length=1)
     garbling_certificates: tuple[GarblingCertificate, ...] = ()
     configurations: tuple[ReleaseConfiguration, ...] = Field(min_length=1)
@@ -284,14 +343,25 @@ class CandidateEvaluation(StrictModel):
 
 
 class OptimizationReport(StrictModel):
-    schema_version: Literal["2.0"] = "2.0"
+    schema_version: Literal["3.0"] = "3.0"
     optimization_id: str
     created_at: datetime
     expires_at: datetime
     request_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
+    policy_id: str
+    policy_version: str
     policy_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
     trust_profile: TrustProfile
+    portfolio_registry_id: str
     portfolio_registry_head_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
+    portfolio_registry_sequence: int = Field(ge=0)
+    composition_domain_id: str
+    composition_scope: Literal[
+        OptimizationCompositionScope.PORTFOLIO_REGISTRY_BOUND
+    ] = OptimizationCompositionScope.PORTFOLIO_REGISTRY_BOUND
+    selected_interface_assurance: InterfaceAssurance | None = None
+    gateway_interface_conformance_required: Literal[True] = True
+    authorization_eligible: Literal[False] = False
     outcome: OptimizationOutcome
     selected_configuration_id: str | None
     selected_configuration_sha256: str | None = Field(default=None, pattern=r"^[0-9a-f]{64}$")
@@ -300,12 +370,15 @@ class OptimizationReport(StrictModel):
     selected_release_artifact_sha256: str | None = Field(default=None, pattern=r"^[0-9a-f]{64}$")
     selected_release_interface_sha256: str | None = Field(default=None, pattern=r"^[0-9a-f]{64}$")
     selected_portfolio_status: PortfolioAssuranceStatus | None = None
+    selected_covered_release_ids: tuple[str, ...] = ()
     selected_control_ids: tuple[str, ...] = ()
     fail_safe_gate_passed: bool
     assurance_frontier_configuration_ids: tuple[str, ...]
     candidate_evaluations: tuple[CandidateEvaluation, ...]
-    selection_rule: str
+    selection_policy: SelectionPolicy
+    selection_policy_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
     reasons: tuple[str, ...]
+    runtime_identity: RuntimeIdentity
     engine_version: str
 
     @model_validator(mode="after")
@@ -334,17 +407,42 @@ class OptimizationReport(StrictModel):
             any(value is not None for value in selected) or self.selected_control_ids
         ):
             raise ValueError("a failing gate must not authorize a release or controls")
+        if self.fail_safe_gate_passed and not self.selected_covered_release_ids:
+            raise ValueError("a passing gate requires an explicit covered release set")
+        if not self.fail_safe_gate_passed and self.selected_covered_release_ids:
+            raise ValueError("a failing gate cannot claim a covered release set")
+        if self.selection_policy_sha256 != sha256_bytes(
+            canonical_json_bytes(self.selection_policy)
+        ):
+            raise ValueError("optimization report selection-policy hash does not replay")
+        if self.runtime_identity.component_id != "release_optimizer":
+            raise ValueError("optimization report runtime identity must name release_optimizer")
+        if self.runtime_identity.component_version != "OptimizationReport/3.0":
+            raise ValueError("optimization report runtime identity has the wrong component version")
+        if self.runtime_identity.package_version != self.engine_version:
+            raise ValueError("optimization report engine version does not match its runtime identity")
         return self
 
 
 class SignedOptimizationManifest(StrictModel):
-    schema_version: Literal["2.0"] = "2.0"
+    schema_version: Literal["3.0"] = "3.0"
     optimization_id: str
     request_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
     report_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
+    policy_id: str
+    policy_version: str
     policy_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
     trust_profile: TrustProfile
+    portfolio_registry_id: str
     portfolio_registry_head_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
+    portfolio_registry_sequence: int = Field(ge=0)
+    composition_domain_id: str
+    composition_scope: Literal[
+        OptimizationCompositionScope.PORTFOLIO_REGISTRY_BOUND
+    ] = OptimizationCompositionScope.PORTFOLIO_REGISTRY_BOUND
+    selected_interface_assurance: InterfaceAssurance | None = None
+    gateway_interface_conformance_required: Literal[True] = True
+    authorization_eligible: Literal[False] = False
     outcome: OptimizationOutcome
     selected_configuration_id: str | None
     selected_configuration_sha256: str | None = Field(default=None, pattern=r"^[0-9a-f]{64}$")
@@ -353,8 +451,10 @@ class SignedOptimizationManifest(StrictModel):
     selected_release_artifact_sha256: str | None = Field(default=None, pattern=r"^[0-9a-f]{64}$")
     selected_release_interface_sha256: str | None = Field(default=None, pattern=r"^[0-9a-f]{64}$")
     selected_portfolio_status: PortfolioAssuranceStatus | None = None
+    selected_covered_release_ids: tuple[str, ...] = ()
     selected_control_ids: tuple[str, ...] = ()
     fail_safe_gate_passed: bool
+    selection_policy_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
     created_at: datetime
     expires_at: datetime
     signer_key_id: str = Field(pattern=r"^[0-9a-f]{24}$")
@@ -377,6 +477,10 @@ class SignedOptimizationManifest(StrictModel):
             raise ValueError("a passing optimization manifest requires every selected-release binding")
         if not self.fail_safe_gate_passed and any(value is not None for value in selected):
             raise ValueError("a failing optimization manifest must not authorize a selected release")
+        if self.fail_safe_gate_passed and not self.selected_covered_release_ids:
+            raise ValueError("a passing optimization manifest requires a covered release set")
+        if not self.fail_safe_gate_passed and self.selected_covered_release_ids:
+            raise ValueError("a failing optimization manifest cannot claim a covered release set")
         return self
 
 
@@ -385,13 +489,22 @@ def build_signed_optimization_manifest(
     private_key_path: Path,
 ) -> SignedOptimizationManifest:
     unsigned = {
-        "schema_version": "2.0",
+        "schema_version": "3.0",
         "optimization_id": report.optimization_id,
         "request_sha256": report.request_sha256,
         "report_sha256": sha256_bytes(canonical_json_bytes(report)),
+        "policy_id": report.policy_id,
+        "policy_version": report.policy_version,
         "policy_sha256": report.policy_sha256,
         "trust_profile": report.trust_profile,
+        "portfolio_registry_id": report.portfolio_registry_id,
         "portfolio_registry_head_sha256": report.portfolio_registry_head_sha256,
+        "portfolio_registry_sequence": report.portfolio_registry_sequence,
+        "composition_domain_id": report.composition_domain_id,
+        "composition_scope": report.composition_scope,
+        "selected_interface_assurance": report.selected_interface_assurance,
+        "gateway_interface_conformance_required": report.gateway_interface_conformance_required,
+        "authorization_eligible": report.authorization_eligible,
         "outcome": report.outcome,
         "selected_configuration_id": report.selected_configuration_id,
         "selected_configuration_sha256": report.selected_configuration_sha256,
@@ -400,8 +513,10 @@ def build_signed_optimization_manifest(
         "selected_release_artifact_sha256": report.selected_release_artifact_sha256,
         "selected_release_interface_sha256": report.selected_release_interface_sha256,
         "selected_portfolio_status": report.selected_portfolio_status,
+        "selected_covered_release_ids": report.selected_covered_release_ids,
         "selected_control_ids": report.selected_control_ids,
         "fail_safe_gate_passed": report.fail_safe_gate_passed,
+        "selection_policy_sha256": report.selection_policy_sha256,
         "created_at": report.created_at,
         "expires_at": report.expires_at,
         "signature_algorithm": "Ed25519",
@@ -420,9 +535,18 @@ def verify_signed_optimization_manifest(
     bindings = {
         "optimization_id": report.optimization_id,
         "request_sha256": report.request_sha256,
+        "policy_id": report.policy_id,
+        "policy_version": report.policy_version,
         "policy_sha256": report.policy_sha256,
         "trust_profile": report.trust_profile,
+        "portfolio_registry_id": report.portfolio_registry_id,
         "portfolio_registry_head_sha256": report.portfolio_registry_head_sha256,
+        "portfolio_registry_sequence": report.portfolio_registry_sequence,
+        "composition_domain_id": report.composition_domain_id,
+        "composition_scope": report.composition_scope,
+        "selected_interface_assurance": report.selected_interface_assurance,
+        "gateway_interface_conformance_required": report.gateway_interface_conformance_required,
+        "authorization_eligible": report.authorization_eligible,
         "outcome": report.outcome,
         "selected_configuration_id": report.selected_configuration_id,
         "selected_configuration_sha256": report.selected_configuration_sha256,
@@ -431,8 +555,10 @@ def verify_signed_optimization_manifest(
         "selected_release_artifact_sha256": report.selected_release_artifact_sha256,
         "selected_release_interface_sha256": report.selected_release_interface_sha256,
         "selected_portfolio_status": report.selected_portfolio_status,
+        "selected_covered_release_ids": report.selected_covered_release_ids,
         "selected_control_ids": report.selected_control_ids,
         "fail_safe_gate_passed": report.fail_safe_gate_passed,
+        "selection_policy_sha256": report.selection_policy_sha256,
         "created_at": report.created_at,
         "expires_at": report.expires_at,
     }
@@ -465,12 +591,35 @@ class ReleaseOptimizer:
         now = datetime.now(timezone.utc)
         if request.authorization_expires_at <= now:
             raise ValueError("requested release authorization is already expired")
-        if request.trust_profile is TrustProfile.ADVERSARIAL_SUPPLY_CHAIN:
+        registry_snapshot = self._verify_portfolio_registry(
+            request.portfolio_registry,
+            base_dir,
+            now,
+        )
+        active_policy_path = verify_source_file(
+            request.active_policy.policy_path,
+            request.active_policy.policy_sha256,
+            base_dir,
+        )
+        active_policy = PolicyBundle.model_validate_json(
+            active_policy_path.read_text(encoding="utf-8")
+        )
+        if (
+            request.active_policy.policy_id != active_policy.policy_id
+            or request.active_policy.policy_version != active_policy.policy_version
+        ):
+            raise ValueError("active policy reference does not match its policy bundle")
+        if active_policy.effective_from > now:
+            raise ValueError("active optimization policy is not yet effective")
+        if active_policy.expires_at is not None and active_policy.expires_at <= now:
+            raise ValueError("active optimization policy has expired")
+        selection_policy_sha256 = sha256_bytes(
+            canonical_json_bytes(request.selection_policy)
+        )
+        if selection_policy_sha256 not in active_policy.accepted_selection_policy_sha256s:
             raise ValueError(
-                "adversarial_supply_chain is unsupported without sandboxed independent artifact replay; "
-                "the gate refuses to downgrade this trust boundary"
+                "selection policy is not authorized by the active policy bundle"
             )
-
         experiments = {item.experiment_id: item for item in request.experiments}
         certificates = {item.certificate_id: item for item in request.garbling_certificates}
         verifications: dict[str, GarblingVerification] = {}
@@ -514,7 +663,7 @@ class ReleaseOptimizer:
                 configuration,
                 report,
                 experiments,
-                request.portfolio_registry_head_sha256,
+                registry_snapshot,
                 base_dir,
             )
             expiries.extend(control.valid_until for control in configuration.controls)
@@ -527,13 +676,21 @@ class ReleaseOptimizer:
                     experiments,
                     certificates,
                     verifications,
-                    request.portfolio_registry_head_sha256,
+                    registry_snapshot,
                     now,
                     rational_portfolio_bounds,
                 )
             )
-        if len(policy_hashes) != 1:
-            raise ValueError("all release configurations must be assessed under the same policy hash")
+        if policy_hashes != {request.active_policy.policy_sha256}:
+            raise ValueError(
+                "every release configuration must use the authority-declared active policy hash"
+            )
+        if any(
+            report.policy_id != active_policy.policy_id
+            or report.policy_version != active_policy.policy_version
+            for report in reports.values()
+        ):
+            raise ValueError("assessment report policy identity is stale or mismatched")
 
         feasible_ids = {item.configuration_id for item in evaluations if item.feasible}
         exact_reachability = self._transitive_reachability(experiments, exact_edges)
@@ -554,12 +711,7 @@ class ReleaseOptimizer:
         if candidates:
             selected = min(
                 candidates,
-                key=lambda item: (
-                    item.implementation_cost,
-                    -item.utility.lower_bound,
-                    not item.is_proposed_configuration,
-                    item.configuration_id,
-                ),
+                key=lambda item: self._selection_key(item, request.selection_policy),
             )
             outcome = (
                 OptimizationOutcome.RELEASE_AS_PROPOSED
@@ -601,9 +753,18 @@ class ReleaseOptimizer:
             created_at=now,
             expires_at=expires_at,
             request_sha256=sha256_bytes(canonical_json_bytes(request)),
-            policy_sha256=next(iter(policy_hashes)),
+            policy_id=active_policy.policy_id,
+            policy_version=active_policy.policy_version,
+            policy_sha256=request.active_policy.policy_sha256,
             trust_profile=request.trust_profile,
-            portfolio_registry_head_sha256=request.portfolio_registry_head_sha256,
+            portfolio_registry_id=registry_snapshot.registry_id,
+            portfolio_registry_head_sha256=registry_snapshot.registry_head_sha256,
+            portfolio_registry_sequence=registry_snapshot.registry_sequence,
+            composition_domain_id=registry_snapshot.composition_domain_id,
+            selected_interface_assurance=(
+                reports[selected.configuration_id].assessment_scope.interface_assurance
+                if selected else None
+            ),
             outcome=outcome,
             selected_configuration_id=selected.configuration_id if selected else None,
             selected_configuration_sha256=(
@@ -616,17 +777,43 @@ class ReleaseOptimizer:
                 sha256_bytes(canonical_json_bytes(selected.release_interface)) if selected else None
             ),
             selected_portfolio_status=(selected.portfolio.status if selected else None),
+            selected_covered_release_ids=(
+                selected.portfolio.registered_release_ids if selected else ()
+            ),
             selected_control_ids=(tuple(control.control_id for control in selected.controls) if selected else ()),
             fail_safe_gate_passed=selected is not None,
             assurance_frontier_configuration_ids=frontier,
             candidate_evaluations=tuple(evaluations),
-            selection_rule=(
-                "privacy and utility feasibility; exact Blackwell-minimal information surface; "
-                "minimum implementation cost; maximum utility lower bound; stable identifier"
-            ),
+            selection_policy=request.selection_policy,
+            selection_policy_sha256=selection_policy_sha256,
             reasons=reasons,
+            runtime_identity=current_runtime_identity(
+                component_id="release_optimizer",
+                component_version="OptimizationReport/3.0",
+                algorithm_profile={
+                    "frontier_construction": "verified submitted garbling certificates and graph reachability",
+                    "ordinary_comparison_arithmetic": "Python binary64",
+                    "scipy_invoked_by_optimizer": False,
+                    "mrap_g7_exact_or_outward_clearance_eligible": False,
+                    "selection_policy_authorized_by_active_policy": True,
+                    "selection_order": [criterion.value for criterion in request.selection_policy.tie_break_order],
+                },
+            ),
             engine_version=VERSION,
         )
+
+    @staticmethod
+    def _selection_key(
+        configuration: ReleaseConfiguration,
+        policy: SelectionPolicy,
+    ) -> tuple[float | bool | str, ...]:
+        values: dict[SelectionCriterion, float | bool | str] = {
+            SelectionCriterion.IMPLEMENTATION_COST_ASCENDING: configuration.implementation_cost,
+            SelectionCriterion.UTILITY_LOWER_BOUND_DESCENDING: -configuration.utility.lower_bound,
+            SelectionCriterion.PREFER_PROPOSED_CONFIGURATION: not configuration.is_proposed_configuration,
+            SelectionCriterion.CONFIGURATION_ID_ASCENDING: configuration.configuration_id,
+        }
+        return tuple(values[criterion] for criterion in policy.tie_break_order)
 
     @staticmethod
     def _load_assessment(
@@ -716,13 +903,23 @@ class ReleaseOptimizer:
         configuration: ReleaseConfiguration,
         report: AssessmentReport,
         experiments: dict[str, FiniteExperiment],
-        registry_head_sha256: str,
+        registry_snapshot: PortfolioRegistrySnapshot,
         base_dir: Path,
     ) -> dict[str, Fraction]:
         portfolio = configuration.portfolio
         rational_bounds: dict[str, Fraction] = {}
-        if portfolio.registry_head_sha256 != registry_head_sha256:
+        if portfolio.registry_head_sha256 != registry_snapshot.registry_head_sha256:
             raise ValueError(f"portfolio record for {configuration.configuration_id} uses another registry head")
+        if portfolio.registry_sequence != registry_snapshot.registry_sequence:
+            raise ValueError(f"portfolio record for {configuration.configuration_id} uses another registry sequence")
+        if portfolio.composition_domain_id != registry_snapshot.composition_domain_id:
+            raise ValueError(f"portfolio record for {configuration.configuration_id} uses another composition domain")
+        expected_release_ids = set(registry_snapshot.active_release_ids) | {report.release_id}
+        if set(portfolio.registered_release_ids) != expected_release_ids:
+            raise ValueError(
+                f"portfolio record for {configuration.configuration_id} does not cover exactly "
+                "the active registry snapshot plus the candidate release"
+            )
         expected_pairs = tuple(sorted(
             f"{decision.population_scope_id}|{decision.threat_id}"
             for decision in report.decisions
@@ -739,7 +936,7 @@ class ReleaseOptimizer:
             source,
             (
                 "status", "composition_domain_id", "population_secret_pairs",
-                "registry_head_sha256", "registered_release_ids", "method",
+                "registry_head_sha256", "registry_sequence", "registered_release_ids", "method",
                 "joint_upper_bounds", "joint_experiment_ids",
             ),
         )
@@ -912,13 +1109,40 @@ class ReleaseOptimizer:
             raise ValueError("search-space certificate does not enumerate exactly the submitted configurations")
 
     @staticmethod
+    def _verify_portfolio_registry(
+        snapshot: PortfolioRegistrySnapshot,
+        base_dir: Path,
+        now: datetime,
+    ) -> PortfolioRegistrySnapshot:
+        source = verify_source_file(snapshot.source_path, snapshot.source_sha256, base_dir)
+        verify_provenance_binding(
+            snapshot,
+            source,
+            (
+                "schema_version",
+                "registry_id",
+                "registry_head_sha256",
+                "registry_sequence",
+                "composition_domain_id",
+                "active_release_ids",
+                "observed_at",
+                "expires_at",
+            ),
+        )
+        if snapshot.expires_at <= now:
+            raise ValueError("portfolio registry snapshot has expired")
+        if snapshot.observed_at > now:
+            raise ValueError("portfolio registry snapshot is dated in the future")
+        return snapshot
+
+    @staticmethod
     def _evaluate_configuration(
         configuration: ReleaseConfiguration,
         report: AssessmentReport,
         experiments: dict[str, FiniteExperiment],
         certificates: dict[str, GarblingCertificate],
         verifications: dict[str, GarblingVerification],
-        registry_head_sha256: str,
+        registry_snapshot: PortfolioRegistrySnapshot,
         now: datetime,
         rational_portfolio_bounds: dict[str, Fraction],
     ) -> CandidateEvaluation:
@@ -954,8 +1178,10 @@ class ReleaseOptimizer:
             reasons.append("utility certificate does not retain replayable raw evidence")
         if configuration.portfolio.status is PortfolioAssuranceStatus.UNASSESSED:
             reasons.append("portfolio composition is explicitly unassessed")
-        if configuration.portfolio.registry_head_sha256 != registry_head_sha256:
+        if configuration.portfolio.registry_head_sha256 != registry_snapshot.registry_head_sha256:
             reasons.append("portfolio registry head changed")
+        if configuration.portfolio.registry_sequence != registry_snapshot.registry_sequence:
+            reasons.append("portfolio registry sequence changed")
         expired_controls = [control.control_id for control in configuration.controls if control.valid_until <= now]
         if expired_controls:
             reasons.append(f"control certificates have expired: {sorted(expired_controls)}")

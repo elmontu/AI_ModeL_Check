@@ -4,7 +4,8 @@ from dataclasses import dataclass
 from enum import StrEnum
 from typing import Iterable
 
-from .models import AssessmentRequest, ThreatKind
+from .integrity import canonical_json_bytes, sha256_bytes
+from .models import AssessmentRequest, DpInput, ThreatKind, TreeLinkageInput
 
 
 class CoverageStatus(StrEnum):
@@ -100,6 +101,17 @@ def assess_request_model_coverage(request: AssessmentRequest) -> dict[str, objec
         reasons.append("interactive transcript clearance is deliberately unsupported")
     if entry.status is not CoverageStatus.GENERIC_CORE_APPLICABLE:
         reasons.append("one or more dedicated family/modality workers are required")
+    default_clearing_paths = _default_clearing_paths(request)
+    threats_without_default_clearing_path = sorted(
+        threat.threat_id
+        for threat in request.threats
+        if threat.mandatory and not default_clearing_paths[threat.threat_id]
+    )
+    if threats_without_default_clearing_path:
+        advisories.append(
+            "the shipped analyzer roster has no candidate clearing path for one or more "
+            "declared mandatory threats; floor and screen evidence can still block or diagnose"
+        )
     return {
         "release_id": request.release.release_id,
         "submitted_model_family": request.release.model_family,
@@ -107,13 +119,70 @@ def assess_request_model_coverage(request: AssessmentRequest) -> dict[str, objec
         "model_profile": profile.model_dump(mode="json"),
         "declared_threats": sorted(kind.value for kind in declared),
         "missing_recommended_threats": missing,
-        "portfolio_release_count": 1 + len(request.release.previous_release_ids),
-        "portfolio_assessment_required": bool(request.release.previous_release_ids),
+        "declared_lineage_release_count": len(request.release.previous_release_ids),
+        "portfolio_assessment_required": True,
+        "authoritative_portfolio_registry_required": True,
+        "default_clearing_paths": default_clearing_paths,
+        "threats_without_default_clearing_path": threats_without_default_clearing_path,
         "coverage_ready": not reasons,
         "can_clear": False,
         "advisories": advisories,
         "reasons": reasons or ["catalog coverage is complete, but scientific evidence and the final policy gate remain required"],
     }
+
+
+def _default_clearing_paths(request: AssessmentRequest) -> dict[str, list[str]]:
+    """Report candidate paths in the shipped roster; never claim a release verdict.
+
+    A listed path still has to produce a validated ceiling no greater than policy tolerance.
+    Both paths assess the submitter-declared interface only; deployment conformance remains a
+    separate gateway obligation.
+    """
+
+    threats = {threat.threat_id: threat for threat in request.threats}
+    paths: dict[str, list[str]] = {threat_id: [] for threat_id in threats}
+    interface_sha256 = sha256_bytes(canonical_json_bytes(request.release.interface))
+    for value in request.analyzer_inputs:
+        threat = threats[value.threat_id]
+        if isinstance(value, TreeLinkageInput):
+            if (
+                threat.kind is ThreatKind.LINKAGE
+                and value.recipient_has_candidate_roster
+                and value.recipient_has_target_signal
+                and value.complete_interface_coverage
+                and value.observed_interface_sha256 == interface_sha256
+            ):
+                paths[threat.threat_id].append(
+                    "tree_recipient_exact_complete_declared_interface"
+                )
+            continue
+        if not isinstance(value, DpInput):
+            continue
+        base_valid = (
+            value.accountant_replayed
+            and value.complete_pipeline
+            and value.protected_unit == request.release.protected_unit
+        )
+        metric_valid = False
+        if threat.kind is ThreatKind.MEMBERSHIP:
+            metric_valid = threat.decision_metric == "equal_prior_membership_success" or (
+                threat.decision_metric == "membership_tpr_at_fpr"
+                and value.fpr is not None
+                and abs(value.fpr - threat.metric_parameters["target_fpr"]) <= 1e-15
+            )
+        elif threat.decision_metric == "finite_secret_exact_guess_success":
+            policy_prior_cap = threat.metric_parameters.get("maximum_secret_prior")
+            metric_valid = (
+                value.secret_cardinality is not None
+                and value.maximum_secret_prior is not None
+                and value.pairwise_secret_relation_validated
+                and value.secret_prior_bound_validated
+                and policy_prior_cap is not None
+                and value.maximum_secret_prior <= policy_prior_cap + 1e-15
+            )
+        if base_valid and metric_valid:
+            paths[threat.threat_id].append("dp_complete_pipeline_declared_interface")
+    return paths
 
 
 def known_model_family_ids() -> Iterable[str]:

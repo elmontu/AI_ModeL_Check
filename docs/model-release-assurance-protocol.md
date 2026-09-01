@@ -175,14 +175,25 @@ where:
 - \(K_n\) is the role/key/attestation trust registry; and
 - \(V_n\) contains revocations, suspensions, incidents, and mandatory reassessment events.
 
-The state head is
+Let (c_n=H(\mathsf{Canonical}(\Delta_n))), where \(\Delta_n\) is the complete
+committed transition. The portable release-commit recurrence is
 
 \[
-h_n=H(\texttt{"MRAP-STATE-1"}\parallel n\parallel h_{n-1}\parallel
-\mathsf{Canonical}(\Delta_n)),
+h_n=H(\mathsf{Canonical}(\{\texttt{domain}:\texttt{"MRAP-STATE-1"},
+\texttt{committed\_sequence}:n,\texttt{previous\_head\_sha256}:h_{n-1},
+\texttt{release\_id}:r,\texttt{release\_instance\_sha256}:i,
+\texttt{portfolio\_commit\_sha256}:c_n\})).
 \]
 
-where \(\Delta_n\) is the complete committed transition. An authorized auditor MUST be able to obtain the transition, its signature, and an inclusion/consistency proof or equivalent independently replayable history. An append-only Merkle log is a suitable transparency mechanism; [RFC 9162](https://www.rfc-editor.org/rfc/rfc9162.html) supplies a studied construction, but logging alone does not determine whether a release is safe.
+The verifier MUST require (n=n_{previous}+1), recompute this head, and bind the
+release and release-instance identities shown above. An authorized auditor MUST also obtain
+\(\Delta_n\), verify that its canonical digest equals \(c_n\), establish that it is the complete
+semantic transition, and obtain its signature and an inclusion/consistency proof or equivalent
+independently replayable history. The offline Python verifier replays the recurrence from the
+declared portfolio-commit digest but does not establish semantic completeness or authoritative
+registry inclusion. An append-only Merkle log is a suitable transparency mechanism;
+[RFC 9162](https://www.rfc-editor.org/rfc/rfc9162.html) supplies a studied construction, but
+logging alone does not determine whether a release is safe.
 
 ### 6.2 Immutable release instance
 
@@ -219,6 +230,8 @@ Changing any field creates a new instance. A stale-head retry MUST rebase and re
 
 Each message MUST reference all immediate predecessors needed to replay its decision. Reports MUST retain negative and inconclusive evidence; a producer cannot omit an inconvenient mandatory result and still satisfy message completeness.
 
+The repository's `AssessmentReport` is deliberately scoped to one proposed release. Its `previous_release_ids` field records declared lineage only; it is not an authoritative inventory and cannot satisfy `G9 Portfolio`. A conforming `OptimizationReport` used at `G9` MUST instead bind the authoritative registry snapshot, its current head, the exact active release identifiers, the candidate release, and the policy snapshot used for joint evaluation. Neither report verifies a live endpoint. Gateway conformance is established only by the separate `ActivationReceipt` after the registry commit, including remeasurement of every recipient-observable channel named by the complete-interface commitment.
+
 ## 8. Normative state machine
 
 Each instance has exactly one current protocol state. The registry, not a client-side report, is authoritative for `AUTHORIZED`, `ACTIVE`, `SUSPENDED`, `EXPIRED`, and `REVOKED`.
@@ -228,14 +241,14 @@ Each instance has exactly one current protocol state. The registry, not a client
 | `DRAFT` | valid `Registration` by `SO` | `REGISTERED` | Identity, legitimate purpose, prohibited uses, accountable owner, affected parties, schema, immutable artifact/interface/candidate hashes, policy and current head captured |
 | `REGISTERED` | approved `EvidencePlan` | `PLAN_FROZEN` | Threat, population and governance-evidence completeness; consultation/impact plan registered; error allocated before observation; workers and stopping rules fixed |
 | `PLAN_FROZEN` | complete `EvidenceBundle` set | `EVIDENCE_FROZEN` | Source, context, worker, positive-control, raw-data and plan bindings verified; collection closed |
-| `EVIDENCE_FROZEN` | signed `AssessmentReport` | `ASSESSED` | Every mandatory candidate/threat cell is `clear`, `block`, or `inconclusive`; arithmetic/certificates replay |
-| `ASSESSED` | signed `OptimizationReport` | `OPTIMIZED` | Deterministic feasible-set evaluation; utility before minimization; exhaustive proof if outcome is `reject` |
+| `EVIDENCE_FROZEN` | signed `AssessmentReport` | `ASSESSED` | Every mandatory candidate/threat cell is `clear`, `block`, or `inconclusive`; arithmetic/certificates replay; report remains single-release, declared-interface evidence and is not an authorization |
+| `ASSESSED` | signed `OptimizationReport` | `OPTIMIZED` | Deterministic feasible-set evaluation; utility before minimization; exhaustive proof if outcome is `reject`; current authoritative registry snapshot and complete candidate-plus-active portfolio bound |
 | `OPTIMIZED` | valid commit request by `AR` | `COMMIT_PENDING` | Reasoned governance decision, authority, independent challenge, conflicts, affected-party evidence, objections/disposition, conditions and retirement owner complete; no mandatory gate overridden; selected candidate unchanged; evidence and policy live |
 | `COMMIT_PENDING` | successful registry CAS | `AUTHORIZED` | Expected head matches; complete joint portfolio and budgets valid; authorization and state delta committed atomically |
 | `AUTHORIZED` | valid gateway activation | `ACTIVE` | Registry membership/current status checked; served bytes/interface/controls exactly match; activation lease issued |
 | `ACTIVE` | material change, monitor breach, lease loss | `SUSPENDED` | Gateway stops new access before or atomically with event recording |
-| `ACTIVE` or `SUSPENDED` | expiry | `EXPIRED` | Gateway stops new access; retained outputs follow records policy |
-| any non-revoked state | authorized revocation | `REVOKED` | Registry commits revocation and gateway denies new access |
+| `AUTHORIZED`, `ACTIVE`, or `SUSPENDED` | expiry | `EXPIRED` | An unused authorization becomes unusable and the gateway stops new access; retained outputs follow records policy |
+| any nonterminal, non-revoked state | authorized revocation | `REVOKED` | Registry commits revocation and gateway denies new access |
 | any pre-authorization state | incomplete/remediable result | `REDESIGN_REQUIRED` | No authorization; a changed proposal starts a new immutable instance |
 | `ASSESSED` or `OPTIMIZED` | proved infeasibility under complete candidate set | `REJECTED` | Exhaustive-search premise is certified; otherwise use `REDESIGN_REQUIRED` |
 | any state before `AUTHORIZED` | stale head, replay, conflict, timeout | `ABORTED` | No release; rebase against the new state and repeat affected stages |
@@ -350,7 +363,15 @@ Commit(request):
       require selected configuration and evidence remain live
       re-evaluate complete portfolio and all cumulative ledgers
       require budget_delta is available
-      new_head = H("MRAP-STATE-1", sequence+1, old_head, canonical(entry))
+      portfolio_commit_sha256 = H(Canonical(entry))
+      new_head = H(Canonical({
+          domain: "MRAP-STATE-1",
+          committed_sequence: sequence+1,
+          previous_head_sha256: old_head,
+          release_id: request.release_id,
+          release_instance_sha256: request.release_instance_sha256,
+          portfolio_commit_sha256: portfolio_commit_sha256
+      }))
       authorization = Sign_PR(entry, old_head, new_head, sequence+1)
       atomically persist entry, budget_delta, authorization and new_head
   publish AuthorizationReceipt plus inclusion/consistency proof
@@ -555,9 +576,18 @@ Watermark and canary tests remain scheme- and protocol-specific evidence. They d
 
 Only a deployment conforming to all five levels may describe a release as authorized under MRAP/1.0. The current CLI outputs MUST be described as offline assessments, selections, certificates, or structural/authenticated transcript replays. They MUST NOT be relabelled `AuthorizationReceipt` or used directly by a serving gateway.
 
-The repository includes a typed `ReleaseProtocolRun` contract version 1.1 and `release-protocol-verify` command. It replays the normative state machine, actor/role permissions, artifact-producer roles, exact-decimal assurance spending, event hash chain, assessment/selection preconditions, strict registry-sequence advancement, atomic compare-and-swap assertion, deployment digest equality, expiry, monitoring, suspension, revocation, and abort behavior. By default it also rehashes every referenced artifact file. The `structural_v1` profile does not authenticate actors. The `authenticated_v1` profile verifies domain-separated release-bound Ed25519 signatures for every event and artifact declaration against an external public-key trust store and rejects supplied compromised-key identifiers.
+The repository includes a typed `ReleaseProtocolRun` contract version 1.1 and `release-protocol-verify` command. It replays the normative state machine, actor/role permissions, artifact-producer roles, exact-decimal per-run assurance spending, event hash chain, assessment/selection preconditions, exact registry-sequence increment, the release-bound `MRAP-STATE-1` commitment recurrence, atomic compare-and-swap assertion, deployment digest equality, expiry, monitoring, suspension, revocation, and abort behavior. By default it also rehashes every referenced artifact file. Recomputing the head proves consistency with the supplied portfolio-commit digest; it does not prove the committed artifact is the complete semantic registry delta or that an authoritative registry included it. The `structural_v1` profile does not authenticate actors. The `authenticated_v1` profile verifies domain-separated release-bound Ed25519 signatures for every event and artifact declaration against an external public-key trust store and rejects supplied compromised-key identifiers.
 
 Both profiles remain conformance harnesses rather than an authoritative protocol service: they do not issue credentials, discover compromise, contact or implement a linearizable registry, enforce a gateway, verify remote attestations, or establish that the scientific contents of an artifact are true. A correspondence manifest prevents silent role/state/action drift, and adversarial mutation tests exercise concrete rejection behavior, but the Python verifier has not been proved to refine the Lean model.
+
+The current ordinary assessment and selection contracts retain Python binary64 fields and comparisons.
+`ReleaseOptimizer` does not invoke SciPy—it replays supplied transfer certificates and uses graph
+reachability—but that fact does not make its ordinary comparisons exact. Whenever a clearance result
+depends on an unresolved binary64 boundary, G7 is not evidenced, the result must remain
+`INCONCLUSIVE`, and the deployment cannot claim MRAP conformance until exact, approved-decimal, or
+outward-rounded replay closes the boundary. Cross-release accumulation of statistical, privacy,
+query, and operational budgets also remains an authoritative-registry obligation; per-run transcript
+fields do not implement the lifetime ledgers required by Section 11.
 
 Supply-chain attestations SHOULD link each independent actor's materials and products in the spirit of [in-toto](https://www.usenix.org/conference/usenixsecurity19/presentation/torres-arias), while the registry separately enforces model-release policy and state. NIST's [AI Risk Management Framework](https://doi.org/10.6028/NIST.AI.100-1) motivates lifecycle-wide governance and monitoring, but MRAP's typed messages, scoped formal invariants and conditional assurance argument are project-specific.
 
