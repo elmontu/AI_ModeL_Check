@@ -157,7 +157,10 @@ def verify(lake: str) -> None:
         raise RuntimeError(
             f"expected Lean {EXPECTED_LEAN_VERSION}; received: {version.strip()}"
         )
-    _run([lake, "build"])
+    # Main.lean audits the intentionally non-public mutation witnesses.  They
+    # are not re-exported by the default MRAP library target, so a clean build
+    # must request that module explicitly before invoking Lean on Main.lean.
+    _run([lake, "build", "MRAP", "MRAP.Mutants"])
     audit_output = _run([lake, "env", "lean", "Main.lean"])
     _audit_axiom_output(audit_output)
     print("Formal MRAP verification passed with the approved axiom boundary.")

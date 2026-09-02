@@ -91,6 +91,15 @@ class FormalVerificationArtifactTests(unittest.TestCase):
         self.assertNotIn("import MRAP.Mutants", public_umbrella)
         self.assertIn("import MRAP.Mutants", audit_entry)
 
+    def test_clean_audit_build_requests_non_public_mutants(self) -> None:
+        wrapper = (ROOT / "scripts" / "verify_formal_protocol.py").read_text(
+            encoding="utf-8"
+        )
+        reproduction = (FORMAL / "README.md").read_text(encoding="utf-8")
+        expected_build = '"build", "MRAP", "MRAP.Mutants"'
+        self.assertIn(expected_build, wrapper)
+        self.assertIn("lake build MRAP MRAP.Mutants", reproduction)
+
 
 if __name__ == "__main__":
     unittest.main()

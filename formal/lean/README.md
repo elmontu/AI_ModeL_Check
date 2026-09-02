@@ -30,7 +30,7 @@ audit artifacts and are intentionally not re-exported by the public library.
 From this directory:
 
 ```bash
-lake build
+lake build MRAP MRAP.Mutants
 lake env lean Main.lean
 ```
 
