@@ -1,8 +1,10 @@
 {
   "configuration_id": "bounded-api-release",
   "artifact_sha256": "2f42b587627c5b6c4447d781b57a47082743f029b475f560a574553abcedfdd5",
-  "interface_sha256": "cdfd0beca66fca75add4570feaf641261b007753cd786718f204b94b3c58700a",
-  "population_scope_sha256s": ["d0ceafb482b5ed133cd89c765ec4e9d228f4c14bf07fac3f4aa67297a79ed5e8"],
+  "interface_sha256": "5e4d4114d575d9b556f4df570e473f37f6147cd34b0558ff076cd4db797ef994",
+  "population_scope_sha256s": [
+    "f85f632a9ac034ed0bd4f21cd3256729443a901de4ab95d89c52898615f25604"
+  ],
   "evaluation_split_sha256": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
   "metric": "balanced_accuracy",
   "lower_bound": 0.8,

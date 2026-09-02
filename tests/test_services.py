@@ -7,6 +7,7 @@ from pathlib import Path
 from model_release_assurance.analyzers.llm_watermark import LlmWatermarkAnalyzer
 from model_release_assurance.analyzers.tree import TreeLinkageAnalyzer
 from model_release_assurance.engine import AssuranceEngine
+from model_release_assurance.integrity import canonical_json_bytes, sha256_bytes
 from model_release_assurance.mcp_tools import AssuranceToolService
 from model_release_assurance.models import AssessmentRequest, ReleaseContract, ThreatContract, TreeLinkageInput
 from model_release_assurance.services import (
@@ -41,6 +42,7 @@ class AnalyzerServiceTests(unittest.TestCase):
         self.assertEqual(capabilities["tree_linkage"], (True, True))
         self.assertEqual(capabilities["dp"], (True, False))
         self.assertEqual(capabilities["attack"], (False, True))
+        self.assertEqual(capabilities["attack_battery"], (False, True))
         self.assertEqual(capabilities["controlled_inference"], (False, True))
         self.assertEqual(capabilities["llm_canary"], (False, True))
         self.assertEqual(capabilities["llm_watermark"], (False, False))
@@ -111,13 +113,31 @@ class AnalyzerServiceTests(unittest.TestCase):
 
     def test_mcp_discovery_exposes_non_authorizing_red_team_tools(self) -> None:
         result = AssuranceToolService(ROOT).list_red_team_tools()
-        self.assertEqual(result["contract_version"], "1.0")
+        self.assertEqual(result["contract_version"], "2.0")
+        entries = result["catalog"]["entries"]
         self.assertEqual(
-            {item["name"] for item in result["tools"]},
+            {item["attack_id"] for item in entries},
             {"structural_disclosure", "worst_case_membership"},
         )
-        self.assertTrue(all(not item["can_clear"] for item in result["tools"]))
-        self.assertTrue(all(not item["can_block"] for item in result["tools"]))
+        self.assertTrue(all(not item["can_clear"] for item in entries))
+        self.assertTrue(all(item["decision_authority"] == "none" for item in entries))
+        self.assertEqual(len(result["catalog_sha256"]), 64)
+        self.assertEqual(
+            result["catalog_sha256"],
+            sha256_bytes(canonical_json_bytes(result["catalog"])),
+        )
+
+    def test_mcp_validation_errors_do_not_echo_untrusted_input(self) -> None:
+        sentinel = "secret-model-input-that-must-not-be-reflected"
+        service = AssuranceToolService(ROOT)
+
+        attack_result = service.validate_attack_battery({"payload": sentinel})
+        request_result = service.validate_assessment_request({"payload": sentinel})
+
+        self.assertFalse(attack_result["valid"])
+        self.assertFalse(request_result["valid"])
+        self.assertNotIn(sentinel, json.dumps(attack_result))
+        self.assertNotIn(sentinel, json.dumps(request_result))
 
     def test_engine_rejects_remote_service_identity_escalation(self) -> None:
         raw = json.loads((ROOT / "examples" / "request.json").read_text(encoding="utf-8"))

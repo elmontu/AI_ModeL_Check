@@ -1,0 +1,7 @@
+{
+  "analyzer": "attack_battery",
+  "configuration_version": "1.0.0",
+  "translation": "typed battery results to positive-control-guarded floor records",
+  "multiplicity": "derived from every blocking run in the complete frozen battery",
+  "authority": "floor_or_screen_only"
+}

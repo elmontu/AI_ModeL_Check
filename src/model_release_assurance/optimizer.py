@@ -293,7 +293,7 @@ class ReleaseConfiguration(StrictModel):
 
 
 class OptimizationRequest(StrictModel):
-    schema_version: Literal["3.0"] = "3.0"
+    schema_version: Literal["4.0"] = "4.0"
     optimization_id: str = Field(min_length=3, max_length=128, pattern=r"^[A-Za-z0-9._:-]+$")
     objective: str = Field(
         default="utility feasibility, then Blackwell-minimal disclosure, then cost and utility tie-breaks",
@@ -343,7 +343,7 @@ class CandidateEvaluation(StrictModel):
 
 
 class OptimizationReport(StrictModel):
-    schema_version: Literal["3.0"] = "3.0"
+    schema_version: Literal["4.0"] = "4.0"
     optimization_id: str
     created_at: datetime
     expires_at: datetime
@@ -417,7 +417,7 @@ class OptimizationReport(StrictModel):
             raise ValueError("optimization report selection-policy hash does not replay")
         if self.runtime_identity.component_id != "release_optimizer":
             raise ValueError("optimization report runtime identity must name release_optimizer")
-        if self.runtime_identity.component_version != "OptimizationReport/3.0":
+        if self.runtime_identity.component_version != "OptimizationReport/4.0":
             raise ValueError("optimization report runtime identity has the wrong component version")
         if self.runtime_identity.package_version != self.engine_version:
             raise ValueError("optimization report engine version does not match its runtime identity")
@@ -425,7 +425,7 @@ class OptimizationReport(StrictModel):
 
 
 class SignedOptimizationManifest(StrictModel):
-    schema_version: Literal["3.0"] = "3.0"
+    schema_version: Literal["4.0"] = "4.0"
     optimization_id: str
     request_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
     report_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
@@ -489,7 +489,7 @@ def build_signed_optimization_manifest(
     private_key_path: Path,
 ) -> SignedOptimizationManifest:
     unsigned = {
-        "schema_version": "3.0",
+        "schema_version": "4.0",
         "optimization_id": report.optimization_id,
         "request_sha256": report.request_sha256,
         "report_sha256": sha256_bytes(canonical_json_bytes(report)),
@@ -789,7 +789,7 @@ class ReleaseOptimizer:
             reasons=reasons,
             runtime_identity=current_runtime_identity(
                 component_id="release_optimizer",
-                component_version="OptimizationReport/3.0",
+                component_version="OptimizationReport/4.0",
                 algorithm_profile={
                     "frontier_construction": "verified submitted garbling certificates and graph reachability",
                     "ordinary_comparison_arithmetic": "Python binary64",

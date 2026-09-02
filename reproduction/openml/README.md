@@ -6,6 +6,29 @@ The benchmark corpus is OpenML-CC18, suite 99. The retained manifest records sui
 
 Raw snapshots, OpenML caches, trained models, and run outputs are ignored by Git because of their size and are absent from the current checkout. A publishable replay must regenerate or restore them and bind their cryptographic hashes in the final study seal.
 
+## Runtime and dependency records
+
+`requirements-experiments.txt` is the resolver constraint set installed by the
+experiment CI tier. It is a compatibility band, not a lock: each CI job checks
+only the package versions selected by the resolver for that job and Python
+version. The ranges do not claim that every permitted version combination has
+been tested, nor do they reconstruct an earlier OpenML environment.
+
+[`runtime.json`](runtime.json) retains a historical, provisional package-version
+tuple from earlier OpenML working records. It is not the current CI profile, a
+dependency lock, or proof that a study run completed. In particular, its
+scikit-learn and XGBoost versions fall outside the current CI compatibility
+band. The runtime nested in `manifests/suite-99-datasets.json` describes manifest
+acquisition, not all later training and analysis stages.
+
+For a new replay, create an isolated environment that satisfies the current
+constraints, capture the exact resolved package and platform inventory actually
+used by every stage, and retain any installation lock or container digest
+created by that replay. Before creating the final study seal, replace the
+provisional `runtime.json` contents with that observed run record and review it
+alongside the regenerated outputs. Until those outputs and bindings exist, the
+checkout contains a registered design rather than sealed empirical evidence.
+
 ## Reproduction stages
 
 ```bash
@@ -162,4 +185,8 @@ python3 \
   scripts/seal_openml_reproduction.py
 ```
 
-The seal is `output/reproduction/openml-study-manifest.json`. It hashes retained configurations, code, schemas, examples, summaries, and analyses. Generated reports remain under the ignored `output/` tree.
+When successfully generated, the seal is
+`output/reproduction/openml-study-manifest.json`. It hashes retained
+configurations, code, schemas, examples, summaries, analyses, and the observed
+runtime record. That file and the generated reports remain under the ignored
+`output/` tree and are absent from this checkout.

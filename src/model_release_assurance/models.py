@@ -20,15 +20,18 @@ class StrictModel(BaseModel):
     )
 
 
-def _canonical_model_sha256(value: BaseModel) -> str:
-    encoded = json.dumps(
-        value.model_dump(mode="json", exclude_none=True),
+def _canonical_model_bytes(value: BaseModel) -> bytes:
+    return json.dumps(
+        value.model_dump(mode="json", exclude_none=False),
         sort_keys=True,
         separators=(",", ":"),
         ensure_ascii=True,
         allow_nan=False,
     ).encode("utf-8")
-    return hashlib.sha256(encoded).hexdigest()
+
+
+def _canonical_model_sha256(value: BaseModel) -> str:
+    return hashlib.sha256(_canonical_model_bytes(value)).hexdigest()
 
 
 class ThreatKind(StrEnum):
@@ -171,26 +174,27 @@ DecisionMetric = Literal[
 
 
 class LlmProtocolContract(StrictModel):
+    schema_version: Literal["1.0"]
     model_provider: str = Field(min_length=1, max_length=256)
     model_identifier: str = Field(min_length=1, max_length=256)
     model_version: str = Field(min_length=1, max_length=256)
     tokenizer_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
     decoding_parameters: dict[str, str | int | float | bool] = Field(min_length=1)
     system_prompt_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
-    adapter_sha256s: tuple[str, ...] = ()
-    retrieval_corpus_sha256: str | None = Field(default=None, pattern=r"^[0-9a-f]{64}$")
-    retriever_config_sha256: str | None = Field(default=None, pattern=r"^[0-9a-f]{64}$")
-    tool_names: tuple[str, ...] = ()
-    tool_policy_sha256: str | None = Field(default=None, pattern=r"^[0-9a-f]{64}$")
+    adapter_sha256s: tuple[str, ...]
+    retrieval_corpus_sha256: str | None = Field(pattern=r"^[0-9a-f]{64}$")
+    retriever_config_sha256: str | None = Field(pattern=r"^[0-9a-f]{64}$")
+    tool_names: tuple[str, ...]
+    tool_policy_sha256: str | None = Field(pattern=r"^[0-9a-f]{64}$")
     memory_mode: Literal["none", "session", "persistent"]
-    memory_ttl_seconds: int | None = Field(default=None, ge=0)
+    memory_ttl_seconds: int | None = Field(ge=0)
     logging_mode: Literal["none", "security_only", "full_transcript"]
     provider_retention_days: int = Field(ge=0)
     maximum_session_tokens: int = Field(gt=0)
     maximum_lifetime_queries: int = Field(gt=0)
     maximum_concurrent_sessions: int = Field(gt=0)
     reset_semantics: str = Field(min_length=1, max_length=2048)
-    filter_bundle_sha256: str | None = Field(default=None, pattern=r"^[0-9a-f]{64}$")
+    filter_bundle_sha256: str | None = Field(pattern=r"^[0-9a-f]{64}$")
     update_policy: Literal["immutable", "versioned_reassessment_required"]
     valid_until: datetime
 
@@ -330,7 +334,7 @@ class TimingChannelContract(StrictModel):
     """Declaration of recipient-observable latency and its mitigation."""
 
     recipient_observable: bool
-    measurement_resolution_milliseconds: float | None = Field(default=None, ge=0.0)
+    measurement_resolution_milliseconds: float | None = Field(ge=0.0)
     includes_queue_time: bool
     mitigation: Literal["not_applicable", "none", "bucketed", "padded", "constant_time_target"]
     mitigation_parameters: dict[str, str | int | float | bool]
@@ -362,7 +366,7 @@ class ErrorChannelContract(StrictModel):
     transport_status: Literal["none", "http", "grpc", "custom"]
     documented_status_codes: tuple[str, ...]
     error_content: Literal["none", "opaque", "structured", "free_text"]
-    error_schema_sha256: str | None = Field(default=None, pattern=r"^[0-9a-f]{64}$")
+    error_schema_sha256: str | None = Field(pattern=r"^[0-9a-f]{64}$")
     retry_metadata: bool
 
     @model_validator(mode="after")
@@ -387,10 +391,10 @@ class ExecutionChannelContract(StrictModel):
     """Batch, concurrency, and cross-request-state semantics."""
 
     batching: Literal["none", "fixed", "variable", "recipient_controlled"]
-    maximum_batch_size: int | None = Field(default=None, gt=0)
-    maximum_concurrent_requests: int | None = Field(default=None, gt=0)
+    maximum_batch_size: int | None = Field(gt=0)
+    maximum_concurrent_requests: int | None = Field(gt=0)
     cross_request_state: Literal["none", "session", "persistent"]
-    cross_request_state_ttl_seconds: int | None = Field(default=None, ge=0)
+    cross_request_state_ttl_seconds: int | None = Field(ge=0)
 
     @model_validator(mode="after")
     def execution_declaration_is_coherent(self) -> ExecutionChannelContract:
@@ -408,6 +412,57 @@ class ExecutionChannelContract(StrictModel):
             self.cross_request_state_ttl_seconds is None or self.cross_request_state_ttl_seconds <= 0
         ):
             raise ValueError("session state requires a positive TTL")
+        return self
+
+
+class RateLimitContract(StrictModel):
+    """Complete recipient-visible and enforcement semantics for request limiting."""
+
+    enabled: bool
+    scope: Literal["none", "per_identity", "per_ip", "per_session", "global", "custom"]
+    requests_per_window: int | None = Field(gt=0)
+    window_seconds: int | None = Field(gt=0)
+    burst_capacity: int | None = Field(gt=0)
+    retry_after_exposed: bool
+    enforcement: Literal[
+        "not_applicable",
+        "local",
+        "shared_strong",
+        "shared_eventual",
+        "custom",
+    ]
+    custom_parameters: dict[str, str | int | float | bool]
+
+    @model_validator(mode="after")
+    def rate_limit_is_complete(self) -> RateLimitContract:
+        if self.enabled:
+            if self.scope == "none" or self.enforcement == "not_applicable":
+                raise ValueError(
+                    "enabled rate limiting requires a scope and enforcement model"
+                )
+            if self.requests_per_window is None or self.window_seconds is None:
+                raise ValueError(
+                    "enabled rate limiting requires a request count and window"
+                )
+            if self.burst_capacity is None:
+                raise ValueError("enabled rate limiting requires a burst capacity")
+        elif (
+            self.scope != "none"
+            or self.requests_per_window is not None
+            or self.window_seconds is not None
+            or self.burst_capacity is not None
+            or self.retry_after_exposed
+            or self.enforcement != "not_applicable"
+            or self.custom_parameters
+        ):
+            raise ValueError(
+                "disabled rate limiting must explicitly declare no enforcement behavior"
+            )
+        custom_selected = self.scope == "custom" or self.enforcement == "custom"
+        if custom_selected != bool(self.custom_parameters):
+            raise ValueError(
+                "custom rate-limit parameters must be present exactly for a custom mode"
+            )
         return self
 
 
@@ -446,7 +501,7 @@ class SerializationContract(StrictModel):
     media_types: tuple[str, ...] = Field(min_length=1)
     encodings: tuple[str, ...] = Field(min_length=1)
     compression: tuple[str, ...]
-    schema_sha256: str | None = Field(default=None, pattern=r"^[0-9a-f]{64}$")
+    schema_sha256: str | None = Field(pattern=r"^[0-9a-f]{64}$")
     endianness: Literal["not_applicable", "little", "big", "network", "mixed"]
 
     @model_validator(mode="after")
@@ -465,22 +520,23 @@ class SerializationContract(StrictModel):
 class InterfaceContract(StrictModel):
     """Versioned, declarably complete recipient-observable release interface."""
 
-    schema_version: Literal["2.0"]
+    schema_version: Literal["3.0"]
     protocol_type: Literal["predictive", "interactive_llm"]
     access: Literal["aggregate", "label", "score", "text", "embedding", "gradient", "weights", "full_artifact"]
     outputs: tuple[str, ...] = Field(min_length=1)
     output_channels: OutputChannelContract
-    precision_bits: int | None = Field(default=None, ge=1, le=4096)
-    query_budget: int | None = Field(default=None, ge=0)
+    precision_bits: int | None = Field(ge=1, le=4096)
+    query_budget: int | None = Field(ge=0)
     adaptive_queries: bool
     authenticated: bool
     rate_limited: bool
+    rate_limit: RateLimitContract
     timing: TimingChannelContract
     errors: ErrorChannelContract
     execution: ExecutionChannelContract
     access_paths: AccessPathContract
     serialization: SerializationContract
-    llm_protocol: LlmProtocolContract | None = None
+    llm_protocol: LlmProtocolContract | None
     notes: str = ""
 
     @model_validator(mode="after")
@@ -509,6 +565,26 @@ class InterfaceContract(StrictModel):
         if not expected_side_channels.issubset(self.access_paths.side_channels):
             missing = sorted(expected_side_channels - set(self.access_paths.side_channels))
             raise ValueError(f"access-path declaration omits observable side channels: {missing}")
+        if self.rate_limited != self.rate_limit.enabled:
+            raise ValueError(
+                "rate_limited must match the structured rate-limit declaration"
+            )
+        if self.rate_limit.retry_after_exposed:
+            if not self.errors.retry_metadata:
+                raise ValueError(
+                    "exposed retry-after metadata requires errors.retry_metadata=true"
+                )
+            expected_status = {
+                "http": "429",
+                "grpc": "RESOURCE_EXHAUSTED",
+            }.get(self.errors.transport_status)
+            if (
+                expected_status is not None
+                and expected_status not in self.errors.documented_status_codes
+            ):
+                raise ValueError(
+                    "exposed retry-after metadata requires the transport's rate-limit status code"
+                )
         if self.protocol_type == "interactive_llm" and self.llm_protocol is None:
             raise ValueError("interactive_llm interfaces require a complete LLM protocol contract")
         if self.protocol_type == "predictive" and self.llm_protocol is not None:
@@ -578,6 +654,14 @@ class PolicyReference(StrictModel):
     policy_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
 
 
+class CeilingAttackBatteryMode(StrEnum):
+    """Policy disposition for a threat that would otherwise clear on a ceiling."""
+
+    REQUIRED = "required"
+    PROHIBITED = "ceiling_prohibited"
+    WAIVED = "waived"
+
+
 class PolicyRule(StrictModel):
     threat_id: str = Field(min_length=3, max_length=128, pattern=r"^[A-Za-z0-9._:-]+$")
     kind: ThreatKind
@@ -586,6 +670,12 @@ class PolicyRule(StrictModel):
     metric_parameters: dict[str, float] = Field(default_factory=dict)
     tolerance: float = Field(ge=0.0, le=1.0)
     tolerance_basis: Literal["absolute", "incremental"]
+    ceiling_attack_battery_mode: CeilingAttackBatteryMode
+    ceiling_attack_battery_waiver_reason: str | None = Field(
+        default=None,
+        min_length=1,
+        max_length=4096,
+    )
 
     @model_validator(mode="after")
     def metric_is_compatible(self) -> PolicyRule:
@@ -621,6 +711,13 @@ class PolicyRule(StrictModel):
                 )
         if any(not 0.0 <= value <= 1.0 for value in self.metric_parameters.values()):
             raise ValueError("policy metric parameters must be probabilities in [0,1]")
+        if self.ceiling_attack_battery_mode is CeilingAttackBatteryMode.WAIVED:
+            if self.ceiling_attack_battery_waiver_reason is None:
+                raise ValueError("a ceiling attack-battery waiver requires a recorded reason")
+        elif self.ceiling_attack_battery_waiver_reason is not None:
+            raise ValueError(
+                "ceiling_attack_battery_waiver_reason is only valid when the battery is waived"
+            )
         return self
 
 
@@ -651,14 +748,73 @@ class AnalyzerRequirement(StrictModel):
         return self
 
 
+class AttackBatteryRequirement(StrictModel):
+    """Policy-authorized complete empirical battery required before ceiling clearance."""
+
+    requirement_id: str = Field(
+        min_length=3,
+        max_length=128,
+        pattern=r"^[A-Za-z0-9._:-]+$",
+    )
+    threat_id: str = Field(
+        min_length=3,
+        max_length=128,
+        pattern=r"^[A-Za-z0-9._:-]+$",
+    )
+    accepted_catalog_sha256s: tuple[str, ...] = Field(min_length=1)
+    required_attack_ids: tuple[str, ...] = Field(min_length=1)
+    accepted_configuration_sha256s: tuple[str, ...] = Field(min_length=1)
+    accepted_worker_service_ids: tuple[str, ...] = Field(min_length=1)
+    minimum_worker_service_version: str = Field(pattern=r"^[0-9]+\.[0-9]+\.[0-9]+$")
+    accepted_worker_implementation_sha256s: tuple[str, ...] = Field(min_length=1)
+    accepted_worker_image_sha256s: tuple[str, ...] = Field(min_length=1)
+    accepted_attester_key_ids: tuple[str, ...] = ()
+    minimum_isolation_assurance: Literal["declared", "externally_attested"]
+    positive_controls_required: Literal[True] = True
+    minimum_positive_control_detection_lower_bound: float = Field(gt=0.0, le=1.0)
+
+    @model_validator(mode="after")
+    def requirement_is_unambiguous(self) -> AttackBatteryRequirement:
+        named_sets = (
+            ("required attack identifiers", self.required_attack_ids),
+            ("worker service identifiers", self.accepted_worker_service_ids),
+            ("attester key identifiers", self.accepted_attester_key_ids),
+        )
+        for label, values in named_sets:
+            if len(values) != len(set(values)):
+                raise ValueError(f"{label} must be unique")
+        digest_sets = (
+            ("catalog", self.accepted_catalog_sha256s),
+            ("configuration", self.accepted_configuration_sha256s),
+            ("worker implementation", self.accepted_worker_implementation_sha256s),
+            ("worker image", self.accepted_worker_image_sha256s),
+        )
+        for label, values in digest_sets:
+            if len(values) != len(set(values)):
+                raise ValueError(f"accepted {label} digests must be unique")
+            if any(
+                len(value) != 64
+                or any(character not in "0123456789abcdef" for character in value)
+                for value in values
+            ):
+                raise ValueError(f"accepted {label} digests must be lowercase SHA-256 values")
+        if (
+            self.minimum_isolation_assurance == "externally_attested"
+            and not self.accepted_attester_key_ids
+        ):
+            raise ValueError("externally attested isolation requires accepted attester key IDs")
+        return self
+
+
 class PolicyBundle(StrictModel):
-    schema_version: Literal["2.0"] = "2.0"
+    schema_version: Literal["3.0"] = "3.0"
     policy_id: str = Field(min_length=3, max_length=128, pattern=r"^[A-Za-z0-9._:-]+$")
     policy_version: str = Field(min_length=1, max_length=64)
     effective_from: datetime
     expires_at: datetime | None = None
     rules: tuple[PolicyRule, ...]
     analyzer_requirements: tuple[AnalyzerRequirement, ...] = ()
+    attack_battery_requirements: tuple[AttackBatteryRequirement, ...] = ()
     accepted_selection_policy_sha256s: tuple[str, ...] = Field(min_length=1)
 
     @model_validator(mode="after")
@@ -684,6 +840,60 @@ class PolicyBundle(StrictModel):
         } - set(ids)
         if unknown:
             raise ValueError(f"analyzer requirements reference unknown policy threats: {sorted(unknown)}")
+        battery_ids = [item.requirement_id for item in self.attack_battery_requirements]
+        battery_threats = [item.threat_id for item in self.attack_battery_requirements]
+        if len(battery_ids) != len(set(battery_ids)):
+            raise ValueError("attack-battery requirement identifiers must be unique")
+        if len(battery_threats) != len(set(battery_threats)):
+            raise ValueError("at most one attack-battery requirement is allowed per threat")
+        unknown_battery_threats = set(battery_threats) - set(ids)
+        if unknown_battery_threats:
+            raise ValueError(
+                "attack-battery requirements reference unknown policy threats: "
+                f"{sorted(unknown_battery_threats)}"
+            )
+        rules_by_id = {rule.threat_id: rule for rule in self.rules}
+        battery_by_threat = {
+            requirement.threat_id: requirement
+            for requirement in self.attack_battery_requirements
+        }
+        required_without_battery = {
+            threat_id
+            for threat_id, rule in rules_by_id.items()
+            if rule.ceiling_attack_battery_mode is CeilingAttackBatteryMode.REQUIRED
+            and threat_id not in battery_by_threat
+        }
+        if required_without_battery:
+            raise ValueError(
+                "ceiling-clearable threats omit required attack batteries: "
+                f"{sorted(required_without_battery)}"
+            )
+        unexpected_batteries = {
+            threat_id
+            for threat_id in battery_by_threat
+            if rules_by_id[threat_id].ceiling_attack_battery_mode
+            is not CeilingAttackBatteryMode.REQUIRED
+        }
+        if unexpected_batteries:
+            raise ValueError(
+                "attack-battery requirements are only valid for required battery modes: "
+                f"{sorted(unexpected_batteries)}"
+            )
+        analyzer_pairs = {
+            (requirement.threat_id, requirement.analyzer): requirement
+            for requirement in self.analyzer_requirements
+        }
+        missing_battery_analyzers = {
+            threat_id
+            for threat_id in battery_by_threat
+            if (threat_id, "attack_battery") not in analyzer_pairs
+            or not analyzer_pairs[(threat_id, "attack_battery")].required
+        }
+        if missing_battery_analyzers:
+            raise ValueError(
+                "required attack batteries need a required attack_battery analyzer: "
+                f"{sorted(missing_battery_analyzers)}"
+            )
         if len(self.accepted_selection_policy_sha256s) != len(
             set(self.accepted_selection_policy_sha256s)
         ):
@@ -814,6 +1024,540 @@ class EvidenceContext(StrictModel):
     def observation_time_is_aware(self) -> EvidenceContext:
         if self.observed_at.utcoffset() is None:
             raise ValueError("evidence context observed_at must include a timezone offset")
+        return self
+
+
+class AttackCatalogEntry(StrictModel):
+    attack_id: str = Field(min_length=1, max_length=128, pattern=r"^[A-Za-z0-9._:-]+$")
+    attack_version: str = Field(pattern=r"^[0-9]+\.[0-9]+\.[0-9]+$")
+    service_id: str = Field(min_length=3, max_length=128, pattern=r"^[A-Za-z0-9._:-]+$")
+    implementation_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
+    applicable_model_families: tuple[str, ...] = Field(min_length=1)
+    applicable_protocol_types: tuple[Literal["predictive", "interactive_llm"], ...] = Field(
+        min_length=1
+    )
+    applicable_threat_kinds: tuple[ThreatKind, ...] = Field(min_length=1)
+    supported_metrics: tuple[DecisionMetric, ...]
+    evidence_role: Literal["blocking_floor", "screen_only"]
+    positive_control_kind: Literal["known_leak_binomial", "expected_flag"]
+    minimum_repetitions: int = Field(ge=1)
+    requires_model_execution: bool
+    can_clear: Literal[False] = False
+    decision_authority: Literal["none"] = "none"
+
+    @model_validator(mode="after")
+    def entry_sets_are_unique(self) -> AttackCatalogEntry:
+        for label, values in (
+            ("model families", self.applicable_model_families),
+            ("protocol types", self.applicable_protocol_types),
+            ("threat kinds", self.applicable_threat_kinds),
+            ("metrics", self.supported_metrics),
+        ):
+            if len(values) != len(set(values)):
+                raise ValueError(f"attack-catalog {label} must be unique")
+        if self.evidence_role == "blocking_floor" and not self.supported_metrics:
+            raise ValueError("blocking attack-catalog entries require supported metrics")
+        return self
+
+
+class AttackCatalog(StrictModel):
+    schema_version: Literal["1.0"] = "1.0"
+    catalog_id: str = Field(min_length=3, max_length=128, pattern=r"^[A-Za-z0-9._:-]+$")
+    catalog_version: str = Field(pattern=r"^[0-9]+\.[0-9]+\.[0-9]+$")
+    valid_from: datetime
+    valid_until: datetime | None = None
+    entries: tuple[AttackCatalogEntry, ...] = Field(min_length=1)
+
+    @model_validator(mode="after")
+    def catalog_is_coherent(self) -> AttackCatalog:
+        if self.valid_from.utcoffset() is None:
+            raise ValueError("attack-catalog valid_from must include a timezone offset")
+        if self.valid_until is not None:
+            if self.valid_until.utcoffset() is None:
+                raise ValueError("attack-catalog valid_until must include a timezone offset")
+            if self.valid_until <= self.valid_from:
+                raise ValueError("attack-catalog valid_until must follow valid_from")
+        ids = [entry.attack_id for entry in self.entries]
+        if len(ids) != len(set(ids)):
+            raise ValueError("attack-catalog entries must have unique attack IDs")
+        return self
+
+
+class AttackResourceLimits(StrictModel):
+    timeout_seconds: int = Field(gt=0, le=86_400)
+    memory_megabytes: int = Field(
+        gt=0,
+        description=(
+            "Declared worker memory budget; the reference core does not mechanically "
+            "observe or attest compliance because the submission carries no memory telemetry."
+        ),
+    )
+    cpu_cores: float = Field(
+        gt=0.0,
+        description=(
+            "Declared worker CPU budget; the reference core does not mechanically "
+            "observe or attest compliance because the submission carries no CPU telemetry."
+        ),
+    )
+    maximum_records: int = Field(
+        gt=0,
+        description="Maximum aggregate statistical trials reported by the worker.",
+    )
+    maximum_output_bytes: int = Field(
+        gt=0,
+        description="Maximum canonical governed worker-output size in bytes.",
+    )
+
+
+class AttackPositiveControlPlan(StrictModel):
+    control_id: str = Field(min_length=1, max_length=128, pattern=r"^[A-Za-z0-9._:-]+$")
+    attack_id: str = Field(min_length=1, max_length=128, pattern=r"^[A-Za-z0-9._:-]+$")
+    control_kind: Literal["known_leak_binomial", "expected_flag"]
+    reference_artifact_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
+    reference_dataset_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
+    minimum_trials: int = Field(gt=0)
+    minimum_detection_lower_bound: float = Field(gt=0.0, le=1.0)
+    confidence: float = Field(gt=0.5, lt=1.0)
+
+
+class AttackRunPlan(StrictModel):
+    run_id: str = Field(min_length=1, max_length=128, pattern=r"^[A-Za-z0-9._:-]+$")
+    attack_id: str = Field(min_length=1, max_length=128, pattern=r"^[A-Za-z0-9._:-]+$")
+    attack_version: str = Field(pattern=r"^[0-9]+\.[0-9]+\.[0-9]+$")
+    metric: DecisionMetric
+    evidence_role: Literal["blocking_floor", "screen_only"]
+    seed: int = Field(ge=0)
+    repetitions: int = Field(ge=1)
+    confidence: float = Field(gt=0.5, lt=1.0)
+    comparison_family_size: int = Field(ge=1)
+    target_fpr: float | None = Field(default=None, gt=0.0, lt=1.0)
+    positive_control_ids: tuple[str, ...] = Field(min_length=1)
+    parameters: dict[str, str | int | float | bool] = Field(default_factory=dict)
+
+    @model_validator(mode="after")
+    def plan_is_coherent(self) -> AttackRunPlan:
+        if len(self.positive_control_ids) != len(set(self.positive_control_ids)):
+            raise ValueError("attack-run positive-control identifiers must be unique")
+        if self.metric == "membership_tpr_at_fpr" and self.target_fpr is None:
+            raise ValueError("low-FPR membership attack plans require target_fpr")
+        if self.metric != "membership_tpr_at_fpr" and self.target_fpr is not None:
+            raise ValueError("target_fpr is only valid for membership_tpr_at_fpr")
+        return self
+
+
+class AttackBatteryConfiguration(StrictModel):
+    schema_version: Literal["1.0"] = "1.0"
+    configuration_id: str = Field(
+        min_length=3,
+        max_length=128,
+        pattern=r"^[A-Za-z0-9._:-]+$",
+    )
+    catalog_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
+    frozen_at: datetime
+    resource_limits: AttackResourceLimits
+    runs: tuple[AttackRunPlan, ...] = Field(min_length=1)
+    positive_controls: tuple[AttackPositiveControlPlan, ...] = Field(min_length=1)
+    stopping_rule: str = Field(min_length=1, max_length=2048)
+    multiplicity_method: Literal["bonferroni"]
+
+    @model_validator(mode="after")
+    def configuration_is_complete(self) -> AttackBatteryConfiguration:
+        if self.frozen_at.utcoffset() is None:
+            raise ValueError("attack-battery frozen_at must include a timezone offset")
+        run_ids = [run.run_id for run in self.runs]
+        if len(run_ids) != len(set(run_ids)):
+            raise ValueError("attack-battery run IDs must be unique")
+        control_ids = [control.control_id for control in self.positive_controls]
+        if len(control_ids) != len(set(control_ids)):
+            raise ValueError("attack-battery positive-control IDs must be unique")
+        known_controls = set(control_ids)
+        missing_controls = {
+            control_id
+            for run in self.runs
+            for control_id in run.positive_control_ids
+            if control_id not in known_controls
+        }
+        if missing_controls:
+            raise ValueError(
+                "attack runs reference unknown positive controls: "
+                f"{sorted(missing_controls)}"
+            )
+        control_attack = {
+            control.control_id: control.attack_id for control in self.positive_controls
+        }
+        mismatched_controls = {
+            control_id
+            for run in self.runs
+            for control_id in run.positive_control_ids
+            if control_attack[control_id] != run.attack_id
+        }
+        if mismatched_controls:
+            raise ValueError(
+                "positive controls must be bound to the attack that consumes them: "
+                f"{sorted(mismatched_controls)}"
+            )
+        return self
+
+
+class AttackPositiveControlResult(StrictModel):
+    schema_version: Literal["1.0"] = "1.0"
+    control_id: str = Field(min_length=1, max_length=128, pattern=r"^[A-Za-z0-9._:-]+$")
+    attack_id: str = Field(min_length=1, max_length=128, pattern=r"^[A-Za-z0-9._:-]+$")
+    service_id: str = Field(min_length=3, max_length=128, pattern=r"^[A-Za-z0-9._:-]+$")
+    attack_version: str = Field(pattern=r"^[0-9]+\.[0-9]+\.[0-9]+$")
+    implementation_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
+    status: Literal["succeeded", "failed", "timed_out"]
+    successes: int | None = Field(default=None, ge=0)
+    trials: int | None = Field(default=None, gt=0)
+    reported_detection_lower_bound: float | None = Field(default=None, ge=0.0, le=1.0)
+    expected_flag_observed: bool | None = None
+    raw_result_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
+
+    @model_validator(mode="after")
+    def result_shape_matches_status(self) -> AttackPositiveControlResult:
+        if self.status == "succeeded":
+            has_binomial = self.successes is not None and self.trials is not None
+            has_flag = self.expected_flag_observed is not None
+            if has_binomial == has_flag:
+                raise ValueError(
+                    "a successful positive control must report exactly one typed result"
+                )
+            if has_binomial:
+                assert self.successes is not None and self.trials is not None
+                if self.successes > self.trials:
+                    raise ValueError("positive-control successes cannot exceed trials")
+                if self.reported_detection_lower_bound is None:
+                    raise ValueError("binomial positive controls require a reported lower bound")
+            elif self.reported_detection_lower_bound is not None:
+                raise ValueError("flag controls cannot report a binomial lower bound")
+        elif any(
+            value is not None
+            for value in (
+                self.successes,
+                self.trials,
+                self.reported_detection_lower_bound,
+                self.expected_flag_observed,
+            )
+        ):
+            raise ValueError("failed or timed-out positive controls cannot report results")
+        return self
+
+
+class AttackRunResult(StrictModel):
+    run_id: str = Field(min_length=1, max_length=128, pattern=r"^[A-Za-z0-9._:-]+$")
+    attack_id: str = Field(min_length=1, max_length=128, pattern=r"^[A-Za-z0-9._:-]+$")
+    service_id: str = Field(min_length=3, max_length=128, pattern=r"^[A-Za-z0-9._:-]+$")
+    attack_version: str = Field(pattern=r"^[0-9]+\.[0-9]+\.[0-9]+$")
+    implementation_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
+    status: Literal["succeeded", "failed", "timed_out"]
+    metric: DecisionMetric
+    successes: int | None = Field(default=None, ge=0)
+    trials: int | None = Field(default=None, gt=0)
+    false_positives: int | None = Field(default=None, ge=0)
+    nonmember_trials: int | None = Field(default=None, gt=0)
+    target_fpr: float | None = Field(default=None, gt=0.0, lt=1.0)
+    raw_result_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
+    negative_control_summary: str = Field(min_length=1, max_length=2048)
+    can_clear: Literal[False] = False
+
+    @model_validator(mode="after")
+    def counts_match_result_status(self) -> AttackRunResult:
+        if self.status == "succeeded":
+            if self.successes is None or self.trials is None:
+                raise ValueError("successful attack results require successes and trials")
+            if self.successes > self.trials:
+                raise ValueError("attack successes cannot exceed trials")
+            if self.metric == "membership_tpr_at_fpr":
+                if (
+                    self.false_positives is None
+                    or self.nonmember_trials is None
+                    or self.target_fpr is None
+                ):
+                    raise ValueError(
+                        "low-FPR attack results require false-positive counts and target_fpr"
+                    )
+                if self.false_positives > self.nonmember_trials:
+                    raise ValueError("false positives cannot exceed nonmember trials")
+            elif any(
+                value is not None
+                for value in (self.false_positives, self.nonmember_trials, self.target_fpr)
+            ):
+                raise ValueError("false-positive fields are only valid for low-FPR membership")
+        elif any(
+            value is not None
+            for value in (
+                self.successes,
+                self.trials,
+                self.false_positives,
+                self.nonmember_trials,
+                self.target_fpr,
+            )
+        ):
+            raise ValueError("failed or timed-out attacks cannot report decision counts")
+        return self
+
+
+class AttackIsolationEvidence(StrictModel):
+    schema_version: Literal["1.0"] = "1.0"
+    assurance: Literal["declared", "externally_attested"]
+    worker_image_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
+    run_as_non_root: bool
+    no_new_privileges: bool
+    read_only_root_filesystem: bool
+    network_access: Literal["none", "restricted", "unrestricted"]
+    writable_audit_path: bool
+    writable_key_path: bool
+    writable_governance_path: bool
+    read_only_mount_sha256s: tuple[str, ...]
+    attester_key_id: str | None = Field(default=None, min_length=1, max_length=256)
+    statement_sha256: str | None = Field(default=None, pattern=r"^[0-9a-f]{64}$")
+    signature: str | None = Field(default=None, min_length=1)
+
+    @model_validator(mode="after")
+    def attestation_fields_are_coherent(self) -> AttackIsolationEvidence:
+        attestation = (self.attester_key_id, self.statement_sha256, self.signature)
+        if self.assurance == "externally_attested" and any(value is None for value in attestation):
+            raise ValueError("externally attested isolation requires key, statement, and signature")
+        if self.assurance == "declared" and any(value is not None for value in attestation):
+            raise ValueError("declared isolation cannot present unverified attestation fields")
+        if len(self.read_only_mount_sha256s) != len(set(self.read_only_mount_sha256s)):
+            raise ValueError("read-only mount digests must be unique")
+        if any(
+            len(value) != 64
+            or any(character not in "0123456789abcdef" for character in value)
+            for value in self.read_only_mount_sha256s
+        ):
+            raise ValueError("read-only mount digests must be lowercase SHA-256 values")
+        return self
+
+
+class AttackBatteryWorkerOutput(StrictModel):
+    schema_version: Literal["1.0"] = "1.0"
+    execution_id: str = Field(min_length=3, max_length=128, pattern=r"^[A-Za-z0-9._:-]+$")
+    release_id: str = Field(min_length=3, max_length=128, pattern=r"^[A-Za-z0-9._:-]+$")
+    release_contract_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
+    policy_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
+    artifact_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
+    interface_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
+    population_scope_id: str = Field(min_length=3, max_length=128, pattern=r"^[A-Za-z0-9._:-]+$")
+    population_scope_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
+    decision_game_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
+    catalog_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
+    configuration_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
+    worker: EvidenceProducer
+    worker_runtime_identity: RuntimeIdentity
+    isolation: AttackIsolationEvidence
+    started_at: datetime
+    completed_at: datetime
+    positive_controls: tuple[AttackPositiveControlResult, ...] = Field(min_length=1)
+    results: tuple[AttackRunResult, ...] = Field(min_length=1)
+    retained_raw_bundle_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
+    decision_authority: Literal["none"] = "none"
+    can_clear: Literal[False] = False
+
+    @model_validator(mode="after")
+    def output_is_complete(self) -> AttackBatteryWorkerOutput:
+        for label, values in (
+            ("positive-control IDs", [item.control_id for item in self.positive_controls]),
+            ("run IDs", [item.run_id for item in self.results]),
+        ):
+            if len(values) != len(set(values)):
+                raise ValueError(f"attack-worker {label} must be unique")
+        if self.started_at.utcoffset() is None or self.completed_at.utcoffset() is None:
+            raise ValueError("attack-worker timestamps must include timezone offsets")
+        if self.completed_at < self.started_at:
+            raise ValueError("attack-worker completion cannot precede its start")
+        if self.worker.configuration_sha256 != self.configuration_sha256:
+            raise ValueError("attack-worker producer is not bound to the battery configuration")
+        runtime = self.worker_runtime_identity
+        if (
+            runtime.component_id != "attack_battery_worker"
+            or runtime.component_version != "AttackBatteryWorkerOutput/1.0"
+        ):
+            raise ValueError("attack-worker runtime identity has the wrong component")
+        profile = runtime.algorithm_profile
+        expected_attacks = sorted({item.attack_id for item in self.results})
+        expected_controls = sorted({item.control_id for item in self.positive_controls})
+        if profile.get("catalog_sha256") != self.catalog_sha256:
+            raise ValueError("attack-worker runtime profile uses another catalog")
+        if profile.get("configuration_sha256") != self.configuration_sha256:
+            raise ValueError("attack-worker runtime profile uses another configuration")
+        profile_attacks = profile.get("attacks")
+        if not isinstance(profile_attacks, (list, tuple)) or sorted(
+            profile_attacks
+        ) != expected_attacks:
+            raise ValueError("attack-worker runtime profile omits or substitutes attacks")
+        profile_controls = profile.get("positive_controls")
+        if not isinstance(profile_controls, (list, tuple)) or sorted(
+            profile_controls
+        ) != expected_controls:
+            raise ValueError(
+                "attack-worker runtime profile omits or substitutes positive controls"
+            )
+        if profile.get("decision_authority") != "none":
+            raise ValueError("attack-worker runtime profile cannot claim decision authority")
+        return self
+
+
+class AttackBatteryInput(StrictModel):
+    """Complete, policy-matchable attack battery submitted to the assurance core."""
+
+    analyzer: Literal["attack_battery"] = "attack_battery"
+    schema_version: Literal["1.0"] = "1.0"
+    threat_id: str
+    population_scope_id: str
+    catalog: AttackCatalog
+    catalog_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
+    configuration: AttackBatteryConfiguration
+    configuration_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
+    worker_output: AttackBatteryWorkerOutput
+    worker_output_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
+    evidence_context: EvidenceContext
+    provenance: AnalyzerProvenance
+
+    @model_validator(mode="after")
+    def battery_bindings_are_exact(self) -> AttackBatteryInput:
+        expected_hashes = (
+            ("catalog", self.catalog_sha256, _canonical_model_sha256(self.catalog)),
+            (
+                "configuration",
+                self.configuration_sha256,
+                _canonical_model_sha256(self.configuration),
+            ),
+            (
+                "worker output",
+                self.worker_output_sha256,
+                _canonical_model_sha256(self.worker_output),
+            ),
+        )
+        for label, declared, actual in expected_hashes:
+            if declared != actual:
+                raise ValueError(f"attack-battery {label} digest does not match its content")
+        if self.configuration.catalog_sha256 != self.catalog_sha256:
+            raise ValueError("attack-battery configuration references a different catalog")
+        if self.configuration.frozen_at < self.catalog.valid_from or (
+            self.catalog.valid_until is not None
+            and self.configuration.frozen_at >= self.catalog.valid_until
+        ):
+            raise ValueError("attack-battery configuration was frozen outside catalog validity")
+        output = self.worker_output
+        if output.catalog_sha256 != self.catalog_sha256:
+            raise ValueError("attack-worker output references a different catalog")
+        if output.configuration_sha256 != self.configuration_sha256:
+            raise ValueError("attack-worker output references a different configuration")
+        if output.started_at < self.configuration.frozen_at:
+            raise ValueError("attack-worker execution predates the frozen configuration")
+        if output.started_at < self.catalog.valid_from or (
+            self.catalog.valid_until is not None
+            and output.completed_at >= self.catalog.valid_until
+        ):
+            raise ValueError("attack-worker execution falls outside catalog validity")
+        context_fields = (
+            "release_id",
+            "release_contract_sha256",
+            "policy_sha256",
+            "artifact_sha256",
+            "interface_sha256",
+            "population_scope_id",
+            "population_scope_sha256",
+            "decision_game_sha256",
+        )
+        if any(
+            getattr(output, field) != getattr(self.evidence_context, field)
+            for field in context_fields
+        ):
+            raise ValueError("attack-worker output does not match the evidence context")
+        if not output.started_at <= self.evidence_context.observed_at <= output.completed_at:
+            raise ValueError(
+                "attack-battery evidence observation must fall within the worker execution interval"
+            )
+        limits = self.configuration.resource_limits
+        elapsed_seconds = (output.completed_at - output.started_at).total_seconds()
+        if elapsed_seconds > limits.timeout_seconds:
+            raise ValueError("attack-worker execution exceeds the frozen timeout")
+        reported_records = sum(
+            (result.trials or 0) + (result.nonmember_trials or 0)
+            for result in output.results
+        ) + sum((control.trials or 0) for control in output.positive_controls)
+        if reported_records > limits.maximum_records:
+            raise ValueError(
+                "attack-worker reported statistical trials exceed the frozen record limit"
+            )
+        if len(_canonical_model_bytes(output)) > limits.maximum_output_bytes:
+            raise ValueError("attack-worker governed output exceeds the frozen byte limit")
+        if self.population_scope_id != self.evidence_context.population_scope_id:
+            raise ValueError("attack battery uses the wrong population scope")
+        entries = {entry.attack_id: entry for entry in self.catalog.entries}
+        plans = {plan.run_id: plan for plan in self.configuration.runs}
+        results = {result.run_id: result for result in output.results}
+        if set(plans) != set(results):
+            raise ValueError("attack-worker results must disposition every planned run exactly once")
+        controls = {
+            control.control_id: control for control in self.configuration.positive_controls
+        }
+        control_results = {
+            result.control_id: result for result in output.positive_controls
+        }
+        if set(controls) != set(control_results):
+            raise ValueError(
+                "attack-worker output must disposition every positive control exactly once"
+            )
+        blocking_family_size = sum(
+            plan.evidence_role == "blocking_floor" for plan in plans.values()
+        )
+        for plan in plans.values():
+            entry = entries.get(plan.attack_id)
+            if entry is None:
+                raise ValueError(f"attack plan uses uncatalogued attack {plan.attack_id!r}")
+            if entry.attack_version != plan.attack_version:
+                raise ValueError("attack plan version does not match the catalog")
+            if plan.metric not in entry.supported_metrics:
+                raise ValueError("attack plan metric is not supported by its catalog entry")
+            if plan.evidence_role != entry.evidence_role:
+                raise ValueError("attack plan evidence role does not match the catalog")
+            if plan.repetitions < entry.minimum_repetitions:
+                raise ValueError("attack plan repetitions are below the catalog minimum")
+            if (
+                plan.evidence_role == "blocking_floor"
+                and plan.comparison_family_size != blocking_family_size
+            ):
+                raise ValueError(
+                    "blocking attack multiplicity must be derived from the complete battery"
+                )
+            result = results[plan.run_id]
+            if result.attack_id != plan.attack_id or result.metric != plan.metric:
+                raise ValueError("attack result identity or metric does not match its plan")
+            if (
+                result.service_id != entry.service_id
+                or result.attack_version != entry.attack_version
+                or result.implementation_sha256 != entry.implementation_sha256
+            ):
+                raise ValueError(
+                    "attack result service, version, or implementation does not match the catalog"
+                )
+            if result.target_fpr != plan.target_fpr:
+                raise ValueError("attack result target_fpr does not match its plan")
+        for control_id, plan in controls.items():
+            result = control_results[control_id]
+            if result.attack_id != plan.attack_id:
+                raise ValueError("positive-control result does not match its plan")
+            entry = entries.get(plan.attack_id)
+            if entry is None:
+                raise ValueError(
+                    f"positive-control plan uses uncatalogued attack {plan.attack_id!r}"
+                )
+            if plan.control_kind != entry.positive_control_kind:
+                raise ValueError(
+                    "positive-control kind does not match the attack catalog"
+                )
+            if (
+                result.service_id != entry.service_id
+                or result.attack_version != entry.attack_version
+                or result.implementation_sha256 != entry.implementation_sha256
+            ):
+                raise ValueError(
+                    "positive-control service, version, or implementation does not match the catalog"
+                )
         return self
 
 
@@ -1065,14 +1809,15 @@ class LlmCanaryInput(StrictModel):
 
 
 AnalyzerInput = Annotated[
-    TreeLinkageInput | DpInput | AttackInput | PopulationInput | ControlledInferenceInput
+    TreeLinkageInput | DpInput | AttackInput | AttackBatteryInput
+    | PopulationInput | ControlledInferenceInput
     | LlmWatermarkInput | LlmCanaryInput,
     Field(discriminator="analyzer"),
 ]
 
 
 class AssessmentRequest(StrictModel):
-    schema_version: Literal["4.0"] = "4.0"
+    schema_version: Literal["5.0"] = "5.0"
     policy: PolicyReference
     release: ReleaseContract
     population_scopes: tuple[PopulationScope, ...]
@@ -1179,6 +1924,44 @@ class EvidenceRecord(StrictModel):
         return self
 
 
+class AttackBatteryStatus(StrictModel):
+    mode: CeilingAttackBatteryMode
+    requirement_id: str | None = Field(default=None, min_length=3, max_length=128)
+    required_attack_ids: tuple[str, ...] = ()
+    completed_attack_ids: tuple[str, ...] = ()
+    passing_positive_control_ids: tuple[str, ...] = ()
+    satisfied: bool
+    waiver_reason: str | None = Field(default=None, min_length=1, max_length=4096)
+    failure_reasons: tuple[str, ...] = ()
+
+    @model_validator(mode="after")
+    def status_matches_mode(self) -> AttackBatteryStatus:
+        for label, values in (
+            ("required attack IDs", self.required_attack_ids),
+            ("completed attack IDs", self.completed_attack_ids),
+            ("passing positive-control IDs", self.passing_positive_control_ids),
+            ("failure reasons", self.failure_reasons),
+        ):
+            if len(values) != len(set(values)):
+                raise ValueError(f"attack-battery {label} must be unique")
+        if self.mode is CeilingAttackBatteryMode.REQUIRED:
+            if self.requirement_id is None or not self.required_attack_ids:
+                raise ValueError("a required attack battery needs a requirement and attack IDs")
+            if self.waiver_reason is not None:
+                raise ValueError("a required attack battery cannot carry a waiver reason")
+            if self.satisfied == bool(self.failure_reasons):
+                raise ValueError("attack-battery satisfaction must match its failure reasons")
+        elif self.mode is CeilingAttackBatteryMode.WAIVED:
+            if not self.satisfied or self.waiver_reason is None:
+                raise ValueError("a waived attack battery must record its reason")
+            if self.requirement_id is not None or self.required_attack_ids or self.failure_reasons:
+                raise ValueError("a waived attack battery cannot claim a required execution")
+        else:
+            if self.satisfied or self.waiver_reason is not None or self.requirement_id is not None:
+                raise ValueError("a prohibited ceiling cannot claim a battery or waiver")
+        return self
+
+
 class ThreatDecision(StrictModel):
     threat_id: str
     population_scope_id: str
@@ -1200,6 +1983,8 @@ class ThreatDecision(StrictModel):
     excluded_evidence_ids: tuple[str, ...] = ()
     evidence_consistency: EvidenceConsistency
     conflicting_evidence_ids: tuple[str, ...] = ()
+    clearance_evidence_class: EvidenceClass | None = None
+    ceiling_attack_battery: AttackBatteryStatus
     reasons: tuple[str, ...]
 
     @model_validator(mode="after")
@@ -1234,6 +2019,17 @@ class ThreatDecision(StrictModel):
             raise ValueError("excluded evidence identifiers must be unique")
         if set(self.evidence_ids) & set(self.excluded_evidence_ids):
             raise ValueError("included and excluded evidence identifiers must be disjoint")
+        if self.verdict is Verdict.CLEAR:
+            if self.clearance_evidence_class not in (EvidenceClass.EXACT, EvidenceClass.CEILING):
+                raise ValueError("a clear decision must identify exact or ceiling evidence")
+            if self.clearance_evidence_class is EvidenceClass.CEILING:
+                battery = self.ceiling_attack_battery
+                if battery.mode is CeilingAttackBatteryMode.PROHIBITED:
+                    raise ValueError("a policy-prohibited ceiling cannot clear a threat")
+                if battery.mode is CeilingAttackBatteryMode.REQUIRED and not battery.satisfied:
+                    raise ValueError("ceiling clearance requires a satisfied attack battery")
+        elif self.clearance_evidence_class is not None:
+            raise ValueError("only a clear decision may name a clearance evidence class")
         return self
 
 
@@ -1262,7 +2058,7 @@ class AssessmentScope(StrictModel):
 
 
 class AssessmentReport(StrictModel):
-    schema_version: Literal["4.0"] = "4.0"
+    schema_version: Literal["5.0"] = "5.0"
     assessment_id: str
     release_id: str
     policy_id: str
@@ -1296,7 +2092,7 @@ class AssessmentReport(StrictModel):
                 raise ValueError("assessment report timestamps must include timezone offsets")
         if self.runtime_identity.component_id != "assurance_engine":
             raise ValueError("assessment report runtime identity must name assurance_engine")
-        if self.runtime_identity.component_version != "AssessmentReport/4.0":
+        if self.runtime_identity.component_version != "AssessmentReport/5.0":
             raise ValueError("assessment report runtime identity has the wrong component version")
         if self.runtime_identity.package_version != self.engine_version:
             raise ValueError("assessment report engine version does not match its runtime identity")
@@ -1339,7 +2135,7 @@ class AssessmentReport(StrictModel):
 
 
 class SignedManifest(StrictModel):
-    schema_version: Literal["2.0"] = "2.0"
+    schema_version: Literal["3.0"] = "3.0"
     assessment_id: str
     release_id: str
     policy_id: str

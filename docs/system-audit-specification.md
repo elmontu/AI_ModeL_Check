@@ -15,8 +15,9 @@
 | Supersedes | None |
 | Framework | Model Release Assurance (MRA) `0.7.0` |
 | Lifecycle protocol | MRAP/1.0, candidate normative specification |
-| Implemented conformance | MRAP-L0 through MRAP-L2 reference capabilities |
+| Implemented reference capability, not full conformance | MRAP-L0 through MRAP-L2 offline capabilities; any applicable failed or unevidenced gate, including an unresolved clearance-critical binary64 boundary under G7, precludes an MRAP-conformance conclusion |
 | Not implemented | Authoritative MRAP-L3 authorization and MRAP-L4 enforcement services |
+| Contract baseline | Pre-governed draft; the first governed baseline begins only when a protected release process signs or externally attests the exact current-schema manifest bytes |
 | Intended reader | Technical, security, statistical, governance, legal, and operational auditor |
 | Audit unit | One repository revision plus one adopter deployment and its retained evidence |
 
@@ -24,6 +25,14 @@ The framework value above is the package version string, not proof that the insp
 published release. An auditor MUST also record the commit or tree hash, annotated release tag where
 claimed, and the complete dirty/untracked-file inventory. An uncommitted working tree cannot be
 accepted as a released artifact merely because its package version is `0.7.0`.
+
+The contracts in this draft were iterated before the first governed schema baseline. Earlier draft
+bytes are not a released compatibility promise and artifacts produced from them MUST NOT be
+restamped as current or presented as governed replay. At first governed use, the adopter MUST retain
+the exact schemas, released runtime, dependency lock, fixtures, trust metadata, and a protected
+signature or external attestation over the exact current-schema manifest bytes. After that baseline,
+every incompatible contract change MUST increment the affected top-level and nested versions, retain
+the superseded bytes, and provide migration or vintage-runtime replay evidence.
 
 This is the single entry point for an end-to-end audit. It integrates the requirements and boundaries
 that are otherwise separated across the architecture, protocol, governance, mathematical, formal,
@@ -82,6 +91,9 @@ MRA is an offline, fail-closed reference toolkit for:
 - binding evidence to a proposed release, policy, artifact, interface, population, decision game,
   observation time, analyzer implementation, analyzer version, and analyzer configuration;
 - classifying evidence without reversing its direction;
+- validating versioned attack catalogs, frozen battery configurations, positive controls, worker
+  outputs, runtime identity and isolation declarations, and enforcing a policy-mandated attack
+  battery before an otherwise clearing ceiling may clear;
 - producing per-threat `clear`, `block`, or `inconclusive` assessment recommendations;
 - evaluating submitted release configurations against utility, privacy, transfer, search, control,
   and complete-portfolio conditions;
@@ -94,6 +106,11 @@ The repository does not train, export, deploy, serve, authorize, suspend, revoke
 monitor production models. It does not operate a durable workflow engine, identity provider,
 attestation service, immutable evidence store, authoritative portfolio registry, deployment gateway,
 telemetry platform, KMS/HSM, or incident-management system.
+
+The supported core validates and replays submitted attack-battery content; it does not deserialize
+or execute the submitted release model. The local SACRO-ML-inspired red-team utilities can execute
+trusted local model objects as experimental tooling, but their exploratory reports do not satisfy a
+decision-bearing battery and carry no clearance, blocking, authorization, or isolation authority.
 
 The current assessment threat taxonomy is privacy-focused: linkage, membership, attribute inference,
 and reconstruction. Population analysis is a screen, not a fifth deciding threat. Fairness,
@@ -170,6 +187,7 @@ remeasures the exact live artifact, interface, controls, registry status, and ex
 | `mra` CLI and Python package | [I] | One local Python process | Validate, assess, optimize, solve, sign, and replay | Not a daemon, scheduler, registry, gateway, or authority |
 | `AssuranceEngine` | [I] | In-process | Verify bindings, dispatch analyzers, aggregate evidence, decide threats | Does not inspect or execute the release model |
 | Analyzer service registry | [I] | In-process by default | Route each typed input to exactly one service and enforce capabilities | Default services are not authenticated remote microservices |
+| Attack-battery contract and analyzer | [I] | In-process validation/replay of externally produced content | Bind policy-approved catalog/configuration/worker output; replay positive controls and simultaneous attack floors; gate ceiling eligibility | Does not execute a model, authenticate a worker, or prove declared isolation/attestation true |
 | `ReleaseOptimizer` | [I] | In-process | Evaluate feasibility and deterministic selection | Does not commit or activate a release |
 | Certificate solvers/verifiers | [I] | In-process; some generation paths require the `portfolio` SciPy extra | Finite portfolio, statistical, and protocol-design solving/replay | Certificates are premise-bound and non-authorizing |
 | Strategic-assurance module | [I] | In-process Python API; experimental script wrapper | Solve and replay supplemental exact-rational strategic stress-test certificates | No public schema or `mra` command; no governance, authorization, or hard-gate effect |
@@ -178,7 +196,7 @@ remeasures the exact live artifact, interface, controls, registry status, and ex
 | MRAP transcript verifier | [I] | Offline process | Replay supplied structural/authenticated lifecycle records | Does not contact or implement registry/gateway services |
 | Lean package | [I], build-time | Separate pinned toolchain | Prove scoped abstract transition/statistical properties | No Python or infrastructure refinement proof |
 | MCP reviewer server | [E] | Separate local stdio process | Advisory retrieval, validation, read-only audit verification, experiment calls | No lifecycle authority or process isolation by tool omission |
-| Evidence-lab workers | [E] | Local process/subprocess | Generate bounded measurements, floors, or screens | Output is not automatically admissible evidence |
+| Evidence-lab and exploratory red-team workers | [E] | Local process/subprocess | Generate bounded measurements, candidate floors, screens, and non-authorizing red-team reports | Output is not automatically an admissible attack-battery submission or evidence |
 | Identity, immutable stores, registry, gateway, monitoring | [X] | Adopter services | Perform production trust, authorization, enforcement, and operations | Specified but absent from this repository |
 
 ## 3. External training-to-serving integration
@@ -193,9 +211,9 @@ EXPORT / PACKAGE [X]
      dependencies, runtime, precision/calibration, configuration and entry points
   -> create deterministic content manifest and final bundle digest
 ASSESS [I]
-  -> AssessmentRequest 4.0 -> AssessmentReport 4.0
+  -> AssessmentRequest 5.0 -> AssessmentReport 5.0
 SELECT [I]
-  -> OptimizationRequest 3.0 -> OptimizationReport 3.0
+  -> OptimizationRequest 4.0 -> OptimizationReport 4.0
 AUTHORIZE [X]
   -> authority request -> atomic registry commit -> AuthorizationReceipt
 ACTIVATE [X]
@@ -210,10 +228,35 @@ manifest for the complete deployable bundle, and the gateway MUST verify the sam
 digest and content manifest. A checkpoint digest, model card, unpacked weight file, or filename is
 not a substitute for that obligation.
 
-Every recipient-observable channel MUST be declared and checked as applicable: labels, scores,
-probabilities, logits, explanations, embeddings, gradients, parameters, downloadable files,
-precision, serialization, errors, status codes, timing, rate/batching behavior, cross-request state,
-retrieval, tools, memory, updates, local access, and administrative access.
+Every recipient-observable channel MUST be declared and checked as applicable. The current
+`InterfaceContract 3.0` mapping is:
+
+| Recipient-observable channel | Contract field(s) | Current interpretation |
+|---|---|---|
+| Aggregates, labels, scores, probabilities, logits, explanations and text | `output_channels.aggregates`, `.labels`, `.scores`, `.probabilities`, `.logits`, `.explanations`, `.text` | Required booleans declare presence or absence |
+| Embeddings, gradients and parameters/weights | `output_channels.embeddings`, `.gradients`, `.parameters` | Required booleans declare presence or absence |
+| Downloadable files, shipped summaries and custom outputs | `output_channels.downloadable_files`, `.shipped_summary_metadata`, `.custom_channels` | Empty tuples declare absence; names are unique across the three sets |
+| Human-readable output names and primary access class | `outputs`, `access` | `access` must agree with the structured output inventory; these fields do not replace it |
+| Precision | `precision_bits` | `null` means no numeric precision is asserted by this declaration |
+| Serialization | `serialization.formats`, `.media_types`, `.encodings`, `.compression`, `.schema_sha256`, `.endianness` | Formats, media types and encodings are mandatory; a schema digest is optional |
+| Errors, transport status and retry signals | `errors.transport_status`, `.documented_status_codes`, `.error_content`, `.error_schema_sha256`, `.retry_metadata` | Cross-field validation prevents status/error combinations that contradict the declared transport |
+| Timing | `timing.*` and `access_paths.side_channels` containing `timing` when observable | Observable timing requires resolution and a declared mitigation state |
+| Batching, concurrency and cross-request state | `execution.batching`, `.maximum_batch_size`, `.maximum_concurrent_requests`, `.cross_request_state`, `.cross_request_state_ttl_seconds` | Cross-field validation checks batch and state/TTL coherence |
+| Query lifetime and adaptive use | `query_budget`, `adaptive_queries`; for interactive LLMs, `llm_protocol.maximum_lifetime_queries` | Interactive values must agree; this is not a portfolio-wide query ledger |
+| Authentication and rate controls | `authenticated`, `rate_limited`, `rate_limit.enabled`, `.scope`, `.requests_per_window`, `.window_seconds`, `.burst_capacity`, `.retry_after_exposed`, `.enforcement`, `.custom_parameters` | The compatibility flag must match the structured declaration; enabled limits require a scope, window, count, burst and enforcement model; exposed retry-after requires error retry metadata plus HTTP `429` or gRPC `RESOURCE_EXHAUSTED` (custom transports declare their own code); live enforcement is not verified |
+| Retrieval | `llm_protocol.retrieval_corpus_sha256`, `.retriever_config_sha256` | Both hashes are present together or both absent |
+| Tools | `llm_protocol.tool_names`, `.tool_policy_sha256` | A non-empty tool set requires a tool-policy digest |
+| Memory and reset behavior | `llm_protocol.memory_mode`, `.memory_ttl_seconds`, `.reset_semantics`, mirrored by `execution.cross_request_state*` | Interactive state and TTL declarations must agree |
+| Model/service updates | `llm_protocol.update_policy`, model/version/adapter fields; predictive artifact changes require a new release contract | No transparent in-place update is authorized by this field |
+| Logs, telemetry, cache/resource and custom side channels | `access_paths.side_channels`, `.custom_side_channels`; LLM logging/retention in `llm_protocol.logging_mode` and `.provider_retention_days` | Declared exposure only; no live observation is performed |
+| Local and administrative access | `access_paths.local_access`, `.local_capabilities`, `.admin_access`, `.admin_capabilities` | Capability lists must be empty exactly when their access class is `none` |
+
+Nullable interface, channel, rate-limit, and `LlmProtocolContract 1.0` fields are required-explicit:
+the submitted JSON must contain either the declared value or `null`, and omission fails validation.
+That declaration is still not evidence that the live service matches it. In particular, the
+structured rate-limit contract records intended value/window/burst/scope/retry/enforcement behavior
+but does not measure distributed counters, reset behavior under failure, or bypass paths. An auditor
+MUST independently verify the live gateway, and `live_interface_verified` remains false.
 
 ## 4. Normative governance and participant model
 
@@ -366,7 +409,7 @@ proofs remain required.
 Every message MUST retain the immediate predecessors required to replay its decision. Negative,
 failed, blocked, and inconclusive evidence MUST remain in the trace.
 
-The implemented `AssessmentReport 4.0` is always `single_release_no_portfolio`,
+The implemented `AssessmentReport 5.0` is always `single_release_no_portfolio`,
 `declared_interface_only`, `live_interface_verified=false`, and `authorization_eligible=false`.
 Declared `previous_release_ids` record lineage only. A portfolio-capable downstream stage MUST use a
 current authoritative registry snapshot and exact active-release inventory instead.
@@ -520,19 +563,26 @@ ActivateAndMonitor(authorization_receipt, deployment):
 The supported CLI requires `--audit-db` for `assess` and performs:
 
 ```text
-AssessmentRequest 4.0
-  1. append full-request-hash intent before analyzer execution
-  2. load and SHA-256-check PolicyBundle 2.0
+AssessmentRequest 5.0
+  1. reparse the complete request from its JSON-compatible representation at the trusted boundary,
+     then append a content-bearing intent with the full canonical request before analyzer execution
+  2. load and SHA-256-check PolicyBundle 3.0
   3. verify policy identity, version, validity, mandatory threats, tolerances and analyzers
-  4. reject producer versions below policy and unaccepted implementation/configuration digests
+  4. reject producer versions below policy and unaccepted implementation/configuration digests;
+     bind any required attack catalog, complete battery, policy-allowlisted battery-orchestrator
+     service/version/implementation and image identity, per-attack executor identities, and controls
   5. resolve regular-file artifact, evidence and configuration references; verify their SHA-256
   6. rebuild release, policy, artifact, interface, population and decision-game bindings
   7. dispatch each typed analyzer input to exactly one registered service
   8. revalidate returned producer, input kind, context, evidence direction and capability
-  9. aggregate applicable floors and complete-declared-interface exact/ceiling evidence
- 10. produce per-threat and overall decisions
- 11. append exactly one completion or failure event referencing the intent
- 12. emit AssessmentReport 4.0 only after the completion event commits
+  9. replay attack-battery completeness, catalog validity at configuration freeze and execution,
+     every run/control executor's catalog-bound service/version/implementation identity,
+     simultaneous bounds, positive controls and declared isolation; an unsatisfied mandatory
+     battery makes an otherwise clearing ceiling ineligible
+ 10. aggregate applicable floors and complete-declared-interface exact/ceiling evidence
+ 11. produce per-threat and overall decisions
+ 12. append exactly one content-bearing completion or failure event referencing the intent
+ 13. emit AssessmentReport 5.0 only after the completion event commits
 ```
 
 Direct Python engine calls remain pure and may lack an audit record; their reports are still
@@ -561,7 +611,13 @@ Decision rules:
 - a validated lower bound over tolerance produces `block`;
 - otherwise, contradictory lower and upper bounds produce `inconclusive` with
   `evidence_consistency=contradictory` and the conflicting evidence identifiers;
-- otherwise, a valid complete-interface upper bound within tolerance produces `clear`;
+- otherwise, a valid complete-interface exact value within tolerance produces `clear`;
+- otherwise, a complete-interface ceiling within tolerance produces `clear` only when the policy
+  requires a battery and its complete required attacks and positive controls pass, or the policy
+  explicitly records a battery waiver and reason;
+- an otherwise clearing ceiling is `inconclusive` when the policy prohibits ceiling clearance or a
+  required attack battery, positive control, operating point, worker binding, or isolation declaration
+  does not pass;
 - otherwise the result is `inconclusive` with `evidence_consistency=insufficient`;
 - a contradiction never demotes an independently established over-tolerance blocking floor; and
 - any mandatory `block`, `inconclusive`, or unassessed threat prevents overall clearance.
@@ -573,6 +629,7 @@ Decision rules:
 | `tree_linkage` | Recipient-realizable exact linkage value | Clear or block | Tree linkage only; clearance requires complete declared-interface coverage |
 | `dp` | End-to-end mechanism ceiling | Clear only | All deployed processing, selection, stopping, summaries, and releases must be inside the proved mechanism |
 | `attack` | Empirical attack floor | Block only | Failure never clears; strength is relative to bound attack configuration |
+| `attack_battery` | Positive-control-guarded simultaneous attack floor or screen from a complete typed battery | Block only; separately gates ceiling eligibility | Core replays submitted content but does not execute the model, authenticate the worker, or prove declared isolation |
 | `controlled_inference` | Attribute/reconstruction floor | Block only | Requires paired comparator and registered metric; no interactive-LLM clearance |
 | `llm_canary` | Bound membership/reconstruction floor or screen | Block only | Never clears; collection/protocol defects downgrade to screen |
 | `llm_watermark` | Watermark screen | No decision | Detection is not authorship or privacy proof |
@@ -580,14 +637,53 @@ Decision rules:
 
 Default service descriptors equal, rather than exceed, these capabilities. Adapter construction and
 the engine reject capability widening. Every `EvidenceRecord` carries producer service ID, semantic
-version, implementation digest, and configuration digest. `PolicyBundle 2.0` sets minimum service
-versions and accepted digests per threat, so a policy update can invalidate an outdated analyzer.
-These bindings do not authenticate a remote workload or prove its output true.
+version, implementation digest, and configuration digest. `PolicyBundle 3.0` sets minimum service
+versions and accepted digests per threat, so a policy update can invalidate an outdated analyzer. It
+also gives every ceiling-relevant threat one of three explicit modes: required battery, ceiling
+prohibited, or reason-bearing waiver. A required-battery rule names accepted catalog/configuration,
+worker service/version/implementation/image, isolation assurance, required attacks and minimum
+positive-control detection lower bound. These bindings do not authenticate a remote workload or
+prove its output or isolation declaration true.
 
-Because `attack`, `controlled_inference`, and `llm_canary` evidence is floor-or-screen and can never
-clear, an allowlisted but weak configuration can reduce detection usefulness but cannot turn attack
-non-attainment into clearance. Configuration strength still matters operationally and must be
-policy-reviewed; its failure mode on these paths is loss of blocking power, not an unsound clear.
+`AttackCatalog 1.0`, `AttackBatteryConfiguration 1.0`, `AttackPositiveControlResult 1.0`,
+`AttackBatteryWorkerOutput 1.0`, and `AttackBatteryInput 1.0` bind applicability, metric and evidence
+role; the complete preregistered run family; seeds, repetitions, stopping, multiplicity and resource
+limits; known-leak or expected-flag positive controls; every planned run/result; raw-bundle digests;
+the battery orchestrator/runtime identity; each run and positive control's catalogued executor
+service, attack version and implementation digest; the catalog validity window over configuration
+freeze and execution; and declared or externally attested isolation fields. Attack entries and
+worker outputs carry `can_clear=false`. Successful eligible runs may become blocking floors; failed,
+timed-out, control-failing, operating-point-missing or screen-only runs remain screens.
+
+The current configuration contract accepts only equal-Bonferroni multiplicity; unsupported `holm`
+or `preallocated` labels fail validation because no bound allocation parameters or replay exist for
+them. The evidence observation must fall within the worker start/completion interval, and the engine
+checks the complete interval against policy effectiveness/expiry, release expiry, and its bounded
+future-skew rule. The core mechanically checks elapsed timeout, aggregate reported statistical trials,
+and canonical governed-output bytes against the frozen limits. CPU and memory values remain declared
+budgets: the submission contains no independently observed CPU/memory telemetry or attestation, so
+production isolation must enforce and attest those limits externally.
+
+For a policy-required attack identifier, every frozen plan for that attack must declare
+`evidence_role=blocking_floor`; a required screen-only plan cannot satisfy the battery. For
+`membership_tpr_at_fpr`, the core independently recomputes a one-sided Clopper-Pearson false-positive
+upper bound using the complete-family simultaneous allocation (two bounds per comparison) and
+requires that upper bound to be no greater than the threat-bound target FPR. Merely reporting a
+successful run at the requested operating point is insufficient.
+
+The reference core checks non-root, no-new-privileges, read-only-root, no-network and no writable
+audit/key/governance-path declarations. It does not create that isolation. If policy requires
+`externally_attested` assurance, the current core deliberately leaves the battery unsatisfied because
+external isolation-signature verification is unavailable. Production must execute hostile artifacts
+under a separately authenticated and attested worker principal with enforced resource and path
+controls.
+
+For the older standalone `attack`, `controlled_inference`, and `llm_canary` floor/screen paths, weak
+configuration still means loss of blocking power. That loss becomes clearance-relevant when a
+ceiling is offered for the same threat. PolicyBundle 3.0 closes the silent-composition path for
+`required` mode: no complete passing battery means the ceiling remains `inconclusive`. A recorded
+waiver is visible implemented behavior, not evidence that normative G6 or an adopter's governance
+rules permit the waiver.
 
 ### 9.4 Model-family support boundary [I/E]
 
@@ -614,7 +710,7 @@ stages complete. Floor/screen analyzers can still block or diagnose other famili
 
 ### 9.5 Selection and portfolio workflow [I]
 
-`OptimizationRequest 3.0` binds:
+`OptimizationRequest 4.0` binds:
 
 - active policy identity, version, path, and digest;
 - caller-declared portfolio-registry identity, head, sequence, composition domain, exact active
@@ -627,7 +723,7 @@ stages complete. Floor/screen analyzers can still block or diagnose other famili
 - a versioned `SelectionPolicy` with ordered deterministic criteria and final configuration-ID tie.
 
 The optimizer computes the canonical selection-policy digest and requires it to appear in the active
-`PolicyBundle.accepted_selection_policy_sha256s` allowlist before evaluating candidates. This closes
+`PolicyBundle 3.0` `accepted_selection_policy_sha256s` allowlist before evaluating candidates. This closes
 the in-band preference-order authorization defect; it does not authenticate the registry, utility,
 control, search-space, experiment, transfer, or portfolio inputs.
 
@@ -655,7 +751,7 @@ generator or prove that the real candidate space is complete, so production use 
 external approval and independent completeness replay. Otherwise infeasibility yields
 `redesign_required`.
 
-Every `OptimizationReport 3.0` echoes the policy and registry identity/head/sequence/domain, the
+Every `OptimizationReport 4.0` echoes the policy and registry identity/head/sequence/domain, the
 selection policy and hash, all candidate evaluations, and `authorization_eligible=false`. Only
 `release_as_proposed` or `release_with_controls` outcomes populate selected
 artifact/interface/assessment/control bindings, portfolio status, and covered release identifiers;
@@ -663,10 +759,15 @@ artifact/interface/assessment/control bindings, portfolio status, and covered re
 
 The optimizer itself does **not** call SciPy to construct the Blackwell frontier. It replays the
 submitted transfer certificates, constructs a directed reachability relation, and applies the
-declared deterministic ordering to the resulting frontier. Ordinary utility, cost, tolerance, and
-uncertified portfolio fields still use Python binary64. Separate certificate-generation and
-statistical helper paths may use the optional SciPy dependency; that does not turn the optimizer's
-ordinary binary64 comparisons into exact or outward-rounded arithmetic.
+declared deterministic ordering to the resulting frontier. The garbling replay and the edge predicate
+`maximum_row_total_variation <= numerical_tolerance` use Python binary64. That predicate determines
+whether an edge exists, so a boundary case can change graph topology, frontier membership and final
+selection rather than merely perturbing a reported scalar. Utility, cost, evidence tolerance and
+uncertified portfolio fields also use binary64. Separate certificate-generation and statistical
+helper paths may use the optional SciPy dependency; neither fact makes ordinary comparisons exact or
+outward rounded. The runtime still computes a report, but any result that turns on an unresolved
+garbling/transfer edge or other clearance-critical binary64 boundary fails G7 and cannot support an
+MRAP-conformance conclusion.
 
 Supported trust profiles are:
 
@@ -686,18 +787,25 @@ validated:
 ```text
 append intent(full canonical request, operation, UUID run ID, release ID/instance digest)
   -> execute
-     -> append completed(intent reference, full output hash and bindings)
-     or append failed(intent reference, truncated exception type/message)
+     -> append completed(intent reference, full canonical report, report hash and bindings)
+     or append failed(intent reference, stable error code and redacted diagnostic fingerprint)
   -> emit output only after completed append
 ```
 
-`audit-verify` replays the canonical payload, versioned event-hash format, predecessor chain,
-contiguous sequence, ledger identity, release/release-instance identity,
-operation-specific intent/completion bindings, and exactly-one-terminal rule. For time it
-parses a timezone-aware event value and revalidates an assessment request at its intent time; it does
-not authenticate the clock, enforce monotonic event time, or apply a future-skew policy. It reports
-orphaned intents and can compare an expected ledger ID, event count, and head. Read-only verification
-does not mutate the database.
+The v2 intent stores both the full canonical request and its hash. A v2 completion stores both the
+full canonical assessment/optimization report and its hash. `audit-verify` therefore revalidates the
+embedded request at its intent time, validates the embedded report, checks request-to-report and
+operation-specific bindings, and replays the canonical payload, versioned event-hash format,
+predecessor chain, contiguous sequence, ledger identity, release/release-instance identity, and
+exactly-one-terminal rule without reopening the request, report, policy, evidence, configuration, or
+artifact source paths. This is self-contained structural and content-hash replay of the ledger rows;
+it does not re-establish the truth, availability, immutability, or original digest of the external
+source files named inside those objects.
+
+For time, verification parses a timezone-aware event value and asks whether an assessment request was
+valid at its intent event. It does not authenticate the clock, enforce monotonic event time, or apply
+a future-skew policy. It reports orphaned intents and can compare an expected ledger ID, event count,
+and head. Read-only verification does not mutate the database.
 
 The current CLI reads JSON and completes Pydantic validation before appending its intent. Missing
 files, malformed JSON, and schema/expiry validation failures therefore leave no intent or failed
@@ -705,10 +813,17 @@ terminal, and direct library calls are outside this chain. An adopter that must 
 malformed attempts needs an authenticated ingress record over the raw request digest before parsing,
 plus a bound rejection terminal; the present v2 ledger does not provide that coverage.
 
-The current failure payload is bounded to the exception type and the first 4,096 characters of its
-message; that truncation is not a sanitizer. Production deployments MUST classify and redact
-secrets, personal data, paths, tokens, prompts, and source excerpts before any failure reaches the
-audit ledger, while preserving a separately governed diagnostic reference when policy requires it.
+New failure events first bound the raw error code and diagnostic, then retain a stable error category
+and a domain-separated diagnostic fingerprint rather than the diagnostic text itself. The compatible
+v2 failure field can contain non-fingerprint text; `AuditVerification 3.0` counts such rows separately
+and reports `plaintext_failure_diagnostics_present` degradation. That narrow failure-field improvement
+does not make this ledger suitable for sensitive production content: every
+successful intent and completion deliberately duplicates the full canonical request and report.
+Those objects can contain personal data, prompts, source paths, proprietary configuration, attack
+details or other sensitive values. A production design MUST apply an approved minimization,
+encryption, access, retention, legal-hold and deletion model, or keep content in a protected immutable
+store and place only authenticated content references in the ledger while preserving self-contained
+authorized replay by another governed mechanism.
 
 New events use `mra-audit-event-v2`: a domain-separated canonical preimage binds the hash-format
 identifier, ledger ID, payload schema version, operation, event type, subject, release ID,
@@ -717,6 +832,20 @@ a valid v2 event into a different ledger without invalidating its hash. Rows car
 `legacy-v1` hash remain replayable only with explicit legacy opt-in, are counted separately, and
 cannot establish v2 governance coverage. The v2 format is still a local unsigned event chain; a
 production format additionally needs authenticated writers and externally protected custody.
+
+The v2 envelope is not a historical document dispatcher. The current verifier accepts embedded
+Assessment 5.0 and Optimization 4.0 requests/reports; it does not promise replay of prior-draft
+Assessment 4.0 or Optimization 3.0 intent/completion rows. Preserve the corresponding vintage runtime
+for any governed baseline instead of treating envelope-version equality as document compatibility.
+
+The audit counters classify independent axes and can overlap. `legacy_event_count` counts legacy
+completion-only `assessment_report` and `optimization_report` event types regardless of hash format.
+`legacy_hash_event_count` counts rows whose hash format is missing or `legacy-v1` regardless of event
+type. `domain_separated_hash_event_count` counts rows using `mra-audit-event-v2`.
+`redacted_failure_diagnostic_count` and `plaintext_failure_diagnostic_count` partition failed
+terminals; `diagnostic_degradations` must report plaintext presence exactly when the latter is nonzero.
+The event-type partition reconciles against intent plus terminal counts, while the hash-format and
+failure-diagnostic partitions reconcile separately.
 
 `audit-checkpoint` exports a portable ledger ID, count/sequence, head digest, and creation time for
 external anchoring. The local database is not append-only against a principal that can modify or
@@ -740,7 +869,7 @@ For audit reporting, distinguish these profiles. They are audit-review categorie
 
 | Audit profile | Requirements | Current status |
 |---|---|---|
-| `local_v2` | SQLite v2 intent/terminal chain with `legacy_event_count == 0` and `legacy_hash_event_count == 0`, canonical replay, ledger/release identity, sequence and orphan checks | Implemented for v2-only ledgers |
+| `local_v2` | SQLite v2 current-document intent/terminal chain with both legacy counters and `plaintext_failure_diagnostic_count` equal to zero, canonical replay, ledger/release identity, sequence and orphan checks | Implemented for current Assessment 5.0/Optimization 4.0 documents in v2 envelopes |
 | `anchored_v1` | `local_v2` plus independently retained expected identity/count/head and anchor receipt on a governed schedule | External integration required |
 | `production_v1` | Authenticated actors, append-only replicated custody, signed/transparency-logged checkpoints, managed keys, retention/legal hold, independent read-only verification and incident handling | External production profile |
 
@@ -752,8 +881,9 @@ operator did not replace the entire ledger. The audit status should therefore sa
 The runtime `complete` field means only that the observed v2 intents have no orphaned terminal at the
 verification cutoff. A result may still report `complete=true` while containing legacy completion-
 only rows. Governance-grade `local_v2` coverage therefore additionally requires
-`legacy_event_count == 0`, `legacy_hash_event_count == 0`, and externally recorded verification
-counts and orphan identifiers. A release-bound event hash does not identify which ledger is the
+`legacy_event_count == 0`, `legacy_hash_event_count == 0`,
+`plaintext_failure_diagnostic_count == 0`, no diagnostic degradation, and externally recorded
+verification counts and orphan identifiers. A release-bound event hash does not identify which ledger is the
 institution's canonical ledger and cannot prove that a caller did not select a fresh ledger. That
 namespace and completeness claim requires an externally governed ledger registry and ingress route.
 
@@ -768,7 +898,7 @@ Assessment and optimization manifests are domain-specific, non-authorizing Ed255
 objects. They are not interchangeable with MRAP event/artifact signatures.
 
 `release-protocol-verify` accepts `ReleaseProtocolRun 1.1` and emits
-`ReleaseProtocolVerification 1.0` containing `verification_profile`,
+`ReleaseProtocolVerification 2.0` containing `verification_profile`,
 `artifact_files_verified`, `authenticated_signatures_verified`, `verification_time`, `run_sha256`,
 `runtime_identity`,
 `skipped_checks`, `degradations`, `valid`, `final_state`, `authorization_issued`,
@@ -827,8 +957,9 @@ evidence-plan/bundle, authorization, activation, monitoring, incident, retiremen
 
 The reviewer MCP server is a source-checkout-only local stdio server. At startup it creates an
 in-memory lexical index from repository documentation and schemas. Its tools list analyzer and
-red-team descriptors, search advisory text, return a named schema, validate an assessment request,
-review non-clearing model coverage, verify a confined audit database read-only, and invoke selected
+red-team descriptors, validate the structure of an `AttackBatteryInput 1.0` submission without
+executing it, search advisory text, return a named schema, validate an assessment request, review
+non-clearing model coverage, verify a confined audit database read-only, and invoke selected
 experimental workflows. It exposes no MCP resources or prompts, HTTP/SSE endpoint, signing,
 authorization, registry, activation, failover, or training-control operation.
 
@@ -842,9 +973,12 @@ request/response envelope. The default analyzer registry remains local, and the 
 does not host the prospective analyzer RPC tools. Discovery metadata is not proof of remote
 deployment, worker authentication, or decision authority.
 
-Evidence-lab workers may execute trusted local model code, launch subprocesses, use optional
-dependencies, or download public data. Their results remain screens or candidate floors until an
-approved evidence authority recollects or binds them into a complete current assessment request.
+Evidence-lab and exploratory red-team workers may execute trusted local model code, launch
+subprocesses, use optional dependencies, or download public data. The exploratory red-team registry
+publishes versioned non-clearing catalog descriptors and a runtime-identified report, but it does not
+emit the complete decision-bearing worker output or prove isolation. Results remain screens or
+candidate floors until an approved external worker produces every policy-bound attack-battery object
+and an evidence authority binds the complete submission into a current assessment request.
 
 ## 10. Current machine-contract inventory
 
@@ -852,32 +986,49 @@ Schema suffixes version individual contracts, not the framework as a whole.
 
 | Domain | Current contract | Critical audit purpose |
 |---|---|---|
-| Assessment input | `assessment-request-v4.json` (`4.0`) | Release, policy, population, threat, analyzer, source, producer, and context bindings |
-| Policy | `policy-bundle-v2.json` (`2.0`) | Mandatory rules plus analyzer version, implementation/configuration, and selection-policy digest allowlists |
-| Assessment output | `assessment-report-v4.json` (`4.0`) | Per-threat results, complete evidence disposition, runtime identity and explicit single-release/declared-interface/non-authorizing scope |
-| Assessment integrity | `signed-manifest-v2.json` (`2.0`) | Direct artifact/interface plus request/report/policy hashes, scope and interface-assurance echo |
-| Optimization input | `optimization-request-v3.json` (`3.0`) | Active policy, caller-declared source-bound portfolio snapshot, candidates, controls, utility, transfer, search, and selection policy |
-| Optimization output | `optimization-report-v3.json` (`3.0`) | Complete candidate evaluation, selected bindings and runtime identity |
-| Optimization integrity | `signed-optimization-manifest-v3.json` (`3.0`) | Signed final selection and scope bindings |
+| Assessment input | `assessment-request-v5.json` (`5.0`) | Release, policy, population, threat, analyzer, source, producer, context and complete attack-battery bindings |
+| Policy | `policy-bundle-v3.json` (`3.0`) | Mandatory rules; analyzer and selection-policy allowlists; per-threat ceiling/battery mode; accepted catalog/configuration/worker/image/isolation and positive-control thresholds |
+| Assessment output | `assessment-report-v5.json` (`5.0`) | Per-threat results, attack-battery status, complete evidence disposition, runtime identity and explicit single-release/declared-interface/non-authorizing scope |
+| Assessment integrity | `signed-manifest-v3.json` (`3.0`) | Direct artifact/interface plus request/report/policy hashes, scope and interface-assurance echo for Assessment 5.0 |
+| Attack catalog | `attack-catalog-v1.json` (`1.0`) | Versioned attack applicability, implementation, evidence role, control kind and no-clearance authority |
+| Attack-battery configuration | `attack-battery-configuration-v1.json` (`1.0`) | Complete frozen runs, controls, seeds, supported Bonferroni multiplicity, stopping rule and declared resource limits |
+| Attack positive-control result | `attack-positive-control-result-v1.json` (`1.0`) | Catalog-bound executor service/version/implementation identity, typed known-leak binomial or expected-flag result and raw-result digest |
+| Attack worker output | `attack-battery-worker-output-v1.json` (`1.0`) | Release/context/catalog/configuration bindings, battery-orchestrator producer/runtime identity, isolation declaration, all per-result executor triples, controls/results and retained raw-bundle digest |
+| Attack-battery submission | `attack-battery-submission-v1.json` (`1.0`) | Content hashes and exact catalog/configuration/output/run/control disposition supplied to the core |
+| Optimization input | `optimization-request-v4.json` (`4.0`) | Active PolicyBundle 3.0, AssessmentReport 5.0 references, caller-declared source-bound portfolio snapshot, candidates, controls, utility, transfer, search, and selection policy |
+| Optimization output | `optimization-report-v4.json` (`4.0`) | Complete candidate evaluation, selected bindings and runtime identity |
+| Optimization integrity | `signed-optimization-manifest-v4.json` (`4.0`) | Signed final selection and scope bindings |
 | Portfolio specification | `incomplete-portfolio-specification-v1.json` | Approved finite portfolio semantics |
 | Portfolio problem/certificate | `incomplete-portfolio-problem-v1.json`; `incomplete-portfolio-certificate-v1.1.json` | Conservative or exact composition result and replay |
 | Portfolio statistics | `portfolio-multinomial-counts-v1.json`, `portfolio-multinomial-plan-v1.json`, `portfolio-error-budget-v1.json`, `portfolio-multinomial-request-v1.json`, `portfolio-multinomial-evidence-v1.json` | Frozen counts, plan, budget, simultaneous evidence, and compilation |
 | Protocol design | `protocol-feasibility-problem-v1.json`; `protocol-feasibility-certificate-v1.json` | Finite design-time soundness/liveness frontier |
 | Lifecycle transcript | `release-protocol-run-v1.1.json` | Supplied lifecycle artifacts, events, roles, hashes, signatures, and states |
-| Lifecycle replay result | `release-protocol-verification-v1.json` | Verification profile, checks, skips, degradation, run digest and runtime identity |
-| Local audit result | `audit-verification-v2.json` | Chain/release identity, hash-format counts, head, terminals, orphans, completeness and runtime identity |
-| Current schema inventory | `current-schema-manifest-v1.json` | Deterministic filename/model/version/digest inventory replayed in CI; repository inventory is not itself a protected signing ceremony |
+| Lifecycle replay result | `release-protocol-verification-v2.json` (`2.0`) | Verification profile, checks, skips, degradation, run digest and runtime identity |
+| Local audit result | `audit-verification-v3.json` (`3.0`) | Chain/release identity, independently defined event/hash-format counts, head, terminals, orphans, completeness and runtime identity |
+| Current schema inventory | `current-schema-manifest-v1.json` | Deterministic inventory of all 26 registered contract schemas; excludes its own digest by design and requires exact-byte regeneration plus detached protected attestation |
 | Local audit anchor | `audit-checkpoint-v1.json` | Portable expected ledger identity/count/head |
 | Analyzer service envelope | Python-only request/response contract `2.0` | Prospective transport-neutral evidence exchange; no standalone public JSON Schema |
 | Supplemental strategic stress test | Python-only `StrategicAssuranceProblem 1.0`, `StrategicAssuranceCertificate 1.0`, and unversioned verification result | Exact-rational supplemental replay through the Python API or experimental script; no public schema or `mra` command and no governance-decision effect |
 
 Older schema files are retained for structural provenance. The current CLI intentionally rejects
-superseded top-level versions. Historical legal-hold or retention use MUST preserve the matching
-released wheel, dependency lock, trust metadata, artifact hashes, and vintage replay fixtures until
-a version-dispatched verifier exists. Missing modern evidence fields must be recollected or migrated
-by an authorized process; they must not be invented or restamped.
+superseded top-level versions. The current containing Pydantic models also reject unsupported nested
+versions: `InterfaceContract 3.0`, `LlmProtocolContract 1.0`, `SelectionPolicy 1.0`, `PortfolioRegistrySnapshot 1.0`, the attack
+catalog/configuration/control/output/submission `1.0` contracts, and the prospective analyzer
+request/response envelope `2.0` are exact accepted versions, with no implicit fallback or migration.
+Historical legal-hold or retention use MUST preserve the matching released wheel, dependency lock,
+trust metadata, artifact hashes, and vintage replay fixtures until a version-dispatched verifier
+exists. Missing modern evidence fields must be recollected or migrated by an authorized process;
+they must not be invented or restamped.
 
-`ReleaseContract`, `InterfaceContract`, `EvidenceRecord`, `SelectionPolicy 1.0`,
+This inventory is the pre-governed candidate for the first baseline described in Section 0. Its 26 entries cover
+registered contract-schema bytes, not the manifest file itself: embedding the digest of the final
+manifest bytes inside those same bytes would be recursive. Maintenance MUST separately compare the
+manifest byte-for-byte with deterministic regeneration. A released claim MUST additionally verify a
+detached signature or external attestation over those exact manifest bytes, protected signer custody,
+and the retained release tuple. Source control or the unsigned digest list alone is not attestation.
+
+`ReleaseContract`, `InterfaceContract`, `EvidenceRecord`, `AttackBatteryRequirement`,
+`AttackIsolationEvidence`, `SelectionPolicy 1.0`,
 `PortfolioRegistrySnapshot 1.0`, strategic-assurance contracts, audit event payloads, and many
 lifecycle artifact contents are nested or Python-only contracts rather than independent top-level
 schemas. An auditor must inspect their containing schema and executable model, not assume every
@@ -889,18 +1040,21 @@ logical object has its own file.
 |---|---|
 | `ReleaseContract` | Release ID, owner, recipient, purpose, family/profile, protected unit, opaque artifact path/hash, interface, unique declared lineage, timezone-aware expiry |
 | `ModelProfile` | Task, input/output modalities, training paradigm, component families, generative/stateful flags and defined custom task where applicable |
-| `InterfaceContract` | Version 2 predictive/interactive protocol; structured response/output inventory including summaries and downloads; precision; serialization; timing; error/status/retry behavior; batching/concurrency/cross-request state; side/local/admin access; lifetime query budget; authentication/rate controls; and complete LLM subprotocol when used |
+| `InterfaceContract` | Version 3 predictive/interactive protocol with required-explicit nullable fields and a structured rate value/window/burst/scope/retry/enforcement declaration; Section 3 maps every named channel to its field. No declaration proves live-interface equality or distributed counter/reset/bypass behavior |
 | `PopulationScope` | Scope ID, unit, frame/reference date, inclusion and size evidence, and source-bound assumptions required by the selected population contract |
 | `ThreatContract` | Threat ID/kind, population scope, decision metric/parameters, tolerance/basis, candidate/secret/side-information/realizability semantics |
 | `EvidenceContext` | Release and contract hashes, policy, artifact, interface, population, decision game and timezone-aware observation time |
 | `EvidenceProducer` | Service ID, semantic version, implementation digest and configuration digest |
 | `EvidenceRecord` | Producer/context, evidence direction/coverage/capabilities, metric, interval/value, assumptions and source bindings; every record is retained in the report and named as used or excluded by its threat decision |
+| `PolicyRule` / `AttackBatteryRequirement` | Per-threat required/prohibited/waived ceiling mode and waiver reason; accepted catalog/configuration/worker/image/attester identities; required attacks, isolation level and minimum positive-control detection lower bound |
+| `AttackCatalog` / `AttackBatteryConfiguration` | Versioned attack applicability/authority and validity window plus complete frozen run/control family, declared resource limits, stopping and the currently supported Bonferroni method |
+| `AttackBatteryWorkerOutput` / `AttackBatteryInput` | Exact release/context/content hashes, execution interval containing `observed_at`, battery-orchestrator and runtime identity, catalog-bound service/version/implementation identity for every run and control, declared/attested isolation fields, raw digests and complete dispositions; the core checks timeout/trial/output-byte limits, but CPU/memory compliance and content truth are not attested |
 | `AssessmentScope` | Declared lineage, single-release/no-portfolio, declared-interface-only, live-unverified, gateway-required and non-authorizing literals |
 | `SelectionPolicy` | Version, policy ID, rationale, unique ordered criteria, final deterministic configuration-ID tie, canonical digest and active-policy allowlist membership |
 | `PortfolioRegistrySnapshot` | Registry ID/head/sequence/domain, exact active IDs, observed/expiry times and source path/hash; source binding does not authenticate the registry or prove the head is live |
 | `ReleaseConfiguration` | Candidate ID/proposed status, assessment reference, released artifact/interface, utility, cost, controls, threat-experiment bindings and portfolio certificate |
 | `FiniteExperiment` | Threat/population/game, secret states, observations, channel/prior, interface description and optional artifact/interface hashes |
-| `GarblingCertificate` | Dominant/dominated experiment IDs, stochastic kernel, total-variation allowance, numerical tolerance and construction |
+| `GarblingCertificate` | Dominant/dominated experiment IDs, stochastic kernel, total-variation allowance, numerical tolerance and construction; its binary64 tolerance comparison controls reachability-edge existence and therefore frontier topology |
 | `ThreatExperimentBinding` | Threat plus assessed/released experiment IDs and required substitution-certificate reference when they differ |
 | `SearchSpaceCertificate` | Declared method, submitted configuration IDs and source path/hash; runtime does not prove generator or real-space completeness |
 | `UtilityCertificate` | Configuration/artifact/interface/population/split hashes, metric, lower bound/estimate/floor, population, uncertainty, disjointness and retained source |
@@ -913,8 +1067,9 @@ logical object has its own file.
 |---|---|---|---|
 | Schemas, protocol, formal sources | Repository maintainers through Git review | Committed and replayed in CI | Protected source control and review |
 | Request, policy, evidence, config, artifact files | Caller/external roles | Assessment/optimization helpers accept absolute paths or resolve from the input base; protocol artifacts require confined relative paths; regular-file checks where required and SHA-256 | Canonical intake, immutable custody, malware/format controls |
+| Attack catalog, battery, positive-control, worker-output and raw-result objects | External attack/evidence worker and caller | Typed content/digest/context binding and in-process replay; core does not execute the target | Isolated attested execution, protected raw custody, issuer identity and independent control artifacts |
 | Reports, certificates, manifests | CLI or caller | Typed JSON and optional signature | Transactional immutable retention with legal hold and access control |
-| SQLite `AuditStore` | CLI | Intent/terminal hash chain, WAL/FULL sync, ledger identity, checkpoint | Separate immutable checkpoint anchor, backup/restore, custody |
+| SQLite `AuditStore` | CLI | Content-bearing intent/completion chain containing full canonical requests/reports, WAL/FULL sync, ledger identity and checkpoint | Sensitive-content minimization/encryption/access/retention design, separate immutable checkpoint anchor, backup/restore and custody |
 | PEM keys/trust stores | Local tools or caller | Ed25519 operations | HSM/KMS, identity binding, rotation, revocation, dual control |
 | MCP knowledge index | Local source checkout | In-memory deterministic chunks and hashes | Tenant/auth controls if deployed; no truth authority |
 | Experimental output/cache | Evidence lab | Ignored local files | Freeze and bind through approved evidence process before use |
@@ -951,9 +1106,12 @@ Pull requests and main-branch pushes run the Lean proof build/axiom audit and Py
 3.13 compile/test/schema/link matrix before building and smoke-testing wheel/sdist artifacts. A tagged
 release requires an annotated `vX.Y.Z` tag reachable from `main`, exact tag/package-version equality,
 the release checks, package validation, a clean-environment wheel smoke test, and creation of a draft
-GitHub release. Schema maintenance verifies the deterministic current-schema manifest against all
-registered current schema bytes. The repository does not hold the protected key needed to sign that
-manifest as release provenance. Automation does not publish to PyPI or deploy a service.
+GitHub release. Schema maintenance verifies the deterministic current-schema manifest against all 26
+registered current contract-schema bytes and separately compares the manifest itself with
+deterministic regeneration; the manifest does not recursively inventory its own final bytes. The
+repository does not hold the protected key needed for the detached signature or attestation required
+to make those exact manifest bytes release provenance. Automation does not publish to PyPI or deploy
+a service.
 
 ## 12. Security and adversary model
 
@@ -1002,6 +1160,7 @@ interface threat analysis.
 | Artifact substitution | SHA-256 and signed manifest bindings | Canonical upload, immutable store, scan, complete bundle verification |
 | Evidence rebinding | Source-observed release/policy/artifact/interface/population/game hashes | Attested workers, immutable logs, approved images and custody |
 | Weak/stale analyzer | Typed producer/version/config digests and policy floors/allowlists | Workload identity, attestation, reassessment queue on policy change |
+| Missing or weak empirical challenge before ceiling clearance | PolicyBundle 3.0 requires, prohibits, or explicitly waives a per-threat battery; typed complete battery and positive controls gate ceiling eligibility | Independent catalog/configuration approval, known-leak reference artifacts/data, isolated attested execution, raw-result custody and waiver governance |
 | Evidence-direction reversal | Central decision engine and exact capability descriptors | Independent method review and negative conformance fixtures |
 | Missing evidence treated as safe | Fail-closed inconclusive decision | UI/workflow must prohibit discretionary silent override |
 | Contradictory evidence gaming | Distinct contradiction class, producer evidence IDs, blocking-floor preservation | Independent adjudication and incident handling |
@@ -1012,7 +1171,8 @@ interface threat analysis.
 | Control theatre | Privacy credit only for source-bound controls declared as information reduction | Independently verify semantic effectiveness plus gateway enforcement, monitoring, expiry and failure action |
 | Audit omission/tamper | Mandatory CLI intent/terminal chain and anchorable checkpoint | Immutable external anchor, custody, backup and restore verification |
 | Signing-key theft | Signature verification and compromise-list input | KMS/HSM, dual control, rotation/revocation and enrollment |
-| Malicious deserialization | Core treats model as opaque bytes | No-network non-root worker, allowlist, scan and resource limits |
+| Malicious deserialization | Core treats the model as opaque bytes and validates submitted battery output; the external attack worker must execute the target | No-network/non-root/no-new-privileges worker, read-only root, no writable audit/key/governance paths, image allowlist/attestation, scanning and enforced resource limits |
+| Audit-ledger confidentiality | New failure events retain a diagnostic fingerprint rather than free-form text | Full requests and reports are still duplicated in v2 rows; use protected content custody, minimization/encryption/access/retention controls or a separately governed reference design |
 | MCP privilege escalation | Non-authorizing tool contract; the audit verifier is read-only, but experiment tools execute and may write local state | Separate reviewer and execution principals with sandboxing; omission or path confinement is not process isolation |
 | Stale approval | Contract/manifest/protocol expiry | Gateway lease, live revocation and clock/registry fidelity |
 | Interactive LLM under-modeling | Complete protocol contract; no one-shot clearance | Transcript-level analysis covering RAG, tools, memory, updates and concurrency |
@@ -1044,6 +1204,13 @@ Any unsupported or unbound premise yields `inconclusive`, not a presumption of s
 - Exact transfer from assessed to released behavior is valid only when the released experiment is a
   verified garbling/information reduction of the assessed experiment for the same states and prior.
 - Approximate transfer MUST add the verified error penalty conservatively.
+- Garbling residual, allowance and numerical-tolerance comparisons that decide whether a reachability
+  edge exists MUST be exact or conservatively outward rounded. An unresolved binary64 boundary can
+  change the graph, Blackwell frontier and selection and therefore fails G7.
+- Where policy permits a ceiling to clear only after empirical challenge, the complete frozen attack
+  family and its multiplicity allocation MUST run, every required known-leak/expected-flag positive
+  control MUST pass its policy threshold, and any non-attainment, failed control, incomplete run or
+  missing required floor MUST keep the ceiling ineligible rather than count as evidence of safety.
 - Marginally safe releases may be unsafe jointly; portfolio dependence must be directly assessed,
   validly composed, or conservatively maximized over the registered feasible set.
 - Floating-point solvers may propose results, but exact-rational or outward-rounded replay must verify
@@ -1149,8 +1316,9 @@ Before production accreditation, the adopter MUST provide and test:
    retirement responsibilities;
 2. deterministic policy-profile resolution and frozen threat/tolerance/utility requirements;
 3. immutable artifact/evidence/governance storage and a complete deterministic bundle manifest;
-4. approved analyzer catalog, isolated attested workers, positive controls, version/digest policy,
-   and reassessment queues;
+4. approved analyzer and attack catalogs, complete frozen battery configurations, known-leak or
+   expected-flag positive controls, isolated attested workers, version/digest policy, raw-result
+   custody, and reassessment queues;
 5. OIDC or equivalent identity, RBAC/ABAC, four-eyes controls, and separation of duties;
 6. KMS/HSM signing keys, rotation, revocation, compromise response, and trust-store governance;
 7. encrypted storage, retention, legal hold, deletion, backup, restore, and access controls;
@@ -1197,10 +1365,16 @@ rather than inventing an identifier.
 
 - [ ] Record repository commit, framework version, dirty-tree status, platform, Python versions, and
   dependency locks.
-- [ ] Verify `current-schema-manifest-v1.json` against every current schema byte-for-byte, confirm its
-  registered model/version inventory matches Section 10, and ensure no retained historical schema is
-  presented as current executable support. For a released claim, also verify the separately signed
-  manifest/attestation and its protected-key custody; a Git-tracked digest list alone is insufficient.
+- [ ] Verify every one of the 26 registered current contract schemas byte-for-byte against
+  `current-schema-manifest-v1.json`, confirm its model/version inventory matches Section 10, and
+  ensure no retained historical schema is presented as current executable support. The manifest
+  excludes its own digest by design; separately compare its exact bytes with deterministic
+  regeneration. For a released claim, verify the detached signature or external attestation over
+  those exact manifest bytes and its protected signer/key custody; a Git-tracked digest list alone is
+  insufficient.
+- [ ] Identify the first governed schema baseline and its signed/attested manifest. Reject an
+  incompatible same-version change after that baseline; retain superseded schema/runtime/fixtures and
+  never restamp missing modern fields into vintage artifacts.
 - [ ] For each evidence direction, inspect schema/validation, positive, boundary, malformed/binding,
   and authority-negative tests; in particular, prove a floor- or screen-declaring analyzer cannot
   produce a clearing record under any accepted input.
@@ -1221,8 +1395,15 @@ rather than inventing an identifier.
 - [ ] Verify owner, purpose, prohibited uses, recipient, model family/profile, modalities, training
   paradigm, protected unit, population scopes, and expiry.
 - [ ] Verify the complete recipient-observable interface, including side/admin channels.
-- [ ] Verify policy path/hash, identity/version, effective time, expiry, rules and mandatory threats.
+- [ ] Verify the Section 3 channel-to-field mapping, required-explicit nulls, and structured
+  rate value/window/burst/scope/retry/enforcement declaration; treat it as a claim, not proof of
+  live distributed-counter, reset, failure, or bypass behavior.
+- [ ] Verify policy path/hash, identity/version, effective time, expiry, rules, mandatory threats and
+  each ceiling's required/prohibited/waived attack-battery disposition and waiver reason.
 - [ ] Verify analyzer minimum versions and accepted implementation/configuration digests.
+- [ ] Mutate every supported nested version and confirm fail-closed rejection, including
+  `InterfaceContract 3.0`, `LlmProtocolContract 1.0`, `SelectionPolicy 1.0`, `PortfolioRegistrySnapshot 1.0`, all attack-battery
+  `1.0` objects, and analyzer envelope `2.0`; no fallback may be inferred.
 - [ ] Verify every referenced source/configuration is immutable, retained, regular where required,
   and matches its expected digest.
 - [ ] Verify the release instance changes when any material bound field changes.
@@ -1236,6 +1417,27 @@ rather than inventing an identifier.
 - [ ] Confirm every analyzer input is routed once and its descriptor does not exceed emitted authority.
 - [ ] Confirm floor, ceiling, exact and screen evidence cannot cross their allowed decision direction.
 - [ ] Confirm attack non-attainment never clears and population/watermark screens never decide.
+- [ ] For every threat whose ceiling mode is `required`, verify the policy-approved catalog was valid
+  at both configuration freeze and execution; verify the complete frozen configuration, exact
+  required-attack set, policy-allowlisted battery-orchestrator service/version/implementation and
+  image, runtime identity, resource limits, raw bundle, and every planned run/result disposition.
+- [ ] Confirm the evidence observation lies inside the worker execution interval; replay policy,
+  release, catalog and bounded-current-time checks over that full interval. Recompute elapsed timeout,
+  aggregate reported trials and canonical worker-output bytes against the frozen limits. Treat CPU and
+  memory as unverified declarations unless separate isolation telemetry/attestation proves enforcement.
+- [ ] Require the supported `bonferroni` multiplicity value and independently replay its complete
+  family size/allocation; reject unparameterized `holm`, `preallocated`, or unknown labels.
+- [ ] Distinguish the battery orchestrator from attack executors. For every run and positive-control
+  result, verify its service/version/implementation triple exactly matches the corresponding frozen
+  catalog entry; reject missing, substituted, expired, or merely orchestrator-inherited identities.
+- [ ] For every floor-producing configuration, replay each bound positive control, its reference
+  artifact/dataset and policy minimum detection lower bound. Confirm every required attack plan is
+  `blocking_floor`; for low-FPR membership runs, independently recompute the complete-family
+  simultaneous one-sided FPR upper bound and confirm it attains the threat-bound target. A failure,
+  timeout, missed operating point, screen-only result, missing floor or incomplete required run keeps
+  a ceiling ineligible.
+- [ ] Treat `waived` as an explicit governance exception requiring its recorded reason and independent
+  authority review; do not relabel it as positive-control or G6 evidence.
 - [ ] Confirm DP evidence covers the entire deployed pipeline and all related releases.
 - [ ] Confirm exact/ceiling clearance has complete declared-interface coverage.
 - [ ] Confirm contradiction is distinct from absence, names both conflicting records, and does not
@@ -1254,6 +1456,9 @@ rather than inventing an identifier.
   experiments and portfolio evidence.
 - [ ] Verify any changed assessed-to-released experiment has a safe-direction exact or conservatively
   approximate transfer certificate.
+- [ ] Replay the garbling residual/allowance and edge-existence comparison conservatively. If
+  `maximum_row_total_variation <= numerical_tolerance` is unresolved at binary64 precision, treat the
+  reachability graph, frontier and selection as G7-inconclusive.
 - [ ] Verify each population-secret pair covers the exact active portfolio plus candidate.
 - [ ] Verify utility passes before Blackwell/disclosure minimization.
 - [ ] Verify selection policy version, rationale, ordered criteria, final deterministic tie, hash,
@@ -1271,16 +1476,28 @@ rather than inventing an identifier.
   rejected and direct-library attempts that the current ledger cannot observe.
 - [ ] Confirm each intent has exactly one completed or failed terminal event.
 - [ ] Confirm output is not released before completion append.
+- [ ] Confirm each v2 intent contains the full canonical request plus its hash and each completion
+  contains the full canonical report plus its hash; verify self-contained structural replay succeeds
+  without reopening named source paths, while separately revalidating those external source bytes and
+  custody where the audit claim requires truth rather than ledger consistency.
 - [ ] Run `audit-verify` with externally expected ledger ID, event count and head; record `complete`,
   `event_count`, `intent_count`, `completed_count`, `failed_count`, `legacy_event_count`,
-  `legacy_hash_event_count`, `domain_separated_hash_event_count`, release/instance identifiers, and
-  the full `orphaned_run_ids` set.
+  `legacy_hash_event_count`, `domain_separated_hash_event_count`, both failure-diagnostic counts,
+  `diagnostic_degradations`, release/instance identifiers, and the full `orphaned_run_ids` set.
 - [ ] Retain the exact verification invocation, result, independently protected prior
   checkpoint/anchor receipt and its digest together. Do not claim anchored verification from the
   result JSON alone because it does not echo the supplied expectations or an `anchor_checked` flag.
 - [ ] Require both `legacy_event_count == 0` and `legacy_hash_event_count == 0` before claiming
-  `local_v2` or governance-grade operation;
+  `local_v2` or governance-grade operation; also require
+  `plaintext_failure_diagnostic_count == 0` and an empty `diagnostic_degradations` list;
   do not treat runtime `complete=true` as proof that legacy-only rows are absent.
+- [ ] Interpret the counters independently: `legacy_event_count` is completion-only legacy event
+  types regardless of hash format; `legacy_hash_event_count` is missing/`legacy-v1` hash rows
+  regardless of event type; the diagnostic counters partition failed terminals. Investigate any
+  plaintext failure diagnostic or nonzero legacy count and do not sum independent axes together.
+- [ ] Confirm the embedded document versions match the verifier's current Assessment 5.0 and
+  Optimization 4.0 profile. Use a preserved vintage runtime for any prior governed document baseline;
+  a v2 envelope alone is not evidence that prior-draft documents are replay-compatible.
 - [ ] Verify that the externally governed ledger namespace identifies this database as the canonical
   ledger for the release; an internally valid fresh ledger does not establish complete run history.
 - [ ] Investigate every orphan, gap, duplicate terminal, tail replacement or identity mismatch.
@@ -1325,8 +1542,14 @@ rather than inventing an identifier.
 - [ ] Verify the independent auditor/verifier has read-only audit-database and snapshot access and
   has no ledger-writer, anchor-writer, authorization, registry-mutation, signing, or deployment
   credential.
-- [ ] Verify production failure-event redaction prevents secrets, personal data, tokens, prompts,
-  sensitive paths, and source excerpts from entering the ledger; truncation alone does not pass.
+- [ ] Verify the attack-execution principal is separate from assessment and review principals,
+  no-network/non-root/no-new-privileges, read-only-root and resource-limited; it has no writable audit,
+  key or governance path, and its image and attestation are policy accepted. Core validation of an
+  isolation declaration is not proof that these controls operated.
+- [ ] Verify ledger confidentiality for the full canonical request/report content, including secrets,
+  personal data, prompts, sensitive paths, source excerpts, attack details, encryption, access,
+  retention, legal hold and deletion. A diagnostic fingerprint for new failures does not sanitize the
+  content-bearing intent/completion rows.
 - [ ] Verify KMS/HSM key custody, enrollment, dual control, rotation, compromise and revocation.
 - [ ] Verify identity, RBAC/ABAC, four-eyes approvals and tenant separation.
 - [ ] Verify immutable storage, encryption, backup/restore, deletion, retention and legal hold.
@@ -1352,6 +1575,8 @@ rather than inventing an identifier.
   premise, coverage model, release binding and permitted decision effect.
 - [ ] Reject or mark `inconclusive` any clearance-critical comparison at an unresolved binary64
   boundary until exact, approved-decimal, or conservative outward-rounded replay establishes it.
+- [ ] Specifically test garbling/transfer residual and tolerance boundaries because an edge flip
+  changes reachability, frontier membership and final selection rather than only a displayed scalar.
 - [ ] Independently review scientific assumptions, population validity, side information, recipient
   realizability, threat completeness, and interface completeness.
 
@@ -1382,7 +1607,10 @@ that result as MRAP-conformant authorization.
 | Gap | Current treatment | Required closure evidence |
 |---|---|---|
 | Authoritative identity and separation | Not implemented | Production identity/RBAC design, tests and role/key inventory |
-| Attested remote evidence workers | Local adapters/experimental workers only | Isolated service, workload identity, attestation, fixtures and operations |
+| Attested remote evidence and attack workers | Typed attack worker output/runtime/isolation contracts and local adapters exist; the core validates submitted declarations and deliberately cannot satisfy a policy requiring externally verified isolation attestation | Isolated service, workload identity, real image/statement signature verification, attestation trust policy, hostile-artifact fixtures and operations |
+| Decision-bearing attack execution | Versioned catalog/configuration/control/output/submission contracts and the `attack_battery` analyzer replay complete submitted content; the supported core never deserializes or executes the release model, and exploratory red-team reports are not decision-bearing submissions | Separately authenticated no-network/non-root/no-new-privileges execution service with read-only root, enforced resource limits, no writable audit/key/governance paths, approved images and immutable raw-result custody |
+| Positive-control and battery source truth | PolicyBundle 3.0 requires approved complete batteries and control thresholds before ceiling clearance; required runs must be blocking-floor attacks, attain any low-FPR operating point and pass their bound controls | Independently produced known-leak reference models/datasets, approved catalog strength, attested execution, retained raw observations and periodic sensitivity/reassessment evidence |
+| Attack-battery coverage breadth and waivers | Required/prohibited/reason-bearing-waived ceiling modes are explicit; the bundled catalog/example covers only a narrow predictive membership case and a waiver can make a ceiling eligible | Threat/family/protocol-specific approved batteries, independent waiver authority and expiry, negative fixtures and evidence that every mandatory G6 obligation remains non-waived for any conformance claim |
 | Trusted build and runtime identity attestation | Four principal verification/report outputs carry a deterministic `RuntimeIdentity` with package/component/Python/dependency/source and algorithm-profile digests; these fields are produced by the same local runtime and are not a trusted-build attestation | Released wheel/container digest, dependency lock/SBOM, reproducible-build or SLSA-style provenance, signer identity, independent verification and retained vintage environment |
 | Complete bundle inspection | One opaque regular-file digest | Deterministic manifest/assembler and exact gateway verification |
 | Live-interface verification | Report explicitly says false | Adversarial gateway conformance suite and activation receipt |
@@ -1398,17 +1626,18 @@ that result as MRAP-conformant authorization.
 | Immutable audit custody | Local chain and portable checkpoint | External scheduled anchoring, restore and truncation exercises |
 | Canonical audit-ledger namespace and run completeness | New event hashes bind ledger/release/instance identity and verification can filter an expected release; a caller can still choose a fresh internally valid ledger | Authenticated ingress that routes every governed operation to one authoritative ledger namespace, ledger discovery/inventory and externally anchored completeness evidence |
 | Pre-validation audit ingress | CLI intent begins only after file read, JSON parse and Pydantic validation; direct-library runs are not chained | Authenticated raw-request digest before parsing, bound rejection terminals and coverage tests |
+| Audit content confidentiality | New writers bound diagnostics before retaining a redacted fingerprint; AuditVerification counts plaintext-compatible failure fields as explicit degradation, but v2 intents/completions still store full canonical request/report content | Approved minimization or protected content-reference design, encryption, least-privilege access, retention/legal hold/deletion, separately governed content availability and privacy review |
 | Anchored-verification receipt | Verification output does not bind supplied expectations or an anchor receipt | Versioned result containing expected tuple, anchor/checkpoint digest, source, time and `anchor_checked` status |
 | Public production audit-event model | New rows use a versioned domain-separated ledger/release-bound hash and reject legacy hashes by default; payload/envelope models remain Python-private and events are unsigned | Public versioned event/envelope/anchor schemas, authenticated writer signatures, protected actor identity and legacy migration/retirement evidence |
-| Schema-manifest signing custody | A deterministic current-schema manifest inventories exact schema bytes and is diffed in maintenance checks; source control alone is not a release signature | Protected release key or transparency-backed attestation, signer/threshold policy, verification in release and consumer workflows, rotation/revocation and retained signed manifests |
+| Schema-manifest signing custody | A deterministic manifest inventories all 26 registered contract schemas, explicitly excludes its own recursive digest, and is compared with exact-byte regeneration; source control alone is not a release signature | Detached protected release signature or transparency-backed attestation over the exact manifest bytes, signer/threshold policy, consumer verification, rotation/revocation and retained signed manifests |
 | Durable workflow orchestration | Not implemented | Idempotent scheduler, retries, cancellation, human approvals and recovery |
 | Managed key infrastructure | Local PEM reference | KMS/HSM lifecycle and identity enrollment evidence |
-| Historical version-dispatched verifier | Not implemented | Preserved vintage runtime now; future dispatch/migration tests |
+| Historical version-dispatched verifier | Not implemented; this document declares the pre-governed draft cutoff and requires the first protected manifest attestation to establish the version floor | Preserve each governed schema/runtime/lock/trust/fixture baseline; add prior-manifest compatibility checks, future dispatch and authorized migration tests |
 | Broad model-family clearance | Only DP and tree exact default paths | Approved family/protocol-specific ceiling or exact-evidence workers |
 | Interactive LLM/agent clearance | Deliberately unsupported | Complete transcript-level mechanism and portfolio accounting |
 | Fairness decision contracts | Adopter-policy gap | Versioned population/group, metric, authority, evidence and remedy contracts |
 | Normative/runtime lifecycle parity | Transcript replay implements a narrower transition relation than MRAP/1.0; rejecting all duplicate event IDs is a deliberate stricter replay rule and liveness/transport-deduplication cost, not a safety violation | Align the remaining actions/fields with the protocol and add transition-conformance fixtures for every origin/event pair; document retry handling |
-| Binary64 decision boundaries — current G7 blocker | Ordinary tolerance/evidence/utility/portfolio fields and comparisons use Python floats. `ReleaseOptimizer` itself does not invoke SciPy; optional upstream solver/statistical paths may. Any unresolved clearance-critical boundary prevents G7 and therefore MRAP conformance | Exact or approved-decimal contracts, solver-independent exact/outward replay and boundary fixtures; keep the affected result inconclusive until closure |
+| Binary64 decision boundaries — current G7 blocker | Ordinary tolerance/evidence/utility/portfolio fields and comparisons use Python floats. Garbling residual/allowance/tolerance comparisons are especially consequential because `maximum_row_total_variation <= numerical_tolerance` decides reachability-edge existence and can change the Blackwell frontier. `ReleaseOptimizer` itself does not invoke SciPy; optional upstream solver/statistical paths may. Any unresolved clearance-critical boundary prevents G7 and therefore MRAP conformance | Exact or approved-decimal contracts, solver-independent exact/outward replay and scalar plus graph-topology boundary fixtures; keep the affected result inconclusive until closure |
 | Python-to-Lean refinement | Not proved | Verified/independently validated refinement and expanded property testing |
 | Production observability/accreditation | Not implemented | Telemetry, SLOs, incident exercises and independent accreditation |
 
@@ -1421,9 +1650,9 @@ was corrected, never that the external production obligation disappeared.
 | Finding | Disposition in the current repository | Residual audit obligation |
 |---|---|---|
 | `C1` single-release assessment could imply composition clearance | Assessment scope is corrected and future-dated registry snapshots are rejected. The optimizer enforces candidate-plus-snapshot consistency, not snapshot authenticity or active-inventory completeness | An authenticated live registry and complete active-set proof remain mandatory; offline G9 is conditional on the caller-supplied snapshot |
-| `C2` declared interface was treated as verified or was narrower than the normative channel list | `InterfaceContract 2.0` makes output/download/summary, precision/serialization, timing, error/status, batching/concurrency/state, side/local/admin and LLM channels structurally declarable; reports remain `live_interface_verified=false` | External adversarial gateway remeasurement must prove the declaration is complete and equals the live endpoint |
+| `C2` declared interface was treated as verified or was narrower than the normative channel list | Section 3 now maps every normative channel to `InterfaceContract 3.0`; fields are required-explicit, rate behavior has a structured declaration, and output/download/summary, precision/serialization, timing, error/status, batching/concurrency/state, side/local/admin and versioned LLM channels are declarable; reports remain `live_interface_verified=false` | An external adversarial gateway must prove the declaration is complete and equals the endpoint, including distributed rate-counter, reset, failure and bypass behavior |
 | `C3` optional/post-output audit enabled verdict shopping | Resolved for successfully validated CLI requests by mandatory intent-before-computation and terminal-before-output | Pre-validation failures, direct-library calls, external immutable custody and anchoring remain gaps |
-| `C4` evidence omitted analyzer identity/strength | Resolved by service ID/version and implementation/configuration digests bound into evidence and policy | Authenticate/attest the real worker and retain its image/configuration externally |
+| `C4` evidence omitted analyzer identity/strength | Resolved for general analyzers by service/version and implementation/configuration digests; the attack-battery path additionally binds catalog, complete configuration, worker/image/runtime, positive controls and raw-result digests | Authenticate/attest the real worker, independently approve battery strength and retain its image/configuration/raw observations externally |
 | `C5` stronger analyzers did not stale old clearance | Resolved at assessment time through per-threat minimum versions and digest allowlists | Policy change must trigger an external reassessment queue and gateway/registry expiry action |
 | `S1` contradictory evidence weakened a block | Resolved: contradiction and absence are distinct, both evidence IDs are retained, and an independently blocking floor remains blocking | Open an integrity/adjudication event in the production workflow |
 | `S2` most families had no ordinary clearing path | Accepted and made explicit: only complete DP ceilings and recipient-realizable tree exact evidence clear by default | Add approved exact/ceiling workers or remain inconclusive; out-of-band bypass is not MRAP conformance |
@@ -1435,11 +1664,15 @@ was corrected, never that the external production obligation disappeared.
 | `S8` degraded transcript verification was hidden | Resolved in result fields for profile, signature/artifact booleans, skips, degradations and runtime identity | Consumers must enforce their minimum profile; runtime replay differs from MRAP and vintage dispatch is absent |
 | `F1` principal outputs lacked runtime implementation provenance | Assessment, optimization, lifecycle replay and audit verification outputs carry deterministic `RuntimeIdentity` records | Self-reported checkout identity is not trusted-build provenance; verify released bytes, dependencies, build attestation and signer custody externally |
 | `F2` an unused authorization could not expire normatively | Corrected: both normative and runtime transitions allow `AUTHORIZED -> EXPIRED` | Exercise expiry-before-activation in registry and gateway conformance tests |
-| `F3` audit events were spliceable and lacked release-instance identity | New v2 events bind ledger, operation, release, instance, canonical payload, predecessor and time under a versioned domain separator; legacy hashes require explicit opt-in | Operate one authenticated canonical ledger namespace, protected ingress and external anchoring; local self-consistency cannot prove every run was routed there |
+| `F3` audit events were spliceable and lacked release-instance identity | New v2 events bind ledger, operation, release, instance, full canonical request/report content, predecessor and time under a versioned domain separator; legacy hashes require explicit opt-in | Operate one authenticated canonical ledger namespace, protected ingress, sensitive-content controls and external anchoring; local self-consistency cannot prove every run was routed there |
 | `F4` excluded evidence lacked identifiers | Corrected: each decision names excluded IDs and report validation requires applicable plus excluded IDs to cover every retained record | Review exclusion applicability and reasons; authenticated evidence custody remains external |
-| `F5` ordinary binary64 paths conflict with G7 | Valid and explicitly a current conformance blocker at unresolved clearance boundaries; the optimizer does not itself call SciPy | Move decision-critical fields/comparisons to exact or outward-rounded replay and retain boundary tests and producer/runtime provenance |
+| `F5` ordinary binary64 paths conflict with G7 | Valid and explicitly a current conformance blocker at unresolved clearance boundaries; the optimizer does not itself call SciPy, but its binary64 garbling tolerance predicate can add/remove a reachability edge and change the frontier | Move decision-critical fields/comparisons to exact or outward-rounded replay and retain scalar and topology-edge boundary tests plus producer/runtime provenance |
 | `F6` registry state head was accepted without recomputation | Corrected narrowly: replay enforces `+1` and recomputes the release-bound state-head commitment | Prove portfolio-commit semantic completeness, authoritative registry execution and inclusion/consistency externally |
 | `F7` the gap register omitted disclosed lifecycle and enforcement limitations | Corrected by the explicit state-head, lifecycle-event, role-concentration, activation/lease, gateway-suspension and cumulative-budget rows above | Keep this register synchronized with executable contracts and transition-conformance tests on every release |
+| `N1` draft contracts changed without a governed version boundary | Current breaking changes use new top-level versions: PolicyBundle 3.0, Assessment 5.0, signed assessment manifest 3.0, Optimization 4.0, lifecycle verification 2.0 and audit verification 3.0; Section 0 defines the first-governed-baseline rule | Establish and retain the first detached signed/attested manifest; compare every later release with the last governed baseline and preserve vintage replay artifacts |
+| `N2` the schema manifest appeared required to digest itself | Corrected: the manifest declares 26 registered contract entries, explicit self-exclusion, deterministic exact-byte regeneration and detached-attestation semantics | Verify the detached protected signature/attestation over the exact manifest bytes; never substitute a recursive self-hash or Git tracking for release provenance |
+| `N3` audit prose disagreed on request content versus hash | Corrected: v2 intents contain full canonical request plus hash and completions contain full canonical report plus hash; replay is structurally self-contained and does not reopen external sources | The content-bearing SQLite design is unsuitable for sensitive production without minimization/encryption/access/retention controls or a separately governed protected reference design |
+| Red-team execution and mandatory empirical challenge were uncontracted | PolicyBundle 3.0 plus five public attack contracts, central positive-control/statistical replay, floor-only analyzer authority and ceiling-battery gating close the in-band composition path; actual target execution remains external | Deploy and attest the isolated worker, approve threat/family-specific catalogs and reference controls, retain raw evidence, govern waivers and keep authority-negative fixtures current |
 | Additional migration, opaque-bundle, score, retention and formal-runtime concerns | Preserved as explicit nonclaims, controls and gap-register entries; coverage percentage was removed | Preserve vintage verifiers, inspect complete bundles, retain outputs outside ignored `output/`, and establish Python/deployment refinement separately |
 
 ## 20. Verification commands and repository map
@@ -1494,10 +1727,6 @@ mra release-protocol-verify path/to/release-protocol-run.json \
 # Repository verification
 make check
 make verify
-
-# Post-critique executable-control evaluation (raw cases, no safety score)
-PYTHONPATH=src python scripts/evaluate_design_controls.py \
-  --output reproduction/design-control-validation/results.json
 ```
 
 Use `mra --help` and the relevant subcommand help for all required parameters. Authenticated lifecycle
@@ -1515,7 +1744,7 @@ replay additionally requires an external trust store and `--require-authenticate
 | `tests/` | Unit, negative, mutation, integration, replay and bounded empirical checks |
 | `docs/` | Normative, reference, guide and experimental interpretation |
 | `scripts/` | Developer, evidence-generation and benchmark entry points |
-| `reproduction/` | Retained study configurations/manifests plus the explicitly scoped post-critique control-regression result; none is release authorization |
+| `reproduction/` | Retained research study configurations, manifests and empirical artifacts; none is a control-validation score or release authorization |
 | `.github/` | CI, release automation, review and issue controls |
 | `output/` | Ignored local runtime data; not a production evidence store |
 

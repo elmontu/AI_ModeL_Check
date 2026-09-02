@@ -7,6 +7,7 @@ from pathlib import Path
 from model_release_assurance.decision import decide_threat
 from model_release_assurance.models import (
     AssessmentRequest,
+    AttackBatteryStatus,
     EvidenceClass,
     EvidenceConsistency,
     EvidenceCoverage,
@@ -89,6 +90,14 @@ class ContradictoryEvidenceRegressionTests(unittest.TestCase):
             self.request.release,
             records,
             self.request.policy.policy_sha256,
+            AttackBatteryStatus(
+                mode="required",
+                requirement_id="regression-battery",
+                required_attack_ids=("membership-loss-threshold",),
+                completed_attack_ids=("membership-loss-threshold",),
+                passing_positive_control_ids=("known-leak-control",),
+                satisfied=True,
+            ),
         )
 
     def test_contradictory_ceiling_cannot_weaken_blocking_floor(self) -> None:

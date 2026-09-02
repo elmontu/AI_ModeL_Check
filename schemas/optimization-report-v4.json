@@ -1,0 +1,489 @@
+{
+  "$defs": {
+    "CandidateEvaluation": {
+      "additionalProperties": false,
+      "properties": {
+        "assessment_verdict": {
+          "$ref": "#/$defs/OverallVerdict"
+        },
+        "configuration_id": {
+          "title": "Configuration Id",
+          "type": "string"
+        },
+        "feasible": {
+          "title": "Feasible",
+          "type": "boolean"
+        },
+        "implementation_cost": {
+          "title": "Implementation Cost",
+          "type": "number"
+        },
+        "reasons": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Reasons",
+          "type": "array"
+        },
+        "substitution_penalties": {
+          "additionalProperties": {
+            "type": "number"
+          },
+          "title": "Substitution Penalties",
+          "type": "object"
+        },
+        "utility_margin": {
+          "title": "Utility Margin",
+          "type": "number"
+        }
+      },
+      "required": [
+        "configuration_id",
+        "feasible",
+        "assessment_verdict",
+        "utility_margin",
+        "implementation_cost",
+        "substitution_penalties",
+        "reasons"
+      ],
+      "title": "CandidateEvaluation",
+      "type": "object"
+    },
+    "InterfaceAssurance": {
+      "enum": [
+        "declared_interface_only"
+      ],
+      "title": "InterfaceAssurance",
+      "type": "string"
+    },
+    "OptimizationOutcome": {
+      "enum": [
+        "release_as_proposed",
+        "release_with_controls",
+        "redesign_required",
+        "reject"
+      ],
+      "title": "OptimizationOutcome",
+      "type": "string"
+    },
+    "OverallVerdict": {
+      "enum": [
+        "clear",
+        "block",
+        "inconclusive"
+      ],
+      "title": "OverallVerdict",
+      "type": "string"
+    },
+    "PortfolioAssuranceStatus": {
+      "enum": [
+        "analytically_composed",
+        "directly_joint_assessed",
+        "unassessed"
+      ],
+      "title": "PortfolioAssuranceStatus",
+      "type": "string"
+    },
+    "RuntimeIdentity": {
+      "additionalProperties": false,
+      "description": "Replayable identity of the software component that emitted an artifact.",
+      "properties": {
+        "algorithm_profile": {
+          "additionalProperties": true,
+          "title": "Algorithm Profile",
+          "type": "object"
+        },
+        "algorithm_profile_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Algorithm Profile Sha256",
+          "type": "string"
+        },
+        "component_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "title": "Component Id",
+          "type": "string"
+        },
+        "component_version": {
+          "maxLength": 64,
+          "minLength": 1,
+          "title": "Component Version",
+          "type": "string"
+        },
+        "dependency_versions": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "title": "Dependency Versions",
+          "type": "object"
+        },
+        "package_name": {
+          "const": "model-release-assurance",
+          "default": "model-release-assurance",
+          "title": "Package Name",
+          "type": "string"
+        },
+        "package_source_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Package Source Sha256",
+          "type": "string"
+        },
+        "package_version": {
+          "title": "Package Version",
+          "type": "string"
+        },
+        "python_implementation": {
+          "maxLength": 64,
+          "minLength": 1,
+          "title": "Python Implementation",
+          "type": "string"
+        },
+        "python_version": {
+          "maxLength": 64,
+          "minLength": 1,
+          "title": "Python Version",
+          "type": "string"
+        },
+        "schema_version": {
+          "const": "1.0",
+          "default": "1.0",
+          "title": "Schema Version",
+          "type": "string"
+        }
+      },
+      "required": [
+        "package_version",
+        "package_source_sha256",
+        "component_id",
+        "component_version",
+        "algorithm_profile",
+        "algorithm_profile_sha256",
+        "python_implementation",
+        "python_version",
+        "dependency_versions"
+      ],
+      "title": "RuntimeIdentity",
+      "type": "object"
+    },
+    "SelectionCriterion": {
+      "enum": [
+        "implementation_cost_ascending",
+        "utility_lower_bound_descending",
+        "prefer_proposed_configuration",
+        "configuration_id_ascending"
+      ],
+      "title": "SelectionCriterion",
+      "type": "string"
+    },
+    "SelectionPolicy": {
+      "additionalProperties": false,
+      "description": "Versioned justification for choosing among Blackwell-minimal candidates.",
+      "properties": {
+        "policy_id": {
+          "maxLength": 128,
+          "minLength": 3,
+          "pattern": "^[A-Za-z0-9._:-]+$",
+          "title": "Policy Id",
+          "type": "string"
+        },
+        "rationale": {
+          "maxLength": 2048,
+          "minLength": 1,
+          "title": "Rationale",
+          "type": "string"
+        },
+        "schema_version": {
+          "const": "1.0",
+          "default": "1.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "tie_break_order": {
+          "items": {
+            "$ref": "#/$defs/SelectionCriterion"
+          },
+          "minItems": 1,
+          "title": "Tie Break Order",
+          "type": "array"
+        }
+      },
+      "required": [
+        "policy_id",
+        "tie_break_order",
+        "rationale"
+      ],
+      "title": "SelectionPolicy",
+      "type": "object"
+    },
+    "TrustProfile": {
+      "enum": [
+        "cooperative",
+        "separated_assessor"
+      ],
+      "title": "TrustProfile",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "assurance_frontier_configuration_ids": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Assurance Frontier Configuration Ids",
+      "type": "array"
+    },
+    "authorization_eligible": {
+      "const": false,
+      "default": false,
+      "title": "Authorization Eligible",
+      "type": "boolean"
+    },
+    "candidate_evaluations": {
+      "items": {
+        "$ref": "#/$defs/CandidateEvaluation"
+      },
+      "title": "Candidate Evaluations",
+      "type": "array"
+    },
+    "composition_domain_id": {
+      "title": "Composition Domain Id",
+      "type": "string"
+    },
+    "composition_scope": {
+      "const": "portfolio_registry_bound",
+      "default": "portfolio_registry_bound",
+      "title": "Composition Scope",
+      "type": "string"
+    },
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    },
+    "engine_version": {
+      "title": "Engine Version",
+      "type": "string"
+    },
+    "expires_at": {
+      "format": "date-time",
+      "title": "Expires At",
+      "type": "string"
+    },
+    "fail_safe_gate_passed": {
+      "title": "Fail Safe Gate Passed",
+      "type": "boolean"
+    },
+    "gateway_interface_conformance_required": {
+      "const": true,
+      "default": true,
+      "title": "Gateway Interface Conformance Required",
+      "type": "boolean"
+    },
+    "optimization_id": {
+      "title": "Optimization Id",
+      "type": "string"
+    },
+    "outcome": {
+      "$ref": "#/$defs/OptimizationOutcome"
+    },
+    "policy_id": {
+      "title": "Policy Id",
+      "type": "string"
+    },
+    "policy_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Policy Sha256",
+      "type": "string"
+    },
+    "policy_version": {
+      "title": "Policy Version",
+      "type": "string"
+    },
+    "portfolio_registry_head_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Portfolio Registry Head Sha256",
+      "type": "string"
+    },
+    "portfolio_registry_id": {
+      "title": "Portfolio Registry Id",
+      "type": "string"
+    },
+    "portfolio_registry_sequence": {
+      "minimum": 0,
+      "title": "Portfolio Registry Sequence",
+      "type": "integer"
+    },
+    "reasons": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Reasons",
+      "type": "array"
+    },
+    "request_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Request Sha256",
+      "type": "string"
+    },
+    "runtime_identity": {
+      "$ref": "#/$defs/RuntimeIdentity"
+    },
+    "schema_version": {
+      "const": "4.0",
+      "default": "4.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "selected_assessment_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Selected Assessment Id"
+    },
+    "selected_assessment_report_sha256": {
+      "anyOf": [
+        {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Selected Assessment Report Sha256"
+    },
+    "selected_configuration_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Selected Configuration Id"
+    },
+    "selected_configuration_sha256": {
+      "anyOf": [
+        {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Selected Configuration Sha256"
+    },
+    "selected_control_ids": {
+      "default": [],
+      "items": {
+        "type": "string"
+      },
+      "title": "Selected Control Ids",
+      "type": "array"
+    },
+    "selected_covered_release_ids": {
+      "default": [],
+      "items": {
+        "type": "string"
+      },
+      "title": "Selected Covered Release Ids",
+      "type": "array"
+    },
+    "selected_interface_assurance": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/InterfaceAssurance"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "selected_portfolio_status": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/PortfolioAssuranceStatus"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "selected_release_artifact_sha256": {
+      "anyOf": [
+        {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Selected Release Artifact Sha256"
+    },
+    "selected_release_interface_sha256": {
+      "anyOf": [
+        {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Selected Release Interface Sha256"
+    },
+    "selection_policy": {
+      "$ref": "#/$defs/SelectionPolicy"
+    },
+    "selection_policy_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Selection Policy Sha256",
+      "type": "string"
+    },
+    "trust_profile": {
+      "$ref": "#/$defs/TrustProfile"
+    }
+  },
+  "required": [
+    "optimization_id",
+    "created_at",
+    "expires_at",
+    "request_sha256",
+    "policy_id",
+    "policy_version",
+    "policy_sha256",
+    "trust_profile",
+    "portfolio_registry_id",
+    "portfolio_registry_head_sha256",
+    "portfolio_registry_sequence",
+    "composition_domain_id",
+    "outcome",
+    "selected_configuration_id",
+    "selected_assessment_id",
+    "fail_safe_gate_passed",
+    "assurance_frontier_configuration_ids",
+    "candidate_evaluations",
+    "selection_policy",
+    "selection_policy_sha256",
+    "reasons",
+    "runtime_identity",
+    "engine_version"
+  ],
+  "title": "OptimizationReport",
+  "type": "object"
+}

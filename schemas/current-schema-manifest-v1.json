@@ -7,6 +7,46 @@
   "contracts": [
     {
       "declared_schema_version": "1.0",
+      "filename": "attack-battery-configuration-v1.json",
+      "kind": "attack-battery-configuration",
+      "model_import": "model_release_assurance.models.AttackBatteryConfiguration",
+      "model_title": "AttackBatteryConfiguration",
+      "sha256": "ed0772359dac2d6af80c8c6faa985b381dfbb176799a1583b54daf6e20db67b3"
+    },
+    {
+      "declared_schema_version": "1.0",
+      "filename": "attack-battery-submission-v1.json",
+      "kind": "attack-battery-submission",
+      "model_import": "model_release_assurance.models.AttackBatteryInput",
+      "model_title": "AttackBatteryInput",
+      "sha256": "91166ac837e003d4f29f2e65a433fa0341524a6cee7f2536a2159e0b7c18ab35"
+    },
+    {
+      "declared_schema_version": "1.0",
+      "filename": "attack-battery-worker-output-v1.json",
+      "kind": "attack-battery-worker-output",
+      "model_import": "model_release_assurance.models.AttackBatteryWorkerOutput",
+      "model_title": "AttackBatteryWorkerOutput",
+      "sha256": "8c02db2fc2560384f68a7cb92043a91c3c0ec6a2d5fb9151567df2d67bf34e8d"
+    },
+    {
+      "declared_schema_version": "1.0",
+      "filename": "attack-catalog-v1.json",
+      "kind": "attack-catalog",
+      "model_import": "model_release_assurance.models.AttackCatalog",
+      "model_title": "AttackCatalog",
+      "sha256": "18e0eed292bd96e7a17c94ea05cee2a41c92a96cccbd92085e849633f5f41fb8"
+    },
+    {
+      "declared_schema_version": "1.0",
+      "filename": "attack-positive-control-result-v1.json",
+      "kind": "attack-positive-control-result",
+      "model_import": "model_release_assurance.models.AttackPositiveControlResult",
+      "model_title": "AttackPositiveControlResult",
+      "sha256": "7cf1a9cb2f1821c2c917a80390fed25794df5ac06fe5ac0519c8bcf58aa3951b"
+    },
+    {
+      "declared_schema_version": "1.0",
       "filename": "audit-checkpoint-v1.json",
       "kind": "audit-checkpoint",
       "model_import": "model_release_assurance.audit.AuditCheckpoint",
@@ -14,52 +54,52 @@
       "sha256": "c075efecb23b8ac9c025dfd7e95950f02c04eb5b920fa8849c9545c88cb08b78"
     },
     {
-      "declared_schema_version": "2.0",
-      "filename": "audit-verification-v2.json",
+      "declared_schema_version": "3.0",
+      "filename": "audit-verification-v3.json",
       "kind": "audit-verification",
       "model_import": "model_release_assurance.audit.AuditVerification",
       "model_title": "AuditVerification",
-      "sha256": "95b457ed3c9255bc6b6d829b23e84fd9a8e292f19aa95c817dcd037c73858fd4"
+      "sha256": "7be0a861cc94b666a6438e472ac2171cfb4c413326f472086afb7cea28382f46"
     },
     {
-      "declared_schema_version": "2.0",
-      "filename": "signed-manifest-v2.json",
+      "declared_schema_version": "3.0",
+      "filename": "signed-manifest-v3.json",
       "kind": "manifest",
       "model_import": "model_release_assurance.models.SignedManifest",
       "model_title": "SignedManifest",
-      "sha256": "e92acdaeb993c72b7b8513b12b08dd83dcd97406973e3d81c51a5ef6c88862e4"
+      "sha256": "7439c177956e5a715c82df6163a35a57e6499783e09ce55773214a6ec1021c23"
     },
     {
-      "declared_schema_version": "3.0",
-      "filename": "optimization-request-v3.json",
+      "declared_schema_version": "4.0",
+      "filename": "optimization-request-v4.json",
       "kind": "optimization",
       "model_import": "model_release_assurance.optimizer.OptimizationRequest",
       "model_title": "OptimizationRequest",
-      "sha256": "590d9fbc630e35a1382e1d0826e176fcf09b9dfd2a1ec051071c286f5f622071"
+      "sha256": "ee71bdbdd4c87cb631141a70ccee6db7fef8a3c73349d9c6bdcd18f9484f9ded"
     },
     {
-      "declared_schema_version": "3.0",
-      "filename": "signed-optimization-manifest-v3.json",
+      "declared_schema_version": "4.0",
+      "filename": "signed-optimization-manifest-v4.json",
       "kind": "optimization-manifest",
       "model_import": "model_release_assurance.optimizer.SignedOptimizationManifest",
       "model_title": "SignedOptimizationManifest",
-      "sha256": "fe730ba6ba76d7eb40bd400d9b004c9596d8b28c51576451e8ef9af0a1a5685e"
+      "sha256": "0e38a691cc7fe8c1cbc5529b551b92ef66b16acdf5addfe9ae468cb44bc2ffed"
     },
     {
-      "declared_schema_version": "3.0",
-      "filename": "optimization-report-v3.json",
+      "declared_schema_version": "4.0",
+      "filename": "optimization-report-v4.json",
       "kind": "optimization-report",
       "model_import": "model_release_assurance.optimizer.OptimizationReport",
       "model_title": "OptimizationReport",
-      "sha256": "487ebc355b10a6b618346039722f6eea3753a4a8511b20305704a9c7def93266"
+      "sha256": "9ca97e24c65370a7d96dfb92aa27101edc7787ceb08408dd1588095dd4c29cf8"
     },
     {
-      "declared_schema_version": "2.0",
-      "filename": "policy-bundle-v2.json",
+      "declared_schema_version": "3.0",
+      "filename": "policy-bundle-v3.json",
       "kind": "policy",
       "model_import": "model_release_assurance.models.PolicyBundle",
       "model_title": "PolicyBundle",
-      "sha256": "05eda7a236e0dd899682b320ebb6834b7c952b5f609c555398a04f64cdd5a56c"
+      "sha256": "1c1f4ea07b49c47b3c8edec24af1b41fda78fcae549b0ad3aad5abba8333fff0"
     },
     {
       "declared_schema_version": "1.1",
@@ -150,30 +190,36 @@
       "sha256": "9593bececcc2f6f48ed0dcb7fd9e4c6a27258cf34495ab53fa0305fcc63f3d54"
     },
     {
-      "declared_schema_version": "1.0",
-      "filename": "release-protocol-verification-v1.json",
+      "declared_schema_version": "2.0",
+      "filename": "release-protocol-verification-v2.json",
       "kind": "release-protocol-verification",
       "model_import": "model_release_assurance.release_protocol.ReleaseProtocolVerification",
       "model_title": "ReleaseProtocolVerification",
-      "sha256": "e75d778cefa9797f6fa5ea30c73d858c07db7db2cea69955c127ff571c8c26d4"
+      "sha256": "ddf60e46cb31b37664d4cb46b95e220fe8311b1d02781c9f1932c097ce3046f2"
     },
     {
-      "declared_schema_version": "4.0",
-      "filename": "assessment-report-v4.json",
+      "declared_schema_version": "5.0",
+      "filename": "assessment-report-v5.json",
       "kind": "report",
       "model_import": "model_release_assurance.models.AssessmentReport",
       "model_title": "AssessmentReport",
-      "sha256": "2e7d457127deb6bed608db85da5baeb03779a61a52f961b9a6b024d8c65ade74"
+      "sha256": "dc15df5dc905e1f6f5482d22d212a4a3e661582bdffb7f4c7332272b6370f12d"
     },
     {
-      "declared_schema_version": "4.0",
-      "filename": "assessment-request-v4.json",
+      "declared_schema_version": "5.0",
+      "filename": "assessment-request-v5.json",
       "kind": "request",
       "model_import": "model_release_assurance.models.AssessmentRequest",
       "model_title": "AssessmentRequest",
-      "sha256": "2d9153012864700fecc0b7e61f5edcb0e0ed108e5d7896e4173af3614c847c20"
+      "sha256": "499424b6389fb05a3bd81909e3a9222d23adcd5afab3f101aa2e3d7dfbe9c8ec"
     }
   ],
+  "coverage": {
+    "manifest_integrity": "deterministic exact-byte regeneration plus detached protected release attestation",
+    "manifest_self_included": false,
+    "registered_contract_count": 26,
+    "self_exclusion_reason": "A byte inventory cannot recursively contain the digest of its own final bytes."
+  },
   "digest_algorithm": "sha256",
   "digest_scope": "exact_file_bytes",
   "manifest_type": "current_schema_registry",

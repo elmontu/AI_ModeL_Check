@@ -69,7 +69,7 @@ trained models, complete run outputs, or final study seal.
 | `validate_llm_audit_profile.py` | Validate the LLM watermark/canary preregistration template and optionally enforce collection readiness. | Maintenance check and protocol linter; it does not execute an audit or emit scientific evidence. |
 | `evaluate_knowledge_retrieval.py` | Measure deterministic retrieval hit rate and reciprocal rank over the repository knowledge index. | Maintenance evaluation for the RAG corpus. |
 | `evaluate_protocol_mutations.py` | Run accepted controls and unsafe MRAP transcript mutations, then report the mutation score and non-claim. | Maintenance evaluation built from the protocol test suite; not a scientific adequacy result. |
-| `evaluate_design_controls.py` | Replay the twelve named post-critique interface, policy, evidence, audit, registry, runtime, CLI, and numeric-boundary regressions and retain raw outcomes. | Maintenance evaluation with no safety score; it does not test external custody, scientific adequacy, or authorize a release. |
+| `refresh_example_contracts.py` | Deterministically regenerate the current policy, attack catalog/battery, hash-bound evidence, assessment report, and optimization request fixtures. | Maintenance generator only; it does not execute an attack or authorize a release. |
 | `verify_formal_protocol.py` | Verify the Lean toolchain boundary, theorem inventory, proof build, and axiom audit. | Maintenance check; requires Lake/Lean for the complete proof replay. |
 
 ## Dependency guide

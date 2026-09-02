@@ -64,7 +64,7 @@ class AssuranceToolServiceTests(unittest.TestCase):
     def test_schema_path_traversal_is_rejected(self) -> None:
         with self.assertRaises(ValueError):
             self.service.get_schema("../examples/request.json")
-        schema = self.service.get_schema("assessment-request-v4.json")
+        schema = self.service.get_schema("assessment-request-v5.json")
         self.assertEqual(schema["title"], "AssessmentRequest")
 
     def test_audit_verification_is_confined_and_read_only(self) -> None:
@@ -75,6 +75,9 @@ class AssuranceToolServiceTests(unittest.TestCase):
             result = self.service.verify_audit_chain(str(database), require_events=False)
             self.assertEqual(result["events"], 0)
             self.assertTrue(result["complete"])
+            self.assertEqual(result["redacted_failure_diagnostic_count"], 0)
+            self.assertEqual(result["plaintext_failure_diagnostic_count"], 0)
+            self.assertEqual(result["diagnostic_degradations"], [])
             self.assertEqual(database.read_bytes(), before)
         with tempfile.TemporaryDirectory() as outside:
             database = Path(outside) / "outside.sqlite3"

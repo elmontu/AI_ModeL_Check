@@ -1,5 +1,5 @@
 {
-  "schema_version": "3.0",
+  "schema_version": "4.0",
   "optimization_id": "whole-government-demo-release-search",
   "objective": "utility feasibility, then Blackwell-minimal disclosure, then cost and utility tie-breaks",
   "selection_policy": {
@@ -16,9 +16,9 @@
   "trust_profile": "cooperative",
   "active_policy": {
     "policy_id": "whole-government-model-release-demo",
-    "policy_version": "2.0.0",
+    "policy_version": "3.0.0",
     "policy_path": "policy.json",
-    "policy_sha256": "9e00b697be580a6921b42e1b4ddb206aba90ca4bde61cb402450fd49c246653f"
+    "policy_sha256": "8a9c5d6767fae14e11bb5f1ee5427ed1e8a0ce50782b204235c71f0eddb9043d"
   },
   "authorization_expires_at": "2099-01-01T00:00:00Z",
   "portfolio_registry": {
@@ -39,12 +39,42 @@
       "threat_id": "linkage-person",
       "population_scope_id": "service-participants-2026",
       "decision_game_sha256": "4bb158d840ec659005d778c0443f537245d03ba7dfdef279ff98e11f5e271430",
-      "state_ids": ["a", "b", "c", "d"],
-      "observation_ids": ["L1", "L2"],
-      "channel": [[1, 0], [1, 0], [0, 1], [0, 1]],
-      "prior": [0.25, 0.25, 0.25, 0.25],
+      "state_ids": [
+        "a",
+        "b",
+        "c",
+        "d"
+      ],
+      "observation_ids": [
+        "L1",
+        "L2"
+      ],
+      "channel": [
+        [
+          1.0,
+          0.0
+        ],
+        [
+          1.0,
+          0.0
+        ],
+        [
+          0.0,
+          1.0
+        ],
+        [
+          0.0,
+          1.0
+        ]
+      ],
+      "prior": [
+        0.25,
+        0.25,
+        0.25,
+        0.25
+      ],
       "interface_description": "assessed full-artifact linkage surface",
-      "interface_sha256": "4cde1c5e2dd0f3303c9c8e2c3c3bef3d089746a38569b1442c346d81b6e50ed8",
+      "interface_sha256": "f13f29ea2027109f4f02992b37713ee9f63bf56672afb800ac9c3fb6966473b8",
       "artifact_sha256": "2f42b587627c5b6c4447d781b57a47082743f029b475f560a574553abcedfdd5"
     },
     {
@@ -52,12 +82,37 @@
       "threat_id": "linkage-person",
       "population_scope_id": "service-participants-2026",
       "decision_game_sha256": "4bb158d840ec659005d778c0443f537245d03ba7dfdef279ff98e11f5e271430",
-      "state_ids": ["a", "b", "c", "d"],
-      "observation_ids": ["bounded-response"],
-      "channel": [[1], [1], [1], [1]],
-      "prior": [0.25, 0.25, 0.25, 0.25],
+      "state_ids": [
+        "a",
+        "b",
+        "c",
+        "d"
+      ],
+      "observation_ids": [
+        "bounded-response"
+      ],
+      "channel": [
+        [
+          1.0
+        ],
+        [
+          1.0
+        ],
+        [
+          1.0
+        ],
+        [
+          1.0
+        ]
+      ],
+      "prior": [
+        0.25,
+        0.25,
+        0.25,
+        0.25
+      ],
       "interface_description": "released bounded API linkage surface",
-      "interface_sha256": "cdfd0beca66fca75add4570feaf641261b007753cd786718f204b94b3c58700a",
+      "interface_sha256": "5e4d4114d575d9b556f4df570e473f37f6147cd34b0558ff076cd4db797ef994",
       "artifact_sha256": "2f42b587627c5b6c4447d781b57a47082743f029b475f560a574553abcedfdd5"
     },
     {
@@ -65,12 +120,30 @@
       "threat_id": "membership-person",
       "population_scope_id": "service-participants-2026",
       "decision_game_sha256": "686901249c969d5c1a631f1a617c319f9c235842745ea34c6956b6c5c2fef38c",
-      "state_ids": ["member", "nonmember"],
-      "observation_ids": ["response-a", "response-b"],
-      "channel": [[0.55, 0.45], [0.45, 0.55]],
-      "prior": [0.5, 0.5],
+      "state_ids": [
+        "member",
+        "nonmember"
+      ],
+      "observation_ids": [
+        "response-a",
+        "response-b"
+      ],
+      "channel": [
+        [
+          0.55,
+          0.45
+        ],
+        [
+          0.45,
+          0.55
+        ]
+      ],
+      "prior": [
+        0.5,
+        0.5
+      ],
       "interface_description": "assessed full-artifact membership surface",
-      "interface_sha256": "4cde1c5e2dd0f3303c9c8e2c3c3bef3d089746a38569b1442c346d81b6e50ed8",
+      "interface_sha256": "f13f29ea2027109f4f02992b37713ee9f63bf56672afb800ac9c3fb6966473b8",
       "artifact_sha256": "2f42b587627c5b6c4447d781b57a47082743f029b475f560a574553abcedfdd5"
     },
     {
@@ -78,12 +151,27 @@
       "threat_id": "membership-person",
       "population_scope_id": "service-participants-2026",
       "decision_game_sha256": "686901249c969d5c1a631f1a617c319f9c235842745ea34c6956b6c5c2fef38c",
-      "state_ids": ["member", "nonmember"],
-      "observation_ids": ["bounded-response"],
-      "channel": [[1], [1]],
-      "prior": [0.5, 0.5],
+      "state_ids": [
+        "member",
+        "nonmember"
+      ],
+      "observation_ids": [
+        "bounded-response"
+      ],
+      "channel": [
+        [
+          1.0
+        ],
+        [
+          1.0
+        ]
+      ],
+      "prior": [
+        0.5,
+        0.5
+      ],
       "interface_description": "released bounded API membership surface",
-      "interface_sha256": "cdfd0beca66fca75add4570feaf641261b007753cd786718f204b94b3c58700a",
+      "interface_sha256": "5e4d4114d575d9b556f4df570e473f37f6147cd34b0558ff076cd4db797ef994",
       "artifact_sha256": "2f42b587627c5b6c4447d781b57a47082743f029b475f560a574553abcedfdd5"
     }
   ],
@@ -92,7 +180,14 @@
       "certificate_id": "linkage-api-garbling",
       "dominant_experiment_id": "linkage-full-artifact",
       "dominated_experiment_id": "linkage-bounded-api",
-      "kernel": [[1], [1]],
+      "kernel": [
+        [
+          1.0
+        ],
+        [
+          1.0
+        ]
+      ],
       "maximum_row_total_variation": 0.0,
       "numerical_tolerance": 1e-12,
       "construction": "both full-artifact linkage observations are mapped to the single bounded API response"
@@ -101,7 +196,14 @@
       "certificate_id": "membership-api-garbling",
       "dominant_experiment_id": "membership-full-artifact",
       "dominated_experiment_id": "membership-bounded-api",
-      "kernel": [[1], [1]],
+      "kernel": [
+        [
+          1.0
+        ],
+        [
+          1.0
+        ]
+      ],
       "maximum_row_total_variation": 0.0,
       "numerical_tolerance": 1e-12,
       "construction": "both full-artifact membership observations are mapped to the single bounded API response"
@@ -114,15 +216,21 @@
       "is_proposed_configuration": false,
       "assessment": {
         "report_path": "evidence/assessment-clear-report.json",
-        "report_sha256": "b6b043c4755cba123219799ab787e66635dff01a6039420ecb285a352464a743"
+        "report_sha256": "54c67bee1980b3ebf8c96316c84a0ad7c103c9c023825253a8ed87f7bc2e6d8d",
+        "signed_manifest_path": null,
+        "signed_manifest_sha256": null,
+        "assessor_public_key_path": null,
+        "accepted_signer_key_ids": []
       },
       "release_artifact_path": "artifacts/demo-tree.json",
       "release_artifact_sha256": "2f42b587627c5b6c4447d781b57a47082743f029b475f560a574553abcedfdd5",
       "release_interface": {
-        "schema_version": "2.0",
+        "schema_version": "3.0",
         "protocol_type": "predictive",
         "access": "aggregate",
-        "outputs": ["bounded-response"],
+        "outputs": [
+          "bounded-response"
+        ],
         "output_channels": {
           "aggregates": true,
           "labels": false,
@@ -143,6 +251,16 @@
         "adaptive_queries": false,
         "authenticated": true,
         "rate_limited": true,
+        "rate_limit": {
+          "enabled": true,
+          "scope": "per_identity",
+          "requests_per_window": 1000,
+          "window_seconds": 3600,
+          "burst_capacity": 20,
+          "retry_after_exposed": true,
+          "enforcement": "shared_strong",
+          "custom_parameters": {}
+        },
         "timing": {
           "recipient_observable": true,
           "measurement_resolution_milliseconds": 1.0,
@@ -152,7 +270,13 @@
         },
         "errors": {
           "transport_status": "http",
-          "documented_status_codes": ["200", "400", "401", "429", "500"],
+          "documented_status_codes": [
+            "200",
+            "400",
+            "401",
+            "429",
+            "500"
+          ],
           "error_content": "opaque",
           "error_schema_sha256": null,
           "retry_metadata": true
@@ -165,7 +289,11 @@
           "cross_request_state_ttl_seconds": null
         },
         "access_paths": {
-          "side_channels": ["timing", "status_code", "error_content"],
+          "side_channels": [
+            "timing",
+            "status_code",
+            "error_content"
+          ],
           "custom_side_channels": [],
           "admin_access": "none",
           "admin_capabilities": [],
@@ -173,9 +301,15 @@
           "local_capabilities": []
         },
         "serialization": {
-          "formats": ["json"],
-          "media_types": ["application/json"],
-          "encodings": ["utf-8"],
+          "formats": [
+            "json"
+          ],
+          "media_types": [
+            "application/json"
+          ],
+          "encodings": [
+            "utf-8"
+          ],
           "compression": [],
           "schema_sha256": null,
           "endianness": "not_applicable"
@@ -186,8 +320,10 @@
       "utility": {
         "configuration_id": "bounded-api-release",
         "artifact_sha256": "2f42b587627c5b6c4447d781b57a47082743f029b475f560a574553abcedfdd5",
-        "interface_sha256": "cdfd0beca66fca75add4570feaf641261b007753cd786718f204b94b3c58700a",
-        "population_scope_sha256s": ["d0ceafb482b5ed133cd89c765ec4e9d228f4c14bf07fac3f4aa67297a79ed5e8"],
+        "interface_sha256": "5e4d4114d575d9b556f4df570e473f37f6147cd34b0558ff076cd4db797ef994",
+        "population_scope_sha256s": [
+          "f85f632a9ac034ed0bd4f21cd3256729443a901de4ab95d89c52898615f25604"
+        ],
         "evaluation_split_sha256": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
         "metric": "balanced_accuracy",
         "lower_bound": 0.8,
@@ -199,7 +335,7 @@
         "audit_disjoint": true,
         "raw_evidence_retained": true,
         "source_path": "evidence/optimization-utility.json",
-        "source_sha256": "586e9faccbb33ec7e31c8c6ca9ca08931868f2311c715c9bf1d390a14ff3b8c8"
+        "source_sha256": "5b4023684dc651ef34ea37d18fd91433b9cdb3b706cf061b20bf7ce225af1e9b"
       },
       "implementation_cost": 1.0,
       "controls": [
@@ -211,10 +347,10 @@
           "changes_information_structure": true,
           "credited_for_privacy": true,
           "artifact_sha256": "2f42b587627c5b6c4447d781b57a47082743f029b475f560a574553abcedfdd5",
-          "interface_sha256": "cdfd0beca66fca75add4570feaf641261b007753cd786718f204b94b3c58700a",
+          "interface_sha256": "5e4d4114d575d9b556f4df570e473f37f6147cd34b0558ff076cd4db797ef994",
           "valid_until": "2099-01-01T00:00:00Z",
           "evidence_path": "evidence/bounded-api-control.json",
-          "evidence_sha256": "c4a01591a7bb9bf058a40265fdbec558a502032c6d0f1f283d2859e8b34d491e"
+          "evidence_sha256": "095a53f4f80b6578c77155e81144fa9d8e782cd4efb52a0c69ee1c3956614c52"
         }
       ],
       "threat_experiments": [
@@ -258,5 +394,6 @@
       "notes": "Demonstration only; the one-response API is intentionally simple so the garbling can be inspected directly."
     }
   ],
-  "search_space_status": "candidate_set_only"
+  "search_space_status": "candidate_set_only",
+  "search_space_certificate": null
 }

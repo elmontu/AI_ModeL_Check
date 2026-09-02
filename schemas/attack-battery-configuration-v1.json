@@ -1,0 +1,307 @@
+{
+  "$defs": {
+    "AttackPositiveControlPlan": {
+      "additionalProperties": false,
+      "properties": {
+        "attack_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9._:-]+$",
+          "title": "Attack Id",
+          "type": "string"
+        },
+        "confidence": {
+          "exclusiveMaximum": 1.0,
+          "exclusiveMinimum": 0.5,
+          "title": "Confidence",
+          "type": "number"
+        },
+        "control_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9._:-]+$",
+          "title": "Control Id",
+          "type": "string"
+        },
+        "control_kind": {
+          "enum": [
+            "known_leak_binomial",
+            "expected_flag"
+          ],
+          "title": "Control Kind",
+          "type": "string"
+        },
+        "minimum_detection_lower_bound": {
+          "exclusiveMinimum": 0.0,
+          "maximum": 1.0,
+          "title": "Minimum Detection Lower Bound",
+          "type": "number"
+        },
+        "minimum_trials": {
+          "exclusiveMinimum": 0,
+          "title": "Minimum Trials",
+          "type": "integer"
+        },
+        "reference_artifact_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Reference Artifact Sha256",
+          "type": "string"
+        },
+        "reference_dataset_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Reference Dataset Sha256",
+          "type": "string"
+        }
+      },
+      "required": [
+        "control_id",
+        "attack_id",
+        "control_kind",
+        "reference_artifact_sha256",
+        "reference_dataset_sha256",
+        "minimum_trials",
+        "minimum_detection_lower_bound",
+        "confidence"
+      ],
+      "title": "AttackPositiveControlPlan",
+      "type": "object"
+    },
+    "AttackResourceLimits": {
+      "additionalProperties": false,
+      "properties": {
+        "cpu_cores": {
+          "description": "Declared worker CPU budget; the reference core does not mechanically observe or attest compliance because the submission carries no CPU telemetry.",
+          "exclusiveMinimum": 0.0,
+          "title": "Cpu Cores",
+          "type": "number"
+        },
+        "maximum_output_bytes": {
+          "description": "Maximum canonical governed worker-output size in bytes.",
+          "exclusiveMinimum": 0,
+          "title": "Maximum Output Bytes",
+          "type": "integer"
+        },
+        "maximum_records": {
+          "description": "Maximum aggregate statistical trials reported by the worker.",
+          "exclusiveMinimum": 0,
+          "title": "Maximum Records",
+          "type": "integer"
+        },
+        "memory_megabytes": {
+          "description": "Declared worker memory budget; the reference core does not mechanically observe or attest compliance because the submission carries no memory telemetry.",
+          "exclusiveMinimum": 0,
+          "title": "Memory Megabytes",
+          "type": "integer"
+        },
+        "timeout_seconds": {
+          "exclusiveMinimum": 0,
+          "maximum": 86400,
+          "title": "Timeout Seconds",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "timeout_seconds",
+        "memory_megabytes",
+        "cpu_cores",
+        "maximum_records",
+        "maximum_output_bytes"
+      ],
+      "title": "AttackResourceLimits",
+      "type": "object"
+    },
+    "AttackRunPlan": {
+      "additionalProperties": false,
+      "properties": {
+        "attack_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9._:-]+$",
+          "title": "Attack Id",
+          "type": "string"
+        },
+        "attack_version": {
+          "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$",
+          "title": "Attack Version",
+          "type": "string"
+        },
+        "comparison_family_size": {
+          "minimum": 1,
+          "title": "Comparison Family Size",
+          "type": "integer"
+        },
+        "confidence": {
+          "exclusiveMaximum": 1.0,
+          "exclusiveMinimum": 0.5,
+          "title": "Confidence",
+          "type": "number"
+        },
+        "evidence_role": {
+          "enum": [
+            "blocking_floor",
+            "screen_only"
+          ],
+          "title": "Evidence Role",
+          "type": "string"
+        },
+        "metric": {
+          "enum": [
+            "bayes_linkage_success",
+            "incremental_bayes_linkage_success",
+            "worst_observation_success",
+            "membership_tpr_at_fpr",
+            "equal_prior_membership_success",
+            "finite_secret_exact_guess_success",
+            "attribute_attack_success",
+            "incremental_attribute_attack_success",
+            "reconstruction_success",
+            "incremental_reconstruction_success"
+          ],
+          "title": "Metric",
+          "type": "string"
+        },
+        "parameters": {
+          "additionalProperties": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              },
+              {
+                "type": "number"
+              },
+              {
+                "type": "boolean"
+              }
+            ]
+          },
+          "title": "Parameters",
+          "type": "object"
+        },
+        "positive_control_ids": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Positive Control Ids",
+          "type": "array"
+        },
+        "repetitions": {
+          "minimum": 1,
+          "title": "Repetitions",
+          "type": "integer"
+        },
+        "run_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9._:-]+$",
+          "title": "Run Id",
+          "type": "string"
+        },
+        "seed": {
+          "minimum": 0,
+          "title": "Seed",
+          "type": "integer"
+        },
+        "target_fpr": {
+          "anyOf": [
+            {
+              "exclusiveMaximum": 1.0,
+              "exclusiveMinimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Target Fpr"
+        }
+      },
+      "required": [
+        "run_id",
+        "attack_id",
+        "attack_version",
+        "metric",
+        "evidence_role",
+        "seed",
+        "repetitions",
+        "confidence",
+        "comparison_family_size",
+        "positive_control_ids"
+      ],
+      "title": "AttackRunPlan",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "catalog_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Catalog Sha256",
+      "type": "string"
+    },
+    "configuration_id": {
+      "maxLength": 128,
+      "minLength": 3,
+      "pattern": "^[A-Za-z0-9._:-]+$",
+      "title": "Configuration Id",
+      "type": "string"
+    },
+    "frozen_at": {
+      "format": "date-time",
+      "title": "Frozen At",
+      "type": "string"
+    },
+    "multiplicity_method": {
+      "const": "bonferroni",
+      "title": "Multiplicity Method",
+      "type": "string"
+    },
+    "positive_controls": {
+      "items": {
+        "$ref": "#/$defs/AttackPositiveControlPlan"
+      },
+      "minItems": 1,
+      "title": "Positive Controls",
+      "type": "array"
+    },
+    "resource_limits": {
+      "$ref": "#/$defs/AttackResourceLimits"
+    },
+    "runs": {
+      "items": {
+        "$ref": "#/$defs/AttackRunPlan"
+      },
+      "minItems": 1,
+      "title": "Runs",
+      "type": "array"
+    },
+    "schema_version": {
+      "const": "1.0",
+      "default": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "stopping_rule": {
+      "maxLength": 2048,
+      "minLength": 1,
+      "title": "Stopping Rule",
+      "type": "string"
+    }
+  },
+  "required": [
+    "configuration_id",
+    "catalog_sha256",
+    "frozen_at",
+    "resource_limits",
+    "runs",
+    "positive_controls",
+    "stopping_rule",
+    "multiplicity_method"
+  ],
+  "title": "AttackBatteryConfiguration",
+  "type": "object"
+}

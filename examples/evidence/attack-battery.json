@@ -1,0 +1,208 @@
+{
+  "analyzer": "attack_battery",
+  "schema_version": "1.0",
+  "threat_id": "membership-person",
+  "population_scope_id": "service-participants-2026",
+  "catalog": {
+    "schema_version": "1.0",
+    "catalog_id": "mra.demo.attack-catalog",
+    "catalog_version": "1.0.0",
+    "valid_from": "2026-01-01T00:00:00Z",
+    "valid_until": "2099-01-01T00:00:00Z",
+    "entries": [
+      {
+        "attack_id": "membership_loss_threshold",
+        "attack_version": "1.0.0",
+        "service_id": "mra.red-team.membership-loss-threshold",
+        "implementation_sha256": "4284fd0383a2b19e3fbee0b973b47a006b2969b0037713ad01bb928e10086357",
+        "applicable_model_families": [
+          "tree_ensemble"
+        ],
+        "applicable_protocol_types": [
+          "predictive"
+        ],
+        "applicable_threat_kinds": [
+          "membership"
+        ],
+        "supported_metrics": [
+          "equal_prior_membership_success"
+        ],
+        "evidence_role": "blocking_floor",
+        "positive_control_kind": "known_leak_binomial",
+        "minimum_repetitions": 1,
+        "requires_model_execution": true,
+        "can_clear": false,
+        "decision_authority": "none"
+      }
+    ]
+  },
+  "catalog_sha256": "94c9d8423df94f361c3a0471502a0b38ad060c620ae545bc74ed7046d7934477",
+  "configuration": {
+    "schema_version": "1.0",
+    "configuration_id": "demo-membership-battery-v1",
+    "catalog_sha256": "94c9d8423df94f361c3a0471502a0b38ad060c620ae545bc74ed7046d7934477",
+    "frozen_at": "2026-08-17T00:00:00Z",
+    "resource_limits": {
+      "timeout_seconds": 300,
+      "memory_megabytes": 2048,
+      "cpu_cores": 2.0,
+      "maximum_records": 10000,
+      "maximum_output_bytes": 10000000
+    },
+    "runs": [
+      {
+        "run_id": "membership-loss-run-1",
+        "attack_id": "membership_loss_threshold",
+        "attack_version": "1.0.0",
+        "metric": "equal_prior_membership_success",
+        "evidence_role": "blocking_floor",
+        "seed": 20260817,
+        "repetitions": 1,
+        "confidence": 0.95,
+        "comparison_family_size": 1,
+        "target_fpr": null,
+        "positive_control_ids": [
+          "known-leak-membership-control"
+        ],
+        "parameters": {
+          "threshold_calibration": "disjoint_reference_model",
+          "audit_partition": "disjoint_target_holdout"
+        }
+      }
+    ],
+    "positive_controls": [
+      {
+        "control_id": "known-leak-membership-control",
+        "attack_id": "membership_loss_threshold",
+        "control_kind": "known_leak_binomial",
+        "reference_artifact_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "reference_dataset_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "minimum_trials": 100,
+        "minimum_detection_lower_bound": 0.8,
+        "confidence": 0.95
+      }
+    ],
+    "stopping_rule": "execute every frozen run and positive control exactly once",
+    "multiplicity_method": "bonferroni"
+  },
+  "configuration_sha256": "3669134f76c0b52f1f1458a34556418bf11dd795bed8e2b95c3b04a386664203",
+  "worker_output": {
+    "schema_version": "1.0",
+    "execution_id": "demo-membership-battery-execution",
+    "release_id": "whole-government-demo-tree-v1",
+    "release_contract_sha256": "58fa3564d8445f55834ebdd9699a4d412035a2f96bfb42b27f5c99cd510d035b",
+    "policy_sha256": "8a9c5d6767fae14e11bb5f1ee5427ed1e8a0ce50782b204235c71f0eddb9043d",
+    "artifact_sha256": "2f42b587627c5b6c4447d781b57a47082743f029b475f560a574553abcedfdd5",
+    "interface_sha256": "f13f29ea2027109f4f02992b37713ee9f63bf56672afb800ac9c3fb6966473b8",
+    "population_scope_id": "service-participants-2026",
+    "population_scope_sha256": "f85f632a9ac034ed0bd4f21cd3256729443a901de4ab95d89c52898615f25604",
+    "decision_game_sha256": "686901249c969d5c1a631f1a617c319f9c235842745ea34c6956b6c5c2fef38c",
+    "catalog_sha256": "94c9d8423df94f361c3a0471502a0b38ad060c620ae545bc74ed7046d7934477",
+    "configuration_sha256": "3669134f76c0b52f1f1458a34556418bf11dd795bed8e2b95c3b04a386664203",
+    "worker": {
+      "service_id": "mra.red-team.membership-loss-threshold",
+      "service_version": "1.0.0",
+      "implementation_sha256": "4284fd0383a2b19e3fbee0b973b47a006b2969b0037713ad01bb928e10086357",
+      "configuration_sha256": "3669134f76c0b52f1f1458a34556418bf11dd795bed8e2b95c3b04a386664203"
+    },
+    "worker_runtime_identity": {
+      "schema_version": "1.0",
+      "package_name": "model-release-assurance",
+      "package_version": "0.7.0",
+      "package_source_sha256": "1975d738148ab6dd019c57e7c1f12993de7e73f71f882f753ed6893da86c39e3",
+      "component_id": "attack_battery_worker",
+      "component_version": "AttackBatteryWorkerOutput/1.0",
+      "algorithm_profile": {
+        "catalog_sha256": "94c9d8423df94f361c3a0471502a0b38ad060c620ae545bc74ed7046d7934477",
+        "configuration_sha256": "3669134f76c0b52f1f1458a34556418bf11dd795bed8e2b95c3b04a386664203",
+        "attacks": [
+          "membership_loss_threshold"
+        ],
+        "positive_controls": [
+          "known-leak-membership-control"
+        ],
+        "decision_authority": "none"
+      },
+      "algorithm_profile_sha256": "01f23c0208e90a2328eb437cb44231c19df5920fa28ec2289e72dc4a09e98f17",
+      "python_implementation": "CPython",
+      "python_version": "3.12.13",
+      "dependency_versions": {
+        "cryptography": "48.0.1",
+        "numpy": "2.5.2",
+        "pydantic": "2.13.4",
+        "scikit-learn": "1.6.1",
+        "scipy": "1.18.0"
+      }
+    },
+    "isolation": {
+      "schema_version": "1.0",
+      "assurance": "declared",
+      "worker_image_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      "run_as_non_root": true,
+      "no_new_privileges": true,
+      "read_only_root_filesystem": true,
+      "network_access": "none",
+      "writable_audit_path": false,
+      "writable_key_path": false,
+      "writable_governance_path": false,
+      "read_only_mount_sha256s": [
+        "2f42b587627c5b6c4447d781b57a47082743f029b475f560a574553abcedfdd5"
+      ],
+      "attester_key_id": null,
+      "statement_sha256": null,
+      "signature": null
+    },
+    "started_at": "2026-08-18T00:00:00Z",
+    "completed_at": "2026-08-18T00:05:00Z",
+    "positive_controls": [
+      {
+        "schema_version": "1.0",
+        "control_id": "known-leak-membership-control",
+        "attack_id": "membership_loss_threshold",
+        "service_id": "mra.red-team.membership-loss-threshold",
+        "attack_version": "1.0.0",
+        "implementation_sha256": "4284fd0383a2b19e3fbee0b973b47a006b2969b0037713ad01bb928e10086357",
+        "status": "succeeded",
+        "successes": 95,
+        "trials": 100,
+        "reported_detection_lower_bound": 0.8977466223567152,
+        "expected_flag_observed": null,
+        "raw_result_sha256": "6cc6ba7a9140db28330b24199e42ac2b3c7c86c332bed2eba88d1ffaf7377b6b"
+      }
+    ],
+    "results": [
+      {
+        "run_id": "membership-loss-run-1",
+        "attack_id": "membership_loss_threshold",
+        "service_id": "mra.red-team.membership-loss-threshold",
+        "attack_version": "1.0.0",
+        "implementation_sha256": "4284fd0383a2b19e3fbee0b973b47a006b2969b0037713ad01bb928e10086357",
+        "status": "succeeded",
+        "metric": "equal_prior_membership_success",
+        "successes": 520,
+        "trials": 1000,
+        "false_positives": null,
+        "nonmember_trials": null,
+        "target_fpr": null,
+        "raw_result_sha256": "f8ac0e56ea951afb41c606d3741899b660ac89e5cb5e0e39faf3122ddcc42ea6",
+        "negative_control_summary": "permuted labels retained as a null check, not a positive control",
+        "can_clear": false
+      }
+    ],
+    "retained_raw_bundle_sha256": "f02b656567f913bf4c71d63a402e3d7982a29fb49f3588605a5e7bc9632c2e84",
+    "decision_authority": "none",
+    "can_clear": false
+  },
+  "worker_output_sha256": "a5b42977a8b49e547e59c13731e0ac85d11f23865685ca8f11a0ff66e284feb5",
+  "evidence_context": {
+    "release_id": "whole-government-demo-tree-v1",
+    "release_contract_sha256": "58fa3564d8445f55834ebdd9699a4d412035a2f96bfb42b27f5c99cd510d035b",
+    "policy_sha256": "8a9c5d6767fae14e11bb5f1ee5427ed1e8a0ce50782b204235c71f0eddb9043d",
+    "artifact_sha256": "2f42b587627c5b6c4447d781b57a47082743f029b475f560a574553abcedfdd5",
+    "interface_sha256": "f13f29ea2027109f4f02992b37713ee9f63bf56672afb800ac9c3fb6966473b8",
+    "population_scope_id": "service-participants-2026",
+    "population_scope_sha256": "f85f632a9ac034ed0bd4f21cd3256729443a901de4ab95d89c52898615f25604",
+    "decision_game_sha256": "686901249c969d5c1a631f1a617c319f9c235842745ea34c6956b6c5c2fef38c",
+    "observed_at": "2026-08-18T00:00:00Z"
+  }
+}

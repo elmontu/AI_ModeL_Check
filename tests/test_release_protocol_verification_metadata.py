@@ -152,7 +152,7 @@ class ReleaseProtocolVerificationMetadataTests(unittest.TestCase):
 
         self.assertTrue(result.valid, result.reasons)
         self.assertEqual(run.schema_version, "1.1")
-        self.assertEqual(result.schema_version, "1.0")
+        self.assertEqual(result.schema_version, "2.0")
         self.assertEqual(
             result.verification_profile,
             ReleaseProtocolVerificationProfile.STRUCTURAL,

@@ -8,6 +8,7 @@ from model_release_assurance.release_protocol import (
     ReleaseProtocolEventType,
     ReleaseProtocolState,
 )
+from model_release_assurance.schema_registry import SCHEMA_REGISTRY
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -34,28 +35,8 @@ class SystemAuditSpecificationTests(unittest.TestCase):
             self.assertIn(f"`G{gate}", self.text)
 
     def test_current_public_contracts_are_named(self) -> None:
-        current_schemas = (
-            "assessment-request-v4.json",
-            "assessment-report-v4.json",
-            "policy-bundle-v2.json",
-            "signed-manifest-v2.json",
-            "optimization-request-v3.json",
-            "optimization-report-v3.json",
-            "signed-optimization-manifest-v3.json",
-            "incomplete-portfolio-problem-v1.json",
-            "incomplete-portfolio-certificate-v1.1.json",
-            "incomplete-portfolio-specification-v1.json",
-            "portfolio-multinomial-counts-v1.json",
-            "portfolio-multinomial-plan-v1.json",
-            "portfolio-error-budget-v1.json",
-            "portfolio-multinomial-request-v1.json",
-            "portfolio-multinomial-evidence-v1.json",
-            "protocol-feasibility-problem-v1.json",
-            "protocol-feasibility-certificate-v1.json",
-            "release-protocol-run-v1.1.json",
-            "release-protocol-verification-v1.json",
-            "audit-verification-v2.json",
-            "audit-checkpoint-v1.json",
+        current_schemas = tuple(
+            registration.filename for registration in SCHEMA_REGISTRY.values()
         )
         for schema in current_schemas:
             self.assertIn(f"`{schema}`", self.text)

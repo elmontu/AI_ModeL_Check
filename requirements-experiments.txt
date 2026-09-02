@@ -1,10 +1,11 @@
-# Environment family for rerunning the retained OpenML and stochastic studies.
-# Exact versions used to seal the current evidence record are recorded in
-# output/reproduction/openml-study-manifest.json under `runtime`.
+# Resolver constraints installed by CI for the experiment test tier.
+# This is a compatibility band, not a lock: each CI run tests only the versions
+# resolved for that run, and no retained OpenML study output is currently sealed.
+# A reproduction run must separately capture and bind its exact resolved runtime.
 joblib>=1.4
 numpy>=2.0
 pandas>=2.2
 pyarrow>=17
-scikit-learn>=1.5
+scikit-learn>=1.5,<1.7
 scipy>=1.13
-xgboost>=2.1
+xgboost>=2.1,<3

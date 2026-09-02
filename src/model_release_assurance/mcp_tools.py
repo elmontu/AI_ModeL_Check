@@ -9,11 +9,12 @@ from typing import Any
 from pydantic import ValidationError
 
 from .audit import AuditStore
+from .integrity import canonical_json_bytes, sha256_bytes
 from .experimental_workflow import run_experimental_workflow
 from .empirical_workflow import EmpiricalWorkflowConfig, run_empirical_xgboost_mlp_workflow
 from .knowledge import KnowledgeIndex
 from .model_coverage import assess_request_model_coverage
-from .models import AssessmentRequest
+from .models import AssessmentRequest, AttackBatteryInput
 from .privacy_orchestration import build_privacy_audit_plan
 from .services import AnalyzerServiceRegistry, default_analyzer_service_registry
 from .red_team import default_red_team_tool_registry
@@ -50,19 +51,40 @@ class AssuranceToolService:
 
     def list_red_team_tools(self) -> dict[str, Any]:
         registry = default_red_team_tool_registry()
+        catalog = registry.catalog()
         return {
-            "contract_version": "1.0",
-            "tools": [
-                {
-                    "name": tool.name,
-                    "service_id": tool.service_id,
-                    "mcp_tool": tool.mcp_tool,
-                    "transport": "in_process",
-                    "can_clear": False,
-                    "can_block": False,
-                }
-                for tool in registry.tools
-            ],
+            "contract_version": "2.0",
+            "catalog": catalog.model_dump(mode="json", exclude_none=False),
+            "catalog_sha256": sha256_bytes(canonical_json_bytes(catalog)),
+            "execution_boundary": (
+                "Exploratory in-process tools run only inside the bounded empirical workflow. "
+                "Decision-bearing submissions require AttackBatteryInput/1.0 from a separately "
+                "isolated worker."
+            ),
+        }
+
+    def validate_attack_battery(self, submission: dict[str, Any]) -> dict[str, Any]:
+        """Validate complete battery structure and bindings without executing a model."""
+        try:
+            parsed = AttackBatteryInput.model_validate(submission)
+        except ValidationError as exc:
+            return {
+                "valid": False,
+                "errors": exc.errors(
+                    include_url=False,
+                    include_context=False,
+                    include_input=False,
+                ),
+            }
+        return {
+            "valid": True,
+            "schema_version": parsed.schema_version,
+            "threat_id": parsed.threat_id,
+            "catalog_sha256": parsed.catalog_sha256,
+            "configuration_sha256": parsed.configuration_sha256,
+            "worker_output_sha256": parsed.worker_output_sha256,
+            "can_clear": False,
+            "note": "Validation is not execution, assessment, authorization, or isolation proof.",
         }
 
     def search_assurance_docs(self, query: str, limit: int = 5) -> dict[str, Any]:
@@ -85,7 +107,14 @@ class AssuranceToolService:
         try:
             parsed = AssessmentRequest.model_validate(request)
         except ValidationError as exc:
-            return {"valid": False, "errors": exc.errors(include_url=False)}
+            return {
+                "valid": False,
+                "errors": exc.errors(
+                    include_url=False,
+                    include_context=False,
+                    include_input=False,
+                ),
+            }
         return {
             "valid": True,
             "release_id": parsed.release.release_id,
@@ -114,6 +143,15 @@ class AssuranceToolService:
             "ledger_id": str(verification.ledger_id),
             "head_sha256": verification.head_sha256,
             "complete": verification.complete,
+            "legacy_event_count": verification.legacy_event_count,
+            "legacy_hash_event_count": verification.legacy_hash_event_count,
+            "redacted_failure_diagnostic_count": (
+                verification.redacted_failure_diagnostic_count
+            ),
+            "plaintext_failure_diagnostic_count": (
+                verification.plaintext_failure_diagnostic_count
+            ),
+            "diagnostic_degradations": list(verification.diagnostic_degradations),
             "orphaned_run_ids": [str(value) for value in verification.orphaned_run_ids],
         }
 

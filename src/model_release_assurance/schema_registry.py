@@ -13,7 +13,17 @@ from pydantic import BaseModel
 
 from .audit import AuditCheckpoint, AuditVerification
 from .incomplete_portfolio import AnalyticPortfolioEvidenceEntry, IncompletePortfolioProblem
-from .models import AssessmentReport, AssessmentRequest, PolicyBundle, SignedManifest
+from .models import (
+    AssessmentReport,
+    AssessmentRequest,
+    AttackBatteryConfiguration,
+    AttackBatteryInput,
+    AttackBatteryWorkerOutput,
+    AttackCatalog,
+    AttackPositiveControlResult,
+    PolicyBundle,
+    SignedManifest,
+)
 from .optimizer import (
     OptimizationReport,
     OptimizationRequest,
@@ -68,19 +78,44 @@ def _registration(
 
 
 _REGISTRATIONS = (
-    _registration("request", AssessmentRequest, "assessment-request-v4.json", "4.0"),
-    _registration("policy", PolicyBundle, "policy-bundle-v2.json", "2.0"),
-    _registration("report", AssessmentReport, "assessment-report-v4.json", "4.0"),
-    _registration("manifest", SignedManifest, "signed-manifest-v2.json", "2.0"),
-    _registration("optimization", OptimizationRequest, "optimization-request-v3.json", "3.0"),
+    _registration("request", AssessmentRequest, "assessment-request-v5.json", "5.0"),
+    _registration("policy", PolicyBundle, "policy-bundle-v3.json", "3.0"),
+    _registration("report", AssessmentReport, "assessment-report-v5.json", "5.0"),
+    _registration("manifest", SignedManifest, "signed-manifest-v3.json", "3.0"),
+    _registration("attack-catalog", AttackCatalog, "attack-catalog-v1.json", "1.0"),
     _registration(
-        "optimization-report", OptimizationReport, "optimization-report-v3.json", "3.0"
+        "attack-battery-configuration",
+        AttackBatteryConfiguration,
+        "attack-battery-configuration-v1.json",
+        "1.0",
+    ),
+    _registration(
+        "attack-positive-control-result",
+        AttackPositiveControlResult,
+        "attack-positive-control-result-v1.json",
+        "1.0",
+    ),
+    _registration(
+        "attack-battery-worker-output",
+        AttackBatteryWorkerOutput,
+        "attack-battery-worker-output-v1.json",
+        "1.0",
+    ),
+    _registration(
+        "attack-battery-submission",
+        AttackBatteryInput,
+        "attack-battery-submission-v1.json",
+        "1.0",
+    ),
+    _registration("optimization", OptimizationRequest, "optimization-request-v4.json", "4.0"),
+    _registration(
+        "optimization-report", OptimizationReport, "optimization-report-v4.json", "4.0"
     ),
     _registration(
         "optimization-manifest",
         SignedOptimizationManifest,
-        "signed-optimization-manifest-v3.json",
-        "3.0",
+        "signed-optimization-manifest-v4.json",
+        "4.0",
     ),
     _registration(
         "portfolio-problem",
@@ -151,11 +186,11 @@ _REGISTRATIONS = (
     _registration(
         "release-protocol-verification",
         ReleaseProtocolVerification,
-        "release-protocol-verification-v1.json",
-        "1.0",
+        "release-protocol-verification-v2.json",
+        "2.0",
     ),
     _registration(
-        "audit-verification", AuditVerification, "audit-verification-v2.json", "2.0"
+        "audit-verification", AuditVerification, "audit-verification-v3.json", "3.0"
     ),
     _registration("audit-checkpoint", AuditCheckpoint, "audit-checkpoint-v1.json", "1.0"),
 )
@@ -247,6 +282,16 @@ def schema_manifest(schemas_dir: Path) -> dict[str, object]:
         "digest_scope": "exact_file_bytes",
         "package_name": PACKAGE_NAME,
         "package_version": VERSION,
+        "coverage": {
+            "registered_contract_count": len(contracts),
+            "manifest_self_included": False,
+            "self_exclusion_reason": (
+                "A byte inventory cannot recursively contain the digest of its own final bytes."
+            ),
+            "manifest_integrity": (
+                "deterministic exact-byte regeneration plus detached protected release attestation"
+            ),
+        },
         "contracts": contracts,
         "attestation": {
             "committed_signature": False,

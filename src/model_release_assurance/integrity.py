@@ -19,7 +19,10 @@ from .models import AssessmentReport, AssessmentRequest, ReleaseContract, Signed
 
 
 def canonical_json_bytes(value: BaseModel | dict[str, Any]) -> bytes:
-    raw = value.model_dump(mode="json", exclude_none=True) if isinstance(value, BaseModel) else value
+    # Required-explicit nullable contract fields are part of the governed
+    # representation and therefore of its digest. Callers supplying a raw dict
+    # remain responsible for providing the complete validated representation.
+    raw = value.model_dump(mode="json", exclude_none=False) if isinstance(value, BaseModel) else value
 
     def encode_special(item: Any) -> Any:
         if isinstance(item, (datetime, date)):
@@ -218,7 +221,7 @@ def build_signed_manifest(
         raise IntegrityError("report composition lineage does not match the assessment request")
     private_key = _load_private(private_key_path)
     unsigned = {
-        "schema_version": "2.0",
+        "schema_version": "3.0",
         "assessment_id": report.assessment_id,
         "release_id": report.release_id,
         "policy_id": report.policy_id,

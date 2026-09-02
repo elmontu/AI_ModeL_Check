@@ -31,7 +31,8 @@ python -m model_release_assurance.mcp_server --repository-root .
 ```
 
 The server exposes `list_analyzer_services` and `list_red_team_tools` for read-only discovery of the
-replaceable analyzer boundaries and prospective MCP tool names. It also exposes
+replaceable analyzer boundaries and the typed red-team catalog. `validate_attack_battery` performs
+non-authorizing structural and digest-binding validation of an inert submission. The server also exposes
 `search_assurance_docs`, `get_schema`, `validate_assessment_request`, `review_model_coverage`,
 `verify_audit_chain`, `run_experimental_model_audit`, `run_empirical_model_workflow`,
 `read_privacy_audit_report`, `plan_privacy_audit`, and `run_rag_guided_privacy_audit`. It has no tools for
@@ -70,8 +71,9 @@ XGBoost and scikit-learn MLP classifiers on independently seeded synthetic datas
 disjoint-holdout metrics with familywise Bonferroni-corrected exact accuracy intervals. The contract
 limits replicate, sample, and feature counts. Functional metrics remain screens, membership attack
 measurements are unbound empirical floors, and the overall result always returns
-`no_release_authorization`. A floor cannot block until it is converted or recollected through an
-approved worker into a complete source-bound assessment request.
+`no_release_authorization`. A floor cannot block until a separately isolated, policy-approved worker
+recollects it into `AttackBatteryWorkerOutput/1.0` and the complete content-addressed submission passes
+trusted-core validation and positive-control replay.
 
 Those input-shape limits are not a complete resource sandbox: estimator hyperparameter dictionaries
 and total tool runtime are not comprehensively bounded by the current MCP adapter. Keep this tool local
@@ -81,15 +83,17 @@ deadlines, cancellation, and output limits.
 Each empirical replicate also runs a bounded red-team stage. A reference model trained on an
 independent synthetic dataset freezes a loss-threshold membership attack before application to the
 target model's members and holdout nonmembers. The stage also measures Gaussian feature corruption
-and every single-feature occlusion. Membership results are simultaneous empirical floors but cannot
-block until routed through a complete source-bound assessment request; robustness results are screens.
+and every single-feature occlusion. Membership results are exploratory simultaneous floors but cannot
+block until routed through the policy-bound attack-battery contract; robustness results are screens.
 Neither can clear.
 
 The empirical workflow additionally invokes the focused
 [SACRO-ML-inspired red-team registry](sacro-ml-red-team.md): aggregate structural disclosure screens
 and a repeated worst-case probability membership classifier with a dummy baseline and simultaneous
-low-FPR bounds. The in-process estimator tools are discovery-visible but are not exposed as remote
-calls until an attested inert-artifact worker contract exists.
+low-FPR bounds. Their `ExploratoryRedTeamReport/2.0` is explicitly assessment-ineligible. Discovery
+returns the typed catalog and digest, but live estimator calls remain inside the bounded local workflow.
+A remote deployment must exchange inert artifact references and a signed worker output from an
+isolated principal; `validate_attack_battery` itself does not execute, authenticate, attest, or decide.
 
 `McpAnalyzerService` is a transport adapter for separately deployed analyzer servers. It intentionally accepts an invocation function instead of importing a particular MCP client implementation, keeping the assurance core independent of SDK lifecycle and transport choices. Requests and responses use contract version `2.0`; producer service/version and implementation/configuration digests are revalidated against the routed descriptor and active policy while the assessment engine retains all decision authority. Discovery metadata does not imply that every analyzer is already remotely deployed—the default registry uses local adapters and can be migrated service by service.
 

@@ -1,0 +1,198 @@
+{
+  "$defs": {
+    "AttackCatalogEntry": {
+      "additionalProperties": false,
+      "properties": {
+        "applicable_model_families": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Applicable Model Families",
+          "type": "array"
+        },
+        "applicable_protocol_types": {
+          "items": {
+            "enum": [
+              "predictive",
+              "interactive_llm"
+            ],
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Applicable Protocol Types",
+          "type": "array"
+        },
+        "applicable_threat_kinds": {
+          "items": {
+            "$ref": "#/$defs/ThreatKind"
+          },
+          "minItems": 1,
+          "title": "Applicable Threat Kinds",
+          "type": "array"
+        },
+        "attack_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9._:-]+$",
+          "title": "Attack Id",
+          "type": "string"
+        },
+        "attack_version": {
+          "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$",
+          "title": "Attack Version",
+          "type": "string"
+        },
+        "can_clear": {
+          "const": false,
+          "default": false,
+          "title": "Can Clear",
+          "type": "boolean"
+        },
+        "decision_authority": {
+          "const": "none",
+          "default": "none",
+          "title": "Decision Authority",
+          "type": "string"
+        },
+        "evidence_role": {
+          "enum": [
+            "blocking_floor",
+            "screen_only"
+          ],
+          "title": "Evidence Role",
+          "type": "string"
+        },
+        "implementation_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Implementation Sha256",
+          "type": "string"
+        },
+        "minimum_repetitions": {
+          "minimum": 1,
+          "title": "Minimum Repetitions",
+          "type": "integer"
+        },
+        "positive_control_kind": {
+          "enum": [
+            "known_leak_binomial",
+            "expected_flag"
+          ],
+          "title": "Positive Control Kind",
+          "type": "string"
+        },
+        "requires_model_execution": {
+          "title": "Requires Model Execution",
+          "type": "boolean"
+        },
+        "service_id": {
+          "maxLength": 128,
+          "minLength": 3,
+          "pattern": "^[A-Za-z0-9._:-]+$",
+          "title": "Service Id",
+          "type": "string"
+        },
+        "supported_metrics": {
+          "items": {
+            "enum": [
+              "bayes_linkage_success",
+              "incremental_bayes_linkage_success",
+              "worst_observation_success",
+              "membership_tpr_at_fpr",
+              "equal_prior_membership_success",
+              "finite_secret_exact_guess_success",
+              "attribute_attack_success",
+              "incremental_attribute_attack_success",
+              "reconstruction_success",
+              "incremental_reconstruction_success"
+            ],
+            "type": "string"
+          },
+          "title": "Supported Metrics",
+          "type": "array"
+        }
+      },
+      "required": [
+        "attack_id",
+        "attack_version",
+        "service_id",
+        "implementation_sha256",
+        "applicable_model_families",
+        "applicable_protocol_types",
+        "applicable_threat_kinds",
+        "supported_metrics",
+        "evidence_role",
+        "positive_control_kind",
+        "minimum_repetitions",
+        "requires_model_execution"
+      ],
+      "title": "AttackCatalogEntry",
+      "type": "object"
+    },
+    "ThreatKind": {
+      "enum": [
+        "linkage",
+        "membership",
+        "attribute",
+        "reconstruction"
+      ],
+      "title": "ThreatKind",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "catalog_id": {
+      "maxLength": 128,
+      "minLength": 3,
+      "pattern": "^[A-Za-z0-9._:-]+$",
+      "title": "Catalog Id",
+      "type": "string"
+    },
+    "catalog_version": {
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$",
+      "title": "Catalog Version",
+      "type": "string"
+    },
+    "entries": {
+      "items": {
+        "$ref": "#/$defs/AttackCatalogEntry"
+      },
+      "minItems": 1,
+      "title": "Entries",
+      "type": "array"
+    },
+    "schema_version": {
+      "const": "1.0",
+      "default": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "valid_from": {
+      "format": "date-time",
+      "title": "Valid From",
+      "type": "string"
+    },
+    "valid_until": {
+      "anyOf": [
+        {
+          "format": "date-time",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Valid Until"
+    }
+  },
+  "required": [
+    "catalog_id",
+    "catalog_version",
+    "valid_from",
+    "entries"
+  ],
+  "title": "AttackCatalog",
+  "type": "object"
+}

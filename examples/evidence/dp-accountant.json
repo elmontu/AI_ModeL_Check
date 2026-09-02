@@ -3,7 +3,7 @@
   "threat_id": "membership-person",
   "population_scope_id": "service-participants-2026",
   "epsilon": 0.2,
-  "delta": 0.000001,
+  "delta": 1e-06,
   "adjacency": "add/remove one person",
   "protected_unit": "person",
   "accountant": "demonstration accountant",
@@ -16,12 +16,12 @@
   "secret_prior_bound_validated": false,
   "evidence_context": {
     "release_id": "whole-government-demo-tree-v1",
-    "release_contract_sha256": "3aa3db7a0601c388368283687cbb28b0fd73e1870f773712e9f349e013e6297a",
-    "policy_sha256": "9e00b697be580a6921b42e1b4ddb206aba90ca4bde61cb402450fd49c246653f",
+    "release_contract_sha256": "58fa3564d8445f55834ebdd9699a4d412035a2f96bfb42b27f5c99cd510d035b",
+    "policy_sha256": "8a9c5d6767fae14e11bb5f1ee5427ed1e8a0ce50782b204235c71f0eddb9043d",
     "artifact_sha256": "2f42b587627c5b6c4447d781b57a47082743f029b475f560a574553abcedfdd5",
-    "interface_sha256": "4cde1c5e2dd0f3303c9c8e2c3c3bef3d089746a38569b1442c346d81b6e50ed8",
+    "interface_sha256": "f13f29ea2027109f4f02992b37713ee9f63bf56672afb800ac9c3fb6966473b8",
     "population_scope_id": "service-participants-2026",
-    "population_scope_sha256": "d0ceafb482b5ed133cd89c765ec4e9d228f4c14bf07fac3f4aa67297a79ed5e8",
+    "population_scope_sha256": "f85f632a9ac034ed0bd4f21cd3256729443a901de4ab95d89c52898615f25604",
     "decision_game_sha256": "686901249c969d5c1a631f1a617c319f9c235842745ea34c6956b6c5c2fef38c",
     "observed_at": "2026-08-18T00:00:00Z"
   }

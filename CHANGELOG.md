@@ -7,7 +7,11 @@ All user-visible changes to Model Release Assurance are recorded here. The proje
 ### Added
 
 - A standalone integrated system audit specification consolidating the complete architecture, normative MRAP roles/messages/states/gates, current release contracts and pipelines, evidence semantics, threat and formal boundaries, production obligations, pass/fail rules, and an auditor checklist.
-- Assessment request/report 4.0, policy 2.0, signed assessment manifest 2.0, optimization request/report 3.0, and signed optimization manifest 3.0 contracts.
+- Assessment request/report 5.0, policy 3.0, signed assessment manifest 3.0, optimization request/report 4.0, signed optimization manifest 4.0, release-protocol verification 2.0, and audit-verification 3.0 contracts. Superseded schema bytes remain retained as historical structure.
+- Versioned attack catalog, frozen battery configuration, positive-control result, worker-output, and assessment-submission contracts, plus a non-clearing trusted-core `attack_battery` analyzer.
+- Per-threat policy modes that require, explicitly waive, or prohibit an attack-battery precondition for ceiling-based clearance; exact-value clearance remains distinct.
+- Policy allowlists for the complete catalog/configuration, required attack identifiers, worker service/version/implementation/image, isolation assurance, attester identities, and minimum positive-control power.
+- Centrally replayed positive controls, complete-battery multiplicity, attack applicability checks, required floor/operating-point attainment, and fail-closed missing, failed, timed-out, uncontrolled, or unsafe-isolation dispositions.
 - Machine-readable assessment scope (`single_release_no_portfolio`, `declared_interface_only`, live-interface false, authorization-ineligible) and optimization bindings for the active policy, declared hash-bound portfolio-registry snapshot, exact covered releases, and versioned ordered selection policy.
 - Typed evidence-producer service/version and implementation/configuration digests, with policy minimum versions, digest allowlists, required-analyzer rules, and fail-closed stale-producer rejection.
 - Two-phase assessment/optimization audit events (intent plus completed/failed), orphan detection, ledger identity, contiguous sequence/tail checks, structured verification, and externally anchorable ledger checkpoints.
@@ -15,13 +19,11 @@ All user-visible changes to Model Release Assurance are recorded here. The proje
   verification time, artifact/signature verification booleans, skipped checks, and degradations.
 - Required structured interface declarations for output/download/summary, serialization, timing,
   error/status, execution-state/concurrency, and side/local/administrator access channels.
+- `InterfaceContract 3.0` and nested `LlmProtocolContract 1.0` use required-explicit nullable fields and add a coherent rate-limit value/window/burst/scope/retry/enforcement contract whose compatibility flag must agree.
 - Deterministic runtime identities on assessment, optimization, lifecycle, and audit verification
   outputs, including package-source and transparent algorithm-profile digests.
-- A centralized 21-contract schema registry and deterministic exact-byte current-schema manifest;
+- A centralized 26-contract schema registry and deterministic exact-byte current-schema manifest with explicit self-exclusion metadata;
   trusted release signing/attestation remains an external protected-identity operation.
-- A retained twelve-case post-critique control evaluation covering interface completeness, future
-  registry times, selection-policy authorization, evidence disposition, manifest interface binding,
-  audit splicing, state-head replay, runtime attribution, CLI verdict semantics, and binary64 drift.
 - An executable theorem-to-runtime obligation map naming concrete Python violation behavior, regression tests, coverage status, and external refinement gaps.
 - Dedicated, transcript-bound interactive-LLM analyzers for output-watermark screens and randomized synthetic-canary attack floors.
 - Canary evidence supports low-FPR and equal-prior membership games plus exact reconstruction, while contamination, protocol-binding, preregistration, or recipient-realizability failures downgrade the result to a non-decision-bearing screen.
@@ -32,6 +34,7 @@ All user-visible changes to Model Release Assurance are recorded here. The proje
 - Corrected the deterministic additive-stump fixture to identify it as a workflow proxy rather than a trained native XGBoost model.
 - Integrated a red-team stage with independently trained shadow-model membership attacks, Gaussian feature corruption and exhaustive single-feature occlusion probes; outputs remain non-clearing and require complete assessment bindings before any attack floor may block.
 - Added an independently implemented, MIT-attributed SACRO-ML-inspired target/tool registry with aggregate structural disclosure indicators, repeated worst-case probability membership attacks, dummy baselines, low-FPR simultaneous bounds, standardized reports and MCP-ready discovery metadata.
+- MCP red-team discovery now returns a typed catalog and digest, and a non-authorizing validator checks complete attack-battery submission structure and bindings without executing models or granting decision authority.
 
 ### Changed
 
@@ -48,10 +51,20 @@ All user-visible changes to Model Release Assurance are recorded here. The proje
   inputs remain caller-supplied and require authenticated authorities in production.
 - Assessment and optimization reports now expose their emitting implementation/runtime profile;
   ordinary binary64 clearance comparisons are explicitly ineligible for unresolved MRAP G7 claims.
+- Required-explicit nullable interface declarations now survive CLI, MCP, audit-ledger, fixture, and canonical-hash round trips and participate in governed model digests.
+- New audit failures bound caller-controlled error codes/messages before retaining stable error codes and domain-separated diagnostic fingerprints rather than raw exception text. Audit Verification 3.0 counts fingerprint-form versus plaintext-compatible failed diagnostics and explicitly degrades when plaintext rows are present. The v2 envelope remains plaintext and content-bearing and is not a vintage dispatcher for prior Assessment 4.0 or Optimization 3.0 documents.
+- Complete attack batteries now bind every run and positive-control disposition to its catalogued service, attack version, and implementation digest, distinguish heterogeneous executors from the battery orchestrator, enforce catalog validity over freeze/execution, expose executor identities in evidence, and revalidate copied/constructed request models at the engine boundary.
+- Attack-battery observations must fall within the worker interval; the engine checks the full interval against policy/release/current-time bounds. Frozen timeout, aggregate reported-trial, and canonical output-byte limits are replayed, while CPU/memory are explicitly declared external-enforcement budgets. Unsupported unparameterized Holm/preallocated battery modes now fail closed in favor of the implemented Bonferroni replay.
+- Exposed retry-after behavior now requires matching retry metadata and HTTP `429` or gRPC `RESOURCE_EXHAUSTED` declarations; custom transports retain explicit custom-code semantics.
+- Experiment resolver constraints now stay within the scikit-learn 1.5/1.6 and
+  XGBoost 2.x compatibility band instead of silently selecting incompatible
+  future versions in CI. CI validates the versions resolved for each job, not
+  every allowed combination, and this range file is not a reproduction lock.
 
 ### Removed
 
 - Removed the dated framework audit/corrigendum documents and the frozen Version 0.5 prospective-study runner, analyzer, configuration, test, and seal requirements. Superseded schemas remain historical structural records for provenance and external schema validation; the current CLI accepts only current contract versions.
+- Removed the self-attested post-critique design-control result, evaluator, and test; executable unit/regression tests are the maintained software evidence, while external custody and scientific adequacy remain outside the repository.
 
 ### Fixed
 

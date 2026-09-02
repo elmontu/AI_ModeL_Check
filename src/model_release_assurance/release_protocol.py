@@ -342,7 +342,7 @@ class ReleaseProtocolRun(StrictModel):
 
 
 class ReleaseProtocolVerification(StrictModel):
-    schema_version: Literal["1.0"] = "1.0"
+    schema_version: Literal["2.0"] = "2.0"
     verification_profile: ReleaseProtocolVerificationProfile
     artifact_files_verified: bool
     authenticated_signatures_verified: bool
@@ -1111,7 +1111,7 @@ def verify_release_protocol_run(
         run_sha256=sha256_bytes(canonical_json_bytes(run)),
         runtime_identity=current_runtime_identity(
             component_id="release_protocol_verifier",
-            component_version="ReleaseProtocolVerification/1.0",
+            component_version="ReleaseProtocolVerification/2.0",
             algorithm_profile={
                 "artifact_contract": "ReleaseProtocolArtifact/1",
                 "event_contract": "ReleaseProtocolEvent/1",

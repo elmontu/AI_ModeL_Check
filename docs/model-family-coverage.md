@@ -39,7 +39,7 @@ The catalog is intentionally broad enough to route classical, deep, generative, 
 
 ## Structured model profile
 
-Assessment v4 requires `ReleaseContract.model_profile`, which records:
+Assessment v5 requires `ReleaseContract.model_profile`, which records:
 
 - task: classification, regression, ranking, recommendation, forecasting, clustering, anomaly detection, representation, generation, retrieval, control, decision support, or a defined custom task;
 - input and output modalities;
@@ -48,7 +48,7 @@ Assessment v4 requires `ReleaseContract.model_profile`, which records:
 - whether the system is generative; and
 - whether it is stateful.
 
-Interactive LLM contracts must have a generative text profile. Stateful profiles require an adaptive-query interface. Superseded schemas remain separate historical artifacts; the v4 core does not infer a missing profile.
+Interactive LLM contracts must have a generative text profile. Stateful profiles require an adaptive-query interface. Superseded schemas remain separate historical artifacts; the current v5 assessment core does not infer a missing profile.
 
 ## Command-line review
 

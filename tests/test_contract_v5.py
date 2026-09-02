@@ -34,11 +34,11 @@ def assessment_raw() -> dict:
     return json.loads((ROOT / "examples" / "request.json").read_text(encoding="utf-8"))
 
 
-class AssessmentContractV4Tests(unittest.TestCase):
+class AssessmentContractV5Tests(unittest.TestCase):
     def test_report_and_manifest_expose_non_authorizing_scope(self) -> None:
         request = AssessmentRequest.model_validate(assessment_raw())
         report = AssuranceEngine().assess(request, ROOT / "examples")
-        self.assertEqual(report.schema_version, "4.0")
+        self.assertEqual(report.schema_version, "5.0")
         self.assertEqual(
             report.assessment_scope.composition_scope,
             "single_release_no_portfolio",
@@ -63,7 +63,7 @@ class AssessmentContractV4Tests(unittest.TestCase):
             )
             with self.assertRaisesRegex(IntegrityError, "release_interface_sha256"):
                 verify_signed_manifest(tampered_interface, report, public)
-        self.assertEqual(manifest.schema_version, "2.0")
+        self.assertEqual(manifest.schema_version, "3.0")
         self.assertEqual(manifest.composition_scope, "single_release_no_portfolio")
         self.assertEqual(manifest.interface_assurance, "declared_interface_only")
         self.assertFalse(manifest.authorization_eligible)
@@ -142,19 +142,21 @@ class AssessmentContractV4Tests(unittest.TestCase):
     def test_policy_required_analyzer_cannot_be_omitted(self) -> None:
         raw = assessment_raw()
         raw["analyzer_inputs"] = [
-            value for value in raw["analyzer_inputs"] if value["analyzer"] != "attack"
+            value
+            for value in raw["analyzer_inputs"]
+            if value["analyzer"] != "attack_battery"
         ]
         request = AssessmentRequest.model_validate(raw)
         with self.assertRaisesRegex(ValueError, "omits policy-required analyzers"):
             AssuranceEngine().assess(request, ROOT / "examples")
 
 
-class OptimizationContractV3Tests(unittest.TestCase):
+class OptimizationContractV4Tests(unittest.TestCase):
     def test_selection_and_portfolio_scope_are_replayable_outputs(self) -> None:
         path = ROOT / "examples" / "optimization-request.json"
         request = OptimizationRequest.model_validate_json(path.read_text(encoding="utf-8"))
         report = ReleaseOptimizer().optimize(request, path.parent)
-        self.assertEqual(report.schema_version, "3.0")
+        self.assertEqual(report.schema_version, "4.0")
         self.assertEqual(report.selection_policy, request.selection_policy)
         self.assertEqual(report.composition_scope, "portfolio_registry_bound")
         self.assertEqual(

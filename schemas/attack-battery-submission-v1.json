@@ -1,0 +1,1351 @@
+{
+  "$defs": {
+    "AnalyzerProvenance": {
+      "additionalProperties": false,
+      "properties": {
+        "bound_fields": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Bound Fields",
+          "type": "array"
+        },
+        "configuration_path": {
+          "minLength": 1,
+          "title": "Configuration Path",
+          "type": "string"
+        },
+        "producer": {
+          "$ref": "#/$defs/EvidenceProducer"
+        },
+        "source_path": {
+          "minLength": 1,
+          "title": "Source Path",
+          "type": "string"
+        },
+        "source_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Source Sha256",
+          "type": "string"
+        },
+        "tool": {
+          "maxLength": 256,
+          "minLength": 1,
+          "title": "Tool",
+          "type": "string"
+        },
+        "tool_version": {
+          "maxLength": 128,
+          "minLength": 1,
+          "title": "Tool Version",
+          "type": "string"
+        }
+      },
+      "required": [
+        "tool",
+        "tool_version",
+        "producer",
+        "configuration_path",
+        "source_path",
+        "source_sha256",
+        "bound_fields"
+      ],
+      "title": "AnalyzerProvenance",
+      "type": "object"
+    },
+    "AttackBatteryConfiguration": {
+      "additionalProperties": false,
+      "properties": {
+        "catalog_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Catalog Sha256",
+          "type": "string"
+        },
+        "configuration_id": {
+          "maxLength": 128,
+          "minLength": 3,
+          "pattern": "^[A-Za-z0-9._:-]+$",
+          "title": "Configuration Id",
+          "type": "string"
+        },
+        "frozen_at": {
+          "format": "date-time",
+          "title": "Frozen At",
+          "type": "string"
+        },
+        "multiplicity_method": {
+          "const": "bonferroni",
+          "title": "Multiplicity Method",
+          "type": "string"
+        },
+        "positive_controls": {
+          "items": {
+            "$ref": "#/$defs/AttackPositiveControlPlan"
+          },
+          "minItems": 1,
+          "title": "Positive Controls",
+          "type": "array"
+        },
+        "resource_limits": {
+          "$ref": "#/$defs/AttackResourceLimits"
+        },
+        "runs": {
+          "items": {
+            "$ref": "#/$defs/AttackRunPlan"
+          },
+          "minItems": 1,
+          "title": "Runs",
+          "type": "array"
+        },
+        "schema_version": {
+          "const": "1.0",
+          "default": "1.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "stopping_rule": {
+          "maxLength": 2048,
+          "minLength": 1,
+          "title": "Stopping Rule",
+          "type": "string"
+        }
+      },
+      "required": [
+        "configuration_id",
+        "catalog_sha256",
+        "frozen_at",
+        "resource_limits",
+        "runs",
+        "positive_controls",
+        "stopping_rule",
+        "multiplicity_method"
+      ],
+      "title": "AttackBatteryConfiguration",
+      "type": "object"
+    },
+    "AttackBatteryWorkerOutput": {
+      "additionalProperties": false,
+      "properties": {
+        "artifact_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Artifact Sha256",
+          "type": "string"
+        },
+        "can_clear": {
+          "const": false,
+          "default": false,
+          "title": "Can Clear",
+          "type": "boolean"
+        },
+        "catalog_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Catalog Sha256",
+          "type": "string"
+        },
+        "completed_at": {
+          "format": "date-time",
+          "title": "Completed At",
+          "type": "string"
+        },
+        "configuration_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Configuration Sha256",
+          "type": "string"
+        },
+        "decision_authority": {
+          "const": "none",
+          "default": "none",
+          "title": "Decision Authority",
+          "type": "string"
+        },
+        "decision_game_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Decision Game Sha256",
+          "type": "string"
+        },
+        "execution_id": {
+          "maxLength": 128,
+          "minLength": 3,
+          "pattern": "^[A-Za-z0-9._:-]+$",
+          "title": "Execution Id",
+          "type": "string"
+        },
+        "interface_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Interface Sha256",
+          "type": "string"
+        },
+        "isolation": {
+          "$ref": "#/$defs/AttackIsolationEvidence"
+        },
+        "policy_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Policy Sha256",
+          "type": "string"
+        },
+        "population_scope_id": {
+          "maxLength": 128,
+          "minLength": 3,
+          "pattern": "^[A-Za-z0-9._:-]+$",
+          "title": "Population Scope Id",
+          "type": "string"
+        },
+        "population_scope_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Population Scope Sha256",
+          "type": "string"
+        },
+        "positive_controls": {
+          "items": {
+            "$ref": "#/$defs/AttackPositiveControlResult"
+          },
+          "minItems": 1,
+          "title": "Positive Controls",
+          "type": "array"
+        },
+        "release_contract_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Release Contract Sha256",
+          "type": "string"
+        },
+        "release_id": {
+          "maxLength": 128,
+          "minLength": 3,
+          "pattern": "^[A-Za-z0-9._:-]+$",
+          "title": "Release Id",
+          "type": "string"
+        },
+        "results": {
+          "items": {
+            "$ref": "#/$defs/AttackRunResult"
+          },
+          "minItems": 1,
+          "title": "Results",
+          "type": "array"
+        },
+        "retained_raw_bundle_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Retained Raw Bundle Sha256",
+          "type": "string"
+        },
+        "schema_version": {
+          "const": "1.0",
+          "default": "1.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "started_at": {
+          "format": "date-time",
+          "title": "Started At",
+          "type": "string"
+        },
+        "worker": {
+          "$ref": "#/$defs/EvidenceProducer"
+        },
+        "worker_runtime_identity": {
+          "$ref": "#/$defs/RuntimeIdentity"
+        }
+      },
+      "required": [
+        "execution_id",
+        "release_id",
+        "release_contract_sha256",
+        "policy_sha256",
+        "artifact_sha256",
+        "interface_sha256",
+        "population_scope_id",
+        "population_scope_sha256",
+        "decision_game_sha256",
+        "catalog_sha256",
+        "configuration_sha256",
+        "worker",
+        "worker_runtime_identity",
+        "isolation",
+        "started_at",
+        "completed_at",
+        "positive_controls",
+        "results",
+        "retained_raw_bundle_sha256"
+      ],
+      "title": "AttackBatteryWorkerOutput",
+      "type": "object"
+    },
+    "AttackCatalog": {
+      "additionalProperties": false,
+      "properties": {
+        "catalog_id": {
+          "maxLength": 128,
+          "minLength": 3,
+          "pattern": "^[A-Za-z0-9._:-]+$",
+          "title": "Catalog Id",
+          "type": "string"
+        },
+        "catalog_version": {
+          "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$",
+          "title": "Catalog Version",
+          "type": "string"
+        },
+        "entries": {
+          "items": {
+            "$ref": "#/$defs/AttackCatalogEntry"
+          },
+          "minItems": 1,
+          "title": "Entries",
+          "type": "array"
+        },
+        "schema_version": {
+          "const": "1.0",
+          "default": "1.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "valid_from": {
+          "format": "date-time",
+          "title": "Valid From",
+          "type": "string"
+        },
+        "valid_until": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Valid Until"
+        }
+      },
+      "required": [
+        "catalog_id",
+        "catalog_version",
+        "valid_from",
+        "entries"
+      ],
+      "title": "AttackCatalog",
+      "type": "object"
+    },
+    "AttackCatalogEntry": {
+      "additionalProperties": false,
+      "properties": {
+        "applicable_model_families": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Applicable Model Families",
+          "type": "array"
+        },
+        "applicable_protocol_types": {
+          "items": {
+            "enum": [
+              "predictive",
+              "interactive_llm"
+            ],
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Applicable Protocol Types",
+          "type": "array"
+        },
+        "applicable_threat_kinds": {
+          "items": {
+            "$ref": "#/$defs/ThreatKind"
+          },
+          "minItems": 1,
+          "title": "Applicable Threat Kinds",
+          "type": "array"
+        },
+        "attack_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9._:-]+$",
+          "title": "Attack Id",
+          "type": "string"
+        },
+        "attack_version": {
+          "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$",
+          "title": "Attack Version",
+          "type": "string"
+        },
+        "can_clear": {
+          "const": false,
+          "default": false,
+          "title": "Can Clear",
+          "type": "boolean"
+        },
+        "decision_authority": {
+          "const": "none",
+          "default": "none",
+          "title": "Decision Authority",
+          "type": "string"
+        },
+        "evidence_role": {
+          "enum": [
+            "blocking_floor",
+            "screen_only"
+          ],
+          "title": "Evidence Role",
+          "type": "string"
+        },
+        "implementation_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Implementation Sha256",
+          "type": "string"
+        },
+        "minimum_repetitions": {
+          "minimum": 1,
+          "title": "Minimum Repetitions",
+          "type": "integer"
+        },
+        "positive_control_kind": {
+          "enum": [
+            "known_leak_binomial",
+            "expected_flag"
+          ],
+          "title": "Positive Control Kind",
+          "type": "string"
+        },
+        "requires_model_execution": {
+          "title": "Requires Model Execution",
+          "type": "boolean"
+        },
+        "service_id": {
+          "maxLength": 128,
+          "minLength": 3,
+          "pattern": "^[A-Za-z0-9._:-]+$",
+          "title": "Service Id",
+          "type": "string"
+        },
+        "supported_metrics": {
+          "items": {
+            "enum": [
+              "bayes_linkage_success",
+              "incremental_bayes_linkage_success",
+              "worst_observation_success",
+              "membership_tpr_at_fpr",
+              "equal_prior_membership_success",
+              "finite_secret_exact_guess_success",
+              "attribute_attack_success",
+              "incremental_attribute_attack_success",
+              "reconstruction_success",
+              "incremental_reconstruction_success"
+            ],
+            "type": "string"
+          },
+          "title": "Supported Metrics",
+          "type": "array"
+        }
+      },
+      "required": [
+        "attack_id",
+        "attack_version",
+        "service_id",
+        "implementation_sha256",
+        "applicable_model_families",
+        "applicable_protocol_types",
+        "applicable_threat_kinds",
+        "supported_metrics",
+        "evidence_role",
+        "positive_control_kind",
+        "minimum_repetitions",
+        "requires_model_execution"
+      ],
+      "title": "AttackCatalogEntry",
+      "type": "object"
+    },
+    "AttackIsolationEvidence": {
+      "additionalProperties": false,
+      "properties": {
+        "assurance": {
+          "enum": [
+            "declared",
+            "externally_attested"
+          ],
+          "title": "Assurance",
+          "type": "string"
+        },
+        "attester_key_id": {
+          "anyOf": [
+            {
+              "maxLength": 256,
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Attester Key Id"
+        },
+        "network_access": {
+          "enum": [
+            "none",
+            "restricted",
+            "unrestricted"
+          ],
+          "title": "Network Access",
+          "type": "string"
+        },
+        "no_new_privileges": {
+          "title": "No New Privileges",
+          "type": "boolean"
+        },
+        "read_only_mount_sha256s": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Read Only Mount Sha256S",
+          "type": "array"
+        },
+        "read_only_root_filesystem": {
+          "title": "Read Only Root Filesystem",
+          "type": "boolean"
+        },
+        "run_as_non_root": {
+          "title": "Run As Non Root",
+          "type": "boolean"
+        },
+        "schema_version": {
+          "const": "1.0",
+          "default": "1.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "signature": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Signature"
+        },
+        "statement_sha256": {
+          "anyOf": [
+            {
+              "pattern": "^[0-9a-f]{64}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Statement Sha256"
+        },
+        "worker_image_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Worker Image Sha256",
+          "type": "string"
+        },
+        "writable_audit_path": {
+          "title": "Writable Audit Path",
+          "type": "boolean"
+        },
+        "writable_governance_path": {
+          "title": "Writable Governance Path",
+          "type": "boolean"
+        },
+        "writable_key_path": {
+          "title": "Writable Key Path",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "assurance",
+        "worker_image_sha256",
+        "run_as_non_root",
+        "no_new_privileges",
+        "read_only_root_filesystem",
+        "network_access",
+        "writable_audit_path",
+        "writable_key_path",
+        "writable_governance_path",
+        "read_only_mount_sha256s"
+      ],
+      "title": "AttackIsolationEvidence",
+      "type": "object"
+    },
+    "AttackPositiveControlPlan": {
+      "additionalProperties": false,
+      "properties": {
+        "attack_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9._:-]+$",
+          "title": "Attack Id",
+          "type": "string"
+        },
+        "confidence": {
+          "exclusiveMaximum": 1.0,
+          "exclusiveMinimum": 0.5,
+          "title": "Confidence",
+          "type": "number"
+        },
+        "control_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9._:-]+$",
+          "title": "Control Id",
+          "type": "string"
+        },
+        "control_kind": {
+          "enum": [
+            "known_leak_binomial",
+            "expected_flag"
+          ],
+          "title": "Control Kind",
+          "type": "string"
+        },
+        "minimum_detection_lower_bound": {
+          "exclusiveMinimum": 0.0,
+          "maximum": 1.0,
+          "title": "Minimum Detection Lower Bound",
+          "type": "number"
+        },
+        "minimum_trials": {
+          "exclusiveMinimum": 0,
+          "title": "Minimum Trials",
+          "type": "integer"
+        },
+        "reference_artifact_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Reference Artifact Sha256",
+          "type": "string"
+        },
+        "reference_dataset_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Reference Dataset Sha256",
+          "type": "string"
+        }
+      },
+      "required": [
+        "control_id",
+        "attack_id",
+        "control_kind",
+        "reference_artifact_sha256",
+        "reference_dataset_sha256",
+        "minimum_trials",
+        "minimum_detection_lower_bound",
+        "confidence"
+      ],
+      "title": "AttackPositiveControlPlan",
+      "type": "object"
+    },
+    "AttackPositiveControlResult": {
+      "additionalProperties": false,
+      "properties": {
+        "attack_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9._:-]+$",
+          "title": "Attack Id",
+          "type": "string"
+        },
+        "attack_version": {
+          "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$",
+          "title": "Attack Version",
+          "type": "string"
+        },
+        "control_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9._:-]+$",
+          "title": "Control Id",
+          "type": "string"
+        },
+        "expected_flag_observed": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Expected Flag Observed"
+        },
+        "implementation_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Implementation Sha256",
+          "type": "string"
+        },
+        "raw_result_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Raw Result Sha256",
+          "type": "string"
+        },
+        "reported_detection_lower_bound": {
+          "anyOf": [
+            {
+              "maximum": 1.0,
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Reported Detection Lower Bound"
+        },
+        "schema_version": {
+          "const": "1.0",
+          "default": "1.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "service_id": {
+          "maxLength": 128,
+          "minLength": 3,
+          "pattern": "^[A-Za-z0-9._:-]+$",
+          "title": "Service Id",
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "succeeded",
+            "failed",
+            "timed_out"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "successes": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Successes"
+        },
+        "trials": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Trials"
+        }
+      },
+      "required": [
+        "control_id",
+        "attack_id",
+        "service_id",
+        "attack_version",
+        "implementation_sha256",
+        "status",
+        "raw_result_sha256"
+      ],
+      "title": "AttackPositiveControlResult",
+      "type": "object"
+    },
+    "AttackResourceLimits": {
+      "additionalProperties": false,
+      "properties": {
+        "cpu_cores": {
+          "description": "Declared worker CPU budget; the reference core does not mechanically observe or attest compliance because the submission carries no CPU telemetry.",
+          "exclusiveMinimum": 0.0,
+          "title": "Cpu Cores",
+          "type": "number"
+        },
+        "maximum_output_bytes": {
+          "description": "Maximum canonical governed worker-output size in bytes.",
+          "exclusiveMinimum": 0,
+          "title": "Maximum Output Bytes",
+          "type": "integer"
+        },
+        "maximum_records": {
+          "description": "Maximum aggregate statistical trials reported by the worker.",
+          "exclusiveMinimum": 0,
+          "title": "Maximum Records",
+          "type": "integer"
+        },
+        "memory_megabytes": {
+          "description": "Declared worker memory budget; the reference core does not mechanically observe or attest compliance because the submission carries no memory telemetry.",
+          "exclusiveMinimum": 0,
+          "title": "Memory Megabytes",
+          "type": "integer"
+        },
+        "timeout_seconds": {
+          "exclusiveMinimum": 0,
+          "maximum": 86400,
+          "title": "Timeout Seconds",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "timeout_seconds",
+        "memory_megabytes",
+        "cpu_cores",
+        "maximum_records",
+        "maximum_output_bytes"
+      ],
+      "title": "AttackResourceLimits",
+      "type": "object"
+    },
+    "AttackRunPlan": {
+      "additionalProperties": false,
+      "properties": {
+        "attack_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9._:-]+$",
+          "title": "Attack Id",
+          "type": "string"
+        },
+        "attack_version": {
+          "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$",
+          "title": "Attack Version",
+          "type": "string"
+        },
+        "comparison_family_size": {
+          "minimum": 1,
+          "title": "Comparison Family Size",
+          "type": "integer"
+        },
+        "confidence": {
+          "exclusiveMaximum": 1.0,
+          "exclusiveMinimum": 0.5,
+          "title": "Confidence",
+          "type": "number"
+        },
+        "evidence_role": {
+          "enum": [
+            "blocking_floor",
+            "screen_only"
+          ],
+          "title": "Evidence Role",
+          "type": "string"
+        },
+        "metric": {
+          "enum": [
+            "bayes_linkage_success",
+            "incremental_bayes_linkage_success",
+            "worst_observation_success",
+            "membership_tpr_at_fpr",
+            "equal_prior_membership_success",
+            "finite_secret_exact_guess_success",
+            "attribute_attack_success",
+            "incremental_attribute_attack_success",
+            "reconstruction_success",
+            "incremental_reconstruction_success"
+          ],
+          "title": "Metric",
+          "type": "string"
+        },
+        "parameters": {
+          "additionalProperties": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              },
+              {
+                "type": "number"
+              },
+              {
+                "type": "boolean"
+              }
+            ]
+          },
+          "title": "Parameters",
+          "type": "object"
+        },
+        "positive_control_ids": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Positive Control Ids",
+          "type": "array"
+        },
+        "repetitions": {
+          "minimum": 1,
+          "title": "Repetitions",
+          "type": "integer"
+        },
+        "run_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9._:-]+$",
+          "title": "Run Id",
+          "type": "string"
+        },
+        "seed": {
+          "minimum": 0,
+          "title": "Seed",
+          "type": "integer"
+        },
+        "target_fpr": {
+          "anyOf": [
+            {
+              "exclusiveMaximum": 1.0,
+              "exclusiveMinimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Target Fpr"
+        }
+      },
+      "required": [
+        "run_id",
+        "attack_id",
+        "attack_version",
+        "metric",
+        "evidence_role",
+        "seed",
+        "repetitions",
+        "confidence",
+        "comparison_family_size",
+        "positive_control_ids"
+      ],
+      "title": "AttackRunPlan",
+      "type": "object"
+    },
+    "AttackRunResult": {
+      "additionalProperties": false,
+      "properties": {
+        "attack_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9._:-]+$",
+          "title": "Attack Id",
+          "type": "string"
+        },
+        "attack_version": {
+          "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$",
+          "title": "Attack Version",
+          "type": "string"
+        },
+        "can_clear": {
+          "const": false,
+          "default": false,
+          "title": "Can Clear",
+          "type": "boolean"
+        },
+        "false_positives": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "False Positives"
+        },
+        "implementation_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Implementation Sha256",
+          "type": "string"
+        },
+        "metric": {
+          "enum": [
+            "bayes_linkage_success",
+            "incremental_bayes_linkage_success",
+            "worst_observation_success",
+            "membership_tpr_at_fpr",
+            "equal_prior_membership_success",
+            "finite_secret_exact_guess_success",
+            "attribute_attack_success",
+            "incremental_attribute_attack_success",
+            "reconstruction_success",
+            "incremental_reconstruction_success"
+          ],
+          "title": "Metric",
+          "type": "string"
+        },
+        "negative_control_summary": {
+          "maxLength": 2048,
+          "minLength": 1,
+          "title": "Negative Control Summary",
+          "type": "string"
+        },
+        "nonmember_trials": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Nonmember Trials"
+        },
+        "raw_result_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Raw Result Sha256",
+          "type": "string"
+        },
+        "run_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9._:-]+$",
+          "title": "Run Id",
+          "type": "string"
+        },
+        "service_id": {
+          "maxLength": 128,
+          "minLength": 3,
+          "pattern": "^[A-Za-z0-9._:-]+$",
+          "title": "Service Id",
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "succeeded",
+            "failed",
+            "timed_out"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "successes": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Successes"
+        },
+        "target_fpr": {
+          "anyOf": [
+            {
+              "exclusiveMaximum": 1.0,
+              "exclusiveMinimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Target Fpr"
+        },
+        "trials": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Trials"
+        }
+      },
+      "required": [
+        "run_id",
+        "attack_id",
+        "service_id",
+        "attack_version",
+        "implementation_sha256",
+        "status",
+        "metric",
+        "raw_result_sha256",
+        "negative_control_summary"
+      ],
+      "title": "AttackRunResult",
+      "type": "object"
+    },
+    "EvidenceContext": {
+      "additionalProperties": false,
+      "properties": {
+        "artifact_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Artifact Sha256",
+          "type": "string"
+        },
+        "decision_game_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Decision Game Sha256",
+          "type": "string"
+        },
+        "interface_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Interface Sha256",
+          "type": "string"
+        },
+        "observed_at": {
+          "format": "date-time",
+          "title": "Observed At",
+          "type": "string"
+        },
+        "policy_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Policy Sha256",
+          "type": "string"
+        },
+        "population_scope_id": {
+          "maxLength": 128,
+          "minLength": 3,
+          "pattern": "^[A-Za-z0-9._:-]+$",
+          "title": "Population Scope Id",
+          "type": "string"
+        },
+        "population_scope_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Population Scope Sha256",
+          "type": "string"
+        },
+        "release_contract_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Release Contract Sha256",
+          "type": "string"
+        },
+        "release_id": {
+          "maxLength": 128,
+          "minLength": 3,
+          "pattern": "^[A-Za-z0-9._:-]+$",
+          "title": "Release Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "release_id",
+        "release_contract_sha256",
+        "policy_sha256",
+        "artifact_sha256",
+        "interface_sha256",
+        "population_scope_id",
+        "population_scope_sha256",
+        "decision_game_sha256",
+        "observed_at"
+      ],
+      "title": "EvidenceContext",
+      "type": "object"
+    },
+    "EvidenceProducer": {
+      "additionalProperties": false,
+      "properties": {
+        "configuration_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Configuration Sha256",
+          "type": "string"
+        },
+        "implementation_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Implementation Sha256",
+          "type": "string"
+        },
+        "service_id": {
+          "maxLength": 128,
+          "minLength": 3,
+          "pattern": "^[A-Za-z0-9._:-]+$",
+          "title": "Service Id",
+          "type": "string"
+        },
+        "service_version": {
+          "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$",
+          "title": "Service Version",
+          "type": "string"
+        }
+      },
+      "required": [
+        "service_id",
+        "service_version",
+        "implementation_sha256",
+        "configuration_sha256"
+      ],
+      "title": "EvidenceProducer",
+      "type": "object"
+    },
+    "RuntimeIdentity": {
+      "additionalProperties": false,
+      "description": "Replayable identity of the software component that emitted an artifact.",
+      "properties": {
+        "algorithm_profile": {
+          "additionalProperties": true,
+          "title": "Algorithm Profile",
+          "type": "object"
+        },
+        "algorithm_profile_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Algorithm Profile Sha256",
+          "type": "string"
+        },
+        "component_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "title": "Component Id",
+          "type": "string"
+        },
+        "component_version": {
+          "maxLength": 64,
+          "minLength": 1,
+          "title": "Component Version",
+          "type": "string"
+        },
+        "dependency_versions": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "title": "Dependency Versions",
+          "type": "object"
+        },
+        "package_name": {
+          "const": "model-release-assurance",
+          "default": "model-release-assurance",
+          "title": "Package Name",
+          "type": "string"
+        },
+        "package_source_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Package Source Sha256",
+          "type": "string"
+        },
+        "package_version": {
+          "title": "Package Version",
+          "type": "string"
+        },
+        "python_implementation": {
+          "maxLength": 64,
+          "minLength": 1,
+          "title": "Python Implementation",
+          "type": "string"
+        },
+        "python_version": {
+          "maxLength": 64,
+          "minLength": 1,
+          "title": "Python Version",
+          "type": "string"
+        },
+        "schema_version": {
+          "const": "1.0",
+          "default": "1.0",
+          "title": "Schema Version",
+          "type": "string"
+        }
+      },
+      "required": [
+        "package_version",
+        "package_source_sha256",
+        "component_id",
+        "component_version",
+        "algorithm_profile",
+        "algorithm_profile_sha256",
+        "python_implementation",
+        "python_version",
+        "dependency_versions"
+      ],
+      "title": "RuntimeIdentity",
+      "type": "object"
+    },
+    "ThreatKind": {
+      "enum": [
+        "linkage",
+        "membership",
+        "attribute",
+        "reconstruction"
+      ],
+      "title": "ThreatKind",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "description": "Complete, policy-matchable attack battery submitted to the assurance core.",
+  "properties": {
+    "analyzer": {
+      "const": "attack_battery",
+      "default": "attack_battery",
+      "title": "Analyzer",
+      "type": "string"
+    },
+    "catalog": {
+      "$ref": "#/$defs/AttackCatalog"
+    },
+    "catalog_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Catalog Sha256",
+      "type": "string"
+    },
+    "configuration": {
+      "$ref": "#/$defs/AttackBatteryConfiguration"
+    },
+    "configuration_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Configuration Sha256",
+      "type": "string"
+    },
+    "evidence_context": {
+      "$ref": "#/$defs/EvidenceContext"
+    },
+    "population_scope_id": {
+      "title": "Population Scope Id",
+      "type": "string"
+    },
+    "provenance": {
+      "$ref": "#/$defs/AnalyzerProvenance"
+    },
+    "schema_version": {
+      "const": "1.0",
+      "default": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "threat_id": {
+      "title": "Threat Id",
+      "type": "string"
+    },
+    "worker_output": {
+      "$ref": "#/$defs/AttackBatteryWorkerOutput"
+    },
+    "worker_output_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Worker Output Sha256",
+      "type": "string"
+    }
+  },
+  "required": [
+    "threat_id",
+    "population_scope_id",
+    "catalog",
+    "catalog_sha256",
+    "configuration",
+    "configuration_sha256",
+    "worker_output",
+    "worker_output_sha256",
+    "evidence_context",
+    "provenance"
+  ],
+  "title": "AttackBatteryInput",
+  "type": "object"
+}

@@ -23,6 +23,7 @@ from model_release_assurance.decision import decision_game_sha256, decide_threat
 from model_release_assurance.integrity import canonical_json_bytes, sha256_bytes
 from model_release_assurance.models import (
     AnalyzerProvenance,
+    AttackBatteryStatus,
     AttackInput,
     ControlledInferenceInput,
     DpInput,
@@ -186,6 +187,11 @@ def bound_decide(contract: ThreatContract, evidence, release_contract: ReleaseCo
         bound_release,
         tuple(evidence),
         SIMULATION_POLICY_SHA256,
+        AttackBatteryStatus(
+            mode="waived",
+            satisfied=True,
+            waiver_reason="synthetic effectiveness replay isolates the numeric decision rule",
+        ),
     )
 
 

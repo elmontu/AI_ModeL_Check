@@ -1,0 +1,358 @@
+{
+  "$defs": {
+    "AnalyzerRequirement": {
+      "additionalProperties": false,
+      "description": "Policy allowlist for one evidence producer used against one threat.",
+      "properties": {
+        "accepted_configuration_sha256s": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Accepted Configuration Sha256S",
+          "type": "array"
+        },
+        "accepted_implementation_sha256s": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Accepted Implementation Sha256S",
+          "type": "array"
+        },
+        "analyzer": {
+          "maxLength": 128,
+          "minLength": 1,
+          "title": "Analyzer",
+          "type": "string"
+        },
+        "minimum_service_version": {
+          "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$",
+          "title": "Minimum Service Version",
+          "type": "string"
+        },
+        "required": {
+          "default": true,
+          "title": "Required",
+          "type": "boolean"
+        },
+        "threat_id": {
+          "maxLength": 128,
+          "minLength": 3,
+          "pattern": "^[A-Za-z0-9._:-]+$",
+          "title": "Threat Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "threat_id",
+        "analyzer",
+        "minimum_service_version",
+        "accepted_implementation_sha256s",
+        "accepted_configuration_sha256s"
+      ],
+      "title": "AnalyzerRequirement",
+      "type": "object"
+    },
+    "AttackBatteryRequirement": {
+      "additionalProperties": false,
+      "description": "Policy-authorized complete empirical battery required before ceiling clearance.",
+      "properties": {
+        "accepted_attester_key_ids": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Accepted Attester Key Ids",
+          "type": "array"
+        },
+        "accepted_catalog_sha256s": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Accepted Catalog Sha256S",
+          "type": "array"
+        },
+        "accepted_configuration_sha256s": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Accepted Configuration Sha256S",
+          "type": "array"
+        },
+        "accepted_worker_image_sha256s": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Accepted Worker Image Sha256S",
+          "type": "array"
+        },
+        "accepted_worker_implementation_sha256s": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Accepted Worker Implementation Sha256S",
+          "type": "array"
+        },
+        "accepted_worker_service_ids": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Accepted Worker Service Ids",
+          "type": "array"
+        },
+        "minimum_isolation_assurance": {
+          "enum": [
+            "declared",
+            "externally_attested"
+          ],
+          "title": "Minimum Isolation Assurance",
+          "type": "string"
+        },
+        "minimum_positive_control_detection_lower_bound": {
+          "exclusiveMinimum": 0.0,
+          "maximum": 1.0,
+          "title": "Minimum Positive Control Detection Lower Bound",
+          "type": "number"
+        },
+        "minimum_worker_service_version": {
+          "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$",
+          "title": "Minimum Worker Service Version",
+          "type": "string"
+        },
+        "positive_controls_required": {
+          "const": true,
+          "default": true,
+          "title": "Positive Controls Required",
+          "type": "boolean"
+        },
+        "required_attack_ids": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Required Attack Ids",
+          "type": "array"
+        },
+        "requirement_id": {
+          "maxLength": 128,
+          "minLength": 3,
+          "pattern": "^[A-Za-z0-9._:-]+$",
+          "title": "Requirement Id",
+          "type": "string"
+        },
+        "threat_id": {
+          "maxLength": 128,
+          "minLength": 3,
+          "pattern": "^[A-Za-z0-9._:-]+$",
+          "title": "Threat Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "requirement_id",
+        "threat_id",
+        "accepted_catalog_sha256s",
+        "required_attack_ids",
+        "accepted_configuration_sha256s",
+        "accepted_worker_service_ids",
+        "minimum_worker_service_version",
+        "accepted_worker_implementation_sha256s",
+        "accepted_worker_image_sha256s",
+        "minimum_isolation_assurance",
+        "minimum_positive_control_detection_lower_bound"
+      ],
+      "title": "AttackBatteryRequirement",
+      "type": "object"
+    },
+    "CeilingAttackBatteryMode": {
+      "description": "Policy disposition for a threat that would otherwise clear on a ceiling.",
+      "enum": [
+        "required",
+        "ceiling_prohibited",
+        "waived"
+      ],
+      "title": "CeilingAttackBatteryMode",
+      "type": "string"
+    },
+    "PolicyRule": {
+      "additionalProperties": false,
+      "properties": {
+        "ceiling_attack_battery_mode": {
+          "$ref": "#/$defs/CeilingAttackBatteryMode"
+        },
+        "ceiling_attack_battery_waiver_reason": {
+          "anyOf": [
+            {
+              "maxLength": 4096,
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Ceiling Attack Battery Waiver Reason"
+        },
+        "decision_metric": {
+          "enum": [
+            "bayes_linkage_success",
+            "incremental_bayes_linkage_success",
+            "worst_observation_success",
+            "membership_tpr_at_fpr",
+            "equal_prior_membership_success",
+            "finite_secret_exact_guess_success",
+            "attribute_attack_success",
+            "incremental_attribute_attack_success",
+            "reconstruction_success",
+            "incremental_reconstruction_success"
+          ],
+          "title": "Decision Metric",
+          "type": "string"
+        },
+        "kind": {
+          "$ref": "#/$defs/ThreatKind"
+        },
+        "mandatory": {
+          "title": "Mandatory",
+          "type": "boolean"
+        },
+        "metric_parameters": {
+          "additionalProperties": {
+            "type": "number"
+          },
+          "title": "Metric Parameters",
+          "type": "object"
+        },
+        "threat_id": {
+          "maxLength": 128,
+          "minLength": 3,
+          "pattern": "^[A-Za-z0-9._:-]+$",
+          "title": "Threat Id",
+          "type": "string"
+        },
+        "tolerance": {
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Tolerance",
+          "type": "number"
+        },
+        "tolerance_basis": {
+          "enum": [
+            "absolute",
+            "incremental"
+          ],
+          "title": "Tolerance Basis",
+          "type": "string"
+        }
+      },
+      "required": [
+        "threat_id",
+        "kind",
+        "mandatory",
+        "decision_metric",
+        "tolerance",
+        "tolerance_basis",
+        "ceiling_attack_battery_mode"
+      ],
+      "title": "PolicyRule",
+      "type": "object"
+    },
+    "ThreatKind": {
+      "enum": [
+        "linkage",
+        "membership",
+        "attribute",
+        "reconstruction"
+      ],
+      "title": "ThreatKind",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "accepted_selection_policy_sha256s": {
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Accepted Selection Policy Sha256S",
+      "type": "array"
+    },
+    "analyzer_requirements": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/AnalyzerRequirement"
+      },
+      "title": "Analyzer Requirements",
+      "type": "array"
+    },
+    "attack_battery_requirements": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/AttackBatteryRequirement"
+      },
+      "title": "Attack Battery Requirements",
+      "type": "array"
+    },
+    "effective_from": {
+      "format": "date-time",
+      "title": "Effective From",
+      "type": "string"
+    },
+    "expires_at": {
+      "anyOf": [
+        {
+          "format": "date-time",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Expires At"
+    },
+    "policy_id": {
+      "maxLength": 128,
+      "minLength": 3,
+      "pattern": "^[A-Za-z0-9._:-]+$",
+      "title": "Policy Id",
+      "type": "string"
+    },
+    "policy_version": {
+      "maxLength": 64,
+      "minLength": 1,
+      "title": "Policy Version",
+      "type": "string"
+    },
+    "rules": {
+      "items": {
+        "$ref": "#/$defs/PolicyRule"
+      },
+      "title": "Rules",
+      "type": "array"
+    },
+    "schema_version": {
+      "const": "3.0",
+      "default": "3.0",
+      "title": "Schema Version",
+      "type": "string"
+    }
+  },
+  "required": [
+    "policy_id",
+    "policy_version",
+    "effective_from",
+    "rules",
+    "accepted_selection_policy_sha256s"
+  ],
+  "title": "PolicyBundle",
+  "type": "object"
+}

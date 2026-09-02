@@ -4,6 +4,9 @@ from collections import defaultdict
 
 from .integrity import canonical_json_bytes, sha256_bytes
 from .models import (
+    AttackBatteryStatus,
+    CeilingAttackBatteryMode,
+    EvidenceClass,
     EvidenceConsistency,
     EvidenceCoverage,
     EvidenceRecord,
@@ -38,6 +41,7 @@ def decide_threat(
     release: ReleaseContract,
     records: tuple[EvidenceRecord, ...],
     policy_sha256: str,
+    ceiling_attack_battery: AttackBatteryStatus,
 ) -> ThreatDecision:
     scope_hash = population_scope_sha256(population_scope)
     game_hash = decision_game_sha256(threat, population_scope)
@@ -60,7 +64,7 @@ def decide_threat(
     floor_records = [
         record for record in applicable if record.can_block and record.lower is not None
     ]
-    ceiling_records = [
+    clearing_records = [
         record
         for record in applicable
         if record.can_clear
@@ -68,21 +72,69 @@ def decide_threat(
         and record.upper is not None
     ]
     floors = [record.lower for record in floor_records]
-    ceilings = [record.upper for record in ceiling_records]
+    ceilings = [record.upper for record in clearing_records]
     lower = max(floors, default=0.0)
     upper = min(ceilings, default=1.0)
     reasons: list[str] = []
     contradictory = lower > upper + 1e-12
 
     # A contradictory ceiling must not weaken an independently blocking floor.
+    clearance_evidence_class = None
+    exact_clear_records = [
+        record
+        for record in clearing_records
+        if record.evidence_class is EvidenceClass.EXACT
+        and record.upper is not None
+        and record.upper <= threat.tolerance
+    ]
+    ceiling_clear_records = [
+        record
+        for record in clearing_records
+        if record.evidence_class is EvidenceClass.CEILING
+        and record.upper is not None
+        and record.upper <= threat.tolerance
+    ]
+
     if lower > threat.tolerance:
         verdict = Verdict.BLOCK
         reasons.append(f"validated floor {lower:.6g} exceeds tolerance {threat.tolerance:.6g}")
     elif contradictory:
         verdict = Verdict.INCONCLUSIVE
-    elif ceilings and upper <= threat.tolerance:
+    elif exact_clear_records:
         verdict = Verdict.CLEAR
+        clearance_evidence_class = EvidenceClass.EXACT
+        exact_upper = min(record.upper for record in exact_clear_records if record.upper is not None)
+        reasons.append(
+            f"validated exact value {exact_upper:.6g} is within tolerance "
+            f"{threat.tolerance:.6g}"
+        )
+    elif ceiling_clear_records and (
+        ceiling_attack_battery.mode is CeilingAttackBatteryMode.WAIVED
+        or (
+            ceiling_attack_battery.mode is CeilingAttackBatteryMode.REQUIRED
+            and ceiling_attack_battery.satisfied
+        )
+    ):
+        verdict = Verdict.CLEAR
+        clearance_evidence_class = EvidenceClass.CEILING
         reasons.append(f"validated ceiling {upper:.6g} is within tolerance {threat.tolerance:.6g}")
+        if ceiling_attack_battery.mode is CeilingAttackBatteryMode.WAIVED:
+            reasons.append(
+                "policy explicitly waived the attack battery: "
+                f"{ceiling_attack_battery.waiver_reason}"
+            )
+        else:
+            reasons.append("policy-mandated attack battery and positive controls passed")
+    elif ceiling_clear_records:
+        verdict = Verdict.INCONCLUSIVE
+        if ceiling_attack_battery.mode is CeilingAttackBatteryMode.PROHIBITED:
+            reasons.append("policy prohibits clearance from ceiling evidence for this threat")
+        else:
+            reasons.append(
+                "otherwise-clearing ceiling is ineligible because the mandatory attack "
+                "battery or its positive controls did not pass"
+            )
+            reasons.extend(ceiling_attack_battery.failure_reasons)
     else:
         verdict = Verdict.INCONCLUSIVE
         if not ceilings:
@@ -144,6 +196,8 @@ def decide_threat(
         excluded_evidence_ids=tuple(record.evidence_id for record in excluded),
         evidence_consistency=evidence_consistency,
         conflicting_evidence_ids=conflicting_evidence_ids,
+        clearance_evidence_class=clearance_evidence_class,
+        ceiling_attack_battery=ceiling_attack_battery,
         reasons=tuple(reasons),
     )
 

@@ -9,6 +9,7 @@ from pydantic import Field
 
 from .analyzers import (
     AttackAnalyzer,
+    AttackBatteryAnalyzer,
     ControlledInferenceAnalyzer,
     DpAnalyzer,
     LlmCanaryAnalyzer,
@@ -128,9 +129,9 @@ class McpAnalyzerService:
     ) -> tuple[EvidenceRecord, ...]:
         response = self._invoke(self.descriptor.mcp_tool, {
             "contract_version": "2.0",
-            "release": release.model_dump(mode="json", exclude_none=True),
-            "threat": threat.model_dump(mode="json", exclude_none=True),
-            "analyzer_input": value.model_dump(mode="json", exclude_none=True),
+            "release": release.model_dump(mode="json", exclude_none=False),
+            "threat": threat.model_dump(mode="json", exclude_none=False),
+            "analyzer_input": value.model_dump(mode="json", exclude_none=False),
         })
         if response.get("contract_version") != "2.0":
             raise ValueError("MCP analyzer returned an unsupported contract version")
@@ -169,6 +170,7 @@ def default_analyzer_service_registry() -> AnalyzerServiceRegistry:
         LocalAnalyzerService(TreeLinkageAnalyzer()),
         LocalAnalyzerService(DpAnalyzer()),
         LocalAnalyzerService(AttackAnalyzer()),
+        LocalAnalyzerService(AttackBatteryAnalyzer()),
         LocalAnalyzerService(ControlledInferenceAnalyzer()),
         LocalAnalyzerService(LlmWatermarkAnalyzer()),
         LocalAnalyzerService(LlmCanaryAnalyzer()),

@@ -272,7 +272,7 @@ class ReleaseOptimizerTests(unittest.TestCase):
         request = AssessmentRequest.model_validate(load_example())
         report = AssuranceEngine().assess(request, ROOT / "examples")
         path = directory / "assessment.json"
-        path.write_text(report.model_dump_json(indent=2, exclude_none=True) + "\n")
+        path.write_text(report.model_dump_json(indent=2, exclude_none=False) + "\n")
         return path, report
 
     def _experiments(self, report) -> list[dict]:
@@ -454,6 +454,9 @@ class ReleaseOptimizerTests(unittest.TestCase):
                 encoding="utf-8"
             )
         )["selection_policy"]
+        active_policy = json.loads(
+            (ROOT / "examples" / "policy.json").read_text(encoding="utf-8")
+        )
         registry_payload = {
             "schema_version": "1.0",
             "registry_id": "unit-test-registry",
@@ -471,8 +474,8 @@ class ReleaseOptimizerTests(unittest.TestCase):
             "selection_policy": selection_policy,
             "trust_profile": "cooperative",
             "active_policy": {
-                "policy_id": "whole-government-model-release-demo",
-                "policy_version": "2.0.0",
+                "policy_id": active_policy["policy_id"],
+                "policy_version": active_policy["policy_version"],
                 "policy_path": str(ROOT / "examples" / "policy.json"),
                 "policy_sha256": sha256_file(ROOT / "examples" / "policy.json"),
             },

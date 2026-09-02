@@ -1,10 +1,10 @@
 {
-  "schema_version": "4.0",
+  "schema_version": "5.0",
   "policy": {
     "policy_id": "whole-government-model-release-demo",
-    "policy_version": "2.0.0",
+    "policy_version": "3.0.0",
     "policy_path": "policy.json",
-    "policy_sha256": "9e00b697be580a6921b42e1b4ddb206aba90ca4bde61cb402450fd49c246653f"
+    "policy_sha256": "8a9c5d6767fae14e11bb5f1ee5427ed1e8a0ce50782b204235c71f0eddb9043d"
   },
   "release": {
     "release_id": "whole-government-demo-tree-v1",
@@ -14,21 +14,29 @@
     "model_family": "tree_ensemble",
     "model_profile": {
       "task": "classification",
-      "input_modalities": ["tabular"],
-      "output_modalities": ["tabular"],
+      "input_modalities": [
+        "tabular"
+      ],
+      "output_modalities": [
+        "tabular"
+      ],
       "training_paradigm": "supervised",
       "component_model_families": [],
       "generative": false,
-      "stateful": false
+      "stateful": false,
+      "custom_task_definition": null
     },
     "protected_unit": "person",
     "artifact_path": "artifacts/demo-tree.json",
     "artifact_sha256": "2f42b587627c5b6c4447d781b57a47082743f029b475f560a574553abcedfdd5",
     "interface": {
-      "schema_version": "2.0",
+      "schema_version": "3.0",
       "protocol_type": "predictive",
       "access": "full_artifact",
-      "outputs": ["tree rules", "leaf signature"],
+      "outputs": [
+        "tree rules",
+        "leaf signature"
+      ],
       "output_channels": {
         "aggregates": false,
         "labels": false,
@@ -40,15 +48,31 @@
         "embeddings": false,
         "gradients": false,
         "parameters": true,
-        "downloadable_files": ["demo-tree.json"],
-        "shipped_summary_metadata": ["leaf signature"],
-        "custom_channels": ["tree rules"]
+        "downloadable_files": [
+          "demo-tree.json"
+        ],
+        "shipped_summary_metadata": [
+          "leaf signature"
+        ],
+        "custom_channels": [
+          "tree rules"
+        ]
       },
       "precision_bits": 64,
       "query_budget": null,
+      "adaptive_queries": false,
       "authenticated": true,
       "rate_limited": false,
-      "adaptive_queries": false,
+      "rate_limit": {
+        "enabled": false,
+        "scope": "none",
+        "requests_per_window": null,
+        "window_seconds": null,
+        "burst_capacity": null,
+        "retry_after_exposed": false,
+        "enforcement": "not_applicable",
+        "custom_parameters": {}
+      },
       "timing": {
         "recipient_observable": false,
         "measurement_resolution_milliseconds": null,
@@ -76,32 +100,47 @@
         "admin_access": "none",
         "admin_capabilities": [],
         "local_access": "artifact_only",
-        "local_capabilities": ["read and execute the packaged model artifact"]
+        "local_capabilities": [
+          "read and execute the packaged model artifact"
+        ]
       },
       "serialization": {
-        "formats": ["xgboost-json"],
-        "media_types": ["application/json"],
-        "encodings": ["utf-8"],
+        "formats": [
+          "xgboost-json"
+        ],
+        "media_types": [
+          "application/json"
+        ],
+        "encodings": [
+          "utf-8"
+        ],
         "compression": [],
         "schema_sha256": null,
         "endianness": "not_applicable"
       },
-      "llm_protocol": null
+      "llm_protocol": null,
+      "notes": ""
     },
-    "previous_release_ids": []
+    "previous_release_ids": [],
+    "expires_at": null
   },
   "population_scopes": [
     {
       "scope_id": "service-participants-2026",
       "name": "Participants in the defined public-service programme",
       "unit_kind": "person",
+      "custom_unit_definition": null,
       "universe_definition": "People meeting the programme eligibility and reference-date criteria, regardless of which participating agency holds the source record.",
       "inclusion_criteria": [
         "meets the documented programme eligibility rule",
         "has an active or historical programme record as at the reference date"
       ],
-      "exclusion_criteria": ["test and synthetic identities"],
-      "jurisdictions": ["Singapore"],
+      "exclusion_criteria": [
+        "test and synthetic identities"
+      ],
+      "jurisdictions": [
+        "Singapore"
+      ],
       "reference_date": "2026-01-01",
       "valid_until": "2099-01-01",
       "population_snapshot_sha256": "2222222222222222222222222222222222222222222222222222222222222222",
@@ -113,7 +152,11 @@
         "source": "Demonstration-only bounded programme register estimate",
         "measured_at": "2026-01-01T00:00:00Z"
       },
-      "subgroup_dimensions": ["programme", "region", "eligibility_band"],
+      "subgroup_dimensions": [
+        "programme",
+        "region",
+        "eligibility_band"
+      ],
       "data_steward": "Demonstration cross-government data steward",
       "notes": "Synthetic scope metadata; not an empirical government population estimate."
     }
@@ -136,6 +179,7 @@
       "adversary_metadata_profile": "exact_database_feature_summaries_v1",
       "success_metric": "incremental exact-identity Bayes success",
       "decision_metric": "incremental_bayes_linkage_success",
+      "metric_parameters": {},
       "tolerance": 0.3,
       "tolerance_basis": "incremental",
       "harm_rationale": "Incorrect or unauthorised person-level linkage may expose a protected relationship with a public service.",
@@ -159,10 +203,13 @@
       "adversary_metadata_profile": "exact_database_feature_summaries_v1",
       "success_metric": "equal-prior exact membership success",
       "decision_metric": "equal_prior_membership_success",
+      "metric_parameters": {},
       "tolerance": 0.6,
       "tolerance_basis": "absolute",
       "harm_rationale": "Training membership may reveal engagement with a sensitive public programme.",
       "population_scope_id": "service-participants-2026",
+      "candidate_set": null,
+      "target_signal_source": null,
       "realizability": "not_applicable"
     }
   ],
@@ -171,20 +218,31 @@
       "analyzer": "tree_linkage",
       "threat_id": "linkage-person",
       "population_scope_id": "service-participants-2026",
-      "candidate_ids": ["a", "b", "c", "d"],
-      "observations": ["L1", "L1", "L2", "L2"],
+      "candidate_ids": [
+        "a",
+        "b",
+        "c",
+        "d"
+      ],
+      "observations": [
+        "L1",
+        "L1",
+        "L2",
+        "L2"
+      ],
+      "prior": null,
       "recipient_has_candidate_roster": true,
       "recipient_has_target_signal": true,
-      "observed_interface_sha256": "4cde1c5e2dd0f3303c9c8e2c3c3bef3d089746a38569b1442c346d81b6e50ed8",
+      "observed_interface_sha256": "f13f29ea2027109f4f02992b37713ee9f63bf56672afb800ac9c3fb6966473b8",
       "complete_interface_coverage": true,
       "evidence_context": {
         "release_id": "whole-government-demo-tree-v1",
-        "release_contract_sha256": "3aa3db7a0601c388368283687cbb28b0fd73e1870f773712e9f349e013e6297a",
-        "policy_sha256": "9e00b697be580a6921b42e1b4ddb206aba90ca4bde61cb402450fd49c246653f",
+        "release_contract_sha256": "58fa3564d8445f55834ebdd9699a4d412035a2f96bfb42b27f5c99cd510d035b",
+        "policy_sha256": "8a9c5d6767fae14e11bb5f1ee5427ed1e8a0ce50782b204235c71f0eddb9043d",
         "artifact_sha256": "2f42b587627c5b6c4447d781b57a47082743f029b475f560a574553abcedfdd5",
-        "interface_sha256": "4cde1c5e2dd0f3303c9c8e2c3c3bef3d089746a38569b1442c346d81b6e50ed8",
+        "interface_sha256": "f13f29ea2027109f4f02992b37713ee9f63bf56672afb800ac9c3fb6966473b8",
         "population_scope_id": "service-participants-2026",
-        "population_scope_sha256": "d0ceafb482b5ed133cd89c765ec4e9d228f4c14bf07fac3f4aa67297a79ed5e8",
+        "population_scope_sha256": "f85f632a9ac034ed0bd4f21cd3256729443a901de4ab95d89c52898615f25604",
         "decision_game_sha256": "4bb158d840ec659005d778c0443f537245d03ba7dfdef279ff98e11f5e271430",
         "observed_at": "2026-08-18T00:00:00Z"
       },
@@ -199,8 +257,20 @@
         },
         "configuration_path": "config/tree-linkage-analyzer.json",
         "source_path": "evidence/tree-linkage.json",
-        "source_sha256": "ef6d44e4f49ef35848181de36c4343456cce8def28f90869018c9e97b77ff5fe",
-        "bound_fields": ["analyzer", "threat_id", "population_scope_id", "candidate_ids", "observations", "prior", "recipient_has_candidate_roster", "recipient_has_target_signal", "observed_interface_sha256", "complete_interface_coverage", "evidence_context"]
+        "source_sha256": "bfd5f60872afdf522a6450b0809477e108803b980ea9e183d7a307636775d514",
+        "bound_fields": [
+          "analyzer",
+          "threat_id",
+          "population_scope_id",
+          "candidate_ids",
+          "observations",
+          "prior",
+          "recipient_has_candidate_roster",
+          "recipient_has_target_signal",
+          "observed_interface_sha256",
+          "complete_interface_coverage",
+          "evidence_context"
+        ]
       }
     },
     {
@@ -208,7 +278,7 @@
       "threat_id": "membership-person",
       "population_scope_id": "service-participants-2026",
       "epsilon": 0.2,
-      "delta": 0.000001,
+      "delta": 1e-06,
       "adjacency": "add/remove one person",
       "protected_unit": "person",
       "accountant": "demonstration accountant",
@@ -221,12 +291,12 @@
       "secret_prior_bound_validated": false,
       "evidence_context": {
         "release_id": "whole-government-demo-tree-v1",
-        "release_contract_sha256": "3aa3db7a0601c388368283687cbb28b0fd73e1870f773712e9f349e013e6297a",
-        "policy_sha256": "9e00b697be580a6921b42e1b4ddb206aba90ca4bde61cb402450fd49c246653f",
+        "release_contract_sha256": "58fa3564d8445f55834ebdd9699a4d412035a2f96bfb42b27f5c99cd510d035b",
+        "policy_sha256": "8a9c5d6767fae14e11bb5f1ee5427ed1e8a0ce50782b204235c71f0eddb9043d",
         "artifact_sha256": "2f42b587627c5b6c4447d781b57a47082743f029b475f560a574553abcedfdd5",
-        "interface_sha256": "4cde1c5e2dd0f3303c9c8e2c3c3bef3d089746a38569b1442c346d81b6e50ed8",
+        "interface_sha256": "f13f29ea2027109f4f02992b37713ee9f63bf56672afb800ac9c3fb6966473b8",
         "population_scope_id": "service-participants-2026",
-        "population_scope_sha256": "d0ceafb482b5ed133cd89c765ec4e9d228f4c14bf07fac3f4aa67297a79ed5e8",
+        "population_scope_sha256": "f85f632a9ac034ed0bd4f21cd3256729443a901de4ab95d89c52898615f25604",
         "decision_game_sha256": "686901249c969d5c1a631f1a617c319f9c235842745ea34c6956b6c5c2fef38c",
         "observed_at": "2026-08-18T00:00:00Z"
       },
@@ -241,8 +311,25 @@
         },
         "configuration_path": "config/dp-analyzer.json",
         "source_path": "evidence/dp-accountant.json",
-        "source_sha256": "be4d7e1e09d9c587081bbbc79203f8a3d26b4b617ca3b455f02ace2517db0413",
-        "bound_fields": ["analyzer", "threat_id", "population_scope_id", "epsilon", "delta", "adjacency", "protected_unit", "accountant", "accountant_replayed", "complete_pipeline", "fpr", "secret_cardinality", "maximum_secret_prior", "pairwise_secret_relation_validated", "secret_prior_bound_validated", "evidence_context"]
+        "source_sha256": "e17efe4e001de83465670a26731408f9db3e01e35e6207593a98bcb2713e237f",
+        "bound_fields": [
+          "analyzer",
+          "threat_id",
+          "population_scope_id",
+          "epsilon",
+          "delta",
+          "adjacency",
+          "protected_unit",
+          "accountant",
+          "accountant_replayed",
+          "complete_pipeline",
+          "fpr",
+          "secret_cardinality",
+          "maximum_secret_prior",
+          "pairwise_secret_relation_validated",
+          "secret_prior_bound_validated",
+          "evidence_context"
+        ]
       }
     },
     {
@@ -254,18 +341,22 @@
       "successes": 520,
       "trials": 1000,
       "confidence": 0.95,
+      "comparison_family_size": 1,
       "calibration_disjoint": true,
       "audit_disjoint": true,
       "raw_counts_retained": true,
       "threshold_pre_registered": true,
+      "false_positives": null,
+      "nonmember_trials": null,
+      "target_fpr": null,
       "evidence_context": {
         "release_id": "whole-government-demo-tree-v1",
-        "release_contract_sha256": "3aa3db7a0601c388368283687cbb28b0fd73e1870f773712e9f349e013e6297a",
-        "policy_sha256": "9e00b697be580a6921b42e1b4ddb206aba90ca4bde61cb402450fd49c246653f",
+        "release_contract_sha256": "58fa3564d8445f55834ebdd9699a4d412035a2f96bfb42b27f5c99cd510d035b",
+        "policy_sha256": "8a9c5d6767fae14e11bb5f1ee5427ed1e8a0ce50782b204235c71f0eddb9043d",
         "artifact_sha256": "2f42b587627c5b6c4447d781b57a47082743f029b475f560a574553abcedfdd5",
-        "interface_sha256": "4cde1c5e2dd0f3303c9c8e2c3c3bef3d089746a38569b1442c346d81b6e50ed8",
+        "interface_sha256": "f13f29ea2027109f4f02992b37713ee9f63bf56672afb800ac9c3fb6966473b8",
         "population_scope_id": "service-participants-2026",
-        "population_scope_sha256": "d0ceafb482b5ed133cd89c765ec4e9d228f4c14bf07fac3f4aa67297a79ed5e8",
+        "population_scope_sha256": "f85f632a9ac034ed0bd4f21cd3256729443a901de4ab95d89c52898615f25604",
         "decision_game_sha256": "686901249c969d5c1a631f1a617c319f9c235842745ea34c6956b6c5c2fef38c",
         "observed_at": "2026-08-18T00:00:00Z"
       },
@@ -280,8 +371,260 @@
         },
         "configuration_path": "config/attack-analyzer.json",
         "source_path": "evidence/attack-counts.json",
-        "source_sha256": "0bffe1c684e85c367c83ec7b2d63da87a3da874de4f2aeebd987c50eb06578e5",
-        "bound_fields": ["analyzer", "threat_id", "population_scope_id", "attack_name", "metric", "successes", "trials", "confidence", "comparison_family_size", "calibration_disjoint", "audit_disjoint", "raw_counts_retained", "threshold_pre_registered", "false_positives", "nonmember_trials", "target_fpr", "evidence_context"]
+        "source_sha256": "d27cf505d0687c10f8617ec5122203a1efbeffdfe8074222e62a9b95d4f82946",
+        "bound_fields": [
+          "analyzer",
+          "threat_id",
+          "population_scope_id",
+          "attack_name",
+          "metric",
+          "successes",
+          "trials",
+          "confidence",
+          "comparison_family_size",
+          "calibration_disjoint",
+          "audit_disjoint",
+          "raw_counts_retained",
+          "threshold_pre_registered",
+          "false_positives",
+          "nonmember_trials",
+          "target_fpr",
+          "evidence_context"
+        ]
+      }
+    },
+    {
+      "analyzer": "attack_battery",
+      "schema_version": "1.0",
+      "threat_id": "membership-person",
+      "population_scope_id": "service-participants-2026",
+      "catalog": {
+        "schema_version": "1.0",
+        "catalog_id": "mra.demo.attack-catalog",
+        "catalog_version": "1.0.0",
+        "valid_from": "2026-01-01T00:00:00Z",
+        "valid_until": "2099-01-01T00:00:00Z",
+        "entries": [
+          {
+            "attack_id": "membership_loss_threshold",
+            "attack_version": "1.0.0",
+            "service_id": "mra.red-team.membership-loss-threshold",
+            "implementation_sha256": "4284fd0383a2b19e3fbee0b973b47a006b2969b0037713ad01bb928e10086357",
+            "applicable_model_families": [
+              "tree_ensemble"
+            ],
+            "applicable_protocol_types": [
+              "predictive"
+            ],
+            "applicable_threat_kinds": [
+              "membership"
+            ],
+            "supported_metrics": [
+              "equal_prior_membership_success"
+            ],
+            "evidence_role": "blocking_floor",
+            "positive_control_kind": "known_leak_binomial",
+            "minimum_repetitions": 1,
+            "requires_model_execution": true,
+            "can_clear": false,
+            "decision_authority": "none"
+          }
+        ]
+      },
+      "catalog_sha256": "94c9d8423df94f361c3a0471502a0b38ad060c620ae545bc74ed7046d7934477",
+      "configuration": {
+        "schema_version": "1.0",
+        "configuration_id": "demo-membership-battery-v1",
+        "catalog_sha256": "94c9d8423df94f361c3a0471502a0b38ad060c620ae545bc74ed7046d7934477",
+        "frozen_at": "2026-08-17T00:00:00Z",
+        "resource_limits": {
+          "timeout_seconds": 300,
+          "memory_megabytes": 2048,
+          "cpu_cores": 2.0,
+          "maximum_records": 10000,
+          "maximum_output_bytes": 10000000
+        },
+        "runs": [
+          {
+            "run_id": "membership-loss-run-1",
+            "attack_id": "membership_loss_threshold",
+            "attack_version": "1.0.0",
+            "metric": "equal_prior_membership_success",
+            "evidence_role": "blocking_floor",
+            "seed": 20260817,
+            "repetitions": 1,
+            "confidence": 0.95,
+            "comparison_family_size": 1,
+            "target_fpr": null,
+            "positive_control_ids": [
+              "known-leak-membership-control"
+            ],
+            "parameters": {
+              "threshold_calibration": "disjoint_reference_model",
+              "audit_partition": "disjoint_target_holdout"
+            }
+          }
+        ],
+        "positive_controls": [
+          {
+            "control_id": "known-leak-membership-control",
+            "attack_id": "membership_loss_threshold",
+            "control_kind": "known_leak_binomial",
+            "reference_artifact_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "reference_dataset_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "minimum_trials": 100,
+            "minimum_detection_lower_bound": 0.8,
+            "confidence": 0.95
+          }
+        ],
+        "stopping_rule": "execute every frozen run and positive control exactly once",
+        "multiplicity_method": "bonferroni"
+      },
+      "configuration_sha256": "3669134f76c0b52f1f1458a34556418bf11dd795bed8e2b95c3b04a386664203",
+      "worker_output": {
+        "schema_version": "1.0",
+        "execution_id": "demo-membership-battery-execution",
+        "release_id": "whole-government-demo-tree-v1",
+        "release_contract_sha256": "58fa3564d8445f55834ebdd9699a4d412035a2f96bfb42b27f5c99cd510d035b",
+        "policy_sha256": "8a9c5d6767fae14e11bb5f1ee5427ed1e8a0ce50782b204235c71f0eddb9043d",
+        "artifact_sha256": "2f42b587627c5b6c4447d781b57a47082743f029b475f560a574553abcedfdd5",
+        "interface_sha256": "f13f29ea2027109f4f02992b37713ee9f63bf56672afb800ac9c3fb6966473b8",
+        "population_scope_id": "service-participants-2026",
+        "population_scope_sha256": "f85f632a9ac034ed0bd4f21cd3256729443a901de4ab95d89c52898615f25604",
+        "decision_game_sha256": "686901249c969d5c1a631f1a617c319f9c235842745ea34c6956b6c5c2fef38c",
+        "catalog_sha256": "94c9d8423df94f361c3a0471502a0b38ad060c620ae545bc74ed7046d7934477",
+        "configuration_sha256": "3669134f76c0b52f1f1458a34556418bf11dd795bed8e2b95c3b04a386664203",
+        "worker": {
+          "service_id": "mra.red-team.membership-loss-threshold",
+          "service_version": "1.0.0",
+          "implementation_sha256": "4284fd0383a2b19e3fbee0b973b47a006b2969b0037713ad01bb928e10086357",
+          "configuration_sha256": "3669134f76c0b52f1f1458a34556418bf11dd795bed8e2b95c3b04a386664203"
+        },
+        "worker_runtime_identity": {
+          "schema_version": "1.0",
+          "package_name": "model-release-assurance",
+          "package_version": "0.7.0",
+          "package_source_sha256": "1975d738148ab6dd019c57e7c1f12993de7e73f71f882f753ed6893da86c39e3",
+          "component_id": "attack_battery_worker",
+          "component_version": "AttackBatteryWorkerOutput/1.0",
+          "algorithm_profile": {
+            "catalog_sha256": "94c9d8423df94f361c3a0471502a0b38ad060c620ae545bc74ed7046d7934477",
+            "configuration_sha256": "3669134f76c0b52f1f1458a34556418bf11dd795bed8e2b95c3b04a386664203",
+            "attacks": [
+              "membership_loss_threshold"
+            ],
+            "positive_controls": [
+              "known-leak-membership-control"
+            ],
+            "decision_authority": "none"
+          },
+          "algorithm_profile_sha256": "01f23c0208e90a2328eb437cb44231c19df5920fa28ec2289e72dc4a09e98f17",
+          "python_implementation": "CPython",
+          "python_version": "3.12.13",
+          "dependency_versions": {
+            "cryptography": "48.0.1",
+            "numpy": "2.5.2",
+            "pydantic": "2.13.4",
+            "scikit-learn": "1.6.1",
+            "scipy": "1.18.0"
+          }
+        },
+        "isolation": {
+          "schema_version": "1.0",
+          "assurance": "declared",
+          "worker_image_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+          "run_as_non_root": true,
+          "no_new_privileges": true,
+          "read_only_root_filesystem": true,
+          "network_access": "none",
+          "writable_audit_path": false,
+          "writable_key_path": false,
+          "writable_governance_path": false,
+          "read_only_mount_sha256s": [
+            "2f42b587627c5b6c4447d781b57a47082743f029b475f560a574553abcedfdd5"
+          ],
+          "attester_key_id": null,
+          "statement_sha256": null,
+          "signature": null
+        },
+        "started_at": "2026-08-18T00:00:00Z",
+        "completed_at": "2026-08-18T00:05:00Z",
+        "positive_controls": [
+          {
+            "schema_version": "1.0",
+            "control_id": "known-leak-membership-control",
+            "attack_id": "membership_loss_threshold",
+            "service_id": "mra.red-team.membership-loss-threshold",
+            "attack_version": "1.0.0",
+            "implementation_sha256": "4284fd0383a2b19e3fbee0b973b47a006b2969b0037713ad01bb928e10086357",
+            "status": "succeeded",
+            "successes": 95,
+            "trials": 100,
+            "reported_detection_lower_bound": 0.8977466223567152,
+            "expected_flag_observed": null,
+            "raw_result_sha256": "6cc6ba7a9140db28330b24199e42ac2b3c7c86c332bed2eba88d1ffaf7377b6b"
+          }
+        ],
+        "results": [
+          {
+            "run_id": "membership-loss-run-1",
+            "attack_id": "membership_loss_threshold",
+            "service_id": "mra.red-team.membership-loss-threshold",
+            "attack_version": "1.0.0",
+            "implementation_sha256": "4284fd0383a2b19e3fbee0b973b47a006b2969b0037713ad01bb928e10086357",
+            "status": "succeeded",
+            "metric": "equal_prior_membership_success",
+            "successes": 520,
+            "trials": 1000,
+            "false_positives": null,
+            "nonmember_trials": null,
+            "target_fpr": null,
+            "raw_result_sha256": "f8ac0e56ea951afb41c606d3741899b660ac89e5cb5e0e39faf3122ddcc42ea6",
+            "negative_control_summary": "permuted labels retained as a null check, not a positive control",
+            "can_clear": false
+          }
+        ],
+        "retained_raw_bundle_sha256": "f02b656567f913bf4c71d63a402e3d7982a29fb49f3588605a5e7bc9632c2e84",
+        "decision_authority": "none",
+        "can_clear": false
+      },
+      "worker_output_sha256": "a5b42977a8b49e547e59c13731e0ac85d11f23865685ca8f11a0ff66e284feb5",
+      "evidence_context": {
+        "release_id": "whole-government-demo-tree-v1",
+        "release_contract_sha256": "58fa3564d8445f55834ebdd9699a4d412035a2f96bfb42b27f5c99cd510d035b",
+        "policy_sha256": "8a9c5d6767fae14e11bb5f1ee5427ed1e8a0ce50782b204235c71f0eddb9043d",
+        "artifact_sha256": "2f42b587627c5b6c4447d781b57a47082743f029b475f560a574553abcedfdd5",
+        "interface_sha256": "f13f29ea2027109f4f02992b37713ee9f63bf56672afb800ac9c3fb6966473b8",
+        "population_scope_id": "service-participants-2026",
+        "population_scope_sha256": "f85f632a9ac034ed0bd4f21cd3256729443a901de4ab95d89c52898615f25604",
+        "decision_game_sha256": "686901249c969d5c1a631f1a617c319f9c235842745ea34c6956b6c5c2fef38c",
+        "observed_at": "2026-08-18T00:00:00Z"
+      },
+      "provenance": {
+        "tool": "mra-attack-battery-adapter",
+        "tool_version": "1.0.0",
+        "producer": {
+          "service_id": "mra.analyzer.attack_battery",
+          "service_version": "1.0.0",
+          "implementation_sha256": "b19655d0d33390397a38bddc2d9ebe57f58dd6f0f89a1be93223de0bfb4200dd",
+          "configuration_sha256": "b48e0f7369e2c52b00c44ab917013c4dd7b80cadbd33bb81b623f76f0a1d927c"
+        },
+        "configuration_path": "config/attack-battery-analyzer.json",
+        "source_path": "evidence/attack-battery.json",
+        "source_sha256": "76982c8f79db2bc3b1b6610625ed94c0ab3444a76563b38b414c9e2ce3544a87",
+        "bound_fields": [
+          "analyzer",
+          "schema_version",
+          "threat_id",
+          "population_scope_id",
+          "catalog",
+          "catalog_sha256",
+          "configuration",
+          "configuration_sha256",
+          "worker_output",
+          "worker_output_sha256",
+          "evidence_context"
+        ]
       }
     }
   ]

@@ -1,12 +1,16 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Any, Protocol
+from datetime import datetime, timezone
+from pathlib import Path
+from typing import Any, Literal, Protocol
 
 from pydantic import Field
 
 from .analyzers.attack import clopper_pearson_lower, clopper_pearson_upper
-from .models import StrictModel
+from .integrity import canonical_json_bytes, sha256_bytes, sha256_file
+from .models import AttackCatalog, AttackCatalogEntry, StrictModel
+from .runtime_identity import current_runtime_identity
 
 
 SACRO_ML_REFERENCE = {
@@ -22,6 +26,13 @@ SACRO_ML_REFERENCE = {
 
 
 class RedTeamConfig(StrictModel):
+    schema_version: Literal["1.0"] = "1.0"
+    configuration_id: str = Field(
+        default="exploratory-sacro-inspired-v1",
+        min_length=3,
+        max_length=128,
+        pattern=r"^[A-Za-z0-9._:-]+$",
+    )
     seed: int = Field(ge=0)
     membership_repetitions: int = Field(default=5, ge=2, le=20)
     attack_test_fraction: float = Field(default=0.3, gt=0.15, lt=0.5)
@@ -308,14 +319,62 @@ class RedTeamToolRegistry:
             raise ValueError("red-team tools must be non-empty with unique names")
         self.tools = tools
 
+    def catalog(self) -> AttackCatalog:
+        implementation_sha256 = sha256_file(Path(__file__))
+        entries = []
+        for tool in self.tools:
+            blocking = tool.name == "worst_case_membership"
+            entries.append(AttackCatalogEntry(
+                attack_id=tool.name,
+                attack_version="1.0.0",
+                service_id=tool.service_id,
+                implementation_sha256=implementation_sha256,
+                applicable_model_families=("tree_ensemble", "tabular_neural_network"),
+                applicable_protocol_types=("predictive",),
+                applicable_threat_kinds=("membership",),
+                supported_metrics=("equal_prior_membership_success",) if blocking else (),
+                evidence_role="blocking_floor" if blocking else "screen_only",
+                positive_control_kind="known_leak_binomial" if blocking else "expected_flag",
+                minimum_repetitions=2 if blocking else 1,
+                requires_model_execution=True,
+                can_clear=False,
+                decision_authority="none",
+            ))
+        return AttackCatalog(
+            catalog_id="mra.sacro-inspired-red-team",
+            catalog_version="1.0.0",
+            valid_from=datetime(2026, 1, 1, tzinfo=timezone.utc),
+            valid_until=None,
+            entries=tuple(entries),
+        )
+
     def run(self, target: RedTeamTarget, config: RedTeamConfig) -> dict[str, Any]:
+        started_at = datetime.now(timezone.utc)
         reports = [tool.run(target, config) for tool in self.tools]
         if any(report.get("can_clear") is not False for report in reports):
             raise ValueError("red-team tool exceeded its non-clearing authority")
+        catalog = self.catalog()
+        completed_at = datetime.now(timezone.utc)
         return {
-            "schema_version": "1.0",
+            "schema_version": "2.0",
             "suite": "mra_sacro_ml_inspired_red_team",
             "reference": SACRO_ML_REFERENCE,
+            "catalog": catalog.model_dump(mode="json", exclude_none=False),
+            "catalog_sha256": sha256_bytes(canonical_json_bytes(catalog)),
+            "configuration": config.model_dump(mode="json", exclude_none=False),
+            "configuration_sha256": sha256_bytes(canonical_json_bytes(config)),
+            "started_at": started_at.isoformat(),
+            "completed_at": completed_at.isoformat(),
+            "runtime_identity": current_runtime_identity(
+                component_id="exploratory_red_team_worker",
+                component_version="ExploratoryRedTeamReport/2.0",
+                algorithm_profile={
+                    "tool_ids": [tool.name for tool in self.tools],
+                    "catalog_sha256": sha256_bytes(canonical_json_bytes(catalog)),
+                    "configuration_sha256": sha256_bytes(canonical_json_bytes(config)),
+                    "decision_authority": "none",
+                },
+            ).model_dump(mode="json"),
             "target": {
                 "target_id": target.target_id,
                 "model_kind": target.model_kind,
@@ -325,6 +384,8 @@ class RedTeamToolRegistry:
             "tools": reports,
             "decision": "no_release_authorization",
             "can_clear": False,
+            "assessment_eligible": False,
+            "assessment_contract": "AttackBatteryWorkerOutput/1.0 is required for in-band use",
         }
 
 

@@ -1,8 +1,13 @@
 {
+  "compatibility_profile": "not-the-current-ci-band",
+  "evidence_binding_status": "unsealed-in-current-checkout",
   "numpy": "2.4.3",
   "pandas": "3.0.1",
   "pyarrow": "24.0.0",
   "python": "3.12.10",
+  "record_scope": "retained package-version tuple from earlier OpenML working records; not a dependency lock or proof of a completed study run",
+  "record_status": "historical-provisional",
+  "record_version": "1.0",
   "scikit_learn": "1.8.0",
   "scipy": "1.17.1",
   "xgboost": "3.2.0"

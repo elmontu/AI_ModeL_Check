@@ -26,7 +26,7 @@ def interactive_release_and_threat():
     raw = json.loads((ROOT / "examples" / "request.json").read_text(encoding="utf-8"))
     request = AssessmentRequest.model_validate(raw)
     interface_raw = {
-        "schema_version": "2.0",
+        "schema_version": "3.0",
         "protocol_type": "interactive_llm",
         "access": "text",
         "outputs": ["text"],
@@ -50,6 +50,16 @@ def interactive_release_and_threat():
         "adaptive_queries": True,
         "authenticated": True,
         "rate_limited": True,
+        "rate_limit": {
+            "enabled": True,
+            "scope": "per_identity",
+            "requests_per_window": 100,
+            "window_seconds": 3600,
+            "burst_capacity": 5,
+            "retry_after_exposed": True,
+            "enforcement": "shared_strong",
+            "custom_parameters": {},
+        },
         "timing": {
             "recipient_observable": True,
             "measurement_resolution_milliseconds": 1.0,
@@ -88,13 +98,21 @@ def interactive_release_and_threat():
             "endianness": "not_applicable",
         },
         "llm_protocol": {
+            "schema_version": "1.0",
             "model_provider": "test provider",
             "model_identifier": "test model",
             "model_version": "2026-08-13",
             "tokenizer_sha256": "1" * 64,
             "decoding_parameters": {"temperature": 0.0},
             "system_prompt_sha256": "2" * 64,
+            "adapter_sha256s": [],
+            "retrieval_corpus_sha256": None,
+            "retriever_config_sha256": None,
+            "tool_names": [],
+            "tool_policy_sha256": None,
             "memory_mode": "none",
+            "memory_ttl_seconds": None,
+            "filter_bundle_sha256": None,
             "logging_mode": "security_only",
             "provider_retention_days": 0,
             "maximum_session_tokens": 4096,

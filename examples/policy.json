@@ -1,7 +1,7 @@
 {
-  "schema_version": "2.0",
+  "schema_version": "3.0",
   "policy_id": "whole-government-model-release-demo",
-  "policy_version": "2.0.0",
+  "policy_version": "3.0.0",
   "effective_from": "2026-01-01T00:00:00Z",
   "expires_at": "2099-01-01T00:00:00Z",
   "rules": [
@@ -12,7 +12,8 @@
       "decision_metric": "incremental_bayes_linkage_success",
       "metric_parameters": {},
       "tolerance": 0.3,
-      "tolerance_basis": "incremental"
+      "tolerance_basis": "incremental",
+      "ceiling_attack_battery_mode": "ceiling_prohibited"
     },
     {
       "threat_id": "membership-person",
@@ -21,7 +22,8 @@
       "decision_metric": "equal_prior_membership_success",
       "metric_parameters": {},
       "tolerance": 0.6,
-      "tolerance_basis": "absolute"
+      "tolerance_basis": "absolute",
+      "ceiling_attack_battery_mode": "required"
     }
   ],
   "analyzer_requirements": [
@@ -59,7 +61,48 @@
       "accepted_configuration_sha256s": [
         "d23bfa2964096be53b1f902489484b82c8e5938bc123dbbba11648eece4f4d16"
       ],
+      "required": false
+    },
+    {
+      "threat_id": "membership-person",
+      "analyzer": "attack_battery",
+      "minimum_service_version": "1.0.0",
+      "accepted_implementation_sha256s": [
+        "b19655d0d33390397a38bddc2d9ebe57f58dd6f0f89a1be93223de0bfb4200dd"
+      ],
+      "accepted_configuration_sha256s": [
+        "b48e0f7369e2c52b00c44ab917013c4dd7b80cadbd33bb81b623f76f0a1d927c"
+      ],
       "required": true
+    }
+  ],
+  "attack_battery_requirements": [
+    {
+      "requirement_id": "membership-required-battery-v1",
+      "threat_id": "membership-person",
+      "accepted_catalog_sha256s": [
+        "94c9d8423df94f361c3a0471502a0b38ad060c620ae545bc74ed7046d7934477"
+      ],
+      "required_attack_ids": [
+        "membership_loss_threshold"
+      ],
+      "accepted_configuration_sha256s": [
+        "3669134f76c0b52f1f1458a34556418bf11dd795bed8e2b95c3b04a386664203"
+      ],
+      "accepted_worker_service_ids": [
+        "mra.red-team.membership-loss-threshold"
+      ],
+      "minimum_worker_service_version": "1.0.0",
+      "accepted_worker_implementation_sha256s": [
+        "4284fd0383a2b19e3fbee0b973b47a006b2969b0037713ad01bb928e10086357"
+      ],
+      "accepted_worker_image_sha256s": [
+        "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+      ],
+      "accepted_attester_key_ids": [],
+      "minimum_isolation_assurance": "declared",
+      "positive_controls_required": true,
+      "minimum_positive_control_detection_lower_bound": 0.8
     }
   ],
   "accepted_selection_policy_sha256s": [

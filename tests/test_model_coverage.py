@@ -76,7 +76,7 @@ class ModelCoverageTests(unittest.TestCase):
             all(not paths for paths in result["default_clearing_paths"].values())
         )
 
-    def test_assessment_v4_requires_a_structured_model_profile(self) -> None:
+    def test_assessment_v5_requires_a_structured_model_profile(self) -> None:
         raw = json.loads((ROOT / "examples" / "request.json").read_text())
         raw["release"].pop("model_profile")
         with self.assertRaises(ValidationError):

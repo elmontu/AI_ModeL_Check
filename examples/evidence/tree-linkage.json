@@ -2,21 +2,31 @@
   "analyzer": "tree_linkage",
   "threat_id": "linkage-person",
   "population_scope_id": "service-participants-2026",
-  "candidate_ids": ["a", "b", "c", "d"],
-  "observations": ["L1", "L1", "L2", "L2"],
+  "candidate_ids": [
+    "a",
+    "b",
+    "c",
+    "d"
+  ],
+  "observations": [
+    "L1",
+    "L1",
+    "L2",
+    "L2"
+  ],
   "prior": null,
   "recipient_has_candidate_roster": true,
   "recipient_has_target_signal": true,
-  "observed_interface_sha256": "4cde1c5e2dd0f3303c9c8e2c3c3bef3d089746a38569b1442c346d81b6e50ed8",
+  "observed_interface_sha256": "f13f29ea2027109f4f02992b37713ee9f63bf56672afb800ac9c3fb6966473b8",
   "complete_interface_coverage": true,
   "evidence_context": {
     "release_id": "whole-government-demo-tree-v1",
-    "release_contract_sha256": "3aa3db7a0601c388368283687cbb28b0fd73e1870f773712e9f349e013e6297a",
-    "policy_sha256": "9e00b697be580a6921b42e1b4ddb206aba90ca4bde61cb402450fd49c246653f",
+    "release_contract_sha256": "58fa3564d8445f55834ebdd9699a4d412035a2f96bfb42b27f5c99cd510d035b",
+    "policy_sha256": "8a9c5d6767fae14e11bb5f1ee5427ed1e8a0ce50782b204235c71f0eddb9043d",
     "artifact_sha256": "2f42b587627c5b6c4447d781b57a47082743f029b475f560a574553abcedfdd5",
-    "interface_sha256": "4cde1c5e2dd0f3303c9c8e2c3c3bef3d089746a38569b1442c346d81b6e50ed8",
+    "interface_sha256": "f13f29ea2027109f4f02992b37713ee9f63bf56672afb800ac9c3fb6966473b8",
     "population_scope_id": "service-participants-2026",
-    "population_scope_sha256": "d0ceafb482b5ed133cd89c765ec4e9d228f4c14bf07fac3f4aa67297a79ed5e8",
+    "population_scope_sha256": "f85f632a9ac034ed0bd4f21cd3256729443a901de4ab95d89c52898615f25604",
     "decision_game_sha256": "4bb158d840ec659005d778c0443f537245d03ba7dfdef279ff98e11f5e271430",
     "observed_at": "2026-08-18T00:00:00Z"
   }

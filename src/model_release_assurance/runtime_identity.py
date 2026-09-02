@@ -101,6 +101,9 @@ def current_runtime_identity(
         python_version=platform.python_version(),
         dependency_versions={
             "cryptography": _installed_version("cryptography"),
+            "numpy": _installed_version("numpy"),
             "pydantic": _installed_version("pydantic"),
+            "scikit-learn": _installed_version("scikit-learn"),
+            "scipy": _installed_version("scipy"),
         },
     )

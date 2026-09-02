@@ -67,7 +67,8 @@ def _read_json(path: Path) -> dict:
 
 def _write_model(path: Path, model) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
-    _write_text_lf(path, model.model_dump_json(indent=2, exclude_none=True) + "\n")
+    # Preserve required-explicit nullable fields in governed CLI artifacts.
+    _write_text_lf(path, model.model_dump_json(indent=2, exclude_none=False) + "\n")
 
 
 def _write_text_lf(path: Path, value: str) -> None:

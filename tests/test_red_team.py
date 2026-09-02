@@ -3,6 +3,7 @@ from __future__ import annotations
 import unittest
 
 from model_release_assurance.empirical_workflow import empirical_dependencies_available
+from model_release_assurance.integrity import canonical_json_bytes, sha256_bytes
 from model_release_assurance.red_team import (
     RedTeamConfig,
     RedTeamTarget,
@@ -46,7 +47,7 @@ class SacroInspiredRedTeamTests(unittest.TestCase):
         )
 
     def test_suite_is_attributed_versioned_and_non_clearing(self) -> None:
-        self.assertEqual(self.report["schema_version"], "1.0")
+        self.assertEqual(self.report["schema_version"], "2.0")
         self.assertEqual(self.report["reference"]["project"], "SACRO-ML")
         self.assertEqual(
             self.report["reference"]["reviewed_commit"],
@@ -54,6 +55,19 @@ class SacroInspiredRedTeamTests(unittest.TestCase):
         )
         self.assertEqual(self.report["decision"], "no_release_authorization")
         self.assertFalse(self.report["can_clear"])
+        self.assertFalse(self.report["assessment_eligible"])
+        self.assertEqual(
+            self.report["catalog_sha256"],
+            sha256_bytes(canonical_json_bytes(self.report["catalog"])),
+        )
+        self.assertEqual(
+            self.report["configuration_sha256"],
+            sha256_bytes(canonical_json_bytes(self.report["configuration"])),
+        )
+        self.assertEqual(
+            self.report["runtime_identity"]["component_version"],
+            "ExploratoryRedTeamReport/2.0",
+        )
 
     def test_structural_tool_reports_aggregate_indicators_only(self) -> None:
         structural = next(

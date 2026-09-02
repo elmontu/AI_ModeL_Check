@@ -1,7 +1,9 @@
 # Software architecture
 
-> **Status: Reference.** This document describes the complete repository architecture and its
-> production integration boundary. It does not create a model-release authorization.
+> **Status: Implemented reference capability, not a complete conformance claim.** This document
+> describes the repository architecture and production integration boundary. The ordinary decision
+> path still uses binary64 and does not discharge MRAP G7 exact/outward-rounded arithmetic. Nothing
+> in this document creates a model-release authorization.
 
 ## Purpose, scope, and sources of truth
 
@@ -45,8 +47,9 @@ integration mechanism beside the assurance plane; it is not the governance plane
 1. EVIDENCE / MODEL-EXECUTION PLANE
 ┌─────────────────────────────────────────────────────────────────────────────┐
 │ [X] Approved isolated evidence workers + immutable evidence/artifact store   │
-│ [E] Local research workers emit measurements, attack floors, or screens      │
-│     that require approved binding or recollection before assessment          │
+│     -> typed attack-battery worker output with positive controls              │
+│ [E] Local research workers emit assessment-ineligible exploratory reports    │
+│     that require approved recollection before assessment                     │
 └──────────────────────────────────┬──────────────────────────────────────────┘
                                    │ inert referenced files
                                    v
@@ -54,6 +57,7 @@ integration mechanism beside the assurance plane; it is not the governance plane
 ┌─────────────────────────────────────────────────────────────────────────────┐
 │ [I] `mra` CLI / Python core                                                  │
 │     contracts -> integrity checks -> local analyzer services -> decisions    │
+│     attack-battery validation/control replay -> floor/screen + ceiling gate   │
 │     -> assessment / optimization / certificate / replay outputs              │
 │ [I] local intent/terminal SQLite AuditStore for audited CLI operation        │
 │ [I] supplied MRAP transcript verifier                                        │
@@ -82,9 +86,9 @@ that rechecks the exact live artifact, interface, controls, expiry, and lifecycl
 | Runtime unit | Status and process | Responsibility | Important non-claim |
 |---|---|---|---|
 | `mra` CLI and Python package | **[I]** One local Python process | Parse contracts, assess evidence, optimize candidates, export schemas, generate/verify signatures, and replay certificates and transcripts | Not a daemon, scheduler, registry, gateway, or authorization service |
-| Default analyzer registry | **[I]** In the same process as the core | Route each typed analyzer input to exactly one local analyzer and return `EvidenceRecord` values | The default analyzers are not Kubernetes microservices and do not authenticate an external worker identity |
+| Default analyzer registry | **[I]** In the same process as the core | Route each typed analyzer input to exactly one local analyzer, including policy-bound attack-battery translation, and return `EvidenceRecord` values | The default analyzers are not Kubernetes microservices and do not authenticate an external worker identity or prove worker isolation |
 | `AuditStore` | **[I]** Local SQLite file opened by the CLI | Append assessment/optimization intent and terminal events to a hash chain; replay it and export a head/count checkpoint | Not an immutable evidence store, telemetry database, MRAP transcript, externally anchored transparency log, or authoritative ledger |
-| MRA MCP server | **[E]** Separate local source-checkout process | Expose tools over stdio for retrieval, validation, read-only audit verification, and experimental runners | No resources, prompts, HTTP/SSE transport, analyzer RPC endpoints, or lifecycle authority |
+| MRA MCP server | **[E]** Separate local source-checkout process | Expose tools over stdio for retrieval, schema/request/attack-battery validation, read-only audit verification, and experimental runners | No resources, prompts, HTTP/SSE transport, analyzer RPC endpoints, worker attestation, or lifecycle authority |
 | Evidence-lab workers and scripts | **[E]** Trusted local process or subprocess | Run bounded model, privacy, red-team, OpenML, XGBoost, portfolio, and strategic experiments | Measurements are not automatically admissible assessment evidence and never authorize |
 | Lean package | **[I] build-time** Separate Lake/Lean build | Define and prove properties of the abstract MRAP model | Not loaded by the Python runtime and not a refinement proof for Python or infrastructure |
 | GitHub/Make automation | **[I] repository automation** CI or maintainer process | Compile, test, replay schemas/links/proofs, build and smoke-test distributions, create draft releases | Does not publish to a package index or deploy MRA as a service |
@@ -128,8 +132,8 @@ host the prospective `analyze_*` tools used by that adapter.
 
 | Family | Commands | Output or effect |
 |---|---|---|
-| Contract and assessment | `validate`, `model-coverage`, `assess` | Structure validation, advisory family coverage, or scoped `AssessmentReport 4.0`; governance-grade use records intent and completion/failure in a local audit chain |
-| Release selection | `optimize` | `OptimizationReport 3.0`; governance-grade use records intent and completion/failure in a local audit chain |
+| Contract and assessment | `validate`, `model-coverage`, `assess` | Structure validation, advisory family coverage, or scoped `AssessmentReport 5.0`; governance-grade use records intent and completion/failure in a local audit chain |
+| Release selection | `optimize` | `OptimizationReport 4.0`; governance-grade use records intent and completion/failure in a local audit chain |
 | Portfolio statistics | `portfolio-multinomial-generate`, `portfolio-multinomial-verify`, `portfolio-multinomial-compile` | Simultaneous evidence or an incomplete-portfolio problem |
 | Portfolio certificates | `portfolio-solve`, `portfolio-verify` | Exact/envelope `AnalyticPortfolioEvidenceEntry 1.1` and replay result |
 | Protocol design | `protocol-solve`, `protocol-verify` | Finite soundness/liveness certificate and exact replay result |
@@ -149,9 +153,9 @@ by `AssuranceEngine.assess`, and catalog coverage never clears a release.
 
 ```text
 1. TRAIN / COLLECT [X]       2. EXPORT / FREEZE [X]       3. ASSURE [I]
-controlled training           checkpoint + tokenizer       AssessmentRequest 4.0
+controlled training           checkpoint + tokenizer       AssessmentRequest 5.0
 + declared instrumentation    + preprocessing/config        for final bundle
-+ minimized observations      + exporter/runtime/precision  -> AssessmentReport 4.0
++ minimized observations      + exporter/runtime/precision  -> AssessmentReport 5.0
 + early health or             -> complete deployable bundle -> optional selection
   adopter-policy screens      -> artifact SHA-256
              |                          |                         |
@@ -199,23 +203,29 @@ creating the audit intent; missing, malformed, schema-invalid, and direct-librar
 have no CLI intent/terminal record and remain outside governance-grade audit coverage.
 
 ```text
-AssessmentRequest 4.0
+AssessmentRequest 5.0
         |
         +-> `mra validate`: strict Pydantic structure only
         |
         +-> `mra assess`:
-              0. read, parse, and validate the request (pre-intent boundary)
-              1. append an audit intent containing the canonical full-request hash
-              2. load and hash-check PolicyBundle 2.0
+              0. read, parse, and validate the request (pre-intent boundary); the engine reparses
+                 the complete model at its own boundary to close model-copy/construct bypasses
+              1. append an audit intent containing the canonical full request and hash
+              2. load and hash-check PolicyBundle 3.0
               3. compare policy identity, validity, mandatory threats, tolerances, and required analyzers
               4. reject producer versions below policy or unaccepted implementation/configuration digests
               5. resolve the release artifact/configuration/evidence as regular files and verify SHA-256
               6. reconstruct release/policy/artifact/interface/population/game context
               7. route each discriminated input to exactly one analyzer service
               8. revalidate returned producer, analyzer/input-kind, context, and capabilities
-              9. aggregate floors and complete-declared-interface ceilings per mandatory threat
-             10. append exactly one completion or failure event referencing the intent
-             11. emit AssessmentReport 4.0 with non-authorizing scope fields
+              9. replay complete attack-battery coverage, catalog/execution-time validity,
+                 per-run/control executor identities, positive controls, supported Bonferroni
+                 multiplicity, operating points, observable timeout/trial/output-byte limits,
+                 orchestrator allowlists, and declared/attested isolation policy
+             10. aggregate floors, exact values, and complete-declared-interface ceilings;
+                 gate ceiling clearance on the per-threat battery policy mode
+             11. append exactly one completion or failure event referencing the intent
+             12. emit AssessmentReport 5.0 with non-authorizing scope fields
 ```
 
 The request and every returned `EvidenceRecord` carry a typed producer service ID/version plus
@@ -232,13 +242,14 @@ Current local analyzer semantics are fail-closed:
 | `tree_linkage` | Recipient-realizable exact values may block; they clear only with complete-interface coverage | Tree-ensemble linkage only |
 | `dp` | Validated end-to-end mechanism ceilings may clear the assessed metric | Conditional on all deployed data/output paths being inside the proved mechanism; the core checks only the declared interface and never emits blocking DP evidence |
 | `attack` | Validated empirical floors may block | Never clears |
+| `attack_battery` | Policy-bound, positive-control-guarded simultaneous floors or screens; battery status gates ceiling eligibility | Never clears directly; missing/failed/timed-out/screen-only/missed-operating-point or unsafe execution makes an otherwise clearing ceiling inconclusive |
 | `controlled_inference` | Validated attribute/reconstruction floors may block | Never clears; generic path rejects interactive LLMs |
 | `llm_canary` | Properly bound membership/reconstruction floors may block | Never clears; invalid collection becomes a screen |
 | `llm_watermark` | Screen only | Neither blocks nor clears |
 | `population` | Population-model screen only | Neither blocks nor clears |
 
 Default service descriptors are derived from each analyzer's implemented maximum decision
-capabilities: tree `(clear, block)`, DP `(clear only)`, attack/controlled inference/canary `(block
+capabilities: tree `(clear, block)`, DP `(clear only)`, attack/attack-battery/controlled inference/canary `(block
 only)`, and watermark/population `(neither)`. Adapter construction rejects capability widening, and
 the engine revalidates each returned record. A remote registry must still authenticate the descriptor
 issuer and test the worker behavior.
@@ -258,7 +269,7 @@ AssessmentReport reference(s) + candidate artifacts/interfaces
 + active policy reference + versioned selection policy
                     |
                     v
-OptimizationRequest 3.0
+OptimizationRequest 4.0
   -> load and bind assessment reports/manifests
   -> require the active PolicyBundle to allowlist the selection-policy digest
   -> replay source files, controls, utility, portfolio, search, and garbling claims
@@ -268,8 +279,8 @@ OptimizationRequest 3.0
   -> select from the feasible Blackwell-minimal frontier using declared ordered tie-breaks
                     |
                     v
-OptimizationReport 3.0 (echoes policy, registry, covered releases, selection policy, scope)
-  -> separate optional `optimize-sign` -> SignedOptimizationManifest 3.0
+OptimizationReport 4.0 (echoes policy, registry, covered releases, selection policy, scope)
+  -> separate optional `optimize-sign` -> SignedOptimizationManifest 4.0
 ```
 
 The supported trust profiles are `cooperative` and `separated_assessor`; the latter requires a valid
@@ -314,6 +325,18 @@ and stress-test tools. Their certificates do not override assessment, selection,
   New events use a domain-separated hash that binds the ledger and release instance. SQLite uses
   `BEGIN IMMEDIATE`, WAL mode, and `synchronous=FULL` for each append. External anchoring and a
   canonical institutional ledger namespace remain required.
+- The audit-event/payload v2 ledger is content-bearing: canonical requests and reports are embedded as plaintext JSON in
+  SQLite, while new failure events validate the caller-controlled error code/message bounds before
+  retaining only the stable error code and a domain-separated diagnostic fingerprint.
+  `AuditVerification 3.0` separately counts fingerprint-form and plaintext-compatible failed-event
+  diagnostics and reports plaintext rows as an explicit diagnostic degradation. The v2 envelope is
+  not a historical document dispatcher: the current verifier accepts current Assessment 5.0 and
+  Optimization 4.0 embedded documents and does not promise replay of prior Assessment 4.0 or
+  Optimization 3.0 intent/completion rows. `audit-verify` replays accepted embedded structures,
+  hashes, release bindings and the event chain without reopening the original policy, evidence,
+  artifact or configuration files. SQLite, WAL files and backups provide no confidentiality, and
+  post-append redaction would break replay; this local mode is unsuitable for sensitive production
+  payloads.
 - `release-protocol-verify` replays event order, actor roles, artifact kinds and declared hashes,
   checks artifact files unless explicitly skipped, and verifies lifecycle
   transitions, exact `+1` portfolio sequence, the release-bound `MRAP-STATE-1` head recurrence, CAS
@@ -321,7 +344,7 @@ and stress-test tools. Their certificates do not override assessment, selection,
   commitment; replay does not prove its semantic completeness or authoritative registry inclusion.
   `structural_v1` permits
   unsigned declarations; `authenticated_v1` additionally checks release-bound event and artifact
-  signatures against a supplied trust store and compromise list. `ReleaseProtocolVerification 1.0`
+  signatures against a supplied trust store and compromise list. `ReleaseProtocolVerification 2.0`
   embeds the run hash, verification time, runtime identity, profile, artifact/signature verification booleans,
   skipped checks, and degradations.
 - The CLI requires `--audit-db`; there is no unaudited CLI mode. The completion append precedes
@@ -355,13 +378,13 @@ and execution.
 
 ## Release-contract architecture
 
-`ReleaseContract` is a nested current contract inside `AssessmentRequest 4.0`, not a standalone
+`ReleaseContract` is a nested current contract inside `AssessmentRequest 5.0`, not a standalone
 top-level schema and not the complete normative MRAP release instance. It binds:
 
 - `release_id`, owner, recipient, purpose, previous releases, and expiry;
 - model family, structured task/modality/training profile, and protected unit;
 - one local regular-file artifact path and its exact SHA-256 digest; and
-- `InterfaceContract 2.0`: declared protocol/access, structured response/download/summary outputs,
+- `InterfaceContract 3.0`: declared protocol/access, structured response/download/summary outputs,
   precision and serialization, timing, error/status/retry behavior, batching/concurrency/state,
   side/local/admin access, query budget, authentication/rate controls, and the interactive-LLM
   subprotocol where applicable.
@@ -383,14 +406,15 @@ deployed path is within the proved end-to-end mechanism.
 
 | Boundary | Current contract | Producer -> consumer | Authority |
 |---|---|---|---|
-| Submission and policy | [`assessment-request-v4.json`](../schemas/assessment-request-v4.json) (`4.0`) with nested `ReleaseContract`; [`policy-bundle-v2.json`](../schemas/policy-bundle-v2.json) (`2.0`) by path/hash | External package and policy roles -> validator/engine | Defines candidate, producer allowlist/version floors, and policy context; producer digests are not workload authentication |
+| Submission and policy | [`assessment-request-v5.json`](../schemas/assessment-request-v5.json) (`5.0`) with nested `ReleaseContract`; [`policy-bundle-v3.json`](../schemas/policy-bundle-v3.json) (`3.0`) by path/hash | External package and policy roles -> validator/engine | Defines candidate, producer allowlist/version floors, attack-battery requirements, and policy context; producer digests are not workload authentication |
 | Engine and analyzer | Nested `ReleaseContract`, `ThreatContract`, discriminated analyzer input, and `EvidenceRecord`; service envelope `2.0` in Python | Engine -> local analyzer or prospective MCP adapter -> engine | Analyzer emits producer-bound evidence; central engine decides; no standalone public service-envelope schema |
-| Assessment output | [`assessment-report-v4.json`](../schemas/assessment-report-v4.json) and [`signed-manifest-v2.json`](../schemas/signed-manifest-v2.json) | Engine/assessor -> reviewer, optimizer, or audit store | Explicitly single-release, declared-interface-only, and non-authorizing; the signed manifest directly binds the interface digest |
-| Local audit replay | [`audit-verification-v2.json`](../schemas/audit-verification-v2.json) and [`audit-checkpoint-v1.json`](../schemas/audit-checkpoint-v1.json) | AuditStore -> reviewer/external immutable anchor | Detects intent omissions and local-chain tamper relative to an anchor; not an authoritative or immutable ledger |
-| Selection | [`optimization-request-v3.json`](../schemas/optimization-request-v3.json), [`optimization-report-v3.json`](../schemas/optimization-report-v3.json), [`signed-optimization-manifest-v3.json`](../schemas/signed-optimization-manifest-v3.json) | Configuration/assessment roles -> optimizer -> external authorization process | Binds active policy, portfolio registry, covered releases, and selection policy; does not commit or activate |
+| Attack execution | [`attack-catalog-v1.json`](../schemas/attack-catalog-v1.json), [`attack-battery-configuration-v1.json`](../schemas/attack-battery-configuration-v1.json), [`attack-positive-control-result-v1.json`](../schemas/attack-positive-control-result-v1.json), [`attack-battery-worker-output-v1.json`](../schemas/attack-battery-worker-output-v1.json), and [`attack-battery-submission-v1.json`](../schemas/attack-battery-submission-v1.json) | Policy authority and isolated worker -> trusted-core analyzer | Complete floor/screen evidence and a ceiling-clearance precondition; no direct clearance, execution, attestation verification, or authorization authority |
+| Assessment output | [`assessment-report-v5.json`](../schemas/assessment-report-v5.json) and [`signed-manifest-v3.json`](../schemas/signed-manifest-v3.json) | Engine/assessor -> reviewer, optimizer, or audit store | Explicitly single-release, declared-interface-only, and non-authorizing; the signed manifest directly binds the interface digest |
+| Local audit replay | [`audit-verification-v3.json`](../schemas/audit-verification-v3.json) and [`audit-checkpoint-v1.json`](../schemas/audit-checkpoint-v1.json) | AuditStore -> reviewer/external immutable anchor | Detects intent omissions and local-chain tamper relative to an anchor; not an authoritative, confidential, or immutable ledger |
+| Selection | [`optimization-request-v4.json`](../schemas/optimization-request-v4.json), [`optimization-report-v4.json`](../schemas/optimization-report-v4.json), [`signed-optimization-manifest-v4.json`](../schemas/signed-optimization-manifest-v4.json) | Configuration/assessment roles -> optimizer -> external authorization process | Binds active policy, portfolio registry, covered releases, and selection policy; does not commit or activate |
 | Portfolio statistics and certificates | Current multinomial plan/count/budget/request/evidence, portfolio specification/problem, and certificate families | Evidence planner/worker -> generator/compiler/solver -> verifier and optimizer | Bounded statistical or mathematical support only |
 | Protocol design | [`protocol-feasibility-problem-v1.json`](../schemas/protocol-feasibility-problem-v1.json) and [`protocol-feasibility-certificate-v1.json`](../schemas/protocol-feasibility-certificate-v1.json) | Protocol designer -> solver/verifier | Design-time finite-model result only |
-| Governance lifecycle | [`release-protocol-run-v1.1.json`](../schemas/release-protocol-run-v1.1.json) and [`release-protocol-verification-v1.json`](../schemas/release-protocol-verification-v1.json) (protocol `MRAP/1.0`) | External MRAP roles/services -> offline verifier | Replays the declared lifecycle and records verification degradation; external registry and gateway alone create `AUTHORIZED`/`ACTIVE` |
+| Governance lifecycle | [`release-protocol-run-v1.1.json`](../schemas/release-protocol-run-v1.1.json) and [`release-protocol-verification-v2.json`](../schemas/release-protocol-verification-v2.json) (protocol `MRAP/1.0`) | External MRAP roles/services -> offline verifier | Replays the declared lifecycle and records verification degradation; external registry and gateway alone create `AUTHORIZED`/`ACTIVE` |
 
 All current and retained historical schemas are listed in the [schema map](../schemas/README.md), and
 the deterministic `current-schema-manifest-v1.json` binds each current schema's exact bytes and model

@@ -34,6 +34,7 @@ from model_release_assurance.integrity import (
     verify_signed_manifest,
 )
 from model_release_assurance.models import (
+    AttackBatteryStatus,
     AssessmentRequest,
     AttackInput,
     ControlledInferenceInput,
@@ -68,7 +69,7 @@ def make_paths_absolute(raw: dict) -> None:
 
 def interactive_interface_raw() -> dict:
     return {
-        "schema_version": "2.0",
+        "schema_version": "3.0",
         "protocol_type": "interactive_llm",
         "access": "text",
         "outputs": ["text"],
@@ -92,6 +93,16 @@ def interactive_interface_raw() -> dict:
         "adaptive_queries": True,
         "authenticated": True,
         "rate_limited": True,
+        "rate_limit": {
+            "enabled": True,
+            "scope": "per_identity",
+            "requests_per_window": 100,
+            "window_seconds": 3600,
+            "burst_capacity": 5,
+            "retry_after_exposed": True,
+            "enforcement": "shared_strong",
+            "custom_parameters": {},
+        },
         "timing": {
             "recipient_observable": True,
             "measurement_resolution_milliseconds": 1.0,
@@ -130,13 +141,21 @@ def interactive_interface_raw() -> dict:
             "endianness": "not_applicable",
         },
         "llm_protocol": {
+            "schema_version": "1.0",
             "model_provider": "test provider",
             "model_identifier": "test model",
             "model_version": "2026-08-13",
             "tokenizer_sha256": "1" * 64,
             "decoding_parameters": {"temperature": 0.0},
             "system_prompt_sha256": "2" * 64,
+            "adapter_sha256s": [],
+            "retrieval_corpus_sha256": None,
+            "retriever_config_sha256": None,
+            "tool_names": [],
+            "tool_policy_sha256": None,
             "memory_mode": "none",
+            "memory_ttl_seconds": None,
+            "filter_bundle_sha256": None,
             "logging_mode": "security_only",
             "provider_retention_days": 0,
             "maximum_session_tokens": 4096,
@@ -161,6 +180,36 @@ class ContractTests(unittest.TestCase):
         self.assertEqual(contract.protocol_type, "interactive_llm")
         self.assertEqual(contract.access, "text")
 
+        for field in (
+            "schema_version",
+            "model_provider",
+            "model_identifier",
+            "model_version",
+            "tokenizer_sha256",
+            "decoding_parameters",
+            "system_prompt_sha256",
+            "adapter_sha256s",
+            "retrieval_corpus_sha256",
+            "retriever_config_sha256",
+            "tool_names",
+            "tool_policy_sha256",
+            "memory_mode",
+            "memory_ttl_seconds",
+            "logging_mode",
+            "provider_retention_days",
+            "maximum_session_tokens",
+            "maximum_lifetime_queries",
+            "maximum_concurrent_sessions",
+            "reset_semantics",
+            "filter_bundle_sha256",
+            "update_policy",
+            "valid_until",
+        ):
+            incomplete = json.loads(json.dumps(raw))
+            incomplete["llm_protocol"].pop(field)
+            with self.subTest(llm_field=field), self.assertRaises(ValidationError):
+                InterfaceContract.model_validate(incomplete)
+
         empty_decoding = json.loads(json.dumps(raw))
         empty_decoding["llm_protocol"]["decoding_parameters"] = {}
         with self.assertRaises(ValidationError):
@@ -183,24 +232,136 @@ class ContractTests(unittest.TestCase):
 
     def test_complete_interface_requires_every_structured_channel_declaration(self) -> None:
         raw = load_example()["release"]["interface"]
-        required_sections = (
-            "output_channels", "timing", "errors", "execution", "access_paths", "serialization",
+        required_fields = (
+            "schema_version",
+            "protocol_type",
+            "access",
+            "outputs",
+            "output_channels",
+            "precision_bits",
+            "query_budget",
+            "adaptive_queries",
+            "authenticated",
+            "rate_limited",
+            "rate_limit",
+            "timing",
+            "errors",
+            "execution",
+            "access_paths",
+            "serialization",
+            "llm_protocol",
         )
-        for section in required_sections:
+        for field in required_fields:
             incomplete = json.loads(json.dumps(raw))
-            incomplete.pop(section)
-            with self.subTest(section=section), self.assertRaises(ValidationError):
+            incomplete.pop(field)
+            with self.subTest(field=field), self.assertRaises(ValidationError):
                 InterfaceContract.model_validate(incomplete)
 
-        incomplete_output = json.loads(json.dumps(raw))
-        incomplete_output["output_channels"].pop("shipped_summary_metadata")
-        with self.assertRaises(ValidationError):
-            InterfaceContract.model_validate(incomplete_output)
+        nested_required = {
+            "output_channels": (
+                "aggregates", "labels", "scores", "probabilities", "logits",
+                "explanations", "text", "embeddings", "gradients", "parameters",
+                "downloadable_files", "shipped_summary_metadata", "custom_channels",
+            ),
+            "rate_limit": (
+                "enabled", "scope", "requests_per_window", "window_seconds",
+                "burst_capacity", "retry_after_exposed", "enforcement",
+                "custom_parameters",
+            ),
+            "timing": (
+                "recipient_observable", "measurement_resolution_milliseconds",
+                "includes_queue_time", "mitigation", "mitigation_parameters",
+            ),
+            "errors": (
+                "transport_status", "documented_status_codes", "error_content",
+                "error_schema_sha256", "retry_metadata",
+            ),
+            "execution": (
+                "batching", "maximum_batch_size", "maximum_concurrent_requests",
+                "cross_request_state", "cross_request_state_ttl_seconds",
+            ),
+            "access_paths": (
+                "side_channels", "custom_side_channels", "admin_access",
+                "admin_capabilities", "local_access", "local_capabilities",
+            ),
+            "serialization": (
+                "formats", "media_types", "encodings", "compression",
+                "schema_sha256", "endianness",
+            ),
+        }
+        for section, fields in nested_required.items():
+            for field in fields:
+                incomplete = json.loads(json.dumps(raw))
+                incomplete[section].pop(field)
+                with self.subTest(section=section, field=field), self.assertRaises(
+                    ValidationError
+                ):
+                    InterfaceContract.model_validate(incomplete)
 
         undeclared_timing = interactive_interface_raw()
         undeclared_timing["access_paths"]["side_channels"].remove("timing")
         with self.assertRaises(ValidationError):
             InterfaceContract.model_validate(undeclared_timing)
+
+        mismatched_rate_flag = json.loads(json.dumps(raw))
+        mismatched_rate_flag["rate_limited"] = not raw["rate_limit"]["enabled"]
+        with self.assertRaisesRegex(ValidationError, "structured rate-limit"):
+            InterfaceContract.model_validate(mismatched_rate_flag)
+
+    def test_retry_after_requires_matching_metadata_and_transport_status(self) -> None:
+        missing_metadata = interactive_interface_raw()
+        missing_metadata["errors"]["retry_metadata"] = False
+        with self.assertRaisesRegex(ValidationError, "errors.retry_metadata=true"):
+            InterfaceContract.model_validate(missing_metadata)
+
+        missing_http_status = interactive_interface_raw()
+        missing_http_status["errors"]["documented_status_codes"].remove("429")
+        with self.assertRaisesRegex(ValidationError, "rate-limit status code"):
+            InterfaceContract.model_validate(missing_http_status)
+
+        no_status_channel = interactive_interface_raw()
+        no_status_channel["errors"].update(
+            transport_status="none",
+            documented_status_codes=[],
+            error_content="none",
+            retry_metadata=True,
+        )
+        no_status_channel["access_paths"]["side_channels"] = ["timing"]
+        with self.assertRaisesRegex(ValidationError, "cannot expose retry metadata"):
+            InterfaceContract.model_validate(no_status_channel)
+
+        grpc = interactive_interface_raw()
+        grpc["errors"].update(
+            transport_status="grpc",
+            documented_status_codes=["OK", "RESOURCE_EXHAUSTED"],
+        )
+        self.assertEqual(
+            InterfaceContract.model_validate(grpc).errors.transport_status,
+            "grpc",
+        )
+
+    def test_nested_contract_versions_are_required_and_rejected_when_unknown(self) -> None:
+        predictive = load_example()["release"]["interface"]
+        for replacement in ("2.0", "9.0", None):
+            raw = json.loads(json.dumps(predictive))
+            if replacement is None:
+                raw.pop("schema_version")
+            else:
+                raw["schema_version"] = replacement
+            with self.subTest(interface_version=replacement), self.assertRaises(
+                ValidationError
+            ):
+                InterfaceContract.model_validate(raw)
+
+        interactive = interactive_interface_raw()
+        for replacement in ("0.9", "9.0", None):
+            raw = json.loads(json.dumps(interactive))
+            if replacement is None:
+                raw["llm_protocol"].pop("schema_version")
+            else:
+                raw["llm_protocol"]["schema_version"] = replacement
+            with self.subTest(llm_version=replacement), self.assertRaises(ValidationError):
+                InterfaceContract.model_validate(raw)
 
     def test_unknown_field_fails_closed(self) -> None:
         raw = load_example()
@@ -360,6 +521,7 @@ class ContractTests(unittest.TestCase):
                 "decision_metric": metric,
                 "tolerance": 0.05,
                 "tolerance_basis": "incremental",
+                "ceiling_attack_battery_mode": "ceiling_prohibited",
             })
             self.assertEqual(rule.decision_metric, metric)
 
@@ -371,6 +533,7 @@ class ContractTests(unittest.TestCase):
             "decision_metric": "finite_secret_exact_guess_success",
             "tolerance": 0.4,
             "tolerance_basis": "absolute",
+            "ceiling_attack_battery_mode": "ceiling_prohibited",
         }
         with self.assertRaisesRegex(ValidationError, "maximum_secret_prior"):
             PolicyRule.model_validate(raw)
@@ -460,7 +623,21 @@ class EngineTests(unittest.TestCase):
             can_block=True,
         )
         self.assertEqual(
-            decide_threat(threat, scope, request.release, (floor,), request.policy.policy_sha256).verdict,
+            decide_threat(
+                threat,
+                scope,
+                request.release,
+                (floor,),
+                request.policy.policy_sha256,
+                AttackBatteryStatus(
+                    mode="required",
+                    requirement_id="test-battery",
+                    required_attack_ids=("test-attack",),
+                    completed_attack_ids=("test-attack",),
+                    passing_positive_control_ids=("test-control",),
+                    satisfied=True,
+                ),
+            ).verdict,
             Verdict.BLOCK,
         )
 

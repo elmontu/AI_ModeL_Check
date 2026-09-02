@@ -6,7 +6,7 @@ Model Release Assurance (MRA) has an offline, fail-closed Python reference core 
 
 MRA produces recommendations and replayable certificates. It does **not** authorize, deploy, or serve models.
 
-> **Status:** alpha (`0.7.0`) and sector-neutral. The supported core is offline; optional evidence-lab workers may execute local model code, launch subprocesses, or download public datasets. The repository implements MRAP conformance levels L0–L2 and a machine-checked protocol core. Interfaces and schemas may change between minor `0.x` releases.
+> **Status:** alpha (`0.7.0`) and sector-neutral. The supported core is offline; optional evidence-lab workers may execute local model code, launch subprocesses, or download public datasets. The repository provides reference capabilities aligned with MRAP L0–L2 and a machine-checked protocol core; it does not claim complete conformance while the documented G7 numeric and production-control obligations remain open. Interfaces and schemas may change between minor `0.x` releases.
 
 ## Operational model: contracts, pipelines, and workflows
 
@@ -29,6 +29,7 @@ The [integrated system audit specification](docs/system-audit-specification.md) 
 - Separately checks candidate utility, controls, portfolio support, active-policy authorization of the selection rule, and supplied lifecycle-transcript structure or signatures.
 - Generates and replays feasibility and portfolio certificates, verifies interface-bound signed manifests and ledger-namespaced audit chains, and replays protocol transcripts.
 - Routes model families and threats to applicable checks without treating catalog coverage as clearance.
+- Requires a policy-bound, complete attack battery with centrally replayed positive controls, catalog/time-valid execution, supported multiplicity, observable resource-limit checks, and per-run executor identity before a statistical ceiling may clear a threat; individual attacks remain floor-or-screen evidence only.
 - After successful request parsing/validation, records assessment/optimization intent before analyzer/optimizer execution and detects failed or orphaned runs in the required CLI audit database.
 
 Missing, stale, mismatched, underpowered, or unassessed evidence never becomes evidence of safety. A successful attack may block a release; an unsuccessful attack does not prove safety.
@@ -45,7 +46,8 @@ Production MRAP-L3/L4 deployments still require authenticated identities and sep
 | Versioned JSON Schemas | **Public contracts** | A deterministic manifest inventories every current schema byte-for-byte; superseded files preserve historical structure for archival or external validation, not executable replay by the current CLI |
 | MRAP specification and Lean model | **Normative/reference** | Lifecycle semantics, protocol review, and scoped machine-checked properties |
 | `scripts/` and `reproduction/` | **Experimental** | Evidence generation, benchmarks, and retained study inputs; not a stable API |
-| MCP/RAG, empirical workflows, and red-team helpers | **Incubating** | Source-tree evaluation and integration experiments |
+| Typed attack-battery contracts and trusted-core analyzer | **Reference core** | Policy-bound floor/screen translation and a mandatory ceiling-clearance precondition; no model execution |
+| MCP/RAG, empirical workflows, and red-team execution helpers | **Incubating** | Source-tree evaluation and integration experiments |
 
 The logical Python components are documented in the [project scope](docs/project-scope.md). Internal modules are not automatically stable public APIs merely because they are importable.
 
@@ -125,13 +127,14 @@ maps each optional capability to its dependency tier.
 |---|---|---|
 | Local XGBoost classification audit | `scripts/run_xgboost_audit.py` | [XGBoost worker guide](docs/xgboost.md) |
 | XGBoost/MLP empirical and red-team workflow | `scripts/run_empirical_xgboost_mlp_workflow.py` | [SACRO-ML-inspired red-team guide](docs/sacro-ml-red-team.md) |
-| Post-critique control regressions | `scripts/evaluate_design_controls.py` | [Retained 12-case result](reproduction/design-control-validation/results.json) and [interpretation](reproduction/design-control-validation/README.md) |
+| Policy-bound attack-battery demonstration | `examples/request.json` | [Attack catalog, positive-control, worker-output, and submission contracts](schemas/README.md) |
 | LLM watermark/canary profile validation | `scripts/validate_llm_audit_profile.py` | [LLM audit guide](docs/llm-watermark-canary.md) |
 | OpenML, public-privacy, portfolio, and strategic studies | grouped runners in `scripts/` | [`reproduction/`](reproduction/) |
 
-These tools emit bounded measurements, candidate attack floors, or screens—never authorization.
-Their output is not an admissible `EvidenceRecord` until an approved worker binds or recollects it for
-a complete assessment request. Generated research reports, models, audit databases, and benchmark
+Exploratory tools emit bounded measurements, candidate attack floors, or screens—never authorization.
+Their reports are not assessment evidence. A separately isolated approved worker must emit the exact
+typed, content-addressed attack-battery output required by policy; the trusted core then recomputes its
+positive controls and translates eligible results. Generated research reports, models, audit databases, and benchmark
 output may use ignored `output/` paths. Governance records must instead be copied transactionally to
 adopter-owned immutable storage with retention, legal-hold, backup, restore, access, and destruction
 rules.
@@ -155,9 +158,10 @@ The paths stay intentionally stable because scripts, tests, documentation, and r
 ## Core safety invariants
 
 - Attack floors can block but never clear a threat.
-- Clearance requires applicable exact values, verified upper bounds, accountants, or replayable certificates.
+- Exact evidence may clear directly. Ceiling-based clearance additionally requires a complete policy-mandated attack battery with passing positive controls, unless the signed policy records an explicit waiver; a policy may also prohibit ceiling clearance.
 - Evidence is bound to the release contract, policy, artifact, interface, population, decision game, and observation time before analysis.
 - Evidence records identify the analyzer service/version and implementation/configuration digests; policy pins the minimum and accepted producer set.
+- Attack-battery evidence separately identifies the battery orchestrator and each catalogued run/control executor; these digest bindings provide integrity, not workload authentication or truth.
 - Every retained evidence record is dispositioned by identifier as included or excluded, and the active policy allowlists the exact selection-policy digest.
 - Evaluated-to-released transfer requires reassessment or a verified information-reduction argument in the safe direction.
 - Utility is enforced before selecting a least-informative feasible release.
@@ -172,7 +176,8 @@ See the [architecture](docs/architecture.md), [mathematical foundations](docs/ma
 
 ## Development and verification
 
-Install the pinned core and experimental test dependencies before running the complete Python suite:
+Install the locked core runtime and the range-based experiment compatibility
+band before running the complete Python suite:
 
 ```bash
 python -m pip install -r requirements.lock

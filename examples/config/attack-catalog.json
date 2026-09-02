@@ -1,0 +1,33 @@
+{
+  "schema_version": "1.0",
+  "catalog_id": "mra.demo.attack-catalog",
+  "catalog_version": "1.0.0",
+  "valid_from": "2026-01-01T00:00:00Z",
+  "valid_until": "2099-01-01T00:00:00Z",
+  "entries": [
+    {
+      "attack_id": "membership_loss_threshold",
+      "attack_version": "1.0.0",
+      "service_id": "mra.red-team.membership-loss-threshold",
+      "implementation_sha256": "4284fd0383a2b19e3fbee0b973b47a006b2969b0037713ad01bb928e10086357",
+      "applicable_model_families": [
+        "tree_ensemble"
+      ],
+      "applicable_protocol_types": [
+        "predictive"
+      ],
+      "applicable_threat_kinds": [
+        "membership"
+      ],
+      "supported_metrics": [
+        "equal_prior_membership_success"
+      ],
+      "evidence_role": "blocking_floor",
+      "positive_control_kind": "known_leak_binomial",
+      "minimum_repetitions": 1,
+      "requires_model_execution": true,
+      "can_clear": false,
+      "decision_authority": "none"
+    }
+  ]
+}

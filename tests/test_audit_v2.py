@@ -80,6 +80,9 @@ class AuditV2Tests(unittest.TestCase):
             self.assertEqual(verified.intent_count, 2)
             self.assertEqual(verified.completed_count, 1)
             self.assertEqual(verified.failed_count, 1)
+            self.assertEqual(verified.redacted_failure_diagnostic_count, 1)
+            self.assertEqual(verified.plaintext_failure_diagnostic_count, 0)
+            self.assertEqual(verified.diagnostic_degradations, ())
             self.assertEqual(verified.legacy_hash_event_count, 0)
             self.assertEqual(verified.domain_separated_hash_event_count, 4)
             self.assertEqual(verified.release_ids, (request.release.release_id,))
@@ -137,9 +140,33 @@ class AuditV2Tests(unittest.TestCase):
                     intent_count=2,
                     completed_count=1,
                     failed_count=1,
+                    redacted_failure_diagnostic_count=1,
+                    plaintext_failure_diagnostic_count=0,
+                    diagnostic_degradations=(),
                     orphaned_run_ids=(),
                     complete=True,
                     runtime_identity=verified.runtime_identity,
+                )
+
+            with self.assertRaisesRegex(
+                ValidationError, "failure diagnostic counts do not reconcile"
+            ):
+                AuditVerification.model_validate(
+                    {
+                        **verified.model_dump(mode="json"),
+                        "redacted_failure_diagnostic_count": 0,
+                    }
+                )
+            with self.assertRaisesRegex(
+                ValidationError, "diagnostic degradations disagree"
+            ):
+                AuditVerification.model_validate(
+                    {
+                        **verified.model_dump(mode="json"),
+                        "redacted_failure_diagnostic_count": 0,
+                        "plaintext_failure_diagnostic_count": 1,
+                        "diagnostic_degradations": [],
+                    }
                 )
 
             invalid_runtime = verified.runtime_identity.model_copy(
@@ -169,6 +196,193 @@ class AuditV2Tests(unittest.TestCase):
             self.assertTrue(store.verify().complete)
             with self.assertRaisesRegex(IntegrityError, "already has a terminal"):
                 store.append_assessment_failed(run, "duplicate_terminal")
+
+    def test_failed_events_persist_only_a_redacted_diagnostic_fingerprint(self) -> None:
+        request = assessment_request()
+        secret = "mra-secret-token-7b3e5f4d-diagnostic-sentinel"
+        sensitive_path = "/private/tenant-482/patient-prompts/source.ndjson"
+        diagnostic = f"provider token={secret}; source={sensitive_path}"
+        with tempfile.TemporaryDirectory() as directory:
+            store = AuditStore(Path(directory) / "audit.sqlite3")
+            # Keep one connection open so platforms that retain a live WAL are
+            # checked before their final connection-close checkpoint.
+            connection = sqlite3.connect(store.path)
+            try:
+                connection.execute("PRAGMA journal_mode=WAL")
+                first_run = store.append_assessment_intent(request)
+                store.append_assessment_failed(
+                    first_run,
+                    "worker_failed",
+                    diagnostic,
+                )
+                second_run = store.append_assessment_intent(request)
+                store.append_assessment_failed(
+                    second_run,
+                    "worker_failed",
+                    diagnostic,
+                )
+
+                verified = store.verify(require_events=True)
+                self.assertTrue(verified.complete)
+                self.assertEqual(verified.failed_count, 2)
+                self.assertEqual(verified.redacted_failure_diagnostic_count, 2)
+                self.assertEqual(verified.plaintext_failure_diagnostic_count, 0)
+                self.assertEqual(verified.diagnostic_degradations, ())
+
+                payload_jsons = [
+                    row[0]
+                    for row in connection.execute(
+                        """
+                        SELECT payload_json FROM audit_events
+                        WHERE event_type = 'assessment_failed'
+                        ORDER BY sequence
+                        """
+                    )
+                ]
+                payloads = [json.loads(value) for value in payload_jsons]
+                self.assertEqual(
+                    [payload["error_code"] for payload in payloads],
+                    ["worker_failed", "worker_failed"],
+                )
+                fingerprints = [payload["error_message"] for payload in payloads]
+                self.assertEqual(fingerprints[0], fingerprints[1])
+                self.assertRegex(fingerprints[0], r"^redacted:sha256:[0-9a-f]{64}$")
+                expected_fingerprint = "redacted:sha256:" + sha256_bytes(
+                    b"AI_MODE_L_CHECK:AUDIT_DIAGNOSTIC\x00"
+                    + canonical_json_bytes(
+                        {
+                            "error_code": "worker_failed",
+                            "error_message": diagnostic,
+                        }
+                    )
+                )
+                self.assertEqual(fingerprints[0], expected_fingerprint)
+
+                for payload_json in payload_jsons:
+                    self.assertNotIn(secret, payload_json)
+                    self.assertNotIn(sensitive_path, payload_json)
+
+                sentinel_bytes = (
+                    secret.encode("utf-8"),
+                    sensitive_path.encode("utf-8"),
+                )
+                storage_paths = [
+                    store.path,
+                    store.path.with_name(f"{store.path.name}-wal"),
+                ]
+                for storage_path in storage_paths:
+                    if not storage_path.exists():
+                        continue
+                    stored_bytes = storage_path.read_bytes()
+                    for sentinel in sentinel_bytes:
+                        self.assertNotIn(sentinel, stored_bytes)
+            finally:
+                connection.close()
+
+    def test_failed_event_inputs_are_bounded_before_fingerprinting(self) -> None:
+        request = assessment_request()
+        with tempfile.TemporaryDirectory() as directory:
+            store = AuditStore(Path(directory) / "audit.sqlite3")
+            oversized_code_run = store.append_assessment_intent(request)
+            oversized_message_run = store.append_assessment_intent(request)
+
+            with self.assertRaises(ValidationError):
+                store.append_assessment_failed(
+                    oversized_code_run,
+                    "x" * 129,
+                    "bounded diagnostic",
+                )
+            with self.assertRaises(ValidationError):
+                store.append_assessment_failed(
+                    oversized_message_run,
+                    "worker_failed",
+                    "x" * 4097,
+                )
+
+            incomplete = store.verify(require_complete=False)
+            self.assertEqual(incomplete.failed_count, 0)
+            self.assertEqual(incomplete.redacted_failure_diagnostic_count, 0)
+            self.assertEqual(incomplete.plaintext_failure_diagnostic_count, 0)
+            self.assertEqual(
+                set(incomplete.orphaned_run_ids),
+                {oversized_code_run.run_id, oversized_message_run.run_id},
+            )
+
+            store.append_assessment_failed(oversized_code_run, "x" * 128)
+            store.append_assessment_failed(
+                oversized_message_run,
+                "worker_failed",
+                "x" * 4096,
+            )
+            verified = store.verify()
+            self.assertEqual(verified.failed_count, 2)
+            self.assertEqual(verified.redacted_failure_diagnostic_count, 2)
+            self.assertEqual(verified.plaintext_failure_diagnostic_count, 0)
+
+    def test_plaintext_v2_failure_is_reported_as_a_diagnostic_degradation(self) -> None:
+        request = assessment_request()
+        plaintext_diagnostic = "legacy plaintext diagnostic"
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "audit.sqlite3"
+            store = AuditStore(path)
+            run = store.append_assessment_intent(request)
+            store.append_assessment_failed(run, "worker_failed", "original")
+
+            with sqlite3.connect(path) as connection:
+                (
+                    occurred_at,
+                    event_type,
+                    record_id,
+                    payload_json,
+                    previous_hash,
+                ) = connection.execute(
+                    """
+                    SELECT occurred_at, event_type, assessment_id, payload_json,
+                           previous_hash
+                    FROM audit_events WHERE sequence = 2
+                    """
+                ).fetchone()
+                ledger_id = connection.execute(
+                    "SELECT value FROM audit_metadata WHERE key = 'ledger_id'"
+                ).fetchone()[0]
+                payload = json.loads(payload_json)
+                payload["error_message"] = plaintext_diagnostic
+                plaintext_payload_json = canonical_json_bytes(payload).decode("utf-8")
+                plaintext_event_hash = sha256_bytes(
+                    _event_material_v2(
+                        ledger_id,
+                        occurred_at,
+                        event_type,
+                        record_id,
+                        plaintext_payload_json,
+                        previous_hash,
+                    )
+                )
+                connection.execute(
+                    """
+                    UPDATE audit_events
+                    SET payload_json = ?, event_hash = ?
+                    WHERE sequence = 2
+                    """,
+                    (plaintext_payload_json, plaintext_event_hash),
+                )
+                connection.commit()
+
+            verified = store.verify(require_events=True)
+            self.assertEqual(verified.schema_version, "3.0")
+            self.assertEqual(verified.failed_count, 1)
+            self.assertEqual(verified.redacted_failure_diagnostic_count, 0)
+            self.assertEqual(verified.plaintext_failure_diagnostic_count, 1)
+            self.assertEqual(
+                verified.diagnostic_degradations,
+                ("plaintext_failure_diagnostics_present",),
+            )
+            self.assertEqual(verified.legacy_event_count, 0)
+            self.assertEqual(verified.legacy_hash_event_count, 0)
+            self.assertEqual(
+                verified.runtime_identity.algorithm_profile["failure_diagnostics"],
+                "bounded-input-redacted-sha256-with-plaintext-v2-degradation",
+            )
 
     def test_assessment_completion_must_match_the_intent_contract(self) -> None:
         request, report = assessment_pair()
@@ -572,6 +786,9 @@ class AuditV2Tests(unittest.TestCase):
             self.assertEqual(verified.legacy_hash_event_count, 1)
             self.assertEqual(verified.domain_separated_hash_event_count, 0)
             self.assertEqual(verified.intent_count, 0)
+            self.assertEqual(verified.redacted_failure_diagnostic_count, 0)
+            self.assertEqual(verified.plaintext_failure_diagnostic_count, 0)
+            self.assertEqual(verified.diagnostic_degradations, ())
             self.assertEqual(verified.head_sha256, digest)
             self.assertNotEqual(verified.head_sha256, GENESIS)
 

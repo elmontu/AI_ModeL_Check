@@ -22,6 +22,7 @@ _AUDIT_SCHEMA_VERSION = "2.0"
 _AUDIT_EVENT_HASH_FORMAT = "mra-audit-event-v2"
 _LEGACY_EVENT_HASH_FORMAT = "legacy-v1"
 _AUDIT_EVENT_DOMAIN = b"AI_MODE_L_CHECK:AUDIT_EVENT"
+_AUDIT_DIAGNOSTIC_DOMAIN = b"AI_MODE_L_CHECK:AUDIT_DIAGNOSTIC"
 _LEGACY_EVENT_TYPES = frozenset({"assessment_report", "optimization_report"})
 _INTENT_EVENT_TYPES = {
     "assessment_intent": "assessment",
@@ -47,10 +48,30 @@ _EVENT_OPERATIONS = {
 
 AuditOperation = Literal["assessment", "optimization"]
 AuditEventHashFormat = Literal["mra-audit-event-v2"]
+AuditDiagnosticDegradation = Literal["plaintext_failure_diagnostics_present"]
 
 
 def _canonical_json_text(value: StrictModel) -> str:
     return canonical_json_bytes(value).decode("utf-8")
+
+
+def _redacted_error_diagnostic(error_code: str, error_message: str) -> str:
+    """Return a stable, domain-separated fingerprint without retaining diagnostics."""
+    material = canonical_json_bytes(
+        {"error_code": error_code, "error_message": error_message}
+    )
+    digest = sha256_bytes(_AUDIT_DIAGNOSTIC_DOMAIN + b"\x00" + material)
+    return f"redacted:sha256:{digest}"
+
+
+def _is_redacted_error_diagnostic(value: str) -> bool:
+    prefix = "redacted:sha256:"
+    digest = value.removeprefix(prefix)
+    return (
+        value.startswith(prefix)
+        and len(digest) == 64
+        and all(character in "0123456789abcdef" for character in digest)
+    )
 
 
 def _canonical_object(value: str, label: str) -> dict:
@@ -271,12 +292,17 @@ def _validated_document_text(
     model: type[StrictModel],
     label: str,
 ) -> str:
-    raw = value.model_dump(mode="json", exclude_none=True)
+    # Governed request/report contracts use required-explicit nullable fields.
+    # Preserve those JSON nulls in the embedded replay document; the outer
+    # audit-event payload retains its existing omit-optional-None convention.
+    raw = value.model_dump(mode="json", exclude_none=False)
     try:
         validated = model.model_validate(raw)
     except ValidationError as exc:
         raise IntegrityError(f"invalid {label}: {exc}") from exc
-    return _canonical_json_text(validated)
+    return canonical_json_bytes(
+        validated.model_dump(mode="json", exclude_none=False)
+    ).decode("utf-8")
 
 
 def _validate_replayed_request(
@@ -332,6 +358,13 @@ def _validate_replayed_request(
 
 
 class _AuditIntentPayload(StrictModel):
+    """Current v2 envelope for current embedded request contracts.
+
+    The envelope version is not a vintage-document dispatcher. This verifier
+    deliberately does not promise replay of the prior AssessmentRequest 4.0 or
+    OptimizationRequest 3.0 document shapes.
+    """
+
     schema_version: Literal["2.0"] = _AUDIT_SCHEMA_VERSION
     operation: AuditOperation
     run_id: uuid.UUID
@@ -355,8 +388,8 @@ class _AuditIntentPayload(StrictModel):
         if sha256_bytes(self.request_json.encode("utf-8")) != self.request_sha256:
             raise ValueError("audit intent request hash does not match request_json")
         if self.operation == "assessment":
-            if raw.get("schema_version") != "4.0":
-                raise ValueError("assessment intent requires an assessment request v4")
+            if raw.get("schema_version") != "5.0":
+                raise ValueError("assessment intent requires an assessment request v5")
             _required_model_fields(raw, AssessmentRequest, "assessment request")
             release = raw.get("release")
             if not isinstance(release, dict):
@@ -368,8 +401,8 @@ class _AuditIntentPayload(StrictModel):
             if self.authorization_expires_at is not None:
                 raise ValueError("assessment intents have no optimization authorization")
         else:
-            if raw.get("schema_version") != "3.0":
-                raise ValueError("optimization intent requires an optimization request v3")
+            if raw.get("schema_version") != "4.0":
+                raise ValueError("optimization intent requires an optimization request v4")
             _required_model_fields(raw, OptimizationRequest, "optimization request")
             if raw.get("optimization_id") != self.subject_id:
                 raise ValueError("optimization intent subject does not match the request")
@@ -400,6 +433,8 @@ class _AuditIntentPayload(StrictModel):
 
 
 class _AuditCompletedPayload(StrictModel):
+    """Current v2 envelope for current embedded report contracts only."""
+
     schema_version: Literal["2.0"] = _AUDIT_SCHEMA_VERSION
     operation: AuditOperation
     run_id: uuid.UUID
@@ -428,8 +463,8 @@ class _AuditCompletedPayload(StrictModel):
         if raw.get("request_sha256") != self.request_sha256:
             raise ValueError("audit completion report binds a different request")
         if self.operation == "assessment":
-            if raw.get("schema_version") != "4.0":
-                raise ValueError("assessment completion requires an assessment report v4")
+            if raw.get("schema_version") != "5.0":
+                raise ValueError("assessment completion requires an assessment report v5")
             _required_model_fields(raw, AssessmentReport, "assessment report")
             AssessmentReport.model_validate(raw)
             if self.result_expires_at is not None:
@@ -446,8 +481,8 @@ class _AuditCompletedPayload(StrictModel):
                     "audit completion release-instance digest does not match report_json"
                 )
         else:
-            if raw.get("schema_version") != "3.0":
-                raise ValueError("optimization completion requires an optimization report v3")
+            if raw.get("schema_version") != "4.0":
+                raise ValueError("optimization completion requires an optimization report v4")
             _required_model_fields(raw, OptimizationReport, "optimization report")
             OptimizationReport.model_validate(raw)
             created_at = datetime.fromisoformat(
@@ -480,6 +515,13 @@ class _AuditCompletedPayload(StrictModel):
         return self
 
 
+class _AuditFailureDiagnosticInput(StrictModel):
+    """Bound caller-controlled diagnostic material before fingerprinting it."""
+
+    error_code: str = Field(min_length=1, max_length=128)
+    error_message: str = Field(default="", max_length=4096)
+
+
 class _AuditFailedPayload(StrictModel):
     schema_version: Literal["2.0"] = _AUDIT_SCHEMA_VERSION
     operation: AuditOperation
@@ -494,8 +536,24 @@ class _AuditFailedPayload(StrictModel):
     release_instance_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
     request_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
     intent_event_hash: str = Field(pattern=r"^[0-9a-f]{64}$")
-    error_code: str = Field(min_length=1, max_length=128)
-    error_message: str = Field(default="", max_length=4096)
+    error_code: str = Field(
+        min_length=1,
+        max_length=128,
+        description=(
+            "Stable diagnostic category retained verbatim; callers must not place "
+            "secrets or free-form exception content in this field."
+        ),
+    )
+    error_message: str = Field(
+        default="",
+        max_length=4096,
+        description=(
+            "Compatibility field: current writers store a domain-separated redacted "
+            "diagnostic fingerprint. Non-fingerprint v2 values are reported as a "
+            "plaintext diagnostic degradation; accepting that field shape does not "
+            "promise replay of prior Assessment 4.0 or Optimization 3.0 intents."
+        ),
+    )
 
 
 class AuditRun(StrictModel):
@@ -538,17 +596,44 @@ class AuditEventReceipt(StrictModel):
 class AuditVerification(StrictModel):
     """Structured result for one fully replayed local audit chain."""
 
-    schema_version: Literal["2.0"] = _AUDIT_SCHEMA_VERSION
+    schema_version: Literal["3.0"] = "3.0"
     ledger_id: uuid.UUID
     event_count: int = Field(ge=0)
     last_sequence: int = Field(ge=0)
     head_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
-    legacy_event_count: int = Field(ge=0)
-    legacy_hash_event_count: int = Field(ge=0)
+    legacy_event_count: int = Field(
+        ge=0,
+        description=(
+            "Count of legacy completion-only assessment_report/optimization_report event "
+            "types, independently of their hash format."
+        ),
+    )
+    legacy_hash_event_count: int = Field(
+        ge=0,
+        description=(
+            "Count of rows using the missing or legacy-v1 hash format, independently of "
+            "their event type."
+        ),
+    )
     domain_separated_hash_event_count: int = Field(ge=0)
     intent_count: int = Field(ge=0)
     completed_count: int = Field(ge=0)
     failed_count: int = Field(ge=0)
+    redacted_failure_diagnostic_count: int = Field(
+        ge=0,
+        description=(
+            "Count of failed terminal payloads whose diagnostic uses the "
+            "redacted:sha256 marker format."
+        ),
+    )
+    plaintext_failure_diagnostic_count: int = Field(
+        ge=0,
+        description=(
+            "Count of failed terminal payloads whose diagnostic is not in the "
+            "redacted:sha256 marker format, including compatible plaintext v2 rows."
+        ),
+    )
+    diagnostic_degradations: tuple[AuditDiagnosticDegradation, ...]
     release_ids: tuple[str, ...] = ()
     release_instance_sha256s: tuple[str, ...] = ()
     orphaned_run_ids: tuple[uuid.UUID, ...] = ()
@@ -559,7 +644,7 @@ class AuditVerification(StrictModel):
     def counts_are_coherent(self) -> AuditVerification:
         if self.runtime_identity.component_id != "audit_verifier":
             raise ValueError("audit verification has the wrong runtime component identity")
-        if self.runtime_identity.component_version != "AuditVerification/2.0":
+        if self.runtime_identity.component_version != "AuditVerification/3.0":
             raise ValueError("audit verification has the wrong component version")
         if self.event_count != self.last_sequence:
             raise ValueError("a verified contiguous chain must end at its event count")
@@ -568,6 +653,22 @@ class AuditVerification(StrictModel):
         terminal_count = self.completed_count + self.failed_count
         if self.intent_count != terminal_count + len(self.orphaned_run_ids):
             raise ValueError("audit intent and terminal counts do not reconcile")
+        if self.failed_count != (
+            self.redacted_failure_diagnostic_count
+            + self.plaintext_failure_diagnostic_count
+        ):
+            raise ValueError(
+                "audit failure diagnostic counts do not reconcile with failed terminals"
+            )
+        expected_diagnostic_degradations = (
+            ("plaintext_failure_diagnostics_present",)
+            if self.plaintext_failure_diagnostic_count
+            else ()
+        )
+        if self.diagnostic_degradations != expected_diagnostic_degradations:
+            raise ValueError(
+                "audit diagnostic degradations disagree with plaintext diagnostics"
+            )
         if self.event_count != self.legacy_event_count + self.intent_count + terminal_count:
             raise ValueError("audit event categories do not reconcile with the event count")
         if self.event_count != (
@@ -1009,6 +1110,10 @@ class AuditStore:
         error_code: str,
         error_message: str,
     ) -> AuditEventReceipt:
+        diagnostic = _AuditFailureDiagnosticInput(
+            error_code=error_code,
+            error_message=error_message,
+        )
         payload = _AuditFailedPayload(
             operation=run.operation,
             run_id=run.run_id,
@@ -1017,8 +1122,10 @@ class AuditStore:
             release_instance_sha256=run.release_instance_sha256,
             request_sha256=run.request_sha256,
             intent_event_hash=run.intent_event_hash,
-            error_code=error_code,
-            error_message=error_message,
+            error_code=diagnostic.error_code,
+            error_message=_redacted_error_diagnostic(
+                diagnostic.error_code, diagnostic.error_message
+            ),
         )
         return self._append_v2_event(
             event_type, run.subject_id, payload, run.run_id, terminal_run=run
@@ -1298,6 +1405,8 @@ class AuditStore:
         terminals: dict[uuid.UUID, str] = {}
         completed_count = 0
         failed_count = 0
+        redacted_failure_diagnostic_count = 0
+        plaintext_failure_diagnostic_count = 0
         legacy_event_count = 0
         legacy_hash_event_count = 0
         domain_separated_hash_event_count = 0
@@ -1496,6 +1605,10 @@ class AuditStore:
                         completed_count += 1
                     else:
                         failed_count += 1
+                        if _is_redacted_error_diagnostic(terminal.error_message):
+                            redacted_failure_diagnostic_count += 1
+                        else:
+                            plaintext_failure_diagnostic_count += 1
                 else:
                     raise IntegrityError(f"unknown audit event type: {event_type}")
 
@@ -1544,19 +1657,29 @@ class AuditStore:
             intent_count=len(intents),
             completed_count=completed_count,
             failed_count=failed_count,
+            redacted_failure_diagnostic_count=redacted_failure_diagnostic_count,
+            plaintext_failure_diagnostic_count=plaintext_failure_diagnostic_count,
+            diagnostic_degradations=(
+                ("plaintext_failure_diagnostics_present",)
+                if plaintext_failure_diagnostic_count
+                else ()
+            ),
             release_ids=tuple(sorted(release_ids)),
             release_instance_sha256s=tuple(sorted(release_instance_sha256s)),
             orphaned_run_ids=orphaned,
             complete=not orphaned,
             runtime_identity=current_runtime_identity(
                 component_id="audit_verifier",
-                component_version="AuditVerification/2.0",
+                component_version="AuditVerification/3.0",
                 algorithm_profile={
                     "canonicalization": "MRA-PY-JSON-1",
                     "event_hash_format": _AUDIT_EVENT_HASH_FORMAT,
                     "legacy_event_hash_format": _LEGACY_EVENT_HASH_FORMAT,
                     "legacy_hash_default": "reject",
                     "release_identity": "explicit-release-id-and-instance-sha256",
+                    "failure_diagnostics": (
+                        "bounded-input-redacted-sha256-with-plaintext-v2-degradation"
+                    ),
                 },
             ),
         )

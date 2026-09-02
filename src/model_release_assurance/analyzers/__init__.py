@@ -1,4 +1,5 @@
 from .attack import AttackAnalyzer
+from .attack_battery import AttackBatteryAnalyzer
 from .controlled_inference import ControlledInferenceAnalyzer
 from .dp import DpAnalyzer
 from .llm_canary import LlmCanaryAnalyzer
@@ -7,6 +8,6 @@ from .population import PopulationAnalyzer
 from .tree import TreeLinkageAnalyzer
 
 __all__ = [
-    "AttackAnalyzer", "ControlledInferenceAnalyzer", "DpAnalyzer", "LlmCanaryAnalyzer",
+    "AttackAnalyzer", "AttackBatteryAnalyzer", "ControlledInferenceAnalyzer", "DpAnalyzer", "LlmCanaryAnalyzer",
     "LlmWatermarkAnalyzer", "PopulationAnalyzer", "TreeLinkageAnalyzer",
 ]

@@ -23,7 +23,6 @@ This index separates the normative protocol, reference implementation, operating
 - **Reference** — [Mathematical foundations](mathematical-foundations.md): decision problems, transfer conditions, statistical guarantees, portfolio composition, proofs, and open obligations.
 - **Reference** — [Formally verified protocol core](formal-verification.md): Lean semantics, theorem inventory, trusted base, reproduction procedure, correspondence gap, and non-claims.
 - **Reference** — [Protocol adversarial evaluation](protocol-evaluation.md): positive controls, unsafe transcript mutations, reproduction, and limits of the mutation score.
-- **Reference** — [Post-critique design-control validation](../reproduction/design-control-validation/README.md): retained raw outcomes for twelve targeted implementation regressions and the open binary64 boundary diagnostic.
 - **Guide** — [Protocol instantiation case studies](protocol-case-studies.md): bounded XGBoost, LLM, and authenticated-lifecycle examples with explicit claim boundaries.
 
 Versioned machine contracts are indexed in [`schemas/README.md`](../schemas/README.md), and the Lean package has its own [`formal/lean/README.md`](../formal/lean/README.md).
@@ -33,7 +32,7 @@ Versioned machine contracts are indexed in [`schemas/README.md`](../schemas/READ
 - **Guide** — [Local XGBoost worker](xgboost.md): configure and run the local audit worker on trusted CSV/Parquet input and interpret its non-clearing evidence outside the trusted decision core.
 - **Experimental** — [LLM watermark and canary testing](llm-watermark-canary.md): preregister output-watermark detection and synthetic training-data exposure audits.
 - **Experimental** — [Advisory retrieval and MCP integration](rag-mcp.md): local hashed retrieval, MCP tools, service adapters, and experimental workflow boundaries.
-- **Experimental** — [SACRO-ML-inspired red-team tools](sacro-ml-red-team.md): structural-disclosure and worst-case-membership tools; the enclosing empirical workflow separately adds corruption and occlusion screens. None has clearance authority.
+- **Experimental/Reference boundary** — [SACRO-ML-inspired red-team tools](sacro-ml-red-team.md): exploratory structural-disclosure and membership tools, plus the reference attack-catalog/battery/positive-control contracts that let an approved isolated worker submit floor-or-screen results. No red-team component can clear or authorize.
 
 Executable contract demonstrations are indexed in [`examples/README.md`](../examples/README.md). Optional benchmark and evidence-generation entry points are indexed in [`scripts/README.md`](../scripts/README.md).
 

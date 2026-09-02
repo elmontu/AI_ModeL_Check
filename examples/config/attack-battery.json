@@ -1,0 +1,48 @@
+{
+  "schema_version": "1.0",
+  "configuration_id": "demo-membership-battery-v1",
+  "catalog_sha256": "94c9d8423df94f361c3a0471502a0b38ad060c620ae545bc74ed7046d7934477",
+  "frozen_at": "2026-08-17T00:00:00Z",
+  "resource_limits": {
+    "timeout_seconds": 300,
+    "memory_megabytes": 2048,
+    "cpu_cores": 2.0,
+    "maximum_records": 10000,
+    "maximum_output_bytes": 10000000
+  },
+  "runs": [
+    {
+      "run_id": "membership-loss-run-1",
+      "attack_id": "membership_loss_threshold",
+      "attack_version": "1.0.0",
+      "metric": "equal_prior_membership_success",
+      "evidence_role": "blocking_floor",
+      "seed": 20260817,
+      "repetitions": 1,
+      "confidence": 0.95,
+      "comparison_family_size": 1,
+      "target_fpr": null,
+      "positive_control_ids": [
+        "known-leak-membership-control"
+      ],
+      "parameters": {
+        "threshold_calibration": "disjoint_reference_model",
+        "audit_partition": "disjoint_target_holdout"
+      }
+    }
+  ],
+  "positive_controls": [
+    {
+      "control_id": "known-leak-membership-control",
+      "attack_id": "membership_loss_threshold",
+      "control_kind": "known_leak_binomial",
+      "reference_artifact_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "reference_dataset_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "minimum_trials": 100,
+      "minimum_detection_lower_bound": 0.8,
+      "confidence": 0.95
+    }
+  ],
+  "stopping_rule": "execute every frozen run and positive control exactly once",
+  "multiplicity_method": "bonferroni"
+}

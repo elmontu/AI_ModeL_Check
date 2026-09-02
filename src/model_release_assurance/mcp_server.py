@@ -31,8 +31,13 @@ def create_server(repository_root: Path):
 
     @server.tool()
     def list_red_team_tools() -> dict[str, Any]:
-        """List SACRO-ML-inspired red-team services and prospective MCP tools."""
+        """Return the versioned red-team catalog and its safe execution boundary."""
         return service.list_red_team_tools()
+
+    @server.tool()
+    def validate_attack_battery(submission: dict[str, Any]) -> dict[str, Any]:
+        """Validate a complete attack-battery contract; never execute or authorize."""
+        return service.validate_attack_battery(submission)
 
     @server.tool()
     def search_assurance_docs(query: str, limit: int = 5) -> dict[str, Any]:

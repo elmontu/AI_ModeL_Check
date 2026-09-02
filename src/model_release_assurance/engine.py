@@ -14,13 +14,18 @@ from .integrity import (
     verify_source_file,
 )
 from .models import (
+    AttackBatteryInput,
+    AttackBatteryStatus,
     AssessmentReport,
     AssessmentRequest,
     AssessmentScope,
+    CeilingAttackBatteryMode,
     EvidenceContext,
     EvidenceRecord,
     PolicyBundle,
 )
+from .analyzers.attack_battery import _positive_control_passes
+from .analyzers.attack import clopper_pearson_upper
 from .services import AnalyzerServiceRegistry, LocalAnalyzerService, default_analyzer_service_registry
 from .runtime_identity import current_runtime_identity
 from .version import VERSION
@@ -51,6 +56,12 @@ class AssuranceEngine:
         )
 
     def assess(self, request: AssessmentRequest, base_dir: Path) -> AssessmentReport:
+        # Pydantic's model_copy/model_construct helpers intentionally skip
+        # validation. Reparse the complete governed document at the trust-core
+        # boundary so an in-process caller cannot bypass cross-model bindings.
+        request = AssessmentRequest.model_validate(
+            request.model_dump(mode="python", exclude_none=False)
+        )
         policy_path = verify_source_file(
             request.policy.policy_path,
             request.policy.policy_sha256,
@@ -135,6 +146,21 @@ class AssuranceEngine:
                 raise ValueError("evidence was observed after policy expiry")
             if request.release.expires_at is not None and value.evidence_context.observed_at >= request.release.expires_at:
                 raise ValueError("evidence was observed after release-contract expiry")
+            if isinstance(value, AttackBatteryInput):
+                execution = value.worker_output
+                if execution.started_at < policy.effective_from:
+                    raise ValueError("attack-worker execution predates the effective policy")
+                if execution.completed_at > now + timedelta(minutes=5):
+                    raise ValueError("attack-worker completion is implausibly in the future")
+                if policy.expires_at is not None and execution.completed_at >= policy.expires_at:
+                    raise ValueError("attack-worker execution completed after policy expiry")
+                if (
+                    request.release.expires_at is not None
+                    and execution.completed_at >= request.release.expires_at
+                ):
+                    raise ValueError(
+                        "attack-worker execution completed after release-contract expiry"
+                    )
             service_records = service.analyze(request.release, threat, value)
             for record in service_records:
                 if record.threat_id != threat.threat_id:
@@ -166,6 +192,10 @@ class AssuranceEngine:
         evidence_ids = [record.evidence_id for record in evidence]
         if len(evidence_ids) != len(set(evidence_ids)):
             raise ValueError("analyzers produced duplicate evidence identifiers")
+        battery_statuses = {
+            threat.threat_id: self._attack_battery_status(request, policy, threat.threat_id)
+            for threat in request.threats
+        }
         decisions = tuple(
             decide_threat(
                 threat,
@@ -173,6 +203,7 @@ class AssuranceEngine:
                 request.release,
                 evidence,
                 request.policy.policy_sha256,
+                battery_statuses[threat.threat_id],
             )
             for threat in request.threats
         )
@@ -207,7 +238,7 @@ class AssuranceEngine:
             overall_verdict=decide_overall(decisions),
             runtime_identity=current_runtime_identity(
                 component_id="assurance_engine",
-                component_version="AssessmentReport/4.0",
+                component_version="AssessmentReport/5.0",
                 algorithm_profile={
                     "ordinary_decision_arithmetic": "Python binary64",
                     "decision_rule": "mandatory threats clear and no threat blocks",
@@ -272,3 +303,206 @@ class AssuranceEngine:
                 "request omits policy-required analyzers: "
                 f"{sorted(f'{threat}/{analyzer}' for threat, analyzer in missing_analyzers)}"
             )
+
+        battery_counts: dict[str, int] = {}
+        for value in request.analyzer_inputs:
+            if value.analyzer == "attack_battery":
+                battery_counts[value.threat_id] = battery_counts.get(value.threat_id, 0) + 1
+        duplicate_batteries = {
+            threat_id for threat_id, count in battery_counts.items() if count != 1
+        }
+        if duplicate_batteries:
+            raise ValueError(
+                "each threat must submit exactly one complete attack battery: "
+                f"{sorted(duplicate_batteries)}"
+            )
+
+    @staticmethod
+    def _attack_battery_status(
+        request: AssessmentRequest,
+        policy: PolicyBundle,
+        threat_id: str,
+    ) -> AttackBatteryStatus:
+        rule = next(rule for rule in policy.rules if rule.threat_id == threat_id)
+        mode = rule.ceiling_attack_battery_mode
+        if mode is CeilingAttackBatteryMode.PROHIBITED:
+            return AttackBatteryStatus(mode=mode, satisfied=False)
+        if mode is CeilingAttackBatteryMode.WAIVED:
+            return AttackBatteryStatus(
+                mode=mode,
+                satisfied=True,
+                waiver_reason=rule.ceiling_attack_battery_waiver_reason,
+            )
+
+        requirement = next(
+            item for item in policy.attack_battery_requirements if item.threat_id == threat_id
+        )
+        candidates = [
+            value
+            for value in request.analyzer_inputs
+            if isinstance(value, AttackBatteryInput) and value.threat_id == threat_id
+        ]
+        if len(candidates) != 1:
+            return AttackBatteryStatus(
+                mode=mode,
+                requirement_id=requirement.requirement_id,
+                required_attack_ids=requirement.required_attack_ids,
+                satisfied=False,
+                failure_reasons=("exactly one complete attack battery was not supplied",),
+            )
+        battery = candidates[0]
+        output = battery.worker_output
+        if battery.catalog_sha256 not in requirement.accepted_catalog_sha256s:
+            raise ValueError("attack catalog digest is not accepted by policy")
+        if battery.configuration_sha256 not in requirement.accepted_configuration_sha256s:
+            raise ValueError("complete attack-battery configuration is not accepted by policy")
+        if output.worker.service_id not in requirement.accepted_worker_service_ids:
+            raise ValueError("attack-worker service identity is not accepted by policy")
+        if AssuranceEngine._semantic_version(
+            output.worker.service_version
+        ) < AssuranceEngine._semantic_version(requirement.minimum_worker_service_version):
+            raise ValueError("attack-worker service version is below the policy minimum")
+        if (
+            output.worker.implementation_sha256
+            not in requirement.accepted_worker_implementation_sha256s
+        ):
+            raise ValueError("attack-worker implementation digest is not accepted by policy")
+        isolation = output.isolation
+        if isolation.worker_image_sha256 not in requirement.accepted_worker_image_sha256s:
+            raise ValueError("attack-worker image digest is not accepted by policy")
+
+        failures: list[str] = []
+        required = set(requirement.required_attack_ids)
+        catalogued = {entry.attack_id for entry in battery.catalog.entries}
+        planned = {plan.attack_id for plan in battery.configuration.runs}
+        missing_catalog = required - catalogued
+        missing_plans = required - planned
+        if missing_catalog:
+            failures.append(f"required attacks absent from catalog: {sorted(missing_catalog)}")
+        if missing_plans:
+            failures.append(f"required attacks absent from frozen battery: {sorted(missing_plans)}")
+
+        results_by_run = {result.run_id: result for result in output.results}
+        completed_attack_ids: set[str] = set()
+        passing_controls: set[str] = set()
+        control_plans = {
+            control.control_id: control for control in battery.configuration.positive_controls
+        }
+        control_results = {
+            result.control_id: result for result in output.positive_controls
+        }
+        control_pass: dict[str, bool] = {}
+        for control_id, plan in control_plans.items():
+            passed, replayed_lower = _positive_control_passes(
+                plan,
+                control_results[control_id],
+            )
+            if (
+                passed
+                and plan.control_kind == "known_leak_binomial"
+                and (
+                    replayed_lower is None
+                    or replayed_lower
+                    < requirement.minimum_positive_control_detection_lower_bound
+                )
+            ):
+                passed = False
+            control_pass[control_id] = passed
+            if passed:
+                passing_controls.add(control_id)
+
+        for attack_id in sorted(required & planned):
+            plans = [
+                plan for plan in battery.configuration.runs if plan.attack_id == attack_id
+            ]
+            run_failures = [
+                plan.run_id
+                for plan in plans
+                if results_by_run[plan.run_id].status != "succeeded"
+            ]
+            failed_controls = sorted({
+                control_id
+                for plan in plans
+                for control_id in plan.positive_control_ids
+                if not control_pass[control_id]
+            })
+            ineligible_floor_runs: list[str] = []
+            threat = next(item for item in request.threats if item.threat_id == threat_id)
+            for plan in plans:
+                result = results_by_run[plan.run_id]
+                if plan.evidence_role != "blocking_floor":
+                    ineligible_floor_runs.append(plan.run_id)
+                    continue
+                if result.status != "succeeded":
+                    continue
+                if plan.metric == "membership_tpr_at_fpr":
+                    assert result.false_positives is not None
+                    assert result.nonmember_trials is not None
+                    assert result.target_fpr is not None
+                    expected_target_fpr = threat.metric_parameters.get("target_fpr")
+                    bounds_per_comparison = 2
+                    simultaneous_bound_count = (
+                        plan.comparison_family_size * bounds_per_comparison
+                    )
+                    per_comparison_confidence = 1.0 - (
+                        (1.0 - plan.confidence) / simultaneous_bound_count
+                    )
+                    fpr_upper = clopper_pearson_upper(
+                        result.false_positives,
+                        result.nonmember_trials,
+                        per_comparison_confidence,
+                    )
+                    if (
+                        expected_target_fpr is None
+                        or abs(result.target_fpr - expected_target_fpr) > 1e-15
+                        or fpr_upper > result.target_fpr
+                    ):
+                        ineligible_floor_runs.append(plan.run_id)
+            if run_failures:
+                failures.append(
+                    f"required attack {attack_id} has non-successful runs: {run_failures}"
+                )
+            if failed_controls:
+                failures.append(
+                    f"required attack {attack_id} has failed positive controls: "
+                    f"{failed_controls}"
+                )
+            if ineligible_floor_runs:
+                failures.append(
+                    f"required attack {attack_id} has runs that cannot produce a "
+                    f"validated floor: {ineligible_floor_runs}"
+                )
+            if not run_failures and not failed_controls and not ineligible_floor_runs:
+                completed_attack_ids.add(attack_id)
+
+        unsafe_isolation = []
+        if not isolation.run_as_non_root:
+            unsafe_isolation.append("worker is not declared non-root")
+        if not isolation.no_new_privileges:
+            unsafe_isolation.append("worker lacks no-new-privileges")
+        if not isolation.read_only_root_filesystem:
+            unsafe_isolation.append("worker root filesystem is writable")
+        if isolation.network_access != "none":
+            unsafe_isolation.append("worker network access is not disabled")
+        if isolation.writable_audit_path or isolation.writable_key_path or isolation.writable_governance_path:
+            unsafe_isolation.append("worker can write an audit, key, or governance path")
+        failures.extend(unsafe_isolation)
+        if requirement.minimum_isolation_assurance == "externally_attested":
+            if isolation.assurance != "externally_attested":
+                failures.append("policy requires externally attested worker isolation")
+            elif isolation.attester_key_id not in requirement.accepted_attester_key_ids:
+                failures.append("worker isolation attester is not accepted by policy")
+            else:
+                failures.append(
+                    "external isolation signature verification is unavailable in the reference core"
+                )
+
+        return AttackBatteryStatus(
+            mode=mode,
+            requirement_id=requirement.requirement_id,
+            required_attack_ids=requirement.required_attack_ids,
+            completed_attack_ids=tuple(sorted(completed_attack_ids)),
+            passing_positive_control_ids=tuple(sorted(passing_controls)),
+            satisfied=not failures,
+            failure_reasons=tuple(failures),
+        )
