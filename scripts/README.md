@@ -59,6 +59,11 @@ trained models, complete run outputs, or final study seal.
 | `run_sample_model_audit_workflow.py` | Exercise the hash-bound sample CNN, LSTM, XGBoost, and LLM artifact workflow and family-specific assurance routing. | Experimental synthetic functional workflow; every model result has `can_clear: false`. |
 | `run_empirical_xgboost_mlp_workflow.py` | Train native XGBoost and MLP models over repeated synthetic datasets, measure utility and attacks, and invoke the focused red-team registry. | Experimental empirical workflow; emits screens or attack floors and always returns `no_release_authorization`. |
 | `run_public_privacy_audit.py` | Run the RAG-planned public-data CNN, LSTM, XGBoost, and compact Transformer privacy experiment. | Experimental worker requiring network access, experiment dependencies, and PyTorch; weak or null attacks never clear. See [`reproduction/public-privacy/README.md`](../reproduction/public-privacy/README.md). |
+| `run_llm_training_hook_audit.py` | Sequentially fine-tune pinned DistilGPT2, OPT-125M, and Pythia-160M revisions for 512 steps each on the same deterministic 8,192-row projection from a digest-verified WildChat-4.8M shard; collect model-specific bounded aggregate activation/gradient telemetry; evaluate the untouched 1,024-row holdout before and after; and compare prior, metadata, loss, combined, and exact-roster knowledge profiles. | Experimental network/GPU worker using separate telemetry streams and a fresh run directory per invocation. Its disjoint 256-member/256-nonmember calibration and audit cells are underpowered, descriptive, noncausal, and nonmonotone; exact roster disclosure is separate; real human-user/ChatGPT content requires independent rights review; OPT's production/commercial legal gate is blocked; Pythia deployment requires policy/manual review; and no result clears or authorizes. See [`reproduction/llm-training-hook/README.md`](../reproduction/llm-training-hook/README.md). |
+| `run_vision_training_hook_audit.py` | Train canonical torchvision AlexNet and DenseNet-121 from scratch for one epoch each on the complete deterministic 21,600-image training split from the digest-pinned 27,000-image EuroSAT RGB archive; evaluate the complete 5,400-image test split before and after; collect bounded aggregate hook telemetry; and run brightness, Gaussian-noise, and FGSM screens on 512 real test images. | Experimental network/GPU worker using a fresh run directory and separate telemetry ledger per architecture. It measures execution and scale over a real satellite-image corpus; one epoch and the bounded perturbations do not establish quality, privacy, security, robustness, fairness, or production readiness. Dataset/modified Sentinel terms remain under manual review, and every result is non-clearing and non-authorizing. See [`reproduction/vision-training-hook/README.md`](../reproduction/vision-training-hook/README.md). |
+| `run_llm_composition_scaling.py` | Run fresh DistilGPT2/OPT-125M/Pythia-160M cells at 2,048, 4,096, and 8,192 WildChat training rows over five seeds, then evaluate seven same-roster output subsets and a separately labelled cumulative-exposure sensitivity path. | Experimental child worker with a bounded resumable journal and aggregate-only suite export. Subset contrasts use the mean of their constituent singleton results; protected-roster exposure and license/policy gates remain separate. |
+| `run_vision_composition_scaling.py` | Run AlexNet/DenseNet-121 at 5,400, 10,800, and 21,600 EuroSAT training images over five seeds, with matched batch-size and hook/no-hook cells, probability-average output composition, real-image perturbations, and registered FGSM source-to-target transfer. | Experimental child worker. Hook effects, batch effects, ensemble screens, and attack transfer remain descriptive and cannot block, clear, or authorize. |
+| `run_composition_scaling_suite.py` | Validate and optionally serialize both child workers, verify their completion manifests and aggregate exports, construct all 31 non-empty five-model resource/gate portfolios, and publish a final suite manifest last. | Experimental coordinator with a 12-hour/20-GiB fail-closed envelope. It composes scalars only within a shared protected-unit population; mixed-modality portfolios remain vectors. See [`reproduction/composition-scaling/README.md`](../reproduction/composition-scaling/README.md). |
 
 ## Validation and maintenance
 
@@ -80,6 +85,16 @@ trained models, complete run outputs, or final study seal.
   `requirements-experiments.txt` or the `experiments` extra.
 - `run_public_privacy_audit.py` additionally requires the
   `privacy-experiments` extra and its PyTorch runtime.
+- `run_llm_training_hook_audit.py` uses the `llm-experiments` extra (PyTorch,
+  Transformers, tokenizers, safetensors, and PyArrow) in an isolated experiment
+  environment; its report records the exact resolved runtime.
+- `run_vision_training_hook_audit.py` uses the `vision-experiments` extra
+  (PyTorch and torchvision). Its registered full-EuroSAT execution requires
+  the exact CUDA runtime declared by the experiment; the focused CI tier is a
+  CPU-only contract/hook test and neither downloads nor trains on EuroSAT.
+- The composition-scaling coordinator uses both experiment tiers. Its focused
+  tests validate configuration, closure, journaling, authority, and export
+  contracts without downloading data or executing the registered GPU matrix.
 - The live MCP server requires the `mcp` extra; the worker scripts themselves
   remain separate processes.
 - Formal proof replay requires the Lean toolchain pinned under `formal/lean/`.

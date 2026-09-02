@@ -1,0 +1,267 @@
+{
+  "schema_version": "1.0",
+  "experiment_id": "vision-eurosat-hook-composition-scaling-v1",
+  "experimental_only": true,
+  "authorization_eligible": false,
+  "assessment_input_emitted": false,
+  "attack_battery_eligible": false,
+  "can_clear": false,
+  "can_block": false,
+  "decision": "no_release_authorization",
+  "requires_approved_recollection": true,
+  "base_vision_protocol": {
+    "config_logical_name": "reproduction/vision-training-hook/config.json",
+    "config_bytes_sha256": "3f2ef402e9e2a6fb3a2fb47a930de30384056682d85dae6c2134694dd6aa1412",
+    "config_canonical_sha256": "4cc042982cadbe6d713edf695ab2373c7ef9f07fffaef9094b7963d83f273f2b",
+    "runner_logical_name": "scripts/run_vision_training_hook_audit.py",
+    "runner_sha256": "85261cd39de3036211fff174b7b9bce5aaf87a69baac17cd42b03aff9eb03e81",
+    "hook_logical_name": "scripts/llm_training_hooks.py",
+    "hook_sha256": "595de99355974866524ca1e11c0cd4d2d14c80a0846657daea36d66ee26ff33c",
+    "dataset_archive_sha256": "b4f5b234ecb7d7ff9c6cddb046543b4717c53fd6e9815be6c0e80cc614f51b90",
+    "train_roster_sha256": "3e26b9ee7014071cd257715e8c0895f478d9256464f3afb40a26bfed3c148b75",
+    "test_roster_sha256": "c0e582d0dd8b88b41ffb08998eb0fcef5d31742815098b18c7c6e8ef2e1f0387"
+  },
+  "runtime": {
+    "required_device_type": "cuda",
+    "required_gpu_name": "NVIDIA L4",
+    "torch_version": "2.13.0",
+    "torchvision_version": "0.28.0",
+    "num_workers": 0,
+    "deterministic_algorithms_mode": "warn_only",
+    "known_nondeterministic_cuda_kernels": ["adaptive_avg_pool2d_backward_cuda"],
+    "bitwise_reproducible": false,
+    "cudnn_benchmark": false,
+    "cudnn_deterministic": true
+  },
+  "resource_budget": {
+    "wall_clock_seconds": 43200,
+    "peak_gpu_reserved_bytes": 21474836480,
+    "peak_host_rss_bytes": 21474836480,
+    "max_aggregate_artifact_bytes": 21474836480,
+    "check_before_each_training_or_composition_phase": true,
+    "check_after_each_training_or_composition_phase": true,
+    "optional_deadline_utc_may_only_tighten": true,
+    "budget_breach_emits_completion": false
+  },
+  "matrix": {
+    "architectures": [
+      {
+        "key": "alexnet",
+        "constructor": "alexnet",
+        "hook_modules": ["features.2", "features.12", "classifier.6"]
+      },
+      {
+        "key": "densenet121",
+        "constructor": "densenet121",
+        "hook_modules": ["features.conv0", "features.denseblock4", "classifier"]
+      }
+    ],
+    "dataset_scales": [
+      {
+        "key": "nested_5400",
+        "rows": 5400,
+        "fraction_of_full_training_roster": 0.25,
+        "class_counts": {
+          "AnnualCrop": 600,
+          "Forest": 600,
+          "HerbaceousVegetation": 600,
+          "Highway": 500,
+          "Industrial": 500,
+          "Pasture": 400,
+          "PermanentCrop": 500,
+          "Residential": 600,
+          "River": 500,
+          "SeaLake": 600
+        },
+        "relative_path_set_sha256": "a7e42ed008ea1d3bee3c4c585b893242a6fa3b97fa2a7dfe33b90058fb0b57f7"
+      },
+      {
+        "key": "nested_10800",
+        "rows": 10800,
+        "fraction_of_full_training_roster": 0.5,
+        "class_counts": {
+          "AnnualCrop": 1200,
+          "Forest": 1200,
+          "HerbaceousVegetation": 1200,
+          "Highway": 1000,
+          "Industrial": 1000,
+          "Pasture": 800,
+          "PermanentCrop": 1000,
+          "Residential": 1200,
+          "River": 1000,
+          "SeaLake": 1200
+        },
+        "relative_path_set_sha256": "03a0b4cdf04a0cf84091114bb3e6d5c55dc70f02978aa7a8cd80e810377318f0"
+      },
+      {
+        "key": "nested_21600",
+        "rows": 21600,
+        "fraction_of_full_training_roster": 1.0,
+        "class_counts": {
+          "AnnualCrop": 2400,
+          "Forest": 2400,
+          "HerbaceousVegetation": 2400,
+          "Highway": 2000,
+          "Industrial": 2000,
+          "Pasture": 1600,
+          "PermanentCrop": 2000,
+          "Residential": 2400,
+          "River": 2000,
+          "SeaLake": 2400
+        },
+        "relative_path_set_sha256": "3e26b9ee7014071cd257715e8c0895f478d9256464f3afb40a26bfed3c148b75"
+      }
+    ],
+    "batch_sizes": [64, 128],
+    "replicate_seeds": [3407, 499625614, 4288481424, 2669540432, 2937338177],
+    "hook_profiles": [
+      {
+        "key": "no_hook",
+        "enabled": false,
+        "module_policy": "none"
+      },
+      {
+        "key": "current_registered",
+        "enabled": true,
+        "module_policy": "base_model_exact_allowlist"
+      }
+    ],
+    "epochs_per_cell": 1,
+    "training_scales_are_independent_fresh_model_cells": true,
+    "max_hook_events_per_cell": 2500,
+    "paired_factor_combinations": 60,
+    "total_training_cells": 120,
+    "pair_order": "sha256(pair_id)_parity_alternates_hook_order",
+    "required_pair_matches": [
+      "initial_state_sha256",
+      "first_batch_manifest_sha256",
+      "first_pre_backward_loss_hex",
+      "batch_order_sha256"
+    ]
+  },
+  "measurement": {
+    "timed_region": "complete_single_epoch_forward_backward_hook_optimizer",
+    "warmup_excluded": false,
+    "reported_cell_metrics": [
+      "duration_seconds",
+      "examples_per_second",
+      "peak_gpu_allocated_bytes",
+      "peak_gpu_reserved_bytes",
+      "mean_batch_weighted_cross_entropy",
+      "optimizer_steps",
+      "hook_event_count",
+      "hook_coverage_status"
+    ],
+    "paired_hook_effect_metrics": [
+      "duration_ratio_hooked_over_no_hook",
+      "throughput_ratio_hooked_over_no_hook",
+      "peak_allocated_byte_delta",
+      "final_state_sha256_equal"
+    ],
+    "resource_aggregation": {
+      "wall_clock_seconds": "sum_across_registered_training_cells_per_model",
+      "peak_gpu_reserved_bytes": "maximum_across_registered_training_cells_per_model",
+      "peak_host_rss_bytes": "maximum_process_high_water_observed_after_registered_training_cells_per_model",
+      "artifact_bytes": "sum_model_specific_persisted_artifact_bytes"
+    },
+    "variance_summary": "descriptive_mean_and_sample_standard_deviation_across_five_registered_seeds",
+    "confidence_interval_claimed": false,
+    "causal_claimed": false,
+    "scaling_law_claimed": false,
+    "hardware_generalization_claimed": false
+  },
+  "model_output_composition": {
+    "enabled": true,
+    "reference_cells": {
+      "dataset_scales": ["nested_5400", "nested_10800", "nested_21600"],
+      "batch_size": 128,
+      "hook_profile": "current_registered"
+    },
+    "member_architectures": ["alexnet", "densenet121"],
+    "ensemble_rule": "arithmetic_mean_of_member_class_probabilities",
+    "clean_test_rows": 5400,
+    "perturbation_test_rows": 512,
+    "perturbation_subset_seed": 3407,
+    "conditions": [
+      "clean",
+      "brightness",
+      "gaussian_noise",
+      "alexnet_fgsm",
+      "densenet121_fgsm",
+      "ensemble_fgsm"
+    ],
+    "brightness_factor": 1.25,
+    "gaussian_noise_std": 0.05,
+    "fgsm_epsilon": 0.00784313725490196,
+    "fgsm_norm": "pixel_linf",
+    "fgsm_sources": ["alexnet", "densenet121", "probability_average_ensemble"],
+    "fgsm_threat_model": "untargeted_white_box_true_label_source_probability_nll",
+    "source_target_transfer_matrix_evaluated": true,
+    "primary_pair_contrast": "pair_metric_minus_arithmetic_mean_of_two_singleton_metrics",
+    "best_singleton_contrast_used": false,
+    "attack_success_denominator": "evaluator_clean_correct_examples",
+    "reported_metrics": [
+      "mean_cross_entropy",
+      "top1_accuracy",
+      "attack_success_rate_on_clean_correct",
+      "member_prediction_disagreement",
+      "measured_max_pixel_linf"
+    ],
+    "aggregate_only": true,
+    "descriptive_only": true,
+    "ordered_model_quality_claimed": false,
+    "causal_composition_claimed": false,
+    "release_evidence": false,
+    "suite_export_singleton_ensemble_fgsm_disagreement_encoding": "not_applicable_finite_zero"
+  },
+  "release_interface_scenarios": {
+    "measured_by_training_matrix": false,
+    "risk_ordering_claimed": false,
+    "numerical_risk_score_emitted": false,
+    "scenario_semantics": "policy_only_not_empirical_assessment_evidence",
+    "profiles": [
+      {
+        "key": "M0_label_only",
+        "disclosed": ["predicted_class"],
+        "gate": "MANUAL_REVIEW_REQUIRED"
+      },
+      {
+        "key": "M1_scores",
+        "disclosed": ["class_probabilities", "confidence"],
+        "gate": "PRIVACY_AND_EXTRACTION_REVIEW_REQUIRED"
+      },
+      {
+        "key": "M2_internal_features",
+        "disclosed": ["embeddings", "activations", "per_example_loss"],
+        "gate": "RESTRICTED_AUDITOR_ONLY"
+      },
+      {
+        "key": "M3_source_provenance",
+        "disclosed": ["source_relative_path", "exact_training_roster", "geolocation_if_available"],
+        "gate": "BLOCKED_REDESIGN_REQUIRED"
+      }
+    ]
+  },
+  "artifact_policy": {
+    "raw_images_retained": false,
+    "raw_labels_retained": false,
+    "raw_tensors_retained": false,
+    "per_example_predictions_retained": false,
+    "model_weights_retained": false,
+    "source_paths_retained": false,
+    "aggregate_cell_results_only": true
+  },
+  "output": {
+    "directory": "output/composition-scaling/vision",
+    "fresh_run_directory_required": true,
+    "resume_existing_incomplete_run_directory_allowed": true,
+    "checkpoint_directory": ".checkpoint",
+    "checkpoint_context": "CONTEXT.json",
+    "checkpoint_ledger": "completed-records.jsonl",
+    "run_directory_mode": "0700",
+    "artifact_file_mode": "0600",
+    "json_report": "vision-composition-scaling-report.json",
+    "markdown_report": "vision-composition-scaling-report.md",
+    "completion_manifest": "RUN_COMPLETE.json"
+  }
+}

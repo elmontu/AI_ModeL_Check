@@ -1,0 +1,220 @@
+{
+  "schema_version": "1.1",
+  "experiment_id": "vision-training-hooks-full-eurosat-rgb-v1",
+  "experimental_only": true,
+  "authorization_eligible": false,
+  "assessment_input_emitted": false,
+  "decision": "no_release_authorization",
+  "dataset": {
+    "name": "EuroSAT RGB",
+    "doi": "10.5281/zenodo.7711810",
+    "official_page": "https://zenodo.org/records/7711810",
+    "url": "https://zenodo.org/api/records/7711810/files/EuroSAT_RGB.zip/content",
+    "allowed_redirect_hosts": ["zenodo.org", "www.zenodo.org"],
+    "archive_file": "EuroSAT_RGB.zip",
+    "archive_bytes": 94658721,
+    "max_download_bytes": 94658721,
+    "max_extracted_bytes": 200000000,
+    "extracted_bytes": 91844360,
+    "sha256": "b4f5b234ecb7d7ff9c6cddb046543b4717c53fd6e9815be6c0e80cc614f51b90",
+    "official_md5": "f46e308c4d50d4bf32fedad2d3d62f3b",
+    "loader": "verified_zip_torchvision_imagefolder_no_download",
+    "synthetic_samples": false,
+    "augmented_samples": false,
+    "total_rows": 27000,
+    "expected_unique_image_sha256": 27000,
+    "expected_cross_split_content_overlap": 0,
+    "train_rows": 21600,
+    "test_rows": 5400,
+    "classes": 10,
+    "native_shape": [3, 64, 64],
+    "class_counts": {
+      "AnnualCrop": 3000, "Forest": 3000, "HerbaceousVegetation": 3000,
+      "Highway": 2500, "Industrial": 2500, "Pasture": 2000,
+      "PermanentCrop": 2500, "Residential": 3000, "River": 2500,
+      "SeaLake": 3000
+    },
+    "split": {
+      "algorithm": "per_class_sha256(seed:relative_path)_lexical_ascending",
+      "seed": 3407,
+      "train_fraction": 0.8,
+      "class_stratified": true,
+      "train_relative_path_set_sha256": "3e26b9ee7014071cd257715e8c0895f478d9256464f3afb40a26bfed3c148b75",
+      "test_relative_path_set_sha256": "c0e582d0dd8b88b41ffb08998eb0fcef5d31742815098b18c7c6e8ef2e1f0387"
+    },
+    "extraction_manifest": {
+      "schema_version": "1.0",
+      "canonical_sha256": "ffe4a9c460a2b20b3f2c86898733efaceac581b4d9dfc900fc73e8b553067c61",
+      "canonical_bytes": 3324046,
+      "serialized_sha256": "f09028023218981546f9c4896a4f1b7201e4b73b3bdeb2c0b0fbe0003582a4d3",
+      "serialized_bytes": 4053063,
+      "max_bytes": 4053063,
+      "file_count": 27000,
+      "max_file_bytes": 1000000,
+      "total_file_bytes": 91844360
+    },
+    "decoded_validation": {
+      "format": "JPEG", "mode": "RGB", "width": 64, "height": 64,
+      "expected_images": 27000
+    },
+    "license": "MIT",
+    "sentinel_data_terms_review": "REQUIRED",
+    "rights_gate": "MANUAL_REVIEW_REQUIRED"
+  },
+  "runtime": {
+    "required_device_type": "cuda",
+    "torch_version": "2.13.0",
+    "torchvision_version": "0.28.0",
+    "num_workers": 0,
+    "reproducibility": {
+      "seeded": true,
+      "split_and_batch_order_deterministic": true,
+      "deterministic_algorithms_mode": "warn_only",
+      "known_nondeterministic_cuda_kernels": ["adaptive_avg_pool2d_backward_cuda"],
+      "unexpected_nondeterminism_warning_policy": "fail_closed",
+      "known_warning_must_be_observed": true,
+      "bitwise_reproducible": false,
+      "single_run_variance_estimated": false,
+      "cudnn_benchmark": false,
+      "cudnn_deterministic": true
+    },
+    "expected_provenance": {
+      "schema_version": "1.0",
+      "registration_status": "REGISTERED",
+      "target_environment": "g6.4xlarge_ap-southeast-1_test_environment",
+      "capture_only_can_authorize": false,
+      "exact": {
+        "pillow_version": "12.3.0",
+        "libjpeg_version": "6.2",
+        "torch_distribution_version": "2.13.0",
+        "torch_distribution_regular_file_count": 12122,
+        "torch_distribution_regular_file_bytes": 1095002598,
+        "torch_distribution_file_manifest_sha256": "76538df1ad5967ce5d21f56be3ff629ebe6be5368ad036d5c9d32d3281433aff",
+        "torchvision_distribution_file_manifest_sha256": "39904d6533e71606f5cecb84e9465154cd80e1d9fd5e2d5cb544badd8eb03abd",
+        "torchvision_package_file_manifest_sha256": "dc617ab5a454fb109b82b292ffead82d026049182a8e301afb784af90755fdd5",
+        "alexnet_constructor_source_sha256": "76f0592d51fad133931c234d9168344c52edb89e46861ff15cdef7af7572ab9f",
+        "densenet121_constructor_source_sha256": "76a71797b7873088c27ca0458588861c197528e86421f57525dc8e3ad771c59a",
+        "imagefolder_class_source_sha256": "b2a36e520cf451d82b993e6fdaa1266d8526ef6a402dcf401f23f0c9cd0a8efa",
+        "default_loader_source_sha256": "b2a36e520cf451d82b993e6fdaa1266d8526ef6a402dcf401f23f0c9cd0a8efa",
+        "pillow_distribution_file_manifest_sha256": "39f01f5718215ef5a5ca1e7c86a8c130d5ecc2deefd4cf4323afda6ef82fdf8b",
+        "pillow_package_file_manifest_sha256": "3d51408c3719e09e3adbeb49c1689ea185837b2c19d9835db5c7ccb9d4bf5112",
+        "pillow_image_source_sha256": "04af3f2db7ffdd61e829fa7aa8f5481d394a0a4129a8fd8aa5b13908928fcd6d",
+        "pillow_imaging_extension_sha256": "b22c753cda12721dcecd4e43b329276d9d9a1dbb0a5aaf64cc6d08fdb514525a"
+      }
+    }
+  },
+  "preprocessing": {
+    "resize": [96, 96], "interpolation": "bilinear", "antialias": true,
+    "normalize_mean": [0.485, 0.456, 0.406],
+    "normalize_std": [0.229, 0.224, 0.225],
+    "augmentation": [], "deterministic": true
+  },
+  "models": [
+    {
+      "key": "alexnet", "constructor": "alexnet", "weights": null,
+      "num_classes": 10, "adaptation": "ten_class_output_head_only",
+      "train_all_parameters": true, "remote_code": false,
+      "implementation_source": "https://github.com/pytorch/vision/tree/v0.28.0/torchvision/models",
+      "implementation_license": "BSD-3-Clause",
+      "implementation_license_url": "https://github.com/pytorch/vision/blob/v0.28.0/LICENSE",
+      "hook_modules": ["features.2", "features.12", "classifier.6"]
+    },
+    {
+      "key": "densenet121", "constructor": "densenet121", "weights": null,
+      "num_classes": 10, "adaptation": "ten_class_output_head_only",
+      "train_all_parameters": true, "remote_code": false,
+      "implementation_source": "https://github.com/pytorch/vision/tree/v0.28.0/torchvision/models",
+      "implementation_license": "BSD-3-Clause",
+      "implementation_license_url": "https://github.com/pytorch/vision/blob/v0.28.0/LICENSE",
+      "hook_modules": ["features.conv0", "features.denseblock4", "classifier"]
+    }
+  ],
+  "training": {
+    "seed": 3407, "epochs": 1, "batch_size": 128,
+    "expected_optimizer_steps_per_model": 169,
+    "optimizer": "SGD", "learning_rate": 0.01, "momentum": 0.9,
+    "weight_decay": 0.0005, "shuffle": true,
+    "shuffle_algorithm": "torch_RandomSampler_seeded_generator",
+    "seeded": true, "data_order_deterministic": true,
+    "bitwise_reproducible": false, "torch_dtype": "float32"
+  },
+  "evaluation": {
+    "test_rows": 5400, "batch_size": 256,
+    "checkpoints": ["before_training", "after_training"],
+    "used_for_tuning": false,
+    "metrics": ["mean_cross_entropy", "top1_accuracy", "examples_per_second"]
+  },
+  "hooks": {
+    "collector": "AggregateTrainingHookCollector", "capture": "aggregate_only",
+    "measurements": [
+      "loss", "activation_finite_fraction", "activation_l2_norm",
+      "activation_abs_max", "backward_gradient_finite_fraction",
+      "backward_gradient_l2_norm", "backward_gradient_abs_max",
+      "parameter_gradient_finite_fraction", "parameter_gradient_l2_norm",
+      "parameter_gradient_abs_max", "duration_seconds", "gpu_memory"
+    ],
+    "raw_images_retained": false, "raw_labels_retained": false,
+    "raw_tensors_retained": false, "max_events_per_model": 1500,
+    "fail_on_nonfinite": true
+  },
+  "hook_non_interference_control": {
+    "enabled": true,
+    "seed": 8819,
+    "paired_real_examples": 2,
+    "control_device": "cpu",
+    "exact_match_required": true,
+    "cuda_noninterference_proven": false,
+    "comparisons": ["initial_state_sha256", "loss_hex", "gradient_sha256", "post_step_state_sha256"]
+  },
+  "red_team": {
+    "enabled": true, "test_rows": 512, "seed": 3407,
+    "threat_model": "untargeted_white_box_true_label",
+    "attack_success_denominator": "clean_correct_examples",
+    "fgsm_norm": "pixel_linf",
+    "max_linf_tolerance": 1e-7,
+    "screens": {
+      "brightness_factor": 1.25,
+      "gaussian_noise_std": 0.05,
+      "fgsm_epsilon": 0.00784313725490196
+    },
+    "evidence_direction": "screen",
+    "descriptive_only": true,
+    "can_clear": false,
+    "can_block": false,
+    "attack_battery_eligible": false,
+    "assessment_input_emitted": false,
+    "requires_approved_recollection": true
+  },
+  "metadata_release_profiles": [
+    {"level": "M0_label_only", "disclosed": ["predicted_class"], "gate": "MANUAL_REVIEW_REQUIRED"},
+    {"level": "M1_scores", "disclosed": ["class_probabilities", "confidence"], "gate": "PRIVACY_AND_EXTRACTION_REVIEW_REQUIRED"},
+    {"level": "M2_internal_features", "disclosed": ["embeddings", "activations", "per_example_loss"], "gate": "RESTRICTED_AUDITOR_ONLY"},
+    {"level": "M3_source_provenance", "disclosed": ["source_relative_path", "exact_training_roster", "geolocation_if_available"], "gate": "BLOCKED_REDESIGN_REQUIRED"}
+  ],
+  "roster_release_handling": {
+    "public_benchmark_reconstructible": true,
+    "experiment_roster_visibility": "internal_provenance_not_a_recipient_interface",
+    "protected_exact_roster_can_clear": false,
+    "protected_exact_roster_gate": "BLOCKED_REDESIGN_REQUIRED",
+    "required_remediation": "remove_roster_disclosure_and_reassess_changed_interface"
+  },
+  "release_gate_summary": {
+    "contract_semantics": "illustrative_non_mrap_gate_summary",
+    "mrap_release_contract_required": true,
+    "operational_pass_can_authorize": false,
+    "dataset_rights_gate": "MANUAL_REVIEW_REQUIRED",
+    "model_implementation_license_gate": "DECLARED_REQUIRES_INDEPENDENT_REVIEW",
+    "quality_gate": "NOT_ASSESSED", "privacy_gate": "NOT_ASSESSED",
+    "security_gate": "NOT_ASSESSED", "robustness_gate": "NOT_ASSESSED",
+    "fairness_gate": "NOT_ASSESSED", "production_distribution_gate": "NOT_ASSESSED",
+    "decision": "no_release_authorization"
+  },
+  "output": {
+    "directory": "output/vision-training-hook",
+    "fresh_run_directory_required": true,
+    "json_report": "vision-training-hook-report.json",
+    "markdown_report": "vision-training-hook-report.md",
+    "telemetry_pattern": "training-telemetry-{model_key}.jsonl",
+    "completion_signal": "vision-training-hook-report.json"
+  }
+}

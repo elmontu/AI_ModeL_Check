@@ -45,6 +45,16 @@ mcp = [
 privacy-experiments = [
   "torch>=2.13",
 ]
+llm-experiments = [
+  "pyarrow>=17",
+  "safetensors>=0.4",
+  "torch>=2.13",
+  "transformers>=4.48,<6",
+]
+vision-experiments = [
+  "torch>=2.13,<2.14",
+  "torchvision>=0.28,<0.29",
+]
 
 [project.scripts]
 mra = "model_release_assurance.cli:main"

@@ -18,7 +18,7 @@ MRA produces recommendations and replayable certificates. It does **not** author
 
 Evidence pipelines feed the reference implementation. Its reports then feed an external authority, registry, and serving gateway. Assessment output is never an authorization.
 
-The [integrated system audit specification](docs/system-audit-specification.md) provides one standalone view of the architecture, normative MRAP lifecycle, contracts, controls, formal boundary, deployment obligations, and audit checklist. The [full software architecture](docs/architecture.md) remains the detailed implementation map.
+The [integrated system audit specification](docs/system-audit-specification.md) provides one standalone view of the architecture, normative MRAP lifecycle, contracts, controls, formal boundary, deployment obligations, and audit checklist. The [full software architecture](docs/architecture.md) remains the detailed implementation map. The [2026-09-02 real-data execution audit](docs/real-data-training-hook-audit-2026-09-02.md) records the completed five-model GPU experiments and their non-authorizing release implications.
 
 ## What the toolkit does
 
@@ -120,8 +120,10 @@ python -m pip install -e '.[experiments]'
 ```
 
 The public-privacy worker additionally needs the `privacy-experiments` extra,
-and a live MCP server needs the `mcp` extra. The [script catalog](scripts/README.md#dependency-guide)
-maps each optional capability to its dependency tier.
+the LLM training-hook worker needs the `llm-experiments` extra, the EuroSAT
+vision worker needs the `vision-experiments` extra, and a live MCP server needs
+the `mcp` extra. The [script catalog](scripts/README.md#dependency-guide) maps
+each optional capability to its dependency tier.
 
 | Capability | Entry point | Guide or retained input |
 |---|---|---|
@@ -129,6 +131,10 @@ maps each optional capability to its dependency tier.
 | XGBoost/MLP empirical and red-team workflow | `scripts/run_empirical_xgboost_mlp_workflow.py` | [SACRO-ML-inspired red-team guide](docs/sacro-ml-red-team.md) |
 | Policy-bound attack-battery demonstration | `examples/request.json` | [Attack catalog, positive-control, worker-output, and submission contracts](schemas/README.md) |
 | LLM watermark/canary profile validation | `scripts/validate_llm_audit_profile.py` | [LLM audit guide](docs/llm-watermark-canary.md) |
+| Real-data three-model LLM training-hook and context-risk matrix | `scripts/run_llm_training_hook_audit.py --config reproduction/llm-training-hook/config.json` | [Pinned 8,192/1,024-row WildChat causal-LM matrix](reproduction/llm-training-hook/README.md) |
+| Full real-data vision training-hook and release-context matrix | `scripts/run_vision_training_hook_audit.py --config reproduction/vision-training-hook/config.json` | [All 27,000 EuroSAT images with canonical from-scratch AlexNet/DenseNet-121](reproduction/vision-training-hook/README.md) |
+| Five-model composition-scaling matrix | `scripts/run_composition_scaling_suite.py --config reproduction/composition-scaling/suite-config.json` | [Shared WildChat/EuroSAT scale, seed, hook, attack, and portfolio protocol](reproduction/composition-scaling/README.md) |
+| Curated completed-run evidence | No execution entry point; publication-safe aggregate record | [Five-model WildChat/EuroSAT execution audit](docs/real-data-training-hook-audit-2026-09-02.md) |
 | OpenML, public-privacy, portfolio, and strategic studies | grouped runners in `scripts/` | [`reproduction/`](reproduction/) |
 
 Exploratory tools emit bounded measurements, candidate attack floors, or screens—never authorization.
@@ -138,6 +144,17 @@ positive controls and translates eligible results. Generated research reports, m
 output may use ignored `output/` paths. Governance records must instead be copied transactionally to
 adopter-owned immutable storage with retention, legal-hold, backup, restore, access, and destruction
 rules.
+
+The LLM and vision matrices use real public-source records rather than
+synthetic training fixtures. Their completed baseline runs exercise ingestion,
+model execution, hook coverage, telemetry replay, and report publication. The
+separate composition-scaling design adds three nested real-data scales, five
+registered seeds, same-population output composition, matched vision hook and
+batch controls, and all 31 non-empty five-model portfolio subsets. It does not
+pool incompatible LLM and vision measurements into a scalar, and a committed
+configuration or queued run is not a completed result. None of these studies
+creates statistical proof of safety, privacy, robustness, fairness,
+generalization, production capacity, or release eligibility.
 
 ## Repository map
 

@@ -1,0 +1,352 @@
+{
+  "schema_version": "1.1",
+  "experiment_id": "llm-training-hook-wildchat-three-model-v1",
+  "experimental_only": true,
+  "authorization_eligible": false,
+  "decision": "no_release_authorization",
+  "catalog": {
+    "repository": "https://github.com/mlabonne/llm-datasets",
+    "revision": "67c52949f3153e311f0183db0700cca6d611524b",
+    "readme_sha256": "64047256aa9e8a888707cce2611b9d6ab58b50c3a6498ed5abd853de2c9546a1",
+    "readme_bytes": 24367,
+    "dataset_entry_verified": true
+  },
+  "dataset": {
+    "id": "allenai/WildChat-4.8M",
+    "revision": "c827c6df8fcf008219ffaffa4d1dd77491099367",
+    "file": "data/train-00000-of-00086.parquet",
+    "url": "https://huggingface.co/datasets/allenai/WildChat-4.8M/resolve/c827c6df8fcf008219ffaffa4d1dd77491099367/data/train-00000-of-00086.parquet",
+    "sha256": "6df660dca78dd92b865bef09b928992ceb6c913b4f06082315876a5997ad2eaa",
+    "bytes": 125527585,
+    "license": "ODC-By-1.0",
+    "governance_sources": {
+      "dataset_card": {
+        "file": "README.md",
+        "url": "https://huggingface.co/datasets/allenai/WildChat-4.8M/resolve/c827c6df8fcf008219ffaffa4d1dd77491099367/README.md",
+        "bytes": 14962,
+        "sha256": "946c2526ed254c35380b9366b3ca1c1bded65695c21c388194e1b643acac70c6"
+      },
+      "license_file": {
+        "file": "LICENSE.md",
+        "url": "https://huggingface.co/datasets/allenai/WildChat-4.8M/resolve/c827c6df8fcf008219ffaffa4d1dd77491099367/LICENSE.md",
+        "bytes": 19947,
+        "sha256": "a7c7f6bdb20d261b8726c7594afb5832b36926e0cabfa116c41f58625bbc776c"
+      },
+      "dataset_card_license_declaration": "odc-by",
+      "content_rights_cleared": false
+    },
+    "loader": "direct_parquet",
+    "trust_remote_code": false,
+    "cache_policy": {
+      "retain_raw_source_for_offline_replay": true,
+      "file_mode": "0600",
+      "directory_mode": "0700",
+      "include_in_recipient_package": false,
+      "operator_retention_and_deletion_policy_required": true
+    },
+    "record_adapter": "wildchat_first_user_assistant_turn_v1",
+    "projected_columns": [
+      "conversation_hash",
+      "conversation.list.element.content",
+      "conversation.list.element.role",
+      "conversation.list.element.turn_identifier",
+      "turn",
+      "language",
+      "model",
+      "toxic",
+      "redacted"
+    ],
+    "excluded_sensitive_columns": [
+      "timestamp",
+      "openai_moderation",
+      "detoxify_moderation",
+      "state",
+      "country",
+      "hashed_ip",
+      "header",
+      "conversation.list.element.created",
+      "conversation.list.element.header",
+      "conversation.list.element.hashed_ip",
+      "conversation.list.element.country",
+      "conversation.list.element.state",
+      "conversation.list.element.openai_id",
+      "conversation.list.element.temperature",
+      "conversation.list.element.timestamp",
+      "conversation.list.element.token_counter",
+      "conversation.list.element.top_p",
+      "conversation.list.element.system_fingerprint",
+      "conversation.list.element.usage"
+    ],
+    "eligibility": {
+      "first_pair_roles": ["user", "assistant"],
+      "require_nonempty_content": true,
+      "require_first_pair_turn_identifiers": true,
+      "language": "English",
+      "require_row_toxic_false": true,
+      "require_row_redacted_false": true,
+      "deduplicate_exact_first_pair": true
+    },
+    "source_scale": {
+      "dataset_conversations": 3199860,
+      "dataset_size_category": "1M<n<10M",
+      "dataset_card_uncompressed_bytes": 42645714270,
+      "registered_shards": 86,
+      "selected_shard_rows": 37208,
+      "selected_shard_eligible_before_deduplication": 16135,
+      "selected_shard_eligible_after_deduplication": 15730
+    },
+    "selection_algorithm": "sha256(seed:id) lexical ascending",
+    "seed": 3407,
+    "rows": {
+      "total": 9216,
+      "train": 8192,
+      "holdout": 1024
+    }
+  },
+  "models": [
+    {
+      "key": "distilgpt2",
+      "id": "distilbert/distilgpt2",
+      "revision": "2290a62682d06624634c1f46a6ad5be0f47f38aa",
+      "owner": "Hugging Face",
+      "license": "Apache-2.0",
+      "model_card_url": "https://huggingface.co/distilbert/distilgpt2/blob/2290a62682d06624634c1f46a6ad5be0f47f38aa/README.md",
+      "use_safetensors": true,
+      "trust_remote_code": false,
+      "artifacts": [
+        {"file": "README.md", "bytes": 10992, "sha256": "111f8d09ac565c745d91df88929147159eaa62b2e58e03943a2e03c1a1439ad7", "role": "governance"},
+        {"file": "config.json", "bytes": 762, "sha256": "4ec5947c1d59fee6212cdf3b0ec1a53eac02092554c5ff0a733488cbd2c64f3a", "role": "execution"},
+        {"file": "generation_config.json", "bytes": 124, "sha256": "b90eadacf585a743a30ea51e8b5c88b8d282a2a34dc0c7e556d0987cdbd68805", "role": "execution"},
+        {"file": "merges.txt", "bytes": 456318, "sha256": "1ce1664773c50f3e0cc8842619a93edc4624525b728b188a9e0be33b7726adc5", "role": "execution"},
+        {"file": "model.safetensors", "bytes": 352824413, "sha256": "e1ff18884359fe8beb795a5f414feb85a6ce3d929ad019c0d958c039d2b94a1b", "role": "weights"},
+        {"file": "tokenizer.json", "bytes": 1355256, "sha256": "8414cab924d8b9b33013f0d221c5862f365ee9be39c5c2bfae8a5a9e970478a6", "role": "execution"},
+        {"file": "tokenizer_config.json", "bytes": 26, "sha256": "5e04eb606e3a1583530a42e36c2a6b6615c86f34fe77e44d9ddeb43ff940931f", "role": "execution"},
+        {"file": "vocab.json", "bytes": 1042301, "sha256": "196139668be63f3b5d6574427317ae82f612a97c5d1cdaf36ed2256dbf636783", "role": "execution"}
+      ],
+      "hook_modules": [
+        "transformer.h.0",
+        "transformer.h.5"
+      ]
+    },
+    {
+      "key": "meta-opt-125m",
+      "id": "facebook/opt-125m",
+      "revision": "27dcfa74d334bc871f3234de431e71c6eeba5dd6",
+      "owner": "Meta",
+      "license": "OPT-175B-license/non-commercial-research-only",
+      "license_url": "https://huggingface.co/facebook/opt-125m/blob/27dcfa74d334bc871f3234de431e71c6eeba5dd6/LICENSE.md",
+      "legal_production_commercial_gate": "BLOCKED",
+      "use_safetensors": false,
+      "trust_remote_code": false,
+      "weights_only": true,
+      "weight_serialization": "pinned_legacy_pytorch",
+      "artifacts": [
+        {"file": "LICENSE.md", "bytes": 11117, "sha256": "11203fa656a6dfd929ded198012b18d5d0f2b95e24d13298be37b70c327329a4", "role": "governance"},
+        {"file": "README.md", "bytes": 7099, "sha256": "7de0df51ed16643814194409c9d6e1cb928db8bb3e0d16ed29c49cb6390607c0", "role": "governance"},
+        {"file": "config.json", "bytes": 651, "sha256": "54162c9cd0377110df1859dfabebb106fc0988c8aadb88207ce1ee0d34985df6", "role": "execution"},
+        {"file": "generation_config.json", "bytes": 137, "sha256": "d37de99f9835d7a4d0916257f724504d12c4a668f36a50b2d42e09ba4ebd05d5", "role": "execution"},
+        {"file": "merges.txt", "bytes": 456318, "sha256": "1ce1664773c50f3e0cc8842619a93edc4624525b728b188a9e0be33b7726adc5", "role": "execution"},
+        {"file": "pytorch_model.bin", "bytes": 250540281, "sha256": "2d74da6615135c58cf3cf9ad4cb11e7c613ff9e55fe658a47ab83b6c8d1174a9", "role": "weights"},
+        {"file": "special_tokens_map.json", "bytes": 441, "sha256": "0f3cd5f307a2735cfee31ddf33be88655e8be165ee2cdc26ced966f04258adf0", "role": "execution"},
+        {"file": "tokenizer_config.json", "bytes": 685, "sha256": "d1e4185b43a0a06421ab7218d5c1a775350bd13024507b34fbed25dcf6c14c6b", "role": "execution"},
+        {"file": "vocab.json", "bytes": 898822, "sha256": "06b4d46c8e752d410213d9548eb27a54db70fda0319b6271fb8d59dead5e1cab", "role": "execution"}
+      ],
+      "hook_modules": [
+        "model.decoder.layers.0",
+        "model.decoder.layers.11"
+      ]
+    },
+    {
+      "key": "pythia-160m",
+      "id": "EleutherAI/pythia-160m",
+      "revision": "50f5173d932e8e61f858120bcb800b97af589f46",
+      "owner": "EleutherAI",
+      "license": "Apache-2.0",
+      "model_card_url": "https://huggingface.co/EleutherAI/pythia-160m/blob/50f5173d932e8e61f858120bcb800b97af589f46/README.md",
+      "use_safetensors": true,
+      "trust_remote_code": false,
+      "human_facing_deployment_policy_gate": "MANUAL_REVIEW_REQUIRED",
+      "model_card_use_warning": "deployment and human-facing use discouraged; independent risk and bias review required",
+      "artifacts": [
+        {"file": "README.md", "bytes": 13593, "sha256": "af8232060773a3b2a5d36a31a1d5bf5a431bc8f20cf513682c2dca7225e7557b", "role": "governance"},
+        {"file": "config.json", "bytes": 569, "sha256": "76eb275107220e450d31258f792a2efcbee109d8b62ae0088260057dec06362f", "role": "execution"},
+        {"file": "model.safetensors", "bytes": 374998696, "sha256": "29d2e457a664e41c12c735f20a36dc0956a665f614a54ce5db21a32e75965270", "role": "weights"},
+        {"file": "special_tokens_map.json", "bytes": 99, "sha256": "6f50ab5a5a509a1c309d6171f339b196a900dc9c99ad0408ff23bb615fdae7ad", "role": "execution"},
+        {"file": "tokenizer.json", "bytes": 2113710, "sha256": "c24618a1b3e6a38167beff1c72cffd126c3a66254347304b50547d12c5f25624", "role": "execution"},
+        {"file": "tokenizer_config.json", "bytes": 396, "sha256": "70e38394e494931c6f773ba41e19460dd4436526b852207367f04341b4066d3f", "role": "execution"}
+      ],
+      "hook_modules": [
+        "gpt_neox.layers.0",
+        "gpt_neox.layers.11"
+      ]
+    }
+  ],
+  "model_matrix": {
+    "execution": "sequential",
+    "shared_dataset_row_split": true,
+    "fresh_model_initialization_per_entry": true,
+    "cross_model_results_are_causal": false,
+    "cross_model_monotonicity_assumed": false
+  },
+  "training": {
+    "seed": 3407,
+    "max_sequence_length": 256,
+    "max_prompt_length": 128,
+    "batch_size": 16,
+    "epochs": 1,
+    "expected_optimizer_steps": 512,
+    "learning_rate": 0.00005,
+    "weight_decay": 0.01,
+    "deterministic": true,
+    "torch_dtype": "float32",
+    "holdout_evaluations": [
+      "before_training",
+      "after_training"
+    ],
+    "holdout_used_for_tuning": false,
+    "pretokenization_bounds": {
+      "max_field_utf8_bytes": 131072,
+      "max_record_utf8_bytes": 262144
+    }
+  },
+  "hooks": {
+    "capture": "aggregate_only",
+    "measurements": [
+      "loss",
+      "activation_finite_fraction",
+      "activation_l2_norm",
+      "activation_abs_max",
+      "backward_gradient_finite_fraction",
+      "backward_gradient_l2_norm",
+      "backward_gradient_abs_max",
+      "parameter_gradient_finite_fraction",
+      "parameter_gradient_l2_norm",
+      "parameter_gradient_abs_max"
+    ],
+    "raw_tensors_retained": false,
+    "raw_tokens_retained": false,
+    "max_events": 10000,
+    "fail_on_nonfinite": true
+  },
+  "context_risk_ladder": {
+    "enabled": true,
+    "per_model": true,
+    "evaluation_checkpoints": [
+      "before_training",
+      "after_training"
+    ],
+    "causal_interpretation": false,
+    "monotonicity_assumed": false,
+    "protected_unit": "training_record",
+    "membership_prior": 0.5,
+    "calibration_per_class": 256,
+    "audit_per_class": 256,
+    "partitioning": {
+      "member_source": "training_rows",
+      "nonmember_source": "holdout_rows",
+      "calibration": {
+        "members": 256,
+        "nonmembers": 256
+      },
+      "audit": {
+        "members": 256,
+        "nonmembers": 256
+      },
+      "calibration_and_audit_disjoint": true
+    },
+    "levels": [
+      {
+        "level": "prior_only",
+        "required_knowledge": ["equal_member_nonmember_prior"],
+        "features": [],
+        "interface_realizability": "text_only_or_more",
+        "evidence_semantics": "descriptive_screen_no_power_claim"
+      },
+      {
+        "level": "candidate_metadata",
+        "required_knowledge": [
+          "candidate_text",
+          "registered_tokenizer_and_preprocessing",
+          "source_turn_count",
+          "source_response_model_family"
+        ],
+        "features": [
+          "sequence_tokens",
+          "target_tokens",
+          "source_turn_count",
+          "source_model_is_gpt4",
+          "prompt_truncated",
+          "response_truncated"
+        ],
+        "interface_realizability": "conditional_on_exact_candidate_metadata_fields",
+        "evidence_semantics": "descriptive_screen_no_power_claim"
+      },
+      {
+        "level": "candidate_loss",
+        "required_knowledge": [
+          "candidate_text",
+          "arbitrary_candidate_continuation_scoring"
+        ],
+        "features": ["target_nll"],
+        "interface_realizability": "logprob_interface_or_white_box",
+        "evidence_semantics": "descriptive_screen_no_power_claim"
+      },
+      {
+        "level": "metadata_plus_loss",
+        "required_knowledge": [
+          "candidate_text",
+          "registered_tokenizer_and_preprocessing",
+          "source_turn_count",
+          "source_response_model_family",
+          "arbitrary_candidate_continuation_scoring"
+        ],
+        "features": [
+          "sequence_tokens",
+          "target_tokens",
+          "source_turn_count",
+          "source_model_is_gpt4",
+          "prompt_truncated",
+          "response_truncated",
+          "target_nll"
+        ],
+        "interface_realizability": "conditional_on_exact_metadata_and_arbitrary_candidate_scoring",
+        "evidence_semantics": "descriptive_screen_no_power_claim"
+      },
+      {
+        "level": "exact_training_roster",
+        "required_knowledge": ["exact_training_roster_manifest"],
+        "features": ["exact_training_roster_membership"],
+        "interface_realizability": "internal_reconstructible_public_experiment_only",
+        "evidence_semantics": "direct_membership_disclosure"
+      }
+    ],
+    "screen_policy": {
+      "powered_for_release": false,
+      "power_analysis_claimed": false,
+      "descriptive_only": true,
+      "can_clear": false,
+      "can_block": false,
+      "null_result": "inconclusive"
+    },
+    "exact_roster_policy": {
+      "can_clear": false,
+      "can_block": true,
+      "public_experiment_roster_reconstructible": true,
+      "public_experiment_visibility": "internal_only_not_a_declared_recipient_interface",
+      "real_protected_roster_membership_gate": "BLOCKED",
+      "real_protected_roster_release_process": "REDESIGN_REQUIRED",
+      "required_remediation": "remove_roster_disclosure_and_reassess_the_changed_interface"
+    }
+  },
+  "output": {
+    "directory": "output/llm-training-hook",
+    "fresh_run_directory_required": true,
+    "run_directory_mode": "0700",
+    "artifact_file_mode": "0600",
+    "run_directory_pattern": "output/llm-training-hook/{run_id}",
+    "json_report": "llm-training-hook-report.json",
+    "markdown_report": "llm-training-hook-report.md",
+    "telemetry_pattern": "training-telemetry-{model_key}.jsonl",
+    "completion_manifest": "RUN_COMPLETE.json"
+  }
+}

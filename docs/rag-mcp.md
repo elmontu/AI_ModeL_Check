@@ -66,6 +66,92 @@ audit receipts, deadlines, and cancellation. An MCP prompt may help draft a mode
 diagnostic report, but generated text is not a release contract, compliance decision, or control-plane
 authorization.
 
+The separate `scripts/run_llm_training_hook_audit.py` evidence-lab worker does
+not widen this MCP surface. It downloads the WildChat-4.8M object
+`data/train-00000-of-00086.parquet` at pinned revision
+`c827c6df8fcf008219ffaffa4d1dd77491099367`, without remote code, and verifies
+its SHA-256
+`6df660dca78dd92b865bef09b928992ceb6c913b4f06082315876a5997ad2eaa`,
+125,527,585-byte size, and 37,208-row count. It projects non-empty first
+user/assistant pairs only from English, `toxic=false`, `redacted=false` rows,
+excludes the registered sensitive source columns, and removes exact duplicate
+pairs. These filters minimize the input; they do not guarantee that dialogue
+is harmless, deidentified, or legally cleared.
+
+The exact 14,962-byte dataset card and 19,947-byte license file are also
+digest-bound governance inputs. Each model loads only from its already verified
+local artifact set with `local_files_only=true`, remote code disabled, and no
+credential token. That loader flag is not OS-level network isolation; an
+enforced egress boundary remains an external worker control. Pre-tokenization
+UTF-8 limits and a verified prefix-only tokenizer special-token policy bound
+the completion-only formatting and masking behavior.
+
+The worker selects the same deterministic 8,192 training rows and untouched
+1,024-row holdout for revision-pinned DistilGPT2, OPT-125M, and Pythia-160M.
+Each fresh model runs sequentially for 512 optimizer steps, and its holdout is
+evaluated before and after without controlling tuning, stopping, or selection.
+Removable model-specific first/last-block hooks emit only bounded aggregate
+finite fractions, norms, and maxima; raw prompts, token IDs, activations,
+gradients, parameters, outputs, and tensors are forbidden from telemetry and
+reports. Run it directly with:
+
+```bash
+python scripts/run_llm_training_hook_audit.py \
+  --config reproduction/llm-training-hook/config.json
+```
+
+Every invocation uses a fresh ignored `run-YYYYMMDDTHHMMSS-ffffffZ` directory
+and separate `training-telemetry-{model_key}.jsonl` streams, with verified
+downloads held in the sibling `cache/` directory. `RUN_COMPLETE.json` is
+published last and binds the complete registered report and telemetry set; a
+directory without it is incomplete. Its JSON, Markdown, and JSONL artifacts
+always declare
+`no_release_authorization` and are not MCP resources, assessment evidence,
+production telemetry, or workload attestation. A production controller must
+independently authenticate and isolate any training worker and exchange inert,
+policy-approved aggregate artifacts rather than tensors.
+
+Its before/after, model-specific context-risk lattices are similarly advisory.
+Equal-prior, candidate-metadata, candidate-loss, and combined metadata/loss
+results use disjoint 256-member/256-nonmember calibration and audit cells and
+are intentionally descriptive screens with no statistical-power claim. Plain
+text-only generation realizes only the prior view. K1 becomes realizable only
+when all six exact source/preprocessing metadata fields are exposed. K2
+requires arbitrary-candidate continuation scoring or white-box access;
+generated-token-only log probabilities are insufficient. K3 requires both K1
+and K2 preconditions, and white-box assessor access does not imply recipient
+access. Differences across profiles,
+checkpoints, or models are noncausal and need not be monotone. Exact
+training-roster access is different: a manifest lookup reveals membership
+directly. The public experiment can reconstruct this roster internally, but
+the roster itself must never become an MCP resource or implied recipient
+surface. If a real protected roster is exposed through any release, local,
+administrative, log, or metadata path, the membership gate is `BLOCKED` and the
+release is `REDESIGN_REQUIRED`; a favorable empirical screen cannot override
+it.
+
+Model-use gates also stay outside MCP and outside the statistical lattice. OPT
+uses a pinned non-commercial research license, so its production/commercial
+gate is `BLOCKED`; its pinned legacy PyTorch serialization is accepted only
+with remote code disabled and weights-only loading. DistilGPT2 and Pythia use
+safetensors with remote code disabled. Pythia's model-card warning requires
+separate policy/manual risk and bias review before deployment or human-facing
+use; it is a use-policy gate, not an Apache-2.0 license prohibition.
+
+WildChat rows contain real human-user prompts and ChatGPT-generated responses.
+The dataset card's ODC-By database declaration must not be presented as a
+license or clearance for individual dialogue or provider outputs. Content
+rights, data governance, privacy, and provider terms therefore remain separate
+release gates regardless of an operationally successful experiment.
+
+The separate EuroSAT vision training-hook worker likewise does not add MCP
+resources or tools. It processes all 27,000 real RGB satellite patches through
+a deterministic path-hash 21,600/5,400 train/test split, trains canonical
+torchvision AlexNet and DenseNet-121 from scratch for one epoch each, and runs
+bounded real-image perturbation screens. This scale is a systems stress test,
+not statistical evidence that the resulting models are safe, private, robust,
+fair, accurate enough, or ready for release.
+
 The optional `run_empirical_model_workflow` tool accepts an experimental configuration, trains native
 XGBoost and scikit-learn MLP classifiers on independently seeded synthetic datasets, and returns
 disjoint-holdout metrics with familywise Bonferroni-corrected exact accuracy intervals. The contract

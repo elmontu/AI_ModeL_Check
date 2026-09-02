@@ -16,6 +16,8 @@ This index separates the normative protocol, reference implementation, operating
 - **Reference** — [Architecture](architecture.md): complete runtime/container view, commands, analyzers, data and storage, training-to-serving integration, release contracts, deployment, CI/release automation, observability, trust, and failure behavior.
 - **Normative** — [Model Release Assurance Protocol (MRAP/1.0)](model-release-assurance-protocol.md): roles, messages, states, gates, atomic authorization, enforcement, monitoring, and conformance levels.
 - **Reference** — [Model-family coverage](model-family-coverage.md): executable family catalog, threat routing, portfolio rule, and the distinction between coverage and clearance.
+- **Experimental** — [Real-data training-hook execution audit (2026-09-02)](real-data-training-hook-audit-2026-09-02.md): curated aggregate results for the completed WildChat three-LLM and full-EuroSAT AlexNet/DenseNet-121 GPU runs, including metadata/context release consequences, bounded red-team screens, hashes, and non-claims.
+- **Experimental** — [Five-model composition-scaling protocol](../reproduction/composition-scaling/README.md): registered three-scale, five-seed WildChat/EuroSAT matrix, matched hook/batch controls, same-population output composition, cross-modal portfolio boundaries, bounded execution, and completion rules.
 
 ## Protocol, contracts, and verification
 

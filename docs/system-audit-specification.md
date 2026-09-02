@@ -197,6 +197,8 @@ remeasures the exact live artifact, interface, controls, registry status, and ex
 | Lean package | [I], build-time | Separate pinned toolchain | Prove scoped abstract transition/statistical properties | No Python or infrastructure refinement proof |
 | MCP reviewer server | [E] | Separate local stdio process | Advisory retrieval, validation, read-only audit verification, experiment calls | No lifecycle authority or process isolation by tool omission |
 | Evidence-lab and exploratory red-team workers | [E] | Local process/subprocess | Generate bounded measurements, candidate floors, screens, and non-authorizing red-team reports | Output is not automatically an admissible attack-battery submission or evidence |
+| Real-data LLM training-hook worker | [E] | Separate PyTorch/Transformers/PyArrow experiment process | Train three pinned causal LMs sequentially on one pinned WildChat cohort, collect aggregate hook telemetry, and compare interface/context profiles | Emits no assessment input, attack-battery output, blocking evidence, clearance, or authorization |
+| Real-data vision training-hook worker | [E] | Separate registered PyTorch/torchvision/Pillow CPU/CUDA experiment process | Train canonical AlexNet and DenseNet-121 from scratch on the pinned full-EuroSAT workload, collect aggregate hook telemetry, and run bounded real-image perturbation screens | Emits no assessment input, attack-battery output, blocking evidence, clearance, or authorization |
 | Identity, immutable stores, registry, gateway, monitoring | [X] | Adopter services | Perform production trust, authorization, enforcement, and operations | Specified but absent from this repository |
 
 ## 3. External training-to-serving integration
@@ -980,6 +982,87 @@ emit the complete decision-bearing worker output or prove isolation. Results rem
 candidate floors until an approved external worker produces every policy-bound attack-battery object
 and an evidence authority binds the complete submission into a current assessment request.
 
+#### 9.8.1 Real-data training-hook profiles [E]
+
+Two retained configurations exercise training-time hooks against real public-source data. They are
+large integration and systems-stress workloads, not supported-core analyzers, normative MRAP
+contracts, powered safety studies, production-capacity benchmarks, or release evidence.
+The completed 2026-09-02 runs are summarized in a separate
+[publication-safe execution audit](real-data-training-hook-audit-2026-09-02.md); that record retains
+aggregate measurements and hashes but deliberately excludes raw data, per-example output, exact
+rosters, host paths, and telemetry.
+
+| Profile | Frozen real-data scale | Model execution | Additional screens | Authority boundary |
+|---|---|---|---|---|
+| LLM training hook | One digest-pinned 37,208-row WildChat-4.8M Parquet shard; deterministic 8,192-row training and disjoint 1,024-row holdout cohorts | Revision-pinned DistilGPT2, Meta OPT-125M, and Pythia-160M; one FP32 epoch and 512 optimizer steps per fresh model; aggregate-only first/last-block and parameter-gradient observations | Before/after K0–K3 membership screens over prior, exact candidate metadata, arbitrary-candidate loss, and their combination; a separate K4 protected-roster fragment illustrates direct disclosure | K0–K3 are descriptive, unpowered, non-blocking and non-clearing. K4 is a logical protected-roster gate, not an empirical attack result. Every run is authorization-ineligible and emits no assessment input. |
+| Vision training hook | Complete digest-pinned EuroSAT RGB archive with all 27,000 real Sentinel-2 patches; deterministic class-stratified **path-hash** split of 21,600 training and 5,400 test images; image-content hashes separately verify uniqueness and cross-roster non-overlap | Canonical torchvision 0.28.0 AlexNet and DenseNet-121, `weights=None`, ten classes, one full FP32 epoch from random initialization per architecture; bounded aggregate early/late-module and parameter-gradient observations | Clean, brightness `1.25`, Gaussian-noise `0.05`, and untargeted true-label FGSM `2/255` screens on a deterministic 512-real-image test subset; M0–M3 label, score, internal-feature, and source-provenance interface profiles | Perturbation measurements are descriptive screens with `can_block=false` and `can_clear=false`; the experimental report emits no assessment input or attack-battery output and cannot authorize release. A protected-roster disclosure is handled as a separate logical redesign condition. |
+
+The vision worker makes two different execution claims. An exact hook/no-hook
+noninterference control runs on CPU and explicitly records that CUDA
+noninterference is unproved. The full CUDA workload is seeded with deterministic
+split and batch order but uses PyTorch's deterministic-algorithm warning mode:
+`adaptive_avg_pool2d_backward_cuda` is the only registered nondeterministic
+kernel warning, unexpected nondeterminism warnings fail closed, and the report
+states `bitwise_reproducible=false` and `single_run_variance_estimated=false`.
+Complete CUDA hook coverage is checked separately; the exact CPU control must
+not be generalized into a bitwise CUDA or universal noninterference claim.
+
+The LLM context profiles are realizable only under their exact illustrative interface fragments. Plain
+text-only generation realizes K0, not K1. K1 requires all six registered candidate source and
+preprocessing metadata fields; K2 requires arbitrary-candidate continuation scoring or white-box
+access, and generated-token-only log probabilities are insufficient; K3 requires both sets of
+preconditions. These fragments are incomplete release-contract illustrations and do not widen a
+recipient interface merely because an assessor has white-box access.
+
+The vision red-team measurements and any analogous LLM empirical attack result remain
+`evidence_direction=screen`: a favorable value cannot clear and an adverse value from these workers
+cannot itself block. Decision-bearing use requires fresh collection by an approved, isolated worker
+that emits the current typed attack catalog, frozen configuration, positive controls,
+`AttackBatteryWorkerOutput 1.0`, and `AttackBatteryInput 1.0` submission with complete
+release/interface/population/game, executor, runtime, raw-result, resource, multiplicity, and custody
+bindings. The evidence authority must then place that submission in an `AssessmentRequest 5.0`; no
+generated report may be restamped into those types after the fact.
+
+Both workers fetch immutable inputs into governed caches and then replay verified local artifacts.
+The LLM worker's `local_files_only=true` loader setting is not operating-system egress isolation, and
+its raw Parquet cache contains dialogue and excluded sensitive source columns. The EuroSAT cache
+contains all source images and labels. Neither cache, raw telemetry, absolute host path, exact row
+identifier roster, nor per-example result belongs in a recipient package or curated public report.
+Experiment operators must provide separate principals, enforced egress/credential controls, access
+policy, retention, legal hold, deletion, and immutable publication where required.
+
+#### 9.8.2 Five-model composition-scaling profile [E]
+
+The registered composition-scaling design coordinates the same three LLM and
+two vision families over real WildChat and EuroSAT inputs. It is a configured
+experiment, not a current machine contract or completed empirical claim.
+
+| Audit dimension | Registered requirement |
+|---|---|
+| Independent reference matrix | Fresh model state for each of 75 model/scale/seed cells: three LLMs at 2,048/4,096/8,192 rows and two vision models at 5,400/10,800/21,600 images, all over five shared seeds. A fixed 1,024-row LLM holdout and fixed 5,400-image vision test roster remain outside training. |
+| Operational controls | Vision repeats every model/scale/seed at batch sizes 64 and 128 with the current hook enabled and disabled, producing 120 vision executions; 90 are matched operational variants beyond the 30 reference cells. The complete suite therefore registers 165 training executions. |
+| Same-population composition | Seven non-empty LLM output subsets and three non-empty vision output subsets. Multi-model contrasts use the mean of constituent singletons. LLM membership scores and vision probability outputs are fused only inside their respective protected-unit populations. |
+| Red-team scope | Vision evaluates clean, brightness, Gaussian noise, ensemble FGSM, and registered AlexNet/DenseNet/pair source-to-target transfer on deterministic real test examples. LLM before/after K0–K3 measurements and bootstrap sensitivity intervals remain descriptive membership screens. |
+| All-model portfolios | All 31 non-empty subsets of the five models are represented. The 21 mixed LLM/vision subsets carry resource and independent gate vectors only; no cross-modal pooled AUC, accuracy, attack-success, or risk scalar is permitted. |
+| Interface context | R0–R5 are explicit non-ordinal capability profiles. Generated-token/class scores, exact candidate metadata, arbitrary-candidate loss, white-box state, and exact protected-roster disclosure are distinguished rather than treated as an automatically cumulative metadata ladder. |
+| Execution closure | The coordinator serializes GPU children inside a 12-hour and 20-GiB fail-closed envelope. Children use exact-prefix, resumable, hash-bound aggregate journals. Model weights, raw/per-example data, roster identifiers, telemetry, secrets, and absolute paths are prohibited from durable output. Registered reports are digest-verified and each `RUN_COMPLETE.json` is written last. |
+| Authority | Every configuration, journal record, report, export, portfolio, and completion manifest is experimental only, emits no assessment input, is attack-battery-ineligible, cannot clear, cannot block, requires approved recollection, is authorization-ineligible, and returns `no_release_authorization`. R5 disclosure instead triggers a separate logical redesign requirement. |
+
+An auditor MUST distinguish the 75 fresh reference cells from the 90 matched
+vision operational variants, and MUST reject a report that counts baseline
+anchors as new scale cells. The cumulative LLM exposure path is secondary and
+confounded by continuing optimization; it MUST NOT be described as independent
+scale replication. Any scalar combining different protected populations,
+modalities, tasks, or games is invalid.
+
+Queue submission, process startup, journal prefixes, and child completion are
+four different states. Only an exact closed child schedule plus its final
+manifest is eligible for suite ingestion, and only two verified children plus
+the suite's final manifest establish operational completion. Even that status
+does not create MRAP evidence or a release decision: decision-bearing use
+requires approved recollection under the typed attack-battery and assessment
+contracts described above.
+
 ## 10. Current machine-contract inventory
 
 Schema suffixes version individual contracts, not the framework as a whole.
@@ -1089,6 +1172,8 @@ access, and any execution worker MUST be isolated separately.
 | Experiments | NumPy, Pandas, PyArrow, SciPy, scikit-learn, XGBoost, joblib | Empirical, OpenML, XGBoost, stochastic and red-team research |
 | MCP | `mcp>=2,<3`, source checkout | Local stdio reviewer server |
 | Privacy experiments | Experiment stack plus PyTorch in a dedicated `.privacy-venv` subprocess; dependency separation only, not a security sandbox | Public-data CNN/LSTM/XGBoost/Transformer worker |
+| LLM training-hook experiment | `llm-experiments`: PyArrow, safetensors, PyTorch 2.13-compatible runtime, and Transformers 4.48–5.x; exact model/tokenizer artifacts and source/governance files are revision/byte/digest registered | Sequential pinned WildChat DistilGPT2/OPT-125M/Pythia-160M integration workload. Initial cache population may use the network; verified local loading, disabled remote code, and no loader credential do not create an OS sandbox. |
+| Vision training-hook experiment | `vision-experiments`: PyTorch 2.13.x and torchvision 0.28.x, plus the registered Pillow/libjpeg and CUDA environment for the full workload | Complete EuroSAT AlexNet/DenseNet-121 integration workload. The exact registered runtime/package-source observations are checked before data access; dependency freezing is integrity evidence, not host attestation or isolation. |
 | Formal | Lean toolchain pinned under `formal/lean/` | Separate kernel proof build and axiom audit |
 
 The `ReleaseOptimizer` does not invoke SciPy: it verifies supplied transfer relations, computes graph
@@ -1103,7 +1188,14 @@ may be used by an adopter, but are not current components or controls.
 ### 11.2 Build and release automation
 
 Pull requests and main-branch pushes run the Lean proof build/axiom audit and Python 3.11, 3.12 and
-3.13 compile/test/schema/link matrix before building and smoke-testing wheel/sdist artifacts. A tagged
+3.13 compile/test/schema/link matrix. The separate `training-hook-runtime` job installs CPU-only
+PyTorch/torchvision on Python 3.13 plus the `llm-experiments` and `vision-experiments` extras, then
+runs `test_llm_training_hooks.py`, `test_llm_training_worker.py`, and
+`test_vision_training_worker.py`. It performs focused contract/hardening checks without downloading
+WildChat, EuroSAT, or model artifacts and without executing the full CUDA workloads. Passing that job
+therefore provides regression coverage, not empirical results, runtime attestation, or safety
+evidence. The package job depends on this focused job as well as the formal and Python matrices before
+building and smoke-testing wheel/sdist artifacts. A tagged
 release requires an annotated `vX.Y.Z` tag reachable from `main`, exact tag/package-version equality,
 the release checks, package validation, a clean-environment wheel smoke test, and creation of a draft
 GitHub release. Schema maintenance verifies the deterministic current-schema manifest against all 26
@@ -1379,11 +1471,15 @@ rather than inventing an identifier.
   and authority-negative tests; in particular, prove a floor- or screen-declaring analyzer cannot
   produce a clearing record under any accepted input.
 - [ ] Run `make check` with core and experiment test dependencies installed.
+- [ ] Reproduce the three focused training-hook unit suites in an environment matching the
+  `training-hook-runtime` job; separately verify any claimed full LLM/CUDA experiment artifacts,
+  because CI neither downloads their registered inputs nor executes those workloads.
 - [ ] Run `make verify` with the pinned Lean toolchain for formal/protocol changes.
 - [ ] Confirm schema replay produces no differences and Markdown links resolve.
 - [ ] Build wheel and sdist, validate metadata, and smoke-test the wheel outside the checkout.
-- [ ] Inspect CI and release workflows for Python matrix, Lean build/axiom audit, tag/version match,
-  package smoke test, least privilege, and draft-only GitHub release creation.
+- [ ] Inspect CI and release workflows for Python matrix, Lean build/axiom audit, focused
+  `training-hook-runtime` dependency/test coverage, package dependency on all required jobs,
+  tag/version match, package smoke test, least privilege, and draft-only GitHub release creation.
 - [ ] Review `CHANGELOG.md` for every breaking contract or security-semantic change.
 
 ### 17.2 Release-instance and contract audit

@@ -1,0 +1,324 @@
+{
+  "schema_version": "1.0",
+  "experiment_id": "llm-composition-scaling-wildchat-three-model-v1",
+  "experimental_only": true,
+  "assessment_input_emitted": false,
+  "attack_battery_eligible": false,
+  "authorization_eligible": false,
+  "can_clear": false,
+  "can_block": false,
+  "decision": "no_release_authorization",
+  "requires_approved_recollection": true,
+  "baseline_binding": {
+    "config_path": "reproduction/llm-training-hook/config.json",
+    "config_sha256": "39e5b5fe8eed4ebb1d512063d6e13a0e8f24656f9043063e879bd0d5d5141480",
+    "runner_path": "scripts/run_llm_training_hook_audit.py",
+    "runner_sha256": "8b0bca73293e20232ac45e35b2762e254977fbdbe09f70967be257ee05719ffd",
+    "hook_path": "scripts/llm_training_hooks.py",
+    "hook_sha256": "595de99355974866524ca1e11c0cd4d2d14c80a0846657daea36d66ee26ff33c",
+    "experiment_id": "llm-training-hook-wildchat-three-model-v1",
+    "dataset": {
+      "id": "allenai/WildChat-4.8M",
+      "revision": "c827c6df8fcf008219ffaffa4d1dd77491099367",
+      "file": "data/train-00000-of-00086.parquet",
+      "sha256": "6df660dca78dd92b865bef09b928992ceb6c913b4f06082315876a5997ad2eaa",
+      "bytes": 125527585,
+      "selected_rows": 9216,
+      "train_rows": 8192,
+      "holdout_rows": 1024,
+      "selection_seed": 3407
+    },
+    "models": [
+      {
+        "key": "distilgpt2",
+        "id": "distilbert/distilgpt2",
+        "revision": "2290a62682d06624634c1f46a6ad5be0f47f38aa",
+        "license_gate": "LEGAL_REVIEW_REQUIRED"
+      },
+      {
+        "key": "meta-opt-125m",
+        "id": "facebook/opt-125m",
+        "revision": "27dcfa74d334bc871f3234de431e71c6eeba5dd6",
+        "license_gate": "BLOCKED_NONCOMMERCIAL_RESEARCH_ONLY"
+      },
+      {
+        "key": "pythia-160m",
+        "id": "EleutherAI/pythia-160m",
+        "revision": "50f5173d932e8e61f858120bcb800b97af589f46",
+        "license_gate": "MANUAL_REVIEW_REQUIRED"
+      }
+    ]
+  },
+  "workload": {
+    "training_order": "deterministic_selected_train_prefix_without_shuffle",
+    "optimizer_state": "persistent_across_checkpoint_segments",
+    "fresh_model_initialization_per_model_scale_training_seed_cell": true,
+    "shared_dataset_split": true,
+    "batch_size": 16,
+    "max_sequence_length": 256,
+    "max_prompt_length": 128,
+    "learning_rate": 0.00005,
+    "weight_decay": 0.01,
+    "torch_dtype": "float32",
+    "training_seed": 3407,
+    "training_seeds": [
+      3407,
+      499625614,
+      4288481424,
+      2669540432,
+      2937338177
+    ],
+    "independent_train_scales": [2048, 4096, 8192],
+    "independent_fresh_model_cells": 45,
+    "candidate_member_pool_rows": 1024,
+    "candidate_member_pool": "first_1024_rows_of_registered_training_order",
+    "candidate_nonmember_pool_rows": 1024,
+    "candidate_nonmember_pool": "complete_registered_holdout",
+    "fixed_candidate_pools_across_checkpoints": true,
+    "secondary_trajectory_training_seed": 3407,
+    "secondary_trajectory_checkpoint_zero_semantics": "prospective_full_run_member_pool_before_any_optimizer_update_not_observed_membership",
+    "secondary_cumulative_trajectory_checkpoints": [
+      {"exposed_rows": 0, "optimizer_steps": 0},
+      {"exposed_rows": 1024, "optimizer_steps": 64},
+      {"exposed_rows": 2048, "optimizer_steps": 128},
+      {"exposed_rows": 4096, "optimizer_steps": 256},
+      {"exposed_rows": 8192, "optimizer_steps": 512}
+    ],
+    "secondary_trajectory_reuses_independent_8192_cell_execution": true,
+    "secondary_trajectory_is_independent_scale_evidence": false,
+    "secondary_trajectory_confounds": [
+      "cumulative_exposure",
+      "fixed_record_order",
+      "optimizer_state_progress",
+      "training_progress"
+    ],
+    "evaluate_holdout_at_every_checkpoint": true,
+    "hash_model_state_at_every_checkpoint": true,
+    "persist_model_weights": false
+  },
+  "composition": {
+    "model_keys": [
+      "distilgpt2",
+      "meta-opt-125m",
+      "pythia-160m"
+    ],
+    "nonempty_model_subsets": [
+      ["distilgpt2"],
+      ["meta-opt-125m"],
+      ["pythia-160m"],
+      ["distilgpt2", "meta-opt-125m"],
+      ["distilgpt2", "pythia-160m"],
+      ["meta-opt-125m", "pythia-160m"],
+      ["distilgpt2", "meta-opt-125m", "pythia-160m"]
+    ],
+    "partition_seeds": [3407, 499625614, 4288481424, 2669540432, 2937338177],
+    "suite_export_partition_seed": 3407,
+    "partition_algorithm": "sha256(llm-composition:{seed}:{arm}:{record-key})_lexical_ascending",
+    "calibration_per_class": 256,
+    "audit_per_class": 256,
+    "calibration_audit_disjoint_within_seed": true,
+    "cross_seed_overlap_allowed_for_sensitivity_analysis": true,
+    "per_model_feature": "negative_target_token_mean_nll",
+    "per_model_standardization": "pooled_calibration_mean_and_population_standard_deviation_floor_1e-12",
+    "subset_score": "unweighted_arithmetic_mean_of_standardized_per_model_features",
+    "threshold": "balanced_accuracy_maximizing_calibration_threshold_with_deterministic_largest_threshold_tie_break",
+    "metrics": [
+      "balanced_accuracy",
+      "roc_auc",
+      "membership_advantage_at_threshold"
+    ],
+    "bootstrap": {
+      "enabled": true,
+      "replicates": 1000,
+      "confidence_level": 0.95,
+      "method": "deterministic_stratified_audit_arm_percentile",
+      "sampling_unit": "candidate_training_record",
+      "threshold_recalibrated_per_replicate": false,
+      "seed_derivation": "sha256(bootstrap:{partition_seed}:{checkpoint_steps}:{subset_key})_first_64_bits"
+    },
+    "partition_sensitivity_summary": "minimum_median_maximum_across_predeclared_partition_seeds",
+    "primary_subset_contrast": "metric_for_subset_S_minus_arithmetic_mean_of_singleton_metrics_for_models_in_S_within_the_same_scale_training_seed_partition_seed_and_evaluation_stage",
+    "best_singleton_primary_contrast": false,
+    "multiple_comparison_adjustment": "none_exploratory_matrix",
+    "causal_interpretation": false,
+    "monotonicity_assumed": false,
+    "powered_for_release": false
+  },
+  "hook_profiles": {
+    "training_profile": "full",
+    "profiles": [
+      {"name": "none", "module_selection": "disabled"},
+      {"name": "early", "module_selection": "first_registered_hook_module"},
+      {"name": "full", "module_selection": "all_registered_hook_modules"}
+    ],
+    "microbenchmark": {
+      "batch_rows": 16,
+      "warmup_steps_per_profile_per_round": 1,
+      "measured_steps_per_profile_per_round": 3,
+      "rounds": 3,
+      "profile_order_by_round": [
+        ["none", "early", "full"],
+        ["early", "full", "none"],
+        ["full", "none", "early"]
+      ],
+      "optimizer_step": false,
+      "same_real_batch_for_every_profile": true,
+      "timing_semantics": "synchronized_forward_backward_and_profile_telemetry_seal_no_optimizer",
+      "overhead_interpretation": "descriptive_microbenchmark_not_a_causal_production_capacity_claim"
+    },
+    "training_event_cap_per_segment": 3000,
+    "aggregate_only": true,
+    "fail_on_nonfinite": true,
+    "raw_event_stream_persisted": false,
+    "raw_tensors_retained": false,
+    "raw_tokens_retained": false,
+    "raw_gradients_retained": false
+  },
+  "release_interfaces": [
+    {
+      "key": "text_only_generation",
+      "generated_token_log_probabilities": false,
+      "arbitrary_candidate_scorers": [],
+      "white_box_model_keys": [],
+      "training_roster": false,
+      "training_roster_membership_protected": false
+    },
+    {
+      "key": "generated_token_log_probabilities_only",
+      "generated_token_log_probabilities": true,
+      "arbitrary_candidate_scorers": [],
+      "white_box_model_keys": [],
+      "training_roster": false,
+      "training_roster_membership_protected": false
+    },
+    {
+      "key": "candidate_scorer_distilgpt2",
+      "generated_token_log_probabilities": true,
+      "arbitrary_candidate_scorers": ["distilgpt2"],
+      "white_box_model_keys": [],
+      "training_roster": false,
+      "training_roster_membership_protected": false
+    },
+    {
+      "key": "candidate_scorer_meta_opt",
+      "generated_token_log_probabilities": true,
+      "arbitrary_candidate_scorers": ["meta-opt-125m"],
+      "white_box_model_keys": [],
+      "training_roster": false,
+      "training_roster_membership_protected": false
+    },
+    {
+      "key": "candidate_scorer_pythia",
+      "generated_token_log_probabilities": true,
+      "arbitrary_candidate_scorers": ["pythia-160m"],
+      "white_box_model_keys": [],
+      "training_roster": false,
+      "training_roster_membership_protected": false
+    },
+    {
+      "key": "candidate_scorers_distilgpt2_meta_opt",
+      "generated_token_log_probabilities": true,
+      "arbitrary_candidate_scorers": ["distilgpt2", "meta-opt-125m"],
+      "white_box_model_keys": [],
+      "training_roster": false,
+      "training_roster_membership_protected": false
+    },
+    {
+      "key": "candidate_scorers_distilgpt2_pythia",
+      "generated_token_log_probabilities": true,
+      "arbitrary_candidate_scorers": ["distilgpt2", "pythia-160m"],
+      "white_box_model_keys": [],
+      "training_roster": false,
+      "training_roster_membership_protected": false
+    },
+    {
+      "key": "candidate_scorers_meta_opt_pythia",
+      "generated_token_log_probabilities": true,
+      "arbitrary_candidate_scorers": ["meta-opt-125m", "pythia-160m"],
+      "white_box_model_keys": [],
+      "training_roster": false,
+      "training_roster_membership_protected": false
+    },
+    {
+      "key": "candidate_scorers_all_three",
+      "generated_token_log_probabilities": true,
+      "arbitrary_candidate_scorers": ["distilgpt2", "meta-opt-125m", "pythia-160m"],
+      "white_box_model_keys": [],
+      "training_roster": false,
+      "training_roster_membership_protected": false
+    },
+    {
+      "key": "white_box_all_three",
+      "generated_token_log_probabilities": false,
+      "arbitrary_candidate_scorers": [],
+      "white_box_model_keys": ["distilgpt2", "meta-opt-125m", "pythia-160m"],
+      "training_roster": false,
+      "training_roster_membership_protected": false
+    },
+    {
+      "key": "protected_data_package_with_exact_roster",
+      "generated_token_log_probabilities": false,
+      "arbitrary_candidate_scorers": [],
+      "white_box_model_keys": [],
+      "training_roster": true,
+      "training_roster_membership_protected": true
+    }
+  ],
+  "release_policy": {
+    "empirical_results_are_descriptive_only": true,
+    "assessment_input_emitted": false,
+    "attack_battery_eligible": false,
+    "can_clear": false,
+    "can_block": false,
+    "exact_protected_roster_hypothetical_gate": "BLOCKED_AND_REDESIGN_REQUIRED",
+    "this_experiment_releases_no_roster": true,
+    "dataset_content_rights_gate": "LEGAL_REVIEW_REQUIRED",
+    "all_model_release_licenses_must_be_satisfied": true,
+    "requires_approved_recollection": true,
+    "approved_recollection_reason": "rerun_the_registered_recipient_realizable_attack_battery_under_a_signed_release_contract",
+    "authorization_eligible": false,
+    "authorization_granted": false,
+    "assessment_complete": false,
+    "decision": "no_release_authorization"
+  },
+  "resource_budget": {
+    "maximum_gpu_hours": 12,
+    "peak_gpu_allocated_bytes_ceiling": 21474836480,
+    "peak_gpu_reserved_bytes_ceiling": 21474836480,
+    "peak_host_rss_bytes_ceiling": 21474836480,
+    "aggregate_artifact_bytes_ceiling": 21474836480,
+    "check_gpu_memory_after_every_measured_phase_and_cell": true,
+    "check_host_rss_alongside_every_budget_and_gpu_check": true,
+    "check_aggregate_artifact_bytes_before_append_and_completion": true,
+    "check_before_every_optimizer_step": true,
+    "check_before_every_model_cell": true,
+    "minimum_remaining_seconds_to_start_model_cell": 600,
+    "deadline_cli_override_may_only_tighten": true,
+    "budget_breach_semantics": "fail_closed_without_completion_manifest"
+  },
+  "output": {
+    "directory": "output/composition-scaling/llm",
+    "run_directory_pattern": "output/composition-scaling/llm/{run_id}",
+    "fresh_run_directory_required": true,
+    "run_directory_mode": "0700",
+    "artifact_file_mode": "0600",
+    "json_report": "llm-composition-scaling-report.json",
+    "markdown_report": "llm-composition-scaling-report.md",
+    "completion_manifest": "RUN_COMPLETE.json",
+    "checkpoint_journal": "COMPLETED_CELLS.jsonl",
+    "checkpoint_journal_record_types": [
+      "hook_microbenchmark_bundle",
+      "scale_seed_model_bundle"
+    ],
+    "expected_checkpoint_records": 16,
+    "resume_requires_exact_config_and_source_context": true,
+    "resume_restarts_in_progress_bundle": true,
+    "completion_requires_exact_expected_cell_closure": true,
+    "reports_contain_aggregates_only": true,
+    "persist_per_example_values": false,
+    "persist_record_identifiers": false,
+    "persist_dialogue_text": false,
+    "persist_model_weights": false,
+    "persist_raw_telemetry_events": false
+  }
+}

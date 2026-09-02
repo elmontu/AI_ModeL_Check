@@ -1,0 +1,527 @@
+{
+  "schema_version": "1.0",
+  "experiment_id": "five-model-composition-scaling-v1",
+  "experimental_only": true,
+  "assessment_input_emitted": false,
+  "attack_battery_eligible": false,
+  "authorization_eligible": false,
+  "authorization_granted": false,
+  "can_clear": false,
+  "can_block": false,
+  "requires_approved_recollection": true,
+  "decision": "no_release_authorization",
+  "models": [
+    {
+      "key": "distilgpt2",
+      "modality": "llm",
+      "implementation": "distilbert/distilgpt2",
+      "revision": "2290a62682d06624634c1f46a6ad5be0f47f38aa"
+    },
+    {
+      "key": "meta-opt-125m",
+      "modality": "llm",
+      "implementation": "facebook/opt-125m",
+      "revision": "27dcfa74d334bc871f3234de431e71c6eeba5dd6"
+    },
+    {
+      "key": "pythia-160m",
+      "modality": "llm",
+      "implementation": "EleutherAI/pythia-160m",
+      "revision": "50f5173d932e8e61f858120bcb800b97af589f46"
+    },
+    {
+      "key": "alexnet",
+      "modality": "vision",
+      "implementation": "torchvision.models.alexnet",
+      "revision": "torchvision-0.28.0"
+    },
+    {
+      "key": "densenet121",
+      "modality": "vision",
+      "implementation": "torchvision.models.densenet121",
+      "revision": "torchvision-0.28.0"
+    }
+  ],
+  "source_bindings": {
+    "base_protocols": {
+      "llm": {
+        "config_path": "reproduction/llm-training-hook/config.json",
+        "config_sha256": "39e5b5fe8eed4ebb1d512063d6e13a0e8f24656f9043063e879bd0d5d5141480",
+        "runner_path": "scripts/run_llm_training_hook_audit.py",
+        "runner_sha256": "8b0bca73293e20232ac45e35b2762e254977fbdbe09f70967be257ee05719ffd",
+        "hook_path": "scripts/llm_training_hooks.py",
+        "hook_sha256": "595de99355974866524ca1e11c0cd4d2d14c80a0846657daea36d66ee26ff33c"
+      },
+      "vision": {
+        "config_path": "reproduction/vision-training-hook/config.json",
+        "config_sha256": "3f2ef402e9e2a6fb3a2fb47a930de30384056682d85dae6c2134694dd6aa1412",
+        "runner_path": "scripts/run_vision_training_hook_audit.py",
+        "runner_sha256": "85261cd39de3036211fff174b7b9bce5aaf87a69baac17cd42b03aff9eb03e81",
+        "hook_path": "scripts/llm_training_hooks.py",
+        "hook_sha256": "595de99355974866524ca1e11c0cd4d2d14c80a0846657daea36d66ee26ff33c"
+      }
+    },
+    "children": {
+      "llm": {
+        "config_path": "reproduction/composition-scaling/llm-config.json",
+        "config_sha256": "4924a2a4bf3f5176d28793a10295e7b7d50c5e007011a8f0d8cd06b90ba4f416",
+        "runner_path": "scripts/run_llm_composition_scaling.py",
+        "runner_sha256": "dbe867cd3df97552fd97680c7df0a4d7a1ff9825617c57f4d8399ad3f714cd92",
+        "experiment_id": "llm-composition-scaling-wildchat-three-model-v1",
+        "report_basename": "llm-composition-scaling-report.json",
+        "completion_manifest_basename": "RUN_COMPLETE.json"
+      },
+      "vision": {
+        "config_path": "reproduction/composition-scaling/vision-config.json",
+        "config_sha256": "e58f0fa0043c9cfe53a6970e05b8d40fbb3bc52a0b59d4928edb85aee126839b",
+        "runner_path": "scripts/run_vision_composition_scaling.py",
+        "runner_sha256": "1fec50133c6f6f60e087ce2e373acfdf0a6d9a1854d606752e86bfbae660994b",
+        "experiment_id": "vision-eurosat-hook-composition-scaling-v1",
+        "report_basename": "vision-composition-scaling-report.json",
+        "completion_manifest_basename": "RUN_COMPLETE.json"
+      }
+    }
+  },
+  "matrix": {
+    "seeds": [3407, 499625614, 4288481424, 2669540432, 2937338177],
+    "real_scales": {
+      "llm": [2048, 4096, 8192],
+      "vision": [5400, 10800, 21600]
+    },
+    "all_nonempty_model_subsets": [
+      ["distilgpt2"],
+      ["meta-opt-125m"],
+      ["pythia-160m"],
+      ["alexnet"],
+      ["densenet121"],
+      ["distilgpt2", "meta-opt-125m"],
+      ["distilgpt2", "pythia-160m"],
+      ["distilgpt2", "alexnet"],
+      ["distilgpt2", "densenet121"],
+      ["meta-opt-125m", "pythia-160m"],
+      ["meta-opt-125m", "alexnet"],
+      ["meta-opt-125m", "densenet121"],
+      ["pythia-160m", "alexnet"],
+      ["pythia-160m", "densenet121"],
+      ["alexnet", "densenet121"],
+      ["distilgpt2", "meta-opt-125m", "pythia-160m"],
+      ["distilgpt2", "meta-opt-125m", "alexnet"],
+      ["distilgpt2", "meta-opt-125m", "densenet121"],
+      ["distilgpt2", "pythia-160m", "alexnet"],
+      ["distilgpt2", "pythia-160m", "densenet121"],
+      ["distilgpt2", "alexnet", "densenet121"],
+      ["meta-opt-125m", "pythia-160m", "alexnet"],
+      ["meta-opt-125m", "pythia-160m", "densenet121"],
+      ["meta-opt-125m", "alexnet", "densenet121"],
+      ["pythia-160m", "alexnet", "densenet121"],
+      ["distilgpt2", "meta-opt-125m", "pythia-160m", "alexnet"],
+      ["distilgpt2", "meta-opt-125m", "pythia-160m", "densenet121"],
+      ["distilgpt2", "meta-opt-125m", "alexnet", "densenet121"],
+      ["distilgpt2", "pythia-160m", "alexnet", "densenet121"],
+      ["meta-opt-125m", "pythia-160m", "alexnet", "densenet121"],
+      ["distilgpt2", "meta-opt-125m", "pythia-160m", "alexnet", "densenet121"]
+    ],
+    "llm_same_population_subsets": [
+      ["distilgpt2"],
+      ["meta-opt-125m"],
+      ["pythia-160m"],
+      ["distilgpt2", "meta-opt-125m"],
+      ["distilgpt2", "pythia-160m"],
+      ["meta-opt-125m", "pythia-160m"],
+      ["distilgpt2", "meta-opt-125m", "pythia-160m"]
+    ],
+    "vision_same_population_subsets": [
+      ["alexnet"],
+      ["densenet121"],
+      ["alexnet", "densenet121"]
+    ],
+    "cross_modal_subsets": [
+      ["distilgpt2", "alexnet"],
+      ["distilgpt2", "densenet121"],
+      ["meta-opt-125m", "alexnet"],
+      ["meta-opt-125m", "densenet121"],
+      ["pythia-160m", "alexnet"],
+      ["pythia-160m", "densenet121"],
+      ["distilgpt2", "meta-opt-125m", "alexnet"],
+      ["distilgpt2", "meta-opt-125m", "densenet121"],
+      ["distilgpt2", "pythia-160m", "alexnet"],
+      ["distilgpt2", "pythia-160m", "densenet121"],
+      ["distilgpt2", "alexnet", "densenet121"],
+      ["meta-opt-125m", "pythia-160m", "alexnet"],
+      ["meta-opt-125m", "pythia-160m", "densenet121"],
+      ["meta-opt-125m", "alexnet", "densenet121"],
+      ["pythia-160m", "alexnet", "densenet121"],
+      ["distilgpt2", "meta-opt-125m", "pythia-160m", "alexnet"],
+      ["distilgpt2", "meta-opt-125m", "pythia-160m", "densenet121"],
+      ["distilgpt2", "meta-opt-125m", "alexnet", "densenet121"],
+      ["distilgpt2", "pythia-160m", "alexnet", "densenet121"],
+      ["meta-opt-125m", "pythia-160m", "alexnet", "densenet121"],
+      ["distilgpt2", "meta-opt-125m", "pythia-160m", "alexnet", "densenet121"]
+    ],
+    "expected_counts": {
+      "all_nonempty_model_subsets": 31,
+      "llm_same_population_subsets": 7,
+      "vision_same_population_subsets": 3,
+      "cross_modal_subsets": 21,
+      "llm_scalar_cells": 105,
+      "vision_scalar_cells": 45,
+      "total_scalar_cells": 150
+    },
+    "cell_authority": {
+      "experimental_only": true,
+      "assessment_input_emitted": false,
+      "attack_battery_eligible": false,
+      "authorization_eligible": false,
+      "authorization_granted": false,
+      "can_clear": false,
+      "can_block": false,
+      "requires_approved_recollection": true,
+      "decision": "no_release_authorization"
+    },
+    "scalar_composition_rule": "permitted_only_within_one_registered_shared_protected_unit_population",
+    "cross_modal_composition_rule": "resource_and_gate_vectors_only_no_empirical_scalar"
+  },
+  "interfaces": {
+    "mask_fields": [
+      "basic_prediction",
+      "generated_token_log_probabilities",
+      "class_scores",
+      "exact_candidate_source_metadata",
+      "exact_candidate_preprocessing_metadata",
+      "arbitrary_candidate_scoring",
+      "model_weights",
+      "embeddings_and_activations",
+      "per_example_loss",
+      "gradients",
+      "source_provenance",
+      "exact_protected_training_roster"
+    ],
+    "profiles": [
+      {
+        "level": "R0",
+        "description": "basic prediction payload only",
+        "mask": {
+          "basic_prediction": true,
+          "generated_token_log_probabilities": false,
+          "class_scores": false,
+          "exact_candidate_source_metadata": false,
+          "exact_candidate_preprocessing_metadata": false,
+          "arbitrary_candidate_scoring": false,
+          "model_weights": false,
+          "embeddings_and_activations": false,
+          "per_example_loss": false,
+          "gradients": false,
+          "source_provenance": false,
+          "exact_protected_training_roster": false
+        },
+        "llm_knowledge_levels": ["K0"],
+        "vision_profile": "M0_label_only",
+        "screen_authority": {
+          "experimental_only": true,
+          "assessment_input_emitted": false,
+          "attack_battery_eligible": false,
+          "authorization_eligible": false,
+          "authorization_granted": false,
+          "can_clear": false,
+          "can_block": false,
+          "requires_approved_recollection": true,
+          "decision": "no_release_authorization"
+        }
+      },
+      {
+        "level": "R1",
+        "description": "generated-token log probabilities or class scores without arbitrary-candidate scoring",
+        "mask": {
+          "basic_prediction": true,
+          "generated_token_log_probabilities": true,
+          "class_scores": true,
+          "exact_candidate_source_metadata": false,
+          "exact_candidate_preprocessing_metadata": false,
+          "arbitrary_candidate_scoring": false,
+          "model_weights": false,
+          "embeddings_and_activations": false,
+          "per_example_loss": false,
+          "gradients": false,
+          "source_provenance": false,
+          "exact_protected_training_roster": false
+        },
+        "llm_knowledge_levels": ["K0"],
+        "vision_profile": "M1_scores",
+        "screen_authority": {
+          "experimental_only": true,
+          "assessment_input_emitted": false,
+          "attack_battery_eligible": false,
+          "authorization_eligible": false,
+          "authorization_granted": false,
+          "can_clear": false,
+          "can_block": false,
+          "requires_approved_recollection": true,
+          "decision": "no_release_authorization"
+        }
+      },
+      {
+        "level": "R2",
+        "description": "exact candidate source and preprocessing metadata without arbitrary scoring",
+        "mask": {
+          "basic_prediction": true,
+          "generated_token_log_probabilities": false,
+          "class_scores": false,
+          "exact_candidate_source_metadata": true,
+          "exact_candidate_preprocessing_metadata": true,
+          "arbitrary_candidate_scoring": false,
+          "model_weights": false,
+          "embeddings_and_activations": false,
+          "per_example_loss": false,
+          "gradients": false,
+          "source_provenance": false,
+          "exact_protected_training_roster": false
+        },
+        "llm_knowledge_levels": ["K0", "K1"],
+        "vision_profile": "NOT_MEASURED",
+        "screen_authority": {
+          "experimental_only": true,
+          "assessment_input_emitted": false,
+          "attack_battery_eligible": false,
+          "authorization_eligible": false,
+          "authorization_granted": false,
+          "can_clear": false,
+          "can_block": false,
+          "requires_approved_recollection": true,
+          "decision": "no_release_authorization"
+        }
+      },
+      {
+        "level": "R3",
+        "description": "arbitrary-candidate scoring and per-example loss without exact metadata",
+        "mask": {
+          "basic_prediction": true,
+          "generated_token_log_probabilities": false,
+          "class_scores": false,
+          "exact_candidate_source_metadata": false,
+          "exact_candidate_preprocessing_metadata": false,
+          "arbitrary_candidate_scoring": true,
+          "model_weights": false,
+          "embeddings_and_activations": false,
+          "per_example_loss": true,
+          "gradients": false,
+          "source_provenance": false,
+          "exact_protected_training_roster": false
+        },
+        "llm_knowledge_levels": ["K0", "K2"],
+        "vision_profile": "M2_internal_features",
+        "screen_authority": {
+          "experimental_only": true,
+          "assessment_input_emitted": false,
+          "attack_battery_eligible": false,
+          "authorization_eligible": false,
+          "authorization_granted": false,
+          "can_clear": false,
+          "can_block": false,
+          "requires_approved_recollection": true,
+          "decision": "no_release_authorization"
+        }
+      },
+      {
+        "level": "R4",
+        "description": "white-box internals and exact candidate metadata",
+        "mask": {
+          "basic_prediction": true,
+          "generated_token_log_probabilities": false,
+          "class_scores": false,
+          "exact_candidate_source_metadata": true,
+          "exact_candidate_preprocessing_metadata": true,
+          "arbitrary_candidate_scoring": true,
+          "model_weights": true,
+          "embeddings_and_activations": true,
+          "per_example_loss": true,
+          "gradients": true,
+          "source_provenance": false,
+          "exact_protected_training_roster": false
+        },
+        "llm_knowledge_levels": ["K0", "K1", "K2", "K3"],
+        "vision_profile": "M2_internal_features",
+        "screen_authority": {
+          "experimental_only": true,
+          "assessment_input_emitted": false,
+          "attack_battery_eligible": false,
+          "authorization_eligible": false,
+          "authorization_granted": false,
+          "can_clear": false,
+          "can_block": false,
+          "requires_approved_recollection": true,
+          "decision": "no_release_authorization"
+        }
+      },
+      {
+        "level": "R5",
+        "description": "exact protected roster and source provenance logical disclosure",
+        "mask": {
+          "basic_prediction": true,
+          "generated_token_log_probabilities": false,
+          "class_scores": false,
+          "exact_candidate_source_metadata": false,
+          "exact_candidate_preprocessing_metadata": false,
+          "arbitrary_candidate_scoring": false,
+          "model_weights": false,
+          "embeddings_and_activations": false,
+          "per_example_loss": false,
+          "gradients": false,
+          "source_provenance": true,
+          "exact_protected_training_roster": true
+        },
+        "llm_knowledge_levels": ["K0", "K4"],
+        "vision_profile": "M3_source_provenance",
+        "screen_authority": {
+          "experimental_only": true,
+          "assessment_input_emitted": false,
+          "attack_battery_eligible": false,
+          "authorization_eligible": false,
+          "authorization_granted": false,
+          "can_clear": false,
+          "can_block": false,
+          "requires_approved_recollection": true,
+          "decision": "no_release_authorization"
+        }
+      }
+    ]
+  },
+  "gate_policy": {
+    "axes": [
+      "model_license",
+      "data_rights",
+      "interface_disclosure",
+      "evidence_authority",
+      "robustness",
+      "fairness"
+    ],
+    "severity_order": [
+      "NOT_ASSESSED",
+      "DECLARED_REQUIRES_INDEPENDENT_REVIEW",
+      "LEGAL_REVIEW_REQUIRED",
+      "MANUAL_REVIEW_REQUIRED",
+      "APPROVED_RECOLLECTION_REQUIRED",
+      "RESTRICTED_AUDITOR_ONLY",
+      "BLOCKED_NONCOMMERCIAL_RESEARCH_ONLY",
+      "BLOCKED_AND_REDESIGN_REQUIRED"
+    ],
+    "absorbing_gates": [
+      "BLOCKED_NONCOMMERCIAL_RESEARCH_ONLY",
+      "BLOCKED_AND_REDESIGN_REQUIRED"
+    ],
+    "propagation": "worst_per_axis_with_absorbing_blocks",
+    "gate_averaging_allowed": false,
+    "model_contributions": {
+      "distilgpt2": {
+        "model_license": "DECLARED_REQUIRES_INDEPENDENT_REVIEW",
+        "data_rights": "MANUAL_REVIEW_REQUIRED",
+        "evidence_authority": "APPROVED_RECOLLECTION_REQUIRED"
+      },
+      "meta-opt-125m": {
+        "model_license": "BLOCKED_NONCOMMERCIAL_RESEARCH_ONLY",
+        "data_rights": "MANUAL_REVIEW_REQUIRED",
+        "evidence_authority": "APPROVED_RECOLLECTION_REQUIRED"
+      },
+      "pythia-160m": {
+        "model_license": "MANUAL_REVIEW_REQUIRED",
+        "data_rights": "MANUAL_REVIEW_REQUIRED",
+        "evidence_authority": "APPROVED_RECOLLECTION_REQUIRED"
+      },
+      "alexnet": {
+        "model_license": "DECLARED_REQUIRES_INDEPENDENT_REVIEW",
+        "data_rights": "MANUAL_REVIEW_REQUIRED",
+        "evidence_authority": "APPROVED_RECOLLECTION_REQUIRED"
+      },
+      "densenet121": {
+        "model_license": "DECLARED_REQUIRES_INDEPENDENT_REVIEW",
+        "data_rights": "MANUAL_REVIEW_REQUIRED",
+        "evidence_authority": "APPROVED_RECOLLECTION_REQUIRED"
+      }
+    },
+    "interface_contributions": {
+      "R0": "MANUAL_REVIEW_REQUIRED",
+      "R1": "MANUAL_REVIEW_REQUIRED",
+      "R2": "MANUAL_REVIEW_REQUIRED",
+      "R3": "RESTRICTED_AUDITOR_ONLY",
+      "R4": "RESTRICTED_AUDITOR_ONLY",
+      "R5": "BLOCKED_AND_REDESIGN_REQUIRED"
+    },
+    "commercial_context": true,
+    "exact_roster_rule": "logical_direct_disclosure_blocks_and_requires_interface_redesign"
+  },
+  "execution": {
+    "mode": "serial_one_gpu",
+    "child_order": ["llm", "vision"],
+    "gpu_parallelism": 1,
+    "visible_gpu_index": 0,
+    "shell": false,
+    "max_wall_clock_seconds": 43200,
+    "max_gpu_reserved_bytes": 21474836480,
+    "max_host_rss_bytes": 21474836480,
+    "max_aggregate_artifact_bytes": 21474836480,
+    "child_cache_defaults": {
+      "llm": "output/llm-training-hook/cache",
+      "vision": "output/cache/vision-training-hook"
+    },
+    "child_cli_contract": ["--config", "--output-dir", "--cache-dir", "--offline"]
+  },
+  "child_contract": {
+    "schema_version": "1.0",
+    "completion_status": "complete",
+    "manifest_report_fields": ["path", "sha256", "bytes"],
+    "suite_export_keys": [
+      "schema_version",
+      "modality",
+      "protected_unit_population",
+      "model_keys",
+      "seeds",
+      "scales",
+      "authority",
+      "resources",
+      "subset_scalars"
+    ],
+    "resource_keys": [
+      "model_key",
+      "wall_clock_seconds",
+      "peak_gpu_reserved_bytes",
+      "peak_host_rss_bytes",
+      "artifact_bytes"
+    ],
+    "scalar_row_keys": ["model_keys", "scale", "seed", "metrics"],
+    "metrics": {
+      "llm": [
+        "before_balanced_accuracy",
+        "after_balanced_accuracy",
+        "balanced_accuracy_change",
+        "before_roc_auc",
+        "after_roc_auc",
+        "roc_auc_change",
+        "before_membership_advantage",
+        "after_membership_advantage",
+        "membership_advantage_change",
+        "after_balanced_accuracy_minus_mean_singletons",
+        "after_roc_auc_minus_mean_singletons"
+      ],
+      "vision": [
+        "clean_top1_accuracy",
+        "clean_mean_cross_entropy",
+        "brightness_top1_accuracy",
+        "gaussian_noise_top1_accuracy",
+        "ensemble_fgsm_top1_accuracy",
+        "ensemble_fgsm_attack_success_rate_on_clean_correct",
+        "ensemble_fgsm_member_prediction_disagreement"
+      ]
+    },
+    "unknown_shape_policy": "fail_closed"
+  },
+  "output": {
+    "aggregate_json": "composition-scaling-suite-report.json",
+    "aggregate_markdown": "composition-scaling-suite-report.md",
+    "completion_manifest": "RUN_COMPLETE.json",
+    "directory_mode": "0700",
+    "artifact_mode": "0600",
+    "contains_record_identifiers": false,
+    "contains_machine_paths": false,
+    "contains_per_example_data": false,
+    "completion_written_last": true
+  }
+}

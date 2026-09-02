@@ -194,6 +194,205 @@ multiplicity obligations. Fairness is adopter-policy-specific future evidence: t
 policy contracts do not define a fairness decision, and demographic parity alone is not a complete
 fairness contract.
 
+### Bounded LLM training-hook experiment
+
+The evidence lab includes one configured, non-authorizing training integration
+test at [`../reproduction/llm-training-hook/`](../reproduction/llm-training-hook/).
+It binds the exact `mlabonne/llm-datasets` catalog commit, an immutable AllenAI
+WildChat-4.8M revision and direct Parquet object, and immutable DistilGPT2,
+OPT-125M, and Pythia-160M revisions. The selected shard is
+`data/train-00000-of-00086.parquet` at revision
+`c827c6df8fcf008219ffaffa4d1dd77491099367`, with SHA-256
+`6df660dca78dd92b865bef09b928992ceb6c913b4f06082315876a5997ad2eaa`,
+125,527,585 bytes, and 37,208 rows. The catalog README digest and the dataset
+entry's presence in those exact catalog bytes are also bound. Direct Parquet
+loading and disabled remote code prevent dataset-script execution; downloaded
+bytes are verified before parsing.
+
+The worker projects the first non-empty user/assistant pair only from English,
+`toxic=false`, `redacted=false` rows, excludes source network, geography,
+header, timestamp, request-identifier, and moderation fields, and removes exact
+pair duplicates. These are bounded eligibility and minimization rules, not a
+claim that content is harmless, deidentified, or legally cleared. The selected
+rows contain real human-user prompts and ChatGPT-generated responses. The
+dataset card's ODC-By declaration concerns database rights and does not itself
+license or clear each conversation or provider output.
+The exact 14,962-byte dataset card and 19,947-byte license file are separately
+digest-bound governance inputs. Binding their bytes makes the upstream
+declaration auditable; it does not turn that declaration into a rights grant.
+
+Seeded identifier hashing selects 9,216 rows: the same 8,192 training rows and
+1,024-row untouched holdout for every model. Each fresh model trains
+sequentially for one deterministic FP32 epoch with batch size 16, yielding 512
+optimizer steps. Every model evaluates its holdout before and after training,
+but no holdout result controls tuning, stopping, checkpoint choice, hook
+thresholds, or model choice.
+
+During each model's single deterministic FP32 epoch, removable hooks observe
+only its registered first and last block: `transformer.h.0/.5` for DistilGPT2,
+`model.decoder.layers.0/.11` for OPT, and `gpt_neox.layers.0/.11` for Pythia.
+They immediately reduce forward, backward-output-gradient, and
+parameter-gradient observations to finite fractions, L2 norms, absolute
+maxima, and loss summaries, enforce an event cap, fail on non-finite
+observations, and retain no raw prompts, tokens, outputs, parameters,
+activations, gradients, or tensors. Each model has a separate JSONL stream in a
+fresh run directory. The JSONL streams and JSON/Markdown reports are ignored
+experimental artifacts with code/configuration/data/model/runtime provenance.
+They are not production telemetry, trusted workload attestation, LLM canary
+evidence, an assessment report, or authorization; holdout loss and perplexity
+remain functional screens.
+
+Before tokenization, the worker applies registered 131,072-byte-per-field and
+262,144-byte-per-record UTF-8 limits. It probes each tokenizer's installed
+special-token API and accepts only a prefix-only policy compatible with masking
+the model prefix and prompt from completion loss. Models load from the exact
+verified local artifact set with `local_files_only=true`, remote code disabled,
+and no credential token. This loader setting is not OS-level network isolation;
+an isolated production worker still needs an enforced egress boundary.
+
+Before and after training each model, the worker runs a knowledge-profile
+lattice over disjoint cells with 256 members and 256 nonmembers for calibration
+and the same counts for audit. It compares an equal-prior baseline,
+model-tokenizer/source metadata (`sequence_tokens`, `target_tokens`,
+`source_turn_count`, `source_model_is_gpt4`, `prompt_truncated`, and
+`response_truncated`), `target_nll`, metadata plus loss, and exact roster
+lookup. The first four are descriptive screens with no power claim and can never clear
+or block. Their realizability follows the declared interface. Plain text-only
+generation realizes only the equal-prior view. Candidate metadata becomes
+realizable only if the interface supplies all six exact registered fields and
+the tokenizer/preprocessing are known. Candidate loss requires an interface
+that scores every supplied continuation token or white-box access; generated-
+token-only log probabilities are insufficient. The combined view requires all
+metadata and arbitrary-candidate-scoring preconditions. White-box assessor
+access does not widen a text-only recipient interface.
+Before/after, between-profile, and cross-model differences are neither causal
+estimates nor guaranteed to be monotone.
+
+The public experiment's roster is internally reconstructible from its pinned
+input, seed, and selection rule but is not a declared recipient surface. An
+exposed exact training-roster manifest directly reveals membership and is not a
+statistical attack result. For a real protected roster, that condition sets the
+membership gate to `BLOCKED` and the release process to `REDESIGN_REQUIRED`.
+The disclosure path must be removed, the changed interface and artifact
+rebound, and the release reassessed before the process can continue. A
+favorable empirical screen cannot override direct disclosure.
+
+Legal and use-policy gates remain independent of technical measurements. The
+pinned OPT license is non-commercial-research-only, so production/commercial
+use is `BLOCKED`; the worker allows only pinned legacy PyTorch weights with
+remote code disabled and weights-only loading. DistilGPT2 and Pythia require
+safetensors with remote code disabled. Pythia's model-card warning discourages
+deployment and human-facing use, so those uses require independent risk/bias
+and policy/manual review even though its declared license is Apache-2.0. Every
+run remains experimental and reports `no_release_authorization`; data rights,
+privacy, security, and provenance require separate release-process evidence.
+
+The worker writes `RUN_COMPLETE.json` last, after verifying the registered
+JSON, Markdown, and telemetry artifact names, byte sizes, and SHA-256 digests.
+Without that final manifest the directory is an incomplete run, not a report
+set that may be audited as operationally complete.
+
+### Full real-data vision training-hook experiment
+
+The separate configured vision workload at
+[`../reproduction/vision-training-hook/`](../reproduction/vision-training-hook/)
+uses the complete pinned EuroSAT RGB archive: all 27,000 real Sentinel-2
+land-use/land-cover JPEG patches in ten classes. It does not use synthetic
+training examples. Within each class, the worker orders registered relative
+paths by `sha256("3407:" + relative_path)` to produce a deterministic,
+class-stratified 21,600-image training roster and 5,400-image test roster. This
+is a **path-hash split**, not a content-hash split. Independent content digests
+then verify 27,000 unique images and zero duplicate-image overlap between the
+two rosters. The test split is not used for tuning or checkpoint selection,
+and the design does not address spatial autocorrelation or new-region shift.
+
+The two models are the canonical torchvision 0.28.0 AlexNet and DenseNet-121
+implementations, each constructed with `weights=None` and ten output classes.
+They therefore train from seeded random initialization rather than pretrained
+checkpoints. Each architecture consumes the full 21,600-image
+training split for one FP32 epoch and is evaluated on all 5,400 test images
+before and after. Model-specific early/late hooks reduce observations to
+bounded aggregate telemetry. A paired real-example CPU control checks that the
+instrumented and uninstrumented one-step paths match exactly for the registered
+control; it explicitly does not prove CUDA noninterference. The full CUDA
+workload uses deterministic split/batch order with warn-only deterministic
+algorithms, allowlists only `adaptive_avg_pool2d_backward_cuda`, rejects
+unexpected nondeterminism warnings, and makes no bitwise-reproducibility claim.
+
+The post-training red-team stage uses a deterministic 512-image subset of the
+real test roster for bounded brightness, Gaussian-noise, and white-box FGSM
+screens. Its M0–M3 interface profiles separately describe label-only, score,
+internal-feature, and source-provenance disclosures. These perturbations and
+profiles are descriptive, non-clearing checks. Processing the complete real
+corpus is a systems scalability and integration stress test; one seed, one
+epoch, one non-spatial split, and a small registered attack set are not a
+statistical safety, robustness, privacy, fairness, accuracy, or production-
+capacity proof. Every outcome remains `no_release_authorization`.
+
+### Five-model composition-scaling experiment
+
+The registered design under
+[`../reproduction/composition-scaling/`](../reproduction/composition-scaling/)
+extends the two baseline workers without changing the supported assurance core.
+One coordinator validates both child contracts, serializes GPU execution,
+verifies child completion manifests and aggregate exports, constructs portfolio
+views, and publishes its own completion manifest last.
+
+```text
+suite coordinator (12-hour / 20-GiB fail-closed envelope)
+        |
+        +--> LLM child: 3 models x 3 WildChat scales x 5 seeds = 45 fresh cells
+        |       +--> 7 non-empty, same-roster output subsets
+        |       +--> separately labelled cumulative-exposure sensitivity path
+        |
+        +--> vision child: 2 models x 3 EuroSAT scales x 5 seeds
+                +--> batch {64,128} x hook {off,on} = 120 cells total
+                +--> 3 non-empty output subsets and FGSM transfer registry
+        |
+        +--> 31 non-empty five-model resource/gate portfolios
+                +--> 10 same-modality portfolios may carry modality scalars
+                +--> 21 mixed portfolios remain resource/gate vectors only
+```
+
+The 75 independent reference cells are fresh model initializations at each
+model/scale/seed point. The remaining 90 vision cells are matched operational
+batch/hook variants, not additional independent model families. LLM training
+scales are 2,048, 4,096, and 8,192 rows with a fixed disjoint 1,024-row
+holdout. Vision training scales are 5,400, 10,800, and 21,600 images with a
+fixed 5,400-image test roster. The five shared seeds are frozen in the child
+contracts. Reusing the completed baseline report as an anchor does not satisfy
+any new cell or fused measurement.
+
+Scalar output composition is permitted only among models evaluated against the
+same protected-unit population and game. The LLM child combines member scores
+within that domain and compares each multi-model subset with the mean of its
+constituent singleton results. The vision child probability-averages model
+outputs on the same test examples and evaluates clean and registered perturbed
+conditions. AUC, balanced accuracy, top-1 accuracy, membership advantage, and
+attack success are not commensurate across modalities and are never averaged
+into a cross-modal risk score.
+
+Release-interface levels R0–R5 are non-ordinal capability profiles rather than
+an assumption that metadata accumulates monotonically. R0 is basic prediction;
+R1 adds generated-token log probabilities or class scores; R2 is exact
+candidate source/preprocessing metadata; R3 permits arbitrary-candidate
+scoring or per-example loss; R4 exposes white-box/internal features together
+with exact metadata; and R5 exposes the exact protected roster/source
+provenance. R5 is a logical `BLOCKED_REDESIGN_REQUIRED` disclosure condition,
+not an empirical attack result. OPT-containing commercial portfolios remain
+license-blocked independently of measurements, while Pythia and dataset rights
+remain manual policy gates.
+
+Children retain bounded aggregate checkpoints in resumable hash-bound journals.
+They do not persist model weights, examples, protected rosters, per-example
+scores, raw telemetry, or absolute paths. A partial journal is not a completed
+run. Each child must close its exact schedule, publish registered JSON and
+Markdown reports, and write `RUN_COMPLETE.json` last; only then may the suite
+verify its aggregate export. Every level repeats the exact non-authorizing
+authority fields, including `assessment_input_emitted=false`,
+`attack_battery_eligible=false`, `can_clear=false`, `can_block=false`, and
+`decision=no_release_authorization`.
+
 ## Implemented runtime workflows
 
 ### Validation and assessment
@@ -458,7 +657,7 @@ versioned models, schemas, negative tests, authorization rules, and migration po
 | SQLite AuditStore | Required for CLI `assess`/`optimize`; library engines remain pure/non-authorizing | `audit-verify`, `audit-checkpoint`, and read-only MCP verifier | Intent/terminal WAL/FULL-sync chain; new hashes bind ledger/release/instance identity while legacy hashes require explicit opt-in; no signature, authoritative namespace, remote anchor, legal hold, replication, or authorization semantics |
 | PEM keys and trust-store paths | Local `keygen` or external maintainer | Sign/verify and authenticated transcript replay | Reference filesystem key handling; no KMS/HSM, identity enrollment, rotation service, or secret distribution |
 | Knowledge index | Built in memory by the MCP server; optional save/load API | MCP search tool | Deterministic lexical chunks with source and chunk hashes; no embeddings, vector database, tenant filtering, or truth authority |
-| Experimental output and public-data cache | Evidence-lab workers or MCP subprocess | Researchers and replay utilities | Ignored runtime data; may contain generated models and measurements; not retained release evidence unless an external process freezes and binds it |
+| Experimental output and public-data cache | Evidence-lab workers or MCP subprocess | Researchers and replay utilities | Ignored runtime data; may contain generated models and measurements. The LLM hook worker writes only bounded aggregate activation/gradient telemetry, but this is still not production telemetry or retained release evidence unless an external process freezes, authenticates, and binds it. |
 | Immutable artifact/evidence store, registry, and monitoring store | External production services | External authorities, gateway, monitors, and supplied transcript assembler | Required target infrastructure; not implemented or emulated by local SQLite |
 
 The standard CLI does not sandbox caller-selected input or output paths. Experimental MCP methods add
@@ -476,6 +675,8 @@ subprocesses still inherit every file and credential permission of the MCP serve
 | Experiment tier | NumPy, Pandas, PyArrow, SciPy, scikit-learn, XGBoost, and joblib | OpenML, empirical, XGBoost, stochastic, and red-team research paths |
 | MCP tier | `mcp>=2,<3`, source checkout | Local stdio server; docs/schemas corpus is not bundled in the wheel |
 | Privacy tier | Experiment dependencies plus PyTorch in `.privacy-venv` | Public-data CNN/LSTM/XGBoost/Transformer subprocess; may require network access |
+| LLM hook tier | Isolated PyTorch, Transformers, tokenizers, safetensors, and PyArrow runtime | Sequential commit-pinned direct-Parquet DistilGPT2/OPT-125M/Pythia-160M matrix with model-specific aggregate-only removable hooks and fresh run directories; OPT's pinned legacy weights require weights-only loading, and initial immutable fetches require network access |
+| Vision hook tier | Registered PyTorch/torchvision/Pillow CUDA runtime | Full pinned 27,000-image EuroSAT RGB archive; canonical from-scratch AlexNet/DenseNet-121 one-epoch matrix, aggregate-only removable hooks, and bounded real-image perturbation screens; initial immutable fetch requires network access |
 | Formal tier | Lean toolchain pinned under `formal/lean/` | Separate proof build and axiom audit |
 
 `ReleaseOptimizer` does not call SciPy: it replays supplied transfer certificates, computes graph
@@ -534,7 +735,11 @@ Completed domain outcomes—including `block`, `inconclusive`, `redesign_require
 `0`; validation/integrity/operational failures exit `2`. Automation must inspect the report rather
 than treating process success as release approval. Direct library use does not silently acquire an
 audit record.
-Experimental reports are study artifacts, not production telemetry.
+Experimental reports are study artifacts, not production telemetry. The LLM
+training-hook JSONL stream is likewise a bounded self-reported experiment
+artifact: its hash and provenance fields can detect accidental drift or local
+tampering within the retained run, but they do not authenticate the workload,
+host, dataset owner, or measurement truth.
 
 There are no structured application logs, metrics, traces, health/readiness endpoints, dashboards,
 alerts, centralized operational audit service, or on-call integration. Production observability is an
