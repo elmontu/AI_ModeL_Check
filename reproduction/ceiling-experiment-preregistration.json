@@ -1,0 +1,53 @@
+{
+  "schema_version": "1.0",
+  "registration_id": "mra-ceiling-experiments-2026-09-03",
+  "registered_at": "2026-09-03T05:19:12Z",
+  "outcome_collection_started": false,
+  "source_snapshot": {
+    "git_commit": "dd08baa3eec7ba8767d70e163181a946559031d0",
+    "git_tree": "3079517e0d8cc4496744c34f5627ecbbab682b08",
+    "commit_timestamp": "2026-09-03T13:18:52+08:00",
+    "commit_signed": false,
+    "external_timestamp_present_at_registration": false,
+    "note": "The local Git commit freezes the complete tracked source tree before outcome collection. GitHub publication was pending authentication at registration time."
+  },
+  "registered_artifacts": {
+    "known_channel_config_sha256": "6de06c2f888f33e11e2af2bed93e3042b7b76f34b163049ed89be1a1f4f3cb6b",
+    "known_channel_runner_sha256": "29d71d9a0a219a8b13e5c6eedb960bf9a8bcc87fc13df2c467c7ec1efc903b69",
+    "model_backed_config_sha256": "8e02ad4833927230a03fcf1400e2369190d5d4aac83f9519d4062d87438b5711",
+    "model_backed_runner_sha256": "438f4b601539a552e1bfc1877db1ab0b5e19b1957b24fe656e5871d6cec30f51",
+    "wrapper_conformance_sha256": "e03646ee29712ab9a85bb0af93d6196ccccbc0b9afe1c41a12676d85aba778d5",
+    "requirements_lock_sha256": "ba2acd1515e9523fb3ea0ab21ccc817c3c230b6a4bcb9e1d7871f8d68e24fbcb",
+    "experiment_requirements_sha256": "74dfcd43b99f640200c41c7bad01a2ac2f41098f10234c7cda197fc6eacac077",
+    "project_manifest_sha256": "9ff2ca82cad08b1398a10af9dca1ac144ad6417a8ff39247b60d0e7a65791bdd"
+  },
+  "pre_outcome_verification": {
+    "target_environment": {
+      "python": "3.13.15",
+      "scipy": "1.18.1",
+      "torch": "2.13.0+cu130",
+      "xgboost": "2.1.4",
+      "scikit_learn": "1.6.1",
+      "cuda_available": true
+    },
+    "focused_tests": {
+      "passed": 55,
+      "failed": 0,
+      "errors": 0
+    },
+    "fabricated_repeat_path_preflight": {
+      "real_collector_invoked": false,
+      "completed_model_variant_families": 1,
+      "completed_repetitions": 200,
+      "all_analyzer_replays_completed": true,
+      "all_exact_oracles_covered": true,
+      "stopped_after_first_family": true,
+      "acceptance_result_computed": false
+    }
+  },
+  "authority": {
+    "experimental_only": true,
+    "authorization_eligible": false,
+    "release_authorization": "none"
+  }
+}
