@@ -1,0 +1,53 @@
+{
+  "schema_version": "1.0",
+  "registration_id": "model-backed-finite-channel-public-data-v2-2026-09-03",
+  "registered_at": "2026-09-03T05:34:55Z",
+  "outcome_collection_started": false,
+  "reason_for_new_registration": {
+    "predecessor": "model-backed-finite-channel-public-data-v1",
+    "predecessor_status": "failed_before_outcome_compilation",
+    "failure_record": "reproduction/model-backed-finite-channel/failed-v1-execution.json",
+    "failure_record_sha256": "ee229cdbcc75762643068e74353c5c09a30d1c58f5188a0f7f1979c9f40a1b93",
+    "outcome_inspected_before_v2_registration": false,
+    "change_scope": "XGBoost sklearn-wrapper serialization compatibility and its regression tests"
+  },
+  "source_snapshot": {
+    "git_commit": "972eef898634b13ee471adb98a2e92ac03c06c08",
+    "git_tree": "2a16edc735f6659fc2c53886bde4a6d98e886c14",
+    "commit_timestamp": "2026-09-03T13:34:37+08:00",
+    "commit_signed": false,
+    "external_timestamp_present_at_registration": false,
+    "archive_sha256": "12d8086e99ffbe6cfbe04d1333081d0c8558d484f44e7a58aaa95f28fd6f9bf2",
+    "note": "The local Git commit and deterministic source archive freeze the complete tracked source tree before v2 outcome collection. GitHub publication was pending authentication at registration time."
+  },
+  "registered_artifacts": {
+    "config_sha256": "77850b333353bef86d72a1647ed0de50bf6c2d6b7ee7f6d1e26e721e653e3f8e",
+    "experiment_runner_sha256": "75c46cd7232bd2676c282993e255a161be0d2df1ec1e4e3a1824ad093319714d",
+    "collector_runner_sha256": "177dc20deeb8ea1413f66f473dd92726d7c637cbe8bd325d2fbe7c54ccf1f13a",
+    "xgboost_regression_test_sha256": "b7ce6ff7ad360dbdf8fe548244d1c15f84682714ea9d86b49c128e55bccdef2b"
+  },
+  "pre_outcome_verification": {
+    "target_environment": {
+      "python": "3.13.15",
+      "scipy": "1.18.1",
+      "torch": "2.13.0+cu130",
+      "xgboost": "2.1.4",
+      "scikit_learn": "1.6.1",
+      "cuda_available": true
+    },
+    "focused_tests": {
+      "passed": 10,
+      "failed": 0,
+      "errors": 0,
+      "includes_xgboost_serialization_regression_tests": 2,
+      "includes_model_backed_protocol_tests": 8
+    },
+    "real_collector_invoked_for_v2": false,
+    "acceptance_result_computed_for_v2": false
+  },
+  "authority": {
+    "experimental_only": true,
+    "authorization_eligible": false,
+    "release_authorization": "none"
+  }
+}
