@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="687" viewBox="0 0 1280 687" role="img" aria-labelledby="title desc">
+<title id="title">Finite-channel ceiling validation</title>
+<desc id="desc">Exact oracle risk points shown against controlled and model-conditional mean intervals. Triangles mark model-conditional 95th-percentile ceilings. A dashed vertical line marks the MRA tolerance of 0.65.</desc>
+<rect width="100%" height="100%" fill="#ffffff"/>
+<style>text{font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#172033}.title{font-size:25px;font-weight:700}.subtitle{font-size:14px;fill:#536079}.label{font-size:13px}.label.fail{fill:#b42318;font-weight:700}.tick{font-size:12px;fill:#667085}.section{font-size:12px;font-weight:700;letter-spacing:.08em}.legend{font-size:12px}</style>
+<text class="title" x="32" y="40">Ceiling validation against exact oracle risk</text>
+<text class="subtitle" x="32" y="66">Line = mean [floor, ceiling]; dot = exact risk R*; triangle = p95 ceiling; dashed line = tolerance 0.65</text>
+<line x1="32" y1="91" x2="54" y2="91" stroke="#1769aa" stroke-width="5" stroke-linecap="round"/>
+<text class="legend" x="62" y="95">controlled mean interval</text>
+<line x1="232" y1="91" x2="254" y2="91" stroke="#7a3db8" stroke-width="5" stroke-linecap="round"/>
+<text class="legend" x="262" y="95">model-conditional one-shot interval</text>
+<circle cx="503" cy="91" r="5" fill="#111827"/>
+<text class="legend" x="514" y="95">exact oracle risk</text>
+<polygon points="654,84 648,96 660,96" fill="#7a3db8"/>
+<text class="legend" x="669" y="95">model p95 ceiling</text>
+<line x1="440.00" y1="125" x2="440.00" y2="567" stroke="#e4e7ec" stroke-width="1"/>
+<text class="tick" x="440.00" y="595" text-anchor="middle">0.5</text>
+<line x1="594.00" y1="125" x2="594.00" y2="567" stroke="#e4e7ec" stroke-width="1"/>
+<text class="tick" x="594.00" y="595" text-anchor="middle">0.6</text>
+<line x1="748.00" y1="125" x2="748.00" y2="567" stroke="#e4e7ec" stroke-width="1"/>
+<text class="tick" x="748.00" y="595" text-anchor="middle">0.7</text>
+<line x1="902.00" y1="125" x2="902.00" y2="567" stroke="#e4e7ec" stroke-width="1"/>
+<text class="tick" x="902.00" y="595" text-anchor="middle">0.8</text>
+<line x1="1056.00" y1="125" x2="1056.00" y2="567" stroke="#e4e7ec" stroke-width="1"/>
+<text class="tick" x="1056.00" y="595" text-anchor="middle">0.9</text>
+<line x1="1210.00" y1="125" x2="1210.00" y2="567" stroke="#e4e7ec" stroke-width="1"/>
+<text class="tick" x="1210.00" y="595" text-anchor="middle">1.0</text>
+<line x1="671.00" y1="117" x2="671.00" y2="567" stroke="#d1495b" stroke-width="2" stroke-dasharray="7 5"/>
+<text class="tick" x="678.00" y="113" fill="#b42318">tolerance 0.65</text>
+<text class="section" x="32" y="128" fill="#1769aa">CONTROLLED EXACT GROUND TRUTH</text>
+<text class="label" x="32" y="150">Controlled · XGBoost label · SAFE</text>
+<line x1="441.24" y1="145" x2="610.94" y2="145" stroke="#1769aa" stroke-width="6" stroke-linecap="round"/>
+<line x1="441.24" y1="138" x2="441.24" y2="152" stroke="#1769aa" stroke-width="2"/>
+<line x1="610.94" y1="138" x2="610.94" y2="152" stroke="#1769aa" stroke-width="2"/>
+<circle cx="517.00" cy="145" r="5.5" fill="#111827" stroke="#ffffff" stroke-width="1.5"/>
+<text class="label" x="32" y="198">Controlled · CNN label · BOUNDARY</text>
+<line x1="592.71" y1="193" x2="768.43" y2="193" stroke="#1769aa" stroke-width="6" stroke-linecap="round"/>
+<line x1="592.71" y1="186" x2="592.71" y2="200" stroke="#1769aa" stroke-width="2"/>
+<line x1="768.43" y1="186" x2="768.43" y2="200" stroke="#1769aa" stroke-width="2"/>
+<circle cx="671.00" cy="193" r="5.5" fill="#111827" stroke="#ffffff" stroke-width="1.5"/>
+<text class="label" x="32" y="246">Controlled · LLM label · UNSAFE</text>
+<line x1="815.51" y1="241" x2="992.01" y2="241" stroke="#1769aa" stroke-width="6" stroke-linecap="round"/>
+<line x1="815.51" y1="234" x2="815.51" y2="248" stroke="#1769aa" stroke-width="2"/>
+<line x1="992.01" y1="234" x2="992.01" y2="248" stroke="#1769aa" stroke-width="2"/>
+<circle cx="902.00" cy="241" r="5.5" fill="#111827" stroke="#ffffff" stroke-width="1.5"/>
+<line x1="32" y1="263" x2="1248" y2="263" stroke="#cfd5df"/>
+<text class="section" x="32" y="281" fill="#7a3db8">MODEL-CONDITIONAL PUBLIC DATA</text>
+<text class="label" x="32" y="306">Conditional · CNN · raw</text>
+<line x1="440.00" y1="301" x2="516.99" y2="301" stroke="#7a3db8" stroke-width="6" stroke-linecap="round"/>
+<line x1="440.00" y1="294" x2="440.00" y2="308" stroke="#7a3db8" stroke-width="2"/>
+<line x1="516.99" y1="294" x2="516.99" y2="308" stroke="#7a3db8" stroke-width="2"/>
+<circle cx="463.10" cy="301" r="5.5" fill="#111827" stroke="#ffffff" stroke-width="1.5"/>
+<polygon points="523.94,293 517.94,306 529.94,306" fill="#7a3db8"/>
+<text class="label" x="32" y="342">Conditional · CNN · 90% erasure</text>
+<line x1="440.00" y1="337" x2="486.89" y2="337" stroke="#7a3db8" stroke-width="6" stroke-linecap="round"/>
+<line x1="440.00" y1="330" x2="440.00" y2="344" stroke="#7a3db8" stroke-width="2"/>
+<line x1="486.89" y1="330" x2="486.89" y2="344" stroke="#7a3db8" stroke-width="2"/>
+<circle cx="442.31" cy="337" r="5.5" fill="#111827" stroke="#ffffff" stroke-width="1.5"/>
+<polygon points="492.13,329 486.13,342 498.13,342" fill="#7a3db8"/>
+<text class="label" x="32" y="390">Conditional · XGBoost · raw</text>
+<line x1="515.97" y1="385" x2="612.73" y2="385" stroke="#7a3db8" stroke-width="6" stroke-linecap="round"/>
+<line x1="515.97" y1="378" x2="515.97" y2="392" stroke="#7a3db8" stroke-width="2"/>
+<line x1="612.73" y1="378" x2="612.73" y2="392" stroke="#7a3db8" stroke-width="2"/>
+<circle cx="559.35" cy="385" r="5.5" fill="#111827" stroke="#ffffff" stroke-width="1.5"/>
+<polygon points="621.78,377 615.78,390 627.78,390" fill="#7a3db8"/>
+<text class="label" x="32" y="438">Conditional · XGBoost · 90% erasure</text>
+<line x1="440.00" y1="433" x2="495.92" y2="433" stroke="#7a3db8" stroke-width="6" stroke-linecap="round"/>
+<line x1="440.00" y1="426" x2="440.00" y2="440" stroke="#7a3db8" stroke-width="2"/>
+<line x1="495.92" y1="426" x2="495.92" y2="440" stroke="#7a3db8" stroke-width="2"/>
+<circle cx="451.94" cy="433" r="5.5" fill="#111827" stroke="#ffffff" stroke-width="1.5"/>
+<polygon points="501.56,425 495.56,438 507.56,438" fill="#7a3db8"/>
+<text class="label fail" x="32" y="486">Conditional · Transformer proxy · raw · CLEAR POWER FAIL</text>
+<line x1="562.01" y1="481" x2="670.67" y2="481" stroke="#7a3db8" stroke-width="6" stroke-linecap="round"/>
+<line x1="562.01" y1="474" x2="562.01" y2="488" stroke="#7a3db8" stroke-width="2"/>
+<line x1="670.67" y1="474" x2="670.67" y2="488" stroke="#7a3db8" stroke-width="2"/>
+<circle cx="611.60" cy="481" r="5.5" fill="#111827" stroke="#ffffff" stroke-width="1.5"/>
+<polygon points="681.87,473 675.87,486 687.87,486" fill="#7a3db8"/>
+<text class="label" x="32" y="534">Conditional · Transformer proxy · 90% erasure</text>
+<line x1="440.00" y1="529" x2="503.27" y2="529" stroke="#7a3db8" stroke-width="6" stroke-linecap="round"/>
+<line x1="440.00" y1="522" x2="440.00" y2="536" stroke="#7a3db8" stroke-width="2"/>
+<line x1="503.27" y1="522" x2="503.27" y2="536" stroke="#7a3db8" stroke-width="2"/>
+<circle cx="457.16" cy="529" r="5.5" fill="#111827" stroke="#ffffff" stroke-width="1.5"/>
+<polygon points="508.31,521 502.31,534 514.31,534" fill="#7a3db8"/>
+<text class="subtitle" x="825.00" y="655" text-anchor="middle">Equal-prior membership success probability</text>
+</svg>
