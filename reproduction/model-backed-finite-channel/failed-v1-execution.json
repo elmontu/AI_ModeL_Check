@@ -1,0 +1,29 @@
+{
+  "schema_version": "1.0",
+  "experiment_id": "model-backed-finite-channel-public-data-v1",
+  "source_commit": "dd08baa3eec7ba8767d70e163181a946559031d0",
+  "status": "failed_before_outcome_compilation",
+  "exit_status": 1,
+  "elapsed_wall_seconds": 9.2,
+  "maximum_resident_set_kib": 2361080,
+  "failure_stage": "ephemeral_xgboost_artifact_hashing",
+  "failure_type": "AttributeError",
+  "failure_summary": "The installed sklearn-compatible XGBClassifier requires save_raw to be called on get_booster(), not on the classifier wrapper.",
+  "execution_log_sha256": "bac7b366039ffb3fb5bb646708f5321862519408f4ad87dcd4ef5b6f864d9238",
+  "resource_usage_sha256": "d98c23dbc4ea4dfea7a1170d6be94eb5990ed5a85ea94e5a15a9bcff3de2aa27",
+  "result_directory_created": false,
+  "ceiling_outcome_emitted": false,
+  "risk_outcome_inspected": false,
+  "raw_collector_directory_retained": false,
+  "resolution": {
+    "scope": "compatibility_bug_only",
+    "change": "Resolve the low-level Booster with XGBClassifier.get_booster() before deterministic serialization.",
+    "regression_test_added": "tests/test_public_privacy_audit_artifact_hash.py",
+    "rerun_requires_new_registration": true
+  },
+  "authority": {
+    "experimental_only": true,
+    "authorization_eligible": false,
+    "release_authorization": "none"
+  }
+}

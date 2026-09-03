@@ -326,7 +326,7 @@ def validate_config(
     }, "config top-level schema changed")
     _require(config.get("schema_version") == "1.0", "unsupported config schema")
     _require(
-        config.get("experiment_id") == "model-backed-finite-channel-public-data-v1",
+        config.get("experiment_id") == "model-backed-finite-channel-public-data-v2",
         "unexpected experiment identifier",
     )
     try:

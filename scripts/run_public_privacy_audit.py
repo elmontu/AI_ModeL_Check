@@ -81,11 +81,22 @@ def torch_artifact_sha256(model: nn.Module) -> str:
     return digest.hexdigest()
 
 
+def xgboost_booster_bytes(model: Any) -> bytes:
+    """Serialize either an sklearn XGB wrapper or a low-level Booster."""
+
+    getter = getattr(model, "get_booster", None)
+    booster = getter() if callable(getter) else model
+    serializer = getattr(booster, "save_raw", None)
+    if not callable(serializer):
+        raise TypeError("XGBoost artifact does not expose a serializable Booster")
+    return bytes(serializer(raw_format="json"))
+
+
 def xgboost_pipeline_sha256(model: Any, preprocessor: ColumnTransformer) -> str:
     """Hash target booster plus fitted preprocessing parameters."""
 
     digest = hashlib.sha256(b"MRA-PUBLIC-AUDIT-XGBOOST-PIPELINE-1\0")
-    digest.update(bytes(model.save_raw(raw_format="json")))
+    digest.update(xgboost_booster_bytes(model))
     digest.update(json.dumps(
         list(preprocessor.feature_names_in_),
         ensure_ascii=False,

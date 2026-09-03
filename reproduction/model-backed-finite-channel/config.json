@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "experiment_id": "model-backed-finite-channel-public-data-v1",
-  "registered_at": "2026-09-03T05:09:30Z",
+  "experiment_id": "model-backed-finite-channel-public-data-v2",
+  "registered_at": "2026-09-03T05:31:30Z",
   "authority": {
     "experimental_only": true,
     "benchmark_population_conditional": true,
@@ -13,7 +13,7 @@
   "collector": {
     "experiment_id": "public-data-four-model-membership-audit-v1",
     "runner_path": "scripts/run_public_privacy_audit.py",
-    "runner_sha256": "7f0254c563b3a182b6f880e233f016e7b641bd4829cb59f2509e0c9eb41ce1c8",
+    "runner_sha256": "177dc20deeb8ea1413f66f473dd92726d7c637cbe8bd325d2fbe7c54ccf1f13a",
     "seed": 2026090301,
     "epochs": 5,
     "raw_output_use": "temporary_disposable_directory_then_aggregate_only_output"
@@ -123,7 +123,7 @@
   },
   "production_path": {
     "experiment_runner_path": "scripts/run_model_backed_finite_channel.py",
-    "experiment_runner_sha256": "438f4b601539a552e1bfc1877db1ab0b5e19b1957b24fe656e5871d6cec30f51",
+    "experiment_runner_sha256": "75c46cd7232bd2676c282993e255a161be0d2df1ec1e4e3a1824ad093319714d",
     "assurance_engine_path": "src/model_release_assurance/engine.py",
     "assurance_engine_sha256": "8500c75f0cc48473e106dcfe0a11f2d3a820d582a0e9a5c4865b681985208739",
     "analytic_solver_path": "src/model_release_assurance/incomplete_portfolio.py",
