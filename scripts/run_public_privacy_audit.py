@@ -69,6 +69,41 @@ def canonical_hash(*arrays: np.ndarray) -> str:
     return digest.hexdigest()
 
 
+def torch_artifact_sha256(model: nn.Module) -> str:
+    """Hash the ephemeral trained weights without persisting them."""
+
+    digest = hashlib.sha256(b"MRA-PUBLIC-AUDIT-TORCH-ARTIFACT-1\0")
+    for name, tensor in sorted(model.state_dict().items()):
+        array = tensor.detach().cpu().numpy()
+        digest.update(name.encode("utf-8"))
+        digest.update(b"\0")
+        digest.update(bytes.fromhex(canonical_hash(array)))
+    return digest.hexdigest()
+
+
+def xgboost_pipeline_sha256(model: Any, preprocessor: ColumnTransformer) -> str:
+    """Hash target booster plus fitted preprocessing parameters."""
+
+    digest = hashlib.sha256(b"MRA-PUBLIC-AUDIT-XGBOOST-PIPELINE-1\0")
+    digest.update(bytes(model.save_raw(raw_format="json")))
+    digest.update(json.dumps(
+        list(preprocessor.feature_names_in_),
+        ensure_ascii=False,
+        separators=(",", ":"),
+    ).encode("utf-8"))
+    numeric = preprocessor.named_transformers_["numeric"]
+    for name in ("mean_", "scale_", "var_"):
+        digest.update(bytes.fromhex(canonical_hash(np.asarray(getattr(numeric, name)))))
+    categorical = preprocessor.named_transformers_["categorical"]
+    for categories in categorical.categories_:
+        digest.update(json.dumps(
+            [str(value) for value in categories],
+            ensure_ascii=False,
+            separators=(",", ":"),
+        ).encode("utf-8"))
+    return digest.hexdigest()
+
+
 def split_indices(size: int, counts: tuple[int, ...], seed: int) -> list[np.ndarray]:
     if sum(counts) > size:
         raise ValueError(f"requested {sum(counts)} rows from dataset with {size}")
@@ -220,6 +255,7 @@ def audit_torch_pair(
     )
     return {
         "model": name,
+        "ephemeral_model_artifact_sha256": torch_artifact_sha256(target),
         "utility_accuracy": torch_accuracy(target, x[utility], y[utility]),
         "training_rows": len(target_train),
         "attack": attack,
@@ -292,6 +328,10 @@ def audit_xgboost(cache: Path, seed: int) -> tuple[dict[str, Any], dict[str, Any
     )
     report = {
         "model": "xgboost",
+        "ephemeral_model_artifact_sha256": xgboost_pipeline_sha256(
+            target,
+            preprocessor,
+        ),
         "utility_accuracy": float(np.mean(target.predict(transformed[utility]) == labels[utility])),
         "training_rows": len(target_train),
         "attack": attack,

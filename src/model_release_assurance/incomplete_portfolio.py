@@ -399,9 +399,15 @@ def _fraction(value: float | int) -> Fraction:
 
 
 def _outward_float(value: Fraction) -> float:
-    """Smallest binary64 value greater than or equal to an exact non-negative rational."""
+    """Return a binary64 whose canonical JSON decimal is at least ``value``.
+
+    Evidence bounds are serialized as JSON numbers and replayed from their
+    canonical decimal text.  Comparing ``Fraction.from_float(candidate)`` here
+    is insufficient: the shortest round-tripping decimal for that same float
+    can lie on the other side of the exact rational policy boundary.
+    """
     candidate = float(value)
-    if Fraction.from_float(candidate) < value:
+    while Fraction(Decimal(str(candidate))) < value:
         candidate = math.nextafter(candidate, math.inf)
     return min(1.0, max(0.0, candidate))
 

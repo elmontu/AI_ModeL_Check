@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import math
+from decimal import Decimal
 from fractions import Fraction
 
 from ..decision_theory import exact_guess_problem
@@ -78,8 +79,10 @@ def _exact_guess_floor(value: FiniteChannelCeilingInput) -> Fraction:
 
 
 def _downward_float(value: Fraction) -> float:
+    """Return a binary64 whose canonical JSON decimal is at most ``value``."""
+
     candidate = float(value)
-    if Fraction.from_float(candidate) > value:
+    while Fraction(Decimal(str(candidate))) > value:
         candidate = math.nextafter(candidate, -math.inf)
     return min(1.0, max(0.0, candidate))
 

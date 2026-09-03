@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import unittest
 import math
+from decimal import Decimal
 from fractions import Fraction
 
 from pydantic import ValidationError
@@ -439,8 +440,21 @@ class IncompletePortfolioTests(unittest.TestCase):
     def test_outward_rounding_never_falls_below_exact_fraction(self) -> None:
         exact = Fraction(3, 10)
         rounded = outward_rounded_fraction(exact)
-        self.assertGreaterEqual(Fraction.from_float(rounded), exact)
-        self.assertEqual(rounded, math.nextafter(0.3, math.inf))
+        self.assertGreaterEqual(Fraction(Decimal(str(rounded))), exact)
+        self.assertEqual(rounded, 0.3)
+
+        # This exact ceiling previously rounded to a binary64 whose binary
+        # value was outward but whose canonical JSON decimal was inward.
+        regression = Fraction(123298220863982761, 200000000000000000)
+        regression_rounded = outward_rounded_fraction(regression)
+        self.assertGreaterEqual(
+            Fraction(Decimal(str(regression_rounded))),
+            regression,
+        )
+        self.assertEqual(
+            regression_rounded,
+            math.nextafter(0.6164911043199138, math.inf),
+        )
 
     def test_decimal_probability_vectors_have_exact_normalized_semantics(self) -> None:
         raw = xor_problem(CouplingModel.ARBITRARY).model_dump(mode="json")

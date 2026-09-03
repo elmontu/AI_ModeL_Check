@@ -1,0 +1,223 @@
+{
+  "schema_version": "1.0",
+  "experiment_id": "finite-channel-ceiling-ground-truth-v1",
+  "implementation_version": 1,
+  "design_frozen_at": "2026-09-03T05:09:30+00:00",
+  "authority": {
+    "experimental_only": true,
+    "assessment_input_emitted": false,
+    "authorization_eligible": false,
+    "prior_screens_promoted": false
+  },
+  "master_seed": 20260903,
+  "familywise_alpha": 0.05,
+  "evaluation_familywise_alpha": 0.05,
+  "tolerance": {
+    "numerator": 13,
+    "denominator": 20
+  },
+  "prior": [
+    {
+      "numerator": 1,
+      "denominator": 2
+    },
+    {
+      "numerator": 1,
+      "denominator": 2
+    }
+  ],
+  "state_ids": [
+    "out",
+    "in"
+  ],
+  "observation_ids": [
+    "response-0",
+    "response-1",
+    "response-2",
+    "response-3"
+  ],
+  "selection_scope": "all predeclared tiers, scenarios, states, observations, repetitions, decision statuses, and evaluation endpoints",
+  "tiers": [
+    {
+      "tier_id": "fast-calibration",
+      "role": "diagnostic_only",
+      "replicates": 100,
+      "sample_sizes_per_state": [
+        100,
+        500
+      ],
+      "production_replay": "first_n_per_group",
+      "production_replay_replicates": 3
+    },
+    {
+      "tier_id": "representative-full-replay",
+      "role": "primary",
+      "replicates": 400,
+      "sample_sizes_per_state": [
+        2000
+      ],
+      "production_replay": "all",
+      "production_replay_replicates": 400
+    }
+  ],
+  "primary_claim_thresholds": {
+    "maximum_undercoverage_upper_bound": 0.05,
+    "maximum_false_clear_upper_bound": 0.05,
+    "minimum_safe_clear_lower_bound": 0.9,
+    "minimum_boundary_hold_lower_bound": 0.8,
+    "minimum_unsafe_block_lower_bound": 0.9,
+    "require_calibration_width_tightening": true,
+    "require_exact_family_invariance": true,
+    "require_all_tamper_checks_fail_closed": true,
+    "require_full_engine_clear_hold_block_chain": true
+  },
+  "scenarios": [
+    {
+      "scenario_id": "xgboost-safe-margin",
+      "model_family": "xgboost",
+      "role": "safe",
+      "controlled_ground_truth_only": true,
+      "real_data_target": "OpenML-CC18 tabular classifier behind an enforced four-symbol response wrapper",
+      "channel": [
+        [
+          {
+            "numerator": 3,
+            "denominator": 10
+          },
+          {
+            "numerator": 1,
+            "denominator": 4
+          },
+          {
+            "numerator": 1,
+            "denominator": 4
+          },
+          {
+            "numerator": 1,
+            "denominator": 5
+          }
+        ],
+        [
+          {
+            "numerator": 1,
+            "denominator": 5
+          },
+          {
+            "numerator": 1,
+            "denominator": 4
+          },
+          {
+            "numerator": 1,
+            "denominator": 4
+          },
+          {
+            "numerator": 3,
+            "denominator": 10
+          }
+        ]
+      ],
+      "expected_exact_risk": {
+        "numerator": 11,
+        "denominator": 20
+      }
+    },
+    {
+      "scenario_id": "cnn-policy-boundary",
+      "model_family": "cnn",
+      "role": "boundary",
+      "controlled_ground_truth_only": true,
+      "real_data_target": "EuroSAT CNN behind an enforced four-symbol response wrapper",
+      "channel": [
+        [
+          {
+            "numerator": 2,
+            "denominator": 5
+          },
+          {
+            "numerator": 1,
+            "denominator": 10
+          },
+          {
+            "numerator": 1,
+            "denominator": 4
+          },
+          {
+            "numerator": 1,
+            "denominator": 4
+          }
+        ],
+        [
+          {
+            "numerator": 1,
+            "denominator": 10
+          },
+          {
+            "numerator": 2,
+            "denominator": 5
+          },
+          {
+            "numerator": 1,
+            "denominator": 4
+          },
+          {
+            "numerator": 1,
+            "denominator": 4
+          }
+        ]
+      ],
+      "expected_exact_risk": {
+        "numerator": 13,
+        "denominator": 20
+      }
+    },
+    {
+      "scenario_id": "llm-unsafe-margin",
+      "model_family": "llm",
+      "role": "unsafe",
+      "controlled_ground_truth_only": true,
+      "real_data_target": "WildChat fine-tuned language model exposed only through a one-query four-token forced-choice wrapper",
+      "channel": [
+        [
+          {
+            "numerator": 11,
+            "denominator": 20
+          },
+          {
+            "numerator": 1,
+            "denominator": 4
+          },
+          {
+            "numerator": 1,
+            "denominator": 10
+          },
+          {
+            "numerator": 1,
+            "denominator": 10
+          }
+        ],
+        [
+          {
+            "numerator": 1,
+            "denominator": 10
+          },
+          {
+            "numerator": 1,
+            "denominator": 10
+          },
+          {
+            "numerator": 1,
+            "denominator": 4
+          },
+          {
+            "numerator": 11,
+            "denominator": 20
+          }
+        ]
+      ],
+      "expected_exact_risk": {
+        "numerator": 4,
+        "denominator": 5
+      }
+    }
+  ]
+}

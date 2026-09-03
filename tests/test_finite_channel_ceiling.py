@@ -1,13 +1,18 @@
 from __future__ import annotations
 
 import json
+import math
 import tempfile
 import unittest
 from datetime import date, datetime, timezone
+from decimal import Decimal
 from fractions import Fraction
 from pathlib import Path
 
-from model_release_assurance.analyzers.finite_channel import FiniteChannelCeilingAnalyzer
+from model_release_assurance.analyzers.finite_channel import (
+    FiniteChannelCeilingAnalyzer,
+    _downward_float,
+)
 from model_release_assurance.decision import (
     decision_game_sha256,
     decide_threat,
@@ -243,6 +248,15 @@ def _fixture(
 
 
 class FiniteChannelCeilingTests(unittest.TestCase):
+    def test_floor_rounding_is_outward_under_canonical_json_semantics(self) -> None:
+        # ``0.3`` is below this rational as a binary64 but above it when the
+        # same float is interpreted from its canonical JSON decimal text.
+        exact = Fraction(29999999999999999, 100000000000000000)
+        rounded = _downward_float(exact)
+
+        self.assertLessEqual(Fraction(Decimal(str(rounded))), exact)
+        self.assertEqual(rounded, math.nextafter(0.3, -math.inf))
+
     def test_typed_prior_preserves_non_binary_rational_probabilities(self) -> None:
         evidence = FiniteStatePriorEvidence(
             threat_id="three-state-secret",
@@ -716,7 +730,7 @@ class FiniteChannelCeilingTests(unittest.TestCase):
         )
 
         self.assertEqual(records[1].exact_upper.as_fraction(), Fraction(3, 5))
-        self.assertGreater(records[1].upper, threat.tolerance)
+        self.assertEqual(records[1].upper, threat.tolerance)
         self.assertEqual(decision.verdict, Verdict.CLEAR)
         self.assertEqual(decision.upper_bound_fraction.as_fraction(), Fraction(3, 5))
 
