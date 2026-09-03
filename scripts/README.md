@@ -46,6 +46,8 @@ trained models, complete run outputs, or final study seal.
 
 | Scripts | Purpose | Status |
 |---|---|---|
+| `run_finite_channel_ceiling_experiment.py` | Replay exact controlled safe, boundary, and unsafe channels through the production analyzer, selected full Engine paths, simultaneous meta-evaluation, and tamper controls. | Completed experimental validation with [retained accepted results](../reproduction/finite-channel-ceiling/results/manifest.json). Its model names are labels, only three replays traverse the Engine, and the experimental battery waiver is not deployment-valid. |
+| `run_model_backed_finite_channel.py` | Train CNN, XGBoost, and compact-Transformer-proxy collectors on public data, compile finite-pool categorical channels, and execute six one-shot Engine plus 1,200 repeated analyzer replays. | Completed v2 experiment with [retained mixed results](../reproduction/model-backed-finite-channel/results/v2/manifest.json): 8/9 criteria passed; raw proxy `CLEAR` power was 109/200. Aggregate sampling and wrapper-surface conformance were separate, so this is not an end-to-end wrapper test. |
 | `run_portfolio_stochastic_benchmark.py`<br>`analyze_portfolio_stochastic_benchmark.py` | Generate and replay stochastic incomplete-portfolio coverage, certificate, and false-clear stress tests. | Experimental benchmark with a retained configuration; outputs are generated under `output/`. |
 | `run_protocol_feasibility_benchmark.py` | Generate the finite protocol solver's raw trials, summary, and analysis in one command. | Experimental benchmark; there is no separate `analyze_protocol_feasibility_benchmark.py`. A default run also requires generated OpenML seal and framework-effectiveness output. |
 | `run_strategic_assurance_experiment.py` | Replay exact-rational strategic certificates and run seeded incentive, tie, deterrence, and monitoring stress tests. | Experimental governance stress test; explicitly emits no governance decision or authorization. |
@@ -83,6 +85,13 @@ trained models, complete run outputs, or final study seal.
   from `requirements.lock`.
 - OpenML, XGBoost, stochastic, and empirical workflows require
   `requirements-experiments.txt` or the `experiments` extra.
+- The controlled ceiling runner uses the experiment dependency tier for exact
+  interval calculations. Its default retained study executed 1,800 records;
+  use the frozen configuration when reproducing the published result.
+- The model-backed ceiling runner additionally uses the public-privacy
+  collector stack and PyTorch. Its compact Transformer is an LLM proxy, its
+  target pools are small finite benchmark populations, and its repeated trials
+  resample those same pools.
 - `run_public_privacy_audit.py` additionally requires the
   `privacy-experiments` extra and its PyTorch runtime.
 - `run_llm_training_hook_audit.py` uses the `llm-experiments` extra (PyTorch,

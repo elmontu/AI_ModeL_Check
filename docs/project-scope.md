@@ -66,7 +66,7 @@ Neither set of results is an MRAP lifecycle state. Only an external implementati
 - The Python models define the contracts accepted by the current reference implementation; committed current files in `schemas/` are their generated machine-readable exports. Superseded schemas preserve historical structure but are not executable compatibility promises by the current CLI.
 - The Lean development proves properties of its explicitly scoped abstract model. It does not certify the Python implementation or a production deployment.
 - Examples are executable demonstrations, not normative evidence.
-- Scripts and reproduction materials are study tooling. Their presence does not establish that a study completed or that its outputs support a production claim.
+- Scripts and reproduction materials are study tooling. Their presence does not establish that a study completed; only an explicitly retained, hash-manifested result may support its narrowly declared experimental claim, never a production authorization.
 - Release history and migration notes live in `CHANGELOG.md`; they do not override current contracts or documentation.
 
 ## Directory responsibilities
@@ -80,7 +80,7 @@ Neither set of results is an MRAP lifecycle state. Only an external implementati
 | `tests/` | Unit, replay, integration, and bounded experiment tests |
 | `docs/` | Normative, reference, guide, and experimental documentation |
 | `scripts/` | Optional developer, benchmark, analyzer, and evidence-generation entry points |
-| `reproduction/` | Retained study configurations and manifests; not generated results |
+| `reproduction/` | Retained study configurations, registrations, manifests, and explicitly selected publication-safe aggregate results |
 | `output/` | Generated local artifacts excluded from version control |
 
 The supported operating interfaces are the `mra` CLI and the versioned contracts. Python imports are supported only when explicitly documented; a module or script is not automatically a stable API because it is importable. Experimental features must retain explicit non-authorization and evidence-direction boundaries when they are moved behind another transport or service.

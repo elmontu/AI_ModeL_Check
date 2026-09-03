@@ -6,6 +6,22 @@ All user-visible changes to Model Release Assurance are recorded here. The proje
 
 ### Added
 
+- A preregistered exact-ground-truth finite-channel experiment with retained
+  aggregate results: 1,800 completed records, zero undercoverage across 1,200
+  primary analyzer replays, simultaneous undercoverage upper bound `0.015606`,
+  correct `CLEAR`/`HOLD`/`BLOCK` resolution in all 400 repetitions per role,
+  three source-backed Engine integrations, and fail-closed tamper controls.
+- A completed public-data model-backed v2 experiment covering CNN/MNIST,
+  XGBoost/Adult, and a compact-Transformer/20-Newsgroups LLM proxy under raw-bin
+  and 90%-erasure variants. The retained mixed result passed eight of nine
+  criteria: undercoverage was 0/1,200, but raw proxy `CLEAR` power was 109/200
+  with a simultaneous lower bound of `0.449431`, below the registered `0.95`.
+- Generated paper-ready ceiling tables, a figure, a machine-readable summary,
+  result manifests, and drafting indexes that keep coverage, tightness,
+  decision usefulness, and authority scope distinct. The v1 pre-outcome
+  serialization failure and compatibility-only v2 registration remain in the
+  audit trail. Both studies record experimental attack-battery waivers and no
+  release authorization; v2 does not claim end-to-end wrapper execution.
 - An MLSys paper workspace with a start-here guide, draft outline, claims-to-evidence matrix,
   artifact index, and experiment/reproducibility gates that distinguish retained results from
   configured studies and prohibited claims.

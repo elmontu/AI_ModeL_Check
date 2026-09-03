@@ -20,11 +20,17 @@ has a retained artifact.
 > to release context, and keeps assessment separate from external
 > authorization and serving. `[SUPPORTED]` A Lean model checks scoped
 > authorization-integrity and statistical-accounting properties under explicit
-> premises. `[SUPPORTED]` In a completed integration study, aggregate training
+> premises. `[SUPPORTED]` Across 1,200 controlled primary replays, the
+> finite-channel ceiling had zero observed undercoverage and resolved every
+> registered safe, boundary, and unsafe case as `CLEAR`, `HOLD`, or `BLOCK`.
+> A completed public-data follow-up again observed zero undercoverage but failed
+> its overall acceptance rule because the raw compact-Transformer proxy cleared
+> in only 109 of 200 repeats, demonstrating that soundness and decision
+> usefulness are distinct. `[SUPPORTED]` In a completed integration study, aggregate training
 > hooks executed on three language models over a pinned WildChat cohort and two
 > vision architectures over all 27,000 EuroSAT images; the retained report
 > treats all measured attacks as non-authorizing screens. `[AUTHOR TODO]` Add
-> fresh protocol-test, mutation, proof-replay, composition-scaling, and overhead
+> fresh protocol-test, mutation, proof-replay, and overhead
 > results only after their artifacts are frozen. `[NON-CLAIM]` MRA does not
 > implement a production authorization registry or serving gateway and does not
 > establish that the evaluated models are safe.
@@ -48,12 +54,11 @@ and distinguish cited source results from this paper's proposed system design.
 
 ### 1.2 Thesis
 
-`[AUTHOR TODO]` Choose one primary thesis. Recommended narrow version:
-
 > Explicit, versioned contracts and direction-aware evidence composition make
-> model-release decisions replayable and fail closed across heterogeneous model
-> checks, while exposing rather than concealing the remaining production trust
-> boundary.
+> finite-channel release assessment replayable and fail closed: exact-risk
+> experiments can audit ceiling coverage separately from its ability to resolve
+> `CLEAR`, `HOLD`, or `BLOCK`, while the protocol exposes rather than conceals
+> the remaining production trust boundary.
 
 Do not use “proves safe,” “automates governance,” or “production-ready.”
 
@@ -61,8 +66,9 @@ Do not use “proves safe,” “automates governance,” or “production-ready
 
 Use the candidate contribution set in the [workspace README](README.md), after
 checking each sentence against the [claims matrix](claims-to-evidence.md).
-Separate implemented contributions from the composition-scaling methodology,
-whose full registered experiment is not yet retained as completed.
+Lead with the contract/protocol design and two-tier ceiling evaluation. Present
+the five-model hook audit as integration evidence. Keep composition scaling as
+a secondary registered design whose full experiment is not completed.
 
 ## 2. Problem statement and assurance boundary
 
@@ -127,16 +133,21 @@ and DP paths. Do not imply that an optimizer result is an authorization.
 ### 3.4 Finite-channel bounds
 
 Describe the architecture-neutral finite-channel path as an implementation
-capability, not as an empirical result. Its decision-bearing statistical path
-requires a policy-frozen exact-guess game and rational prior, a complete
+capability with separately scoped empirical validation. Its decision-bearing
+statistical path requires a policy-frozen exact-guess game and rational prior, a complete
 enforced finite recipient interface, recipient-realizable observations,
 selection-valid simultaneous evidence, exact context/source bindings, and
 engine-replayed outward endpoints. Incomplete, continuous, or unbounded
 adaptive interfaces are redesigned rather than assigned a false ceiling.
 
-`[AUTHOR TODO]` Add a completed, independently recollected case study before
-claiming this path clears or blocks a real release. Existing training-hook runs
-remain screens.
+The [completed ceiling evaluation](ceiling-experiment-results.md) supports
+coverage and decision-resolution claims for exact controlled channels. Its
+model-backed tier is a preserved mixed result: zero observed undercoverage but
+insufficient clear power for the raw compact-Transformer proxy. It is
+conditional on finite pools and aggregate resampling. Wrapper conformance was
+tested separately from sampling, both experiments waived the attack-battery
+precondition experimentally, and neither run authorized a release. Existing
+training-hook and red-team runs remain screens.
 
 ### 3.5 Lifecycle integrity and external authority
 
@@ -184,7 +195,7 @@ examples, tokens, logits, activations, or gradients. The completed case-study
 details and exact artifact digests are in the
 [real-data execution audit](../docs/real-data-training-hook-audit-2026-09-02.md).
 
-### 5.3 Composition-scaling coordinator
+### 5.3 Secondary composition-scaling coordinator
 
 Describe serial one-GPU orchestration, child manifest validation, resource
 ceilings, safe aggregate publication, same-population scalar subsets, and
@@ -201,12 +212,36 @@ leaderboards.
 |---|---|---|---|
 | RQ1 | Does the reference core reject registered malformed, incomplete, rebound, or role-confused release records? | Test fixtures and a 21-mutant evaluation program exist. | Fresh complete test log and retained mutation report at the paper commit. |
 | RQ2 | Can aggregate hooks run end to end on materially different real-data model workloads without retaining per-example telemetry? | Completed five-model WildChat/EuroSAT audit. | Already curated; independently verify cited hashes and disclose unavailable raw-public artifacts. |
-| RQ3 | How do model, data scale, seed, and same-population composition affect measurements and resource use? | Five-model experiment is registered, not complete. | Both child completion manifests, suite completion manifest, reports, journals, environment, and analysis snapshot. |
+| RQ3 | How do model, data scale, seed, and same-population composition affect measurements and resource use? | Secondary five-model experiment is registered, not complete. | Both child completion manifests, suite completion manifest, reports, journals, environment, and analysis snapshot. |
 | RQ4 | Are the scoped protocol invariants mechanically reproducible? | Lean source, pinned toolchain, and verification wrapper exist. | Fresh proof-build transcript and environment identity. |
 | RQ5 | What is the runtime/storage overhead of contracts, hashing, replay, and hooks? | Isolated throughput/memory observations exist for the five-model audit. | Repeated baseline-versus-instrumented trials and end-to-end core microbenchmarks; do not infer from one run. |
-| RQ6 | Can a complete finite release channel produce a decision-bearing floor/ceiling and resolution? | Core path and contracts exist; old model runs are ineligible screens. | Approved state-conditioned recollection with frozen game/prior/interface and full binding context. |
+| RQ6 | Does the finite-channel ceiling cover exact risk and remain tight enough to resolve policy decisions? | Controlled experiment accepted; model-backed v2 completed with 8/9 criteria and a preserved decision-power failure. | [Generated tables and figure](ceiling-experiment-results.md), [summary](../reproduction/ceiling-experiment-summary.json), and both retained manifests/reports. |
 
-### 6.1 Completed real-data integration case study
+### 6.1 Completed finite-channel ceiling evaluation
+
+Use the [generated result tables and figure](ceiling-experiment-results.md), not
+manual transcription. Structure the section around four metrics:
+
+1. soundness: observed undercoverage and its simultaneous upper confidence
+   bound;
+2. tightness: interval width and ceiling excess over exact risk;
+3. decision usefulness: `CLEAR`, `HOLD`, and `BLOCK` rates around tolerance;
+4. fail-closed integration: arithmetic/source replay and negative controls.
+
+The controlled tier completed 1,200 primary analyzer replays with 0/1,200
+undercoverage, a maximum simultaneous undercoverage upper bound of `0.015606`,
+and 400/400 correct decisions for each safe, boundary, and unsafe role. Only
+three runs traversed the full source-backed Engine path.
+
+The model-backed tier completed six one-shot Engine and 1,200 analyzer replays.
+It observed 0/1,200 undercoverage, but the raw Transformer-proxy arm cleared
+109/200 times with a simultaneous lower bound of `0.449431`, missing the `0.95`
+target; the other five arms cleared 200/200. Report the overall result as 8/9
+criteria passed, not as accepted. Counts came from an aggregate sampler and
+the wrapper harness ran separately. Preserve the finite-pool/resampling,
+one-seed, proxy-only, experimental-waiver, and no-authorization boundaries.
+
+### 6.2 Completed real-data integration case study
 
 Safe present-tense facts from the retained audit include:
 
@@ -226,13 +261,13 @@ audit. Preserve its qualifications: one seed, one epoch, one GPU stack, no
 confidence intervals, non-randomized model assignment, and no causal metadata
 effect.
 
-### 6.2 Protocol rejection and proof replay
+### 6.3 Protocol rejection and proof replay
 
 `[REPRODUCE]` Report the complete Python suite, schema replay, Markdown checks,
 mutation evaluation, and Lean build separately. Include skips and failures;
 never collapse these distinct checks into one “verified” percentage.
 
-### 6.3 Composition and scaling
+### 6.4 Secondary composition and scaling
 
 `[PLANNED]` The frozen design contains three LLMs, two vision models, three
 real-data scales per modality, five seeds, 31 nonempty model subsets, seven LLM
@@ -240,7 +275,7 @@ scalar subsets, three vision scalar subsets, and 21 mixed-modal vector-only
 subsets. The coordinator runs children serially on one GPU with 12-hour and
 20-GiB ceilings. These are protocol facts, not measured outcomes.
 
-### 6.4 Ablations and negative controls
+### 6.5 Ablations and negative controls
 
 `[AUTHOR TODO]` Prioritize ablations that test the paper's mechanism:
 
@@ -259,6 +294,13 @@ At minimum, retain these limitations:
   monitoring, revocation services, and institutional authority are absent;
 - formal theorems apply to an abstract system and explicit premises;
 - most empirical runs are screens, not upper bounds or release evidence;
+- controlled ceiling coverage is not a universal proof, and the model-backed
+  result is conditional on one artifact per family and resampling from finite
+  target pools of 400/400 records for CNN and XGBoost and 350/350 for the
+  proxy;
+- v2 did not route aggregate samples through the wrapper harness end to end and
+  used an experimental attack-battery waiver;
+- the compact Transformer is an LLM proxy, not an interactive LLM;
 - the completed GPU study is single-run and single-node;
 - dataset/model licensing and human-data rights remain independent gates;
 - complete interactive LLM interfaces, adaptive transcripts, tools, RAG,
@@ -293,6 +335,8 @@ conditions rather than treating a public download as rights clearance.
 ## 10. Conclusion
 
 Return to the narrow thesis: the contribution is a reference architecture and
-enforcement model that makes release assumptions and evidence direction
-explicit. Do not close by asserting production safety or completed
-composition-scaling results.
+enforcement model that makes release assumptions, evidence direction, ceiling
+soundness, and decision usefulness explicit. Treat the preserved model-backed
+failure as evidence for fail-closed interpretation, not as something to hide or
+retrospectively repair. Do not close by asserting production safety or
+completed composition-scaling results.

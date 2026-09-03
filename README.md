@@ -18,7 +18,7 @@ MRA produces recommendations and replayable certificates. It does **not** author
 
 Evidence pipelines feed the reference implementation. Its reports then feed an external authority, registry, and serving gateway. Assessment output is never an authorization.
 
-The [integrated system audit specification](docs/system-audit-specification.md) provides one standalone view of the architecture, normative MRAP lifecycle, contracts, controls, formal boundary, deployment obligations, and audit checklist. The [full software architecture](docs/architecture.md) remains the detailed implementation map. The [2026-09-02 real-data execution audit](docs/real-data-training-hook-audit-2026-09-02.md) records the completed five-model GPU experiments and their non-authorizing release implications. Authors can begin with the dedicated [MLSys paper workspace](paper/README.md), which separates supportable claims from configured or missing experiments.
+The [integrated system audit specification](docs/system-audit-specification.md) provides one standalone view of the architecture, normative MRAP lifecycle, contracts, controls, formal boundary, deployment obligations, and audit checklist. The [full software architecture](docs/architecture.md) remains the detailed implementation map. The [ceiling experiment report](paper/ceiling-experiment-results.md) records a completed controlled validation and a completed mixed model-backed result; the [2026-09-02 real-data execution audit](docs/real-data-training-hook-audit-2026-09-02.md) records the five-model GPU hook experiments and their non-authorizing release implications. Authors can begin with the dedicated [MLSys paper workspace](paper/README.md), which separates supportable claims from configured or missing experiments.
 
 ## What the toolkit does
 
@@ -143,6 +143,8 @@ each optional capability to its dependency tier.
 | Full real-data vision training-hook and release-context matrix | `scripts/run_vision_training_hook_audit.py --config reproduction/vision-training-hook/config.json` | [All 27,000 EuroSAT images with canonical from-scratch AlexNet/DenseNet-121](reproduction/vision-training-hook/README.md) |
 | Five-model composition-scaling matrix | `scripts/run_composition_scaling_suite.py --config reproduction/composition-scaling/suite-config.json` | [Shared WildChat/EuroSAT scale, seed, hook, attack, and portfolio protocol](reproduction/composition-scaling/README.md) |
 | Curated completed-run evidence | No execution entry point; publication-safe aggregate record | [Five-model WildChat/EuroSAT execution audit](docs/real-data-training-hook-audit-2026-09-02.md) |
+| Exact-ground-truth ceiling validation | `scripts/run_finite_channel_ceiling_experiment.py` | [Controlled configuration and retained result](reproduction/finite-channel-ceiling/README.md) |
+| Public-data model-backed ceiling validation | `scripts/run_model_backed_finite_channel.py` | [Completed v2 result and retained artifacts](reproduction/model-backed-finite-channel/README.md) |
 | OpenML, public-privacy, portfolio, and strategic studies | grouped runners in `scripts/` | [`reproduction/`](reproduction/) |
 
 Exploratory tools emit bounded measurements, candidate attack floors, or screens—never authorization.
@@ -208,6 +210,34 @@ configuration or queued run is not a completed result. None of these studies
 creates statistical proof of safety, privacy, robustness, fairness,
 generalization, production capacity, or release eligibility.
 
+### What the ceiling experiments establish
+
+The [publication summary](reproduction/ceiling-experiment-summary.json) and
+[paper-ready tables](paper/ceiling-experiment-results.md) keep soundness and
+decision usefulness separate. On exact controlled channels, 1,200 primary
+analyzer replays observed no ceiling undercoverage and produced the registered
+`CLEAR`, `HOLD`, and `BLOCK` decisions in all 400 repetitions per role; the
+simultaneous undercoverage upper bound was `0.015606`. This is empirical
+calibration for the frozen finite-channel family, not a universal proof.
+
+The completed public-data v2 study also observed zero undercoverage in 1,200
+repeated analyzer replays, but it met only eight of nine registered acceptance
+criteria. The raw compact-Transformer proxy channel cleared in 109 of 200
+repetitions, giving a simultaneous clear-rate lower bound of `0.449431`, below
+the registered `0.95` target. The other five model/interface families met that
+target. This preserved negative result shows why coverage alone does not make a
+ceiling decision-useful.
+
+Both studies used experimental attack-battery waivers and issued no release
+authorization. In v2, counts were drawn by the aggregate sampler while the
+zero-input wrapper surface was checked separately; the run therefore does not
+demonstrate end-to-end traffic through an enforcing wrapper. Its CNN/MNIST,
+XGBoost/Adult, and compact-Transformer/20-Newsgroups observations are
+conditional on one artifact per family, 400 `IN`/400 `OUT` records for CNN and
+XGBoost and 350/350 for the proxy, repeated sampling from those pools, and the
+registered categorical abstraction. The
+Transformer is an LLM proxy, not an interactive LLM.
+
 ## Repository map
 
 ```text
@@ -217,7 +247,7 @@ formal/                        Abstract protocol specification and Lean proofs
 examples/                      Small supported CLI examples
 tests/                         Core, integration, and experimental verification
 scripts/                       Developer and study entry points; not public CLI
-reproduction/                  Retained study inputs, configurations, and manifests
+reproduction/                  Study inputs, registrations, manifests, and selected aggregate results
 paper/                         MLSys draft outline, evidence map, and reproducibility gates
 docs/                          Product, protocol, operational, and research guidance
 output/                        Generated local artifacts; ignored by Git

@@ -1,8 +1,8 @@
 # Experiments and reproducibility checklist
 
 This is both an experiment ledger and the acceptance checklist for paper
-results. Checkboxes start empty intentionally: repository presence is not proof
-that a fresh paper-snapshot run completed.
+results. Checked items in the E7 sections are facts reconciled to retained
+manifests; unchecked items remain paper-snapshot or deployment work.
 
 ## Current evaluation ledger
 
@@ -10,11 +10,12 @@ that a fresh paper-snapshot run completed.
 |---|---|---|---|---|
 | E1 | WildChat training hooks on DistilGPT2, OPT-125M, and Pythia-160M | Completed experimental execution; curated audit retained | Yes, as aggregate integration observations and screens only | Reconcile every quoted value/digest with the [retained audit](../docs/real-data-training-hook-audit-2026-09-02.md). |
 | E2 | EuroSAT training hooks and bounded perturbations on AlexNet and DenseNet-121 | Completed experimental execution; curated audit retained | Yes, as aggregate integration observations and screens only | Preserve one-run, one-epoch, one-GPU, no-CI, and non-authorizing qualifications. |
-| E3 | Five-model composition scaling | Registered/configured | No outcomes | Complete all registered child cells and final suite aggregation; retain and hash both child completions and suite completion. |
+| E3 | Five-model composition scaling | Registered/configured secondary study | No outcomes | Complete all registered child cells and final suite aggregation; retain and hash both child completions and suite completion. Do not use it as primary evidence meanwhile. |
 | E4 | Python core/schema regression suite | Implemented and runnable | No current paper-snapshot outcome | Run `make check` at the frozen commit; record all pass/fail/skip counts and environment. |
 | E5 | Protocol adversarial mutation evaluation | Program defines two controls and 21 unsafe mutants | No score | Generate, retain, and hash the report; describe the score only as registered-mutant coverage. |
 | E6 | Lean proof replay and axiom audit | Source and pinned toolchain retained | The theorem statements are citable; no fresh paper-snapshot execution claim | Run `make formal`; retain complete output, toolchain identity, and commit. |
-| E7 | Decision-bearing finite-channel case | Contracts/analyzer implemented; old runs ineligible | No empirical decision outcome | Approved state-conditioned recollection under the exact game, rational prior, complete finite interface, shared binding context, simultaneous plan/count/budget, and outward endpoint replay. |
+| E7a | Controlled finite-channel ceiling validation | Completed; all registered claims passed | Yes, for the exact controlled channel family | Use the [generated result report](ceiling-experiment-results.md) and retain its synthetic-channel, three-Engine-replay, experimental-waiver, and non-authorizing boundaries. |
+| E7b | Model-backed public-data ceiling validation v2 | Completed; 8/9 acceptance criteria passed | Yes, as a mixed conditional result—not an accepted study | Preserve zero undercoverage and the failed raw Transformer-proxy clear-power criterion together; do not claim end-to-end wrapper enforcement. |
 | E8 | OpenML, stochastic portfolio, strategic, and public-privacy studies | Registered or configured | No completed outcomes | Follow each study's sealing contract and retain complete raw/derived artifacts before use. |
 | E9 | Production authority/registry/gateway evaluation | Not implemented | No | Requires an external system and an independently reviewed operational/refinement study. |
 
@@ -107,10 +108,12 @@ is the public record. Before copying any number:
   `authorization_eligible=false`, and `assessment_input_emitted=false`
   disposition.
 
-## Composition-scaling study
+## Secondary planned composition-scaling study
 
 Use the [registered protocol](../reproduction/composition-scaling/README.md) and
 do not edit the matrix after inspecting results without creating a new version.
+This study is secondary to the completed ceiling evaluation until all of its
+registered cells and completion manifests exist.
 
 ### Registration checks
 
@@ -162,33 +165,65 @@ do not edit the matrix after inspecting results without creating a new version.
 - [ ] Keep unmeasured fairness/robustness axes as `NOT_ASSESSED` and preserve
   worst/absorbing categorical gate propagation without averaging.
 
-## Finite-channel case study needed for the central decision claim
+## Completed finite-channel ceiling evaluation
 
-The core's finite-channel path is a strong candidate for an end-to-end paper
-case, but the existing model runs cannot be restamped into it. A new approved
-collection must check all of the following:
+The [generated paper result](ceiling-experiment-results.md) and
+[machine-readable summary](../reproduction/ceiling-experiment-summary.json)
+are the drafting entry points. They derive from the retained controlled and
+model-backed reports rather than manual transcription.
 
-- [ ] A policy and threat freeze the identical ordered finite decision game and
-  exact rational prior before collection.
-- [ ] Typed prior evidence is source-verified and exactly matches that game.
-- [ ] The released transcript/interface is complete, bounded, recipient
-  realizable, and enforced as a finite alphabet.
-- [ ] Plan, counts, committed error budget, compiled evidence, and assessment
-  carry the same release/policy/artifact/interface/population/game binding
-  context.
-- [ ] Sampling ends no later than the assessment observation time; IID and
-  collection claims have independent support rather than only submitter
-  declarations.
-- [ ] The selected family is complete and simultaneous; no state/candidate is
-  chosen after observing outcomes.
-- [ ] The engine regenerates marginal evidence and validates each serialized
-  Clopper–Pearson endpoint with outward directed arithmetic within work limits.
-- [ ] The report distinguishes `CLEAR` when the eligible ceiling is at or below
-  tolerance, `BLOCK` when the eligible floor exceeds tolerance, and otherwise
-  fail-closed `INCONCLUSIVE` with a concrete resolution action.
-- [ ] An incomplete, continuous, or adaptively unbounded interface yields
-  `redesign_interface`, not a numerical ceiling.
-- [ ] Authorization remains external even if the assessment verdict clears.
+### E7a: controlled exact-ground-truth result
+
+- [x] The exact rational game, prior, channel family, error allocation,
+  stopping rule, and acceptance thresholds were frozen before collection.
+- [x] All 1,800 predeclared records completed, including 1,200 primary analyzer
+  replays at 2,000 observations per state.
+- [x] Primary undercoverage was 0/1,200; the maximum Bonferroni-simultaneous
+  Clopper--Pearson upper bound was `0.015606`.
+- [x] Safe, boundary, and unsafe roles produced 400/400 `CLEAR`, 400/400
+  `HOLD`, and 400/400 `BLOCK`, respectively; each simultaneous role-correct
+  lower bound was `0.984394`.
+- [x] Mean interval width decreased from 100 to 500 observations per state for
+  every registered scenario.
+- [x] Analyzer replay, family-label invariance, three source-backed Engine
+  integrations, and registered tamper controls passed.
+- [x] The report states that model-family names are labels and that the
+  experimental attack-battery waiver is not deployment-valid.
+
+### E7b: completed model-backed v2 mixed result
+
+- [x] V1's pre-outcome XGBoost serialization failure and the compatibility-only
+  v2 registration are retained rather than silently overwritten.
+- [x] CNN/MNIST, XGBoost/Adult, and compact-Transformer/20-Newsgroups outputs
+  were reduced to two registered categorical variants per model; the
+  Transformer is labelled as an LLM proxy.
+- [x] Six one-shot Engine replays and 1,200 repeated analyzer replays completed;
+  observed undercoverage was 0/1,200 and each simultaneous undercoverage upper
+  bound was `0.027031`, below the `0.05` target.
+- [x] Five families cleared 200/200 times and met the registered simultaneous
+  clear-rate lower target.
+- [x] The raw Transformer-proxy family cleared only 109/200 times; its
+  simultaneous lower bound was `0.449431`, below the registered `0.95` target.
+- [x] The report therefore records eight of nine criteria passed and an overall
+  `registered_acceptance_not_met` result.
+- [x] All retained model results are conditional on one artifact per family,
+  400 `IN`/400 `OUT` records for CNN and XGBoost and 350/350 for the proxy, and
+  repeated sampling from those same pools.
+- [x] Counts came from the aggregate sampler; the wrapper surface was tested
+  separately, so v2 supplies no end-to-end wrapper-enforcement evidence.
+- [x] Both experiments used experimental attack-battery waivers and emitted no
+  release authorization.
+
+### Remaining deployment evidence
+
+- [ ] Independently enforce and observe the complete recipient wrapper,
+  including error, timing, process-isolation, and operating-system channels.
+- [ ] Replace the experimental battery waiver with the policy-required complete
+  red-team battery and independently authenticated collection.
+- [ ] Validate new artifacts, seeds, populations, and deployment interfaces;
+  neither completed experiment transfers automatically to them.
+- [ ] Implement and evaluate the external authority, registry, gateway,
+  monitoring, and revocation workflow before making an authorization claim.
 
 ## Paper tables and figures
 

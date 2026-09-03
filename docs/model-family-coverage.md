@@ -10,6 +10,15 @@ decision game, population, and proof contract. The current framework separates t
 
 Only the third question can contribute to a release decision. Catalog membership is not evidence and the coverage command always emits `can_clear: false`.
 
+The [completed ceiling experiments](../paper/ceiling-experiment-results.md)
+test the shared finite-channel path without establishing family-wide coverage.
+Controlled XGBoost, CNN, and LLM names are labels only. The model-backed tier
+uses one CNN/MNIST artifact, one XGBoost/Adult artifact, and one compact
+Transformer/20-Newsgroups artifact under a categorical hidden-record game; the
+Transformer is an LLM proxy. It observed zero undercoverage but missed the
+registered decision-power target for the raw proxy arm. These observations do
+not transfer to another artifact, seed, population, or interface.
+
 ## Governed catalog
 
 The executable catalog contains 20 categories:
@@ -126,6 +135,6 @@ For every model family:
 - Generic attack, controlled-inference, and canary floor registration binds declared dataset,
   procedure, seed, stopping, trial, low-FPR, and sealed-assignment facts by hash, but the offline core
   neither authenticates their source nor proves those declarations true or faithfully executed.
-- Existing LLM, vision, training-hook, composition-scaling, and red-team runs remain screens. They require approved state-conditioned recollection under the finite-channel contract; completion of an old run cannot be restamped into evidence.
+- Existing LLM, vision, training-hook, composition-scaling, and red-team runs remain screens. They require approved state-conditioned recollection under the finite-channel contract; completion of an old run cannot be restamped into evidence. The separately registered model-backed v2 study is evidence only for its finite-pool categorical abstraction: aggregate sampling did not traverse the wrapper harness end to end, its attack-battery precondition was experimentally waived, and its assessment issued no authorization.
 - Most vision, audio, graph, recommender, generative-media, RL and composite releases still require dedicated workers unless their complete recipient channel meets the finite-channel proof contract.
 - “All models” therefore means every family is classified, scoped and failed closed—not that every family can currently be cleared.
