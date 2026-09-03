@@ -1,0 +1,36 @@
+{
+  "closed_hidden_record_sampler": true,
+  "complete_recipient_transcript": [
+    "nll_negative",
+    "nll_0_to_0p5",
+    "nll_0p5_to_1",
+    "nll_1_to_2",
+    "nll_2_to_4",
+    "nll_4_or_more",
+    "nll_nonfinite",
+    "wrapper_error",
+    "wrapper_timeout",
+    "state_independent_erasure"
+  ],
+  "experimental_only": true,
+  "mechanism_id": "closed-hidden-record-semantic-nll-v1",
+  "query_budget_per_issued_capability": 1,
+  "schema_version": "1.0",
+  "state_independent_erasure": {
+    "denominator": 10,
+    "numerator": 9
+  },
+  "supports": [
+    "coupling:conditional_independence",
+    "artifact:f48cd2b0afce8ef742d06d3eb66ed57f4981e84c2be8695457a346038061ad1f",
+    "interface:d3d33aa1353ad63cf13be7dba8f9a34216c9950ba9d50dcb9d980a38305ffcaf",
+    "complete-transcript:model-backed-xgboost-erasure_0p9",
+    "wrapper-execution:256359b2c88c8160f434573d2068770e8066e316c883114f6b2b4f72e7629d2a",
+    "wrapper-module:5600491f44d294c9c97047c1994502b4799a81a5422786e7cb43850396faae9a",
+    "wrapper-variant:erasure_0p9",
+    "wrapper-conformance:e03253e5b46fe43e99f706c576ee4e48578ecda9d0cad899eaf324dd1604c68a"
+  ],
+  "variant_id": "erasure_0p9",
+  "wrapper_execution_evidence_path": "wrapper-execution-evidence.json",
+  "wrapper_execution_evidence_sha256": "256359b2c88c8160f434573d2068770e8066e316c883114f6b2b4f72e7629d2a"
+}

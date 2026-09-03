@@ -1,0 +1,98 @@
+{
+  "schema_version": "1.0",
+  "experiment_id": "model-backed-finite-channel-public-data-v3",
+  "execution_status": "completed_registered_acceptance_met",
+  "source_snapshot": {
+    "git_commit": "f98baa460bed95dc44c2a17aceb9f3cb750f8f89",
+    "git_tree": "c41de1732419ddf0b592d7e8f71f4cdea91d577e",
+    "source_archive_sha256": "51ccfad22801c4ab3f0ddfa1fe51f90e606c80eb8e2897fa850ca9039e1886b1",
+    "config_file_sha256": "074a138ace5d676ad302faecbfaeef58c3430c9a2a2bbba036fb463b6b388f9f",
+    "runner_sha256": "06adde03a9d6e80ec7420580ea958952bdb1489bb6ce5a297b9e46132cf1bfb4",
+    "collector_runner_sha256": "177dc20deeb8ea1413f66f473dd92726d7c637cbe8bd325d2fbe7c54ccf1f13a",
+    "wrapper_module_sha256": "5600491f44d294c9c97047c1994502b4799a81a5422786e7cb43850396faae9a",
+    "preregistration": "../../v3-preregistration.json",
+    "registration_note": "The frozen local commit and deterministic archive predated outcome collection; no external timestamp or signature was available."
+  },
+  "execution": {
+    "exit_status": 0,
+    "exit_status_meaning": "all registered acceptance criteria met",
+    "registered_criteria_passed": 10,
+    "registered_criteria_total": 10,
+    "full_source_backed_engine_replays": 6,
+    "production_analyzer_replays": 1200,
+    "repeats_per_family": 200,
+    "trials_per_state_per_repeat": 5000,
+    "elapsed_wall_clock_seconds": 578.55,
+    "maximum_resident_set_kib": 2361000
+  },
+  "retained_artifacts": {
+    "artifact_count_including_manifest": 96,
+    "report_sha256": "3645f695eaf3bf322e44ff6ea143b11894d3dbe5650b3d318ffd1df9c2f0b050",
+    "finite_population_oracles_sha256": "e66e57940dd582c799915c0153dd1c3f2a1fe23b8740fccb3f9cad557e60793b",
+    "wrapper_conformance_sha256": "8ae3161100bbf229aa1723448dc8e19b78a05d88f9f4f2b848622244a38acd2f",
+    "execution_log_sha256": "854d6e983a0c6d92f4543daf26d7b8d6ee37a744154f8e948f74137034ea710a",
+    "resource_usage_sha256": "0fe34ff4a0745b99f92e45b3e49ce43bb3e635784cd0875e2fca5201db9b4d4e"
+  },
+  "publication_sanitization": {
+    "machine_paths_removed": true,
+    "metrics_or_outcomes_changed": false,
+    "original_execution_log_sha256": "810f985f5bc4502e6d22046b10fc1e5de8a94cb58bc19392ea67f6722b462a61",
+    "original_resource_usage_sha256": "4e2b85d05adf376b50cce2fba9d772252bbf44ed5a3b32bd9013344ecc81bbe0",
+    "transformation": "Replaced the ephemeral collector directory, remote virtual-environment prefix, and remote dataset-cache path with labeled placeholders."
+  },
+  "registered_result": {
+    "all_six_oracle_risks_covered": true,
+    "undercoverage_events": 0,
+    "repeated_intervals": 1200,
+    "maximum_simultaneous_undercoverage_upper": 0.02900165989049329,
+    "wrong_direction_events": 0,
+    "maximum_simultaneous_wrong_direction_upper": 0.02900165989049329,
+    "margin_eligible_families": 4,
+    "resolved_margin_eligible_families": 4,
+    "minimum_simultaneous_correct_direction_lower_for_resolved_families": 0.9709983401095067,
+    "near_threshold_diagnostic": {
+      "family": "compact_transformer_llm_proxy/raw_bins",
+      "oracle_risk": 0.6128571428571429,
+      "absolute_margin_from_tolerance": 0.037142857142857144,
+      "margin_eligible": false,
+      "clear_count": 31,
+      "hold_count": 169,
+      "block_count": 0,
+      "interpretation": "The registered interval mostly remained HOLD near the threshold; this is valid abstention, not a failed ceiling or a release claim."
+    },
+    "exact_erasure_contraction_identity_holds": true,
+    "wrapper_conformance_and_sampling_equivalence_passed": true,
+    "negative_controls_passed": 5
+  },
+  "model_families": {
+    "cnn": {
+      "dataset": "MNIST",
+      "raw_oracle_risk": 0.5125,
+      "erasure_0p9_oracle_risk": 0.50125
+    },
+    "xgboost": {
+      "dataset": "Adult",
+      "raw_oracle_risk": 0.55875,
+      "erasure_0p9_oracle_risk": 0.505875
+    },
+    "compact_transformer_llm_proxy": {
+      "dataset": "20 Newsgroups",
+      "raw_oracle_risk": 0.6128571428571429,
+      "erasure_0p9_oracle_risk": 0.5112857142857142,
+      "scope_note": "Compact text classifier proxy; not a generative LLM or deployed interactive endpoint."
+    }
+  },
+  "wrapper_evidence": {
+    "every_primary_and_repeat_observation_generated_through_one_use_wrapper": true,
+    "exact_aggregate_schedule_cross_replay_passed": true,
+    "per_family_wrapper_execution_artifact_engine_source_bound": true,
+    "engine_semantically_proves_endpoint_or_operating_system_enforcement": false
+  },
+  "interpretation": {
+    "benchmark_population_conditional": true,
+    "supports": "Within the frozen finite target pools, one-query categorical wrappers, state prior, sampling plan, and model artifacts, the implementation produced statistically calibrated upper bounds and useful role-aware decisions at the registered confidence family.",
+    "does_not_support": "Universal correctness, deployment-population generalization, arbitrary or adaptive serving queries, operating-system or timing-side-channel isolation, a real generative LLM endpoint, horizontal scalability, training-hook efficacy, or release authorization.",
+    "authorization_eligible": false,
+    "release_authorization": "none"
+  }
+}

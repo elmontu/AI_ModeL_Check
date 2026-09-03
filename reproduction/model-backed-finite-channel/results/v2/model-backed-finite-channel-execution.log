@@ -1,5 +1,5 @@
 {
-  "output": "/tmp/mra-public-model-collector-ga0d0vtk/privacy-audit-report.json",
+  "output": "[EPHEMERAL_COLLECTOR_DIR]/privacy-audit-report.json",
   "results": {
     "cnn": {
       "utility_accuracy": 0.874,

@@ -1,0 +1,366 @@
+{
+  "experimental_only": true,
+  "results": [
+    {
+      "checks": [
+        {
+          "check_id": "exactly_one_categorical_symbol",
+          "passed": true
+        },
+        {
+          "check_id": "no_transcript_timing_or_metadata",
+          "passed": true
+        },
+        {
+          "check_id": "second_query_refused",
+          "passed": true
+        },
+        {
+          "check_id": "all_caller_fields_refused_with_constant_error",
+          "passed": true
+        },
+        {
+          "check_id": "complete_registered_alphabet_is_totalized",
+          "passed": true
+        },
+        {
+          "check_id": "exact_state_independent_erasure_schedule_replayed",
+          "passed": true
+        },
+        {
+          "check_id": "no_public_metadata_accessors",
+          "passed": true
+        }
+      ],
+      "collector_model": "cnn",
+      "conformant": true,
+      "erasure_probe": {
+        "expected_erasure_count": 0,
+        "observed_erasure_count": 0,
+        "probe_count": 100,
+        "transcripts_retained": false
+      },
+      "interface": {
+        "query_budget": 1,
+        "recipient_callable": "query()",
+        "recipient_input_fields": [],
+        "registered_observation_count": 10,
+        "return_type": "categorical_symbol_string",
+        "state_independent_erasure": {
+          "denominator": 1,
+          "numerator": 0
+        },
+        "transcript_metadata_fields": []
+      },
+      "limitations": [
+        "Python object reflection and memory inspection are not a security boundary.",
+        "Process, scheduler, transport, network, hardware, and operating-system side channels are not tested.",
+        "Authentication, rate limiting, deployment isolation, and real serving-endpoint enforcement are not proven.",
+        "Conformance is conditional on the supplied aggregate finite population and registered categorical interface."
+      ],
+      "schema_version": "1.0",
+      "variant_id": "raw_bins"
+    },
+    {
+      "checks": [
+        {
+          "check_id": "exactly_one_categorical_symbol",
+          "passed": true
+        },
+        {
+          "check_id": "no_transcript_timing_or_metadata",
+          "passed": true
+        },
+        {
+          "check_id": "second_query_refused",
+          "passed": true
+        },
+        {
+          "check_id": "all_caller_fields_refused_with_constant_error",
+          "passed": true
+        },
+        {
+          "check_id": "complete_registered_alphabet_is_totalized",
+          "passed": true
+        },
+        {
+          "check_id": "exact_state_independent_erasure_schedule_replayed",
+          "passed": true
+        },
+        {
+          "check_id": "no_public_metadata_accessors",
+          "passed": true
+        }
+      ],
+      "collector_model": "cnn",
+      "conformant": true,
+      "erasure_probe": {
+        "expected_erasure_count": 87,
+        "observed_erasure_count": 87,
+        "probe_count": 100,
+        "transcripts_retained": false
+      },
+      "interface": {
+        "query_budget": 1,
+        "recipient_callable": "query()",
+        "recipient_input_fields": [],
+        "registered_observation_count": 10,
+        "return_type": "categorical_symbol_string",
+        "state_independent_erasure": {
+          "denominator": 10,
+          "numerator": 9
+        },
+        "transcript_metadata_fields": []
+      },
+      "limitations": [
+        "Python object reflection and memory inspection are not a security boundary.",
+        "Process, scheduler, transport, network, hardware, and operating-system side channels are not tested.",
+        "Authentication, rate limiting, deployment isolation, and real serving-endpoint enforcement are not proven.",
+        "Conformance is conditional on the supplied aggregate finite population and registered categorical interface."
+      ],
+      "schema_version": "1.0",
+      "variant_id": "erasure_0p9"
+    },
+    {
+      "checks": [
+        {
+          "check_id": "exactly_one_categorical_symbol",
+          "passed": true
+        },
+        {
+          "check_id": "no_transcript_timing_or_metadata",
+          "passed": true
+        },
+        {
+          "check_id": "second_query_refused",
+          "passed": true
+        },
+        {
+          "check_id": "all_caller_fields_refused_with_constant_error",
+          "passed": true
+        },
+        {
+          "check_id": "complete_registered_alphabet_is_totalized",
+          "passed": true
+        },
+        {
+          "check_id": "exact_state_independent_erasure_schedule_replayed",
+          "passed": true
+        },
+        {
+          "check_id": "no_public_metadata_accessors",
+          "passed": true
+        }
+      ],
+      "collector_model": "xgboost",
+      "conformant": true,
+      "erasure_probe": {
+        "expected_erasure_count": 0,
+        "observed_erasure_count": 0,
+        "probe_count": 100,
+        "transcripts_retained": false
+      },
+      "interface": {
+        "query_budget": 1,
+        "recipient_callable": "query()",
+        "recipient_input_fields": [],
+        "registered_observation_count": 10,
+        "return_type": "categorical_symbol_string",
+        "state_independent_erasure": {
+          "denominator": 1,
+          "numerator": 0
+        },
+        "transcript_metadata_fields": []
+      },
+      "limitations": [
+        "Python object reflection and memory inspection are not a security boundary.",
+        "Process, scheduler, transport, network, hardware, and operating-system side channels are not tested.",
+        "Authentication, rate limiting, deployment isolation, and real serving-endpoint enforcement are not proven.",
+        "Conformance is conditional on the supplied aggregate finite population and registered categorical interface."
+      ],
+      "schema_version": "1.0",
+      "variant_id": "raw_bins"
+    },
+    {
+      "checks": [
+        {
+          "check_id": "exactly_one_categorical_symbol",
+          "passed": true
+        },
+        {
+          "check_id": "no_transcript_timing_or_metadata",
+          "passed": true
+        },
+        {
+          "check_id": "second_query_refused",
+          "passed": true
+        },
+        {
+          "check_id": "all_caller_fields_refused_with_constant_error",
+          "passed": true
+        },
+        {
+          "check_id": "complete_registered_alphabet_is_totalized",
+          "passed": true
+        },
+        {
+          "check_id": "exact_state_independent_erasure_schedule_replayed",
+          "passed": true
+        },
+        {
+          "check_id": "no_public_metadata_accessors",
+          "passed": true
+        }
+      ],
+      "collector_model": "xgboost",
+      "conformant": true,
+      "erasure_probe": {
+        "expected_erasure_count": 87,
+        "observed_erasure_count": 87,
+        "probe_count": 100,
+        "transcripts_retained": false
+      },
+      "interface": {
+        "query_budget": 1,
+        "recipient_callable": "query()",
+        "recipient_input_fields": [],
+        "registered_observation_count": 10,
+        "return_type": "categorical_symbol_string",
+        "state_independent_erasure": {
+          "denominator": 10,
+          "numerator": 9
+        },
+        "transcript_metadata_fields": []
+      },
+      "limitations": [
+        "Python object reflection and memory inspection are not a security boundary.",
+        "Process, scheduler, transport, network, hardware, and operating-system side channels are not tested.",
+        "Authentication, rate limiting, deployment isolation, and real serving-endpoint enforcement are not proven.",
+        "Conformance is conditional on the supplied aggregate finite population and registered categorical interface."
+      ],
+      "schema_version": "1.0",
+      "variant_id": "erasure_0p9"
+    },
+    {
+      "checks": [
+        {
+          "check_id": "exactly_one_categorical_symbol",
+          "passed": true
+        },
+        {
+          "check_id": "no_transcript_timing_or_metadata",
+          "passed": true
+        },
+        {
+          "check_id": "second_query_refused",
+          "passed": true
+        },
+        {
+          "check_id": "all_caller_fields_refused_with_constant_error",
+          "passed": true
+        },
+        {
+          "check_id": "complete_registered_alphabet_is_totalized",
+          "passed": true
+        },
+        {
+          "check_id": "exact_state_independent_erasure_schedule_replayed",
+          "passed": true
+        },
+        {
+          "check_id": "no_public_metadata_accessors",
+          "passed": true
+        }
+      ],
+      "collector_model": "compact_transformer_llm_proxy",
+      "conformant": true,
+      "erasure_probe": {
+        "expected_erasure_count": 0,
+        "observed_erasure_count": 0,
+        "probe_count": 100,
+        "transcripts_retained": false
+      },
+      "interface": {
+        "query_budget": 1,
+        "recipient_callable": "query()",
+        "recipient_input_fields": [],
+        "registered_observation_count": 10,
+        "return_type": "categorical_symbol_string",
+        "state_independent_erasure": {
+          "denominator": 1,
+          "numerator": 0
+        },
+        "transcript_metadata_fields": []
+      },
+      "limitations": [
+        "Python object reflection and memory inspection are not a security boundary.",
+        "Process, scheduler, transport, network, hardware, and operating-system side channels are not tested.",
+        "Authentication, rate limiting, deployment isolation, and real serving-endpoint enforcement are not proven.",
+        "Conformance is conditional on the supplied aggregate finite population and registered categorical interface."
+      ],
+      "schema_version": "1.0",
+      "variant_id": "raw_bins"
+    },
+    {
+      "checks": [
+        {
+          "check_id": "exactly_one_categorical_symbol",
+          "passed": true
+        },
+        {
+          "check_id": "no_transcript_timing_or_metadata",
+          "passed": true
+        },
+        {
+          "check_id": "second_query_refused",
+          "passed": true
+        },
+        {
+          "check_id": "all_caller_fields_refused_with_constant_error",
+          "passed": true
+        },
+        {
+          "check_id": "complete_registered_alphabet_is_totalized",
+          "passed": true
+        },
+        {
+          "check_id": "exact_state_independent_erasure_schedule_replayed",
+          "passed": true
+        },
+        {
+          "check_id": "no_public_metadata_accessors",
+          "passed": true
+        }
+      ],
+      "collector_model": "compact_transformer_llm_proxy",
+      "conformant": true,
+      "erasure_probe": {
+        "expected_erasure_count": 87,
+        "observed_erasure_count": 87,
+        "probe_count": 100,
+        "transcripts_retained": false
+      },
+      "interface": {
+        "query_budget": 1,
+        "recipient_callable": "query()",
+        "recipient_input_fields": [],
+        "registered_observation_count": 10,
+        "return_type": "categorical_symbol_string",
+        "state_independent_erasure": {
+          "denominator": 10,
+          "numerator": 9
+        },
+        "transcript_metadata_fields": []
+      },
+      "limitations": [
+        "Python object reflection and memory inspection are not a security boundary.",
+        "Process, scheduler, transport, network, hardware, and operating-system side channels are not tested.",
+        "Authentication, rate limiting, deployment isolation, and real serving-endpoint enforcement are not proven.",
+        "Conformance is conditional on the supplied aggregate finite population and registered categorical interface."
+      ],
+      "schema_version": "1.0",
+      "variant_id": "erasure_0p9"
+    }
+  ],
+  "schema_version": "1.0"
+}

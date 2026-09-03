@@ -15,7 +15,8 @@ manifests; unchecked items remain paper-snapshot or deployment work.
 | E5 | Protocol adversarial mutation evaluation | Program defines two controls and 21 unsafe mutants | No score | Generate, retain, and hash the report; describe the score only as registered-mutant coverage. |
 | E6 | Lean proof replay and axiom audit | Source and pinned toolchain retained | The theorem statements are citable; no fresh paper-snapshot execution claim | Run `make formal`; retain complete output, toolchain identity, and commit. |
 | E7a | Controlled finite-channel ceiling validation | Completed; all registered claims passed | Yes, for the exact controlled channel family | Use the [generated result report](ceiling-experiment-results.md) and retain its synthetic-channel, three-Engine-replay, experimental-waiver, and non-authorizing boundaries. |
-| E7b | Model-backed public-data ceiling validation v2 | Completed; 8/9 acceptance criteria passed | Yes, as a mixed conditional result—not an accepted study | Preserve zero undercoverage and the failed raw Transformer-proxy clear-power criterion together; do not claim end-to-end wrapper enforcement. |
+| E7b | Model-backed public-data ceiling validation v2 | Completed historical predecessor; 8/9 criteria passed | Yes, as a preserved negative result | Preserve zero undercoverage and the failed raw Transformer-proxy clear-power criterion together; do not pool it into v3. |
+| E7c | Prospectively frozen corrective model-backed v3 | Completed; all 10 criteria passed | Yes, within its finite-pool, safe-side scope | Report 18-endpoint soundness/wrong-direction bounds, margin-eligible resolution, near-boundary holds, wrapper cross-replay, and the absence of a model-backed above-tolerance case. |
 | E8 | OpenML, stochastic portfolio, strategic, and public-privacy studies | Registered or configured | No completed outcomes | Follow each study's sealing contract and retain complete raw/derived artifacts before use. |
 | E9 | Production authority/registry/gateway evaluation | Not implemented | No | Requires an external system and an independently reviewed operational/refinement study. |
 
@@ -211,8 +212,40 @@ model-backed reports rather than manual transcription.
   repeated sampling from those same pools.
 - [x] Counts came from the aggregate sampler; the wrapper surface was tested
   separately, so v2 supplies no end-to-end wrapper-enforcement evidence.
-- [x] Both experiments used experimental attack-battery waivers and emitted no
-  release authorization.
+- [x] The controlled and v2 experiments used experimental attack-battery
+  waivers and emitted no release authorization.
+
+### E7c: accepted prospective corrective v3
+
+- [x] V3 was designed after v2 outcomes were known, then frozen with a fresh
+  collector seed, fresh primary/repeat seed domains, role-aware criteria, and
+  no reuse of v2 outcomes.
+- [x] All 10 registered criteria passed. Six full Engine primary replays and
+  1,200 analyzer repeats completed.
+- [x] Undercoverage and wrong-direction events were both 0/1,200. Across 18
+  Bonferroni one-sided endpoints, every per-family simultaneous upper bound was
+  `0.02900166`, below `0.05`.
+- [x] All four families with exact risk at least `0.10` from the `0.65`
+  tolerance produced 200/200 correct safe-side `CLEAR` decisions, with
+  simultaneous lower bound `0.97099834`.
+- [x] The raw Transformer proxy had exact risk `0.612857`, only `0.037143`
+  below tolerance, so it was not margin eligible. Its 31 `CLEAR` and 169
+  `HOLD` outcomes were retained and no outcome was wrong-direction.
+- [x] No v3 oracle risk exceeded `0.65`; v3 therefore supplies no model-backed
+  unsafe-side or `BLOCK`-power result. The controlled exact-risk `0.80`
+  channel is the only current repeated `BLOCK` demonstration.
+- [x] Every observation executed through a fresh one-use Python wrapper and
+  exactly matched the aggregate reference sampler; wrapper execution evidence
+  was bound into Engine source replay.
+- [x] Five negative controls passed, including missing/tampered wrapper
+  evidence, and all three erasure variants satisfied the exact contraction
+  identity `R_e = 0.5 + 0.1(R_raw - 0.5)`.
+- [x] V3 remains conditional on one fresh artifact per model, 400 `IN`/400
+  `OUT` records for CNN and XGBoost and 350/350 for the proxy, and resampling
+  from those pools. The Transformer is an LLM proxy.
+- [x] Python wrapper execution does not prove deployed endpoint, authentication,
+  timing, process-isolation, or operating-system semantics. V3 also uses an
+  experimental attack-battery waiver and grants no authorization.
 
 ### Remaining deployment evidence
 
@@ -221,7 +254,7 @@ model-backed reports rather than manual transcription.
 - [ ] Replace the experimental battery waiver with the policy-required complete
   red-team battery and independently authenticated collection.
 - [ ] Validate new artifacts, seeds, populations, and deployment interfaces;
-  neither completed experiment transfers automatically to them.
+  no completed experiment transfers automatically to them.
 - [ ] Implement and evaluate the external authority, registry, gateway,
   monitoring, and revocation workflow before making an authorization claim.
 

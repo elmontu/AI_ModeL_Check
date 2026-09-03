@@ -22,8 +22,15 @@
     "report_sha256": "87f46778b65a23a3fc4b8a3187dd211a747481640ea86ad6279be82ed750bd89",
     "finite_population_oracles_sha256": "ef19774334c394fc2dadfd2b8f1041d14e7d66f860885c44ece50e7997dedf08",
     "wrapper_conformance_sha256": "8ae3161100bbf229aa1723448dc8e19b78a05d88f9f4f2b848622244a38acd2f",
-    "execution_log_sha256": "99eb6935ac38bdcef893cce18673f505ba85035c4d949981c681072cec3a518c",
-    "resource_usage_sha256": "9ce56baeaf3e6a925e32f0783efd83d77417d3c6d8f55e7bcae601031162622d"
+    "execution_log_sha256": "cf333de40c4d5e4982fdd4ac3198aba12cf9e12d9cc8daebddf7315b79472f2a",
+    "resource_usage_sha256": "eab60dc859de18bc2398a98bb38810b52a3cc3408dba16957646a11ed92b0f9f"
+  },
+  "publication_sanitization": {
+    "machine_paths_removed": true,
+    "metrics_or_outcomes_changed": false,
+    "original_execution_log_sha256": "99eb6935ac38bdcef893cce18673f505ba85035c4d949981c681072cec3a518c",
+    "original_resource_usage_sha256": "9ce56baeaf3e6a925e32f0783efd83d77417d3c6d8f55e7bcae601031162622d",
+    "transformation": "Replaced the ephemeral collector directory, remote virtual-environment prefix, and remote dataset-cache path with labeled placeholders."
   },
   "registered_negative_result": {
     "failed_criterion": "all_six_simultaneous_clear_rate_lowers_meet_minimum",

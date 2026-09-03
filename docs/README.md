@@ -16,7 +16,7 @@ This index separates the normative protocol, reference implementation, operating
 - **Reference** — [Architecture](architecture.md): complete runtime/container view, commands, analyzers, data and storage, training-to-serving integration, release contracts, deployment, CI/release automation, observability, trust, and failure behavior.
 - **Normative** — [Model Release Assurance Protocol (MRAP/1.0)](model-release-assurance-protocol.md): roles, messages, states, gates, atomic authorization, enforcement, monitoring, and conformance levels.
 - **Reference** — [Model-family coverage](model-family-coverage.md): executable family catalog, threat routing, portfolio rule, and the distinction between coverage and clearance.
-- **Experimental** — [Finite-channel ceiling results](../paper/ceiling-experiment-results.md): generated paper-ready tables and figure for the accepted controlled experiment and completed model-backed v2 mixed result, with soundness, usefulness, wrapper, resampling, and authority boundaries.
+- **Experimental** — [Finite-channel ceiling results](../paper/ceiling-experiment-results.md): generated paper-ready tables and figure for the accepted controlled experiment, preserved v2 negative predecessor, and accepted prospective corrective v3, with soundness, wrong-direction, margin, wrapper, resampling, and authority boundaries.
 - **Experimental** — [Real-data training-hook execution audit (2026-09-02)](real-data-training-hook-audit-2026-09-02.md): curated aggregate results for the completed WildChat three-LLM and full-EuroSAT AlexNet/DenseNet-121 GPU runs, including metadata/context release consequences, bounded red-team screens, hashes, and non-claims.
 - **Experimental** — [Five-model composition-scaling protocol](../reproduction/composition-scaling/README.md): registered three-scale, five-seed WildChat/EuroSAT matrix, matched hook/batch controls, same-population output composition, cross-modal portfolio boundaries, bounded execution, and completion rules.
 
@@ -50,7 +50,7 @@ Executable contract demonstrations are indexed in [`examples/README.md`](../exam
 ## Research and experimental assurance
 
 - **Guide** — [MLSys paper workspace](../paper/README.md): draft outline, claims-to-evidence gate, artifact index, and experiment/reproducibility checklist; it is navigation for authors, not a new evidence source.
-- **Experimental** — [Ceiling experiment reproduction index](../reproduction/README.md): retained controlled and model-backed reports, preregistrations, manifests, aggregate replay rows, and the preserved v2 acceptance failure.
+- **Experimental** — [Ceiling experiment reproduction index](../reproduction/README.md): retained controlled and versioned model-backed reports, preregistrations, manifests, aggregate replay rows, v2 acceptance failure, and v3 corrective pass.
 - **Reference** — [Privacy-assurance literature review](literature-review.md): primary research behind the membership, extraction, differential-privacy, tree, canary, and watermark evidence semantics.
 - **Reference** — [Game-theory literature review](game-theory-literature-review.md): primary-source audit, security, and strategic-ML review with claim labels and transfer limits.
 - **Experimental** — [Executable strategic assurance](strategic-assurance.md): optional exact-rational incentive stress tests that cannot make a governance decision or override a mandatory gate.

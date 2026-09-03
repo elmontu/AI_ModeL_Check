@@ -1,0 +1,377 @@
+{
+  "analytic_evidence": {
+    "envelope_certificate": {
+      "cell_upper_bounds": [
+        [
+          0.0016938380736853857,
+          0.09372897514396195,
+          0.011404789158083836,
+          0.01192348107766241,
+          0.008198826792000232,
+          0.0021893692299760448,
+          0.0016938380736853857,
+          0.0016938380736853857,
+          0.0016938380736853857,
+          0.917354339997879
+        ],
+        [
+          0.0016938380736853857,
+          0.11555578761820719,
+          0.00928869576418217,
+          0.005919208677367352,
+          0.0016938380736853857,
+          0.0016938380736853857,
+          0.0016938380736853857,
+          0.0016938380736853857,
+          0.0016938380736853857,
+          0.907841341266414
+        ]
+      ],
+      "certificate_id": "certificate-xgboost-erasure_0p9",
+      "coverage_confidence": 0.95,
+      "derivation": "conditional-independence product of marginal upper bounds plus joint-event bounds",
+      "feasible_joint_channel": [
+        [
+          0.0016938380736853857,
+          0.09372897514396195,
+          0.011404789158083836,
+          0.003954445210748454,
+          0.001577355394886058,
+          4.167100667911858e-08,
+          0.0,
+          0.0,
+          0.0,
+          0.8876405553476276
+        ],
+        [
+          0.0016938380736853857,
+          0.11555578761820719,
+          0.0052854931975919355,
+          0.0006752473916369722,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.8767896337188785
+        ]
+      ],
+      "joint_observation_ids": [
+        "[\"nll_negative\"]",
+        "[\"nll_0_to_0p5\"]",
+        "[\"nll_0p5_to_1\"]",
+        "[\"nll_1_to_2\"]",
+        "[\"nll_2_to_4\"]",
+        "[\"nll_4_or_more\"]",
+        "[\"nll_nonfinite\"]",
+        "[\"wrapper_error\"]",
+        "[\"wrapper_timeout\"]",
+        "[\"state_independent_erasure\"]"
+      ],
+      "problem_sha256": "df4757dcb4452670a88f7a898c64bd13b9d1e703d88d1a019cbf0acc3a5cc4d4",
+      "raw_upper_bound": 0.5367009730842751,
+      "selection_valid": true,
+      "upper_bound": 0.5367009730842751
+    },
+    "exact_certificate": null,
+    "problem": {
+      "coupling_model": "conditional_independence",
+      "coverage": "simultaneous",
+      "coverage_confidence": 0.95,
+      "decision_game_sha256": "6865850fa62501501a37b43b7d75c286ccae772022a87825bebe710f1d3824fb",
+      "decision_problem": {
+        "action_ids": [
+          "out",
+          "in"
+        ],
+        "gain": [
+          [
+            1.0,
+            0.0
+          ],
+          [
+            0.0,
+            1.0
+          ]
+        ],
+        "interpretation": "exact recovery of the secret state",
+        "problem_id": "6865850fa62501501a37b43b7d75c286ccae772022a87825bebe710f1d3824fb",
+        "state_ids": [
+          "out",
+          "in"
+        ]
+      },
+      "joint_event_bounds": [],
+      "mechanism_assumptions": [
+        "one closed hidden-record query produces the complete categorical transcript",
+        "state-conditioned sampling is IID with replacement from each frozen finite pool",
+        "erasure, if enabled, is independent of the hidden state and underlying bin"
+      ],
+      "mechanism_evidence": [
+        {
+          "evidence_id": "mechanism-xgboost-erasure_0p9",
+          "source_path": "mechanism-evidence.json",
+          "source_sha256": "930517d159c5561d088320fbe3047d7b92ee02cd0b4fba1d42ee80c752a0f916",
+          "supports": [
+            "coupling:conditional_independence",
+            "artifact:f48cd2b0afce8ef742d06d3eb66ed57f4981e84c2be8695457a346038061ad1f",
+            "interface:d3d33aa1353ad63cf13be7dba8f9a34216c9950ba9d50dcb9d980a38305ffcaf",
+            "complete-transcript:model-backed-xgboost-erasure_0p9",
+            "wrapper-execution:256359b2c88c8160f434573d2068770e8066e316c883114f6b2b4f72e7629d2a",
+            "wrapper-module:5600491f44d294c9c97047c1994502b4799a81a5422786e7cb43850396faae9a",
+            "wrapper-variant:erasure_0p9",
+            "wrapper-conformance:e03253e5b46fe43e99f706c576ee4e48578ecda9d0cad899eaf324dd1604c68a"
+          ]
+        },
+        {
+          "evidence_id": "wrapper-execution-xgboost-erasure_0p9",
+          "source_path": "wrapper-execution-evidence.json",
+          "source_sha256": "256359b2c88c8160f434573d2068770e8066e316c883114f6b2b4f72e7629d2a",
+          "supports": [
+            "wrapper-execution:256359b2c88c8160f434573d2068770e8066e316c883114f6b2b4f72e7629d2a",
+            "wrapper-module:5600491f44d294c9c97047c1994502b4799a81a5422786e7cb43850396faae9a",
+            "wrapper-variant:erasure_0p9",
+            "wrapper-conformance:e03253e5b46fe43e99f706c576ee4e48578ecda9d0cad899eaf324dd1604c68a"
+          ]
+        }
+      ],
+      "population_scope_id": "benchmark-xgboost-erasure_0p9",
+      "population_scope_sha256": "b2f6e36e1c720e9b85efe9e9afe9ab3fe0f8c87d123267cf2509f883a71762cc",
+      "portfolio_id": "portfolio-xgboost-erasure_0p9",
+      "prior": [
+        0.5,
+        0.5
+      ],
+      "prior_evidence": {
+        "evidence_id": "prior-xgboost-erasure_0p9",
+        "source_path": "finite-prior.json",
+        "source_sha256": "193a4c491ef68e9757442699d45d7fb29f0cd746f5acf01e9a9fa02d7d3d197b",
+        "supports": [
+          "prior",
+          "decision-game:6865850fa62501501a37b43b7d75c286ccae772022a87825bebe710f1d3824fb",
+          "finite-prior:5ee97d5975f9f78b48adebbc2c4699f119ddd58542d1dcdec8305d3d0eb3b9df"
+        ]
+      },
+      "rational_prior": [
+        {
+          "denominator": 2,
+          "numerator": 1
+        },
+        {
+          "denominator": 2,
+          "numerator": 1
+        }
+      ],
+      "releases": [
+        {
+          "evidence": {
+            "evidence_id": "generation-xgboost-erasure_0p9:model-backed-xgboost-erasure_0p9",
+            "source_path": "simultaneous-evidence.json",
+            "source_sha256": "2cdbb67d9482241157d73f88a847cd20046022493da074a9e5fcd053402c87ba",
+            "supports": [
+              "marginal:model-backed-xgboost-erasure_0p9",
+              "coverage:simultaneous",
+              "error-budget:model-backed-finite-channel-assurance-budget:allocation-xgboost-erasure_0p9",
+              "confidence-endpoints:outward-validated"
+            ]
+          },
+          "lower": [
+            [
+              0.0,
+              0.06653799130828839,
+              0.0031521162028905333,
+              0.0034307098227865933,
+              0.001577355394886058,
+              4.167100667911858e-08,
+              0.0,
+              0.0,
+              0.0,
+              0.8876405553476276
+            ],
+            [
+              0.0,
+              0.08543869359510618,
+              0.0020803354379669682,
+              0.0006752473916369722,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.8767896337188785
+            ]
+          ],
+          "observation_ids": [
+            "nll_negative",
+            "nll_0_to_0p5",
+            "nll_0p5_to_1",
+            "nll_1_to_2",
+            "nll_2_to_4",
+            "nll_4_or_more",
+            "nll_nonfinite",
+            "wrapper_error",
+            "wrapper_timeout",
+            "state_independent_erasure"
+          ],
+          "release_id": "model-backed-xgboost-erasure_0p9",
+          "upper": [
+            [
+              0.0016938380736853857,
+              0.09372897514396195,
+              0.011404789158083836,
+              0.01192348107766241,
+              0.008198826792000232,
+              0.0021893692299760448,
+              0.0016938380736853857,
+              0.0016938380736853857,
+              0.0016938380736853857,
+              0.917354339997879
+            ],
+            [
+              0.0016938380736853857,
+              0.11555578761820719,
+              0.00928869576418217,
+              0.005919208677367352,
+              0.0016938380736853857,
+              0.0016938380736853857,
+              0.0016938380736853857,
+              0.0016938380736853857,
+              0.0016938380736853857,
+              0.907841341266414
+            ]
+          ]
+        }
+      ],
+      "schema_version": "1.0",
+      "selection_scope": "all three preregistered public-data models, both wrapper variants, both secret states, and every listed categorical observation",
+      "state_ids": [
+        "out",
+        "in"
+      ],
+      "threat_id": "membership-xgboost-erasure_0p9"
+    },
+    "rational_upper_audit": {
+      "audit_version": "1.0",
+      "certificate_id": "certificate-xgboost-erasure_0p9",
+      "certificate_kind": "envelope",
+      "exact_upper_denominator": 5000000000000000000,
+      "exact_upper_numerator": 2683504865421375639,
+      "feasible_joint_channel": [
+        [
+          {
+            "denominator": 10000000000000000000,
+            "numerator": 16938380736853857
+          },
+          {
+            "denominator": 20000000000000000,
+            "numerator": 1874579502879239
+          },
+          {
+            "denominator": 250000000000000000,
+            "numerator": 2851197289520959
+          },
+          {
+            "denominator": 50000000000000000000000,
+            "numerator": 197722260537424559071
+          },
+          {
+            "denominator": 500000000000000000,
+            "numerator": 788677697443029
+          },
+          {
+            "denominator": 50000000000000000000000,
+            "numerator": 2083550333955929
+          },
+          {
+            "denominator": 1,
+            "numerator": 0
+          },
+          {
+            "denominator": 1,
+            "numerator": 0
+          },
+          {
+            "denominator": 1,
+            "numerator": 0
+          },
+          {
+            "denominator": 2500000000000000,
+            "numerator": 2219101388369069
+          }
+        ],
+        [
+          {
+            "denominator": 10000000000000000000,
+            "numerator": 16938380736853857
+          },
+          {
+            "denominator": 100000000000000000,
+            "numerator": 11555578761820719
+          },
+          {
+            "denominator": 10000000000000000000,
+            "numerator": 52854931975919521
+          },
+          {
+            "denominator": 5000000000000000000,
+            "numerator": 3376236958184861
+          },
+          {
+            "denominator": 1,
+            "numerator": 0
+          },
+          {
+            "denominator": 1,
+            "numerator": 0
+          },
+          {
+            "denominator": 1,
+            "numerator": 0
+          },
+          {
+            "denominator": 1,
+            "numerator": 0
+          },
+          {
+            "denominator": 1,
+            "numerator": 0
+          },
+          {
+            "denominator": 2000000000000000,
+            "numerator": 1753579267437757
+          }
+        ]
+      ],
+      "number_interpretation": "exact_decimal_weights_normalized_per_probability_vector",
+      "outward_upper_bound": 0.5367009730842752,
+      "problem_sha256": "df4757dcb4452670a88f7a898c64bd13b9d1e703d88d1a019cbf0acc3a5cc4d4"
+    },
+    "schema_version": "1.1"
+  },
+  "analyzer": "finite_channel_ceiling",
+  "bounded_transcript_complete": true,
+  "complete_interface_coverage": true,
+  "evidence_context": {
+    "artifact_sha256": "f48cd2b0afce8ef742d06d3eb66ed57f4981e84c2be8695457a346038061ad1f",
+    "decision_game_sha256": "6865850fa62501501a37b43b7d75c286ccae772022a87825bebe710f1d3824fb",
+    "interface_sha256": "d3d33aa1353ad63cf13be7dba8f9a34216c9950ba9d50dcb9d980a38305ffcaf",
+    "observed_at": "2026-09-03T06:23:25.223347Z",
+    "policy_sha256": "9cf3199e741f1a2020f2d24c834cdb14b4ff1f53a0d59aea373eae12c7a703e5",
+    "population_scope_id": "benchmark-xgboost-erasure_0p9",
+    "population_scope_sha256": "b2f6e36e1c720e9b85efe9e9afe9ab3fe0f8c87d123267cf2509f883a71762cc",
+    "release_contract_sha256": "75fa66360c592b860341594438dc00e413cf1acb357ad62e1fcd528274031071",
+    "release_id": "model-backed-xgboost-erasure_0p9"
+  },
+  "interface_observation_definition": "complete one-query categorical transcript of the closed hidden-record sampler, including negative, nonfinite, wrapper-error, timeout, and erasure outcomes",
+  "observed_artifact_sha256": "f48cd2b0afce8ef742d06d3eb66ed57f4981e84c2be8695457a346038061ad1f",
+  "observed_interface_sha256": "d3d33aa1353ad63cf13be7dba8f9a34216c9950ba9d50dcb9d980a38305ffcaf",
+  "population_scope_id": "benchmark-xgboost-erasure_0p9",
+  "recipient_realizable": true,
+  "release_enforced_finite_alphabet": true,
+  "schema_version": "1.0",
+  "state_trials": [
+    5000,
+    5000
+  ],
+  "threat_id": "membership-xgboost-erasure_0p9"
+}

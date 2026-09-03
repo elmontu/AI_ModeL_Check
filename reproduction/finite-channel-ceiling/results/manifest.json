@@ -19,7 +19,13 @@
     "artifact_count_including_manifest": 4,
     "ground_truth_report_sha256": "62ebc17e94c726a5bad4bd084d2d84d71d0637b42380d1c7200a93900b0cefc7",
     "execution_log_sha256": "40486984d9556def1fb108ce47456ed4f5148b16963e3237f70dd615b7875c66",
-    "resource_usage_sha256": "851306b6b50a4395addc639f47ac57cc291f6a662fb853408640cf1f47d9fa26"
+    "resource_usage_sha256": "9b71337604203c5c152ecccc199ef1e46f6df3235c8aaac985a5d5578da99153"
+  },
+  "publication_sanitization": {
+    "machine_paths_removed": true,
+    "metrics_or_outcomes_changed": false,
+    "original_resource_usage_sha256": "851306b6b50a4395addc639f47ac57cc291f6a662fb853408640cf1f47d9fa26",
+    "transformation": "Replaced the absolute remote virtual-environment prefix with [REMOTE_VENV]."
   },
   "interpretation": {
     "evidence_scope": "controlled finite channels with exact known risks",

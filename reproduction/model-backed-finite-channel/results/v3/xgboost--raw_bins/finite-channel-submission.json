@@ -1,0 +1,406 @@
+{
+  "analytic_evidence": {
+    "envelope_certificate": {
+      "cell_upper_bounds": [
+        [
+          0.0016938380736853857,
+          0.8183800313677597,
+          0.0894210310174899,
+          0.08747898181076018,
+          0.061111208503696494,
+          0.00650536852700947,
+          0.0016938380736853857,
+          0.0016938380736853857,
+          0.0016938380736853857,
+          0.0016938380736853857
+        ],
+        [
+          0.0016938380736853857,
+          0.9262619568004347,
+          0.05890539505542225,
+          0.05047330869738044,
+          0.0016938380736853857,
+          0.0016938380736853857,
+          0.0016938380736853857,
+          0.0016938380736853857,
+          0.0016938380736853857,
+          0.0016938380736853857
+        ]
+      ],
+      "certificate_id": "certificate-xgboost-raw_bins",
+      "coverage_confidence": 0.95,
+      "derivation": "conditional-independence product of marginal upper bounds plus joint-event bounds",
+      "feasible_joint_channel": [
+        [
+          0.0016938380736853857,
+          0.8183800313677597,
+          0.07856944233155472,
+          0.06120872424173389,
+          0.039264127482119236,
+          0.0008838365031470974,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0016938380736853857,
+          0.9262619568004347,
+          0.04130656736862298,
+          0.030737637757256932,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "joint_observation_ids": [
+        "[\"nll_negative\"]",
+        "[\"nll_0_to_0p5\"]",
+        "[\"nll_0p5_to_1\"]",
+        "[\"nll_1_to_2\"]",
+        "[\"nll_2_to_4\"]",
+        "[\"nll_4_or_more\"]",
+        "[\"nll_nonfinite\"]",
+        "[\"wrapper_error\"]",
+        "[\"wrapper_timeout\"]",
+        "[\"state_independent_erasure\"]"
+      ],
+      "problem_sha256": "50184a7eab71da77ad89d7cad94f01c773b61a54de734fcbeee21b91e1cd5749",
+      "raw_upper_bound": 0.5896238685139087,
+      "selection_valid": true,
+      "upper_bound": 0.5896238685139087
+    },
+    "exact_certificate": null,
+    "problem": {
+      "coupling_model": "conditional_independence",
+      "coverage": "simultaneous",
+      "coverage_confidence": 0.95,
+      "decision_game_sha256": "ef68a95d1732c043400680f11111ced8dea19787ec3633e41654a7968e1710d1",
+      "decision_problem": {
+        "action_ids": [
+          "out",
+          "in"
+        ],
+        "gain": [
+          [
+            1.0,
+            0.0
+          ],
+          [
+            0.0,
+            1.0
+          ]
+        ],
+        "interpretation": "exact recovery of the secret state",
+        "problem_id": "ef68a95d1732c043400680f11111ced8dea19787ec3633e41654a7968e1710d1",
+        "state_ids": [
+          "out",
+          "in"
+        ]
+      },
+      "joint_event_bounds": [],
+      "mechanism_assumptions": [
+        "one closed hidden-record query produces the complete categorical transcript",
+        "state-conditioned sampling is IID with replacement from each frozen finite pool",
+        "erasure, if enabled, is independent of the hidden state and underlying bin"
+      ],
+      "mechanism_evidence": [
+        {
+          "evidence_id": "mechanism-xgboost-raw_bins",
+          "source_path": "mechanism-evidence.json",
+          "source_sha256": "d2d282b0e9f93770402523790177f151e0eae135c50ddb401f22836e9bd4256a",
+          "supports": [
+            "coupling:conditional_independence",
+            "artifact:f48cd2b0afce8ef742d06d3eb66ed57f4981e84c2be8695457a346038061ad1f",
+            "interface:d3d33aa1353ad63cf13be7dba8f9a34216c9950ba9d50dcb9d980a38305ffcaf",
+            "complete-transcript:model-backed-xgboost-raw_bins",
+            "wrapper-execution:3f0acc1bb5089c1fe2facb9d34b5212dc54c18e86e1c2d740b1f48d59ae8735a",
+            "wrapper-module:5600491f44d294c9c97047c1994502b4799a81a5422786e7cb43850396faae9a",
+            "wrapper-variant:raw_bins",
+            "wrapper-conformance:89bf0f62ce3a12e6dd141e242ee2c33059fdd255ad9818ec281021c229cb7668"
+          ]
+        },
+        {
+          "evidence_id": "wrapper-execution-xgboost-raw_bins",
+          "source_path": "wrapper-execution-evidence.json",
+          "source_sha256": "3f0acc1bb5089c1fe2facb9d34b5212dc54c18e86e1c2d740b1f48d59ae8735a",
+          "supports": [
+            "wrapper-execution:3f0acc1bb5089c1fe2facb9d34b5212dc54c18e86e1c2d740b1f48d59ae8735a",
+            "wrapper-module:5600491f44d294c9c97047c1994502b4799a81a5422786e7cb43850396faae9a",
+            "wrapper-variant:raw_bins",
+            "wrapper-conformance:89bf0f62ce3a12e6dd141e242ee2c33059fdd255ad9818ec281021c229cb7668"
+          ]
+        }
+      ],
+      "population_scope_id": "benchmark-xgboost-raw_bins",
+      "population_scope_sha256": "f6a9322bc94ed60b8d77147378742e8dab5fe3a07c46a3a07dbadbe4e517d6a8",
+      "portfolio_id": "portfolio-xgboost-raw_bins",
+      "prior": [
+        0.5,
+        0.5
+      ],
+      "prior_evidence": {
+        "evidence_id": "prior-xgboost-raw_bins",
+        "source_path": "finite-prior.json",
+        "source_sha256": "1aeee71ebe930f7cbd1eb487db9505005d2fa9e51fdc5d854a1610d62d696710",
+        "supports": [
+          "prior",
+          "decision-game:ef68a95d1732c043400680f11111ced8dea19787ec3633e41654a7968e1710d1",
+          "finite-prior:5ee97d5975f9f78b48adebbc2c4699f119ddd58542d1dcdec8305d3d0eb3b9df"
+        ]
+      },
+      "rational_prior": [
+        {
+          "denominator": 2,
+          "numerator": 1
+        },
+        {
+          "denominator": 2,
+          "numerator": 1
+        }
+      ],
+      "releases": [
+        {
+          "evidence": {
+            "evidence_id": "generation-xgboost-raw_bins:model-backed-xgboost-raw_bins",
+            "source_path": "simultaneous-evidence.json",
+            "source_sha256": "d880546f51904a0ecc94a937c4457c1e1f609915d5e65caf7cc1e1b455f1f450",
+            "supports": [
+              "marginal:model-backed-xgboost-raw_bins",
+              "coverage:simultaneous",
+              "error-budget:model-backed-finite-channel-assurance-budget:allocation-xgboost-raw_bins",
+              "confidence-endpoints:outward-validated"
+            ]
+          },
+          "lower": [
+            [
+              0.0,
+              0.778181159976416,
+              0.06286023080689072,
+              0.06120872424173389,
+              0.039264127482119236,
+              0.0008838365031470974,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.8978988657481672,
+              0.03747730273881827,
+              0.030737637757256932,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          ],
+          "observation_ids": [
+            "nll_negative",
+            "nll_0_to_0p5",
+            "nll_0p5_to_1",
+            "nll_1_to_2",
+            "nll_2_to_4",
+            "nll_4_or_more",
+            "nll_nonfinite",
+            "wrapper_error",
+            "wrapper_timeout",
+            "state_independent_erasure"
+          ],
+          "release_id": "model-backed-xgboost-raw_bins",
+          "upper": [
+            [
+              0.0016938380736853857,
+              0.8183800313677597,
+              0.0894210310174899,
+              0.08747898181076018,
+              0.061111208503696494,
+              0.00650536852700947,
+              0.0016938380736853857,
+              0.0016938380736853857,
+              0.0016938380736853857,
+              0.0016938380736853857
+            ],
+            [
+              0.0016938380736853857,
+              0.9262619568004347,
+              0.05890539505542225,
+              0.05047330869738044,
+              0.0016938380736853857,
+              0.0016938380736853857,
+              0.0016938380736853857,
+              0.0016938380736853857,
+              0.0016938380736853857,
+              0.0016938380736853857
+            ]
+          ]
+        }
+      ],
+      "schema_version": "1.0",
+      "selection_scope": "all three preregistered public-data models, both wrapper variants, both secret states, and every listed categorical observation",
+      "state_ids": [
+        "out",
+        "in"
+      ],
+      "threat_id": "membership-xgboost-raw_bins"
+    },
+    "rational_upper_audit": {
+      "audit_version": "1.0",
+      "certificate_id": "certificate-xgboost-raw_bins",
+      "certificate_kind": "envelope",
+      "exact_upper_denominator": 800000000000000000,
+      "exact_upper_numerator": 471699094811127069,
+      "feasible_joint_channel": [
+        [
+          {
+            "denominator": 10000000000000000000,
+            "numerator": 16938380736853857
+          },
+          {
+            "denominator": 10000000000000000,
+            "numerator": 8183800313677597
+          },
+          {
+            "denominator": 10000000000000000000,
+            "numerator": 785694423315546909
+          },
+          {
+            "denominator": 100000000000000000,
+            "numerator": 6120872424173389
+          },
+          {
+            "denominator": 250000000000000000,
+            "numerator": 9816031870529809
+          },
+          {
+            "denominator": 5000000000000000000,
+            "numerator": 4419182515735487
+          },
+          {
+            "denominator": 1,
+            "numerator": 0
+          },
+          {
+            "denominator": 1,
+            "numerator": 0
+          },
+          {
+            "denominator": 1,
+            "numerator": 0
+          },
+          {
+            "denominator": 1,
+            "numerator": 0
+          }
+        ],
+        [
+          {
+            "denominator": 10000000000000000000,
+            "numerator": 16938380736853857
+          },
+          {
+            "denominator": 10000000000000000,
+            "numerator": 9262619568004347
+          },
+          {
+            "denominator": 10000000000000000000,
+            "numerator": 413065673686229823
+          },
+          {
+            "denominator": 250000000000000000,
+            "numerator": 7684409439314233
+          },
+          {
+            "denominator": 1,
+            "numerator": 0
+          },
+          {
+            "denominator": 1,
+            "numerator": 0
+          },
+          {
+            "denominator": 1,
+            "numerator": 0
+          },
+          {
+            "denominator": 1,
+            "numerator": 0
+          },
+          {
+            "denominator": 1,
+            "numerator": 0
+          },
+          {
+            "denominator": 1,
+            "numerator": 0
+          }
+        ]
+      ],
+      "number_interpretation": "exact_decimal_weights_normalized_per_probability_vector",
+      "outward_upper_bound": 0.5896238685139089,
+      "problem_sha256": "50184a7eab71da77ad89d7cad94f01c773b61a54de734fcbeee21b91e1cd5749"
+    },
+    "schema_version": "1.1"
+  },
+  "analyzer": "finite_channel_ceiling",
+  "bounded_transcript_complete": true,
+  "complete_interface_coverage": true,
+  "evidence_context": {
+    "artifact_sha256": "f48cd2b0afce8ef742d06d3eb66ed57f4981e84c2be8695457a346038061ad1f",
+    "decision_game_sha256": "ef68a95d1732c043400680f11111ced8dea19787ec3633e41654a7968e1710d1",
+    "interface_sha256": "d3d33aa1353ad63cf13be7dba8f9a34216c9950ba9d50dcb9d980a38305ffcaf",
+    "observed_at": "2026-09-03T06:23:23.973392Z",
+    "policy_sha256": "0476e2c4a2d134241d90c5faa43589cc359ad1e7b98ea94707f2e258d4b846ad",
+    "population_scope_id": "benchmark-xgboost-raw_bins",
+    "population_scope_sha256": "f6a9322bc94ed60b8d77147378742e8dab5fe3a07c46a3a07dbadbe4e517d6a8",
+    "release_contract_sha256": "d23bf5f2e18f2e103b6ac32536e1d7656a0cdbe5f7864c5d2b883a1b5929d2ff",
+    "release_id": "model-backed-xgboost-raw_bins"
+  },
+  "interface_observation_definition": "complete one-query categorical transcript of the closed hidden-record sampler, including negative, nonfinite, wrapper-error, timeout, and erasure outcomes",
+  "observed_artifact_sha256": "f48cd2b0afce8ef742d06d3eb66ed57f4981e84c2be8695457a346038061ad1f",
+  "observed_interface_sha256": "d3d33aa1353ad63cf13be7dba8f9a34216c9950ba9d50dcb9d980a38305ffcaf",
+  "population_scope_id": "benchmark-xgboost-raw_bins",
+  "provenance": {
+    "bound_fields": [
+      "analyzer",
+      "schema_version",
+      "threat_id",
+      "population_scope_id",
+      "analytic_evidence",
+      "observed_interface_sha256",
+      "observed_artifact_sha256",
+      "interface_observation_definition",
+      "release_enforced_finite_alphabet",
+      "complete_interface_coverage",
+      "recipient_realizable",
+      "bounded_transcript_complete",
+      "state_trials",
+      "evidence_context"
+    ],
+    "configuration_path": "experiment-config.json",
+    "producer": {
+      "configuration_sha256": "074a138ace5d676ad302faecbfaeef58c3430c9a2a2bbba036fb463b6b388f9f",
+      "implementation_sha256": "abd1eab49e3de2f48e2cf458856321330d2df4bb64ab090663bd8a4925cecc29",
+      "service_id": "mra.analyzer.finite_channel_ceiling",
+      "service_version": "1.0.0"
+    },
+    "source_path": "finite-channel-input.json",
+    "source_sha256": "49f71bd3b09715d565893d4c1b8a127cd54b5ad8f3bcd6c06fb6352149bde28a",
+    "tool": "model-backed-finite-channel-experiment",
+    "tool_version": "1.0"
+  },
+  "recipient_realizable": true,
+  "release_enforced_finite_alphabet": true,
+  "schema_version": "1.0",
+  "state_trials": [
+    5000,
+    5000
+  ],
+  "threat_id": "membership-xgboost-raw_bins"
+}

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build publication-safe artifacts from the two registered ceiling experiments.
+"""Build publication-safe artifacts from the registered ceiling experiments.
 
 The source reports intentionally retain substantially more audit material than a
 paper needs.  This script validates the complete registered result families and
@@ -10,8 +10,9 @@ The generated artifacts distinguish three claims that must not be conflated:
 
 * experiments do not constitute a universal mathematical proof;
 * the known-channel study is controlled evidence with exact ground truth; and
-* the public-data study is evidence conditional on its finite populations and
-  closed hidden-record wrappers.
+* the v3 public-data study is role-aware evidence conditional on its finite
+  populations and source-bound closed hidden-record wrappers; and
+* the optional v2 predecessor remains visibly separate and failed.
 """
 
 from __future__ import annotations
@@ -31,9 +32,10 @@ from typing import Any, Mapping, Sequence
 
 
 SUMMARY_SCHEMA = "1.0"
-SUMMARY_ID = "mra-ceiling-publication-summary-v1"
+SUMMARY_ID = "mra-ceiling-publication-summary-v2"
 KNOWN_EXPERIMENT_ID = "finite-channel-ceiling-ground-truth-v1"
-MODEL_EXPERIMENT_ID = "model-backed-finite-channel-public-data-v2"
+MODEL_EXPERIMENT_ID = "model-backed-finite-channel-public-data-v3"
+PREDECESSOR_MODEL_EXPERIMENT_ID = "model-backed-finite-channel-public-data-v2"
 
 KNOWN_SCENARIOS: Mapping[str, tuple[str, str, Fraction]] = {
     "xgboost-safe-margin": ("XGBoost label", "safe", Fraction(11, 20)),
@@ -71,7 +73,7 @@ MODEL_VARIANTS = {
     "raw_bins": "raw categorical NLL bins",
     "erasure_0p9": "90% state-independent erasure",
 }
-MODEL_ACCEPTANCE_CRITERIA = {
+PREDECESSOR_MODEL_ACCEPTANCE_CRITERIA = {
     "all_six_oracle_risks_covered",
     "all_source_and_engine_replays_complete",
     "all_four_negative_controls_pass",
@@ -82,11 +84,44 @@ MODEL_ACCEPTANCE_CRITERIA = {
     "all_six_simultaneous_undercoverage_bounds_meet_maximum",
     "all_executable_wrapper_conformance_checks_pass",
 }
+PREDECESSOR_MODEL_NEGATIVE_CONTROLS = {
+    "visible_candidate_or_model_must_be_ineligible",
+    "tampered_counts_must_fail_source_replay",
+    "changed_prior_must_fail_binding",
+    "missing_observation_symbol_must_fail_plan_replay",
+}
+MODEL_ACCEPTANCE_CRITERIA = {
+    "all_six_oracle_risks_covered",
+    "all_source_engine_and_repeat_replays_complete",
+    "all_five_negative_controls_pass",
+    "no_raw_scores_retained",
+    "exact_erasure_contraction_identity_holds",
+    "all_six_simultaneous_undercoverage_bounds_meet_maximum",
+    "all_six_simultaneous_wrong_direction_bounds_meet_maximum",
+    "all_margin_eligible_correct_decision_lowers_meet_minimum",
+    "at_least_three_margin_eligible_families_resolve",
+    "all_executable_wrapper_conformance_and_sampling_equivalence_checks_pass",
+}
 MODEL_NEGATIVE_CONTROLS = {
     "visible_candidate_or_model_must_be_ineligible",
     "tampered_counts_must_fail_source_replay",
     "changed_prior_must_fail_binding",
     "missing_observation_symbol_must_fail_plan_replay",
+    "tampered_or_missing_wrapper_execution_evidence_must_fail_source_replay",
+}
+META_MULTIPLICITY_METHOD = (
+    "bonferroni_across_eighteen_one_sided_bounds:"
+    "six_undercoverage_uppers_six_wrong_direction_uppers_"
+    "six_correct_decision_lowers"
+)
+WRAPPER_CONFORMANCE_CHECK_IDS = {
+    "exactly_one_categorical_symbol",
+    "no_transcript_timing_or_metadata",
+    "second_query_refused",
+    "all_caller_fields_refused_with_constant_error",
+    "complete_registered_alphabet_is_totalized",
+    "exact_state_independent_erasure_schedule_replayed",
+    "no_public_metadata_accessors",
 }
 HEX64 = re.compile(r"[0-9a-f]{64}")
 
@@ -556,7 +591,7 @@ def _model_result(
     return key, public, risk
 
 
-def _repeat_summary(raw: Any, index: int) -> tuple[tuple[str, str], dict[str, Any], Fraction]:
+def _repeat_summary_v2(raw: Any, index: int) -> tuple[tuple[str, str], dict[str, Any], Fraction]:
     summary = _mapping(raw, f"model.repeated_validation.summaries[{index}]")
     key = _model_key(summary, "model repeat summary")
     _, expected_family, _ = MODEL_IDENTITIES[key[0]]
@@ -633,11 +668,17 @@ def _repeat_summary(raw: Any, index: int) -> tuple[tuple[str, str], dict[str, An
     return key, public, risk
 
 
-def summarize_model(report: Mapping[str, Any], report_sha256: str) -> dict[str, Any]:
-    """Validate and project the public-data, finite-population experiment."""
+def summarize_predecessor_model_v2(
+    report: Mapping[str, Any],
+    report_sha256: str,
+) -> dict[str, Any]:
+    """Validate and project the completed v2 predecessor without rewriting it."""
 
     _require(report.get("schema_version") == "1.0", "unsupported model-backed report schema")
-    _require(report.get("experiment_id") == MODEL_EXPERIMENT_ID, "unexpected model-backed experiment id")
+    _require(
+        report.get("experiment_id") == PREDECESSOR_MODEL_EXPERIMENT_ID,
+        "unexpected predecessor model-backed experiment id",
+    )
     authority = _mapping(report.get("authority"), "model authority")
     _require(authority.get("experimental_only") is True, "model evidence must remain experimental")
     _require(authority.get("benchmark_population_conditional") is True, "model evidence lost finite-population scope")
@@ -648,7 +689,10 @@ def summarize_model(report: Mapping[str, Any], report_sha256: str) -> dict[str, 
 
     acceptance = _mapping(report.get("acceptance"), "model acceptance")
     criteria = _mapping(acceptance.get("criteria"), "model acceptance criteria")
-    _require(set(criteria) == MODEL_ACCEPTANCE_CRITERIA, "model acceptance family changed")
+    _require(
+        set(criteria) == PREDECESSOR_MODEL_ACCEPTANCE_CRITERIA,
+        "predecessor model acceptance family changed",
+    )
     _require(all(type(value) is bool for value in criteria.values()), "model acceptance criteria must be booleans")
     acceptance_passed = all(criteria.values())
     _require(
@@ -684,7 +728,7 @@ def summarize_model(report: Mapping[str, Any], report_sha256: str) -> dict[str, 
     _require(len(summaries) == 6, "model repeated-validation family is incomplete")
     public_repeats: dict[tuple[str, str], dict[str, Any]] = {}
     for index, raw in enumerate(summaries):
-        key, public, risk = _repeat_summary(raw, index)
+        key, public, risk = _repeat_summary_v2(raw, index)
         _require(key not in public_repeats, "model repeat summary is duplicated")
         _require(risk == primary_risks[key], "model repeat oracle differs from primary oracle")
         public_repeats[key] = public
@@ -728,10 +772,10 @@ def summarize_model(report: Mapping[str, Any], report_sha256: str) -> dict[str, 
     for raw in controls:
         control = _mapping(raw, "model negative control")
         control_id = control.get("control_id")
-        _require(control_id in MODEL_NEGATIVE_CONTROLS and control_id not in control_ids, "model negative-control roster changed")
+        _require(control_id in PREDECESSOR_MODEL_NEGATIVE_CONTROLS and control_id not in control_ids, "model negative-control roster changed")
         _require(control.get("executed") is True and control.get("passed") is True, "model negative control failed")
         control_ids.add(str(control_id))
-    _require(control_ids == MODEL_NEGATIVE_CONTROLS, "model negative controls are incomplete")
+    _require(control_ids == PREDECESSOR_MODEL_NEGATIVE_CONTROLS, "model negative controls are incomplete")
 
     ordered_results: list[dict[str, Any]] = []
     for model in MODEL_IDENTITIES:
@@ -783,9 +827,9 @@ def summarize_model(report: Mapping[str, Any], report_sha256: str) -> dict[str, 
     )
 
     return {
-        "experiment_id": MODEL_EXPERIMENT_ID,
+        "experiment_id": PREDECESSOR_MODEL_EXPERIMENT_ID,
         "source_report_sha256": report_sha256,
-        "evidence_tier": "model_conditional_public_data",
+        "evidence_tier": "failed_historical_predecessor_model_conditional_public_data",
         "acceptance": {
             "passed": acceptance_passed,
             "status": (
@@ -833,6 +877,722 @@ def summarize_model(report: Mapping[str, Any], report_sha256: str) -> dict[str, 
     }
 
 
+def _model_result_v3(
+    raw: Any,
+    index: int,
+) -> tuple[tuple[str, str], dict[str, Any], Fraction]:
+    """Validate one v3 primary result, including wrapper-source evidence."""
+
+    result = _mapping(raw, f"model-v3.results[{index}]")
+    key, public, risk = _model_result(result, index)
+    expected_erasure = Fraction(0) if key[1] == "raw_bins" else Fraction(9, 10)
+    _require(
+        _fraction(result.get("state_independent_erasure"), "v3 result erasure")
+        == expected_erasure,
+        "v3 result erasure does not match its registered variant",
+    )
+    equivalence = _mapping(
+        result.get("wrapper_sampling_equivalence"),
+        "v3 wrapper sampling equivalence",
+    )
+    _require(
+        set(equivalence) == {"reference_schedule", "seed_replay", "all_passed"},
+        "v3 wrapper sampling-equivalence schema changed",
+    )
+    for field in ("reference_schedule", "seed_replay"):
+        state_checks = _mapping(
+            equivalence.get(field), f"v3 wrapper equivalence {field}"
+        )
+        _require(
+            state_checks == {"out": True, "in": True},
+            f"v3 wrapper {field} equivalence failed or is incomplete",
+        )
+    _require(
+        equivalence.get("all_passed") is True,
+        "v3 wrapper sampling equivalence did not pass",
+    )
+    evidence = _mapping(
+        result.get("wrapper_execution_evidence"),
+        "v3 wrapper execution evidence",
+    )
+    _require(
+        set(evidence) == {"path", "sha256", "engine_source_bound"},
+        "v3 wrapper execution-evidence schema changed",
+    )
+    _require(
+        evidence.get("path") == "wrapper-execution-evidence.json"
+        and bool(HEX64.fullmatch(str(evidence.get("sha256", ""))))
+        and evidence.get("engine_source_bound") is True,
+        "v3 wrapper execution evidence is not source-bound",
+    )
+    public["state_independent_erasure_exact"] = _fraction_text(expected_erasure)
+    public["wrapper_sampling_equivalence"] = True
+    public["wrapper_execution_engine_source_bound"] = True
+    return key, public, risk
+
+
+def _repeat_summary_v3(
+    raw: Any,
+    index: int,
+) -> tuple[tuple[str, str], dict[str, Any], Fraction]:
+    """Validate count/rate/bound and role semantics for one v3 repeat family."""
+
+    summary = _mapping(raw, f"model-v3.repeated_validation.summaries[{index}]")
+    key = _model_key(summary, "v3 repeat summary")
+    _, expected_family, _ = MODEL_IDENTITIES[key[0]]
+    _require(
+        summary.get("model_family") == expected_family,
+        "v3 repeat summary model family changed",
+    )
+    replicates = _integer(summary.get("replicates"), "v3 repeat count", minimum=1)
+    trials = _integer(summary.get("trials_per_state"), "v3 repeat trials", minimum=1)
+    _require(
+        replicates == 200 and trials == 5000,
+        "v3 repeated-validation cell is incomplete",
+    )
+    _require(
+        _integer(
+            summary.get("meta_simultaneous_bound_count"),
+            "v3 meta simultaneous bound count",
+        )
+        == 18,
+        "v3 repeat family does not use all 18 registered meta endpoints",
+    )
+    _require(
+        summary.get("meta_multiplicity_method") == META_MULTIPLICITY_METHOD,
+        "v3 meta multiplicity method changed",
+    )
+
+    risk = _fraction(summary.get("true_exact_oracle_risk"), "v3 repeat oracle risk")
+    tolerance = Fraction(13, 20)
+    expected_direction = (
+        "CLEAR" if risk < tolerance else "BLOCK" if risk > tolerance else "AT_BOUNDARY"
+    )
+    _require(
+        summary.get("expected_direction") == expected_direction,
+        "v3 expected decision direction disagrees with oracle risk",
+    )
+    margin = abs(risk - tolerance)
+    observed_margin = _fraction(
+        summary.get("absolute_margin_from_tolerance"),
+        "v3 absolute margin",
+    )
+    observed_margin_decimal = _probability(
+        summary.get("absolute_margin_from_tolerance_decimal"),
+        "v3 absolute margin decimal",
+    )
+    _require(
+        observed_margin == margin
+        and _close(observed_margin_decimal, float(margin)),
+        "v3 registered margin does not equal |R* - tolerance|",
+    )
+    margin_eligible = margin >= Fraction(1, 10)
+    _require(
+        summary.get("margin_eligible_for_resolution_claim") is margin_eligible,
+        "v3 margin eligibility does not apply the inclusive 0.10 threshold",
+    )
+
+    decisions = _mapping(summary.get("decision_counts"), "v3 decision counts")
+    _require(
+        set(decisions) == {"CLEAR", "HOLD", "BLOCK"},
+        "v3 decision-count family changed",
+    )
+    decision_counts = {
+        name: _integer(decisions[name], f"v3 {name} count")
+        for name in ("CLEAR", "HOLD", "BLOCK")
+    }
+    _require(
+        sum(decision_counts.values()) == replicates,
+        "v3 decision counts do not sum to the registered repeats",
+    )
+
+    def count_rate(
+        count_field: str,
+        rate_field: str,
+        label: str,
+    ) -> tuple[int, float]:
+        count = _integer(summary.get(count_field), f"v3 {label} count")
+        rate = _probability(summary.get(rate_field), f"v3 {label} rate")
+        _require(count <= replicates, f"v3 {label} count exceeds repeats")
+        _require(
+            _close(rate, count / replicates),
+            f"v3 {label} count/rate mismatch",
+        )
+        return count, rate
+
+    under_count, under_rate = count_rate(
+        "undercoverage_count", "undercoverage_rate", "undercoverage"
+    )
+    wrong_count, wrong_rate = count_rate(
+        "wrong_direction_count", "wrong_direction_rate", "wrong-direction"
+    )
+    correct_count, correct_rate = count_rate(
+        "correct_direction_count", "correct_direction_rate", "correct-direction"
+    )
+    clear_count, clear_rate = count_rate("clear_count", "clear_rate", "CLEAR")
+    _require(
+        clear_count == decision_counts["CLEAR"],
+        "v3 CLEAR count disagrees with decision-count family",
+    )
+    if expected_direction == "CLEAR":
+        _require(
+            (correct_count, wrong_count)
+            == (decision_counts["CLEAR"], decision_counts["BLOCK"]),
+            "v3 below-tolerance correct/wrong direction counts are inconsistent",
+        )
+    elif expected_direction == "BLOCK":
+        _require(
+            (correct_count, wrong_count)
+            == (decision_counts["BLOCK"], decision_counts["CLEAR"]),
+            "v3 above-tolerance correct/wrong direction counts are inconsistent",
+        )
+    else:
+        _require(
+            correct_count == wrong_count == 0,
+            "v3 boundary family must be non-directional",
+        )
+
+    under_upper = _probability(
+        summary.get("simultaneous_clopper_pearson_undercoverage_upper"),
+        "v3 simultaneous undercoverage upper",
+    )
+    wrong_upper = _probability(
+        summary.get("simultaneous_clopper_pearson_wrong_direction_upper"),
+        "v3 simultaneous wrong-direction upper",
+    )
+    correct_lower = _probability(
+        summary.get("simultaneous_clopper_pearson_correct_direction_lower"),
+        "v3 simultaneous correct-direction lower",
+    )
+    _require(
+        under_upper + 1e-12 >= under_rate,
+        "v3 undercoverage upper is below its count rate",
+    )
+    _require(
+        wrong_upper + 1e-12 >= wrong_rate,
+        "v3 wrong-direction upper is below its count rate",
+    )
+    _require(
+        correct_lower <= correct_rate + 1e-12,
+        "v3 correct-direction lower exceeds its count rate",
+    )
+
+    mean_ceiling = _probability(summary.get("mean_ceiling"), "v3 mean ceiling")
+    p95_ceiling = _probability(summary.get("p95_ceiling"), "v3 p95 ceiling")
+    mean_width = _probability(
+        summary.get("mean_interval_width"), "v3 mean interval width"
+    )
+    p95_width = _probability(
+        summary.get("p95_interval_width"), "v3 p95 interval width"
+    )
+    maximum_width = _probability(
+        summary.get("maximum_interval_width"), "v3 maximum interval width"
+    )
+    mean_excess = _number(
+        summary.get("mean_ceiling_excess_over_oracle"),
+        "v3 mean ceiling excess",
+        minimum=-1.0,
+        maximum=1.0,
+    )
+    p95_excess = _number(
+        summary.get("p95_ceiling_excess_over_oracle"),
+        "v3 p95 ceiling excess",
+        minimum=-1.0,
+        maximum=1.0,
+    )
+    maximum_excess = _number(
+        summary.get("maximum_ceiling_excess_over_oracle"),
+        "v3 maximum ceiling excess",
+        minimum=-1.0,
+        maximum=1.0,
+    )
+    _require(
+        _close(mean_ceiling - float(risk), mean_excess),
+        "v3 mean ceiling/excess mismatch",
+    )
+    _require(
+        mean_width <= maximum_width + 1e-12
+        and p95_width <= maximum_width + 1e-12
+        and p95_ceiling + 1e-12 >= mean_ceiling,
+        "v3 interval summary order is inconsistent",
+    )
+    _require(
+        mean_excess <= maximum_excess + 1e-12
+        and p95_excess <= maximum_excess + 1e-12,
+        "v3 ceiling-excess summary order is inconsistent",
+    )
+    _require(
+        summary.get("every_production_analyzer_replay_completed") is True,
+        "v3 analyzer replay family is incomplete",
+    )
+    _require(
+        summary.get("every_wrapper_sampling_equivalence_check_passed") is True,
+        "v3 repeat wrapper-sampling equivalence failed",
+    )
+
+    correct_target_met = correct_lower >= 0.95
+    public = {
+        "replicates": replicates,
+        "expected_direction": expected_direction,
+        "absolute_margin_from_tolerance_exact": _fraction_text(margin),
+        "absolute_margin_from_tolerance": float(margin),
+        "margin_eligible_for_resolution_claim": margin_eligible,
+        "decision_counts": decision_counts,
+        "undercoverage_count": under_count,
+        "undercoverage_rate": under_rate,
+        "simultaneous_undercoverage_upper": under_upper,
+        "undercoverage_target_met": under_upper <= 0.05,
+        "wrong_direction_count": wrong_count,
+        "wrong_direction_rate": wrong_rate,
+        "simultaneous_wrong_direction_upper": wrong_upper,
+        "wrong_direction_target_met": wrong_upper <= 0.05,
+        "correct_direction_count": correct_count,
+        "correct_direction_rate": correct_rate,
+        "simultaneous_correct_direction_lower": correct_lower,
+        "correct_direction_target_applicable": margin_eligible,
+        "correct_direction_target_met": (
+            correct_target_met if margin_eligible else None
+        ),
+        "mean_ceiling": mean_ceiling,
+        "p95_ceiling": p95_ceiling,
+        "mean_interval_width": mean_width,
+        "p95_interval_width": p95_width,
+        "maximum_interval_width": maximum_width,
+        "mean_ceiling_excess_over_oracle": mean_excess,
+        "p95_ceiling_excess_over_oracle": p95_excess,
+        "maximum_ceiling_excess_over_oracle": maximum_excess,
+        "wrapper_sampling_equivalence": True,
+    }
+    return key, public, risk
+
+
+def summarize_model_v3(
+    report: Mapping[str, Any],
+    report_sha256: str,
+) -> dict[str, Any]:
+    """Validate and project the frozen v3 role-aware model experiment."""
+
+    _require(report.get("schema_version") == "1.0", "unsupported v3 model report schema")
+    _require(
+        report.get("experiment_id") == MODEL_EXPERIMENT_ID,
+        "unexpected v3 model-backed experiment id",
+    )
+    authority = _mapping(report.get("authority"), "v3 model authority")
+    _require(
+        authority.get("experimental_only") is True
+        and authority.get("benchmark_population_conditional") is True,
+        "v3 model evidence lost its experimental finite-population scope",
+    )
+    for field in (
+        "authorization_eligible",
+        "authorization_granted",
+        "real_world_privacy_claimed",
+    ):
+        _require(authority.get(field) is False, f"v3 authority field {field} must remain false")
+    _require(
+        authority.get("decision") == "no_release_authorization"
+        and report.get("decision") == "no_release_authorization",
+        "v3 experiment granted release authority",
+    )
+
+    acceptance = _mapping(report.get("acceptance"), "v3 acceptance")
+    criteria = _mapping(acceptance.get("criteria"), "v3 acceptance criteria")
+    _require(set(criteria) == MODEL_ACCEPTANCE_CRITERIA, "v3 acceptance family changed")
+    _require(all(type(value) is bool for value in criteria.values()), "v3 acceptance criteria must be booleans")
+    acceptance_passed = all(criteria.values())
+    _require(
+        acceptance.get("passed") is acceptance_passed,
+        "v3 aggregate acceptance disagrees with its registered criteria",
+    )
+    for required_integrity in (
+        "all_source_engine_and_repeat_replays_complete",
+        "all_five_negative_controls_pass",
+        "no_raw_scores_retained",
+        "all_executable_wrapper_conformance_and_sampling_equivalence_checks_pass",
+    ):
+        _require(
+            criteria[required_integrity] is True,
+            f"v3 integrity criterion failed: {required_integrity}",
+        )
+
+    expected_keys = {
+        (model, variant)
+        for model in MODEL_IDENTITIES
+        for variant in MODEL_VARIANTS
+    }
+    results = _sequence(report.get("results"), "v3 model results")
+    _require(len(results) == 6, "v3 primary result family is incomplete")
+    public_results: dict[tuple[str, str], dict[str, Any]] = {}
+    primary_risks: dict[tuple[str, str], Fraction] = {}
+    for index, raw in enumerate(results):
+        key, public, risk = _model_result_v3(raw, index)
+        _require(key not in public_results, "v3 primary result is duplicated")
+        public_results[key] = public
+        primary_risks[key] = risk
+    _require(set(public_results) == expected_keys, "v3 primary result roster changed")
+
+    repeated = _mapping(report.get("repeated_validation"), "v3 repeated validation")
+    _require(
+        _integer(repeated.get("replicates_per_model_variant"), "v3 registered repeats")
+        == 200,
+        "v3 registered repeat count changed",
+    )
+    _require(
+        _integer(
+            repeated.get("meta_simultaneous_bound_count"),
+            "v3 report meta simultaneous bound count",
+        )
+        == 18,
+        "v3 report does not declare all 18 meta endpoints",
+    )
+    summaries = _sequence(repeated.get("summaries"), "v3 repeat summaries")
+    _require(len(summaries) == 6, "v3 repeated-validation family is incomplete")
+    public_repeats: dict[tuple[str, str], dict[str, Any]] = {}
+    for index, raw in enumerate(summaries):
+        key, public, risk = _repeat_summary_v3(raw, index)
+        _require(key not in public_repeats, "v3 repeat summary is duplicated")
+        _require(risk == primary_risks[key], "v3 repeat oracle differs from primary oracle")
+        public_repeats[key] = public
+    _require(set(public_repeats) == expected_keys, "v3 repeat roster changed")
+
+    checks = _mapping(report.get("checks"), "v3 checks")
+    _require(
+        type(checks.get("all_oracles_covered")) is bool,
+        "v3 oracle coverage check is not boolean",
+    )
+    _require(
+        checks.get("all_source_engine_and_repeat_replays_complete") is True,
+        "v3 source/Engine/repeat replay family is incomplete",
+    )
+    full_engine = _mapping(
+        checks.get("full_source_and_engine_replays"), "v3 full Engine replays"
+    )
+    analyzer = _mapping(
+        checks.get("production_analyzer_replays"), "v3 analyzer replays"
+    )
+    _require(
+        _integer(full_engine.get("completed"), "v3 completed Engine replays")
+        == _integer(full_engine.get("expected"), "v3 expected Engine replays")
+        == 6,
+        "v3 full Engine replay family is incomplete",
+    )
+    _require(
+        _integer(analyzer.get("completed"), "v3 completed analyzer replays")
+        == _integer(analyzer.get("expected"), "v3 expected analyzer replays")
+        == 1200,
+        "v3 analyzer replay family is incomplete",
+    )
+    _require(
+        _integer(checks.get("registered_model_count"), "v3 model count") == 3
+        and _integer(checks.get("registered_family_count"), "v3 family count") == 6,
+        "v3 registered model/family count changed",
+    )
+    _require(checks.get("raw_scores_retained") is False, "v3 raw scores were retained")
+
+    wrapper = _mapping(report.get("wrapper_conformance"), "v3 wrapper conformance")
+    wrapper_results = _sequence(wrapper.get("results"), "v3 wrapper results")
+    _require(
+        wrapper.get("all_conformant") is True and len(wrapper_results) == 6,
+        "v3 wrapper conformance family is incomplete",
+    )
+    wrapper_keys: set[tuple[str, str]] = set()
+    for raw in wrapper_results:
+        value = _mapping(raw, "v3 wrapper result")
+        key = _model_key(value, "v3 wrapper result")
+        _require(
+            key not in wrapper_keys and value.get("conformant") is True,
+            "v3 wrapper conformance failed or duplicated",
+        )
+        interface = _mapping(value.get("interface"), "v3 wrapper interface")
+        expected_erasure = Fraction(0) if key[1] == "raw_bins" else Fraction(9, 10)
+        _require(
+            _fraction(
+                interface.get("state_independent_erasure"),
+                "v3 conformance erasure",
+            )
+            == expected_erasure,
+            "v3 conformance result is bound to another erasure variant",
+        )
+        wrapper_checks = _sequence(value.get("checks"), "v3 wrapper checks")
+        observed_check_ids = {
+            str(_mapping(item, "v3 wrapper check").get("check_id"))
+            for item in wrapper_checks
+        }
+        _require(
+            len(wrapper_checks) == len(WRAPPER_CONFORMANCE_CHECK_IDS)
+            and observed_check_ids == WRAPPER_CONFORMANCE_CHECK_IDS
+            and all(
+                _mapping(item, "v3 wrapper check").get("passed") is True
+                for item in wrapper_checks
+            ),
+            "v3 wrapper conformance checks are incomplete or failed",
+        )
+        wrapper_keys.add(key)
+    _require(wrapper_keys == expected_keys, "v3 wrapper conformance roster changed")
+
+    controls = _sequence(report.get("negative_controls"), "v3 negative controls")
+    control_ids: set[str] = set()
+    for raw in controls:
+        control = _mapping(raw, "v3 negative control")
+        control_id = control.get("control_id")
+        _require(
+            control_id in MODEL_NEGATIVE_CONTROLS
+            and control_id not in control_ids
+            and control.get("executed") is True
+            and control.get("passed") is True,
+            "v3 negative control failed, duplicated, or changed",
+        )
+        control_ids.add(str(control_id))
+    _require(
+        len(controls) == 5 and control_ids == MODEL_NEGATIVE_CONTROLS,
+        "v3 negative-control family is incomplete",
+    )
+
+    erasure_rows = _sequence(report.get("erasure_comparisons"), "v3 erasure comparisons")
+    _require(len(erasure_rows) == 3, "v3 erasure comparison family is incomplete")
+    erasure_models: set[str] = set()
+    public_erasure: list[dict[str, Any]] = []
+    for raw in erasure_rows:
+        row = _mapping(raw, "v3 erasure comparison")
+        model = row.get("collector_model")
+        _require(
+            model in MODEL_IDENTITIES and model not in erasure_models,
+            "v3 erasure comparison roster changed",
+        )
+        raw_risk = _fraction(row.get("raw_oracle_risk"), "v3 raw erasure risk")
+        erased_risk = _fraction(
+            row.get("erased_oracle_risk"), "v3 erased oracle risk"
+        )
+        expected_erased = Fraction(1, 2) + (raw_risk - Fraction(1, 2)) / 10
+        _require(
+            erased_risk == expected_erased
+            and _fraction(
+                row.get("expected_erased_oracle_risk"),
+                "v3 expected erased risk",
+            )
+            == expected_erased
+            and row.get("exact_erasure_contraction_identity") is True
+            and row.get("oracle_risk_nonincreasing") is True,
+            "v3 exact 0.9 erasure contraction identity failed",
+        )
+        _require(
+            raw_risk == primary_risks[(str(model), "raw_bins")]
+            and erased_risk == primary_risks[(str(model), "erasure_0p9")],
+            "v3 erasure comparison disagrees with primary oracle risks",
+        )
+        public_erasure.append({
+            "collector_model": model,
+            "model_label": MODEL_IDENTITIES[str(model)][0],
+            "raw_oracle_risk": float(raw_risk),
+            "erased_oracle_risk": float(erased_risk),
+            "identity": "R_erased = 0.5 + 0.1 * (R_raw - 0.5)",
+            "exact_identity_holds": True,
+        })
+        erasure_models.add(str(model))
+    _require(erasure_models == set(MODEL_IDENTITIES), "v3 erasure models are incomplete")
+
+    ordered_results: list[dict[str, Any]] = []
+    for model in MODEL_IDENTITIES:
+        for variant in MODEL_VARIANTS:
+            combined = dict(public_results[(model, variant)])
+            combined["repeated_validation"] = public_repeats[(model, variant)]
+            ordered_results.append(combined)
+
+    one_shot_coverage = sum(value["covers_oracle"] for value in ordered_results)
+    undercoverage_families = sum(
+        value["repeated_validation"]["undercoverage_target_met"]
+        for value in ordered_results
+    )
+    wrong_direction_families = sum(
+        value["repeated_validation"]["wrong_direction_target_met"]
+        for value in ordered_results
+    )
+    margin_eligible_rows = [
+        value
+        for value in ordered_results
+        if value["repeated_validation"]["margin_eligible_for_resolution_claim"]
+    ]
+    resolved_rows = [
+        value
+        for value in margin_eligible_rows
+        if value["repeated_validation"]["correct_direction_target_met"] is True
+    ]
+    all_eligible_resolved = bool(margin_eligible_rows) and len(resolved_rows) == len(
+        margin_eligible_rows
+    )
+
+    decision_evaluation = _mapping(
+        report.get("decision_evaluation"), "v3 decision evaluation"
+    )
+    _require(
+        _mapping(
+            decision_evaluation.get("wrong_direction_definition"),
+            "v3 wrong-direction definition",
+        )
+        == {
+            "oracle_below_tolerance": "BLOCK",
+            "oracle_above_tolerance": "CLEAR",
+            "oracle_equal_tolerance": "none; any result is non-directional",
+            "hold": "never a wrong-direction decision",
+        },
+        "v3 wrong-direction role definition changed",
+    )
+    _require(
+        _fraction(decision_evaluation.get("margin_threshold"), "v3 margin threshold")
+        == Fraction(1, 10),
+        "v3 decision evaluation margin threshold changed",
+    )
+    eligible_names = {
+        f"{value['collector_model']}/{value['variant_id']}"
+        for value in margin_eligible_rows
+    }
+    resolved_names = {
+        f"{value['collector_model']}/{value['variant_id']}"
+        for value in resolved_rows
+    }
+    reported_eligible = _sequence(
+        decision_evaluation.get("eligible_families"), "v3 eligible families"
+    )
+    reported_resolved = _sequence(
+        decision_evaluation.get("resolved_families"), "v3 resolved families"
+    )
+    _require(
+        all(isinstance(value, str) for value in (*reported_eligible, *reported_resolved)),
+        "v3 decision-evaluation family identifiers must be strings",
+    )
+    _require(
+        _integer(
+            decision_evaluation.get("margin_eligible_family_count"),
+            "v3 eligible family count",
+        )
+        == len(margin_eligible_rows)
+        and _integer(
+            decision_evaluation.get("resolved_margin_family_count"),
+            "v3 resolved family count",
+        )
+        == len(resolved_rows)
+        and _integer(
+            decision_evaluation.get("minimum_required_resolved_families"),
+            "v3 minimum resolved families",
+        )
+        == 3
+        and len(reported_eligible) == len(eligible_names)
+        and set(reported_eligible) == eligible_names
+        and len(reported_resolved) == len(resolved_names)
+        and set(reported_resolved) == resolved_names,
+        "v3 decision-evaluation aggregate disagrees with family summaries",
+    )
+
+    derived_criteria = {
+        "all_six_oracle_risks_covered": one_shot_coverage == 6,
+        "all_source_engine_and_repeat_replays_complete": True,
+        "all_five_negative_controls_pass": True,
+        "no_raw_scores_retained": True,
+        "exact_erasure_contraction_identity_holds": len(public_erasure) == 3,
+        "all_six_simultaneous_undercoverage_bounds_meet_maximum": undercoverage_families == 6,
+        "all_six_simultaneous_wrong_direction_bounds_meet_maximum": wrong_direction_families == 6,
+        "all_margin_eligible_correct_decision_lowers_meet_minimum": all_eligible_resolved,
+        "at_least_three_margin_eligible_families_resolve": len(resolved_rows) >= 3,
+        "all_executable_wrapper_conformance_and_sampling_equivalence_checks_pass": True,
+    }
+    _require(
+        dict(criteria) == derived_criteria,
+        "v3 registered acceptance disagrees with recomputed role-aware results",
+    )
+    _require(
+        checks["all_oracles_covered"] is derived_criteria["all_six_oracle_risks_covered"],
+        "v3 oracle coverage check disagrees with primary results",
+    )
+
+    total_repeats = sum(value["repeated_validation"]["replicates"] for value in ordered_results)
+    total_undercoverage = sum(
+        value["repeated_validation"]["undercoverage_count"]
+        for value in ordered_results
+    )
+    total_wrong_direction = sum(
+        value["repeated_validation"]["wrong_direction_count"]
+        for value in ordered_results
+    )
+    failed_criteria = sorted(name for name, passed in criteria.items() if not passed)
+    eligible_lowers = [
+        value["repeated_validation"]["simultaneous_correct_direction_lower"]
+        for value in margin_eligible_rows
+    ]
+    below_tolerance = sum(
+        value["oracle_risk"] < 0.65 for value in ordered_results
+    )
+    above_tolerance = sum(
+        value["oracle_risk"] > 0.65 for value in ordered_results
+    )
+    at_tolerance = len(ordered_results) - below_tolerance - above_tolerance
+    return {
+        "experiment_id": MODEL_EXPERIMENT_ID,
+        "source_report_sha256": report_sha256,
+        "evidence_tier": "role_aware_model_conditional_public_data",
+        "acceptance": {
+            "passed": acceptance_passed,
+            "status": (
+                "all_registered_criteria_passed"
+                if acceptance_passed
+                else "registered_acceptance_not_met"
+            ),
+            "failed_criteria": failed_criteria,
+            "criteria": dict(sorted(criteria.items())),
+        },
+        "experimental_only": True,
+        "benchmark_population_conditional": True,
+        "release_authorization": "none",
+        "meta_simultaneous_bound_count": 18,
+        "full_engine_replays": 6,
+        "production_analyzer_replays": 1200,
+        "full_engine_replay_limit": (
+            "Integration evidence under an experimental attack-battery waiver; the waiver is not "
+            "deployment-valid and the replay grants no authorization."
+        ),
+        "decision_protocol": {
+            "tolerance": 0.65,
+            "minimum_absolute_margin_for_resolution": 0.10,
+            "minimum_resolved_margin_eligible_families": 3,
+            "wrong_direction_upper_target": 0.05,
+            "correct_direction_lower_target": 0.95,
+            "undercoverage_upper_target": 0.05,
+        },
+        "results": ordered_results,
+        "erasure_comparisons": public_erasure,
+        "headline": {
+            "registered_family_count": 6,
+            "total_repeat_count": total_repeats,
+            "total_observed_undercoverage_count": total_undercoverage,
+            "total_observed_wrong_direction_count": total_wrong_direction,
+            "one_shot_oracle_coverage_families": one_shot_coverage,
+            "undercoverage_target_families": undercoverage_families,
+            "wrong_direction_target_families": wrong_direction_families,
+            "below_tolerance_family_count": below_tolerance,
+            "above_tolerance_family_count": above_tolerance,
+            "at_tolerance_family_count": at_tolerance,
+            "margin_eligible_family_count": len(margin_eligible_rows),
+            "resolved_margin_family_count": len(resolved_rows),
+            "minimum_eligible_correct_direction_lower": (
+                min(eligible_lowers) if eligible_lowers else None
+            ),
+            "maximum_simultaneous_undercoverage_upper": max(
+                value["repeated_validation"]["simultaneous_undercoverage_upper"]
+                for value in ordered_results
+            ),
+            "maximum_simultaneous_wrong_direction_upper": max(
+                value["repeated_validation"]["simultaneous_wrong_direction_upper"]
+                for value in ordered_results
+            ),
+        },
+        "scope_limit": (
+            "Conditional on one newly trained artifact per registered model family, the frozen "
+            "finite target audit pools, and the source-bound one-query wrapper. Resolution claims "
+            "apply only when |R* - 0.65| >= 0.10. The observed v3 roster contains no risk above "
+            "0.65, so model-backed BLOCK power is not established."
+        ),
+    }
+
+
 def _assert_publication_safe(value: Any) -> None:
     if isinstance(value, dict):
         overlap = FORBIDDEN_PUBLIC_KEYS.intersection(value)
@@ -852,6 +1612,8 @@ def build_publication_summary(
     *,
     known_report_sha256: str,
     model_report_sha256: str,
+    predecessor_model_report: Mapping[str, Any] | None = None,
+    predecessor_model_report_sha256: str | None = None,
 ) -> dict[str, Any]:
     """Validate both reports and create the aggregate-only public projection."""
 
@@ -860,8 +1622,29 @@ def build_publication_summary(
         and bool(HEX64.fullmatch(model_report_sha256)),
         "source report digests must be lowercase SHA-256 strings",
     )
+    _require(
+        (predecessor_model_report is None)
+        == (predecessor_model_report_sha256 is None),
+        "predecessor report and digest must be supplied together",
+    )
+    if predecessor_model_report_sha256 is not None:
+        _require(
+            bool(HEX64.fullmatch(predecessor_model_report_sha256)),
+            "predecessor report digest must be lowercase SHA-256",
+        )
     known = summarize_known(known_report, known_report_sha256)
-    model = summarize_model(model_report, model_report_sha256)
+    model = summarize_model_v3(model_report, model_report_sha256)
+    predecessor = None
+    if predecessor_model_report is not None and predecessor_model_report_sha256 is not None:
+        predecessor = summarize_predecessor_model_v2(
+            predecessor_model_report,
+            predecessor_model_report_sha256,
+        )
+        _require(
+            _mapping(predecessor["acceptance"], "predecessor acceptance")["passed"]
+            is False,
+            "v2 predecessor history must retain its registered failed acceptance",
+        )
     model_acceptance = _mapping(model["acceptance"], "model publication acceptance")
     model_passed = model_acceptance["passed"] is True
     summary = {
@@ -908,13 +1691,24 @@ def build_publication_summary(
             "interval_width": "U - L; smaller is more decision-useful when coverage is preserved",
             "ceiling_excess": "U - R*; smaller nonnegative values are tighter",
             "decision_rule": "CLEAR if U <= tolerance; BLOCK if L > tolerance; otherwise HOLD",
-            "decision_power": "frequency of the role-correct CLEAR, HOLD, or BLOCK result",
+            "wrong_direction": "BLOCK below tolerance or CLEAR above tolerance; HOLD is conservative and never wrong-direction",
+            "correct_direction": "CLEAR below tolerance or BLOCK above tolerance; the resolution target applies only at absolute margin >= 0.10",
         },
         "decision_tolerance": 0.65,
         "known_channel": known,
         "model_backed": model,
         "release_authorization": "none",
     }
+    if predecessor is not None:
+        summary["predecessor_model_backed_v2"] = predecessor
+        summary["interpretation"]["historical_predecessor"] = {
+            "status": "registered_acceptance_not_met",
+            "experiment_id": PREDECESSOR_MODEL_EXPERIMENT_ID,
+            "statement": (
+                "The v2 result remains an explicitly failed predecessor and is not rewritten "
+                "as v3 evidence. V3 uses a prospectively registered role-aware endpoint family."
+            ),
+        }
     _assert_publication_safe(summary)
     return summary
 
@@ -928,31 +1722,29 @@ def _decimal(value: float) -> str:
 
 
 def render_markdown(summary: Mapping[str, Any], svg_name: str = "ceiling-validation.svg") -> str:
-    """Render the already validated public projection as a paper-ready Markdown note."""
+    """Render the validated v3 projection and optional v2 history."""
 
     known = _mapping(summary["known_channel"], "summary known channel")
     model = _mapping(summary["model_backed"], "summary model backed")
     known_headline = _mapping(known["headline"], "known headline")
     model_headline = _mapping(model["headline"], "model headline")
     model_acceptance = _mapping(model["acceptance"], "model acceptance")
+    failed = ", ".join(str(value) for value in model_acceptance["failed_criteria"])
     if model_acceptance["passed"] is True:
-        opening = (
-            "Both preregistered experiments passed their registered acceptance criteria. "
-            "This is scoped empirical evidence, not a universal proof, and it grants no release authorization."
-        )
-        model_evidence_result = "All registered criteria passed"
+        opening = "The controlled study and the prospectively registered v3 model-backed study passed their scoped acceptance criteria."
+        current_status = "All registered criteria passed"
     else:
-        failed = ", ".join(str(value) for value in model_acceptance["failed_criteria"])
         opening = (
-            "The controlled experiment passed, while the complete model-backed experiment did not meet "
-            f"its registered acceptance criteria ({failed}). The negative result is retained: ceiling "
-            "coverage and decision usefulness must be interpreted separately. No result grants release authorization."
+            "The controlled study passed; the complete v3 model-backed study did not meet "
+            f"its registered acceptance ({failed}). The negative result is reported without promotion."
         )
-        model_evidence_result = "Registered acceptance not met"
+        current_status = "Registered acceptance not met"
+    minimum_lower = model_headline["minimum_eligible_correct_direction_lower"]
+    minimum_lower_text = "n/a" if minimum_lower is None else _percent(float(minimum_lower))
     lines = [
         "# Ceiling experiment results",
         "",
-        opening,
+        f"{opening} These experiments are not a universal proof and grant no release authorization.",
         "",
         f"![Ceiling validation intervals]({svg_name})",
         "",
@@ -960,112 +1752,154 @@ def render_markdown(summary: Mapping[str, Any], svg_name: str = "ceiling-validat
         "",
         "| Evidence level | Result | Valid scope |",
         "| --- | --- | --- |",
-        "| Mathematical or universal proof | Not established by these experiments | Requires separate formal assumptions and proof audit |",
+        "| Mathematical or universal proof | Not established | Requires a separate formal-assumption and proof audit |",
         "| Controlled exact-ground-truth evidence | Accepted | Complete preregistered synthetic finite-channel family |",
-        f"| Model-conditional public-data evidence | {model_evidence_result} | Frozen trained artifacts, finite target pools, and closed one-query wrappers |",
+        f"| V3 role-aware model-conditional evidence | {current_status} | Frozen artifacts, target pools, and source-bound one-query wrappers |",
         "",
         "## Headline metrics",
         "",
-        "| Experiment | Soundness metric | Decision-usefulness metric | Execution |",
+        "| Experiment | Soundness | Role-aware decision behavior | Execution |",
         "| --- | --- | --- | --- |",
         (
-            "| Controlled exact-ground-truth | Minimum observed ceiling coverage "
-            f"{_percent(float(known_headline['minimum_primary_ceiling_coverage_rate']))}; "
-            f"{known_headline['primary_undercoverage_count']}/{known_headline['primary_repeat_count']} observed primary undercoverage; "
-            "maximum simultaneous undercoverage upper "
+            "| Controlled exact-ground-truth | "
+            f"{known_headline['primary_undercoverage_count']}/{known_headline['primary_repeat_count']} observed undercoverage; simultaneous upper "
             f"{_percent(float(known_headline['maximum_simultaneous_primary_undercoverage_upper']))} | "
-            "Registered safe/boundary/unsafe decisions all passed; maximum unsafe false-CLEAR upper "
-            f"{_percent(float(known_headline['maximum_simultaneous_unsafe_false_clear_upper']))} | "
-            f"{known['primary_analyzer_replays']} analyzer + {known['full_engine_replays']} full Engine replays |"
+            "400/400 correct decisions for each safe/boundary/unsafe role | "
+            f"{known['primary_analyzer_replays']} analyzer + {known['full_engine_replays']} Engine replays |"
         ),
         (
-            "| Model-conditional public data | "
-            f"{model_headline['total_observed_undercoverage_count']}/{model_headline['total_repeat_count']} observed repeat undercoverage; "
-            f"{model_headline['one_shot_oracle_coverage_families']}/{model_headline['registered_family_count']} one-shot intervals covered oracle risk; "
-            f"{model_headline['undercoverage_target_families']}/{model_headline['registered_family_count']} repeat families met the undercoverage target; maximum simultaneous repeat undercoverage upper "
-            f"{_percent(float(model_headline['maximum_simultaneous_undercoverage_upper']))} | "
-            f"{model_headline['clear_rate_target_families']}/{model_headline['registered_family_count']} repeat families met the CLEAR-rate target; minimum simultaneous repeat CLEAR-rate lower "
-            f"{_percent(float(model_headline['minimum_simultaneous_clear_rate_lower']))} | "
-            f"{model['production_analyzer_replays']} analyzer + {model['full_engine_replays']} full Engine replays |"
+            "| V3 model-conditional public data | "
+            f"{model_headline['total_observed_undercoverage_count']}/{model_headline['total_repeat_count']} observed undercoverage; "
+            f"{model_headline['undercoverage_target_families']}/6 families met the simultaneous upper target | "
+            f"{model_headline['total_observed_wrong_direction_count']}/{model_headline['total_repeat_count']} wrong-direction decisions; "
+            f"{model_headline['wrong_direction_target_families']}/6 met its upper target; "
+            f"{model_headline['resolved_margin_family_count']}/{model_headline['margin_eligible_family_count']} margin-eligible families resolved; minimum eligible lower {minimum_lower_text} | "
+            f"{model['production_analyzer_replays']} analyzer + {model['full_engine_replays']} Engine replays; 18 simultaneous meta endpoints |"
         ),
         "",
-        "> Full Engine replays are integration evidence under experimental attack-battery waivers. The waivers are not deployment-valid; statistical coverage evidence comes from the registered analyzer repetitions.",
+        "> Engine replays are integration evidence under experimental attack-battery waivers. The waivers are not deployment-valid.",
         "",
         "## Controlled exact-ground-truth primary cells",
         "",
-        "| Scenario | Role | Exact risk R* | Mean floor L | Mean ceiling U | Mean width | Coverage | Correct decision (simultaneous lower) |",
-        "| --- | --- | ---: | ---: | ---: | ---: | ---: | --- |",
+        "| Scenario | Role | R* | Mean [L, U] | Width | Coverage | Correct decision lower |",
+        "| --- | --- | ---: | ---: | ---: | ---: | ---: |",
     ]
-    for row in _sequence(known["primary_results"], "known primary results"):
-        value = _mapping(row, "known primary row")
+    for raw in _sequence(known["primary_results"], "known primary results"):
+        value = _mapping(raw, "known primary row")
         lines.append(
-            f"| {value['model_label']} | {str(value['risk_role']).upper()} | "
-            f"{_decimal(float(value['true_risk']))} | {_decimal(float(value['mean_floor']))} | "
-            f"{_decimal(float(value['mean_ceiling']))} | {_decimal(float(value['mean_interval_width']))} | "
-            f"{_percent(float(value['ceiling_coverage_rate']))} | {value['correct_decision_count']}/{value['replicates']} "
-            f"{value['expected_decision']} ({_percent(float(value['simultaneous_correct_decision_lower']))}) |"
+            f"| {value['model_label']} | {str(value['risk_role']).upper()} | {_decimal(float(value['true_risk']))} | "
+            f"[{_decimal(float(value['mean_floor']))}, {_decimal(float(value['mean_ceiling']))}] | "
+            f"{_decimal(float(value['mean_interval_width']))} | {_percent(float(value['ceiling_coverage_rate']))} | "
+            f"{_percent(float(value['simultaneous_correct_decision_lower']))} |"
         )
     lines.extend([
         "",
-        "## Width calibration",
+        "## V3 role-aware model-conditional cells",
         "",
-        "| Scenario | Mean width at n=100 | Mean width at n=500 | Relative reduction |",
-        "| --- | ---: | ---: | ---: |",
+        "Resolution is preregistered only for families with `|R* - 0.65| >= 0.10`. HOLD is conservative and is never counted as a wrong-direction decision.",
+        "",
+        (
+            f"All {model_headline['below_tolerance_family_count']} v3 oracle risks were below the 0.65 tolerance; "
+            "v3 therefore tests safe-side resolution and conservative HOLD, not model-backed BLOCK power. "
+            "Unsafe-side BLOCK behavior is demonstrated only by the controlled R*=0.80 channel."
+            if model_headline["above_tolerance_family_count"] == 0
+            else (
+                f"V3 contains {model_headline['below_tolerance_family_count']} below-tolerance and "
+                f"{model_headline['above_tolerance_family_count']} above-tolerance families."
+            )
+        ),
+        "",
+        "| Model / wrapper | R* | Margin / role | One-shot [L, U] | Decisions C/H/B | Undercoverage upper | Wrong-direction upper | Correct-direction lower | Registered targets |",
+        "| --- | ---: | --- | ---: | ---: | ---: | ---: | ---: | --- |",
     ])
-    for row in _sequence(known["calibration_width_tightening"], "known width results"):
-        value = _mapping(row, "known width row")
-        lines.append(
-            f"| {value['model_label']} | {_decimal(float(value['smallest_n_mean_width']))} | "
-            f"{_decimal(float(value['largest_n_mean_width']))} | "
-            f"{_percent(float(value['relative_width_reduction']))} |"
+    for raw in _sequence(model["results"], "v3 model results"):
+        value = _mapping(raw, "v3 model result")
+        repeated = _mapping(value["repeated_validation"], "v3 repeated result")
+        eligible = repeated["margin_eligible_for_resolution_claim"] is True
+        resolution = (
+            ("PASS" if repeated["correct_direction_target_met"] else "FAIL")
+            if eligible
+            else "N/A (margin < 0.10)"
         )
-    lines.extend([
-        "",
-        "## Model-conditional public-data cells",
-        "",
-        "| Model / wrapper | Oracle R* | One-shot [L, U] | Width | Repeat undercoverage (simultaneous upper) | Repeat CLEAR (simultaneous lower) | Registered targets |",
-        "| --- | ---: | ---: | ---: | --- | --- | --- |",
-    ])
-    for row in _sequence(model["results"], "model results"):
-        value = _mapping(row, "model result row")
-        repeated = _mapping(value["repeated_validation"], "model repeated result")
+        counts = _mapping(repeated["decision_counts"], "v3 decision counts")
         lines.append(
             f"| {value['model_label']} — {value['variant_label']} | {_decimal(float(value['oracle_risk']))} | "
+            f"{_decimal(float(repeated['absolute_margin_from_tolerance']))} / {repeated['expected_direction']} | "
             f"[{_decimal(float(value['production_floor']))}, {_decimal(float(value['production_ceiling']))}] | "
-            f"{_decimal(float(value['production_interval_width']))} | "
-            f"{repeated['undercoverage_count']}/{repeated['replicates']} "
-            f"({_percent(float(repeated['simultaneous_undercoverage_upper']))}) | "
-            f"{repeated['clear_count']}/{repeated['replicates']} "
-            f"({_percent(float(repeated['simultaneous_clear_rate_lower']))}) | "
+            f"{counts['CLEAR']}/{counts['HOLD']}/{counts['BLOCK']} | "
+            f"{_percent(float(repeated['simultaneous_undercoverage_upper']))} | "
+            f"{_percent(float(repeated['simultaneous_wrong_direction_upper']))} | "
+            f"{_percent(float(repeated['simultaneous_correct_direction_lower']))} | "
             f"coverage {'PASS' if repeated['undercoverage_target_met'] else 'FAIL'}; "
-            f"CLEAR power {'PASS' if repeated['clear_rate_target_met'] else 'FAIL'} |"
+            f"direction {'PASS' if repeated['wrong_direction_target_met'] else 'FAIL'}; resolution {resolution} |"
         )
-    failed_clear_rows = [
-        _mapping(value, "model result row")
-        for value in _sequence(model["results"], "model results")
-        if not _mapping(value, "model result row")["repeated_validation"][
-            "clear_rate_target_met"
-        ]
-    ]
-    if failed_clear_rows:
-        descriptions = ", ".join(
-            f"{value['model_label']} / {value['variant_label']}"
-            for value in failed_clear_rows
+    lines.extend([
+        "",
+        "### Repeated-sample tightness",
+        "",
+        "A ceiling of 1 would cover every risk but be useless. These values report how far the repeated upper bound remained above exact risk and how wide the interval remained.",
+        "",
+        "| Model / wrapper | Mean U | Mean width U-L | Mean excess U-R* | P95 excess U-R* |",
+        "| --- | ---: | ---: | ---: | ---: |",
+    ])
+    for raw in _sequence(model["results"], "v3 model tightness results"):
+        value = _mapping(raw, "v3 model tightness result")
+        repeated = _mapping(value["repeated_validation"], "v3 repeated tightness")
+        lines.append(
+            f"| {value['model_label']} — {value['variant_label']} | "
+            f"{_decimal(float(repeated['mean_ceiling']))} | "
+            f"{_decimal(float(repeated['mean_interval_width']))} | "
+            f"{_decimal(float(repeated['mean_ceiling_excess_over_oracle']))} | "
+            f"{_decimal(float(repeated['p95_ceiling_excess_over_oracle']))} |"
         )
+    lines.extend([
+        "",
+        "## Exact erasure identity",
+        "",
+        "The 90% state-independent erasure variant must satisfy `R_erased = 0.5 + 0.1 × (R_raw - 0.5)` exactly.",
+        "",
+        "| Model | Raw R* | Erased R* | Exact identity |",
+        "| --- | ---: | ---: | --- |",
+    ])
+    for raw in _sequence(model["erasure_comparisons"], "v3 erasure comparisons"):
+        value = _mapping(raw, "v3 erasure comparison")
+        lines.append(
+            f"| {value['model_label']} | {_decimal(float(value['raw_oracle_risk']))} | "
+            f"{_decimal(float(value['erased_oracle_risk']))} | PASS |"
+        )
+
+    predecessor = summary.get("predecessor_model_backed_v2")
+    if predecessor is not None:
+        previous = _mapping(predecessor, "v2 predecessor")
+        previous_acceptance = _mapping(previous["acceptance"], "v2 acceptance")
         lines.extend([
             "",
-            f"The registered model-backed acceptance failure is decision-usefulness, not observed undercoverage: {descriptions} did not meet the simultaneous CLEAR-rate lower target.",
+            "## Historical v2 predecessor — acceptance failed",
+            "",
+            f"V2 remains a separate failed result (`{', '.join(previous_acceptance['failed_criteria'])}`). It is not relabelled as v3 evidence and no v2 outcome is reused by v3.",
+            "",
+            "| Model / wrapper | V2 repeat CLEAR | V2 simultaneous CLEAR lower | V2 target |",
+            "| --- | ---: | ---: | --- |",
         ])
+        for raw in _sequence(previous["results"], "v2 results"):
+            value = _mapping(raw, "v2 result")
+            repeated = _mapping(value["repeated_validation"], "v2 repeated result")
+            lines.append(
+                f"| {value['model_label']} — {value['variant_label']} | {repeated['clear_count']}/{repeated['replicates']} | "
+                f"{_percent(float(repeated['simultaneous_clear_rate_lower']))} | "
+                f"{'PASS' if repeated['clear_rate_target_met'] else 'FAIL'} |"
+            )
     lines.extend([
         "",
         "## How the metrics map to MRA",
         "",
-        "- Soundness is tested by undercoverage: `U < R*`. The simultaneous upper bound quantifies residual uncertainty across the registered family.",
-        "- Tightness is measured by interval width `U - L` and ceiling excess `U - R*`.",
-        "- Decision usefulness follows the protocol rule: CLEAR when `U <= 0.65`, BLOCK when `L > 0.65`, and HOLD otherwise.",
-        "- The model-backed results remain conditional on the frozen finite populations and closed wrappers; the compact Transformer is an LLM proxy, not a generative LLM endpoint.",
+        "- Soundness failure is undercoverage: `U < R*`.",
+        "- Wrong direction is BLOCK below tolerance or CLEAR above tolerance; HOLD is conservative.",
+        "- Correct-direction resolution is evaluated only at the preregistered absolute margin of at least 0.10.",
+        "- Width `U - L` and excess `U - R*` measure tightness; neither replaces coverage.",
+        "- Results remain conditional on frozen finite populations and source-bound wrappers. The compact Transformer is an LLM proxy, not a generative endpoint.",
         "",
-        "No raw scores, count rows, seeds, model artifacts, local paths, or software-environment details are included in this publication projection.",
+        "No raw scores, count rows, seeds, model artifacts, local paths, or software-environment details are included.",
         "",
     ])
     return "\n".join(lines)
@@ -1099,14 +1933,22 @@ def render_svg(summary: Mapping[str, Any]) -> str:
         }[str(value["collector_model"])]
         mean_ceiling = float(repeated["mean_ceiling"])
         mean_floor = mean_ceiling - float(repeated["mean_interval_width"])
+        eligible = repeated["margin_eligible_for_resolution_claim"] is True
+        role_suffix = repeated["expected_direction"]
+        if not eligible:
+            role_suffix = f"{role_suffix} · margin<0.10"
         rows.append((
-            f"Conditional · {short_model} · {variant}",
+            f"Conditional · {short_model} · {variant} · {role_suffix}",
             "model",
             mean_floor,
             mean_ceiling,
             float(value["oracle_risk"]),
             float(repeated["p95_ceiling"]),
-            bool(repeated["clear_rate_target_met"]),
+            (
+                repeated["correct_direction_target_met"] is True
+                if eligible
+                else True
+            ),
         ))
 
     width = 1280
@@ -1133,7 +1975,7 @@ def render_svg(summary: Mapping[str, Any]) -> str:
         '<line x1="32" y1="91" x2="54" y2="91" stroke="#1769aa" stroke-width="5" stroke-linecap="round"/>',
         '<text class="legend" x="62" y="95">controlled mean interval</text>',
         '<line x1="232" y1="91" x2="254" y2="91" stroke="#7a3db8" stroke-width="5" stroke-linecap="round"/>',
-        '<text class="legend" x="262" y="95">model-conditional one-shot interval</text>',
+        '<text class="legend" x="262" y="95">model-conditional mean interval</text>',
         '<circle cx="503" cy="91" r="5" fill="#111827"/>',
         '<text class="legend" x="514" y="95">exact oracle risk</text>',
         '<polygon points="654,84 648,96 660,96" fill="#7a3db8"/>',
@@ -1165,7 +2007,7 @@ def render_svg(summary: Mapping[str, Any]) -> str:
         ceiling_x = x(ceiling)
         risk_x = x(risk)
         label_class = "label" if target_met else "label fail"
-        rendered_label = label if target_met else f"{label} · CLEAR POWER FAIL"
+        rendered_label = label if target_met else f"{label} · RESOLUTION FAIL"
         elements.extend([
             f'<text class="{label_class}" x="32" y="{y + 5}">{xml_escape(rendered_label)}</text>',
             f'<line x1="{floor_x:.2f}" y1="{y}" x2="{ceiling_x:.2f}" y2="{y}" stroke="{color}" stroke-width="6" stroke-linecap="round"/>',
@@ -1207,20 +2049,31 @@ def generate_artifacts(
     json_output: Path,
     markdown_output: Path,
     svg_output: Path,
+    predecessor_model_report_path: Path | None = None,
 ) -> dict[str, Any]:
     """Validate both inputs before atomically writing any publication artifact."""
 
     inputs = {known_report_path.resolve(), model_report_path.resolve()}
+    if predecessor_model_report_path is not None:
+        inputs.add(predecessor_model_report_path.resolve())
     outputs = {json_output.resolve(), markdown_output.resolve(), svg_output.resolve()}
     _require(len(outputs) == 3, "publication output paths must be distinct")
     _require(not inputs.intersection(outputs), "publication output cannot overwrite a source report")
     known_report, known_sha256 = load_report(known_report_path)
     model_report, model_sha256 = load_report(model_report_path)
+    predecessor_report = None
+    predecessor_sha256 = None
+    if predecessor_model_report_path is not None:
+        predecessor_report, predecessor_sha256 = load_report(
+            predecessor_model_report_path
+        )
     summary = build_publication_summary(
         known_report,
         model_report,
         known_report_sha256=known_sha256,
         model_report_sha256=model_sha256,
+        predecessor_model_report=predecessor_report,
+        predecessor_model_report_sha256=predecessor_sha256,
     )
     json_payload = json.dumps(summary, allow_nan=False, indent=2, sort_keys=True) + "\n"
     svg_reference = Path(
@@ -1239,6 +2092,11 @@ def main(argv: Sequence[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--known-report", type=Path, required=True)
     parser.add_argument("--model-report", type=Path, required=True)
+    parser.add_argument(
+        "--predecessor-model-report",
+        type=Path,
+        help="optional completed v2 predecessor report retained as failed history",
+    )
     parser.add_argument("--json-output", type=Path, required=True)
     parser.add_argument("--markdown-output", type=Path, required=True)
     parser.add_argument("--svg-output", type=Path, required=True)
@@ -1250,6 +2108,7 @@ def main(argv: Sequence[str] | None = None) -> int:
             args.json_output,
             args.markdown_output,
             args.svg_output,
+            args.predecessor_model_report,
         )
     except PublicationSummaryError as exc:
         print(f"ceiling summary refused: {exc}", file=sys.stderr)

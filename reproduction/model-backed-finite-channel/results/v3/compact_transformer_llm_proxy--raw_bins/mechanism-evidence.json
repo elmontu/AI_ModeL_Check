@@ -1,0 +1,36 @@
+{
+  "closed_hidden_record_sampler": true,
+  "complete_recipient_transcript": [
+    "nll_negative",
+    "nll_0_to_0p5",
+    "nll_0p5_to_1",
+    "nll_1_to_2",
+    "nll_2_to_4",
+    "nll_4_or_more",
+    "nll_nonfinite",
+    "wrapper_error",
+    "wrapper_timeout",
+    "state_independent_erasure"
+  ],
+  "experimental_only": true,
+  "mechanism_id": "closed-hidden-record-semantic-nll-v1",
+  "query_budget_per_issued_capability": 1,
+  "schema_version": "1.0",
+  "state_independent_erasure": {
+    "denominator": 1,
+    "numerator": 0
+  },
+  "supports": [
+    "coupling:conditional_independence",
+    "artifact:62965779b77fe0ef5e3d2a55937a44063e95b55dd60b885e388edb08eb2574ea",
+    "interface:d3d33aa1353ad63cf13be7dba8f9a34216c9950ba9d50dcb9d980a38305ffcaf",
+    "complete-transcript:model-backed-compact_transformer_llm_proxy-raw_bins",
+    "wrapper-execution:8ac8fc05e89591113d2bac6655dd16959dcff1a01f74b9adcef71b0923eb06ff",
+    "wrapper-module:5600491f44d294c9c97047c1994502b4799a81a5422786e7cb43850396faae9a",
+    "wrapper-variant:raw_bins",
+    "wrapper-conformance:1931289aef739582a77ce91fda78cda138fa89edc4e8c25c91a5173ef7a899e5"
+  ],
+  "variant_id": "raw_bins",
+  "wrapper_execution_evidence_path": "wrapper-execution-evidence.json",
+  "wrapper_execution_evidence_sha256": "8ac8fc05e89591113d2bac6655dd16959dcff1a01f74b9adcef71b0923eb06ff"
+}

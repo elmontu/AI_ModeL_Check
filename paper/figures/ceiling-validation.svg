@@ -8,7 +8,7 @@
 <line x1="32" y1="91" x2="54" y2="91" stroke="#1769aa" stroke-width="5" stroke-linecap="round"/>
 <text class="legend" x="62" y="95">controlled mean interval</text>
 <line x1="232" y1="91" x2="254" y2="91" stroke="#7a3db8" stroke-width="5" stroke-linecap="round"/>
-<text class="legend" x="262" y="95">model-conditional one-shot interval</text>
+<text class="legend" x="262" y="95">model-conditional mean interval</text>
 <circle cx="503" cy="91" r="5" fill="#111827"/>
 <text class="legend" x="514" y="95">exact oracle risk</text>
 <polygon points="654,84 648,96 660,96" fill="#7a3db8"/>
@@ -45,41 +45,41 @@
 <circle cx="902.00" cy="241" r="5.5" fill="#111827" stroke="#ffffff" stroke-width="1.5"/>
 <line x1="32" y1="263" x2="1248" y2="263" stroke="#cfd5df"/>
 <text class="section" x="32" y="281" fill="#7a3db8">MODEL-CONDITIONAL PUBLIC DATA</text>
-<text class="label" x="32" y="306">Conditional · CNN · raw</text>
-<line x1="440.00" y1="301" x2="516.99" y2="301" stroke="#7a3db8" stroke-width="6" stroke-linecap="round"/>
+<text class="label" x="32" y="306">Conditional · CNN · raw · CLEAR</text>
+<line x1="440.00" y1="301" x2="512.69" y2="301" stroke="#7a3db8" stroke-width="6" stroke-linecap="round"/>
 <line x1="440.00" y1="294" x2="440.00" y2="308" stroke="#7a3db8" stroke-width="2"/>
-<line x1="516.99" y1="294" x2="516.99" y2="308" stroke="#7a3db8" stroke-width="2"/>
-<circle cx="463.10" cy="301" r="5.5" fill="#111827" stroke="#ffffff" stroke-width="1.5"/>
-<polygon points="523.94,293 517.94,306 529.94,306" fill="#7a3db8"/>
-<text class="label" x="32" y="342">Conditional · CNN · 90% erasure</text>
-<line x1="440.00" y1="337" x2="486.89" y2="337" stroke="#7a3db8" stroke-width="6" stroke-linecap="round"/>
+<line x1="512.69" y1="294" x2="512.69" y2="308" stroke="#7a3db8" stroke-width="2"/>
+<circle cx="459.25" cy="301" r="5.5" fill="#111827" stroke="#ffffff" stroke-width="1.5"/>
+<polygon points="518.06,293 512.06,306 524.06,306" fill="#7a3db8"/>
+<text class="label" x="32" y="342">Conditional · CNN · 90% erasure · CLEAR</text>
+<line x1="440.00" y1="337" x2="486.16" y2="337" stroke="#7a3db8" stroke-width="6" stroke-linecap="round"/>
 <line x1="440.00" y1="330" x2="440.00" y2="344" stroke="#7a3db8" stroke-width="2"/>
-<line x1="486.89" y1="330" x2="486.89" y2="344" stroke="#7a3db8" stroke-width="2"/>
-<circle cx="442.31" cy="337" r="5.5" fill="#111827" stroke="#ffffff" stroke-width="1.5"/>
-<polygon points="492.13,329 486.13,342 498.13,342" fill="#7a3db8"/>
-<text class="label" x="32" y="390">Conditional · XGBoost · raw</text>
-<line x1="515.97" y1="385" x2="612.73" y2="385" stroke="#7a3db8" stroke-width="6" stroke-linecap="round"/>
-<line x1="515.97" y1="378" x2="515.97" y2="392" stroke="#7a3db8" stroke-width="2"/>
-<line x1="612.73" y1="378" x2="612.73" y2="392" stroke="#7a3db8" stroke-width="2"/>
-<circle cx="559.35" cy="385" r="5.5" fill="#111827" stroke="#ffffff" stroke-width="1.5"/>
-<polygon points="621.78,377 615.78,390 627.78,390" fill="#7a3db8"/>
-<text class="label" x="32" y="438">Conditional · XGBoost · 90% erasure</text>
-<line x1="440.00" y1="433" x2="495.92" y2="433" stroke="#7a3db8" stroke-width="6" stroke-linecap="round"/>
+<line x1="486.16" y1="330" x2="486.16" y2="344" stroke="#7a3db8" stroke-width="2"/>
+<circle cx="441.92" cy="337" r="5.5" fill="#111827" stroke="#ffffff" stroke-width="1.5"/>
+<polygon points="490.96,329 484.96,342 496.96,342" fill="#7a3db8"/>
+<text class="label" x="32" y="390">Conditional · XGBoost · raw · CLEAR · margin&lt;0.10</text>
+<line x1="491.05" y1="385" x2="579.76" y2="385" stroke="#7a3db8" stroke-width="6" stroke-linecap="round"/>
+<line x1="491.05" y1="378" x2="491.05" y2="392" stroke="#7a3db8" stroke-width="2"/>
+<line x1="579.76" y1="378" x2="579.76" y2="392" stroke="#7a3db8" stroke-width="2"/>
+<circle cx="530.47" cy="385" r="5.5" fill="#111827" stroke="#ffffff" stroke-width="1.5"/>
+<polygon points="588.93,377 582.93,390 594.93,390" fill="#7a3db8"/>
+<text class="label" x="32" y="438">Conditional · XGBoost · 90% erasure · CLEAR</text>
+<line x1="440.00" y1="433" x2="491.98" y2="433" stroke="#7a3db8" stroke-width="6" stroke-linecap="round"/>
 <line x1="440.00" y1="426" x2="440.00" y2="440" stroke="#7a3db8" stroke-width="2"/>
-<line x1="495.92" y1="426" x2="495.92" y2="440" stroke="#7a3db8" stroke-width="2"/>
-<circle cx="451.94" cy="433" r="5.5" fill="#111827" stroke="#ffffff" stroke-width="1.5"/>
-<polygon points="501.56,425 495.56,438 507.56,438" fill="#7a3db8"/>
-<text class="label fail" x="32" y="486">Conditional · Transformer proxy · raw · CLEAR POWER FAIL</text>
-<line x1="562.01" y1="481" x2="670.67" y2="481" stroke="#7a3db8" stroke-width="6" stroke-linecap="round"/>
-<line x1="562.01" y1="474" x2="562.01" y2="488" stroke="#7a3db8" stroke-width="2"/>
-<line x1="670.67" y1="474" x2="670.67" y2="488" stroke="#7a3db8" stroke-width="2"/>
-<circle cx="611.60" cy="481" r="5.5" fill="#111827" stroke="#ffffff" stroke-width="1.5"/>
-<polygon points="681.87,473 675.87,486 687.87,486" fill="#7a3db8"/>
-<text class="label" x="32" y="534">Conditional · Transformer proxy · 90% erasure</text>
-<line x1="440.00" y1="529" x2="503.27" y2="529" stroke="#7a3db8" stroke-width="6" stroke-linecap="round"/>
+<line x1="491.98" y1="426" x2="491.98" y2="440" stroke="#7a3db8" stroke-width="2"/>
+<circle cx="449.05" cy="433" r="5.5" fill="#111827" stroke="#ffffff" stroke-width="1.5"/>
+<polygon points="497.86,425 491.86,438 503.86,438" fill="#7a3db8"/>
+<text class="label" x="32" y="486">Conditional · Transformer proxy · raw · CLEAR · margin&lt;0.10</text>
+<line x1="557.37" y1="481" x2="678.72" y2="481" stroke="#7a3db8" stroke-width="6" stroke-linecap="round"/>
+<line x1="557.37" y1="474" x2="557.37" y2="488" stroke="#7a3db8" stroke-width="2"/>
+<line x1="678.72" y1="474" x2="678.72" y2="488" stroke="#7a3db8" stroke-width="2"/>
+<circle cx="613.80" cy="481" r="5.5" fill="#111827" stroke="#ffffff" stroke-width="1.5"/>
+<polygon points="690.58,473 684.58,486 696.58,486" fill="#7a3db8"/>
+<text class="label" x="32" y="534">Conditional · Transformer proxy · 90% erasure · CLEAR</text>
+<line x1="440.00" y1="529" x2="504.49" y2="529" stroke="#7a3db8" stroke-width="6" stroke-linecap="round"/>
 <line x1="440.00" y1="522" x2="440.00" y2="536" stroke="#7a3db8" stroke-width="2"/>
-<line x1="503.27" y1="522" x2="503.27" y2="536" stroke="#7a3db8" stroke-width="2"/>
-<circle cx="457.16" cy="529" r="5.5" fill="#111827" stroke="#ffffff" stroke-width="1.5"/>
-<polygon points="508.31,521 502.31,534 514.31,534" fill="#7a3db8"/>
+<line x1="504.49" y1="522" x2="504.49" y2="536" stroke="#7a3db8" stroke-width="2"/>
+<circle cx="457.38" cy="529" r="5.5" fill="#111827" stroke="#ffffff" stroke-width="1.5"/>
+<polygon points="510.56,521 504.56,534 516.56,534" fill="#7a3db8"/>
 <text class="subtitle" x="825.00" y="655" text-anchor="middle">Equal-prior membership success probability</text>
 </svg>

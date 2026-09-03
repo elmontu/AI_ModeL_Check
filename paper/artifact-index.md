@@ -18,19 +18,22 @@ not a completed result.
 
 | Artifact | Contents | Paper-safe use | Boundary |
 |---|---|---|---|
-| [Ceiling experiment results](ceiling-experiment-results.md) and [machine-readable summary](../reproduction/ceiling-experiment-summary.json) | Generated cross-experiment tables, metric semantics, scope, and links to canonical reports | Primary source for paper-ready ceiling numbers; controlled experiment accepted, model-backed v2 completed with 8/9 criteria | The summary is derived, not a universal proof or authorization. It preserves the failed raw Transformer-proxy decision-power criterion. |
+| [Ceiling experiment results](ceiling-experiment-results.md) and [machine-readable summary](../reproduction/ceiling-experiment-summary.json) | Generated cross-experiment tables, metric semantics, chronology, scope, and links to canonical reports | Primary source for paper-ready ceiling numbers; controlled and model-backed v3 experiments accepted | The summary is derived, not a universal proof or authorization. It preserves v2 as a failed predecessor and keeps the near-threshold v3 proxy arm outside the margin-resolution claim. |
 | [Controlled finite-channel report](../reproduction/finite-channel-ceiling/results/ground-truth-report.json) and [manifest](../reproduction/finite-channel-ceiling/results/manifest.json) | Exact-risk channels, 1,800 count records, repeated analyzer results, three Engine replays, tamper checks, runtime, and digests | Supports controlled coverage, width, false-clear, and `CLEAR`/`HOLD`/`BLOCK` observations | Synthetic channels; family names are labels. The Engine replays use an experimental attack-battery waiver and issue no authorization. |
-| [Model-backed v2 report](../reproduction/model-backed-finite-channel/results/v2/model-backed-finite-channel-report.json) and [manifest](../reproduction/model-backed-finite-channel/results/v2/manifest.json) | CNN/MNIST, XGBoost/Adult, and compact-Transformer/20-Newsgroups finite-pool results for raw-bin and erasure variants | Supports conditional coverage and decision-usefulness observations, including the negative 109/200 raw proxy result | One artifact/family, small finite pools, repeated aggregate sampling; wrapper conformance was separate from sampling. The Transformer is an LLM proxy. |
+| [Model-backed v3 report](../reproduction/model-backed-finite-channel/results/v3/model-backed-finite-channel-report.json) and [manifest](../reproduction/model-backed-finite-channel/results/v3/manifest.json) | Fresh CNN/MNIST, XGBoost/Adult, and compact-Transformer/20-Newsgroups artifacts; raw-bin/erasure channels; per-observation wrapper execution; 18-endpoint role-aware evaluation | Supports conditional soundness, wrong-direction, safe-side margin-resolution, conservative holds, erasure-identity, wrapper-equivalence, replay, and negative-control observations | One artifact/family and small resampled finite pools. All oracle risks are below tolerance, so no model-backed `BLOCK` claim follows. Python wrapper execution and Engine source binding do not prove endpoint/OS semantics. The Transformer is an LLM proxy. |
+| [Model-backed v2 report](../reproduction/model-backed-finite-channel/results/v2/model-backed-finite-channel-report.json) and [manifest](../reproduction/model-backed-finite-channel/results/v2/manifest.json) | Historical predecessor using aggregate sampling separate from wrapper conformance | Supports the preserved negative 109/200 raw proxy result and explains v3's prospectively frozen corrective design | V2 remains failed under its own 8/9 acceptance result; it is not rewritten or pooled as v3 evidence. |
 | [Real-data training-hook execution audit](../docs/real-data-training-hook-audit-2026-09-02.md) | Curated aggregate LLM and vision workload, hook, performance, context-screen, perturbation-screen, provenance, and digest record | Completed publication-safe model-execution and instrumentation observations | Raw data, raw reports, trained state, rosters, and telemetry are excluded; all results are non-authorizing screens. |
 | [LLM registered input](../reproduction/llm-training-hook/README.md) | WildChat source/revision, cohort rules, three-model workload, evidence boundary, and rerun procedure | Explain the exact design behind the completed LLM audit | The configuration alone is not completion; dataset content and caches are not committed. |
 | [Vision registered input](../reproduction/vision-training-hook/README.md) | EuroSAT digest/split, two-architecture workload, hooks, perturbations, and rerun procedure | Explain the exact design behind the completed vision audit | The configuration alone is not completion; images, weights, caches, and raw outputs are not committed. |
 
 Use each canonical retained report or its generated summary, never a
-transcribed spreadsheet or ignored local output. The [v2
-preregistration](../reproduction/model-backed-finite-channel/v2-preregistration.json)
-also records the narrow compatibility change after the [v1 pre-outcome
-failure](../reproduction/model-backed-finite-channel/failed-v1-execution.json);
-that failure is part of the audit trail, not a completed outcome.
+transcribed spreadsheet or ignored local output. The chronology retains the
+[v1 pre-outcome failure](../reproduction/model-backed-finite-channel/failed-v1-execution.json),
+[v2 registration](../reproduction/model-backed-finite-channel/v2-preregistration.json)
+and negative result, then the [prospectively frozen corrective v3
+registration](../reproduction/model-backed-finite-channel/v3-preregistration.json)
+and fresh result. V3 was designed after v2 outcomes were known but reused no v2
+outcome as v3 evidence.
 
 ## Reference implementation and formal artifacts
 
@@ -43,8 +46,9 @@ that failure is part of the audit trail, not a completed outcome.
 | [Formal claim boundary](../docs/formal-verification.md) | Theorem inventory and non-claims | Exact theorem IDs, assumptions, trusted base, and refinement gap | Copy theorem scope, not a broader safety paraphrase. |
 | [Protocol correspondence](../formal/protocol-correspondence-v1.json) | Machine-readable Python/Lean vocabulary and test mapping | Explain executable drift checks | Do not describe it as a refinement proof. |
 | [Game-theory claim ledger](../formal/game-theory-claim-ledger-v1.json) | Citation provenance ledger | Separate source results, MRA inferences, and proposals | Recheck source metadata before final bibliography export. |
-| [Ceiling experiment preregistration](../reproduction/ceiling-experiment-preregistration.json) | Commit-anchored source/configuration record for the controlled and original model-backed designs | Establishes the locally frozen design chronology | The commit was not externally timestamped or signed. Use the separate v2 registration for the completed model-backed run. |
+| [Ceiling experiment preregistration](../reproduction/ceiling-experiment-preregistration.json) | Commit-anchored source/configuration record for the controlled and original model-backed designs | Establishes the locally frozen design chronology | The commit was not externally timestamped or signed. Use the version-specific registration for each completed model-backed run. |
 | [Model-backed v2 preregistration](../reproduction/model-backed-finite-channel/v2-preregistration.json) | Compatibility-only successor registration, source archive digest, environment, and pre-outcome checks | Documents that v2 was frozen before its model outcomes | Local Git/archive anchor only; no external timestamp or signature. |
+| [Model-backed v3 preregistration](../reproduction/model-backed-finite-channel/v3-preregistration.json) | Corrective role-aware design, fresh seed domains, per-use wrapper path, source bindings, and pre-outcome checks | Documents that the v3 correction was frozen after v2 but before fresh v3 outcomes | Local Git/archive anchor only; no external timestamp or signature. It is a corrective replication, not an independent first study. |
 
 ## Registered or configured studies without retained completion
 

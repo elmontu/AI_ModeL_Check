@@ -1,0 +1,212 @@
+[
+  {
+    "analyzer": "finite_channel_ceiling",
+    "artifact_sha256": "62965779b77fe0ef5e3d2a55937a44063e95b55dd60b885e388edb08eb2574ea",
+    "assumptions": [
+      "population_scope_id=benchmark-compact_transformer_llm_proxy-erasure_0p9",
+      "canonical finite-state exact-guess decision game",
+      "simultaneous state-by-observation confidence family",
+      "released observation alphabet equals the assessed complete transcript"
+    ],
+    "baseline": 0.5,
+    "can_block": true,
+    "can_clear": false,
+    "coverage": "complete_interface",
+    "decision_game_sha256": "782b760abc9f3dc7e4d8d47d1848cb468632d158461242e045e5abb3088927a5",
+    "details": {
+      "absolute_ceiling_fraction": {
+        "denominator": 10000000000000000000,
+        "numerator": 5432340452895064349
+      },
+      "absolute_floor_fraction": {
+        "denominator": 20000000000000000000,
+        "numerator": 9829043453940948783
+      },
+      "baseline_fraction": {
+        "denominator": 2,
+        "numerator": 1
+      },
+      "certificate_id": "certificate-compact_transformer_llm_proxy-erasure_0p9",
+      "certificate_kind": "envelope",
+      "certificate_sha256": "61b6c09f9c07e1409ac69dd6c67211faf78828c2e23f8d23be6178bc8f4aa10e",
+      "coverage": "simultaneous",
+      "coverage_confidence": 0.95,
+      "interface_observation_definition": "complete one-query categorical transcript of the closed hidden-record sampler, including negative, nonfinite, wrapper-error, timeout, and erasure outcomes",
+      "interval_width": 0.051781872592459,
+      "model_family_neutral": true,
+      "observation_ids": [
+        "nll_negative",
+        "nll_0_to_0p5",
+        "nll_0p5_to_1",
+        "nll_1_to_2",
+        "nll_2_to_4",
+        "nll_4_or_more",
+        "nll_nonfinite",
+        "wrapper_error",
+        "wrapper_timeout",
+        "state_independent_erasure"
+      ],
+      "planning_estimate_is_decision_evidence": false,
+      "release_gate": "clear_if_all_other_protocol_gates_pass",
+      "reported_ceiling_fraction": {
+        "denominator": 10000000000000000000,
+        "numerator": 5432340452895064349
+      },
+      "reported_floor_fraction": {
+        "denominator": 20000000000000000000,
+        "numerator": 9829043453940948783
+      },
+      "resolution": "ceiling_below_tolerance",
+      "selection_scope": "all three preregistered public-data models, both wrapper variants, both secret states, and every listed categorical observation",
+      "selection_valid": true,
+      "source_sha256": "0cffca54c0090f5fcf6b51f2d2b5988909d43759bdd0aeebbe7c8f7bd7b1c381",
+      "state_ids": [
+        "out",
+        "in"
+      ],
+      "state_trials": [
+        5000,
+        5000
+      ],
+      "tolerance": 0.65
+    },
+    "evidence_class": "floor",
+    "evidence_id": "membership-compact_transformer_llm_proxy-erasure_0p9:finite-channel:floor",
+    "exact_lower": {
+      "denominator": 20000000000000000000,
+      "numerator": 9829043453940948783
+    },
+    "exact_upper": null,
+    "familywise_confidence": 0.95,
+    "interface_sha256": "d3d33aa1353ad63cf13be7dba8f9a34216c9950ba9d50dcb9d980a38305ffcaf",
+    "limitations": [
+      "the confidence statement is conditional on the registered sampling model",
+      "the assessment covers one release contract; G9 must compose every active release",
+      "live deployment conformance remains an activation-gateway obligation"
+    ],
+    "lower": 0.4914521726970474,
+    "metric": "equal_prior_membership_success",
+    "observed_at": "2026-09-03T06:23:28.573668Z",
+    "policy_sha256": "439da9214b1340bafaf342b6fde33b3daea3be596554f249a7d402bd0d021f97",
+    "population_scope_id": "benchmark-compact_transformer_llm_proxy-erasure_0p9",
+    "population_scope_sha256": "d2667d5b14898965d4148fda51f6cdd1d76aaf2a1184e23efdc504e5d6f411f2",
+    "producer": {
+      "configuration_sha256": "074a138ace5d676ad302faecbfaeef58c3430c9a2a2bbba036fb463b6b388f9f",
+      "implementation_sha256": "abd1eab49e3de2f48e2cf458856321330d2df4bb64ab090663bd8a4925cecc29",
+      "service_id": "mra.analyzer.finite_channel_ceiling",
+      "service_version": "1.0.0"
+    },
+    "realizability": "recipient_realizable",
+    "release_contract_sha256": "81a8ded36a6f4c611f4759ea76029c30d94929dffc5f9c56739389fc8bcd7143",
+    "release_id": "model-backed-compact_transformer_llm_proxy-erasure_0p9",
+    "statistical_family_id": "9b07151488b096305ef76266d461465fb76014f5b7a2cd89f7307a3f917debc0",
+    "threat_id": "membership-compact_transformer_llm_proxy-erasure_0p9",
+    "upper": null,
+    "value": 0.4914521726970474
+  },
+  {
+    "analyzer": "finite_channel_ceiling",
+    "artifact_sha256": "62965779b77fe0ef5e3d2a55937a44063e95b55dd60b885e388edb08eb2574ea",
+    "assumptions": [
+      "population_scope_id=benchmark-compact_transformer_llm_proxy-erasure_0p9",
+      "canonical finite-state exact-guess decision game",
+      "simultaneous state-by-observation confidence family",
+      "released observation alphabet equals the assessed complete transcript"
+    ],
+    "baseline": 0.5,
+    "can_block": false,
+    "can_clear": true,
+    "coverage": "complete_interface",
+    "decision_game_sha256": "782b760abc9f3dc7e4d8d47d1848cb468632d158461242e045e5abb3088927a5",
+    "details": {
+      "absolute_ceiling_fraction": {
+        "denominator": 10000000000000000000,
+        "numerator": 5432340452895064349
+      },
+      "absolute_floor_fraction": {
+        "denominator": 20000000000000000000,
+        "numerator": 9829043453940948783
+      },
+      "baseline_fraction": {
+        "denominator": 2,
+        "numerator": 1
+      },
+      "certificate_id": "certificate-compact_transformer_llm_proxy-erasure_0p9",
+      "certificate_kind": "envelope",
+      "certificate_sha256": "61b6c09f9c07e1409ac69dd6c67211faf78828c2e23f8d23be6178bc8f4aa10e",
+      "coverage": "simultaneous",
+      "coverage_confidence": 0.95,
+      "interface_observation_definition": "complete one-query categorical transcript of the closed hidden-record sampler, including negative, nonfinite, wrapper-error, timeout, and erasure outcomes",
+      "interval_width": 0.051781872592459,
+      "model_family_neutral": true,
+      "observation_ids": [
+        "nll_negative",
+        "nll_0_to_0p5",
+        "nll_0p5_to_1",
+        "nll_1_to_2",
+        "nll_2_to_4",
+        "nll_4_or_more",
+        "nll_nonfinite",
+        "wrapper_error",
+        "wrapper_timeout",
+        "state_independent_erasure"
+      ],
+      "planning_estimate_is_decision_evidence": false,
+      "release_gate": "clear_if_all_other_protocol_gates_pass",
+      "reported_ceiling_fraction": {
+        "denominator": 10000000000000000000,
+        "numerator": 5432340452895064349
+      },
+      "reported_floor_fraction": {
+        "denominator": 20000000000000000000,
+        "numerator": 9829043453940948783
+      },
+      "resolution": "ceiling_below_tolerance",
+      "selection_scope": "all three preregistered public-data models, both wrapper variants, both secret states, and every listed categorical observation",
+      "selection_valid": true,
+      "source_sha256": "0cffca54c0090f5fcf6b51f2d2b5988909d43759bdd0aeebbe7c8f7bd7b1c381",
+      "state_ids": [
+        "out",
+        "in"
+      ],
+      "state_trials": [
+        5000,
+        5000
+      ],
+      "tolerance": 0.65
+    },
+    "evidence_class": "ceiling",
+    "evidence_id": "membership-compact_transformer_llm_proxy-erasure_0p9:finite-channel:ceiling",
+    "exact_lower": null,
+    "exact_upper": {
+      "denominator": 10000000000000000000,
+      "numerator": 5432340452895064349
+    },
+    "familywise_confidence": null,
+    "interface_sha256": "d3d33aa1353ad63cf13be7dba8f9a34216c9950ba9d50dcb9d980a38305ffcaf",
+    "limitations": [
+      "the confidence statement is conditional on the registered sampling model",
+      "the assessment covers one release contract; G9 must compose every active release",
+      "live deployment conformance remains an activation-gateway obligation"
+    ],
+    "lower": null,
+    "metric": "equal_prior_membership_success",
+    "observed_at": "2026-09-03T06:23:28.573668Z",
+    "policy_sha256": "439da9214b1340bafaf342b6fde33b3daea3be596554f249a7d402bd0d021f97",
+    "population_scope_id": "benchmark-compact_transformer_llm_proxy-erasure_0p9",
+    "population_scope_sha256": "d2667d5b14898965d4148fda51f6cdd1d76aaf2a1184e23efdc504e5d6f411f2",
+    "producer": {
+      "configuration_sha256": "074a138ace5d676ad302faecbfaeef58c3430c9a2a2bbba036fb463b6b388f9f",
+      "implementation_sha256": "abd1eab49e3de2f48e2cf458856321330d2df4bb64ab090663bd8a4925cecc29",
+      "service_id": "mra.analyzer.finite_channel_ceiling",
+      "service_version": "1.0.0"
+    },
+    "realizability": "recipient_realizable",
+    "release_contract_sha256": "81a8ded36a6f4c611f4759ea76029c30d94929dffc5f9c56739389fc8bcd7143",
+    "release_id": "model-backed-compact_transformer_llm_proxy-erasure_0p9",
+    "statistical_family_id": null,
+    "threat_id": "membership-compact_transformer_llm_proxy-erasure_0p9",
+    "upper": 0.5432340452895065,
+    "value": 0.5432340452895065
+  }
+]

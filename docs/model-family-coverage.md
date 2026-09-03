@@ -15,9 +15,13 @@ test the shared finite-channel path without establishing family-wide coverage.
 Controlled XGBoost, CNN, and LLM names are labels only. The model-backed tier
 uses one CNN/MNIST artifact, one XGBoost/Adult artifact, and one compact
 Transformer/20-Newsgroups artifact under a categorical hidden-record game; the
-Transformer is an LLM proxy. It observed zero undercoverage but missed the
-registered decision-power target for the raw proxy arm. These observations do
-not transfer to another artifact, seed, population, or interface.
+Transformer is an LLM proxy. V2 preserved a failed all-family-clear criterion;
+prospectively frozen corrective v3 used fresh model/sampling seeds and passed
+all role-aware criteria. V3 observed no undercoverage or wrong-direction event,
+resolved all four margin-eligible safe-side families, and held conservatively
+near tolerance. No v3 oracle risk exceeded tolerance, so model-backed
+unsafe-side/`BLOCK` power remains untested. These observations do not transfer
+to another artifact, seed, population, or interface.
 
 ## Governed catalog
 
@@ -135,6 +139,6 @@ For every model family:
 - Generic attack, controlled-inference, and canary floor registration binds declared dataset,
   procedure, seed, stopping, trial, low-FPR, and sealed-assignment facts by hash, but the offline core
   neither authenticates their source nor proves those declarations true or faithfully executed.
-- Existing LLM, vision, training-hook, composition-scaling, and red-team runs remain screens. They require approved state-conditioned recollection under the finite-channel contract; completion of an old run cannot be restamped into evidence. The separately registered model-backed v2 study is evidence only for its finite-pool categorical abstraction: aggregate sampling did not traverse the wrapper harness end to end, its attack-battery precondition was experimentally waived, and its assessment issued no authorization.
+- Existing LLM, vision, training-hook, composition-scaling, and red-team runs remain screens. They require approved state-conditioned recollection under the finite-channel contract; completion of an old run cannot be restamped into evidence. The separately registered model-backed studies are evidence only for their finite-pool categorical abstractions. V2's aggregate sampler and wrapper checks were separate; v3 executed each observation through a one-use Python wrapper, checked exact sampler equivalence, and source-bound that evidence. Neither version proves deployed endpoint/OS semantics, replaces the experimentally waived attack battery, or issues an authorization.
 - Most vision, audio, graph, recommender, generative-media, RL and composite releases still require dedicated workers unless their complete recipient channel meets the finite-channel proof contract.
 - “All models” therefore means every family is classified, scoped and failed closed—not that every family can currently be cleared.

@@ -1,0 +1,100 @@
+{
+  "all_equivalence_checks_pass": true,
+  "collector_model": "compact_transformer_llm_proxy",
+  "conformance": {
+    "checks": [
+      {
+        "check_id": "exactly_one_categorical_symbol",
+        "passed": true
+      },
+      {
+        "check_id": "no_transcript_timing_or_metadata",
+        "passed": true
+      },
+      {
+        "check_id": "second_query_refused",
+        "passed": true
+      },
+      {
+        "check_id": "all_caller_fields_refused_with_constant_error",
+        "passed": true
+      },
+      {
+        "check_id": "complete_registered_alphabet_is_totalized",
+        "passed": true
+      },
+      {
+        "check_id": "exact_state_independent_erasure_schedule_replayed",
+        "passed": true
+      },
+      {
+        "check_id": "no_public_metadata_accessors",
+        "passed": true
+      }
+    ],
+    "collector_model": "compact_transformer_llm_proxy",
+    "conformant": true,
+    "erasure_probe": {
+      "expected_erasure_count": 87,
+      "observed_erasure_count": 87,
+      "probe_count": 100,
+      "transcripts_retained": false
+    },
+    "interface": {
+      "query_budget": 1,
+      "recipient_callable": "query()",
+      "recipient_input_fields": [],
+      "registered_observation_count": 10,
+      "return_type": "categorical_symbol_string",
+      "state_independent_erasure": {
+        "denominator": 10,
+        "numerator": 9
+      },
+      "transcript_metadata_fields": []
+    },
+    "limitations": [
+      "Python object reflection and memory inspection are not a security boundary.",
+      "Process, scheduler, transport, network, hardware, and operating-system side channels are not tested.",
+      "Authentication, rate limiting, deployment isolation, and real serving-endpoint enforcement are not proven.",
+      "Conformance is conditional on the supplied aggregate finite population and registered categorical interface."
+    ],
+    "schema_version": "1.0",
+    "variant_id": "erasure_0p9"
+  },
+  "conformance_result_sha256": "dd6fa84651e2fa57e3477b053e4299d94f796f69c89585490675ff3ca14cd91f",
+  "exact_reference_schedule_equivalence": {
+    "in": true,
+    "out": true
+  },
+  "exact_seed_replay_equivalence": {
+    "in": true,
+    "out": true
+  },
+  "experimental_only": true,
+  "finite_population_sha256": "79e7dd365fae9197db87839da8839f646e8729ddbf32843f18dee32f29133bb1",
+  "individual_transcripts_retained": false,
+  "issuer_semantics": "each observation is produced by a fresh auditor-issued one-use ClosedHiddenRecordCategoricalWrapper capability",
+  "limitations": [
+    "Python process and operating-system side channels are not established.",
+    "This evidence does not establish enforcement by a deployed serving endpoint."
+  ],
+  "primary_seed_domain": "MRA-MODEL-BACKED-V3-PRIMARY-1",
+  "sampled_count_sha256": "c27018c917429f55603ccdac4fdd6ab802d05d4623d3e26a74e66315f079006e",
+  "schema_version": "1.0",
+  "state_independent_erasure": {
+    "denominator": 10,
+    "numerator": 9
+  },
+  "state_seeds": {
+    "in": 609040304,
+    "out": 609040303
+  },
+  "trials_per_state": 5000,
+  "variant_id": "erasure_0p9",
+  "wrapper_config_sha256": "746bfb2d3f3421e84c89e7679df5a8b20e3d3bdb0810343f9b8dbe0d5dc4fb79",
+  "wrapper_id": "closed-hidden-record-semantic-nll-v1",
+  "wrapper_module": {
+    "path": "src/model_release_assurance/experimental_finite_wrapper.py",
+    "sha256": "5600491f44d294c9c97047c1994502b4799a81a5422786e7cb43850396faae9a"
+  }
+}

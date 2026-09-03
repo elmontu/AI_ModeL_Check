@@ -1,0 +1,45 @@
+{
+  "audit_sample_definition": "independent with-replacement draws from each complete finite target pool, in seed domain MRA-MODEL-BACKED-V3-PRIMARY-1, using the preregistered per-model, per-variant, per-state seeds out=609040201 and in=609040202",
+  "binding_context": {
+    "artifact_sha256": "f48cd2b0afce8ef742d06d3eb66ed57f4981e84c2be8695457a346038061ad1f",
+    "decision_game_sha256": "ef68a95d1732c043400680f11111ced8dea19787ec3633e41654a7968e1710d1",
+    "interface_sha256": "d3d33aa1353ad63cf13be7dba8f9a34216c9950ba9d50dcb9d980a38305ffcaf",
+    "policy_sha256": "0476e2c4a2d134241d90c5faa43589cc359ad1e7b98ea94707f2e258d4b846ad",
+    "population_scope_id": "benchmark-xgboost-raw_bins",
+    "population_scope_sha256": "f6a9322bc94ed60b8d77147378742e8dab5fe3a07c46a3a07dbadbe4e517d6a8",
+    "release_contract_sha256": "d23bf5f2e18f2e103b6ac32536e1d7656a0cdbe5f7864c5d2b883a1b5929d2ff",
+    "release_id": "model-backed-xgboost-raw_bins",
+    "schema_version": "1.0"
+  },
+  "family_id": "family-xgboost-raw_bins",
+  "minimum_trials_per_state": 5000,
+  "plan_id": "plan-xgboost-raw_bins",
+  "population_scope_id": "benchmark-xgboost-raw_bins",
+  "portfolio_id": "portfolio-xgboost-raw_bins",
+  "registered_at": "2026-09-03T06:16:40Z",
+  "releases": [
+    {
+      "observation_ids": [
+        "nll_negative",
+        "nll_0_to_0p5",
+        "nll_0p5_to_1",
+        "nll_1_to_2",
+        "nll_2_to_4",
+        "nll_4_or_more",
+        "nll_nonfinite",
+        "wrapper_error",
+        "wrapper_timeout",
+        "state_independent_erasure"
+      ],
+      "release_id": "model-backed-xgboost-raw_bins"
+    }
+  ],
+  "sampling_model": "iid_multinomial",
+  "schema_version": "1.0",
+  "selection_scope": "all three preregistered public-data models, both wrapper variants, both secret states, and every listed categorical observation",
+  "state_ids": [
+    "out",
+    "in"
+  ],
+  "threat_id": "membership-xgboost-raw_bins"
+}

@@ -1,0 +1,143 @@
+{
+  "allocations": [
+    {
+      "allocation_id": "allocation-cnn-raw_bins",
+      "alpha": 0.008333333333333333,
+      "binding_context": {
+        "artifact_sha256": "321bb6ed245c5641c0acf23d748a9f50c7919405eb6ff6dbd3bf6df534401245",
+        "decision_game_sha256": "79870ac67e63999b33964190ce77f446bbd1a755672583b3d86ce89b55cb5500",
+        "interface_sha256": "d3d33aa1353ad63cf13be7dba8f9a34216c9950ba9d50dcb9d980a38305ffcaf",
+        "policy_sha256": "6de8c6356b6bb3423cc2e8ab7fd3b3145af487a2b94ce77d10eeeb2b43f71b20",
+        "population_scope_id": "benchmark-cnn-raw_bins",
+        "population_scope_sha256": "9a68338b62fbad54145c45eb4878448738e4e7669c6b0de65accb1700d9ec827",
+        "release_contract_sha256": "a498a8f42cfe12e33e3481228f7b242cebb55ef1e441ad9383632a50c9e3c63d",
+        "release_id": "model-backed-cnn-raw_bins",
+        "schema_version": "1.0"
+      },
+      "family_id": "family-cnn-raw_bins",
+      "generation_id": "generation-cnn-raw_bins",
+      "population_scope_id": "benchmark-cnn-raw_bins",
+      "portfolio_id": "portfolio-cnn-raw_bins",
+      "sampling_plan_sha256": "dede229bed3bb6780bc517ebac952811f1585ca3a2ce4293d638736f62a8abeb",
+      "status": "committed",
+      "threat_id": "membership-cnn-raw_bins"
+    },
+    {
+      "allocation_id": "allocation-cnn-erasure_0p9",
+      "alpha": 0.008333333333333333,
+      "binding_context": {
+        "artifact_sha256": "321bb6ed245c5641c0acf23d748a9f50c7919405eb6ff6dbd3bf6df534401245",
+        "decision_game_sha256": "190eecf0a511df15be253461d90f72c9bcf8f28c69b14174440075184033480e",
+        "interface_sha256": "d3d33aa1353ad63cf13be7dba8f9a34216c9950ba9d50dcb9d980a38305ffcaf",
+        "policy_sha256": "5a8e3c8e2a6cbf7bfce111c344870ecc5af94623aa0f836ed341ba65ec4e7f30",
+        "population_scope_id": "benchmark-cnn-erasure_0p9",
+        "population_scope_sha256": "873bc29ef10787b276d1c5431ef4a0cf00f19ea2bc24c0ea363a3f0a1f62ef4d",
+        "release_contract_sha256": "43ce8bd88e98f1de45e2034a374eab2dd0ced2a186927eb2d8afeb9213dc5036",
+        "release_id": "model-backed-cnn-erasure_0p9",
+        "schema_version": "1.0"
+      },
+      "family_id": "family-cnn-erasure_0p9",
+      "generation_id": "generation-cnn-erasure_0p9",
+      "population_scope_id": "benchmark-cnn-erasure_0p9",
+      "portfolio_id": "portfolio-cnn-erasure_0p9",
+      "sampling_plan_sha256": "f5a8f5d53f3540b9624b1e85294078229fe04d3b2ece77762f6a6bb277ae5720",
+      "status": "committed",
+      "threat_id": "membership-cnn-erasure_0p9"
+    },
+    {
+      "allocation_id": "allocation-xgboost-raw_bins",
+      "alpha": 0.008333333333333333,
+      "binding_context": {
+        "artifact_sha256": "f48cd2b0afce8ef742d06d3eb66ed57f4981e84c2be8695457a346038061ad1f",
+        "decision_game_sha256": "ef68a95d1732c043400680f11111ced8dea19787ec3633e41654a7968e1710d1",
+        "interface_sha256": "d3d33aa1353ad63cf13be7dba8f9a34216c9950ba9d50dcb9d980a38305ffcaf",
+        "policy_sha256": "0476e2c4a2d134241d90c5faa43589cc359ad1e7b98ea94707f2e258d4b846ad",
+        "population_scope_id": "benchmark-xgboost-raw_bins",
+        "population_scope_sha256": "f6a9322bc94ed60b8d77147378742e8dab5fe3a07c46a3a07dbadbe4e517d6a8",
+        "release_contract_sha256": "d23bf5f2e18f2e103b6ac32536e1d7656a0cdbe5f7864c5d2b883a1b5929d2ff",
+        "release_id": "model-backed-xgboost-raw_bins",
+        "schema_version": "1.0"
+      },
+      "family_id": "family-xgboost-raw_bins",
+      "generation_id": "generation-xgboost-raw_bins",
+      "population_scope_id": "benchmark-xgboost-raw_bins",
+      "portfolio_id": "portfolio-xgboost-raw_bins",
+      "sampling_plan_sha256": "38db9fd122defaf4087c1ac9750aa58f2b938831632dbeba8bd555c0d65f0fa3",
+      "status": "committed",
+      "threat_id": "membership-xgboost-raw_bins"
+    },
+    {
+      "allocation_id": "allocation-xgboost-erasure_0p9",
+      "alpha": 0.008333333333333333,
+      "binding_context": {
+        "artifact_sha256": "f48cd2b0afce8ef742d06d3eb66ed57f4981e84c2be8695457a346038061ad1f",
+        "decision_game_sha256": "6865850fa62501501a37b43b7d75c286ccae772022a87825bebe710f1d3824fb",
+        "interface_sha256": "d3d33aa1353ad63cf13be7dba8f9a34216c9950ba9d50dcb9d980a38305ffcaf",
+        "policy_sha256": "9cf3199e741f1a2020f2d24c834cdb14b4ff1f53a0d59aea373eae12c7a703e5",
+        "population_scope_id": "benchmark-xgboost-erasure_0p9",
+        "population_scope_sha256": "b2f6e36e1c720e9b85efe9e9afe9ab3fe0f8c87d123267cf2509f883a71762cc",
+        "release_contract_sha256": "75fa66360c592b860341594438dc00e413cf1acb357ad62e1fcd528274031071",
+        "release_id": "model-backed-xgboost-erasure_0p9",
+        "schema_version": "1.0"
+      },
+      "family_id": "family-xgboost-erasure_0p9",
+      "generation_id": "generation-xgboost-erasure_0p9",
+      "population_scope_id": "benchmark-xgboost-erasure_0p9",
+      "portfolio_id": "portfolio-xgboost-erasure_0p9",
+      "sampling_plan_sha256": "89e00257219e49a9b29a5c4d5b493ecf247f5a28c8ec4f725a0e7d26ee946ccb",
+      "status": "committed",
+      "threat_id": "membership-xgboost-erasure_0p9"
+    },
+    {
+      "allocation_id": "allocation-compact_transformer_llm_proxy-raw_bins",
+      "alpha": 0.008333333333333333,
+      "binding_context": {
+        "artifact_sha256": "62965779b77fe0ef5e3d2a55937a44063e95b55dd60b885e388edb08eb2574ea",
+        "decision_game_sha256": "a7f37260d00ce69b9a819f94fd424a0d75b75a3f2d6061b504f69ac1c935a995",
+        "interface_sha256": "d3d33aa1353ad63cf13be7dba8f9a34216c9950ba9d50dcb9d980a38305ffcaf",
+        "policy_sha256": "bf88b78ceaa66da42976598fcfe88fd178a6ba1d1b63247971e7eba2b82ad20f",
+        "population_scope_id": "benchmark-compact_transformer_llm_proxy-raw_bins",
+        "population_scope_sha256": "fe6dc47f5b123be4150350442fe1e6d1ab207141e9910a3db1a2a34f76d612af",
+        "release_contract_sha256": "4770d97d6ab39b16867e9e822533ef964ebb53d20660fde95178176367e5d89f",
+        "release_id": "model-backed-compact_transformer_llm_proxy-raw_bins",
+        "schema_version": "1.0"
+      },
+      "family_id": "family-compact_transformer_llm_proxy-raw_bins",
+      "generation_id": "generation-compact_transformer_llm_proxy-raw_bins",
+      "population_scope_id": "benchmark-compact_transformer_llm_proxy-raw_bins",
+      "portfolio_id": "portfolio-compact_transformer_llm_proxy-raw_bins",
+      "sampling_plan_sha256": "207d4cee72d3e3b0008059cfb00c5c449d28a497978a6a5c878dc8351f771de2",
+      "status": "committed",
+      "threat_id": "membership-compact_transformer_llm_proxy-raw_bins"
+    },
+    {
+      "allocation_id": "allocation-compact_transformer_llm_proxy-erasure_0p9",
+      "alpha": 0.008333333333333333,
+      "binding_context": {
+        "artifact_sha256": "62965779b77fe0ef5e3d2a55937a44063e95b55dd60b885e388edb08eb2574ea",
+        "decision_game_sha256": "782b760abc9f3dc7e4d8d47d1848cb468632d158461242e045e5abb3088927a5",
+        "interface_sha256": "d3d33aa1353ad63cf13be7dba8f9a34216c9950ba9d50dcb9d980a38305ffcaf",
+        "policy_sha256": "439da9214b1340bafaf342b6fde33b3daea3be596554f249a7d402bd0d021f97",
+        "population_scope_id": "benchmark-compact_transformer_llm_proxy-erasure_0p9",
+        "population_scope_sha256": "d2667d5b14898965d4148fda51f6cdd1d76aaf2a1184e23efdc504e5d6f411f2",
+        "release_contract_sha256": "81a8ded36a6f4c611f4759ea76029c30d94929dffc5f9c56739389fc8bcd7143",
+        "release_id": "model-backed-compact_transformer_llm_proxy-erasure_0p9",
+        "schema_version": "1.0"
+      },
+      "family_id": "family-compact_transformer_llm_proxy-erasure_0p9",
+      "generation_id": "generation-compact_transformer_llm_proxy-erasure_0p9",
+      "population_scope_id": "benchmark-compact_transformer_llm_proxy-erasure_0p9",
+      "portfolio_id": "portfolio-compact_transformer_llm_proxy-erasure_0p9",
+      "sampling_plan_sha256": "a6b1a26a7ded42106c8f8253b412d345f897cf53aecaa8647f29556ecd6b237b",
+      "status": "committed",
+      "threat_id": "membership-compact_transformer_llm_proxy-erasure_0p9"
+    }
+  ],
+  "authority": "MRA experimental benchmark registration; no release authority",
+  "budget_id": "model-backed-finite-channel-assurance-budget",
+  "committed_at": "2026-09-03T06:16:41Z",
+  "period_end": "2099-01-01",
+  "period_start": "2026-09-03",
+  "schema_version": "1.0",
+  "total_alpha": 0.05
+}

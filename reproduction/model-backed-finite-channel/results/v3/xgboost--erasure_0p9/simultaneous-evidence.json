@@ -1,0 +1,178 @@
+{
+  "assumptions": [
+    "within each secret-state row, retained observations are IID draws from one fixed multinomial channel row",
+    "the committed ledger contains the complete assurance-wide allocation family",
+    "Bonferroni union bounds require no independence between cells, releases, or allocated families",
+    "every serialized endpoint is replay-proved by directed binomial-tail arithmetic"
+  ],
+  "assurance_wide_alpha": 0.05,
+  "assurance_wide_confidence": 0.95,
+  "binding_context": {
+    "artifact_sha256": "f48cd2b0afce8ef742d06d3eb66ed57f4981e84c2be8695457a346038061ad1f",
+    "decision_game_sha256": "6865850fa62501501a37b43b7d75c286ccae772022a87825bebe710f1d3824fb",
+    "interface_sha256": "d3d33aa1353ad63cf13be7dba8f9a34216c9950ba9d50dcb9d980a38305ffcaf",
+    "policy_sha256": "9cf3199e741f1a2020f2d24c834cdb14b4ff1f53a0d59aea373eae12c7a703e5",
+    "population_scope_id": "benchmark-xgboost-erasure_0p9",
+    "population_scope_sha256": "b2f6e36e1c720e9b85efe9e9afe9ab3fe0f8c87d123267cf2509f883a71762cc",
+    "release_contract_sha256": "75fa66360c592b860341594438dc00e413cf1acb357ad62e1fcd528274031071",
+    "release_id": "model-backed-xgboost-erasure_0p9",
+    "schema_version": "1.0"
+  },
+  "budget_id": "model-backed-finite-channel-assurance-budget",
+  "count_file_id": "counts-xgboost-erasure_0p9",
+  "coverage": "simultaneous",
+  "endpoint_proof_terms": 4096,
+  "evidence_type": "simultaneous_multinomial_marginals",
+  "family_alpha": 0.008333333333333333,
+  "family_coverage_confidence": 0.9916666666666666,
+  "family_id": "family-xgboost-erasure_0p9",
+  "limitations": [],
+  "method": "bonferroni_two_sided_clopper_pearson",
+  "per_tail_alpha": 0.00020833333333333332,
+  "per_tail_alpha_denominator": 25000000000000000000,
+  "per_tail_alpha_numerator": 5208333333333333,
+  "population_scope_id": "benchmark-xgboost-erasure_0p9",
+  "portfolio_id": "portfolio-xgboost-erasure_0p9",
+  "request": {
+    "all_cells_reported": true,
+    "allocation_id": "allocation-xgboost-erasure_0p9",
+    "assurance_ledger_complete": true,
+    "budget_reference": {
+      "source_id": "model-backed-finite-channel-assurance-budget",
+      "source_path": "assurance-error-budget.json",
+      "source_sha256": "4cc346267af27ed4fe6e001dc01d18a29c6e75d429ce538df623de9ab16e4dcb"
+    },
+    "counts_reference": {
+      "source_id": "counts-xgboost-erasure_0p9",
+      "source_path": "sampled-counts.json",
+      "source_sha256": "66a4e476d66a77788ecc6fbfa44c21a486aee8d2f22757159fdcb5db4b944f83"
+    },
+    "family_pre_registered": true,
+    "generation_id": "generation-xgboost-erasure_0p9",
+    "sampling_model": "iid_multinomial",
+    "sampling_plan_reference": {
+      "source_id": "plan-xgboost-erasure_0p9",
+      "source_path": "sampling-plan.json",
+      "source_sha256": "89e00257219e49a9b29a5c4d5b493ecf247f5a28c8ec4f725a0e7d26ee946ccb"
+    },
+    "schema_version": "1.0",
+    "selection_process_covered": true,
+    "selection_scope": "all three preregistered public-data models, both wrapper variants, both secret states, and every listed categorical observation"
+  },
+  "rows": [
+    {
+      "counts": [
+        0,
+        397,
+        32,
+        34,
+        20,
+        1,
+        0,
+        0,
+        0,
+        4516
+      ],
+      "lower": [
+        0.0,
+        0.06653799130828839,
+        0.0031521162028905333,
+        0.0034307098227865933,
+        0.001577355394886058,
+        4.167100667911858e-08,
+        0.0,
+        0.0,
+        0.0,
+        0.8876405553476276
+      ],
+      "observation_ids": [
+        "nll_negative",
+        "nll_0_to_0p5",
+        "nll_0p5_to_1",
+        "nll_1_to_2",
+        "nll_2_to_4",
+        "nll_4_or_more",
+        "nll_nonfinite",
+        "wrapper_error",
+        "wrapper_timeout",
+        "state_independent_erasure"
+      ],
+      "release_id": "model-backed-xgboost-erasure_0p9",
+      "state_id": "out",
+      "trials": 5000,
+      "upper": [
+        0.0016938380736853857,
+        0.09372897514396195,
+        0.011404789158083836,
+        0.01192348107766241,
+        0.008198826792000232,
+        0.0021893692299760448,
+        0.0016938380736853857,
+        0.0016938380736853857,
+        0.0016938380736853857,
+        0.917354339997879
+      ]
+    },
+    {
+      "counts": [
+        0,
+        499,
+        24,
+        12,
+        0,
+        0,
+        0,
+        0,
+        0,
+        4465
+      ],
+      "lower": [
+        0.0,
+        0.08543869359510618,
+        0.0020803354379669682,
+        0.0006752473916369722,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.8767896337188785
+      ],
+      "observation_ids": [
+        "nll_negative",
+        "nll_0_to_0p5",
+        "nll_0p5_to_1",
+        "nll_1_to_2",
+        "nll_2_to_4",
+        "nll_4_or_more",
+        "nll_nonfinite",
+        "wrapper_error",
+        "wrapper_timeout",
+        "state_independent_erasure"
+      ],
+      "release_id": "model-backed-xgboost-erasure_0p9",
+      "state_id": "in",
+      "trials": 5000,
+      "upper": [
+        0.0016938380736853857,
+        0.11555578761820719,
+        0.00928869576418217,
+        0.005919208677367352,
+        0.0016938380736853857,
+        0.0016938380736853857,
+        0.0016938380736853857,
+        0.0016938380736853857,
+        0.0016938380736853857,
+        0.907841341266414
+      ]
+    }
+  ],
+  "schema_version": "1.0",
+  "selection_valid": true,
+  "simultaneous_cell_count": 20,
+  "state_ids": [
+    "out",
+    "in"
+  ],
+  "threat_id": "membership-xgboost-erasure_0p9"
+}

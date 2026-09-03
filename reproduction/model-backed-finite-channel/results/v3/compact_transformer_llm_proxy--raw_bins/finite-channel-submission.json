@@ -1,0 +1,406 @@
+{
+  "analytic_evidence": {
+    "envelope_certificate": {
+      "cell_upper_bounds": [
+        [
+          0.0016938380736853857,
+          0.6531681819182087,
+          0.10210113425183265,
+          0.13782212981736305,
+          0.09845612349912441,
+          0.09329864476045892,
+          0.0016938380736853857,
+          0.0016938380736853857,
+          0.0016938380736853857,
+          0.0016938380736853857
+        ],
+        [
+          0.0016938380736853857,
+          0.8760291326471249,
+          0.07294472216911842,
+          0.07708122389612833,
+          0.019400976530338003,
+          0.007922079574752666,
+          0.0016938380736853857,
+          0.0016938380736853857,
+          0.0016938380736853857,
+          0.0016938380736853857
+        ]
+      ],
+      "certificate_id": "certificate-compact_transformer_llm_proxy-raw_bins",
+      "coverage_confidence": 0.95,
+      "derivation": "conditional-independence product of marginal upper bounds plus joint-event bounds",
+      "feasible_joint_channel": [
+        [
+          0.0016938380736853857,
+          0.6531681819182087,
+          0.10210113425183265,
+          0.10627194188566787,
+          0.07059515411555782,
+          0.06616974975504764,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0016938380736853857,
+          0.8760291326471249,
+          0.06046007288123056,
+          0.05244099223976716,
+          0.007919913157613728,
+          0.0014560510005782498,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "joint_observation_ids": [
+        "[\"nll_negative\"]",
+        "[\"nll_0_to_0p5\"]",
+        "[\"nll_0p5_to_1\"]",
+        "[\"nll_1_to_2\"]",
+        "[\"nll_2_to_4\"]",
+        "[\"nll_4_or_more\"]",
+        "[\"nll_nonfinite\"]",
+        "[\"wrapper_error\"]",
+        "[\"wrapper_timeout\"]",
+        "[\"state_independent_erasure\"]"
+      ],
+      "problem_sha256": "8defe8fa813600402377cd043a4d64d8a622df85b86c79e6c8d76c7e00b770a5",
+      "raw_upper_bound": 0.6580881776721652,
+      "selection_valid": true,
+      "upper_bound": 0.6580881776721652
+    },
+    "exact_certificate": null,
+    "problem": {
+      "coupling_model": "conditional_independence",
+      "coverage": "simultaneous",
+      "coverage_confidence": 0.95,
+      "decision_game_sha256": "a7f37260d00ce69b9a819f94fd424a0d75b75a3f2d6061b504f69ac1c935a995",
+      "decision_problem": {
+        "action_ids": [
+          "out",
+          "in"
+        ],
+        "gain": [
+          [
+            1.0,
+            0.0
+          ],
+          [
+            0.0,
+            1.0
+          ]
+        ],
+        "interpretation": "exact recovery of the secret state",
+        "problem_id": "a7f37260d00ce69b9a819f94fd424a0d75b75a3f2d6061b504f69ac1c935a995",
+        "state_ids": [
+          "out",
+          "in"
+        ]
+      },
+      "joint_event_bounds": [],
+      "mechanism_assumptions": [
+        "one closed hidden-record query produces the complete categorical transcript",
+        "state-conditioned sampling is IID with replacement from each frozen finite pool",
+        "erasure, if enabled, is independent of the hidden state and underlying bin"
+      ],
+      "mechanism_evidence": [
+        {
+          "evidence_id": "mechanism-compact_transformer_llm_proxy-raw_bins",
+          "source_path": "mechanism-evidence.json",
+          "source_sha256": "2eb2d1ea7f823af8dd8dc92cb391c0c4753c57ee6ce0d188fbf58f39d1f26c83",
+          "supports": [
+            "coupling:conditional_independence",
+            "artifact:62965779b77fe0ef5e3d2a55937a44063e95b55dd60b885e388edb08eb2574ea",
+            "interface:d3d33aa1353ad63cf13be7dba8f9a34216c9950ba9d50dcb9d980a38305ffcaf",
+            "complete-transcript:model-backed-compact_transformer_llm_proxy-raw_bins",
+            "wrapper-execution:8ac8fc05e89591113d2bac6655dd16959dcff1a01f74b9adcef71b0923eb06ff",
+            "wrapper-module:5600491f44d294c9c97047c1994502b4799a81a5422786e7cb43850396faae9a",
+            "wrapper-variant:raw_bins",
+            "wrapper-conformance:1931289aef739582a77ce91fda78cda138fa89edc4e8c25c91a5173ef7a899e5"
+          ]
+        },
+        {
+          "evidence_id": "wrapper-execution-compact_transformer_llm_proxy-raw_bins",
+          "source_path": "wrapper-execution-evidence.json",
+          "source_sha256": "8ac8fc05e89591113d2bac6655dd16959dcff1a01f74b9adcef71b0923eb06ff",
+          "supports": [
+            "wrapper-execution:8ac8fc05e89591113d2bac6655dd16959dcff1a01f74b9adcef71b0923eb06ff",
+            "wrapper-module:5600491f44d294c9c97047c1994502b4799a81a5422786e7cb43850396faae9a",
+            "wrapper-variant:raw_bins",
+            "wrapper-conformance:1931289aef739582a77ce91fda78cda138fa89edc4e8c25c91a5173ef7a899e5"
+          ]
+        }
+      ],
+      "population_scope_id": "benchmark-compact_transformer_llm_proxy-raw_bins",
+      "population_scope_sha256": "fe6dc47f5b123be4150350442fe1e6d1ab207141e9910a3db1a2a34f76d612af",
+      "portfolio_id": "portfolio-compact_transformer_llm_proxy-raw_bins",
+      "prior": [
+        0.5,
+        0.5
+      ],
+      "prior_evidence": {
+        "evidence_id": "prior-compact_transformer_llm_proxy-raw_bins",
+        "source_path": "finite-prior.json",
+        "source_sha256": "718cae0f94191a32e59a8fe347a375ac0c58c7edd70aaa7582280c30d2dad4f0",
+        "supports": [
+          "prior",
+          "decision-game:a7f37260d00ce69b9a819f94fd424a0d75b75a3f2d6061b504f69ac1c935a995",
+          "finite-prior:5ee97d5975f9f78b48adebbc2c4699f119ddd58542d1dcdec8305d3d0eb3b9df"
+        ]
+      },
+      "rational_prior": [
+        {
+          "denominator": 2,
+          "numerator": 1
+        },
+        {
+          "denominator": 2,
+          "numerator": 1
+        }
+      ],
+      "releases": [
+        {
+          "evidence": {
+            "evidence_id": "generation-compact_transformer_llm_proxy-raw_bins:model-backed-compact_transformer_llm_proxy-raw_bins",
+            "source_path": "simultaneous-evidence.json",
+            "source_sha256": "2a9685f37b1df3ffe9f85a2a08dff5a9f6e284f5ae2264518758060ae21e2e0a",
+            "supports": [
+              "marginal:model-backed-compact_transformer_llm_proxy-raw_bins",
+              "coverage:simultaneous",
+              "error-budget:model-backed-finite-channel-assurance-budget:allocation-compact_transformer_llm_proxy-raw_bins",
+              "confidence-endpoints:outward-validated"
+            ]
+          },
+          "lower": [
+            [
+              0.0,
+              0.6047831603592518,
+              0.07373804319956545,
+              0.1050982362623612,
+              0.07059515411555782,
+              0.06616974975504764,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.8411207883867592,
+              0.048991232697776596,
+              0.05244099223976716,
+              0.007919913157613728,
+              0.0014560510005782498,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          ],
+          "observation_ids": [
+            "nll_negative",
+            "nll_0_to_0p5",
+            "nll_0p5_to_1",
+            "nll_1_to_2",
+            "nll_2_to_4",
+            "nll_4_or_more",
+            "nll_nonfinite",
+            "wrapper_error",
+            "wrapper_timeout",
+            "state_independent_erasure"
+          ],
+          "release_id": "model-backed-compact_transformer_llm_proxy-raw_bins",
+          "upper": [
+            [
+              0.0016938380736853857,
+              0.6531681819182087,
+              0.10210113425183265,
+              0.13782212981736305,
+              0.09845612349912441,
+              0.09329864476045892,
+              0.0016938380736853857,
+              0.0016938380736853857,
+              0.0016938380736853857,
+              0.0016938380736853857
+            ],
+            [
+              0.0016938380736853857,
+              0.8760291326471249,
+              0.07294472216911842,
+              0.07708122389612833,
+              0.019400976530338003,
+              0.007922079574752666,
+              0.0016938380736853857,
+              0.0016938380736853857,
+              0.0016938380736853857,
+              0.0016938380736853857
+            ]
+          ]
+        }
+      ],
+      "schema_version": "1.0",
+      "selection_scope": "all three preregistered public-data models, both wrapper variants, both secret states, and every listed categorical observation",
+      "state_ids": [
+        "out",
+        "in"
+      ],
+      "threat_id": "membership-compact_transformer_llm_proxy-raw_bins"
+    },
+    "rational_upper_audit": {
+      "audit_version": "1.0",
+      "certificate_id": "certificate-compact_transformer_llm_proxy-raw_bins",
+      "certificate_kind": "envelope",
+      "exact_upper_denominator": 4000000000000000000,
+      "exact_upper_numerator": 2632352710688661717,
+      "feasible_joint_channel": [
+        [
+          {
+            "denominator": 10000000000000000000,
+            "numerator": 16938380736853857
+          },
+          {
+            "denominator": 10000000000000000,
+            "numerator": 6531681819182087
+          },
+          {
+            "denominator": 20000000000000000,
+            "numerator": 2042022685036653
+          },
+          {
+            "denominator": 10000000000000000000,
+            "numerator": 1062719418856678043
+          },
+          {
+            "denominator": 50000000000000000,
+            "numerator": 3529757705777891
+          },
+          {
+            "denominator": 25000000000000000,
+            "numerator": 1654243743876191
+          },
+          {
+            "denominator": 1,
+            "numerator": 0
+          },
+          {
+            "denominator": 1,
+            "numerator": 0
+          },
+          {
+            "denominator": 1,
+            "numerator": 0
+          },
+          {
+            "denominator": 1,
+            "numerator": 0
+          }
+        ],
+        [
+          {
+            "denominator": 10000000000000000000,
+            "numerator": 16938380736853857
+          },
+          {
+            "denominator": 10000000000000000,
+            "numerator": 8760291326471249
+          },
+          {
+            "denominator": 2000000000000000000,
+            "numerator": 120920145762461153
+          },
+          {
+            "denominator": 25000000000000000,
+            "numerator": 1311024805994179
+          },
+          {
+            "denominator": 31250000000000000,
+            "numerator": 247497286175429
+          },
+          {
+            "denominator": 5000000000000000000,
+            "numerator": 7280255002891249
+          },
+          {
+            "denominator": 1,
+            "numerator": 0
+          },
+          {
+            "denominator": 1,
+            "numerator": 0
+          },
+          {
+            "denominator": 1,
+            "numerator": 0
+          },
+          {
+            "denominator": 1,
+            "numerator": 0
+          }
+        ]
+      ],
+      "number_interpretation": "exact_decimal_weights_normalized_per_probability_vector",
+      "outward_upper_bound": 0.6580881776721655,
+      "problem_sha256": "8defe8fa813600402377cd043a4d64d8a622df85b86c79e6c8d76c7e00b770a5"
+    },
+    "schema_version": "1.1"
+  },
+  "analyzer": "finite_channel_ceiling",
+  "bounded_transcript_complete": true,
+  "complete_interface_coverage": true,
+  "evidence_context": {
+    "artifact_sha256": "62965779b77fe0ef5e3d2a55937a44063e95b55dd60b885e388edb08eb2574ea",
+    "decision_game_sha256": "a7f37260d00ce69b9a819f94fd424a0d75b75a3f2d6061b504f69ac1c935a995",
+    "interface_sha256": "d3d33aa1353ad63cf13be7dba8f9a34216c9950ba9d50dcb9d980a38305ffcaf",
+    "observed_at": "2026-09-03T06:23:26.621560Z",
+    "policy_sha256": "bf88b78ceaa66da42976598fcfe88fd178a6ba1d1b63247971e7eba2b82ad20f",
+    "population_scope_id": "benchmark-compact_transformer_llm_proxy-raw_bins",
+    "population_scope_sha256": "fe6dc47f5b123be4150350442fe1e6d1ab207141e9910a3db1a2a34f76d612af",
+    "release_contract_sha256": "4770d97d6ab39b16867e9e822533ef964ebb53d20660fde95178176367e5d89f",
+    "release_id": "model-backed-compact_transformer_llm_proxy-raw_bins"
+  },
+  "interface_observation_definition": "complete one-query categorical transcript of the closed hidden-record sampler, including negative, nonfinite, wrapper-error, timeout, and erasure outcomes",
+  "observed_artifact_sha256": "62965779b77fe0ef5e3d2a55937a44063e95b55dd60b885e388edb08eb2574ea",
+  "observed_interface_sha256": "d3d33aa1353ad63cf13be7dba8f9a34216c9950ba9d50dcb9d980a38305ffcaf",
+  "population_scope_id": "benchmark-compact_transformer_llm_proxy-raw_bins",
+  "provenance": {
+    "bound_fields": [
+      "analyzer",
+      "schema_version",
+      "threat_id",
+      "population_scope_id",
+      "analytic_evidence",
+      "observed_interface_sha256",
+      "observed_artifact_sha256",
+      "interface_observation_definition",
+      "release_enforced_finite_alphabet",
+      "complete_interface_coverage",
+      "recipient_realizable",
+      "bounded_transcript_complete",
+      "state_trials",
+      "evidence_context"
+    ],
+    "configuration_path": "experiment-config.json",
+    "producer": {
+      "configuration_sha256": "074a138ace5d676ad302faecbfaeef58c3430c9a2a2bbba036fb463b6b388f9f",
+      "implementation_sha256": "abd1eab49e3de2f48e2cf458856321330d2df4bb64ab090663bd8a4925cecc29",
+      "service_id": "mra.analyzer.finite_channel_ceiling",
+      "service_version": "1.0.0"
+    },
+    "source_path": "finite-channel-input.json",
+    "source_sha256": "91b7b56fbd921e680920fa78666ff89d81c1ec5fe74ffef47ed0bb22b622a9a0",
+    "tool": "model-backed-finite-channel-experiment",
+    "tool_version": "1.0"
+  },
+  "recipient_realizable": true,
+  "release_enforced_finite_alphabet": true,
+  "schema_version": "1.0",
+  "state_trials": [
+    5000,
+    5000
+  ],
+  "threat_id": "membership-compact_transformer_llm_proxy-raw_bins"
+}

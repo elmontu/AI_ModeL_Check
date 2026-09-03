@@ -1,0 +1,178 @@
+{
+  "assumptions": [
+    "within each secret-state row, retained observations are IID draws from one fixed multinomial channel row",
+    "the committed ledger contains the complete assurance-wide allocation family",
+    "Bonferroni union bounds require no independence between cells, releases, or allocated families",
+    "every serialized endpoint is replay-proved by directed binomial-tail arithmetic"
+  ],
+  "assurance_wide_alpha": 0.05,
+  "assurance_wide_confidence": 0.95,
+  "binding_context": {
+    "artifact_sha256": "321bb6ed245c5641c0acf23d748a9f50c7919405eb6ff6dbd3bf6df534401245",
+    "decision_game_sha256": "190eecf0a511df15be253461d90f72c9bcf8f28c69b14174440075184033480e",
+    "interface_sha256": "d3d33aa1353ad63cf13be7dba8f9a34216c9950ba9d50dcb9d980a38305ffcaf",
+    "policy_sha256": "5a8e3c8e2a6cbf7bfce111c344870ecc5af94623aa0f836ed341ba65ec4e7f30",
+    "population_scope_id": "benchmark-cnn-erasure_0p9",
+    "population_scope_sha256": "873bc29ef10787b276d1c5431ef4a0cf00f19ea2bc24c0ea363a3f0a1f62ef4d",
+    "release_contract_sha256": "43ce8bd88e98f1de45e2034a374eab2dd0ced2a186927eb2d8afeb9213dc5036",
+    "release_id": "model-backed-cnn-erasure_0p9",
+    "schema_version": "1.0"
+  },
+  "budget_id": "model-backed-finite-channel-assurance-budget",
+  "count_file_id": "counts-cnn-erasure_0p9",
+  "coverage": "simultaneous",
+  "endpoint_proof_terms": 4052,
+  "evidence_type": "simultaneous_multinomial_marginals",
+  "family_alpha": 0.008333333333333333,
+  "family_coverage_confidence": 0.9916666666666666,
+  "family_id": "family-cnn-erasure_0p9",
+  "limitations": [],
+  "method": "bonferroni_two_sided_clopper_pearson",
+  "per_tail_alpha": 0.00020833333333333332,
+  "per_tail_alpha_denominator": 25000000000000000000,
+  "per_tail_alpha_numerator": 5208333333333333,
+  "population_scope_id": "benchmark-cnn-erasure_0p9",
+  "portfolio_id": "portfolio-cnn-erasure_0p9",
+  "request": {
+    "all_cells_reported": true,
+    "allocation_id": "allocation-cnn-erasure_0p9",
+    "assurance_ledger_complete": true,
+    "budget_reference": {
+      "source_id": "model-backed-finite-channel-assurance-budget",
+      "source_path": "assurance-error-budget.json",
+      "source_sha256": "4cc346267af27ed4fe6e001dc01d18a29c6e75d429ce538df623de9ab16e4dcb"
+    },
+    "counts_reference": {
+      "source_id": "counts-cnn-erasure_0p9",
+      "source_path": "sampled-counts.json",
+      "source_sha256": "439dcde815809ae4bb788f09a7087e984a9006ec9cf08c9f19632ab805f70c02"
+    },
+    "family_pre_registered": true,
+    "generation_id": "generation-cnn-erasure_0p9",
+    "sampling_model": "iid_multinomial",
+    "sampling_plan_reference": {
+      "source_id": "plan-cnn-erasure_0p9",
+      "source_path": "sampling-plan.json",
+      "source_sha256": "f5a8f5d53f3540b9624b1e85294078229fe04d3b2ece77762f6a6bb277ae5720"
+    },
+    "schema_version": "1.0",
+    "selection_process_covered": true,
+    "selection_scope": "all three preregistered public-data models, both wrapper variants, both secret states, and every listed categorical observation"
+  },
+  "rows": [
+    {
+      "counts": [
+        0,
+        414,
+        32,
+        29,
+        20,
+        8,
+        0,
+        0,
+        0,
+        4497
+      ],
+      "lower": [
+        0.0,
+        0.06967204645198144,
+        0.0031521162028905333,
+        0.0027415494181245973,
+        0.001577355394886058,
+        0.00030957195915595434,
+        0.0,
+        0.0,
+        0.0,
+        0.8835925626022947
+      ],
+      "observation_ids": [
+        "nll_negative",
+        "nll_0_to_0p5",
+        "nll_0p5_to_1",
+        "nll_1_to_2",
+        "nll_2_to_4",
+        "nll_4_or_more",
+        "nll_nonfinite",
+        "wrapper_error",
+        "wrapper_timeout",
+        "state_independent_erasure"
+      ],
+      "release_id": "model-backed-cnn-erasure_0p9",
+      "state_id": "out",
+      "trials": 5000,
+      "upper": [
+        0.0016938380736853857,
+        0.09738279372910015,
+        0.011404789158083836,
+        0.01061963702561314,
+        0.008198826792000232,
+        0.0046974039615203765,
+        0.0016938380736853857,
+        0.0016938380736853857,
+        0.0016938380736853857,
+        0.9138157873587939
+      ]
+    },
+    {
+      "counts": [
+        0,
+        424,
+        40,
+        31,
+        7,
+        3,
+        0,
+        0,
+        0,
+        4495
+      ],
+      "lower": [
+        0.0,
+        0.07151884714706389,
+        0.004286503299244941,
+        0.0030142385007228844,
+        0.00023273878568941437,
+        2.215159638301963e-05,
+        0.0,
+        0.0,
+        0.0,
+        0.8831668474770673
+      ],
+      "observation_ids": [
+        "nll_negative",
+        "nll_0_to_0p5",
+        "nll_0p5_to_1",
+        "nll_1_to_2",
+        "nll_2_to_4",
+        "nll_4_or_more",
+        "nll_nonfinite",
+        "wrapper_error",
+        "wrapper_timeout",
+        "state_independent_erasure"
+      ],
+      "release_id": "model-backed-cnn-erasure_0p9",
+      "state_id": "in",
+      "trials": 5000,
+      "upper": [
+        0.0016938380736853857,
+        0.09952886961893387,
+        0.013460076798861343,
+        0.011144064075832268,
+        0.004377832251260769,
+        0.002999957499218261,
+        0.0016938380736853857,
+        0.0016938380736853857,
+        0.0016938380736853857,
+        0.9134429178052234
+      ]
+    }
+  ],
+  "schema_version": "1.0",
+  "selection_valid": true,
+  "simultaneous_cell_count": 20,
+  "state_ids": [
+    "out",
+    "in"
+  ],
+  "threat_id": "membership-cnn-erasure_0p9"
+}

@@ -1,0 +1,182 @@
+{
+  "benchmark_population_conditional": true,
+  "experimental_only": true,
+  "models": [
+    {
+      "collector_model": "cnn",
+      "dataset_key": "mnist",
+      "dataset_snapshot_sha256": "00d76d498ef9ed63a0e2a6d1cbb54b935c9097c2c58207377acc96f49c090017",
+      "display_name": "CNN on public MNIST",
+      "ephemeral_model_artifact_sha256": "54ea892dcfff5b933a97d9df379c8e5ed484a082d8f471b76c3fb073aa0cd6a1",
+      "finite_population_sha256": "a726c20c76897c970ae96139545f1e1b0f04cea1ef37434049d1947b1d519918",
+      "llm_proxy_only": false,
+      "model_family": "cnn",
+      "observation_ids": [
+        "nll_negative",
+        "nll_0_to_0p5",
+        "nll_0p5_to_1",
+        "nll_1_to_2",
+        "nll_2_to_4",
+        "nll_4_or_more",
+        "nll_nonfinite",
+        "wrapper_error",
+        "wrapper_timeout",
+        "state_independent_erasure"
+      ],
+      "raw_wrapper_exact_bayes_risk": {
+        "denominator": 80,
+        "numerator": 41
+      },
+      "state_counts": {
+        "in": [
+          0,
+          343,
+          25,
+          24,
+          6,
+          2,
+          0,
+          0,
+          0,
+          0
+        ],
+        "out": [
+          0,
+          342,
+          22,
+          18,
+          11,
+          7,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "state_population_sizes": {
+        "in": 400,
+        "out": 400
+      },
+      "training_rows": 1200,
+      "utility_accuracy": 0.89
+    },
+    {
+      "collector_model": "xgboost",
+      "dataset_key": "adult",
+      "dataset_snapshot_sha256": "2da111df0ef87812d28e76f4351ccf681387b5784c524b45da8aa741c5a3c2d9",
+      "display_name": "XGBoost on public Adult Census Income",
+      "ephemeral_model_artifact_sha256": "f39009d6f58a44a0f0de080e03acac34db1a6dbd9548ef88e21d6e2f564750d7",
+      "finite_population_sha256": "b220a44757dc367f1427b6e834665a8d5dfe0a28405ee36f7686c6c1b9f354d2",
+      "llm_proxy_only": false,
+      "model_family": "xgboost",
+      "observation_ids": [
+        "nll_negative",
+        "nll_0_to_0p5",
+        "nll_0p5_to_1",
+        "nll_1_to_2",
+        "nll_2_to_4",
+        "nll_4_or_more",
+        "nll_nonfinite",
+        "wrapper_error",
+        "wrapper_timeout",
+        "state_independent_erasure"
+      ],
+      "raw_wrapper_exact_bayes_risk": {
+        "denominator": 800,
+        "numerator": 447
+      },
+      "state_counts": {
+        "in": [
+          0,
+          368,
+          19,
+          13,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "out": [
+          0,
+          321,
+          30,
+          28,
+          20,
+          1,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "state_population_sizes": {
+        "in": 400,
+        "out": 400
+      },
+      "training_rows": 1200,
+      "utility_accuracy": 0.862
+    },
+    {
+      "collector_model": "compact_transformer_llm_proxy",
+      "dataset_key": "20newsgroups",
+      "dataset_snapshot_sha256": "9682ec5735e90813106faca50ab8ed8a3be44c892d8250c553d1ffcb3723ab16",
+      "display_name": "Compact Transformer text classifier on public 20 Newsgroups (LLM proxy only)",
+      "ephemeral_model_artifact_sha256": "695bdde41d4cdc097b610ba0dc92ddd49bbbcd4c2adfef4fe1c02467c25826b0",
+      "finite_population_sha256": "79e7dd365fae9197db87839da8839f646e8729ddbf32843f18dee32f29133bb1",
+      "llm_proxy_only": true,
+      "model_family": "llm_proxy_compact_transformer",
+      "observation_ids": [
+        "nll_negative",
+        "nll_0_to_0p5",
+        "nll_0p5_to_1",
+        "nll_1_to_2",
+        "nll_2_to_4",
+        "nll_4_or_more",
+        "nll_nonfinite",
+        "wrapper_error",
+        "wrapper_timeout",
+        "state_independent_erasure"
+      ],
+      "raw_wrapper_exact_bayes_risk": {
+        "denominator": 700,
+        "numerator": 429
+      },
+      "state_counts": {
+        "in": [
+          0,
+          302,
+          20,
+          23,
+          4,
+          1,
+          0,
+          0,
+          0,
+          0
+        ],
+        "out": [
+          0,
+          223,
+          30,
+          42,
+          30,
+          25,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "state_population_sizes": {
+        "in": 350,
+        "out": 350
+      },
+      "training_rows": 1000,
+      "utility_accuracy": 0.7025
+    }
+  ],
+  "raw_scores_retained": false,
+  "schema_version": "1.0"
+}

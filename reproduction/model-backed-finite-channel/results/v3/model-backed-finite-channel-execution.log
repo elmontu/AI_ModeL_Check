@@ -1,0 +1,41 @@
+{
+  "output": "[EPHEMERAL_COLLECTOR_DIR]/privacy-audit-report.json",
+  "results": {
+    "cnn": {
+      "utility_accuracy": 0.89,
+      "membership_success": 0.5,
+      "lower_95pct": 0.4703331424427788
+    },
+    "lstm": {
+      "utility_accuracy": 0.724,
+      "membership_success": 0.55125,
+      "lower_95pct": 0.5215954881054333
+    },
+    "xgboost": {
+      "utility_accuracy": 0.862,
+      "membership_success": 0.555,
+      "lower_95pct": 0.5253584552567698
+    },
+    "compact_transformer_llm_proxy": {
+      "utility_accuracy": 0.7025,
+      "membership_success": 0.6414285714285715,
+      "lower_95pct": 0.6104945453818305
+    }
+  },
+  "decision": "no_release_authorization"
+}
+{
+  "output": "output/model-backed-finite-channel/v3-run/model-backed-finite-channel-report.json",
+  "families": 6,
+  "oracle_coverage": true,
+  "engine_verdicts": {
+    "cnn/raw_bins": "clear",
+    "cnn/erasure_0p9": "clear",
+    "xgboost/raw_bins": "clear",
+    "xgboost/erasure_0p9": "clear",
+    "compact_transformer_llm_proxy/raw_bins": "inconclusive",
+    "compact_transformer_llm_proxy/erasure_0p9": "clear"
+  },
+  "decision": "no_release_authorization",
+  "acceptance_passed": true
+}

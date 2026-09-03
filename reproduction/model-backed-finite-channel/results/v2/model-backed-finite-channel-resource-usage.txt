@@ -1,5 +1,5 @@
 Command exited with non-zero status 2
-	Command being timed: "/home/ubuntu/model-privacy-check/.privacy-venv/bin/python scripts/run_model_backed_finite_channel.py --config reproduction/model-backed-finite-channel/config.json --cache-dir /home/ubuntu/model-privacy-check/reproduction/public-privacy/raw --output-dir output/model-backed-finite-channel/fresh-run"
+	Command being timed: "[REMOTE_VENV]/bin/python scripts/run_model_backed_finite_channel.py --config reproduction/model-backed-finite-channel/config.json --cache-dir [REMOTE_DATASET_CACHE] --output-dir output/model-backed-finite-channel/fresh-run"
 	User time (seconds): 559.38
 	System time (seconds): 1.20
 	Percent of CPU this job got: 101%

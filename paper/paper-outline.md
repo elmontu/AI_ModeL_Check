@@ -23,10 +23,13 @@ has a retained artifact.
 > premises. `[SUPPORTED]` Across 1,200 controlled primary replays, the
 > finite-channel ceiling had zero observed undercoverage and resolved every
 > registered safe, boundary, and unsafe case as `CLEAR`, `HOLD`, or `BLOCK`.
-> A completed public-data follow-up again observed zero undercoverage but failed
-> its overall acceptance rule because the raw compact-Transformer proxy cleared
-> in only 109 of 200 repeats, demonstrating that soundness and decision
-> usefulness are distinct. `[SUPPORTED]` In a completed integration study, aggregate training
+> A first public-data follow-up preserved a failed all-family-clear criterion.
+> A prospectively frozen corrective replication with fresh model and sampling
+> seeds passed all 10 role-aware criteria: 1,200 repeats had no undercoverage or
+> wrong-direction events, and all four margin-eligible safe-side families
+> resolved correctly in 200/200 repeats. The near-threshold raw Transformer
+> proxy instead produced 31 `CLEAR` and 169 conservative `HOLD` outcomes.
+> `[SUPPORTED]` In a completed integration study, aggregate training
 > hooks executed on three language models over a pinned WildChat cohort and two
 > vision architectures over all 27,000 EuroSAT images; the retained report
 > treats all measured attacks as non-authorizing screens. `[AUTHOR TODO]` Add
@@ -141,13 +144,21 @@ engine-replayed outward endpoints. Incomplete, continuous, or unbounded
 adaptive interfaces are redesigned rather than assigned a false ceiling.
 
 The [completed ceiling evaluation](ceiling-experiment-results.md) supports
-coverage and decision-resolution claims for exact controlled channels. Its
-model-backed tier is a preserved mixed result: zero observed undercoverage but
-insufficient clear power for the raw compact-Transformer proxy. It is
-conditional on finite pools and aggregate resampling. Wrapper conformance was
-tested separately from sampling, both experiments waived the attack-battery
-precondition experimentally, and neither run authorized a release. Existing
-training-hook and red-team runs remain screens.
+coverage and decision-resolution claims for exact controlled channels. It also
+preserves model-backed v2's failed all-family-clear result and reports v3 as a
+prospectively frozen corrective replication with fresh model and sampling
+seeds. V3 adds per-observation one-use wrapper execution, exact aggregate
+cross-replay, source binding, role-aware wrong-direction error, and a
+predeclared resolution margin. It passed all 10 criteria, while retaining the
+near-threshold raw proxy's 31 `CLEAR`/169 `HOLD` split.
+
+The result remains conditional on finite pools and resampling. Python wrapper
+execution is not proof of deployed endpoint or OS semantics, all ceiling
+experiments waive the attack-battery precondition experimentally, and none
+authorizes a release. V3 contains no oracle risk above tolerance, so its
+model-backed evidence covers safe-side resolution and conservative holds—not
+unsafe-side `BLOCK` power. Existing training-hook and red-team runs remain
+screens.
 
 ### 3.5 Lifecycle integrity and external authority
 
@@ -215,7 +226,7 @@ leaderboards.
 | RQ3 | How do model, data scale, seed, and same-population composition affect measurements and resource use? | Secondary five-model experiment is registered, not complete. | Both child completion manifests, suite completion manifest, reports, journals, environment, and analysis snapshot. |
 | RQ4 | Are the scoped protocol invariants mechanically reproducible? | Lean source, pinned toolchain, and verification wrapper exist. | Fresh proof-build transcript and environment identity. |
 | RQ5 | What is the runtime/storage overhead of contracts, hashing, replay, and hooks? | Isolated throughput/memory observations exist for the five-model audit. | Repeated baseline-versus-instrumented trials and end-to-end core microbenchmarks; do not infer from one run. |
-| RQ6 | Does the finite-channel ceiling cover exact risk and remain tight enough to resolve policy decisions? | Controlled experiment accepted; model-backed v2 completed with 8/9 criteria and a preserved decision-power failure. | [Generated tables and figure](ceiling-experiment-results.md), [summary](../reproduction/ceiling-experiment-summary.json), and both retained manifests/reports. |
+| RQ6 | Does the finite-channel ceiling cover exact risk, avoid wrong-direction decisions, and resolve cases with adequate policy margin? | Controlled experiment and prospectively frozen corrective model-backed v3 accepted; v2 negative retained. | [Generated tables and figure](ceiling-experiment-results.md), [summary](../reproduction/ceiling-experiment-summary.json), registrations, and versioned retained manifests/reports. |
 
 ### 6.1 Completed finite-channel ceiling evaluation
 
@@ -233,13 +244,26 @@ undercoverage, a maximum simultaneous undercoverage upper bound of `0.015606`,
 and 400/400 correct decisions for each safe, boundary, and unsafe role. Only
 three runs traversed the full source-backed Engine path.
 
-The model-backed tier completed six one-shot Engine and 1,200 analyzer replays.
-It observed 0/1,200 undercoverage, but the raw Transformer-proxy arm cleared
-109/200 times with a simultaneous lower bound of `0.449431`, missing the `0.95`
-target; the other five arms cleared 200/200. Report the overall result as 8/9
-criteria passed, not as accepted. Counts came from an aggregate sampler and
-the wrapper harness ran separately. Preserve the finite-pool/resampling,
-one-seed, proxy-only, experimental-waiver, and no-authorization boundaries.
+Model-backed v2 completed with 8/9 criteria and its raw Transformer proxy
+cleared 109/200 times under the original all-family-clear rule. Preserve that
+negative outcome as the disclosed predecessor.
+
+Corrective v3 was then prospectively frozen with fresh model and sampling seeds
+and passed 10/10 criteria. Six full Engine primary replays and 1,200 analyzer
+repeats had 0/1,200 undercoverage and wrong-direction events; across 18
+Bonferroni endpoints, each zero-event simultaneous upper bound was `0.02900166`.
+All four families at least `0.10` from tolerance made 200/200 correct safe-side
+decisions, with simultaneous lower bound `0.97099834`. The raw Transformer proxy
+had exact risk `0.612857`, was not margin eligible, and produced 31 `CLEAR` and
+169 `HOLD` outcomes. No v3 oracle exceeded `0.65`; model-backed `BLOCK` power
+is therefore untested and must not be implied. The controlled `0.80` channel
+supplies the current unsafe-side evidence.
+
+Each v3 observation traversed a one-use Python wrapper and exactly matched the
+aggregate reference sampler; wrapper evidence was bound into Engine source
+replay. Preserve the finite-pool/resampling, one-artifact, proxy-only,
+experimental-waiver, no-authorization, and no endpoint/OS-semantic-proof
+boundaries.
 
 ### 6.2 Completed real-data integration case study
 
@@ -298,8 +322,11 @@ At minimum, retain these limitations:
   result is conditional on one artifact per family and resampling from finite
   target pools of 400/400 records for CNN and XGBoost and 350/350 for the
   proxy;
-- v2 did not route aggregate samples through the wrapper harness end to end and
-  used an experimental attack-battery waiver;
+- v2 did not route aggregate samples through the wrapper harness per
+  observation; v3 does, but still provides no endpoint/OS semantic proof;
+- every v3 oracle risk is below tolerance, so model-backed unsafe-side and
+  `BLOCK` power remain untested;
+- all ceiling runs used experimental attack-battery waivers;
 - the compact Transformer is an LLM proxy, not an interactive LLM;
 - the completed GPU study is single-run and single-node;
 - dataset/model licensing and human-data rights remain independent gates;
@@ -337,6 +364,7 @@ conditions rather than treating a public download as rights clearance.
 Return to the narrow thesis: the contribution is a reference architecture and
 enforcement model that makes release assumptions, evidence direction, ceiling
 soundness, and decision usefulness explicit. Treat the preserved model-backed
-failure as evidence for fail-closed interpretation, not as something to hide or
-retrospectively repair. Do not close by asserting production safety or
-completed composition-scaling results.
+v2 failure and the prospectively frozen v3 correction as an honest study
+chronology, not as license to rewrite the predecessor. Do not close by
+asserting production safety, model-backed `BLOCK` validation, or completed
+composition-scaling results.

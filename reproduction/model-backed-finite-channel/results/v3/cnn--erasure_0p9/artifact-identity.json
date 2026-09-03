@@ -1,0 +1,13 @@
+{
+  "collector_epochs": 5,
+  "collector_model": "cnn",
+  "collector_seed": 2026090302,
+  "dataset_snapshot_sha256": "00d76d498ef9ed63a0e2a6d1cbb54b935c9097c2c58207377acc96f49c090017",
+  "ephemeral_model_artifact_sha256": "54ea892dcfff5b933a97d9df379c8e5ed484a082d8f471b76c3fb073aa0cd6a1",
+  "finite_population_sha256": "a726c20c76897c970ae96139545f1e1b0f04cea1ef37434049d1947b1d519918",
+  "identity_kind": "nondeployable_ephemeral_model_identity_envelope",
+  "llm_proxy_only": false,
+  "model_family": "cnn",
+  "note": "Weights are hash-bound but intentionally not retained by this experiment.",
+  "schema_version": "1.0"
+}

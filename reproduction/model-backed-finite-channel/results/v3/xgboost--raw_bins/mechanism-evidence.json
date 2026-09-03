@@ -1,0 +1,36 @@
+{
+  "closed_hidden_record_sampler": true,
+  "complete_recipient_transcript": [
+    "nll_negative",
+    "nll_0_to_0p5",
+    "nll_0p5_to_1",
+    "nll_1_to_2",
+    "nll_2_to_4",
+    "nll_4_or_more",
+    "nll_nonfinite",
+    "wrapper_error",
+    "wrapper_timeout",
+    "state_independent_erasure"
+  ],
+  "experimental_only": true,
+  "mechanism_id": "closed-hidden-record-semantic-nll-v1",
+  "query_budget_per_issued_capability": 1,
+  "schema_version": "1.0",
+  "state_independent_erasure": {
+    "denominator": 1,
+    "numerator": 0
+  },
+  "supports": [
+    "coupling:conditional_independence",
+    "artifact:f48cd2b0afce8ef742d06d3eb66ed57f4981e84c2be8695457a346038061ad1f",
+    "interface:d3d33aa1353ad63cf13be7dba8f9a34216c9950ba9d50dcb9d980a38305ffcaf",
+    "complete-transcript:model-backed-xgboost-raw_bins",
+    "wrapper-execution:3f0acc1bb5089c1fe2facb9d34b5212dc54c18e86e1c2d740b1f48d59ae8735a",
+    "wrapper-module:5600491f44d294c9c97047c1994502b4799a81a5422786e7cb43850396faae9a",
+    "wrapper-variant:raw_bins",
+    "wrapper-conformance:89bf0f62ce3a12e6dd141e242ee2c33059fdd255ad9818ec281021c229cb7668"
+  ],
+  "variant_id": "raw_bins",
+  "wrapper_execution_evidence_path": "wrapper-execution-evidence.json",
+  "wrapper_execution_evidence_sha256": "3f0acc1bb5089c1fe2facb9d34b5212dc54c18e86e1c2d740b1f48d59ae8735a"
+}

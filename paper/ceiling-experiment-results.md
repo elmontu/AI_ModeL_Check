@@ -1,6 +1,6 @@
 # Ceiling experiment results
 
-The controlled experiment passed, while the complete model-backed experiment did not meet its registered acceptance criteria (all_six_simultaneous_clear_rate_lowers_meet_minimum). The negative result is retained: ceiling coverage and decision usefulness must be interpreted separately. No result grants release authorization.
+The controlled study and the prospectively registered v3 model-backed study passed their scoped acceptance criteria. These experiments are not a universal proof and grant no release authorization.
 
 ![Ceiling validation intervals](figures/ceiling-validation.svg)
 
@@ -8,53 +8,84 @@ The controlled experiment passed, while the complete model-backed experiment did
 
 | Evidence level | Result | Valid scope |
 | --- | --- | --- |
-| Mathematical or universal proof | Not established by these experiments | Requires separate formal assumptions and proof audit |
+| Mathematical or universal proof | Not established | Requires a separate formal-assumption and proof audit |
 | Controlled exact-ground-truth evidence | Accepted | Complete preregistered synthetic finite-channel family |
-| Model-conditional public-data evidence | Registered acceptance not met | Frozen trained artifacts, finite target pools, and closed one-query wrappers |
+| V3 role-aware model-conditional evidence | All registered criteria passed | Frozen artifacts, target pools, and source-bound one-query wrappers |
 
 ## Headline metrics
 
-| Experiment | Soundness metric | Decision-usefulness metric | Execution |
+| Experiment | Soundness | Role-aware decision behavior | Execution |
 | --- | --- | --- | --- |
-| Controlled exact-ground-truth | Minimum observed ceiling coverage 100.00%; 0/1200 observed primary undercoverage; maximum simultaneous undercoverage upper 1.56% | Registered safe/boundary/unsafe decisions all passed; maximum unsafe false-CLEAR upper 1.56% | 1200 analyzer + 3 full Engine replays |
-| Model-conditional public data | 0/1200 observed repeat undercoverage; 6/6 one-shot intervals covered oracle risk; 6/6 repeat families met the undercoverage target; maximum simultaneous repeat undercoverage upper 2.70% | 5/6 repeat families met the CLEAR-rate target; minimum simultaneous repeat CLEAR-rate lower 44.94% | 1200 analyzer + 6 full Engine replays |
+| Controlled exact-ground-truth | 0/1200 observed undercoverage; simultaneous upper 1.56% | 400/400 correct decisions for each safe/boundary/unsafe role | 1200 analyzer + 3 Engine replays |
+| V3 model-conditional public data | 0/1200 observed undercoverage; 6/6 families met the simultaneous upper target | 0/1200 wrong-direction decisions; 6/6 met its upper target; 4/4 margin-eligible families resolved; minimum eligible lower 97.10% | 1200 analyzer + 6 Engine replays; 18 simultaneous meta endpoints |
 
-> Full Engine replays are integration evidence under experimental attack-battery waivers. The waivers are not deployment-valid; statistical coverage evidence comes from the registered analyzer repetitions.
+> Engine replays are integration evidence under experimental attack-battery waivers. The waivers are not deployment-valid.
 
 ## Controlled exact-ground-truth primary cells
 
-| Scenario | Role | Exact risk R* | Mean floor L | Mean ceiling U | Mean width | Coverage | Correct decision (simultaneous lower) |
-| --- | --- | ---: | ---: | ---: | ---: | ---: | --- |
-| XGBoost label | SAFE | 0.5500 | 0.5008 | 0.6110 | 0.1102 | 100.00% | 400/400 CLEAR (98.44%) |
-| CNN label | BOUNDARY | 0.6500 | 0.5992 | 0.7133 | 0.1141 | 100.00% | 400/400 HOLD (98.44%) |
-| LLM label | UNSAFE | 0.8000 | 0.7438 | 0.8584 | 0.1146 | 100.00% | 400/400 BLOCK (98.44%) |
+| Scenario | Role | R* | Mean [L, U] | Width | Coverage | Correct decision lower |
+| --- | --- | ---: | ---: | ---: | ---: | ---: |
+| XGBoost label | SAFE | 0.5500 | [0.5008, 0.6110] | 0.1102 | 100.00% | 98.44% |
+| CNN label | BOUNDARY | 0.6500 | [0.5992, 0.7133] | 0.1141 | 100.00% | 98.44% |
+| LLM label | UNSAFE | 0.8000 | [0.7438, 0.8584] | 0.1146 | 100.00% | 98.44% |
 
-## Width calibration
+## V3 role-aware model-conditional cells
 
-| Scenario | Mean width at n=100 | Mean width at n=500 | Relative reduction |
-| --- | ---: | ---: | ---: |
-| XGBoost label | 0.5025 | 0.2225 | 55.73% |
-| CNN label | 0.5181 | 0.2301 | 55.59% |
-| LLM label | 0.4442 | 0.2306 | 48.09% |
+Resolution is preregistered only for families with `|R* - 0.65| >= 0.10`. HOLD is conservative and is never counted as a wrong-direction decision.
 
-## Model-conditional public-data cells
+All 6 v3 oracle risks were below the 0.65 tolerance; v3 therefore tests safe-side resolution and conservative HOLD, not model-backed BLOCK power. Unsafe-side BLOCK behavior is demonstrated only by the controlled R*=0.80 channel.
 
-| Model / wrapper | Oracle R* | One-shot [L, U] | Width | Repeat undercoverage (simultaneous upper) | Repeat CLEAR (simultaneous lower) | Registered targets |
-| --- | ---: | ---: | ---: | --- | --- | --- |
-| CNN / MNIST — raw categorical NLL bins | 0.5150 | [0.4875, 0.5505] | 0.0630 | 0/200 (2.70%) | 200/200 (97.30%) | coverage PASS; CLEAR power PASS |
-| CNN / MNIST — 90% state-independent erasure | 0.5015 | [0.4839, 0.5299] | 0.0460 | 0/200 (2.70%) | 200/200 (97.30%) | coverage PASS; CLEAR power PASS |
-| XGBoost / Adult — raw categorical NLL bins | 0.5775 | [0.5519, 0.6157] | 0.0638 | 0/200 (2.70%) | 200/200 (97.30%) | coverage PASS; CLEAR power PASS |
-| XGBoost / Adult — 90% state-independent erasure | 0.5078 | [0.4896, 0.5372] | 0.0476 | 0/200 (2.70%) | 200/200 (97.30%) | coverage PASS; CLEAR power PASS |
-| Compact Transformer / 20 Newsgroups (LLM proxy) — raw categorical NLL bins | 0.6114 | [0.5769, 0.6475] | 0.0706 | 0/200 (2.70%) | 109/200 (44.94%) | coverage PASS; CLEAR power FAIL |
-| Compact Transformer / 20 Newsgroups (LLM proxy) — 90% state-independent erasure | 0.5111 | [0.4900, 0.5409] | 0.0508 | 0/200 (2.70%) | 200/200 (97.30%) | coverage PASS; CLEAR power PASS |
+| Model / wrapper | R* | Margin / role | One-shot [L, U] | Decisions C/H/B | Undercoverage upper | Wrong-direction upper | Correct-direction lower | Registered targets |
+| --- | ---: | --- | ---: | ---: | ---: | ---: | ---: | --- |
+| CNN / MNIST — raw categorical NLL bins | 0.5125 | 0.1375 / CLEAR | [0.4859, 0.5456] | 200/0/0 | 2.90% | 2.90% | 97.10% | coverage PASS; direction PASS; resolution PASS |
+| CNN / MNIST — 90% state-independent erasure | 0.5012 | 0.1487 / CLEAR | [0.4821, 0.5288] | 200/0/0 | 2.90% | 2.90% | 97.10% | coverage PASS; direction PASS; resolution PASS |
+| XGBoost / Adult — raw categorical NLL bins | 0.5587 | 0.0912 / CLEAR | [0.5311, 0.5896] | 200/0/0 | 2.90% | 2.90% | 97.10% | coverage PASS; direction PASS; resolution N/A (margin < 0.10) |
+| XGBoost / Adult — 90% state-independent erasure | 0.5059 | 0.1441 / CLEAR | [0.4906, 0.5367] | 200/0/0 | 2.90% | 2.90% | 97.10% | coverage PASS; direction PASS; resolution PASS |
+| Compact Transformer / 20 Newsgroups (LLM proxy) — raw categorical NLL bins | 0.6129 | 0.0371 / CLEAR | [0.5784, 0.6581] | 31/169/0 | 2.90% | 2.90% | 9.18% | coverage PASS; direction PASS; resolution N/A (margin < 0.10) |
+| Compact Transformer / 20 Newsgroups (LLM proxy) — 90% state-independent erasure | 0.5113 | 0.1387 / CLEAR | [0.4915, 0.5432] | 200/0/0 | 2.90% | 2.90% | 97.10% | coverage PASS; direction PASS; resolution PASS |
 
-The registered model-backed acceptance failure is decision-usefulness, not observed undercoverage: Compact Transformer / 20 Newsgroups (LLM proxy) / raw categorical NLL bins did not meet the simultaneous CLEAR-rate lower target.
+### Repeated-sample tightness
+
+A ceiling of 1 would cover every risk but be useless. These values report how far the repeated upper bound remained above exact risk and how wide the interval remained.
+
+| Model / wrapper | Mean U | Mean width U-L | Mean excess U-R* | P95 excess U-R* |
+| --- | ---: | ---: | ---: | ---: |
+| CNN / MNIST — raw categorical NLL bins | 0.5472 | 0.0607 | 0.0347 | 0.0382 |
+| CNN / MNIST — 90% state-independent erasure | 0.5300 | 0.0457 | 0.0287 | 0.0318 |
+| XGBoost / Adult — raw categorical NLL bins | 0.5908 | 0.0576 | 0.0320 | 0.0380 |
+| XGBoost / Adult — 90% state-independent erasure | 0.5338 | 0.0463 | 0.0279 | 0.0317 |
+| Compact Transformer / 20 Newsgroups (LLM proxy) — raw categorical NLL bins | 0.6550 | 0.0788 | 0.0422 | 0.0499 |
+| Compact Transformer / 20 Newsgroups (LLM proxy) — 90% state-independent erasure | 0.5419 | 0.0517 | 0.0306 | 0.0345 |
+
+## Exact erasure identity
+
+The 90% state-independent erasure variant must satisfy `R_erased = 0.5 + 0.1 × (R_raw - 0.5)` exactly.
+
+| Model | Raw R* | Erased R* | Exact identity |
+| --- | ---: | ---: | --- |
+| CNN / MNIST | 0.5125 | 0.5012 | PASS |
+| XGBoost / Adult | 0.5587 | 0.5059 | PASS |
+| Compact Transformer / 20 Newsgroups (LLM proxy) | 0.6129 | 0.5113 | PASS |
+
+## Historical v2 predecessor — acceptance failed
+
+V2 remains a separate failed result (`all_six_simultaneous_clear_rate_lowers_meet_minimum`). It is not relabelled as v3 evidence and no v2 outcome is reused by v3.
+
+| Model / wrapper | V2 repeat CLEAR | V2 simultaneous CLEAR lower | V2 target |
+| --- | ---: | ---: | --- |
+| CNN / MNIST — raw categorical NLL bins | 200/200 | 97.30% | PASS |
+| CNN / MNIST — 90% state-independent erasure | 200/200 | 97.30% | PASS |
+| XGBoost / Adult — raw categorical NLL bins | 200/200 | 97.30% | PASS |
+| XGBoost / Adult — 90% state-independent erasure | 200/200 | 97.30% | PASS |
+| Compact Transformer / 20 Newsgroups (LLM proxy) — raw categorical NLL bins | 109/200 | 44.94% | FAIL |
+| Compact Transformer / 20 Newsgroups (LLM proxy) — 90% state-independent erasure | 200/200 | 97.30% | PASS |
 
 ## How the metrics map to MRA
 
-- Soundness is tested by undercoverage: `U < R*`. The simultaneous upper bound quantifies residual uncertainty across the registered family.
-- Tightness is measured by interval width `U - L` and ceiling excess `U - R*`.
-- Decision usefulness follows the protocol rule: CLEAR when `U <= 0.65`, BLOCK when `L > 0.65`, and HOLD otherwise.
-- The model-backed results remain conditional on the frozen finite populations and closed wrappers; the compact Transformer is an LLM proxy, not a generative LLM endpoint.
+- Soundness failure is undercoverage: `U < R*`.
+- Wrong direction is BLOCK below tolerance or CLEAR above tolerance; HOLD is conservative.
+- Correct-direction resolution is evaluated only at the preregistered absolute margin of at least 0.10.
+- Width `U - L` and excess `U - R*` measure tightness; neither replaces coverage.
+- Results remain conditional on frozen finite populations and source-bound wrappers. The compact Transformer is an LLM proxy, not a generative endpoint.
 
-No raw scores, count rows, seeds, model artifacts, local paths, or software-environment details are included in this publication projection.
+No raw scores, count rows, seeds, model artifacts, local paths, or software-environment details are included.

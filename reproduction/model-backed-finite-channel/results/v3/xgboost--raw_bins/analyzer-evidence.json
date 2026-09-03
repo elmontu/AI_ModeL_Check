@@ -1,0 +1,212 @@
+[
+  {
+    "analyzer": "finite_channel_ceiling",
+    "artifact_sha256": "f48cd2b0afce8ef742d06d3eb66ed57f4981e84c2be8695457a346038061ad1f",
+    "assumptions": [
+      "population_scope_id=benchmark-xgboost-raw_bins",
+      "canonical finite-state exact-guess decision game",
+      "simultaneous state-by-observation confidence family",
+      "released observation alphabet equals the assessed complete transcript"
+    ],
+    "baseline": 0.5,
+    "can_block": true,
+    "can_clear": false,
+    "coverage": "complete_interface",
+    "decision_game_sha256": "ef68a95d1732c043400680f11111ced8dea19787ec3633e41654a7968e1710d1",
+    "details": {
+      "absolute_ceiling_fraction": {
+        "denominator": 800000000000000000,
+        "numerator": 471699094811127069
+      },
+      "absolute_floor_fraction": {
+        "denominator": 10000000000000000000,
+        "numerator": 5310578923910290717
+      },
+      "baseline_fraction": {
+        "denominator": 2,
+        "numerator": 1
+      },
+      "certificate_id": "certificate-xgboost-raw_bins",
+      "certificate_kind": "envelope",
+      "certificate_sha256": "5e9ab3475df508213a26274ac1a78dcea4eac5bfa5b3e0e72ed7b7a7cefdbddc",
+      "coverage": "simultaneous",
+      "coverage_confidence": 0.95,
+      "interface_observation_definition": "complete one-query categorical transcript of the closed hidden-record sampler, including negative, nonfinite, wrapper-error, timeout, and erasure outcomes",
+      "interval_width": 0.05856597612287977,
+      "model_family_neutral": true,
+      "observation_ids": [
+        "nll_negative",
+        "nll_0_to_0p5",
+        "nll_0p5_to_1",
+        "nll_1_to_2",
+        "nll_2_to_4",
+        "nll_4_or_more",
+        "nll_nonfinite",
+        "wrapper_error",
+        "wrapper_timeout",
+        "state_independent_erasure"
+      ],
+      "planning_estimate_is_decision_evidence": false,
+      "release_gate": "clear_if_all_other_protocol_gates_pass",
+      "reported_ceiling_fraction": {
+        "denominator": 800000000000000000,
+        "numerator": 471699094811127069
+      },
+      "reported_floor_fraction": {
+        "denominator": 10000000000000000000,
+        "numerator": 5310578923910290717
+      },
+      "resolution": "ceiling_below_tolerance",
+      "selection_scope": "all three preregistered public-data models, both wrapper variants, both secret states, and every listed categorical observation",
+      "selection_valid": true,
+      "source_sha256": "49f71bd3b09715d565893d4c1b8a127cd54b5ad8f3bcd6c06fb6352149bde28a",
+      "state_ids": [
+        "out",
+        "in"
+      ],
+      "state_trials": [
+        5000,
+        5000
+      ],
+      "tolerance": 0.65
+    },
+    "evidence_class": "floor",
+    "evidence_id": "membership-xgboost-raw_bins:finite-channel:floor",
+    "exact_lower": {
+      "denominator": 10000000000000000000,
+      "numerator": 5310578923910290717
+    },
+    "exact_upper": null,
+    "familywise_confidence": 0.95,
+    "interface_sha256": "d3d33aa1353ad63cf13be7dba8f9a34216c9950ba9d50dcb9d980a38305ffcaf",
+    "limitations": [
+      "the confidence statement is conditional on the registered sampling model",
+      "the assessment covers one release contract; G9 must compose every active release",
+      "live deployment conformance remains an activation-gateway obligation"
+    ],
+    "lower": 0.531057892391029,
+    "metric": "equal_prior_membership_success",
+    "observed_at": "2026-09-03T06:23:23.973392Z",
+    "policy_sha256": "0476e2c4a2d134241d90c5faa43589cc359ad1e7b98ea94707f2e258d4b846ad",
+    "population_scope_id": "benchmark-xgboost-raw_bins",
+    "population_scope_sha256": "f6a9322bc94ed60b8d77147378742e8dab5fe3a07c46a3a07dbadbe4e517d6a8",
+    "producer": {
+      "configuration_sha256": "074a138ace5d676ad302faecbfaeef58c3430c9a2a2bbba036fb463b6b388f9f",
+      "implementation_sha256": "abd1eab49e3de2f48e2cf458856321330d2df4bb64ab090663bd8a4925cecc29",
+      "service_id": "mra.analyzer.finite_channel_ceiling",
+      "service_version": "1.0.0"
+    },
+    "realizability": "recipient_realizable",
+    "release_contract_sha256": "d23bf5f2e18f2e103b6ac32536e1d7656a0cdbe5f7864c5d2b883a1b5929d2ff",
+    "release_id": "model-backed-xgboost-raw_bins",
+    "statistical_family_id": "5fa1106b7193902ac1812187019a015bed6c54079143e7e5bf5bf07a28c84991",
+    "threat_id": "membership-xgboost-raw_bins",
+    "upper": null,
+    "value": 0.531057892391029
+  },
+  {
+    "analyzer": "finite_channel_ceiling",
+    "artifact_sha256": "f48cd2b0afce8ef742d06d3eb66ed57f4981e84c2be8695457a346038061ad1f",
+    "assumptions": [
+      "population_scope_id=benchmark-xgboost-raw_bins",
+      "canonical finite-state exact-guess decision game",
+      "simultaneous state-by-observation confidence family",
+      "released observation alphabet equals the assessed complete transcript"
+    ],
+    "baseline": 0.5,
+    "can_block": false,
+    "can_clear": true,
+    "coverage": "complete_interface",
+    "decision_game_sha256": "ef68a95d1732c043400680f11111ced8dea19787ec3633e41654a7968e1710d1",
+    "details": {
+      "absolute_ceiling_fraction": {
+        "denominator": 800000000000000000,
+        "numerator": 471699094811127069
+      },
+      "absolute_floor_fraction": {
+        "denominator": 10000000000000000000,
+        "numerator": 5310578923910290717
+      },
+      "baseline_fraction": {
+        "denominator": 2,
+        "numerator": 1
+      },
+      "certificate_id": "certificate-xgboost-raw_bins",
+      "certificate_kind": "envelope",
+      "certificate_sha256": "5e9ab3475df508213a26274ac1a78dcea4eac5bfa5b3e0e72ed7b7a7cefdbddc",
+      "coverage": "simultaneous",
+      "coverage_confidence": 0.95,
+      "interface_observation_definition": "complete one-query categorical transcript of the closed hidden-record sampler, including negative, nonfinite, wrapper-error, timeout, and erasure outcomes",
+      "interval_width": 0.05856597612287977,
+      "model_family_neutral": true,
+      "observation_ids": [
+        "nll_negative",
+        "nll_0_to_0p5",
+        "nll_0p5_to_1",
+        "nll_1_to_2",
+        "nll_2_to_4",
+        "nll_4_or_more",
+        "nll_nonfinite",
+        "wrapper_error",
+        "wrapper_timeout",
+        "state_independent_erasure"
+      ],
+      "planning_estimate_is_decision_evidence": false,
+      "release_gate": "clear_if_all_other_protocol_gates_pass",
+      "reported_ceiling_fraction": {
+        "denominator": 800000000000000000,
+        "numerator": 471699094811127069
+      },
+      "reported_floor_fraction": {
+        "denominator": 10000000000000000000,
+        "numerator": 5310578923910290717
+      },
+      "resolution": "ceiling_below_tolerance",
+      "selection_scope": "all three preregistered public-data models, both wrapper variants, both secret states, and every listed categorical observation",
+      "selection_valid": true,
+      "source_sha256": "49f71bd3b09715d565893d4c1b8a127cd54b5ad8f3bcd6c06fb6352149bde28a",
+      "state_ids": [
+        "out",
+        "in"
+      ],
+      "state_trials": [
+        5000,
+        5000
+      ],
+      "tolerance": 0.65
+    },
+    "evidence_class": "ceiling",
+    "evidence_id": "membership-xgboost-raw_bins:finite-channel:ceiling",
+    "exact_lower": null,
+    "exact_upper": {
+      "denominator": 800000000000000000,
+      "numerator": 471699094811127069
+    },
+    "familywise_confidence": null,
+    "interface_sha256": "d3d33aa1353ad63cf13be7dba8f9a34216c9950ba9d50dcb9d980a38305ffcaf",
+    "limitations": [
+      "the confidence statement is conditional on the registered sampling model",
+      "the assessment covers one release contract; G9 must compose every active release",
+      "live deployment conformance remains an activation-gateway obligation"
+    ],
+    "lower": null,
+    "metric": "equal_prior_membership_success",
+    "observed_at": "2026-09-03T06:23:23.973392Z",
+    "policy_sha256": "0476e2c4a2d134241d90c5faa43589cc359ad1e7b98ea94707f2e258d4b846ad",
+    "population_scope_id": "benchmark-xgboost-raw_bins",
+    "population_scope_sha256": "f6a9322bc94ed60b8d77147378742e8dab5fe3a07c46a3a07dbadbe4e517d6a8",
+    "producer": {
+      "configuration_sha256": "074a138ace5d676ad302faecbfaeef58c3430c9a2a2bbba036fb463b6b388f9f",
+      "implementation_sha256": "abd1eab49e3de2f48e2cf458856321330d2df4bb64ab090663bd8a4925cecc29",
+      "service_id": "mra.analyzer.finite_channel_ceiling",
+      "service_version": "1.0.0"
+    },
+    "realizability": "recipient_realizable",
+    "release_contract_sha256": "d23bf5f2e18f2e103b6ac32536e1d7656a0cdbe5f7864c5d2b883a1b5929d2ff",
+    "release_id": "model-backed-xgboost-raw_bins",
+    "statistical_family_id": null,
+    "threat_id": "membership-xgboost-raw_bins",
+    "upper": 0.5896238685139089,
+    "value": 0.5896238685139089
+  }
+]

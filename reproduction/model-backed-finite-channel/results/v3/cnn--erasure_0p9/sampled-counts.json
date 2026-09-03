@@ -1,0 +1,78 @@
+{
+  "audit_sample_sha256": "2a3d41f9977178c03528296952dc6af6b6ecec9f1dc7f9944ad09b7d471aac7d",
+  "binding_context": {
+    "artifact_sha256": "321bb6ed245c5641c0acf23d748a9f50c7919405eb6ff6dbd3bf6df534401245",
+    "decision_game_sha256": "190eecf0a511df15be253461d90f72c9bcf8f28c69b14174440075184033480e",
+    "interface_sha256": "d3d33aa1353ad63cf13be7dba8f9a34216c9950ba9d50dcb9d980a38305ffcaf",
+    "policy_sha256": "5a8e3c8e2a6cbf7bfce111c344870ecc5af94623aa0f836ed341ba65ec4e7f30",
+    "population_scope_id": "benchmark-cnn-erasure_0p9",
+    "population_scope_sha256": "873bc29ef10787b276d1c5431ef4a0cf00f19ea2bc24c0ea363a3f0a1f62ef4d",
+    "release_contract_sha256": "43ce8bd88e98f1de45e2034a374eab2dd0ced2a186927eb2d8afeb9213dc5036",
+    "release_id": "model-backed-cnn-erasure_0p9",
+    "schema_version": "1.0"
+  },
+  "count_file_id": "counts-cnn-erasure_0p9",
+  "family_id": "family-cnn-erasure_0p9",
+  "population_scope_id": "benchmark-cnn-erasure_0p9",
+  "portfolio_id": "portfolio-cnn-erasure_0p9",
+  "releases": [
+    {
+      "observation_ids": [
+        "nll_negative",
+        "nll_0_to_0p5",
+        "nll_0p5_to_1",
+        "nll_1_to_2",
+        "nll_2_to_4",
+        "nll_4_or_more",
+        "nll_nonfinite",
+        "wrapper_error",
+        "wrapper_timeout",
+        "state_independent_erasure"
+      ],
+      "release_id": "model-backed-cnn-erasure_0p9",
+      "state_rows": [
+        {
+          "counts": [
+            0,
+            414,
+            32,
+            29,
+            20,
+            8,
+            0,
+            0,
+            0,
+            4497
+          ],
+          "state_id": "out"
+        },
+        {
+          "counts": [
+            0,
+            424,
+            40,
+            31,
+            7,
+            3,
+            0,
+            0,
+            0,
+            4495
+          ],
+          "state_id": "in"
+        }
+      ]
+    }
+  ],
+  "sampling_ended_at": "2026-09-03T06:23:22.411745Z",
+  "sampling_plan_id": "plan-cnn-erasure_0p9",
+  "sampling_plan_sha256": "f5a8f5d53f3540b9624b1e85294078229fe04d3b2ece77762f6a6bb277ae5720",
+  "sampling_protocol": "Python random.Random with independent preregistered state seeds in domain MRA-MODEL-BACKED-V3-PRIMARY-1; integer-uniform with-replacement finite-population draw followed by exact rational, state-independent erasure; out_seed=609040103; in_seed=609040104; trials_per_state=5000",
+  "sampling_started_at": "2026-09-03T06:23:22.375940Z",
+  "schema_version": "1.0",
+  "state_ids": [
+    "out",
+    "in"
+  ],
+  "threat_id": "membership-cnn-erasure_0p9"
+}

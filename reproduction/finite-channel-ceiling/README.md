@@ -1,9 +1,17 @@
-# Preregistered finite-channel ceiling validation
+# Completed preregistered finite-channel ceiling validation
 
 This experiment tests the central MRA ceiling claim against channels whose
 Bayes-optimal guessing risk is known exactly. It is the calibration tier: the
 XGBoost, CNN, and LLM names are deliberately only family labels, not claims
 that these synthetic channels were measured from those models.
+
+The frozen run completed all 1,800 registered records and passed every
+criterion. Across the 1,200 primary analyzer replays it observed zero
+undercoverage, zero unsafe false clears, and 400/400 correct decisions for each
+safe, boundary, and unsafe role. The simultaneous upper bound for each
+zero-event primary endpoint was `0.01560587`, and the role-correct lower bound
+was `0.98439413`. See the retained [report](results/ground-truth-report.json)
+and [manifest](results/manifest.json).
 
 ## Question and registered outcomes
 
@@ -63,6 +71,11 @@ python scripts/run_finite_channel_ceiling_experiment.py \
 The command returns nonzero if a registered claim fails. The JSON retains all
 state-by-observation count rows, exact rational endpoints, decisions, confidence
 bounds, source/analyzer replay checks, and limitations.
+
+The publication resource record replaces only its absolute remote
+virtual-environment prefix with `[REMOTE_VENV]`. The manifest preserves both
+the original raw digest and the sanitized file digest; no metric or outcome is
+changed.
 
 ## Claim boundary
 

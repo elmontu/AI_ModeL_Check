@@ -29,7 +29,7 @@ sample rosters, and trained state remain excluded.
 | Area | Retained assets | Maturity and current status | Entry point |
 |---|---|---|---|
 | [`finite-channel-ceiling/`](finite-channel-ceiling/) | Frozen exact rational channels, preregistration, runner, 1,800 aggregate count records, report, log, resource record, and manifest | **Retained completed result; accepted within controlled scope.** Across 1,200 primary analyzer replays, observed undercoverage was 0 and all 400 safe/boundary/unsafe repetitions produced the registered decision. Model-family names are labels; three integrations traversed the Engine under an experimental attack-battery waiver. | Read [`finite-channel-ceiling/README.md`](finite-channel-ceiling/README.md), then use the [paper result tables](../paper/ceiling-experiment-results.md) or replay the runner. |
-| [`model-backed-finite-channel/`](model-backed-finite-channel/) | V2 preregistration, retained v1 pre-outcome failure, exact finite-pool oracles, six one-shot Engine paths, 1,200 repeated analyzer rows, wrapper-surface checks, report, resource record, and manifest | **Retained completed result; registered acceptance not met.** Eight of nine criteria passed. Undercoverage was 0/1,200, but raw compact-Transformer-proxy `CLEAR` power was 109/200 with a simultaneous lower bound of 0.449431, below 0.95. Counts came from the aggregate sampler and wrapper conformance was separate. | Read [`model-backed-finite-channel/README.md`](model-backed-finite-channel/README.md), the [v2 report](model-backed-finite-channel/results/v2/model-backed-finite-channel-report.json), and the generated [paper tables](../paper/ceiling-experiment-results.md). |
+| [`model-backed-finite-channel/`](model-backed-finite-channel/) | V1 failure record, frozen v2/v3 registrations and configurations, versioned retained reports, finite-pool oracles, wrapper execution evidence, repeated analyzer rows, logs, resource records, and manifests | **Retained completed v3 result; all 10 criteria passed.** V3 completed six Engine primary replays and 1,200 analyzer repeats with 0 undercoverage and wrong-direction events; four margin-eligible safe-side families resolved 200/200 correctly. V2's 8/9 negative result remains preserved. | Read [`model-backed-finite-channel/README.md`](model-backed-finite-channel/README.md), the [v3 report](model-backed-finite-channel/results/v3/model-backed-finite-channel-report.json), [v3 manifest](model-backed-finite-channel/results/v3/manifest.json), historical [v2 report](model-backed-finite-channel/results/v2/model-backed-finite-channel-report.json), and generated [paper tables](../paper/ceiling-experiment-results.md). |
 | [`openml/`](openml/) | OpenML-CC18 suite/source/dataset manifests; subset, MLP, metadata-adversary, DP-SGD, multi-shadow, inference, and population configurations; a historical/provisional runtime tuple | **Registered design.** The runtime tuple is neither the current CI compatibility band nor a dependency lock. The checkout records 72 manifest entries but omits raw snapshots, caches, trained models, run outputs, witness rows, and the top-level study seal. Quantitative prior-run records are provisional until regenerated and independently replayed. | Read [`openml/README.md`](openml/README.md), then use the `fetch_openml_*`, `run_openml_*`, `analyze_openml_*`, witness, and seal utilities cataloged in [`scripts/README.md`](../scripts/README.md). |
 | [`portfolio-stochastic/`](portfolio-stochastic/) | Stochastic incomplete-portfolio benchmark configuration | **Configured experiment.** The benchmark and independent analysis are executable, but generated raw rows, summaries, and reports are not committed. | `scripts/run_portfolio_stochastic_benchmark.py`, then `scripts/analyze_portfolio_stochastic_benchmark.py` |
 | [`strategic-assurance/`](strategic-assurance/) | Exact-rational strategic assurance problem configuration | **Configured experiment.** The seeded stress test checks registered mathematical claims and monitoring/incentive edge cases; it deliberately produces no governance decision or release authorization. | `scripts/run_strategic_assurance_experiment.py` |
@@ -46,13 +46,22 @@ sample rosters, and trained state remain excluded.
 - Sample and synthetic artifacts demonstrate code paths; they are not evidence
   that a production release is safe.
 - The controlled ceiling result supports empirical calibration only for its
-  exact predeclared finite channels. The model-backed result is conditional on
-  one artifact per family, 400 `IN`/400 `OUT` records for CNN and XGBoost and
-  350/350 for the proxy, and resampling from those pools; its compact
-  Transformer is only an LLM proxy.
-- Both ceiling experiments use experimental attack-battery waivers and grant
-  no authorization. V2 does not establish end-to-end wrapper enforcement
-  because aggregate sampling and wrapper-surface conformance were separate.
+  exact predeclared finite channels. Model-backed v2 remains a failed
+  predecessor; corrective v3 was prospectively frozen after v2 with fresh
+  model and sampling seeds and passed under its role-aware criteria.
+- V3 is conditional on one artifact per family, 400 `IN`/400 `OUT` records for
+  CNN and XGBoost and 350/350 for the proxy, and resampling from those pools.
+  Its compact Transformer is only an LLM proxy. It establishes neither
+  population transfer, scalability, nor training-hook behavior.
+- V3 executed every observation through a one-use Python wrapper and exactly
+  cross-replayed its counts against the aggregate sampler. This does not prove
+  deployed endpoint, process-isolation, timing, authentication, or OS semantic
+  completeness.
+- Every v3 oracle risk was below tolerance. V3 supports safe-side resolution
+  and conservative near-boundary holds, not model-backed unsafe-side or
+  `BLOCK` power; only the controlled `0.80` channel supplies that evidence.
+- All ceiling experiments use experimental attack-battery waivers and grant no
+  authorization.
 - Attack floors may support blocking decisions. Weak or unsuccessful attacks
   do not establish confidentiality and never clear a threat.
 - A replayable study result must bind the exact configuration, code, runtime,

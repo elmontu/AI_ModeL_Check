@@ -1,0 +1,24 @@
+{
+  "authority": "MRA experimental benchmark registration",
+  "decision_game_sha256": "190eecf0a511df15be253461d90f72c9bcf8f28c69b14174440075184033480e",
+  "evidence_type": "finite_state_prior",
+  "population_scope_id": "benchmark-cnn-erasure_0p9",
+  "population_scope_sha256": "873bc29ef10787b276d1c5431ef4a0cf00f19ea2bc24c0ea363a3f0a1f62ef4d",
+  "prior": [
+    {
+      "denominator": 2,
+      "numerator": 1
+    },
+    {
+      "denominator": 2,
+      "numerator": 1
+    }
+  ],
+  "prior_definition": "preregistered equal prior for the hidden-record membership game",
+  "schema_version": "1.0",
+  "state_ids": [
+    "out",
+    "in"
+  ],
+  "threat_id": "membership-cnn-erasure_0p9"
+}

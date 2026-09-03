@@ -1,0 +1,178 @@
+{
+  "assumptions": [
+    "within each secret-state row, retained observations are IID draws from one fixed multinomial channel row",
+    "the committed ledger contains the complete assurance-wide allocation family",
+    "Bonferroni union bounds require no independence between cells, releases, or allocated families",
+    "every serialized endpoint is replay-proved by directed binomial-tail arithmetic"
+  ],
+  "assurance_wide_alpha": 0.05,
+  "assurance_wide_confidence": 0.95,
+  "binding_context": {
+    "artifact_sha256": "321bb6ed245c5641c0acf23d748a9f50c7919405eb6ff6dbd3bf6df534401245",
+    "decision_game_sha256": "79870ac67e63999b33964190ce77f446bbd1a755672583b3d86ce89b55cb5500",
+    "interface_sha256": "d3d33aa1353ad63cf13be7dba8f9a34216c9950ba9d50dcb9d980a38305ffcaf",
+    "policy_sha256": "6de8c6356b6bb3423cc2e8ab7fd3b3145af487a2b94ce77d10eeeb2b43f71b20",
+    "population_scope_id": "benchmark-cnn-raw_bins",
+    "population_scope_sha256": "9a68338b62fbad54145c45eb4878448738e4e7669c6b0de65accb1700d9ec827",
+    "release_contract_sha256": "a498a8f42cfe12e33e3481228f7b242cebb55ef1e441ad9383632a50c9e3c63d",
+    "release_id": "model-backed-cnn-raw_bins",
+    "schema_version": "1.0"
+  },
+  "budget_id": "model-backed-finite-channel-assurance-budget",
+  "count_file_id": "counts-cnn-raw_bins",
+  "coverage": "simultaneous",
+  "endpoint_proof_terms": 5568,
+  "evidence_type": "simultaneous_multinomial_marginals",
+  "family_alpha": 0.008333333333333333,
+  "family_coverage_confidence": 0.9916666666666666,
+  "family_id": "family-cnn-raw_bins",
+  "limitations": [],
+  "method": "bonferroni_two_sided_clopper_pearson",
+  "per_tail_alpha": 0.00020833333333333332,
+  "per_tail_alpha_denominator": 25000000000000000000,
+  "per_tail_alpha_numerator": 5208333333333333,
+  "population_scope_id": "benchmark-cnn-raw_bins",
+  "portfolio_id": "portfolio-cnn-raw_bins",
+  "request": {
+    "all_cells_reported": true,
+    "allocation_id": "allocation-cnn-raw_bins",
+    "assurance_ledger_complete": true,
+    "budget_reference": {
+      "source_id": "model-backed-finite-channel-assurance-budget",
+      "source_path": "assurance-error-budget.json",
+      "source_sha256": "4cc346267af27ed4fe6e001dc01d18a29c6e75d429ce538df623de9ab16e4dcb"
+    },
+    "counts_reference": {
+      "source_id": "counts-cnn-raw_bins",
+      "source_path": "sampled-counts.json",
+      "source_sha256": "b9a8d86862983d5ae3ee124db848a6d472c74ff74cf80478e1d7da5f2f3842ae"
+    },
+    "family_pre_registered": true,
+    "generation_id": "generation-cnn-raw_bins",
+    "sampling_model": "iid_multinomial",
+    "sampling_plan_reference": {
+      "source_id": "plan-cnn-raw_bins",
+      "source_path": "sampling-plan.json",
+      "source_sha256": "dede229bed3bb6780bc517ebac952811f1585ca3a2ce4293d638736f62a8abeb"
+    },
+    "schema_version": "1.0",
+    "selection_process_covered": true,
+    "selection_scope": "all three preregistered public-data models, both wrapper variants, both secret states, and every listed categorical observation"
+  },
+  "rows": [
+    {
+      "counts": [
+        0,
+        4288,
+        258,
+        235,
+        130,
+        89,
+        0,
+        0,
+        0,
+        0
+      ],
+      "lower": [
+        0.0,
+        0.8394416358680249,
+        0.04123527493119484,
+        0.03712055040359114,
+        0.018772197251588418,
+        0.011925905517137928,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "observation_ids": [
+        "nll_negative",
+        "nll_0_to_0p5",
+        "nll_0p5_to_1",
+        "nll_1_to_2",
+        "nll_2_to_4",
+        "nll_4_or_more",
+        "nll_nonfinite",
+        "wrapper_error",
+        "wrapper_timeout",
+        "state_independent_erasure"
+      ],
+      "release_id": "model-backed-cnn-raw_bins",
+      "state_id": "out",
+      "trials": 5000,
+      "upper": [
+        0.0016938380736853857,
+        0.8745138986700087,
+        0.06353199128832969,
+        0.05846362291203801,
+        0.03489187071080279,
+        0.02537212955434898,
+        0.0016938380736853857,
+        0.0016938380736853857,
+        0.0016938380736853857,
+        0.0016938380736853857
+      ]
+    },
+    {
+      "counts": [
+        0,
+        4325,
+        302,
+        277,
+        69,
+        27,
+        0,
+        0,
+        0,
+        0
+      ],
+      "lower": [
+        0.0,
+        0.8472141413138469,
+        0.04917247598501106,
+        0.04465290937196463,
+        0.008706939863093562,
+        0.0024732985743671,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "observation_ids": [
+        "nll_negative",
+        "nll_0_to_0p5",
+        "nll_0p5_to_1",
+        "nll_1_to_2",
+        "nll_2_to_4",
+        "nll_4_or_more",
+        "nll_nonfinite",
+        "wrapper_error",
+        "wrapper_timeout",
+        "state_independent_erasure"
+      ],
+      "release_id": "model-backed-cnn-raw_bins",
+      "state_id": "in",
+      "trials": 5000,
+      "upper": [
+        0.0016938380736853857,
+        0.8815154200170995,
+        0.07316275448894624,
+        0.06770047962953342,
+        0.0206091642804981,
+        0.010090905910750386,
+        0.0016938380736853857,
+        0.0016938380736853857,
+        0.0016938380736853857,
+        0.0016938380736853857
+      ]
+    }
+  ],
+  "schema_version": "1.0",
+  "selection_valid": true,
+  "simultaneous_cell_count": 20,
+  "state_ids": [
+    "out",
+    "in"
+  ],
+  "threat_id": "membership-cnn-raw_bins"
+}

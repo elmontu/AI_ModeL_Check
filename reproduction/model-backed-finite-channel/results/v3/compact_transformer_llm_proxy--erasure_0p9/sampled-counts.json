@@ -1,0 +1,78 @@
+{
+  "audit_sample_sha256": "fd915a4c432d976e3030920dadbfdea37e60e9ef94741028cf6bdb0d80c5194a",
+  "binding_context": {
+    "artifact_sha256": "62965779b77fe0ef5e3d2a55937a44063e95b55dd60b885e388edb08eb2574ea",
+    "decision_game_sha256": "782b760abc9f3dc7e4d8d47d1848cb468632d158461242e045e5abb3088927a5",
+    "interface_sha256": "d3d33aa1353ad63cf13be7dba8f9a34216c9950ba9d50dcb9d980a38305ffcaf",
+    "policy_sha256": "439da9214b1340bafaf342b6fde33b3daea3be596554f249a7d402bd0d021f97",
+    "population_scope_id": "benchmark-compact_transformer_llm_proxy-erasure_0p9",
+    "population_scope_sha256": "d2667d5b14898965d4148fda51f6cdd1d76aaf2a1184e23efdc504e5d6f411f2",
+    "release_contract_sha256": "81a8ded36a6f4c611f4759ea76029c30d94929dffc5f9c56739389fc8bcd7143",
+    "release_id": "model-backed-compact_transformer_llm_proxy-erasure_0p9",
+    "schema_version": "1.0"
+  },
+  "count_file_id": "counts-compact_transformer_llm_proxy-erasure_0p9",
+  "family_id": "family-compact_transformer_llm_proxy-erasure_0p9",
+  "population_scope_id": "benchmark-compact_transformer_llm_proxy-erasure_0p9",
+  "portfolio_id": "portfolio-compact_transformer_llm_proxy-erasure_0p9",
+  "releases": [
+    {
+      "observation_ids": [
+        "nll_negative",
+        "nll_0_to_0p5",
+        "nll_0p5_to_1",
+        "nll_1_to_2",
+        "nll_2_to_4",
+        "nll_4_or_more",
+        "nll_nonfinite",
+        "wrapper_error",
+        "wrapper_timeout",
+        "state_independent_erasure"
+      ],
+      "release_id": "model-backed-compact_transformer_llm_proxy-erasure_0p9",
+      "state_rows": [
+        {
+          "counts": [
+            0,
+            315,
+            43,
+            61,
+            39,
+            32,
+            0,
+            0,
+            0,
+            4510
+          ],
+          "state_id": "out"
+        },
+        {
+          "counts": [
+            0,
+            454,
+            27,
+            32,
+            12,
+            2,
+            0,
+            0,
+            0,
+            4473
+          ],
+          "state_id": "in"
+        }
+      ]
+    }
+  ],
+  "sampling_ended_at": "2026-09-03T06:23:28.243048Z",
+  "sampling_plan_id": "plan-compact_transformer_llm_proxy-erasure_0p9",
+  "sampling_plan_sha256": "a6b1a26a7ded42106c8f8253b412d345f897cf53aecaa8647f29556ecd6b237b",
+  "sampling_protocol": "Python random.Random with independent preregistered state seeds in domain MRA-MODEL-BACKED-V3-PRIMARY-1; integer-uniform with-replacement finite-population draw followed by exact rational, state-independent erasure; out_seed=609040303; in_seed=609040304; trials_per_state=5000",
+  "sampling_started_at": "2026-09-03T06:23:28.206813Z",
+  "schema_version": "1.0",
+  "state_ids": [
+    "out",
+    "in"
+  ],
+  "threat_id": "membership-compact_transformer_llm_proxy-erasure_0p9"
+}

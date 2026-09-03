@@ -22,9 +22,10 @@ The strongest supportable systems framing today is:
 > versioned contracts; keeps empirical attack floors separate from clearing
 > ceilings; and makes ceiling soundness and decision usefulness separately
 > auditable. Controlled exact-ground-truth evidence supports the finite-channel
-> path, while a mixed public-data result exposes where a sound ceiling remains
-> too loose to resolve a release. Production authorization and serving controls
-> remain external.
+> path; a preserved negative predecessor and a prospectively frozen corrective
+> replication show how decision criteria can distinguish a wrong direction from
+> a conservative hold near policy tolerance. Production authorization and
+> serving controls remain external.
 
 That is a candidate framing, not a final title or an assertion that the system
 is production-ready. The root [README](../README.md),
@@ -39,7 +40,8 @@ sources of truth.
 | Contracts, assessment/selection core, and offline protocol replay | Implemented reference core | Describe the design and implementation; reproduce tests at the paper commit before reporting outcomes. |
 | Lean protocol model | Machine-checkable scoped formal artifact | State only the theorems and assumptions listed in the [formal verification boundary](../docs/formal-verification.md); rerun the pinned proof build for the paper artifact. |
 | Controlled finite-channel ceiling validation | Completed, accepted experiment with exact ground truth | Report zero observed undercoverage across 1,200 primary analyzer replays, the simultaneous `0.015606` upper bound, perfect registered decision resolution, and interval tightening within the frozen controlled family. |
-| Public-data model-backed ceiling validation v2 | Completed experiment; 8/9 registered criteria passed | Report zero observed undercoverage across 1,200 repeats and the failed raw Transformer-proxy usefulness criterion. Do not call the overall model-backed experiment accepted. |
+| Public-data model-backed ceiling validation v3 | Completed prospective corrective replication; 10/10 registered criteria passed | Report 0/1,200 undercoverage and wrong-direction events, all four margin-eligible safe-side families resolving 200/200 correctly, and the near-threshold raw proxy's 31 `CLEAR`/169 `HOLD` split. |
+| Model-backed v2 predecessor | Completed negative experiment; 8/9 criteria passed | Preserve the failed 109/200 raw proxy `CLEAR` result as the motivation and chronology for v3; never rewrite it as successful v3 evidence. |
 | WildChat/EuroSAT training-hook study | Completed experimental execution with a committed, publication-safe audit | Report the audit's aggregate observations with its single-run and non-authorizing qualifications. |
 | Five-model composition scaling | Configured secondary experiment | Describe the registered design only, as secondary or future evaluation. Do not report scaling results until complete child and suite manifests are retained and checked. |
 | OpenML, stochastic portfolio, strategic assurance, and public-privacy studies | Registered designs or configured experiments | Use as evaluation plans or future work, not completed evidence. |
@@ -77,8 +79,9 @@ Keep the final contribution list no broader than the evidence supports:
    statistical accounting under stated premises.
 4. A two-tier finite-channel evaluation: controlled exact-risk channels test
    coverage, tightness, decision resolution, replay, and tamper rejection; a
-   completed model-backed study preserves the negative finding that the raw
-   compact-Transformer proxy ceiling was sound but not reliably decisive.
+   preserved v2 negative result and prospectively frozen v3 corrective
+   replication test role-aware resolution, wrong-direction error, per-use
+   wrapper sampling, and source binding on fresh public-data model artifacts.
 5. A real-data integration case study covering training-time aggregate hooks on
    three language models and two vision architectures, reported only as
    execution, instrumentation, and descriptive screen evidence.
@@ -94,10 +97,20 @@ live gateway enforcement, complete model safety, general privacy clearance,
 horizontal or multi-node scalability, production reliability, causal effects
 of metadata, or universal coverage across model families. Legacy hook and
 red-team runs remain screens and cannot be retroactively promoted. The new
-model-backed study is decision-bearing only inside its frozen finite-pool game:
-its counts came from an aggregate sampler and wrapper conformance was tested
-separately, so it is not an end-to-end wrapper or serving result. Both ceiling
-studies use experimental attack-battery waivers and grant no authorization.
+model-backed studies are decision-bearing only inside their frozen finite-pool
+games. V2 sampled aggregate counts separately from wrapper conformance. V3
+routed each observation through a one-use Python wrapper, cross-replayed it
+against the aggregate sampler, and bound wrapper evidence into Engine source
+verification; that still does not prove deployed endpoint or operating-system
+semantics. All ceiling studies use experimental attack-battery waivers and
+grant no authorization. V3 covers one fresh artifact per model and resampling
+from small finite pools, not population transfer, scalability, training-hook
+behavior, or a real interactive LLM.
+
+All v3 oracle risks were below tolerance, so unsafe-side and model-backed
+`BLOCK` power remain untested; only the controlled `0.80` channel demonstrates
+repeated `BLOCK` behavior.
+
 See the [ceiling result report](ceiling-experiment-results.md), [production
 roadmap](../docs/reference/production-roadmap.md), and completed hook audit's
 [limitations](../docs/real-data-training-hook-audit-2026-09-02.md).

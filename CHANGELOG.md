@@ -16,12 +16,26 @@ All user-visible changes to Model Release Assurance are recorded here. The proje
   and 90%-erasure variants. The retained mixed result passed eight of nine
   criteria: undercoverage was 0/1,200, but raw proxy `CLEAR` power was 109/200
   with a simultaneous lower bound of `0.449431`, below the registered `0.95`.
+- A prospectively frozen corrective model-backed v3 replication, designed
+  after disclosing v2 and executed with fresh model and sampling seeds. All 10
+  registered criteria passed: six Engine primary replays and 1,200 analyzer
+  repeats had zero undercoverage and wrong-direction events; the simultaneous
+  upper bound was `0.02900166` across 18 Bonferroni endpoints; and all four
+  margin-eligible safe-side families resolved correctly in 200/200 repeats
+  with lower bound `0.97099834`. The near-threshold raw proxy retained 31
+  `CLEAR`/169 `HOLD` outcomes. No v3 risk exceeded tolerance, so it does not
+  establish model-backed `BLOCK` power.
 - Generated paper-ready ceiling tables, a figure, a machine-readable summary,
   result manifests, and drafting indexes that keep coverage, tightness,
   decision usefulness, and authority scope distinct. The v1 pre-outcome
   serialization failure and compatibility-only v2 registration remain in the
-  audit trail. Both studies record experimental attack-battery waivers and no
-  release authorization; v2 does not claim end-to-end wrapper execution.
+  audit trail. All ceiling studies record experimental attack-battery waivers
+  and no release authorization. V3 adds one-use wrapper execution, exact
+  aggregate-sampler cross-replay, Engine source binding, five negative
+  controls, and exact erasure identity without claiming endpoint/OS semantics.
+- Publication copies of ceiling execution/resource logs now replace ephemeral
+  machine paths with labeled placeholders while their manifests retain both
+  the original raw-output digest and sanitized artifact digest.
 - An MLSys paper workspace with a start-here guide, draft outline, claims-to-evidence matrix,
   artifact index, and experiment/reproducibility gates that distinguish retained results from
   configured studies and prohibited claims.

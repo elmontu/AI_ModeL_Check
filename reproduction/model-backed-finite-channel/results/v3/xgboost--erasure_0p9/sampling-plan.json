@@ -1,0 +1,45 @@
+{
+  "audit_sample_definition": "independent with-replacement draws from each complete finite target pool, in seed domain MRA-MODEL-BACKED-V3-PRIMARY-1, using the preregistered per-model, per-variant, per-state seeds out=609040203 and in=609040204",
+  "binding_context": {
+    "artifact_sha256": "f48cd2b0afce8ef742d06d3eb66ed57f4981e84c2be8695457a346038061ad1f",
+    "decision_game_sha256": "6865850fa62501501a37b43b7d75c286ccae772022a87825bebe710f1d3824fb",
+    "interface_sha256": "d3d33aa1353ad63cf13be7dba8f9a34216c9950ba9d50dcb9d980a38305ffcaf",
+    "policy_sha256": "9cf3199e741f1a2020f2d24c834cdb14b4ff1f53a0d59aea373eae12c7a703e5",
+    "population_scope_id": "benchmark-xgboost-erasure_0p9",
+    "population_scope_sha256": "b2f6e36e1c720e9b85efe9e9afe9ab3fe0f8c87d123267cf2509f883a71762cc",
+    "release_contract_sha256": "75fa66360c592b860341594438dc00e413cf1acb357ad62e1fcd528274031071",
+    "release_id": "model-backed-xgboost-erasure_0p9",
+    "schema_version": "1.0"
+  },
+  "family_id": "family-xgboost-erasure_0p9",
+  "minimum_trials_per_state": 5000,
+  "plan_id": "plan-xgboost-erasure_0p9",
+  "population_scope_id": "benchmark-xgboost-erasure_0p9",
+  "portfolio_id": "portfolio-xgboost-erasure_0p9",
+  "registered_at": "2026-09-03T06:16:40Z",
+  "releases": [
+    {
+      "observation_ids": [
+        "nll_negative",
+        "nll_0_to_0p5",
+        "nll_0p5_to_1",
+        "nll_1_to_2",
+        "nll_2_to_4",
+        "nll_4_or_more",
+        "nll_nonfinite",
+        "wrapper_error",
+        "wrapper_timeout",
+        "state_independent_erasure"
+      ],
+      "release_id": "model-backed-xgboost-erasure_0p9"
+    }
+  ],
+  "sampling_model": "iid_multinomial",
+  "schema_version": "1.0",
+  "selection_scope": "all three preregistered public-data models, both wrapper variants, both secret states, and every listed categorical observation",
+  "state_ids": [
+    "out",
+    "in"
+  ],
+  "threat_id": "membership-xgboost-erasure_0p9"
+}

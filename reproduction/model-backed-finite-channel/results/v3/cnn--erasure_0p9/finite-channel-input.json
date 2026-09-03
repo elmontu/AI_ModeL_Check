@@ -1,0 +1,377 @@
+{
+  "analytic_evidence": {
+    "envelope_certificate": {
+      "cell_upper_bounds": [
+        [
+          0.0016938380736853857,
+          0.09738279372910015,
+          0.011404789158083836,
+          0.01061963702561314,
+          0.008198826792000232,
+          0.0046974039615203765,
+          0.0016938380736853857,
+          0.0016938380736853857,
+          0.0016938380736853857,
+          0.9138157873587939
+        ],
+        [
+          0.0016938380736853857,
+          0.09952886961893387,
+          0.013460076798861343,
+          0.011144064075832268,
+          0.004377832251260769,
+          0.002999957499218261,
+          0.0016938380736853857,
+          0.0016938380736853857,
+          0.0016938380736853857,
+          0.9134429178052234
+        ]
+      ],
+      "certificate_id": "certificate-cnn-erasure_0p9",
+      "coverage_confidence": 0.95,
+      "derivation": "conditional-independence product of marginal upper bounds plus joint-event bounds",
+      "feasible_joint_channel": [
+        [
+          0.0016938380736853857,
+          0.09738279372910015,
+          0.011404789158083836,
+          0.004039089082793896,
+          0.001577355394886058,
+          0.00030957195915595434,
+          0.0,
+          0.0,
+          0.0,
+          0.8835925626022947
+        ],
+        [
+          0.0016938380736853857,
+          0.09952886961893387,
+          0.0123413159475181,
+          0.0030142385007228844,
+          0.00023273878568941437,
+          2.215159638301963e-05,
+          0.0,
+          0.0,
+          0.0,
+          0.8831668474770673
+        ]
+      ],
+      "joint_observation_ids": [
+        "[\"nll_negative\"]",
+        "[\"nll_0_to_0p5\"]",
+        "[\"nll_0p5_to_1\"]",
+        "[\"nll_1_to_2\"]",
+        "[\"nll_2_to_4\"]",
+        "[\"nll_4_or_more\"]",
+        "[\"nll_nonfinite\"]",
+        "[\"wrapper_error\"]",
+        "[\"wrapper_timeout\"]",
+        "[\"state_independent_erasure\"]"
+      ],
+      "problem_sha256": "425ce81b2d6531d3b20ee40f52c71382778c8ede9a4932166752423d3193caea",
+      "raw_upper_bound": 0.5288101904503417,
+      "selection_valid": true,
+      "upper_bound": 0.5288101904503417
+    },
+    "exact_certificate": null,
+    "problem": {
+      "coupling_model": "conditional_independence",
+      "coverage": "simultaneous",
+      "coverage_confidence": 0.95,
+      "decision_game_sha256": "190eecf0a511df15be253461d90f72c9bcf8f28c69b14174440075184033480e",
+      "decision_problem": {
+        "action_ids": [
+          "out",
+          "in"
+        ],
+        "gain": [
+          [
+            1.0,
+            0.0
+          ],
+          [
+            0.0,
+            1.0
+          ]
+        ],
+        "interpretation": "exact recovery of the secret state",
+        "problem_id": "190eecf0a511df15be253461d90f72c9bcf8f28c69b14174440075184033480e",
+        "state_ids": [
+          "out",
+          "in"
+        ]
+      },
+      "joint_event_bounds": [],
+      "mechanism_assumptions": [
+        "one closed hidden-record query produces the complete categorical transcript",
+        "state-conditioned sampling is IID with replacement from each frozen finite pool",
+        "erasure, if enabled, is independent of the hidden state and underlying bin"
+      ],
+      "mechanism_evidence": [
+        {
+          "evidence_id": "mechanism-cnn-erasure_0p9",
+          "source_path": "mechanism-evidence.json",
+          "source_sha256": "498d96da763872d8d575f75964b870fd7eba6714ae3875ac767d09a5d9ac5039",
+          "supports": [
+            "coupling:conditional_independence",
+            "artifact:321bb6ed245c5641c0acf23d748a9f50c7919405eb6ff6dbd3bf6df534401245",
+            "interface:d3d33aa1353ad63cf13be7dba8f9a34216c9950ba9d50dcb9d980a38305ffcaf",
+            "complete-transcript:model-backed-cnn-erasure_0p9",
+            "wrapper-execution:76143091d23d5d50c6baf31d90b7ffacdb1e1c64c181a45adfe4b5e47c20fa86",
+            "wrapper-module:5600491f44d294c9c97047c1994502b4799a81a5422786e7cb43850396faae9a",
+            "wrapper-variant:erasure_0p9",
+            "wrapper-conformance:ed7e4218ad3e8b786d9bd6dc216396224742b8e6f0005c443741266c0693c07f"
+          ]
+        },
+        {
+          "evidence_id": "wrapper-execution-cnn-erasure_0p9",
+          "source_path": "wrapper-execution-evidence.json",
+          "source_sha256": "76143091d23d5d50c6baf31d90b7ffacdb1e1c64c181a45adfe4b5e47c20fa86",
+          "supports": [
+            "wrapper-execution:76143091d23d5d50c6baf31d90b7ffacdb1e1c64c181a45adfe4b5e47c20fa86",
+            "wrapper-module:5600491f44d294c9c97047c1994502b4799a81a5422786e7cb43850396faae9a",
+            "wrapper-variant:erasure_0p9",
+            "wrapper-conformance:ed7e4218ad3e8b786d9bd6dc216396224742b8e6f0005c443741266c0693c07f"
+          ]
+        }
+      ],
+      "population_scope_id": "benchmark-cnn-erasure_0p9",
+      "population_scope_sha256": "873bc29ef10787b276d1c5431ef4a0cf00f19ea2bc24c0ea363a3f0a1f62ef4d",
+      "portfolio_id": "portfolio-cnn-erasure_0p9",
+      "prior": [
+        0.5,
+        0.5
+      ],
+      "prior_evidence": {
+        "evidence_id": "prior-cnn-erasure_0p9",
+        "source_path": "finite-prior.json",
+        "source_sha256": "0ceb2a1a2427a1e407f16eaa8d93e7ef937e4af9c11973c0fc40fac526995712",
+        "supports": [
+          "prior",
+          "decision-game:190eecf0a511df15be253461d90f72c9bcf8f28c69b14174440075184033480e",
+          "finite-prior:5ee97d5975f9f78b48adebbc2c4699f119ddd58542d1dcdec8305d3d0eb3b9df"
+        ]
+      },
+      "rational_prior": [
+        {
+          "denominator": 2,
+          "numerator": 1
+        },
+        {
+          "denominator": 2,
+          "numerator": 1
+        }
+      ],
+      "releases": [
+        {
+          "evidence": {
+            "evidence_id": "generation-cnn-erasure_0p9:model-backed-cnn-erasure_0p9",
+            "source_path": "simultaneous-evidence.json",
+            "source_sha256": "eb86aa461a04143a05926151628d2d03028b3f7f6e22e9da832fad625fe61634",
+            "supports": [
+              "marginal:model-backed-cnn-erasure_0p9",
+              "coverage:simultaneous",
+              "error-budget:model-backed-finite-channel-assurance-budget:allocation-cnn-erasure_0p9",
+              "confidence-endpoints:outward-validated"
+            ]
+          },
+          "lower": [
+            [
+              0.0,
+              0.06967204645198144,
+              0.0031521162028905333,
+              0.0027415494181245973,
+              0.001577355394886058,
+              0.00030957195915595434,
+              0.0,
+              0.0,
+              0.0,
+              0.8835925626022947
+            ],
+            [
+              0.0,
+              0.07151884714706389,
+              0.004286503299244941,
+              0.0030142385007228844,
+              0.00023273878568941437,
+              2.215159638301963e-05,
+              0.0,
+              0.0,
+              0.0,
+              0.8831668474770673
+            ]
+          ],
+          "observation_ids": [
+            "nll_negative",
+            "nll_0_to_0p5",
+            "nll_0p5_to_1",
+            "nll_1_to_2",
+            "nll_2_to_4",
+            "nll_4_or_more",
+            "nll_nonfinite",
+            "wrapper_error",
+            "wrapper_timeout",
+            "state_independent_erasure"
+          ],
+          "release_id": "model-backed-cnn-erasure_0p9",
+          "upper": [
+            [
+              0.0016938380736853857,
+              0.09738279372910015,
+              0.011404789158083836,
+              0.01061963702561314,
+              0.008198826792000232,
+              0.0046974039615203765,
+              0.0016938380736853857,
+              0.0016938380736853857,
+              0.0016938380736853857,
+              0.9138157873587939
+            ],
+            [
+              0.0016938380736853857,
+              0.09952886961893387,
+              0.013460076798861343,
+              0.011144064075832268,
+              0.004377832251260769,
+              0.002999957499218261,
+              0.0016938380736853857,
+              0.0016938380736853857,
+              0.0016938380736853857,
+              0.9134429178052234
+            ]
+          ]
+        }
+      ],
+      "schema_version": "1.0",
+      "selection_scope": "all three preregistered public-data models, both wrapper variants, both secret states, and every listed categorical observation",
+      "state_ids": [
+        "out",
+        "in"
+      ],
+      "threat_id": "membership-cnn-erasure_0p9"
+    },
+    "rational_upper_audit": {
+      "audit_version": "1.0",
+      "certificate_id": "certificate-cnn-erasure_0p9",
+      "certificate_kind": "envelope",
+      "exact_upper_denominator": 20000000000000000000,
+      "exact_upper_numerator": 10576203809006835323,
+      "feasible_joint_channel": [
+        [
+          {
+            "denominator": 10000000000000000000,
+            "numerator": 16938380736853857
+          },
+          {
+            "denominator": 20000000000000000,
+            "numerator": 1947655874582003
+          },
+          {
+            "denominator": 250000000000000000,
+            "numerator": 2851197289520959
+          },
+          {
+            "denominator": 25000000000000000000,
+            "numerator": 100977227069847899
+          },
+          {
+            "denominator": 500000000000000000,
+            "numerator": 788677697443029
+          },
+          {
+            "denominator": 50000000000000000000,
+            "numerator": 15478597957797717
+          },
+          {
+            "denominator": 1,
+            "numerator": 0
+          },
+          {
+            "denominator": 1,
+            "numerator": 0
+          },
+          {
+            "denominator": 1,
+            "numerator": 0
+          },
+          {
+            "denominator": 10000000000000000,
+            "numerator": 8835925626022947
+          }
+        ],
+        [
+          {
+            "denominator": 10000000000000000000,
+            "numerator": 16938380736853857
+          },
+          {
+            "denominator": 100000000000000000,
+            "numerator": 9952886961893387
+          },
+          {
+            "denominator": 10000000000000000000,
+            "numerator": 123413159475181259
+          },
+          {
+            "denominator": 2500000000000000000,
+            "numerator": 7535596251807211
+          },
+          {
+            "denominator": 100000000000000000000,
+            "numerator": 23273878568941437
+          },
+          {
+            "denominator": 100000000000000000000,
+            "numerator": 2215159638301963
+          },
+          {
+            "denominator": 1,
+            "numerator": 0
+          },
+          {
+            "denominator": 1,
+            "numerator": 0
+          },
+          {
+            "denominator": 1,
+            "numerator": 0
+          },
+          {
+            "denominator": 10000000000000000,
+            "numerator": 8831668474770673
+          }
+        ]
+      ],
+      "number_interpretation": "exact_decimal_weights_normalized_per_probability_vector",
+      "outward_upper_bound": 0.5288101904503418,
+      "problem_sha256": "425ce81b2d6531d3b20ee40f52c71382778c8ede9a4932166752423d3193caea"
+    },
+    "schema_version": "1.1"
+  },
+  "analyzer": "finite_channel_ceiling",
+  "bounded_transcript_complete": true,
+  "complete_interface_coverage": true,
+  "evidence_context": {
+    "artifact_sha256": "321bb6ed245c5641c0acf23d748a9f50c7919405eb6ff6dbd3bf6df534401245",
+    "decision_game_sha256": "190eecf0a511df15be253461d90f72c9bcf8f28c69b14174440075184033480e",
+    "interface_sha256": "d3d33aa1353ad63cf13be7dba8f9a34216c9950ba9d50dcb9d980a38305ffcaf",
+    "observed_at": "2026-09-03T06:23:22.772080Z",
+    "policy_sha256": "5a8e3c8e2a6cbf7bfce111c344870ecc5af94623aa0f836ed341ba65ec4e7f30",
+    "population_scope_id": "benchmark-cnn-erasure_0p9",
+    "population_scope_sha256": "873bc29ef10787b276d1c5431ef4a0cf00f19ea2bc24c0ea363a3f0a1f62ef4d",
+    "release_contract_sha256": "43ce8bd88e98f1de45e2034a374eab2dd0ced2a186927eb2d8afeb9213dc5036",
+    "release_id": "model-backed-cnn-erasure_0p9"
+  },
+  "interface_observation_definition": "complete one-query categorical transcript of the closed hidden-record sampler, including negative, nonfinite, wrapper-error, timeout, and erasure outcomes",
+  "observed_artifact_sha256": "321bb6ed245c5641c0acf23d748a9f50c7919405eb6ff6dbd3bf6df534401245",
+  "observed_interface_sha256": "d3d33aa1353ad63cf13be7dba8f9a34216c9950ba9d50dcb9d980a38305ffcaf",
+  "population_scope_id": "benchmark-cnn-erasure_0p9",
+  "recipient_realizable": true,
+  "release_enforced_finite_alphabet": true,
+  "schema_version": "1.0",
+  "state_trials": [
+    5000,
+    5000
+  ],
+  "threat_id": "membership-cnn-erasure_0p9"
+}

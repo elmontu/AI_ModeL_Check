@@ -1,4 +1,4 @@
-# Registered v3 model-backed finite-channel experiment
+# Model-backed finite-channel experiments
 
 This experiment asks whether an MRA ceiling is both sound and decision-useful
 on newly trained models and real public datasets. It is intentionally scoped to
@@ -12,12 +12,29 @@ ordinary prediction API or an interactive LLM.
 runner refuses changed inputs. At registration time no v3 collector output or
 acceptance result had been produced.
 
+The frozen v3 run is now complete. It passed all 10 registered criteria: six
+full primary Engine replays and 1,200 repeated analyzer replays completed with
+zero observed undercoverage and zero wrong-direction decisions. The
+18-endpoint simultaneous upper bound for each zero-event family was
+`0.02900166`; all four margin-eligible families made 200/200 correct-direction
+decisions with simultaneous lower bound `0.97099834`. The canonical
+[report](results/v3/model-backed-finite-channel-report.json) and
+[manifest](results/v3/manifest.json) retain the result and its source hashes.
+
 The exact v2 design is preserved as `config-v2.json` (SHA-256
 `77850b333353bef86d72a1647ed0de50bf6c2d6b7ee7f6d1e26e721e653e3f8e`). Its
 retained result history remains under `results/v2/`. V2 sampled through a
 separate aggregate sampler and tested the wrapper surface independently; v3
 therefore uses a fresh collector seed and fresh primary/repeat seed domains.
 No v2 outcome is reused as a v3 outcome.
+
+The v3 raw compact-Transformer proxy was deliberately treated as a
+near-threshold case: its exact risk was `0.612857`, only `0.037143` below the
+`0.65` tolerance, and it produced 31 `CLEAR` and 169 `HOLD` decisions. It was
+not eligible for the preregistered `0.10`-margin resolution claim. Every v3
+oracle risk was below tolerance, so v3 supplies no model-backed `BLOCK`-power
+evidence; that direction is exercised only by the controlled exact-risk `0.80`
+experiment.
 
 ## Fresh model/data stage
 
@@ -107,7 +124,7 @@ still must meet the wrong-direction bound. This avoids requiring all six
 families to clear while retaining a quantitative usefulness test. Coverage
 without resolution is not sufficient.
 
-## Registered run
+## Reproduction
 
 After verifying the registration commit and strict config validation, run the
 following command with the public datasets already cached:
@@ -121,6 +138,10 @@ python scripts/run_model_backed_finite_channel.py \
 
 The command writes the aggregate report even when acceptance fails and returns
 exit status `2` for a completed but failed registered experiment.
+
+Publication copies of the execution and resource logs replace only ephemeral
+machine paths with labeled placeholders. Each manifest preserves the original
+raw-log digest and the sanitized file digest; no metric or outcome is changed.
 
 ## Claim boundary
 

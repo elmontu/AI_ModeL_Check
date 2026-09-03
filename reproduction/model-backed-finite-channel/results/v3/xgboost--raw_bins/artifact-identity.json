@@ -1,0 +1,13 @@
+{
+  "collector_epochs": 5,
+  "collector_model": "xgboost",
+  "collector_seed": 2026090302,
+  "dataset_snapshot_sha256": "2da111df0ef87812d28e76f4351ccf681387b5784c524b45da8aa741c5a3c2d9",
+  "ephemeral_model_artifact_sha256": "f39009d6f58a44a0f0de080e03acac34db1a6dbd9548ef88e21d6e2f564750d7",
+  "finite_population_sha256": "b220a44757dc367f1427b6e834665a8d5dfe0a28405ee36f7686c6c1b9f354d2",
+  "identity_kind": "nondeployable_ephemeral_model_identity_envelope",
+  "llm_proxy_only": false,
+  "model_family": "xgboost",
+  "note": "Weights are hash-bound but intentionally not retained by this experiment.",
+  "schema_version": "1.0"
+}

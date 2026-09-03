@@ -1,0 +1,45 @@
+{
+  "audit_sample_definition": "independent with-replacement draws from each complete finite target pool, in seed domain MRA-MODEL-BACKED-V3-PRIMARY-1, using the preregistered per-model, per-variant, per-state seeds out=609040301 and in=609040302",
+  "binding_context": {
+    "artifact_sha256": "62965779b77fe0ef5e3d2a55937a44063e95b55dd60b885e388edb08eb2574ea",
+    "decision_game_sha256": "a7f37260d00ce69b9a819f94fd424a0d75b75a3f2d6061b504f69ac1c935a995",
+    "interface_sha256": "d3d33aa1353ad63cf13be7dba8f9a34216c9950ba9d50dcb9d980a38305ffcaf",
+    "policy_sha256": "bf88b78ceaa66da42976598fcfe88fd178a6ba1d1b63247971e7eba2b82ad20f",
+    "population_scope_id": "benchmark-compact_transformer_llm_proxy-raw_bins",
+    "population_scope_sha256": "fe6dc47f5b123be4150350442fe1e6d1ab207141e9910a3db1a2a34f76d612af",
+    "release_contract_sha256": "4770d97d6ab39b16867e9e822533ef964ebb53d20660fde95178176367e5d89f",
+    "release_id": "model-backed-compact_transformer_llm_proxy-raw_bins",
+    "schema_version": "1.0"
+  },
+  "family_id": "family-compact_transformer_llm_proxy-raw_bins",
+  "minimum_trials_per_state": 5000,
+  "plan_id": "plan-compact_transformer_llm_proxy-raw_bins",
+  "population_scope_id": "benchmark-compact_transformer_llm_proxy-raw_bins",
+  "portfolio_id": "portfolio-compact_transformer_llm_proxy-raw_bins",
+  "registered_at": "2026-09-03T06:16:40Z",
+  "releases": [
+    {
+      "observation_ids": [
+        "nll_negative",
+        "nll_0_to_0p5",
+        "nll_0p5_to_1",
+        "nll_1_to_2",
+        "nll_2_to_4",
+        "nll_4_or_more",
+        "nll_nonfinite",
+        "wrapper_error",
+        "wrapper_timeout",
+        "state_independent_erasure"
+      ],
+      "release_id": "model-backed-compact_transformer_llm_proxy-raw_bins"
+    }
+  ],
+  "sampling_model": "iid_multinomial",
+  "schema_version": "1.0",
+  "selection_scope": "all three preregistered public-data models, both wrapper variants, both secret states, and every listed categorical observation",
+  "state_ids": [
+    "out",
+    "in"
+  ],
+  "threat_id": "membership-compact_transformer_llm_proxy-raw_bins"
+}
