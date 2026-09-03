@@ -41,6 +41,7 @@ class AnalyzerServiceTests(unittest.TestCase):
         }
         self.assertEqual(capabilities["tree_linkage"], (True, True))
         self.assertEqual(capabilities["dp"], (True, False))
+        self.assertEqual(capabilities["finite_channel_ceiling"], (True, True))
         self.assertEqual(capabilities["attack"], (False, True))
         self.assertEqual(capabilities["attack_battery"], (False, True))
         self.assertEqual(capabilities["controlled_inference"], (False, True))

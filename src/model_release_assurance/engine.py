@@ -1,10 +1,15 @@
 from __future__ import annotations
 
+import json
 import uuid
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
-from .analyzers.base import Analyzer
+from .analyzers.base import (
+    Analyzer,
+    statistical_family_sha256,
+    statistical_floor_design_sha256,
+)
 from .decision import decision_game_sha256, decide_overall, decide_threat, population_scope_sha256
 from .integrity import (
     canonical_json_bytes,
@@ -14,18 +19,40 @@ from .integrity import (
     verify_source_file,
 )
 from .models import (
+    AttackInput,
     AttackBatteryInput,
     AttackBatteryStatus,
     AssessmentReport,
     AssessmentRequest,
     AssessmentScope,
     CeilingAttackBatteryMode,
+    EvidenceBindingContext,
     EvidenceContext,
+    EvidenceClass,
     EvidenceRecord,
+    FiniteChannelCeilingInput,
+    ControlledInferenceInput,
+    LlmCanaryInput,
     PolicyBundle,
+    StatisticalFloorFamilyPlan,
+    StatisticalFloorDesignRegistration,
+)
+from .incomplete_portfolio import (
+    FiniteStatePriorEvidence,
+    StatisticalCoverage,
+    portfolio_prior_fractions,
+    verify_portfolio_problem_evidence,
+)
+from .portfolio_statistics import (
+    MultinomialCountsFile,
+    SimultaneousMultinomialEvidence,
+    verify_problem_against_multinomial_evidence,
 )
 from .analyzers.attack_battery import _positive_control_passes
-from .analyzers.attack import clopper_pearson_upper
+from .analyzers.attack import (
+    bonferroni_per_bound_confidence,
+    clopper_pearson_upper,
+)
 from .services import AnalyzerServiceRegistry, LocalAnalyzerService, default_analyzer_service_registry
 from .runtime_identity import current_runtime_identity
 from .version import VERSION
@@ -69,6 +96,7 @@ class AssuranceEngine:
         )
         policy = PolicyBundle.model_validate_json(policy_path.read_text(encoding="utf-8"))
         self._validate_policy(request, policy)
+        self._verify_statistical_floor_family_plans(request, policy, base_dir)
         verify_release_artifact(request.release, base_dir)
         threat_by_id = {threat.threat_id: threat for threat in request.threats}
         scope_by_id = {scope.scope_id: scope for scope in request.population_scopes}
@@ -76,18 +104,6 @@ class AssuranceEngine:
         release_contract_sha256 = sha256_bytes(canonical_json_bytes(request.release))
         interface_sha256 = sha256_bytes(canonical_json_bytes(request.release.interface))
         for value in request.analyzer_inputs:
-            source_path = verify_source_file(value.provenance.source_path, value.provenance.source_sha256, base_dir)
-            verify_source_file(
-                value.provenance.configuration_path,
-                value.provenance.producer.configuration_sha256,
-                base_dir,
-            )
-            verify_provenance_binding(
-                value,
-                source_path,
-                value.provenance.bound_fields,
-                require_complete=True,
-            )
             service = self.service_registry.resolve(value)
             producer = value.provenance.producer
             descriptor = service.descriptor
@@ -120,6 +136,24 @@ class AssuranceEngine:
                 raise ValueError("analyzer implementation digest is not accepted by policy")
             if producer.configuration_sha256 not in requirement.accepted_configuration_sha256s:
                 raise ValueError("analyzer configuration digest is not accepted by policy")
+            source_path = verify_source_file(
+                value.provenance.source_path,
+                value.provenance.source_sha256,
+                base_dir,
+            )
+            verify_source_file(
+                value.provenance.configuration_path,
+                value.provenance.producer.configuration_sha256,
+                base_dir,
+            )
+            verify_provenance_binding(
+                value,
+                source_path,
+                value.provenance.bound_fields,
+                require_complete=True,
+            )
+            if isinstance(value, FiniteChannelCeilingInput):
+                self._verify_finite_channel_sources(value, base_dir)
             threat = threat_by_id[value.threat_id]
             scope = scope_by_id[threat.population_scope_id]
             expected_context = EvidenceContext(
@@ -162,6 +196,46 @@ class AssuranceEngine:
                         "attack-worker execution completed after release-contract expiry"
                     )
             service_records = service.analyze(request.release, threat, value)
+            family_definition_sha256: str | None = None
+            expected_familywise_confidence: float | None = None
+            if isinstance(value, AttackBatteryInput):
+                blocking_runs = tuple(
+                    plan
+                    for plan in value.configuration.runs
+                    if plan.evidence_role == "blocking_floor"
+                )
+                if blocking_runs:
+                    family_definition_sha256 = value.configuration_sha256
+                    expected_familywise_confidence = blocking_runs[0].confidence
+            elif isinstance(value, FiniteChannelCeilingInput):
+                if (
+                    value.analytic_evidence.problem.coverage
+                    is StatisticalCoverage.SIMULTANEOUS
+                ):
+                    family_definition_sha256 = (
+                        value.analytic_evidence.problem.releases[0].evidence.source_sha256
+                    )
+                    expected_familywise_confidence = (
+                        value.analytic_evidence.problem.coverage_confidence
+                    )
+            elif isinstance(
+                value,
+                (AttackInput, ControlledInferenceInput, LlmCanaryInput),
+            ):
+                family_definition_sha256 = producer.configuration_sha256
+                expected_familywise_confidence = (
+                    value.confidence_family
+                    if isinstance(value, ControlledInferenceInput)
+                    else value.confidence
+                )
+            expected_statistical_family_id = (
+                statistical_family_sha256(
+                    analyzer=value.analyzer,
+                    family_definition_sha256=family_definition_sha256,
+                )
+                if family_definition_sha256 is not None
+                else None
+            )
             for record in service_records:
                 if record.threat_id != threat.threat_id:
                     raise ValueError("analyzer service returned evidence for the wrong threat")
@@ -186,6 +260,29 @@ class AssuranceEngine:
                     raise ValueError("analyzer service exceeded its declared clearance capability")
                 if record.can_block and not service.descriptor.can_block:
                     raise ValueError("analyzer service exceeded its declared blocking capability")
+                if (
+                    record.statistical_family_id is not None
+                    and record.statistical_family_id
+                    != expected_statistical_family_id
+                ):
+                    raise ValueError(
+                        "analyzer service returned an unbound statistical family digest"
+                    )
+                if (
+                    record.statistical_family_id is not None
+                    and record.familywise_confidence
+                    != expected_familywise_confidence
+                ):
+                    raise ValueError(
+                        "analyzer service returned the wrong familywise confidence"
+                    )
+            if expected_statistical_family_id is not None and not any(
+                record.statistical_family_id == expected_statistical_family_id
+                for record in service_records
+            ):
+                raise ValueError(
+                    "analyzer service omitted its policy-bound statistical family disposition"
+                )
             records.extend(service_records)
 
         evidence = tuple(records)
@@ -243,12 +340,156 @@ class AssuranceEngine:
                     "ordinary_decision_arithmetic": "Python binary64",
                     "decision_rule": "mandatory threats clear and no threat blocks",
                     "critical_certificate_arithmetic": "analyzer-specific replay",
+                    "finite_channel_decision_arithmetic": (
+                        "exact rational bounds with outward-only binary64 display"
+                    ),
+                    "finite_channel_endpoint_validation": (
+                        "directed-decimal replay of exact binomial tail inequalities"
+                    ),
                     "scipy_invoked_by_assurance_engine": False,
                     "mrap_g7_exact_or_outward_clearance_eligible": False,
                 },
             ),
             engine_version=VERSION,
         )
+
+    @staticmethod
+    def _verify_finite_channel_sources(
+        value: FiniteChannelCeilingInput,
+        base_dir: Path,
+    ) -> None:
+        """Replay every nested source and bind advisory trial counts to raw rows."""
+
+        problem = value.analytic_evidence.problem
+        prior_path = verify_source_file(
+            problem.prior_evidence.source_path,
+            problem.prior_evidence.source_sha256,
+            base_dir,
+        )
+        try:
+            prior_payload = json.loads(prior_path.read_text(encoding="utf-8"))
+        except (UnicodeDecodeError, json.JSONDecodeError) as exc:
+            raise ValueError("finite-state prior evidence is not valid UTF-8 JSON") from exc
+        prior_evidence = FiniteStatePriorEvidence.model_validate(prior_payload)
+        if problem.rational_prior is None:
+            raise ValueError(
+                "finite-channel certificate omits its authoritative exact rational prior"
+            )
+        authoritative_problem_prior = portfolio_prior_fractions(problem)
+        if (
+            prior_evidence.threat_id != problem.threat_id
+            or prior_evidence.population_scope_id != problem.population_scope_id
+            or prior_evidence.population_scope_sha256 != problem.population_scope_sha256
+            or prior_evidence.decision_game_sha256 != problem.decision_game_sha256
+            or prior_evidence.state_ids != problem.state_ids
+            or tuple(
+                probability.as_fraction()
+                for probability in prior_evidence.prior
+            ) != authoritative_problem_prior
+        ):
+            raise ValueError(
+                "finite-state prior evidence does not match the certificate threat, "
+                "scope, game, ordered states, and numerical prior"
+            )
+        if problem.coverage is StatisticalCoverage.DETERMINISTIC:
+            verify_portfolio_problem_evidence(problem, base_dir)
+            return
+
+        for reference in problem.mechanism_evidence:
+            verify_source_file(
+                reference.source_path,
+                reference.source_sha256,
+                base_dir,
+            )
+
+        release = problem.releases[0]
+        if not any(
+            claim.startswith("error-budget:")
+            for claim in release.evidence.supports
+        ):
+            raise ValueError(
+                "statistical finite-channel assessment requires replayable, "
+                "error-budgeted multinomial evidence"
+            )
+        evidence_path = verify_source_file(
+            release.evidence.source_path,
+            release.evidence.source_sha256,
+            base_dir,
+        )
+        try:
+            payload = json.loads(evidence_path.read_text(encoding="utf-8"))
+        except (UnicodeDecodeError, json.JSONDecodeError) as exc:
+            raise ValueError("finite-channel marginal evidence is not valid UTF-8 JSON") from exc
+        evidence = SimultaneousMultinomialEvidence.model_validate(payload)
+        source_verification = verify_problem_against_multinomial_evidence(
+            problem,
+            evidence,
+            evidence_path,
+        )
+        if (
+            not source_verification.valid
+            or source_verification.endpoint_validation != "validated"
+        ):
+            reasons = source_verification.reasons or (
+                "confidence endpoints were not mechanically validated",
+            )
+            raise ValueError("; ".join(reasons))
+
+        expected_binding = EvidenceBindingContext(
+            release_id=value.evidence_context.release_id,
+            release_contract_sha256=(
+                value.evidence_context.release_contract_sha256
+            ),
+            policy_sha256=value.evidence_context.policy_sha256,
+            artifact_sha256=value.evidence_context.artifact_sha256,
+            interface_sha256=value.evidence_context.interface_sha256,
+            population_scope_id=value.evidence_context.population_scope_id,
+            population_scope_sha256=(
+                value.evidence_context.population_scope_sha256
+            ),
+            decision_game_sha256=value.evidence_context.decision_game_sha256,
+        )
+        if evidence.binding_context is None:
+            raise ValueError(
+                "statistical finite-channel evidence omits the immutable release "
+                "binding context"
+            )
+        if evidence.binding_context != expected_binding:
+            raise ValueError(
+                "statistical finite-channel evidence is bound to another release, "
+                "policy, artifact, interface, population snapshot, or decision game"
+            )
+
+        counts_path = verify_source_file(
+            evidence.request.counts_reference.source_path,
+            evidence.request.counts_reference.source_sha256,
+            evidence_path.parent,
+        )
+        try:
+            counts_payload = json.loads(counts_path.read_text(encoding="utf-8"))
+        except (UnicodeDecodeError, json.JSONDecodeError) as exc:
+            raise ValueError("finite-channel count evidence is not valid UTF-8 JSON") from exc
+        counts = MultinomialCountsFile.model_validate(counts_payload)
+        if counts.binding_context != expected_binding:
+            raise ValueError("finite-channel raw counts change the release binding context")
+        if counts.sampling_ended_at > value.evidence_context.observed_at:
+            raise ValueError(
+                "finite-channel assessment observation precedes completion of its raw sampling"
+            )
+        rows = tuple(
+            row
+            for row in evidence.rows
+            if row.release_id == release.release_id
+        )
+        if tuple(row.state_id for row in rows) != problem.state_ids:
+            raise ValueError(
+                "finite-channel trial rows do not match the certificate state order"
+            )
+        observed_trials = tuple(row.trials for row in rows)
+        if value.state_trials != observed_trials:
+            raise ValueError(
+                "finite-channel state_trials do not replay from the retained raw counts"
+            )
 
     @staticmethod
     def _semantic_version(value: str) -> tuple[int, int, int]:
@@ -259,6 +500,210 @@ class AssuranceEngine:
         if len(parsed) != 3:
             raise ValueError(f"invalid analyzer semantic version {value!r}")
         return parsed  # type: ignore[return-value]
+
+    @staticmethod
+    def _verify_statistical_floor_family_plans(
+        request: AssessmentRequest,
+        policy: PolicyBundle,
+        base_dir: Path,
+    ) -> None:
+        """Replay every generic statistical floor roster before any analysis."""
+
+        generic_types = (AttackInput, ControlledInferenceInput, LlmCanaryInput)
+        families: dict[
+            tuple[str, str, str],
+            list[AttackInput | ControlledInferenceInput | LlmCanaryInput],
+        ] = {}
+        for value in request.analyzer_inputs:
+            if isinstance(value, generic_types):
+                key = (
+                    value.threat_id,
+                    value.analyzer,
+                    value.provenance.producer.configuration_sha256,
+                )
+                families.setdefault(key, []).append(value)
+
+        generic_analyzers = {"attack", "controlled_inference", "llm_canary"}
+        for requirement in policy.analyzer_requirements:
+            if (
+                requirement.threat_id not in {item.threat_id for item in request.threats}
+                or requirement.analyzer not in generic_analyzers
+            ):
+                continue
+            if not requirement.required:
+                raise ValueError(
+                    "a decision-bearing generic statistical floor family must be "
+                    "required by policy"
+                )
+            submitted_configurations = {
+                configuration_sha256
+                for threat_id, analyzer, configuration_sha256 in families
+                if threat_id == requirement.threat_id
+                and analyzer == requirement.analyzer
+            }
+            expected_configurations = set(
+                requirement.accepted_configuration_sha256s
+            )
+            if submitted_configurations != expected_configurations:
+                raise ValueError(
+                    "statistical floor submission must include every policy-approved "
+                    "family configuration exactly once"
+                )
+
+        seen_family_ids: set[tuple[str, str]] = set()
+        for (threat_id, analyzer, configuration_sha256), family in families.items():
+            requirement = next(
+                (
+                    item
+                    for item in policy.analyzer_requirements
+                    if item.threat_id == threat_id and item.analyzer == analyzer
+                ),
+                None,
+            )
+            if (
+                requirement is None
+                or configuration_sha256
+                not in requirement.accepted_configuration_sha256s
+            ):
+                raise ValueError(
+                    "statistical floor family plan is not accepted by policy"
+                )
+            plan_path = verify_source_file(
+                family[0].provenance.configuration_path,
+                configuration_sha256,
+                base_dir,
+            )
+            try:
+                plan = StatisticalFloorFamilyPlan.model_validate_json(
+                    plan_path.read_text(encoding="utf-8")
+                )
+            except (UnicodeDecodeError, ValueError) as exc:
+                raise ValueError(
+                    "generic statistical floor configuration is not a valid typed family plan"
+                ) from exc
+            if (
+                plan.threat_id != threat_id
+                or plan.analyzer != analyzer
+            ):
+                raise ValueError(
+                    "statistical floor family plan changes the threat or analyzer"
+                )
+            policy_rule = next(
+                rule for rule in policy.rules if rule.threat_id == threat_id
+            )
+            if plan.decision_metric != policy_rule.decision_metric:
+                raise ValueError(
+                    "statistical floor family plan changes the policy decision metric"
+                )
+            semantic_family = (threat_id, plan.family_id)
+            if semantic_family in seen_family_ids:
+                raise ValueError(
+                    "statistical floor family_id is reused by multiple configurations"
+                )
+            seen_family_ids.add(semantic_family)
+            if plan.frozen_at < policy.effective_from:
+                raise ValueError(
+                    "statistical floor family was frozen before policy effectiveness"
+                )
+            if policy.expires_at is not None and plan.frozen_at >= policy.expires_at:
+                raise ValueError("statistical floor family was frozen after policy expiry")
+
+            if analyzer in {"attack", "controlled_inference"}:
+                actual_member_ids = tuple(value.attack_name for value in family)
+            else:
+                actual_member_ids = tuple(value.study_id for value in family)
+            if (
+                len(actual_member_ids) != len(set(actual_member_ids))
+                or set(actual_member_ids) != set(plan.member_ids)
+            ):
+                raise ValueError(
+                    "statistical floor submission does not disposition every frozen "
+                    "family member exactly once"
+                )
+            planned_members = {
+                member.member_id: member for member in plan.members
+            }
+            for value in family:
+                confidence = (
+                    value.confidence_family
+                    if isinstance(value, ControlledInferenceInput)
+                    else value.confidence
+                )
+                if (
+                    value.metric != plan.decision_metric
+                    or value.comparison_family_size != len(plan.member_ids)
+                    or confidence != plan.familywise_confidence
+                ):
+                    raise ValueError(
+                        "statistical floor input changes its frozen metric, family size, "
+                        "or familywise confidence"
+                    )
+                member_id = (
+                    value.attack_name
+                    if isinstance(value, (AttackInput, ControlledInferenceInput))
+                    else value.study_id
+                )
+                member = planned_members[member_id]
+                registration_path = verify_source_file(
+                    member.registration_path,
+                    member.registration_sha256,
+                    base_dir,
+                )
+                try:
+                    registration = StatisticalFloorDesignRegistration.model_validate_json(
+                        registration_path.read_text(encoding="utf-8")
+                    )
+                except (UnicodeDecodeError, ValueError) as exc:
+                    raise ValueError(
+                        "statistical floor member registration is not valid typed JSON"
+                    ) from exc
+                expected_primary_trials: int
+                expected_control_trials: int
+                if isinstance(value, AttackInput):
+                    expected_primary_trials = value.trials
+                    expected_control_trials = value.nonmember_trials or 0
+                elif isinstance(value, ControlledInferenceInput):
+                    expected_primary_trials = value.trials
+                    expected_control_trials = 0
+                else:
+                    expected_primary_trials = value.member_canaries
+                    expected_control_trials = value.nonmember_decoys
+                if (
+                    registration.registration_id != plan.family_id + ":" + member_id
+                    or registration.analyzer != analyzer
+                    or registration.threat_id != threat_id
+                    or registration.population_scope_id != value.population_scope_id
+                    or registration.member_id != member_id
+                    or registration.decision_metric != value.metric
+                    or registration.planned_primary_trials != expected_primary_trials
+                    or registration.planned_control_trials != expected_control_trials
+                    or registration.target_fpr != value.target_fpr
+                    or registration.sealed_assignment_sha256
+                    != (
+                        value.sealed_assignment_sha256
+                        if isinstance(value, LlmCanaryInput)
+                        else None
+                    )
+                    or value.preregistration_sha256 != member.registration_sha256
+                ):
+                    raise ValueError(
+                        "statistical floor input does not match its typed design registration"
+                    )
+                if registration.registered_at > plan.frozen_at:
+                    raise ValueError(
+                        "statistical floor design was registered after its family was frozen"
+                    )
+                if (
+                    statistical_floor_design_sha256(value)
+                    != member.input_design_sha256
+                ):
+                    raise ValueError(
+                        "statistical floor input changes its preregistered member design"
+                    )
+                if plan.frozen_at >= value.evidence_context.observed_at:
+                    raise ValueError(
+                        "statistical floor family was not frozen before observation"
+                    )
 
     @staticmethod
     def _validate_policy(request: AssessmentRequest, policy: PolicyBundle) -> None:
@@ -284,6 +729,7 @@ class AssuranceEngine:
                 ("mandatory", threat.mandatory, rule.mandatory),
                 ("decision_metric", threat.decision_metric, rule.decision_metric),
                 ("metric_parameters", threat.metric_parameters, rule.metric_parameters),
+                ("finite_game", threat.finite_game, rule.finite_game),
                 ("tolerance", threat.tolerance, rule.tolerance),
                 ("tolerance_basis", threat.tolerance_basis, rule.tolerance_basis),
             )
@@ -316,6 +762,7 @@ class AssuranceEngine:
                 "each threat must submit exactly one complete attack battery: "
                 f"{sorted(duplicate_batteries)}"
             )
+
 
     @staticmethod
     def _attack_battery_status(
@@ -444,13 +891,21 @@ class AssuranceEngine:
                     simultaneous_bound_count = (
                         plan.comparison_family_size * bounds_per_comparison
                     )
-                    per_comparison_confidence = 1.0 - (
-                        (1.0 - plan.confidence) / simultaneous_bound_count
+                    per_comparison_confidence = bonferroni_per_bound_confidence(
+                        plan.confidence,
+                        simultaneous_bound_count,
                     )
-                    fpr_upper = clopper_pearson_upper(
-                        result.false_positives,
-                        result.nonmember_trials,
-                        per_comparison_confidence,
+                    fpr_upper = (
+                        1.0
+                        if (
+                            result.false_positives / result.nonmember_trials
+                            > result.target_fpr
+                        )
+                        else clopper_pearson_upper(
+                            result.false_positives,
+                            result.nonmember_trials,
+                            per_comparison_confidence,
+                        )
                     )
                     if (
                         expected_target_fpr is None

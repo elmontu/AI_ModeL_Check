@@ -1,8 +1,20 @@
 from __future__ import annotations
 
 import json
+import math
 import os
+import struct
+from dataclasses import dataclass
 from datetime import date, datetime
+from decimal import (
+    MAX_EMAX,
+    MIN_EMIN,
+    Decimal,
+    ROUND_CEILING,
+    ROUND_FLOOR,
+    localcontext,
+)
+from fractions import Fraction
 from pathlib import Path
 from typing import Literal
 
@@ -17,14 +29,19 @@ from .incomplete_portfolio import (
     EvidenceReference,
     IncompletePortfolioProblem,
     JointEventBound,
+    MAX_PRIOR_DISPLAY_ERROR,
     StatisticalCoverage,
 )
-from .models import StrictModel
+from .models import EvidenceBindingContext, RationalProbability, StrictModel
 
 
 MAX_SIMULTANEOUS_CELLS = 10_000
+MAX_TRIALS_PER_STATE_ROW = 10_000_000
 MIN_ALLOCATED_ALPHA = 1e-8
 MAX_ASSURANCE_ALPHA = 0.05
+MAX_DIRECTED_TAIL_TERMS = 2_000_000
+MAX_SIMULTANEOUS_ENDPOINT_TERMS = 2_000_000
+ENDPOINT_PROOF_PRECISIONS = (48, 96, 192)
 
 
 class SourceFileReference(StrictModel):
@@ -41,8 +58,14 @@ class MultinomialStateCounts(StrictModel):
     def counts_are_nonempty(self) -> MultinomialStateCounts:
         if any(value < 0 for value in self.counts):
             raise ValueError("multinomial counts must be non-negative")
-        if sum(self.counts) < 1:
+        trials = sum(self.counts)
+        if trials < 1:
             raise ValueError("every multinomial state row needs at least one trial")
+        if trials > MAX_TRIALS_PER_STATE_ROW:
+            raise ValueError(
+                "multinomial state row exceeds the hard trial limit "
+                f"{MAX_TRIALS_PER_STATE_ROW}"
+            )
         return self
 
 
@@ -71,6 +94,7 @@ class MultinomialSamplingPlan(StrictModel):
     minimum_trials_per_state: int = Field(gt=0)
     selection_scope: str = Field(min_length=1, max_length=4096)
     audit_sample_definition: str = Field(min_length=1, max_length=4096)
+    binding_context: EvidenceBindingContext | None = None
 
     @model_validator(mode="after")
     def plan_is_complete(self) -> MultinomialSamplingPlan:
@@ -119,6 +143,7 @@ class MultinomialCountsFile(StrictModel):
     sampling_protocol: str = Field(min_length=1, max_length=4096)
     state_ids: tuple[str, ...] = Field(min_length=2)
     releases: tuple[MultinomialReleaseCounts, ...] = Field(min_length=1)
+    binding_context: EvidenceBindingContext | None = None
 
     @model_validator(mode="after")
     def complete_count_family(self) -> MultinomialCountsFile:
@@ -153,6 +178,7 @@ class ErrorBudgetAllocation(StrictModel):
     sampling_plan_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
     alpha: float = Field(ge=MIN_ALLOCATED_ALPHA, le=MAX_ASSURANCE_ALPHA)
     status: Literal["committed"] = "committed"
+    binding_context: EvidenceBindingContext | None = None
 
 
 class AssuranceErrorBudget(StrictModel):
@@ -177,10 +203,15 @@ class AssuranceErrorBudget(StrictModel):
             raise ValueError("an evidence generation may consume only one ledger allocation")
         if len({value.family_id for value in self.allocations}) != len(self.allocations):
             raise ValueError("a pre-declared assurance family may have only one allocation")
-        committed = sum(value.alpha for value in self.allocations)
-        if committed > self.total_alpha + 1e-15:
+        committed = sum(
+            (Fraction(Decimal(str(value.alpha))) for value in self.allocations),
+            Fraction(0),
+        )
+        total = Fraction(Decimal(str(self.total_alpha)))
+        if committed > total:
             raise ValueError(
-                f"committed alpha {committed:.12g} exceeds ledger total {self.total_alpha:.12g}"
+                f"committed alpha {float(committed):.12g} exceeds ledger total "
+                f"{self.total_alpha:.12g}"
             )
         return self
 
@@ -205,7 +236,7 @@ class SimultaneousMultinomialRow(StrictModel):
     state_id: str
     observation_ids: tuple[str, ...]
     counts: tuple[int, ...]
-    trials: int = Field(gt=0)
+    trials: int = Field(gt=0, le=MAX_TRIALS_PER_STATE_ROW)
     lower: tuple[float, ...]
     upper: tuple[float, ...]
 
@@ -232,17 +263,26 @@ class SimultaneousMultinomialEvidence(StrictModel):
     assurance_wide_confidence: float = Field(ge=0.95, lt=1.0)
     simultaneous_cell_count: int = Field(gt=0, le=MAX_SIMULTANEOUS_CELLS)
     per_tail_alpha: float = Field(gt=0.0)
+    per_tail_alpha_numerator: int = Field(gt=0)
+    per_tail_alpha_denominator: int = Field(gt=0)
+    endpoint_proof_terms: int = Field(ge=0, le=MAX_SIMULTANEOUS_ENDPOINT_TERMS)
     coverage: StatisticalCoverage
     selection_valid: bool
     rows: tuple[SimultaneousMultinomialRow, ...] = Field(min_length=2)
     assumptions: tuple[str, ...] = Field(min_length=1)
     limitations: tuple[str, ...]
+    binding_context: EvidenceBindingContext | None = None
 
 
 class MultinomialEvidenceVerification(StrictModel):
     valid: bool
     selection_valid: bool
     coverage_confidence: float = Field(gt=0.0, le=1.0)
+    endpoint_validation: Literal["validated", "invalid", "unresolved"]
+    endpoint_validation_method: Literal["directed_decimal_binomial_tail"] = (
+        "directed_decimal_binomial_tail"
+    )
+    endpoints_checked: int = Field(ge=0)
     reasons: tuple[str, ...]
 
 
@@ -254,12 +294,37 @@ class IncompletePortfolioSpecification(StrictModel):
     threat_id: str = Field(min_length=3, max_length=128, pattern=r"^[A-Za-z0-9._:-]+$")
     decision_game_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
     prior: tuple[float, ...]
+    rational_prior: tuple[RationalProbability, ...] | None = None
     decision_problem: DecisionProblem
     coupling_model: CouplingModel
     joint_event_bounds: tuple[JointEventBound, ...] = ()
     prior_evidence: EvidenceReference
     mechanism_assumptions: tuple[str, ...] = Field(min_length=1)
     mechanism_evidence: tuple[EvidenceReference, ...] = Field(min_length=1)
+
+    @model_validator(mode="after")
+    def prior_is_coherent(self) -> IncompletePortfolioSpecification:
+        if len(self.prior) != len(self.decision_problem.state_ids):
+            raise ValueError("portfolio specification prior must align with states")
+        if any(value < 0.0 or value > 1.0 for value in self.prior):
+            raise ValueError("portfolio specification prior must lie in [0,1]")
+        if abs(sum(self.prior) - 1.0) > 1e-10:
+            raise ValueError("portfolio specification prior must sum to one")
+        if self.rational_prior is not None:
+            if len(self.rational_prior) != len(self.prior):
+                raise ValueError("rational specification prior must align with states")
+            exact = tuple(value.as_fraction() for value in self.rational_prior)
+            if sum(exact, Fraction(0)) != 1:
+                raise ValueError("rational specification prior must sum exactly to one")
+            displayed = tuple(Fraction(Decimal(str(value))) for value in self.prior)
+            if any(
+                abs(display - authoritative) > MAX_PRIOR_DISPLAY_ERROR
+                for display, authoritative in zip(displayed, exact, strict=True)
+            ):
+                raise ValueError(
+                    "specification prior display does not approximate rational_prior"
+                )
+        return self
 
 
 def _load_model(path: Path, model_type):
@@ -269,31 +334,410 @@ def _load_model(path: Path, model_type):
         raise ValueError(f"invalid UTF-8 JSON evidence source: {path}") from exc
 
 
+@dataclass(frozen=True)
+class _EndpointProof:
+    status: Literal["valid", "invalid", "unresolved"]
+    precision: int | None
+    terms: int
+    reason: str
+
+
+class _EndpointProofUnresolved(ValueError):
+    """Raised when the implementation cannot prove a confidence endpoint safely."""
+
+
+def _directed_power(base: Decimal, exponent: int, *, rounding: str, precision: int) -> Decimal:
+    """Integer power using only directed, correctly-rounded Decimal operations."""
+    with localcontext() as context:
+        context.prec = precision
+        context.rounding = rounding
+        context.Emax = MAX_EMAX
+        context.Emin = MIN_EMIN
+        context.clamp = 0
+        result = Decimal(1)
+        factor = base
+        remaining = exponent
+        while remaining:
+            if remaining & 1:
+                result = context.multiply(result, factor)
+            remaining >>= 1
+            if remaining:
+                factor = context.multiply(factor, factor)
+        return result
+
+
+def _directed_edge_sum(
+    *,
+    successes: int,
+    trials: int,
+    probability_numerator: int,
+    probability_denominator: int,
+    from_lower_edge: bool,
+    rounding: str,
+    precision: int,
+) -> Decimal:
+    """Bound a binomial CDF/survival sum from an edge under directed rounding."""
+    complement_numerator = probability_denominator - probability_numerator
+    with localcontext() as context:
+        context.prec = precision
+        context.rounding = rounding
+        context.Emax = MAX_EMAX
+        context.Emin = MIN_EMIN
+        context.clamp = 0
+        probability = context.divide(
+            Decimal(probability_numerator), Decimal(probability_denominator)
+        )
+        complement = context.divide(
+            Decimal(complement_numerator), Decimal(probability_denominator)
+        )
+        if from_lower_edge:
+            # Sum P(X=i), i=0,...,successes.
+            term = _directed_power(
+                complement,
+                trials,
+                rounding=rounding,
+                precision=precision,
+            )
+            total = term
+            for index in range(successes):
+                numerator = context.multiply(term, Decimal(trials - index))
+                numerator = context.multiply(
+                    numerator, Decimal(probability_numerator)
+                )
+                denominator = Decimal(
+                    (index + 1) * complement_numerator
+                )
+                term = context.divide(numerator, denominator)
+                total = context.add(total, term)
+            return total
+
+        # Sum P(X=i), i=successes,...,trials.
+        term = _directed_power(
+            probability,
+            trials,
+            rounding=rounding,
+            precision=precision,
+        )
+        total = term
+        for index in range(trials, successes, -1):
+            numerator = context.multiply(term, Decimal(index))
+            numerator = context.multiply(
+                numerator, Decimal(complement_numerator)
+            )
+            denominator = Decimal(
+                (trials - index + 1) * probability_numerator
+            )
+            term = context.divide(numerator, denominator)
+            total = context.add(total, term)
+        return total
+
+
+def _directed_binomial_tail(
+    successes: int,
+    trials: int,
+    endpoint: float,
+    *,
+    side: Literal["lower", "upper"],
+    rounding: str,
+    precision: int,
+) -> tuple[Decimal, int]:
+    """Return a directed bound for the tail defining one CP endpoint."""
+    endpoint_fraction = Fraction(Decimal(str(endpoint)))
+    probability_numerator = endpoint_fraction.numerator
+    probability_denominator = endpoint_fraction.denominator
+    if side == "lower":
+        direct_terms = trials - successes + 1
+        complement_terms = successes
+        if direct_terms <= complement_terms:
+            return (
+                _directed_edge_sum(
+                    successes=successes,
+                    trials=trials,
+                    probability_numerator=probability_numerator,
+                    probability_denominator=probability_denominator,
+                    from_lower_edge=False,
+                    rounding=rounding,
+                    precision=precision,
+                ),
+                direct_terms,
+            )
+        opposite_rounding = (
+            ROUND_FLOOR if rounding == ROUND_CEILING else ROUND_CEILING
+        )
+        complement = _directed_edge_sum(
+            successes=successes - 1,
+            trials=trials,
+            probability_numerator=probability_numerator,
+            probability_denominator=probability_denominator,
+            from_lower_edge=True,
+            rounding=opposite_rounding,
+            precision=precision,
+        )
+        with localcontext() as context:
+            context.prec = precision
+            context.rounding = rounding
+            context.Emax = MAX_EMAX
+            context.Emin = MIN_EMIN
+            tail = max(Decimal(0), context.subtract(Decimal(1), complement))
+            return tail, complement_terms
+
+    direct_terms = successes + 1
+    complement_terms = trials - successes
+    if direct_terms <= complement_terms:
+        return (
+            _directed_edge_sum(
+                successes=successes,
+                trials=trials,
+                probability_numerator=probability_numerator,
+                probability_denominator=probability_denominator,
+                from_lower_edge=True,
+                rounding=rounding,
+                precision=precision,
+            ),
+            direct_terms,
+        )
+    opposite_rounding = (
+        ROUND_FLOOR if rounding == ROUND_CEILING else ROUND_CEILING
+    )
+    complement = _directed_edge_sum(
+        successes=successes + 1,
+        trials=trials,
+        probability_numerator=probability_numerator,
+        probability_denominator=probability_denominator,
+        from_lower_edge=False,
+        rounding=opposite_rounding,
+        precision=precision,
+    )
+    with localcontext() as context:
+        context.prec = precision
+        context.rounding = rounding
+        context.Emax = MAX_EMAX
+        context.Emin = MIN_EMIN
+        tail = max(Decimal(0), context.subtract(Decimal(1), complement))
+        return tail, complement_terms
+
+
+def _prove_endpoint_outward(
+    successes: int,
+    trials: int,
+    endpoint: float,
+    per_tail_alpha: float,
+    *,
+    side: Literal["lower", "upper"],
+) -> _EndpointProof:
+    """Prove or refute the exact tail inequality for a serialized binary64 endpoint."""
+    if not math.isfinite(endpoint) or not 0.0 <= endpoint <= 1.0:
+        return _EndpointProof("invalid", None, 0, "endpoint lies outside [0, 1]")
+    if side == "lower" and successes == 0:
+        status = "valid" if endpoint == 0.0 else "invalid"
+        return _EndpointProof(status, None, 0, "zero-success lower endpoint must equal zero")
+    if side == "upper" and successes == trials:
+        status = "valid" if endpoint == 1.0 else "invalid"
+        return _EndpointProof(status, None, 0, "all-success upper endpoint must equal one")
+    if (side == "lower" and endpoint == 0.0) or (side == "upper" and endpoint == 1.0):
+        return _EndpointProof("valid", None, 0, "boundary endpoint has zero defining tail")
+    if (side == "lower" and endpoint == 1.0) or (side == "upper" and endpoint == 0.0):
+        return _EndpointProof("invalid", None, 0, "inward boundary has unit defining tail")
+
+    terms = min(
+        trials - successes + 1 if side == "lower" else successes + 1,
+        successes if side == "lower" else trials - successes,
+    )
+    if terms > MAX_DIRECTED_TAIL_TERMS:
+        return _EndpointProof(
+            "unresolved",
+            None,
+            terms,
+            f"tail requires {terms} terms, exceeding the proof limit {MAX_DIRECTED_TAIL_TERMS}",
+        )
+
+    alpha_fraction = Fraction(Decimal(str(per_tail_alpha)))
+    alpha_numerator = alpha_fraction.numerator
+    alpha_denominator = alpha_fraction.denominator
+    for precision in ENDPOINT_PROOF_PRECISIONS:
+        tail_upper, _ = _directed_binomial_tail(
+            successes,
+            trials,
+            endpoint,
+            side=side,
+            rounding=ROUND_CEILING,
+            precision=precision,
+        )
+        with localcontext() as context:
+            context.prec = precision
+            context.Emax = MAX_EMAX
+            context.Emin = MIN_EMIN
+            context.rounding = ROUND_FLOOR
+            alpha_lower = context.divide(
+                Decimal(alpha_numerator), Decimal(alpha_denominator)
+            )
+            context.rounding = ROUND_CEILING
+            alpha_upper = context.divide(
+                Decimal(alpha_numerator), Decimal(alpha_denominator)
+            )
+        if tail_upper <= alpha_lower:
+            return _EndpointProof(
+                "valid", precision, terms, "directed upper tail bound is at most alpha"
+            )
+        tail_lower, _ = _directed_binomial_tail(
+            successes,
+            trials,
+            endpoint,
+            side=side,
+            rounding=ROUND_FLOOR,
+            precision=precision,
+        )
+        if tail_lower > alpha_upper:
+            return _EndpointProof(
+                "invalid", precision, terms, "directed lower tail bound exceeds alpha"
+            )
+    return _EndpointProof(
+        "unresolved",
+        ENDPOINT_PROOF_PRECISIONS[-1],
+        terms,
+        "directed tail interval still overlaps alpha at maximum precision",
+    )
+
+
+def _move_endpoint_outward_until_proven(
+    successes: int,
+    trials: int,
+    endpoint: float,
+    per_tail_alpha: float,
+    *,
+    side: Literal["lower", "upper"],
+) -> float:
+    """Return the tightest adjacent binary64 endpoint that the verifier can prove."""
+    outward_target = 0.0 if side == "lower" else 1.0
+    inward_target = 1.0 if side == "lower" else 0.0
+    initial_proof = _prove_endpoint_outward(
+        successes, trials, endpoint, per_tail_alpha, side=side
+    )
+    if initial_proof.status == "unresolved" and initial_proof.precision is None:
+        raise _EndpointProofUnresolved(initial_proof.reason)
+
+    # The optimized quantile is normally within one ULP. Avoid a full binary search
+    # in that common case, but recover deterministically from less accurate fallback
+    # quantiles by searching the ordered positive-binary64 space.
+    if initial_proof.status == "valid":
+        candidate = math.nextafter(endpoint, inward_target)
+        if _prove_endpoint_outward(
+            successes, trials, candidate, per_tail_alpha, side=side
+        ).status != "valid":
+            return endpoint
+    else:
+        candidate = math.nextafter(endpoint, outward_target)
+        if _prove_endpoint_outward(
+            successes, trials, candidate, per_tail_alpha, side=side
+        ).status == "valid":
+            return candidate
+
+    def float_bits(value: float) -> int:
+        return struct.unpack(">Q", struct.pack(">d", value))[0]
+
+    def bits_float(value: int) -> float:
+        return struct.unpack(">d", struct.pack(">Q", value))[0]
+
+    zero_bits = float_bits(0.0)
+    one_bits = float_bits(1.0)
+    if side == "lower":
+        valid_bits, invalid_bits = zero_bits, one_bits
+        while valid_bits + 1 < invalid_bits:
+            midpoint_bits = (valid_bits + invalid_bits) // 2
+            midpoint = bits_float(midpoint_bits)
+            proof = _prove_endpoint_outward(
+                successes, trials, midpoint, per_tail_alpha, side=side
+            )
+            if proof.status == "valid":
+                valid_bits = midpoint_bits
+            else:
+                invalid_bits = midpoint_bits
+        result = bits_float(valid_bits)
+    else:
+        invalid_bits, valid_bits = zero_bits, one_bits
+        while invalid_bits + 1 < valid_bits:
+            midpoint_bits = (invalid_bits + valid_bits) // 2
+            midpoint = bits_float(midpoint_bits)
+            proof = _prove_endpoint_outward(
+                successes, trials, midpoint, per_tail_alpha, side=side
+            )
+            if proof.status == "valid":
+                valid_bits = midpoint_bits
+            else:
+                invalid_bits = midpoint_bits
+        result = bits_float(valid_bits)
+    final_proof = _prove_endpoint_outward(
+        successes, trials, result, per_tail_alpha, side=side
+    )
+    if final_proof.status != "valid":  # pragma: no cover - defensive invariant
+        raise _EndpointProofUnresolved(
+            f"binary64 search did not produce a proved {side} endpoint: {final_proof.reason}"
+        )
+    return result
+
+
 def exact_two_sided_binomial_interval(
     successes: int,
     trials: int,
     per_tail_alpha: float,
 ) -> tuple[float, float]:
-    """Exact Clopper--Pearson interval, with a SciPy fast path for portfolio workloads."""
+    """Clopper--Pearson interval with mechanically proved outward binary64 endpoints."""
     if trials < 1 or successes < 0 or successes > trials:
         raise ValueError("binomial counts must satisfy 0 <= successes <= trials")
+    if trials > MAX_TRIALS_PER_STATE_ROW:
+        raise ValueError(
+            f"binomial trials exceed the hard limit {MAX_TRIALS_PER_STATE_ROW}"
+        )
     if not 0.0 < per_tail_alpha < 0.5:
         raise ValueError("per_tail_alpha must lie in (0, 0.5)")
     try:
         from scipy.stats import beta
     except ImportError:  # pragma: no cover - minimal non-portfolio installation
         confidence = 1.0 - per_tail_alpha
-        return (
-            clopper_pearson_lower(successes, trials, confidence),
-            clopper_pearson_upper(successes, trials, confidence),
+        lower = clopper_pearson_lower(successes, trials, confidence)
+        upper = clopper_pearson_upper(successes, trials, confidence)
+    else:
+        lower = 0.0 if successes == 0 else float(
+            beta.ppf(per_tail_alpha, successes, trials - successes + 1)
         )
-    lower = 0.0 if successes == 0 else float(
-        beta.ppf(per_tail_alpha, successes, trials - successes + 1)
+        upper = 1.0 if successes == trials else float(
+            beta.ppf(1.0 - per_tail_alpha, successes + 1, trials - successes)
+        )
+    return (
+        _move_endpoint_outward_until_proven(
+            successes,
+            trials,
+            lower,
+            per_tail_alpha,
+            side="lower",
+        ),
+        _move_endpoint_outward_until_proven(
+            successes,
+            trials,
+            upper,
+            per_tail_alpha,
+            side="upper",
+        ),
     )
-    upper = 1.0 if successes == trials else float(
-        beta.ppf(1.0 - per_tail_alpha, successes + 1, trials - successes)
-    )
-    return lower, upper
+
+
+def _downward_binary64(value: Fraction) -> tuple[float, Fraction]:
+    """Choose the greatest canonical float-decimal no larger than an exact rational."""
+    candidate = float(value)
+    candidate_fraction = Fraction(Decimal(str(candidate)))
+    while candidate_fraction > value:
+        candidate = math.nextafter(candidate, 0.0)
+        candidate_fraction = Fraction(Decimal(str(candidate)))
+    while True:
+        next_candidate = math.nextafter(candidate, 1.0)
+        next_fraction = Fraction(Decimal(str(next_candidate)))
+        if next_fraction > value:
+            break
+        candidate = next_candidate
+        candidate_fraction = next_fraction
+    if candidate <= 0.0 or candidate_fraction > value:
+        raise ValueError("exact alpha is too small for a positive canonical float-decimal")
+    return candidate, candidate_fraction
 
 
 def _resolve_sources(
@@ -344,6 +788,23 @@ def generate_simultaneous_multinomial_evidence(
     if len(allocations) != 1:
         raise ValueError("the requested committed error-budget allocation does not exist exactly once")
     allocation = allocations[0]
+    source_contexts = (
+        plan.binding_context,
+        counts.binding_context,
+        allocation.binding_context,
+    )
+    if any(value is None for value in source_contexts) and any(
+        value is not None for value in source_contexts
+    ):
+        raise ValueError(
+            "release binding context must be present in the plan, count file, "
+            "and error-budget allocation together"
+        )
+    if source_contexts[0] != source_contexts[1] or source_contexts[0] != source_contexts[2]:
+        raise ValueError(
+            "sampling plan, count file, and error-budget allocation change the "
+            "release binding context"
+        )
     if plan.registered_at > counts.sampling_started_at:
         raise ValueError("sampling plan was not registered before multinomial sampling began")
     if budget.committed_at > counts.sampling_started_at:
@@ -392,9 +853,36 @@ def generate_simultaneous_multinomial_evidence(
         len(counts.state_ids) * len(release.observation_ids)
         for release in counts.releases
     )
-    per_tail_alpha = allocation.alpha / (2.0 * cell_count)
+    exact_family_alpha = Fraction(Decimal(str(allocation.alpha)))
+    exact_per_tail_allocation = exact_family_alpha / (2 * cell_count)
+    per_tail_alpha, used_per_tail_alpha = _downward_binary64(
+        exact_per_tail_allocation
+    )
+    family_coverage_confidence, _ = _downward_binary64(
+        Fraction(1) - exact_family_alpha
+    )
+    assurance_wide_confidence, _ = _downward_binary64(
+        Fraction(1) - Fraction(Decimal(str(budget.total_alpha)))
+    )
     if 1.0 - per_tail_alpha >= 1.0:
         raise ValueError("allocated alpha is too small for stable floating-point exact bounds")
+
+    endpoint_proof_terms = sum(
+        (
+            (0 if count == 0 else min(trials - count + 1, count))
+            + (0 if count == trials else min(count + 1, trials - count))
+        )
+        for release in counts.releases
+        for state_row in release.state_rows
+        for trials in (sum(state_row.counts),)
+        for count in state_row.counts
+    )
+    if endpoint_proof_terms > MAX_SIMULTANEOUS_ENDPOINT_TERMS:
+        raise ValueError(
+            "simultaneous endpoint proof requires "
+            f"{endpoint_proof_terms} directed tail terms, exceeding the aggregate "
+            f"limit {MAX_SIMULTANEOUS_ENDPOINT_TERMS}"
+        )
 
     rows: list[SimultaneousMultinomialRow] = []
     for release in counts.releases:
@@ -449,10 +937,13 @@ def generate_simultaneous_multinomial_evidence(
         state_ids=counts.state_ids,
         family_alpha=allocation.alpha,
         assurance_wide_alpha=budget.total_alpha,
-        family_coverage_confidence=1.0 - allocation.alpha,
-        assurance_wide_confidence=1.0 - budget.total_alpha,
+        family_coverage_confidence=family_coverage_confidence,
+        assurance_wide_confidence=assurance_wide_confidence,
         simultaneous_cell_count=cell_count,
         per_tail_alpha=per_tail_alpha,
+        per_tail_alpha_numerator=used_per_tail_alpha.numerator,
+        per_tail_alpha_denominator=used_per_tail_alpha.denominator,
+        endpoint_proof_terms=endpoint_proof_terms,
         coverage=(
             StatisticalCoverage.SIMULTANEOUS
             if selection_valid
@@ -461,27 +952,140 @@ def generate_simultaneous_multinomial_evidence(
         selection_valid=selection_valid,
         rows=tuple(rows),
         assumptions=(
-            "within each secret-state row, retained observations are IID draws from one fixed multinomial channel row",
+            "within each secret-state row, retained observations are IID draws "
+            "from one fixed multinomial channel row",
             "the committed ledger contains the complete assurance-wide allocation family",
-            "Bonferroni union bounds require no independence between cells, releases, or allocated families",
+            "Bonferroni union bounds require no independence between cells, "
+            "releases, or allocated families",
+            "every serialized endpoint is replay-proved by directed binomial-tail arithmetic",
         ),
         limitations=limitations,
+        binding_context=counts.binding_context,
     )
+
+
+def _validate_serialized_endpoints(
+    evidence: SimultaneousMultinomialEvidence,
+    expected: SimultaneousMultinomialEvidence,
+) -> tuple[Literal["validated", "invalid", "unresolved"], int, tuple[str, ...]]:
+    """Bind submitted endpoints to raw counts and prove every defining tail inequality."""
+    reasons: list[str] = []
+    invalid = False
+    unresolved = False
+    checked = 0
+    submitted_alpha = Fraction(
+        evidence.per_tail_alpha_numerator,
+        evidence.per_tail_alpha_denominator,
+    )
+    serialized_alpha = Fraction(Decimal(str(evidence.per_tail_alpha)))
+    if submitted_alpha != serialized_alpha:
+        invalid = True
+        reasons.append(
+            "per-tail alpha float does not equal its exact numerator/denominator binding"
+        )
+    exact_family_alpha = Fraction(Decimal(str(expected.family_alpha)))
+    if 2 * expected.simultaneous_cell_count * submitted_alpha > exact_family_alpha:
+        invalid = True
+        reasons.append(
+            "exact per-tail allocations exceed the committed family alpha"
+        )
+    if len(evidence.rows) != len(expected.rows):
+        return (
+            "invalid",
+            0,
+            (
+                *reasons,
+                "endpoint validation cannot bind a changed row family to raw counts",
+            ),
+        )
+    for submitted, source_row in zip(evidence.rows, expected.rows, strict=True):
+        cell_scope = f"{source_row.release_id}/{source_row.state_id}"
+        if (
+            submitted.release_id != source_row.release_id
+            or submitted.state_id != source_row.state_id
+            or submitted.observation_ids != source_row.observation_ids
+            or submitted.counts != source_row.counts
+            or submitted.trials != source_row.trials
+        ):
+            invalid = True
+            reasons.append(
+                f"endpoint validation cannot bind {cell_scope} to its raw count row"
+            )
+            continue
+        if (
+            len(submitted.lower) != len(source_row.counts)
+            or len(submitted.upper) != len(source_row.counts)
+        ):
+            invalid = True
+            reasons.append(f"endpoint vector length changed for {cell_scope}")
+            continue
+        for observation_id, successes, lower, upper in zip(
+            source_row.observation_ids,
+            source_row.counts,
+            submitted.lower,
+            submitted.upper,
+            strict=True,
+        ):
+            for side, endpoint in (("lower", lower), ("upper", upper)):
+                proof = _prove_endpoint_outward(
+                    successes,
+                    source_row.trials,
+                    endpoint,
+                    expected.per_tail_alpha,
+                    side=side,
+                )
+                checked += 1
+                if proof.status == "invalid":
+                    invalid = True
+                    reasons.append(
+                        f"{side} endpoint validation failed for "
+                        f"{cell_scope}/{observation_id}: {proof.reason}"
+                    )
+                elif proof.status == "unresolved":
+                    unresolved = True
+                    reasons.append(
+                        f"{side} endpoint validation unresolved for "
+                        f"{cell_scope}/{observation_id}: {proof.reason}"
+                    )
+    status: Literal["validated", "invalid", "unresolved"]
+    if invalid:
+        status = "invalid"
+    elif unresolved:
+        status = "unresolved"
+    else:
+        status = "validated"
+    return status, checked, tuple(reasons)
 
 
 def verify_simultaneous_multinomial_evidence(
     evidence: SimultaneousMultinomialEvidence,
     base_dir: Path,
 ) -> MultinomialEvidenceVerification:
-    """Replay source hashes, the committed allocation, and every exact interval."""
-    expected = generate_simultaneous_multinomial_evidence(evidence.request, base_dir)
+    """Replay sources and mechanically validate every serialized confidence endpoint."""
+    try:
+        expected = generate_simultaneous_multinomial_evidence(evidence.request, base_dir)
+    except _EndpointProofUnresolved as exc:
+        return MultinomialEvidenceVerification(
+            valid=False,
+            selection_valid=False,
+            coverage_confidence=evidence.assurance_wide_confidence,
+            endpoint_validation="unresolved",
+            endpoints_checked=0,
+            reasons=(f"endpoint validation unresolved while replaying raw sources: {exc}",),
+        )
+    endpoint_status, endpoints_checked, endpoint_reasons = _validate_serialized_endpoints(
+        evidence, expected
+    )
     reasons: list[str] = []
     if canonical_json_bytes(expected) != canonical_json_bytes(evidence):
         reasons.append("simultaneous multinomial evidence does not replay from raw sources")
+    reasons.extend(endpoint_reasons)
     return MultinomialEvidenceVerification(
-        valid=not reasons,
+        valid=not reasons and endpoint_status == "validated",
         selection_valid=expected.selection_valid,
         coverage_confidence=expected.assurance_wide_confidence,
+        endpoint_validation=endpoint_status,
+        endpoints_checked=endpoints_checked,
         reasons=tuple(reasons),
     )
 
@@ -612,6 +1216,7 @@ def compile_multinomial_portfolio_problem(
                     f"marginal:{release_id}",
                     coverage_claim,
                     f"error-budget:{evidence.budget_id}:{evidence.request.allocation_id}",
+                    "confidence-endpoints:outward-validated",
                 ),
             ),
         ))
@@ -624,6 +1229,7 @@ def compile_multinomial_portfolio_problem(
         decision_game_sha256=specification.decision_game_sha256,
         state_ids=evidence.state_ids,
         prior=specification.prior,
+        rational_prior=specification.rational_prior,
         releases=tuple(releases),
         decision_problem=specification.decision_problem,
         coupling_model=specification.coupling_model,
@@ -641,7 +1247,7 @@ def verify_problem_against_multinomial_evidence(
     problem: IncompletePortfolioProblem,
     evidence: SimultaneousMultinomialEvidence,
     evidence_path: Path,
-) -> None:
+) -> MultinomialEvidenceVerification:
     """Reject any compiled problem that changes generated bounds or coverage semantics."""
     verification = verify_simultaneous_multinomial_evidence(evidence, evidence_path.parent)
     if not verification.valid:
@@ -681,3 +1287,4 @@ def verify_problem_against_multinomial_evidence(
         or problem.selection_scope != evidence.request.selection_scope
     ):
         raise ValueError("portfolio problem changes generated selection-coverage semantics")
+    return verification

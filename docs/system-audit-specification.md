@@ -573,6 +573,11 @@ AssessmentRequest 5.0
   4. reject producer versions below policy and unaccepted implementation/configuration digests;
      bind any required attack catalog, complete battery, policy-allowlisted battery-orchestrator
      service/version/implementation and image identity, per-attack executor identities, and controls
+  4a. for generic attack, controlled-inference and canary floors, parse the policy-approved
+      `StatisticalFloorFamilyPlan`; require every accepted family configuration and a required
+      analyzer rule; replay its pre-observation freeze, metric, >=95% familywise confidence,
+      supported multiplicity, exactly complete member roster, typed design-registration sources,
+      planned trials and outcome-free input-design hashes
   5. resolve regular-file artifact, evidence and configuration references; verify their SHA-256
   6. rebuild release, policy, artifact, interface, population and decision-game bindings
   7. dispatch each typed analyzer input to exactly one registered service
@@ -608,11 +613,48 @@ for the threat but retains their identifiers in `excluded_evidence_ids`; report 
 the applicable and excluded sets together to disposition every retained evidence record exactly once
 for that threat.
 
+Aggregation does not select the numerically largest independently reported confidence floor. Exact
+floors aggregate by maximum. For generic `attack`, `controlled_inference`, and `llm_canary` inputs,
+the policy-allowlisted producer configuration must parse as
+[`StatisticalFloorFamilyPlan 1.0`](../schemas/statistical-floor-family-plan-v1.json). It
+fixes a unique member roster, threat, analyzer, decision metric, supported Bonferroni method,
+familywise confidence of at least 95%, pre-observation freeze time, and named authority. Before
+analysis, every applicable generic `AnalyzerRequirement` must be required and the submitted
+configuration-digest set must equal its complete accepted set. Family IDs may not be reused across
+configurations for one threat. This prevents a caller from cherry-picking only the most favorable
+policy-approved family.
+
+Every plan member references a path and SHA-256 for
+[`StatisticalFloorDesignRegistration 1.0`](../schemas/statistical-floor-design-registration-v1.json)
+plus an `input_design_sha256`. The registration must precede or equal the family freeze and binds the member's
+analyzer, threat, population, metric, dataset snapshot, procedure, random seed, stopping rule, and
+planned primary/control trials. Low-FPR membership additionally binds `target_fpr`; an LLM canary
+binds a sealed-assignment digest. The engine verifies these against the submitted input, including
+actual trial counts, and replays the domain-separated design hash over analyzer-specific fields that
+exclude observed outcome counts. It then requires every planned member exactly once and exact
+agreement on family size and confidence. Missing, duplicate, substituted, malformed, late-frozen,
+unapproved, unregistered, or design-changed content aborts assessment. File hashes establish content
+integrity, not source authentication, truth of the dataset/procedure claims, or faithful execution.
+Attack-battery and finite-channel inputs obtain their complete-family semantics from their own typed
+contracts.
+
+Within a recognized statistical family, the already familywise-adjusted member floors aggregate by
+maximum. Across distinct family digests, those family maxima aggregate by minimum. The final lower
+endpoint is the maximum of the exact-floor maximum and the cross-family statistical minimum (empty
+components are zero). This minimum is conservative without an independence assumption: it exceeds
+the true value only if every family aggregate fails. It does not erase adverse evidence. If another
+family maximum would cross tolerance or the clearing ceiling while the conservative aggregate would
+not, the release is held with `resolve_statistical_multiplicity`. A stronger cross-family floor
+requires one preregistered shared error ledger. The decision retains the supporting identifiers.
+
 Decision rules:
 
 - a validated lower bound over tolerance produces `block`;
 - otherwise, contradictory lower and upper bounds produce `inconclusive` with
   `evidence_consistency=contradictory` and the conflicting evidence identifiers;
+- otherwise, if another independently registered statistical family would cross tolerance or the
+  clearing ceiling while the conservative cross-family aggregate would not, the result is
+  `inconclusive` with `resolve_statistical_multiplicity`;
 - otherwise, a valid complete-interface exact value within tolerance produces `clear`;
 - otherwise, a complete-interface ceiling within tolerance produces `clear` only when the policy
   requires a battery and its complete required attacks and positive controls pass, or the policy
@@ -624,12 +666,20 @@ Decision rules:
 - a contradiction never demotes an independently established over-tolerance blocking floor; and
 - any mandatory `block`, `inconclusive`, or unassessed threat prevents overall clearance.
 
+Every `ThreatDecision` has a required machine-readable `DecisionResolution`: `code`, a
+`clear`/`block`/`hold` `release_gate`, actions, evidence identifiers, missing obligations, optional
+indicative minimum/additional trials per state, and the literal
+`planning_estimate_is_decision_evidence=false`. The gate must agree with the verdict. Every
+inconclusive decision is a hold with at least one action; indicative trial counts are planning
+guidance only and cannot alter the current evidence interval or verdict.
+
 ### 9.3 Analyzer roster and maximum authority [I]
 
 | Input kind | Emitted evidence | Maximum authority | Key limitation |
 |---|---|---|---|
 | `tree_linkage` | Recipient-realizable exact linkage value | Clear or block | Tree linkage only; clearance requires complete declared-interface coverage |
 | `dp` | End-to-end mechanism ceiling | Clear only | All deployed processing, selection, stopping, summaries, and releases must be inside the proved mechanism |
+| `finite_channel_ceiling` | Selection-valid confidence floor and rationally outward-replayed confidence ceiling for the canonical exact-guess game | Clear or block | Model-family neutral, but only for a complete recipient-realizable released transcript/interface with an enforced finite alphabet; incomplete, continuous, or uncovered adaptive surfaces produce `redesign_interface`, never a decision-bearing ceiling |
 | `attack` | Empirical attack floor | Block only | Failure never clears; strength is relative to bound attack configuration |
 | `attack_battery` | Positive-control-guarded simultaneous attack floor or screen from a complete typed battery | Block only; separately gates ceiling eligibility | Core replays submitted content but does not execute the model, authenticate the worker, or prove declared isolation |
 | `controlled_inference` | Attribute/reconstruction floor | Block only | Requires paired comparator and registered metric; no interactive-LLM clearance |
@@ -646,6 +696,82 @@ prohibited, or reason-bearing waiver. A required-battery rule names accepted cat
 worker service/version/implementation/image, isolation assurance, required attacks and minimum
 positive-control detection lower bound. These bindings do not authenticate a remote workload or
 prove its output or isolation declaration true.
+
+`finite_channel_ceiling` reasons about a released observation channel, not model internals, so it can
+apply to XGBoost and other trees, CNNs, LLMs, and other model families. It is not a catalog-based
+shortcut, nor is it metric-general: the implemented metrics are `bayes_linkage_success`,
+`incremental_bayes_linkage_success`, `equal_prior_membership_success`, and
+`finite_secret_exact_guess_success`. A decision-bearing submission requires a selection-valid
+simultaneous confidence set for the complete state-conditioned channel. `FiniteDecisionGame 1.0`
+freezes ordered secret-state meanings and an exact rational prior. It must appear identically in the
+active `PolicyRule` and submitted `ThreatContract`, and the analyzer checks the analytic state order
+and prior against it. That rational game vector is authoritative within the protocol. The analytic
+problem must repeat it exactly in `rational_prior`, which must also equal the typed prior evidence.
+The legacy float `prior` is only a solver/display projection; each canonical-decimal entry must lie
+within \(10^{-12}\) of its rational counterpart and cannot redefine the prior or drive exact replay.
+Lowest-terms and exact-sum checks are runtime contract invariants because JSON Schema cannot encode
+those cross-entry arithmetic conditions. An absent shared game or analytic state/prior mismatch receives
+`register_policy_bound_finite_game`; changing only the request's policy copy fails engine validation.
+The engine content-hash verifies the applicable marginal, prior, and mechanism references and
+semantically replays typed statistical marginals plus their nested plan/count/error-budget evidence.
+It also parses `FiniteStatePriorEvidence 1.0` and binds its threat, population scope/hash, decision
+game, ordered states, and numerical vector to the analytic problem. The named game/prior authority's
+authenticity and the substantive truth of prior, IID, and mechanism claims remain external
+evidence-authority obligations. The decision game must be canonical exact guess; the deployed
+interface must enforce the registered finite observation alphabet; and the channel must be
+recipient-realizable. The compiler-generated marginal evidence must carry
+`confidence-endpoints:outward-validated`, and engine replay must return
+`endpoint_validation=validated`; a submitter-set endpoint-validity flag has no authority. The plan,
+counts, committed error-budget allocation, and compiled evidence each carry one identical `EvidenceBindingContext` bound to
+the release contract, policy, artifact, interface, population snapshot, and decision game. The engine
+requires exact assessment-context equality and `sampling_ended_at <= observed_at`. Only the supported
+selection-valid simultaneous multinomial construction can emit the floor/ceiling pair. The fixed-decoder floor
+construction and security-critical upper-certificate replay use exact rational arithmetic, with
+exact lower/upper decision fields retained and display values conservatively rounded. Under these
+premises, \(\Pr(\theta\le U)\ge1-\alpha\). The emitted
+confidence floor can `BLOCK` when \(L>\tau\); the ceiling is eligible to `CLEAR` when \(U\le\tau\)
+and the other policy gates pass. Analyzer records label these
+`floor_above_tolerance`/`ceiling_below_tolerance`; the final clear resolution is
+`risk_bound_within_tolerance`. An otherwise eligible interval with \(L\le\tau<U\) is
+`INCONCLUSIVE` with
+`recollect_more_state_conditioned_samples`; policy or battery failure may separately keep a
+below-tolerance ceiling inconclusive.
+
+An omitted transcript component, non-enforced encoding, continuous/open-ended output, or adaptive
+query, state, retrieval, tool, memory, or update path outside the frozen alphabet invalidates the
+finite-channel premise. That condition requires `redesign_interface`; collecting more samples from
+the incomplete projection cannot create a valid ceiling.
+
+Other ineligible inputs that reach the analyzer fail closed as screens, but carry different repair
+work: an absent shared policy/threat game or analytic state/prior mismatch yields
+`register_policy_bound_finite_game`; invalid statistical or analytic-certificate declarations yield
+`repair_sampling_evidence_and_replay`, while a release/artifact/interface binding defect yields
+`repair_release_bindings_and_replay`. A missing, malformed, or hash-mismatched nested source aborts
+assessment before an analyzer screen is emitted. These outcomes are not interchangeable with
+collecting more samples from an otherwise eligible interval.
+Deterministic point tables yield `collect_simultaneous_channel_evidence`: although their rows may be
+point-valued, the reference core has no machine-replayed derivation that makes them decision evidence.
+
+This theorem is conditional on the serialized cell intervals having the claimed coverage. The
+reference multinomial generator searches adjacent float candidates outward until directed decimal
+enclosures prove the defining Clopper--Pearson binomial-tail inequality for the candidate's canonical
+JSON decimal value. Serialized endpoints and allocated alpha are interpreted as exact decimal
+rationals, matching downstream replay. Bonferroni allocation and the assurance-ledger sum are exact.
+Verification regenerates the evidence from raw sources and mechanically proves every endpoint again;
+exact-rational
+ambiguity replay and exact threshold-facing fields then preserve the security directions. This
+closes endpoint-rounding for the reference finite-channel path when its compiler-generated marginal
+claim and successful engine replay are bound. It does not authenticate the authority, prove IID/selection registration
+or live-interface truth, or close ordinary binary64 paths elsewhere under `G7`; an unresolved proof
+or boundary remains inconclusive. The reference proof uses bounded directed-tail evaluation: a tail
+requiring more than 2,000,000 summed terms, a simultaneous family exceeding 2,000,000 aggregate
+directed tail terms, or still unresolved at its maximum configured precision,
+fails closed rather than emitting a ceiling.
+The family also has a 10,000 state-by-observation-cell cap and each raw state row has a 10,000,000
+trial cap. All four work/size bounds apply independently: satisfying the row cap does not guarantee
+that a balanced row fits the per-tail or aggregate proof budget. Engine-replayed `state_trials`
+cannot bypass the raw-row limit. The row total is enforced by a runtime validator over `sum(counts)`;
+the standalone counts JSON Schema describes the cells but cannot express that aggregate constraint.
 
 `AttackCatalog 1.0`, `AttackBatteryConfiguration 1.0`, `AttackPositiveControlResult 1.0`,
 `AttackBatteryWorkerOutput 1.0`, and `AttackBatteryInput 1.0` bind applicability, metric and evidence
@@ -694,21 +820,29 @@ The governed catalog routes 20 families but never supplies evidence. The command
 
 | Family group | Examples | Current default route or gap |
 |---|---|---|
-| Linear/probabilistic | Logistic regression, GLM, naïve Bayes | Generic floors plus exact finite channel or complete DP mechanism |
-| Trees/ensembles | Decision tree, random forest, XGBoost | Tree linkage, generic floors, exact channel, or complete DP mechanism |
+| Linear/probabilistic | Logistic regression, GLM, naïve Bayes | Generic floors plus `finite_channel_ceiling`, exact finite channel, or complete DP mechanism |
+| Trees/ensembles | Decision tree, random forest, XGBoost | Tree linkage, generic floors, `finite_channel_ceiling`, exact channel, or complete DP mechanism |
 | Kernel/exemplar | SVM, Gaussian process, k-NN | Dedicated or bound-channel evidence required; exemplar systems need a dedicated worker |
-| Tabular neural | MLP, TabNet, tabular transformer | No ordinary non-DP default clearing path; dedicated worker or complete DP-SGD required |
-| Vision/audio/time series | CNN, ViT, ASR, forecasting | Modality/sequence-specific workers required |
+| Tabular neural | MLP, TabNet, tabular transformer | `finite_channel_ceiling` only when the complete released interface is finitized and enforced; otherwise a dedicated worker or complete DP-SGD is required |
+| Vision/audio/time series | CNN, ViT, ASR, forecasting | `finite_channel_ceiling` may cover an enforced complete finite interface; otherwise modality/sequence-specific workers are required |
 | Ranking/unsupervised/anomaly | Recommenders, clustering, isolation forest | User/task/tail-specific workers required |
 | Representation/graph | Embeddings, encoders, GNNs | Retrieval, inversion, and graph-specific workers required |
-| Generative text/multimodal | LLM, VLM | Interactive clearance deliberately unsupported without transcript-level mechanism |
+| Generative text/multimodal | LLM, VLM | `finite_channel_ceiling` only for an enforced complete finite transcript; ordinary continuous/adaptive interaction still requires redesign or a transcript-level mechanism |
 | Generative media | Diffusion, GAN, audio/video generation | Modality-specific extraction/membership workers required |
 | RL/agents | Policies and tool-using agents | Trajectory/transcript and tool-authority mechanism required |
 | Composite/custom | Pipelines, mixture-of-experts, unknown future model | Complete component/joint-interface assessment or approved custom profile required |
 
-In the shipped roster, only a valid end-to-end DP ceiling and recipient-realizable tree-linkage exact
-evidence can clear, and even those apply only to one declared interface until portfolio and gateway
-stages complete. Floor/screen analyzers can still block or diagnose other families.
+The conditional `finite_channel_ceiling` route applies to every governed non-custom family above,
+including groups whose row lists only their usual specialized worker. It does not admit an unknown
+custom family, make a family-specific threat disappear, or prove the submitted completeness and
+enforcement declarations true.
+
+In the shipped roster, a valid end-to-end DP ceiling, recipient-realizable tree-linkage exact
+evidence, or a fully replayed `finite_channel_ceiling` can clear. The finite-channel path is broader
+by model family but stricter about complete transcript enumeration, finite-interface enforcement,
+simultaneous selection coverage, nested-source verification, and rational replay. Every path still
+applies only to one declared interface until portfolio and gateway stages complete. Floor/screen
+analyzers can still block or diagnose other families.
 
 ### 9.5 Selection and portfolio workflow [I]
 
@@ -1060,8 +1194,13 @@ four different states. Only an exact closed child schedule plus its final
 manifest is eligible for suite ingestion, and only two verified children plus
 the suite's final manifest establish operational completion. Even that status
 does not create MRAP evidence or a release decision: decision-bearing use
-requires approved recollection under the typed attack-battery and assessment
-contracts described above.
+requires approved recollection under the current assessment contract. An attack
+floor must use the typed attack-battery path described above; a finite-channel
+bound must instead recollect state-conditioned observations under its frozen
+canonical-game, complete-interface, finite-alphabet, recipient-realizability,
+simultaneous-coverage, confidence-endpoint outward-validation, nested-source, and
+rational-replay obligations. Neither path permits an existing composition report to be restamped
+after the fact.
 
 ## 10. Current machine-contract inventory
 
@@ -1069,9 +1208,15 @@ Schema suffixes version individual contracts, not the framework as a whole.
 
 | Domain | Current contract | Critical audit purpose |
 |---|---|---|
-| Assessment input | `assessment-request-v5.json` (`5.0`) | Release, policy, population, threat, analyzer, source, producer, context and complete attack-battery bindings |
+| Assessment input | `assessment-request-v5.json` (`5.0`) | Release, policy, population, threat, analyzer, source, producer and context bindings, including complete attack-battery and nested `FiniteChannelCeilingInput` alternatives |
+| Finite-channel ceiling submission | [`finite-channel-ceiling-submission-v1.json`](../schemas/finite-channel-ceiling-submission-v1.json) (`1.0`) | Standalone schema for the nested `FiniteChannelCeilingInput`: single-release analytic evidence, complete finite recipient-interface declarations, statistical coverage, source/context/provenance bindings and state trials; only engine-replayed simultaneous multinomial coverage is decision-bearing |
+| Finite decision game | [`finite-decision-game-v1.json`](../schemas/finite-decision-game-v1.json) (`1.0`) | Policy-frozen game ID, ordered secret-state IDs and meanings, exact rational prior, prior basis and authority; identical values are required in `PolicyRule` and `ThreatContract` |
+| Finite-state prior evidence | [`finite-state-prior-evidence-v1.json`](../schemas/finite-state-prior-evidence-v1.json) (`1.0`) | Typed prior statement binding threat, population scope/hash, decision-game hash, ordered state IDs, exact rational prior, definition and named authority; the engine replays content and required `decision-game:<sha>` / `finite-prior:<sha>` claims, but does not authenticate the authority or prove the prior normatively correct |
+| Statistical evidence binding context | [`evidence-binding-context-v1.json`](../schemas/evidence-binding-context-v1.json) (`1.0`) | One exact release ID plus release-contract, policy, artifact, interface, population-snapshot and decision-game binding carried identically by finite-channel plan, counts, committed error-budget allocation and compiled evidence |
+| Generic statistical-floor family plan | [`statistical-floor-family-plan-v1.json`](../schemas/statistical-floor-family-plan-v1.json) (`1.0`) | Required policy-allowlisted generic attack/controlled-inference/canary roster fixing threat, analyzer, decision metric, unique member registrations/design hashes, Bonferroni method, >=95% familywise confidence, freeze time and authority; every accepted family and exact member completeness are replayed before analysis |
+| Statistical-floor design registration | [`statistical-floor-design-registration-v1.json`](../schemas/statistical-floor-design-registration-v1.json) (`1.0`) | Outcome-free member registration binding analyzer/threat/population/metric, dataset and procedure digests, seed, stopping, planned primary/control trials and conditional low-FPR/canary fields; source authenticity, declaration truth and execution fidelity remain external |
 | Policy | `policy-bundle-v3.json` (`3.0`) | Mandatory rules; analyzer and selection-policy allowlists; per-threat ceiling/battery mode; accepted catalog/configuration/worker/image/isolation and positive-control thresholds |
-| Assessment output | `assessment-report-v5.json` (`5.0`) | Per-threat results, attack-battery status, complete evidence disposition, runtime identity and explicit single-release/declared-interface/non-authorizing scope |
+| Assessment output | `assessment-report-v5.json` (`5.0`) | Per-threat results and required actionable resolutions, attack-battery status, complete evidence disposition, runtime identity and explicit single-release/declared-interface/non-authorizing scope |
 | Assessment integrity | `signed-manifest-v3.json` (`3.0`) | Direct artifact/interface plus request/report/policy hashes, scope and interface-assurance echo for Assessment 5.0 |
 | Attack catalog | `attack-catalog-v1.json` (`1.0`) | Versioned attack applicability, implementation, evidence role, control kind and no-clearance authority |
 | Attack-battery configuration | `attack-battery-configuration-v1.json` (`1.0`) | Complete frozen runs, controls, seeds, supported Bonferroni multiplicity, stopping rule and declared resource limits |
@@ -1083,34 +1228,44 @@ Schema suffixes version individual contracts, not the framework as a whole.
 | Optimization integrity | `signed-optimization-manifest-v4.json` (`4.0`) | Signed final selection and scope bindings |
 | Portfolio specification | `incomplete-portfolio-specification-v1.json` | Approved finite portfolio semantics |
 | Portfolio problem/certificate | `incomplete-portfolio-problem-v1.json`; `incomplete-portfolio-certificate-v1.1.json` | Conservative or exact composition result and replay |
-| Portfolio statistics | `portfolio-multinomial-counts-v1.json`, `portfolio-multinomial-plan-v1.json`, `portfolio-error-budget-v1.json`, `portfolio-multinomial-request-v1.json`, `portfolio-multinomial-evidence-v1.json` | Frozen counts, plan, budget, simultaneous evidence, and compilation |
+| Portfolio statistics | `portfolio-multinomial-counts-v1.json`, `portfolio-multinomial-plan-v1.json`, `portfolio-error-budget-v1.json`, `portfolio-multinomial-request-v1.json`, `portfolio-multinomial-evidence-v1.json` | Frozen counts, plan, budget, simultaneous evidence, exact shared `EvidenceBindingContext`, sampling interval, engine-replayed endpoint validation, and compilation |
 | Protocol design | `protocol-feasibility-problem-v1.json`; `protocol-feasibility-certificate-v1.json` | Finite design-time soundness/liveness frontier |
 | Lifecycle transcript | `release-protocol-run-v1.1.json` | Supplied lifecycle artifacts, events, roles, hashes, signatures, and states |
 | Lifecycle replay result | `release-protocol-verification-v2.json` (`2.0`) | Verification profile, checks, skips, degradation, run digest and runtime identity |
 | Local audit result | `audit-verification-v3.json` (`3.0`) | Chain/release identity, independently defined event/hash-format counts, head, terminals, orphans, completeness and runtime identity |
-| Current schema inventory | `current-schema-manifest-v1.json` | Deterministic inventory of all 26 registered contract schemas; excludes its own digest by design and requires exact-byte regeneration plus detached protected attestation |
+| Current schema inventory | `current-schema-manifest-v1.json` | Deterministic inventory of all 32 registered contract schemas; excludes its own digest by design and requires exact-byte regeneration plus detached protected attestation |
 | Local audit anchor | `audit-checkpoint-v1.json` | Portable expected ledger identity/count/head |
 | Analyzer service envelope | Python-only request/response contract `2.0` | Prospective transport-neutral evidence exchange; no standalone public JSON Schema |
 | Supplemental strategic stress test | Python-only `StrategicAssuranceProblem 1.0`, `StrategicAssuranceCertificate 1.0`, and unversioned verification result | Exact-rational supplemental replay through the Python API or experimental script; no public schema or `mra` command and no governance-decision effect |
 
 Older schema files are retained for structural provenance. The current CLI intentionally rejects
 superseded top-level versions. The current containing Pydantic models also reject unsupported nested
-versions: `InterfaceContract 3.0`, `LlmProtocolContract 1.0`, `SelectionPolicy 1.0`, `PortfolioRegistrySnapshot 1.0`, the attack
-catalog/configuration/control/output/submission `1.0` contracts, and the prospective analyzer
+versions: `InterfaceContract 3.0`, `LlmProtocolContract 1.0`, `SelectionPolicy 1.0`,
+`PortfolioRegistrySnapshot 1.0`, the finite-channel submission/game/prior `1.0` contracts, the attack
+catalog/configuration/control/output/submission `1.0` contracts, `EvidenceBindingContext 1.0`, and the prospective analyzer
 request/response envelope `2.0` are exact accepted versions, with no implicit fallback or migration.
 Historical legal-hold or retention use MUST preserve the matching released wheel, dependency lock,
 trust metadata, artifact hashes, and vintage replay fixtures until a version-dispatched verifier
 exists. Missing modern evidence fields must be recollected or migrated by an authorized process;
 they must not be invented or restamped.
 
-This inventory is the pre-governed candidate for the first baseline described in Section 0. Its 26 entries cover
+This inventory is the pre-governed candidate for the first baseline described in Section 0. Its 32 entries cover
 registered contract-schema bytes, not the manifest file itself: embedding the digest of the final
 manifest bytes inside those same bytes would be recursive. Maintenance MUST separately compare the
 manifest byte-for-byte with deterministic regeneration. A released claim MUST additionally verify a
 detached signature or external attestation over those exact manifest bytes, protected signer custody,
 and the retained release tuple. Source control or the unsigned digest list alone is not attestation.
 
-`ReleaseContract`, `InterfaceContract`, `EvidenceRecord`, `AttackBatteryRequirement`,
+The standalone finite-channel submission, typed finite-state prior evidence, finite decision game,
+and statistical evidence binding context expanded the registry from 26 to 30 contracts. The typed
+generic statistical-floor family plan and member design registration expand it from 30 to 32. The
+submission, game, and binding-context shapes are also embedded in Assessment 5.0, Policy 3.0, and the
+statistical contracts as applicable. These expansions occurred inside the
+explicitly pre-governed draft window. An adopter that already governed earlier Assessment 5.0 or
+Policy 3.0 bytes MUST preserve that baseline and assign a new contract version; it must not silently
+replace the governed schema under the same version.
+
+`ReleaseContract`, `InterfaceContract`, `EvidenceRecord`, `ThreatDecision`, `DecisionResolution`, `AttackBatteryRequirement`,
 `AttackIsolationEvidence`, `SelectionPolicy 1.0`,
 `PortfolioRegistrySnapshot 1.0`, strategic-assurance contracts, audit event payloads, and many
 lifecycle artifact contents are nested or Python-only contracts rather than independent top-level
@@ -1125,10 +1280,17 @@ logical object has its own file.
 | `ModelProfile` | Task, input/output modalities, training paradigm, component families, generative/stateful flags and defined custom task where applicable |
 | `InterfaceContract` | Version 3 predictive/interactive protocol with required-explicit nullable fields and a structured rate value/window/burst/scope/retry/enforcement declaration; Section 3 maps every named channel to its field. No declaration proves live-interface equality or distributed counter/reset/bypass behavior |
 | `PopulationScope` | Scope ID, unit, frame/reference date, inclusion and size evidence, and source-bound assumptions required by the selected population contract |
-| `ThreatContract` | Threat ID/kind, population scope, decision metric/parameters, tolerance/basis, candidate/secret/side-information/realizability semantics |
+| `ThreatContract` | Threat ID/kind, population scope, decision metric/parameters, tolerance/basis, candidate/secret/side-information/realizability semantics; finite-channel use includes the policy-identical `FiniteDecisionGame` |
+| `FiniteDecisionGame` | Game ID; unique ordered state IDs and secret-value meanings; exact rational prior aligned to those states and summing exactly to one; prior basis and named authority. The active `PolicyRule` and submitted `ThreatContract` must match exactly |
 | `EvidenceContext` | Release and contract hashes, policy, artifact, interface, population, decision game and timezone-aware observation time |
 | `EvidenceProducer` | Service ID, semantic version, implementation digest and configuration digest |
-| `EvidenceRecord` | Producer/context, evidence direction/coverage/capabilities, metric, interval/value, assumptions and source bindings; every record is retained in the report and named as used or excluded by its threat decision |
+| `EvidenceRecord` | Producer/context, evidence direction/coverage/capabilities, metric, interval/value, optional exact rational lower/upper bounds, assumptions and source bindings; display bounds must round outward from exact values, and every record is retained in the report and named as used or excluded by its threat decision |
+| `ThreatDecision` / `DecisionResolution` | Bound interval/verdict/evidence disposition and a required matching clear/block/hold gate, action code, evidence IDs, missing obligations, and optional explicitly non-evidentiary state-trial planning targets; every hold requires an action |
+| `FiniteChannelCeilingInput` | One threat/population and one release's analytic evidence; observed artifact/interface hashes; complete observation definition; enforced finite-alphabet, complete-interface, recipient-realizability, IID-justification and bounded-transcript declarations; coverage-aligned state trials; evidence context and analyzer provenance. Decision-bearing use requires simultaneous multinomial coverage whose compiler-generated claim and engine endpoint validation pass. The engine verifies nested sources, trial counts, full source binding contexts, temporal order and reference Clopper--Pearson tail inequalities before exact/outward analyzer replay; deterministic point tables remain screens because their derivation is not replayed, and declarations do not prove IID, authority or live-interface truth |
+| `EvidenceBindingContext` | Version, release ID, release-contract hash, policy hash, artifact hash, interface hash, population scope ID/hash and decision-game hash. Plan, counts, committed budget allocation and compiled evidence must carry the identical object and match assessment context exactly |
+| `FiniteStatePriorEvidence` | Version/type, threat, population scope/hash, decision-game hash, ordered state IDs, exact rational prior, definition and named authority. The source hash plus `decision-game:<sha>` and canonical `finite-prior:<sha>` claims bind the object to the analytic certificate; issuer authentication and policy legitimacy remain external |
+| `StatisticalFloorFamilyPlan` / `StatisticalFloorFamilyMember` | Version, family ID, generic analyzer kind, threat, decision metric, unique members, >=95% familywise confidence, supported Bonferroni method, timezone-aware freeze time and authority. Each member carries its registration path/hash and outcome-free input-design hash. Every accepted family source must be submitted under a required analyzer rule; inputs must supply every member exactly once and match the frozen metric, size and confidence |
+| `StatisticalFloorDesignRegistration` | Version/registration ID, generic analyzer, threat, population, member, metric, registration time, dataset/procedure SHA-256, random seed, stopping rule, planned primary/control trials and conditional `target_fpr` or sealed assignment. Registration bytes and submitted design replay by hash, but issuer/source authenticity, substantive truth and collection fidelity remain external |
 | `PolicyRule` / `AttackBatteryRequirement` | Per-threat required/prohibited/waived ceiling mode and waiver reason; accepted catalog/configuration/worker/image/attester identities; required attacks, isolation level and minimum positive-control detection lower bound |
 | `AttackCatalog` / `AttackBatteryConfiguration` | Versioned attack applicability/authority and validity window plus complete frozen run/control family, declared resource limits, stopping and the currently supported Bonferroni method |
 | `AttackBatteryWorkerOutput` / `AttackBatteryInput` | Exact release/context/content hashes, execution interval containing `observed_at`, battery-orchestrator and runtime identity, catalog-bound service/version/implementation identity for every run and control, declared/attested isolation fields, raw digests and complete dispositions; the core checks timeout/trial/output-byte limits, but CPU/memory compliance and content truth are not attested |
@@ -1198,7 +1360,7 @@ evidence. The package job depends on this focused job as well as the formal and 
 building and smoke-testing wheel/sdist artifacts. A tagged
 release requires an annotated `vX.Y.Z` tag reachable from `main`, exact tag/package-version equality,
 the release checks, package validation, a clean-environment wheel smoke test, and creation of a draft
-GitHub release. Schema maintenance verifies the deterministic current-schema manifest against all 26
+GitHub release. Schema maintenance verifies the deterministic current-schema manifest against all 32
 registered current contract-schema bytes and separately compares the manifest itself with
 deterministic regeneration; the manifest does not recursively inventory its own final bytes. The
 repository does not hold the protected key needed for the detached signature or attestation required
@@ -1457,7 +1619,7 @@ rather than inventing an identifier.
 
 - [ ] Record repository commit, framework version, dirty-tree status, platform, Python versions, and
   dependency locks.
-- [ ] Verify every one of the 26 registered current contract schemas byte-for-byte against
+- [ ] Verify every one of the 32 registered current contract schemas byte-for-byte against
   `current-schema-manifest-v1.json`, confirm its model/version inventory matches Section 10, and
   ensure no retained historical schema is presented as current executable support. The manifest
   excludes its own digest by design; separately compare its exact bytes with deterministic
@@ -1512,6 +1674,20 @@ rather than inventing an identifier.
   metric, observation time and producer identity.
 - [ ] Confirm every analyzer input is routed once and its descriptor does not exceed emitted authority.
 - [ ] Confirm floor, ceiling, exact and screen evidence cannot cross their allowed decision direction.
+- [ ] For every generic floor family, verify its configuration digest is policy-accepted and replay
+  `StatisticalFloorFamilyPlan 1.0`: the analyzer rule is required; every accepted configuration is
+  submitted; family IDs do not alias; and the threat/analyzer/metric, pre-observation freeze, unique
+  and exactly complete member roster, matching family size, Bonferroni method and >=95% familywise
+  confidence replay. For every member, hash-check and parse `StatisticalFloorDesignRegistration 1.0`;
+  verify registration-before-family-freeze, population, dataset/procedure digests, seed, stopping,
+  planned primary/control trials, conditional low-FPR/canary fields, matching preregistration digest,
+  and the outcome-free input-design hash. Reject omitted families or changed/unplanned members, but do
+  not mistake content integrity for source authentication, declaration truth, or execution fidelity.
+- [ ] For multiple applicable floors, replay the maximum exact floor; the maximum already-adjusted
+  member floor within each recognized complete statistical family; the minimum across distinct
+  family maxima; and finally the maximum of the exact and statistical components. If another family
+  would cross tolerance or the clearing ceiling, require `resolve_statistical_multiplicity` rather
+  than clearance; a stronger cross-family result requires one preregistered shared error ledger.
 - [ ] Confirm attack non-attainment never clears and population/watermark screens never decide.
 - [ ] For every threat whose ceiling mode is `required`, verify the policy-approved catalog was valid
   at both configuration freeze and execution; verify the complete frozen configuration, exact
@@ -1536,6 +1712,12 @@ rather than inventing an identifier.
   authority review; do not relabel it as positive-control or G6 evidence.
 - [ ] Confirm DP evidence covers the entire deployed pipeline and all related releases.
 - [ ] Confirm exact/ceiling clearance has complete declared-interface coverage.
+- [ ] For finite-channel evidence, treat the policy/threat rational game prior as authoritative;
+  require the analytic `rational_prior` and typed prior source to equal it exactly, and verify each
+  canonical-decimal legacy float `prior` entry is within \(10^{-12}\) of it without using that float
+  projection for exact replay. Replay the 10,000-cell, 10,000,000-trial-per-row,
+  2,000,000-term-per-tail, and 2,000,000-term-per-family limits; do not infer these cross-field checks
+  from schema shape alone.
 - [ ] Confirm contradiction is distinct from absence, names both conflicting records, and does not
   weaken an independently blocking floor.
 - [ ] Confirm all mandatory threats have a decision and every retained evidence identifier appears
@@ -1725,12 +1907,12 @@ that result as MRAP-conformant authorization.
 | Audit content confidentiality | New writers bound diagnostics before retaining a redacted fingerprint; AuditVerification counts plaintext-compatible failure fields as explicit degradation, but v2 intents/completions still store full canonical request/report content | Approved minimization or protected content-reference design, encryption, least-privilege access, retention/legal hold/deletion, separately governed content availability and privacy review |
 | Anchored-verification receipt | Verification output does not bind supplied expectations or an anchor receipt | Versioned result containing expected tuple, anchor/checkpoint digest, source, time and `anchor_checked` status |
 | Public production audit-event model | New rows use a versioned domain-separated ledger/release-bound hash and reject legacy hashes by default; payload/envelope models remain Python-private and events are unsigned | Public versioned event/envelope/anchor schemas, authenticated writer signatures, protected actor identity and legacy migration/retirement evidence |
-| Schema-manifest signing custody | A deterministic manifest inventories all 26 registered contract schemas, explicitly excludes its own recursive digest, and is compared with exact-byte regeneration; source control alone is not a release signature | Detached protected release signature or transparency-backed attestation over the exact manifest bytes, signer/threshold policy, consumer verification, rotation/revocation and retained signed manifests |
+| Schema-manifest signing custody | A deterministic manifest inventories all 32 registered contract schemas, explicitly excludes its own recursive digest, and is compared with exact-byte regeneration; source control alone is not a release signature | Detached protected release signature or transparency-backed attestation over the exact manifest bytes, signer/threshold policy, consumer verification, rotation/revocation and retained signed manifests |
 | Durable workflow orchestration | Not implemented | Idempotent scheduler, retries, cancellation, human approvals and recovery |
 | Managed key infrastructure | Local PEM reference | KMS/HSM lifecycle and identity enrollment evidence |
 | Historical version-dispatched verifier | Not implemented; this document declares the pre-governed draft cutoff and requires the first protected manifest attestation to establish the version floor | Preserve each governed schema/runtime/lock/trust/fixture baseline; add prior-manifest compatibility checks, future dispatch and authorized migration tests |
-| Broad model-family clearance | Only DP and tree exact default paths | Approved family/protocol-specific ceiling or exact-evidence workers |
-| Interactive LLM/agent clearance | Deliberately unsupported | Complete transcript-level mechanism and portfolio accounting |
+| Broad model-family clearance | DP, tree exact, and model-family-neutral `finite_channel_ceiling` paths exist, but the latter applies only to an enforced complete finite recipient channel and canonical exact-guess game | Approved evidence collection for the actual interface, plus family/protocol-specific workers for threats or surfaces outside that finite-channel contract |
+| Interactive LLM/agent clearance | A fully bounded, enumerated, enforced finite transcript may use `finite_channel_ceiling`; ordinary continuous, open-ended, or uncovered adaptive interaction remains unsupported | Redesign the interface or supply a complete transcript-level mechanism and portfolio accounting |
 | Fairness decision contracts | Adopter-policy gap | Versioned population/group, metric, authority, evidence and remedy contracts |
 | Normative/runtime lifecycle parity | Transcript replay implements a narrower transition relation than MRAP/1.0; rejecting all duplicate event IDs is a deliberate stricter replay rule and liveness/transport-deduplication cost, not a safety violation | Align the remaining actions/fields with the protocol and add transition-conformance fixtures for every origin/event pair; document retry handling |
 | Binary64 decision boundaries — current G7 blocker | Ordinary tolerance/evidence/utility/portfolio fields and comparisons use Python floats. Garbling residual/allowance/tolerance comparisons are especially consequential because `maximum_row_total_variation <= numerical_tolerance` decides reachability-edge existence and can change the Blackwell frontier. `ReleaseOptimizer` itself does not invoke SciPy; optional upstream solver/statistical paths may. Any unresolved clearance-critical boundary prevents G7 and therefore MRAP conformance | Exact or approved-decimal contracts, solver-independent exact/outward replay and scalar plus graph-topology boundary fixtures; keep the affected result inconclusive until closure |
@@ -1751,7 +1933,7 @@ was corrected, never that the external production obligation disappeared.
 | `C4` evidence omitted analyzer identity/strength | Resolved for general analyzers by service/version and implementation/configuration digests; the attack-battery path additionally binds catalog, complete configuration, worker/image/runtime, positive controls and raw-result digests | Authenticate/attest the real worker, independently approve battery strength and retain its image/configuration/raw observations externally |
 | `C5` stronger analyzers did not stale old clearance | Resolved at assessment time through per-threat minimum versions and digest allowlists | Policy change must trigger an external reassessment queue and gateway/registry expiry action |
 | `S1` contradictory evidence weakened a block | Resolved: contradiction and absence are distinct, both evidence IDs are retained, and an independently blocking floor remains blocking | Open an integrity/adjudication event in the production workflow |
-| `S2` most families had no ordinary clearing path | Accepted and made explicit: only complete DP ceilings and recipient-realizable tree exact evidence clear by default | Add approved exact/ceiling workers or remain inconclusive; out-of-band bypass is not MRAP conformance |
+| `S2` most families had no ordinary clearing path | Partially closed by the model-family-neutral `finite_channel_ceiling` path for a canonical exact-guess game over an enforced complete finite recipient channel; DP and tree exact routes remain, while ordinary continuous/open-ended interfaces still fail closed | Recollect approved state-conditioned evidence under the full finite-channel contract, redesign an incompatible interface, or add another approved exact/ceiling worker; out-of-band bypass is not MRAP conformance |
 | `S3` descriptors advertised broader authority than behavior | Resolved: default capabilities derive from emitted behavior and widening is rejected | Keep authority-negative conformance tests for every new analyzer |
 | `S4` MCP tool omission was presented as a sandbox | Corrected: the process can execute subprocesses/write files and is only non-authorizing, not read-only or isolated | Run review and execution as separate principals without writable audit/key/governance paths |
 | `S5` optimizer tie-break policy was not contracted or policy-authorized | Resolved in-band: the policy is versioned, rationale-bearing, hash-bound and echoed, and its digest must be allowlisted by the active `PolicyBundle` | The remaining selection inputs still need authenticated issuers and a separated-selection trust profile; allowlisting does not prove preference legitimacy by itself |
@@ -1766,7 +1948,7 @@ was corrected, never that the external production obligation disappeared.
 | `F6` registry state head was accepted without recomputation | Corrected narrowly: replay enforces `+1` and recomputes the release-bound state-head commitment | Prove portfolio-commit semantic completeness, authoritative registry execution and inclusion/consistency externally |
 | `F7` the gap register omitted disclosed lifecycle and enforcement limitations | Corrected by the explicit state-head, lifecycle-event, role-concentration, activation/lease, gateway-suspension and cumulative-budget rows above | Keep this register synchronized with executable contracts and transition-conformance tests on every release |
 | `N1` draft contracts changed without a governed version boundary | Current breaking changes use new top-level versions: PolicyBundle 3.0, Assessment 5.0, signed assessment manifest 3.0, Optimization 4.0, lifecycle verification 2.0 and audit verification 3.0; Section 0 defines the first-governed-baseline rule | Establish and retain the first detached signed/attested manifest; compare every later release with the last governed baseline and preserve vintage replay artifacts |
-| `N2` the schema manifest appeared required to digest itself | Corrected: the manifest declares 26 registered contract entries, explicit self-exclusion, deterministic exact-byte regeneration and detached-attestation semantics | Verify the detached protected signature/attestation over the exact manifest bytes; never substitute a recursive self-hash or Git tracking for release provenance |
+| `N2` the schema manifest appeared required to digest itself | Corrected: the manifest declares 32 registered contract entries, explicit self-exclusion, deterministic exact-byte regeneration and detached-attestation semantics | Verify the detached protected signature/attestation over the exact manifest bytes; never substitute a recursive self-hash or Git tracking for release provenance |
 | `N3` audit prose disagreed on request content versus hash | Corrected: v2 intents contain full canonical request plus hash and completions contain full canonical report plus hash; replay is structurally self-contained and does not reopen external sources | The content-bearing SQLite design is unsuitable for sensitive production without minimization/encryption/access/retention controls or a separately governed protected reference design |
 | Red-team execution and mandatory empirical challenge were uncontracted | PolicyBundle 3.0 plus five public attack contracts, central positive-control/statistical replay, floor-only analyzer authority and ceiling-battery gating close the in-band composition path; actual target execution remains external | Deploy and attest the isolated worker, approve threat/family-specific catalogs and reference controls, retain raw evidence, govern waivers and keep authority-negative fixtures current |
 | Additional migration, opaque-bundle, score, retention and formal-runtime concerns | Preserved as explicit nonclaims, controls and gap-register entries; coverage percentage was removed | Preserve vintage verifiers, inspect complete bundles, retain outputs outside ignored `output/`, and establish Python/deployment refinement separately |

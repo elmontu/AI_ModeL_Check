@@ -12,6 +12,7 @@ from model_release_assurance.models import (
     EvidenceConsistency,
     EvidenceCoverage,
     EvidenceRecord,
+    RationalProbability,
     Realizability,
     Verdict,
 )
@@ -61,6 +62,8 @@ class ContradictoryEvidenceRegressionTests(unittest.TestCase):
             metric=self.threat.decision_metric,
             value=lower,
             lower=lower,
+            statistical_family_id="1" * 64,
+            familywise_confidence=0.95,
             realizability=Realizability.RECIPIENT,
             can_clear=False,
             can_block=True,
@@ -126,6 +129,107 @@ class ContradictoryEvidenceRegressionTests(unittest.TestCase):
             decision.conflicting_evidence_ids,
             ("membership-floor", "membership-ceiling"),
         )
+
+    def test_cross_record_statistical_floors_use_a_conservative_minimum(self) -> None:
+        strong = self._floor(0.8).model_copy(
+            update={
+                "evidence_id": "strong-searched-floor",
+                "statistical_family_id": "2" * 64,
+            }
+        )
+        weak = self._floor(0.55).model_copy(
+            update={
+                "evidence_id": "weak-searched-floor",
+                "statistical_family_id": "3" * 64,
+            }
+        )
+
+        not_familywise_adjusted = self._decide((strong, weak))
+        reversed_records = self._decide((weak, strong))
+
+        self.assertEqual(not_familywise_adjusted.verdict, Verdict.INCONCLUSIVE)
+        self.assertEqual(not_familywise_adjusted.lower_bound, 0.55)
+        self.assertEqual(reversed_records.verdict, Verdict.INCONCLUSIVE)
+        self.assertEqual(reversed_records.lower_bound, 0.55)
+        self.assertEqual(
+            not_familywise_adjusted.resolution.code,
+            "resolve_statistical_multiplicity",
+        )
+        self.assertEqual(
+            not_familywise_adjusted.resolution.evidence_ids,
+            ("strong-searched-floor", "weak-searched-floor"),
+        )
+
+        with_otherwise_clearing_ceiling = self._decide(
+            (strong, weak, self._ceiling(0.58))
+        )
+        self.assertEqual(
+            with_otherwise_clearing_ceiling.verdict,
+            Verdict.INCONCLUSIVE,
+        )
+        self.assertEqual(
+            with_otherwise_clearing_ceiling.resolution.code,
+            "resolve_statistical_multiplicity",
+        )
+
+        second_blocking = weak.model_copy(update={"lower": 0.7, "value": 0.7})
+        jointly_blocking = self._decide((strong, second_blocking))
+        self.assertEqual(jointly_blocking.verdict, Verdict.BLOCK)
+        self.assertEqual(jointly_blocking.lower_bound, 0.7)
+        self.assertEqual(
+            jointly_blocking.resolution.evidence_ids,
+            ("strong-searched-floor", "weak-searched-floor"),
+        )
+
+    def test_complete_attack_battery_uses_its_familywise_adjusted_maximum(self) -> None:
+        strong = self._floor(0.8).model_copy(update={
+            "evidence_id": "battery-strong",
+            "analyzer": "attack_battery",
+            "statistical_family_id": "4" * 64,
+        })
+        weak = self._floor(0.55).model_copy(update={
+            "evidence_id": "battery-weak",
+            "analyzer": "attack_battery",
+            "statistical_family_id": "4" * 64,
+        })
+
+        decision = self._decide((weak, strong))
+
+        self.assertEqual(decision.verdict, Verdict.BLOCK)
+        self.assertEqual(decision.lower_bound, 0.8)
+        self.assertEqual(decision.resolution.evidence_ids, ("battery-strong",))
+
+    def test_exact_floor_is_not_weakened_by_cross_record_statistical_floors(self) -> None:
+        exact_values = self._floor(0.75).model_dump(mode="python")
+        exact_values.update({
+            "evidence_id": "exact-three-quarter-floor",
+            "evidence_class": EvidenceClass.EXACT,
+            "upper": 0.75,
+            "exact_lower": RationalProbability(numerator=3, denominator=4),
+            "exact_upper": RationalProbability(numerator=3, denominator=4),
+        })
+        exact = EvidenceRecord.model_validate(exact_values)
+        weak_statistical = self._floor(0.55).model_copy(
+            update={
+                "evidence_id": "weak-statistical-floor",
+                "statistical_family_id": "5" * 64,
+            }
+        )
+
+        forward = self._decide((exact, weak_statistical))
+        reverse = self._decide((weak_statistical, exact))
+
+        for decision in (forward, reverse):
+            self.assertEqual(decision.verdict, Verdict.BLOCK)
+            self.assertEqual(decision.lower_bound, 0.75)
+            self.assertEqual(
+                decision.lower_bound_fraction.as_fraction(),
+                RationalProbability(numerator=3, denominator=4).as_fraction(),
+            )
+            self.assertEqual(
+                decision.resolution.evidence_ids,
+                ("exact-three-quarter-floor",),
+            )
 
     def test_missing_decision_evidence_is_structurally_insufficient(self) -> None:
         decision = self._decide(())

@@ -11,7 +11,7 @@
       "kind": "attack-battery-configuration",
       "model_import": "model_release_assurance.models.AttackBatteryConfiguration",
       "model_title": "AttackBatteryConfiguration",
-      "sha256": "ed0772359dac2d6af80c8c6faa985b381dfbb176799a1583b54daf6e20db67b3"
+      "sha256": "1ba7577e45b7f6267a14d0b2f8e723d57a9f4aba43fd19cc77bde535bc0b9e41"
     },
     {
       "declared_schema_version": "1.0",
@@ -19,7 +19,7 @@
       "kind": "attack-battery-submission",
       "model_import": "model_release_assurance.models.AttackBatteryInput",
       "model_title": "AttackBatteryInput",
-      "sha256": "91166ac837e003d4f29f2e65a433fa0341524a6cee7f2536a2159e0b7c18ab35"
+      "sha256": "12e257fedd3c75bf2e3b9ffeef1e1ef500c754acc55e744c62a62a264c3c2ff5"
     },
     {
       "declared_schema_version": "1.0",
@@ -62,6 +62,38 @@
       "sha256": "7be0a861cc94b666a6438e472ac2171cfb4c413326f472086afb7cea28382f46"
     },
     {
+      "declared_schema_version": "1.0",
+      "filename": "evidence-binding-context-v1.json",
+      "kind": "evidence-binding-context",
+      "model_import": "model_release_assurance.models.EvidenceBindingContext",
+      "model_title": "EvidenceBindingContext",
+      "sha256": "d52f9d7f0212e015e9ec10bb99eda1a1b19c2f8145b26c83e1efe1bc9911080e"
+    },
+    {
+      "declared_schema_version": "1.0",
+      "filename": "finite-channel-ceiling-submission-v1.json",
+      "kind": "finite-channel-ceiling-submission",
+      "model_import": "model_release_assurance.models.FiniteChannelCeilingInput",
+      "model_title": "FiniteChannelCeilingInput",
+      "sha256": "fa5aa2e33a45638f01324d8928e5278fdee6af1b1c3c376520aa8298a8dcc2ec"
+    },
+    {
+      "declared_schema_version": "1.0",
+      "filename": "finite-decision-game-v1.json",
+      "kind": "finite-decision-game",
+      "model_import": "model_release_assurance.models.FiniteDecisionGame",
+      "model_title": "FiniteDecisionGame",
+      "sha256": "1874ad59b8eb702681e2f1144f7016f0279875b3b3eb79d0b2ac9eaae7ffc7fa"
+    },
+    {
+      "declared_schema_version": "1.0",
+      "filename": "finite-state-prior-evidence-v1.json",
+      "kind": "finite-state-prior-evidence",
+      "model_import": "model_release_assurance.incomplete_portfolio.FiniteStatePriorEvidence",
+      "model_title": "FiniteStatePriorEvidence",
+      "sha256": "77aebfe042394a173aa032558164a75fccb8f00325224a789afb0aaaf966c65e"
+    },
+    {
       "declared_schema_version": "3.0",
       "filename": "signed-manifest-v3.json",
       "kind": "manifest",
@@ -99,7 +131,7 @@
       "kind": "policy",
       "model_import": "model_release_assurance.models.PolicyBundle",
       "model_title": "PolicyBundle",
-      "sha256": "1c1f4ea07b49c47b3c8edec24af1b41fda78fcae549b0ad3aad5abba8333fff0"
+      "sha256": "64aec19728b319627c727cfff06f75b92f10dd694c5c456211782f6e8c0c5b61"
     },
     {
       "declared_schema_version": "1.1",
@@ -107,7 +139,7 @@
       "kind": "portfolio-certificate",
       "model_import": "model_release_assurance.incomplete_portfolio.AnalyticPortfolioEvidenceEntry",
       "model_title": "AnalyticPortfolioEvidenceEntry",
-      "sha256": "dde2138f6ca5956bf2dcb480058fed3e44be3a33586e985f876772df78de55ac"
+      "sha256": "d649fa109808bf949054f0d22c55e88c97d2ffdbe052c387ecc435806afc0096"
     },
     {
       "declared_schema_version": "1.0",
@@ -115,7 +147,7 @@
       "kind": "portfolio-error-budget",
       "model_import": "model_release_assurance.portfolio_statistics.AssuranceErrorBudget",
       "model_title": "AssuranceErrorBudget",
-      "sha256": "53859e406ae4895d9e527dfaf181948966b416cb30b273e31973af10a2dfb362"
+      "sha256": "a8dbadc4062854e508e6b0f3f0c4c1183db2f23fcc128ba1a3cf18a2bd7a777e"
     },
     {
       "declared_schema_version": "1.0",
@@ -123,7 +155,7 @@
       "kind": "portfolio-multinomial-counts",
       "model_import": "model_release_assurance.portfolio_statistics.MultinomialCountsFile",
       "model_title": "MultinomialCountsFile",
-      "sha256": "173c9e397e6cc7d760ee877f6a193c5e28de0c242138f8462b1a62b826b42999"
+      "sha256": "81de763f0f5baa8e1d5378601c5ce4c827f398cacb946e4dfa157ee0fff44344"
     },
     {
       "declared_schema_version": "1.0",
@@ -131,7 +163,7 @@
       "kind": "portfolio-multinomial-evidence",
       "model_import": "model_release_assurance.portfolio_statistics.SimultaneousMultinomialEvidence",
       "model_title": "SimultaneousMultinomialEvidence",
-      "sha256": "e15b64145efc91658251bccaa9bd776ca96c671b8880f813c2c9b08cc6ebac2b"
+      "sha256": "825208f6be5579c5698133d9e0d48c85d3dcd655168a8d46c7bb11f872ac7bf4"
     },
     {
       "declared_schema_version": "1.0",
@@ -139,7 +171,7 @@
       "kind": "portfolio-multinomial-plan",
       "model_import": "model_release_assurance.portfolio_statistics.MultinomialSamplingPlan",
       "model_title": "MultinomialSamplingPlan",
-      "sha256": "758b8860a57c33da6b71921fc3612e4662032a9475bc0e248d30fa8f9b676cd8"
+      "sha256": "f4015e882aa5aad4eb610c80d580f1169253bc64e7d6fe8bc80086eb006eabc8"
     },
     {
       "declared_schema_version": "1.0",
@@ -155,7 +187,7 @@
       "kind": "portfolio-problem",
       "model_import": "model_release_assurance.incomplete_portfolio.IncompletePortfolioProblem",
       "model_title": "IncompletePortfolioProblem",
-      "sha256": "d24e5bf82470f8985f82d9aeee885736fd557909d451db25c25777e77d33e1db"
+      "sha256": "d7801b2dfd89f8a123bc57565e48f8171f08bebc0afc144a8eaa549a2fcbeaea"
     },
     {
       "declared_schema_version": "1.0",
@@ -163,7 +195,7 @@
       "kind": "portfolio-specification",
       "model_import": "model_release_assurance.portfolio_statistics.IncompletePortfolioSpecification",
       "model_title": "IncompletePortfolioSpecification",
-      "sha256": "f861f8e5b846a10dda430bbf3cdccd237effaac2643e8b99dd9c7053c5c6683d"
+      "sha256": "85f9c1fa6b8bc70e386adeca283e9ba061d73708cd85145d78ec013957944506"
     },
     {
       "declared_schema_version": "1.0",
@@ -203,7 +235,7 @@
       "kind": "report",
       "model_import": "model_release_assurance.models.AssessmentReport",
       "model_title": "AssessmentReport",
-      "sha256": "dc15df5dc905e1f6f5482d22d212a4a3e661582bdffb7f4c7332272b6370f12d"
+      "sha256": "5045ddb0a556fbae909a9c48b28d6b20ba57f42581a3d6f4d17a14e1e2f1d228"
     },
     {
       "declared_schema_version": "5.0",
@@ -211,13 +243,29 @@
       "kind": "request",
       "model_import": "model_release_assurance.models.AssessmentRequest",
       "model_title": "AssessmentRequest",
-      "sha256": "499424b6389fb05a3bd81909e3a9222d23adcd5afab3f101aa2e3d7dfbe9c8ec"
+      "sha256": "b83d46858ea9858b0d273a03c3366cccef5a6858bf2c93f04d44adbb32becb4d"
+    },
+    {
+      "declared_schema_version": "1.0",
+      "filename": "statistical-floor-design-registration-v1.json",
+      "kind": "statistical-floor-design-registration",
+      "model_import": "model_release_assurance.models.StatisticalFloorDesignRegistration",
+      "model_title": "StatisticalFloorDesignRegistration",
+      "sha256": "693fc411632bc5d493b2405940867a1b456b708e7f040b2749c80a1bc4168191"
+    },
+    {
+      "declared_schema_version": "1.0",
+      "filename": "statistical-floor-family-plan-v1.json",
+      "kind": "statistical-floor-family-plan",
+      "model_import": "model_release_assurance.models.StatisticalFloorFamilyPlan",
+      "model_title": "StatisticalFloorFamilyPlan",
+      "sha256": "435399839ab11447f9eea0cfc678cb5a30288dd39acc5bb0bbb3847c1771b5d7"
     }
   ],
   "coverage": {
     "manifest_integrity": "deterministic exact-byte regeneration plus detached protected release attestation",
     "manifest_self_included": false,
-    "registered_contract_count": 26,
+    "registered_contract_count": 32,
     "self_exclusion_reason": "A byte inventory cannot recursively contain the digest of its own final bytes."
   },
   "digest_algorithm": "sha256",

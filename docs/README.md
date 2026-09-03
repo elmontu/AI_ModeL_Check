@@ -48,6 +48,7 @@ Executable contract demonstrations are indexed in [`examples/README.md`](../exam
 
 ## Research and experimental assurance
 
+- **Guide** — [MLSys paper workspace](../paper/README.md): draft outline, claims-to-evidence gate, artifact index, and experiment/reproducibility checklist; it is navigation for authors, not a new evidence source.
 - **Reference** — [Privacy-assurance literature review](literature-review.md): primary research behind the membership, extraction, differential-privacy, tree, canary, and watermark evidence semantics.
 - **Reference** — [Game-theory literature review](game-theory-literature-review.md): primary-source audit, security, and strategic-ML review with claim labels and transfer limits.
 - **Experimental** — [Executable strategic assurance](strategic-assurance.md): optional exact-rational incentive stress tests that cannot make a governance decision or override a mandatory gate.

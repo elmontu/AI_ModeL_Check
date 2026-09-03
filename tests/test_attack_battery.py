@@ -491,14 +491,17 @@ class AttackBatteryRegressionTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "completion is implausibly in the future"):
             self._assess(raw)
 
-    def test_worker_execution_cannot_predate_policy_effectiveness(self) -> None:
+    def test_policy_effectiveness_rejects_stale_plan_or_execution(self) -> None:
         raw = _load_request()
         policy_raw = json.loads((EXAMPLES / "policy.json").read_text(encoding="utf-8"))
         policy_raw["effective_from"] = "2026-08-18T00:02:00Z"
         for value in raw["analyzer_inputs"]:
             value["evidence_context"]["observed_at"] = "2026-08-18T00:03:00Z"
 
-        with self.assertRaisesRegex(ValueError, "execution predates the effective policy"):
+        with self.assertRaisesRegex(
+            ValueError,
+            "frozen before policy effectiveness|execution predates the effective policy",
+        ):
             self._assess_with_authorized_battery(raw, policy_raw)
 
     def test_worker_execution_cannot_outlive_policy(self) -> None:
@@ -668,6 +671,10 @@ class AttackBatteryRegressionTests(unittest.TestCase):
 
     def test_high_valid_attack_floor_blocks_release(self) -> None:
         raw = _load_request()
+        standalone = next(
+            value for value in raw["analyzer_inputs"] if value["analyzer"] == "attack"
+        )
+        standalone["successes"] = 900
         battery = _battery(raw)
         battery["worker_output"]["results"][0]["successes"] = 900
         _rehash_worker_output(battery)
@@ -721,15 +728,14 @@ class AttackBatteryRegressionTests(unittest.TestCase):
         rule["decision_metric"] = "membership_tpr_at_fpr"
         rule["metric_parameters"] = {"target_fpr": target_fpr}
 
-        standalone_attack = next(
-            value for value in raw["analyzer_inputs"] if value["analyzer"] == "attack"
-        )
-        standalone_attack.update(
-            metric="membership_tpr_at_fpr",
-            false_positives=0,
-            nonmember_trials=100,
-            target_fpr=target_fpr,
-        )
+        raw["analyzer_inputs"] = [
+            value for value in raw["analyzer_inputs"] if value["analyzer"] != "attack"
+        ]
+        policy_raw["analyzer_requirements"] = [
+            value
+            for value in policy_raw["analyzer_requirements"]
+            if value["analyzer"] != "attack"
+        ]
 
         battery = _battery(raw)
         battery["catalog"]["entries"][0]["supported_metrics"] = [

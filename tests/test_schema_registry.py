@@ -24,8 +24,8 @@ SCHEMAS = ROOT / "schemas"
 class SchemaRegistryTests(unittest.TestCase):
     def test_registry_is_unique_and_matches_model_declarations(self) -> None:
         validate_schema_registry()
-        self.assertEqual(len(SCHEMA_REGISTRY), 26)
-        self.assertEqual(len({entry.filename for entry in SCHEMA_REGISTRY.values()}), 26)
+        self.assertEqual(len(SCHEMA_REGISTRY), 32)
+        self.assertEqual(len({entry.filename for entry in SCHEMA_REGISTRY.values()}), 32)
         for kind, registration in SCHEMA_REGISTRY.items():
             self.assertEqual(kind, registration.kind)
             schema = registration.rendered_schema()

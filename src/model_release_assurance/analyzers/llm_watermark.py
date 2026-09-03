@@ -11,7 +11,11 @@ from ..models import (
     ReleaseContract,
     ThreatContract,
 )
-from .attack import clopper_pearson_lower, clopper_pearson_upper
+from .attack import (
+    bonferroni_per_bound_confidence,
+    clopper_pearson_lower,
+    clopper_pearson_upper,
+)
 from .base import evidence_context_fields, evidence_producer_fields
 
 
@@ -34,8 +38,9 @@ class LlmWatermarkAnalyzer:
         if release.interface.protocol_type != "interactive_llm":
             raise AnalyzerError("LLM watermark evidence requires an interactive_llm release")
 
-        per_comparison_confidence = 1.0 - (
-            (1.0 - value.confidence) / (2 * value.comparison_family_size)
+        per_comparison_confidence = bonferroni_per_bound_confidence(
+            value.confidence,
+            2 * value.comparison_family_size,
         )
         valid = (
             value.threshold_pre_registered

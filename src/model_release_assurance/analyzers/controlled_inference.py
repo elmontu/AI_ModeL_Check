@@ -1,5 +1,8 @@
 from __future__ import annotations
 
+from decimal import Decimal
+from fractions import Fraction
+
 from ..errors import AnalyzerError
 from ..models import (
     AnalyzerInput,
@@ -12,8 +15,17 @@ from ..models import (
     ThreatContract,
     ThreatKind,
 )
-from .attack import clopper_pearson_lower, clopper_pearson_upper
-from .base import evidence_context_fields, evidence_producer_fields
+from .attack import (
+    bonferroni_per_bound_confidence,
+    clopper_pearson_lower,
+    clopper_pearson_upper,
+    downward_canonical_float,
+)
+from .base import (
+    evidence_context_fields,
+    evidence_producer_fields,
+    statistical_family_sha256,
+)
 
 
 class ControlledInferenceAnalyzer:
@@ -64,8 +76,9 @@ class ControlledInferenceAnalyzer:
             # Bonferroni across the comparison family and the two marginal
             # binomial bounds. The difference is conservative despite the
             # paired multinomial dependence by the union bound.
-            per_side_confidence = 1.0 - (
-                (1.0 - value.confidence_family) / (2.0 * value.comparison_family_size)
+            per_side_confidence = bonferroni_per_bound_confidence(
+                value.confidence_family,
+                2 * value.comparison_family_size,
             )
             combined_only_lower = clopper_pearson_lower(
                 value.combined_only_successes, value.trials, per_side_confidence
@@ -73,11 +86,20 @@ class ControlledInferenceAnalyzer:
             baseline_only_upper = clopper_pearson_upper(
                 value.baseline_only_successes, value.trials, per_side_confidence
             )
-            lower = max(0.0, combined_only_lower - baseline_only_upper) if valid else None
+            if valid:
+                exact_difference = max(
+                    Fraction(0),
+                    Fraction(Decimal(str(combined_only_lower)))
+                    - Fraction(Decimal(str(baseline_only_upper))),
+                )
+                lower = downward_canonical_float(exact_difference)
+            else:
+                lower = None
         else:
             estimate = value.combined_successes / value.trials
-            per_side_confidence = 1.0 - (
-                (1.0 - value.confidence_family) / value.comparison_family_size
+            per_side_confidence = bonferroni_per_bound_confidence(
+                value.confidence_family,
+                value.comparison_family_size,
             )
             combined_only_lower = None
             baseline_only_upper = None
@@ -104,6 +126,13 @@ class ControlledInferenceAnalyzer:
             value=estimate,
             lower=lower,
             upper=None,
+            statistical_family_id=statistical_family_sha256(
+                analyzer=self.name,
+                family_definition_sha256=(
+                    value.provenance.producer.configuration_sha256
+                ),
+            ),
+            familywise_confidence=value.confidence_family,
             baseline=value.baseline_successes / value.trials,
             realizability=Realizability.RECIPIENT,
             can_clear=False,
@@ -117,6 +146,7 @@ class ControlledInferenceAnalyzer:
             limitations=limitations,
             details={
                 "attack_name": value.attack_name,
+                "preregistration_sha256": value.preregistration_sha256,
                 "trials": value.trials,
                 "combined_successes": value.combined_successes,
                 "baseline_successes": value.baseline_successes,

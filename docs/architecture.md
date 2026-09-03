@@ -413,6 +413,11 @@ AssessmentRequest 5.0
               2. load and hash-check PolicyBundle 3.0
               3. compare policy identity, validity, mandatory threats, tolerances, and required analyzers
               4. reject producer versions below policy or unaccepted implementation/configuration digests
+             4a. for generic blocking analyzers, hash-check and parse the policy-approved
+                 `StatisticalFloorFamilyPlan`; require every accepted configuration and a required
+                 analyzer rule; replay its pre-observation freeze, metric, >=95% familywise
+                 confidence, exact member-roster completeness, typed design-registration sources,
+                 planned trial fields, and outcome-free input-design digests
               5. resolve the release artifact/configuration/evidence as regular files and verify SHA-256
               6. reconstruct release/policy/artifact/interface/population/game context
               7. route each discriminated input to exactly one analyzer service
@@ -421,8 +426,15 @@ AssessmentRequest 5.0
                  per-run/control executor identities, positive controls, supported Bonferroni
                  multiplicity, operating points, observable timeout/trial/output-byte limits,
                  orchestrator allowlists, and declared/attested isolation policy
+             9a. for `finite_channel_ceiling`, validate the canonical exact-guess game and the bound
+                 declarations/claim labels for complete released transcript/interface, enforced
+                 finite alphabet and recipient realizability; replay selection-valid simultaneous
+                 statistical evidence, identical full source binding contexts, sampling-before-
+                 observation order, applicable nested sources, and the exact-rational outward-
+                 rounded ambiguity bound, conditional on externally governed claim truth
              10. aggregate floors, exact values, and complete-declared-interface ceilings;
-                 gate ceiling clearance on the per-threat battery policy mode
+                 gate ceiling clearance on the per-threat battery policy mode; emit a required
+                 machine-readable clear/block/hold resolution and an action for every hold
              11. append exactly one completion or failure event referencing the intent
              12. emit AssessmentReport 5.0 with non-authorizing scope fields
 ```
@@ -440,6 +452,7 @@ Current local analyzer semantics are fail-closed:
 |---|---|---|
 | `tree_linkage` | Recipient-realizable exact values may block; they clear only with complete-interface coverage | Tree-ensemble linkage only |
 | `dp` | Validated end-to-end mechanism ceilings may clear the assessed metric | Conditional on all deployed data/output paths being inside the proved mechanism; the core checks only the declared interface and never emits blocking DP evidence |
+| `finite_channel_ceiling` | Selection-valid confidence floor and rationally outward-replayed ceiling for the canonical exact-guess game | Model-family neutral, but only for a complete recipient-realizable released channel with an enforced finite alphabet; incomplete, continuous, or uncovered adaptive interfaces yield `redesign_interface` and no decision-bearing ceiling |
 | `attack` | Validated empirical floors may block | Never clears |
 | `attack_battery` | Policy-bound, positive-control-guarded simultaneous floors or screens; battery status gates ceiling eligibility | Never clears directly; missing/failed/timed-out/screen-only/missed-operating-point or unsafe execution makes an otherwise clearing ceiling inconclusive |
 | `controlled_inference` | Validated attribute/reconstruction floors may block | Never clears; generic path rejects interactive LLMs |
@@ -448,10 +461,112 @@ Current local analyzer semantics are fail-closed:
 | `population` | Population-model screen only | Neither blocks nor clears |
 
 Default service descriptors are derived from each analyzer's implemented maximum decision
-capabilities: tree `(clear, block)`, DP `(clear only)`, attack/attack-battery/controlled inference/canary `(block
-only)`, and watermark/population `(neither)`. Adapter construction rejects capability widening, and
-the engine revalidates each returned record. A remote registry must still authenticate the descriptor
-issuer and test the worker behavior.
+capabilities: tree and finite-channel `(clear, block)`, DP `(clear only)`,
+attack/attack-battery/controlled inference/canary `(block only)`, and watermark/population `(neither)`.
+Adapter construction rejects capability widening, and the engine revalidates each returned record. A
+remote registry must still authenticate the descriptor issuer and test the worker behavior.
+
+Every `ThreatDecision` contains a required `DecisionResolution` whose release gate matches the
+verdict. A held/inconclusive decision must include an action; evidence identifiers and missing
+obligations remain machine-readable, and optional state-trial targets are explicitly planning
+estimates rather than decision evidence.
+
+Applicable lower bounds are aggregated by evidence semantics, not by choosing the largest displayed
+number. Generic `attack`, `controlled_inference`, and `llm_canary` inputs are grouped by threat,
+analyzer, and producer configuration digest. That digest must be policy-allowlisted and resolve to a
+typed [`StatisticalFloorFamilyPlan 1.0`](../schemas/statistical-floor-family-plan-v1.json) frozen
+before observation. The plan fixes the threat, analyzer, decision metric, unique member roster,
+Bonferroni method, familywise confidence of at least 95%, and named authority. A generic
+`AnalyzerRequirement` for an assessed threat must be required, and the
+submitted family-configuration digests must equal its complete accepted set; this prevents a caller
+from selecting only a favorable policy-approved family. Family IDs cannot be reused across different
+configurations for the same threat.
+
+Each plan member carries a `registration_path`, `registration_sha256`, and outcome-free
+`input_design_sha256`. The first two resolve a typed
+[`StatisticalFloorDesignRegistration 1.0`](../schemas/statistical-floor-design-registration-v1.json),
+registered no later than the family freeze, that binds the analyzer, threat, population, member,
+metric, dataset-snapshot and procedure digests, random seed, stopping rule, and planned primary and
+control trials. A low-FPR membership design additionally binds `target_fpr`; an LLM-canary design
+binds a sealed-assignment digest. The engine checks those fields against the submitted analyzer input
+and verifies a domain-separated digest over its design fields while excluding observed outcome
+counts. It also requires every planned member exactly once and agreement on family size and
+confidence. Missing, duplicated, substituted, malformed, unapproved, or design-changed content
+aborts assessment. File hashing establishes content integrity, not source authentication, dataset or
+procedure authenticity, or proof that collection followed the registered design.
+
+The engine takes the maximum exact floor. Within each recognized statistical family, it takes the
+maximum of the member floors whose bounds have already been adjusted for that complete family. The
+attack-battery configuration and finite-channel statistical source are separately typed complete
+families; generic families use `StatisticalFloorFamilyPlan`. Across distinct statistical-family
+digests, the engine takes the minimum of those family maxima and then the maximum of that result and
+the exact-floor maximum. This avoids a post-hoc choice of the strongest confidence realization
+without assuming independence. If a different family maximum would cross tolerance or the clearing
+ceiling while the conservative aggregate would not, the engine emits a fail-closed
+`resolve_statistical_multiplicity` hold. A producer that needs the stronger result to decide must
+preregister all floor-producing tests under one shared error ledger.
+
+`finite_channel_ceiling` is neutral to the implementation family: the same theorem can apply to an
+XGBoost/tree release, CNN, LLM, or another model because it bounds the registered observation
+channel rather than inspecting the architecture. Applicability nevertheless requires a canonical
+exact-guess game whose ordered secret-state semantics and exact rational prior are identical in the
+active `PolicyRule` and submitted `ThreatContract`, complete released transcript/interface coverage,
+an enforced finite observation alphabet, recipient realizability, selection-valid simultaneous
+multinomial coverage of every selectable statistical cell, approved
+outward validation of statistical confidence endpoints, verified applicable
+marginal/prior/mechanism references, replayed statistical plan/count/error-budget evidence, and
+exact-rational outward replay. Source verification binds those bytes, semantically replays typed
+statistical marginals, and checks typed prior evidence against the game, state order, and numerical
+vector. The rational game vector, repeated exactly in `rational_prior`, is authoritative inside the
+protocol and must equal the typed prior evidence. The legacy float `prior` is only a solver/display
+projection: its canonical-decimal entries must be within \(10^{-12}\) of the corresponding rational
+entries, and it cannot supply a competing prior or drive exact replay. Lowest-terms and exact-sum
+invariants are enforced by the runtime models because their cross-entry arithmetic is not expressible
+in the generated JSON Schema.
+The core does not authenticate the stated prior authority or independently establish the
+substantive truth of every prior, IID, or mechanism claim. The analyzer emits separate
+confidence-floor and confidence-ceiling evidence. The engine can return `CLEAR` only for
+`U <= tolerance` when every other gate passes, and `BLOCK` for `L > tolerance`. An otherwise eligible
+interval with `L <= tolerance < U` is `INCONCLUSIVE` with
+`recollect_more_state_conditioned_samples`; another policy gate can also keep a below-tolerance
+ceiling inconclusive. Interface incompleteness or an unenforced
+continuous/adaptive surface instead requires `redesign_interface`; it cannot be repaired by reporting
+a nominal upper bound. An absent shared policy/threat game or analytic state/prior mismatch requires
+`register_policy_bound_finite_game`; changing only the request's policy copy fails engine validation.
+Even a deterministic point table is non-decision-bearing because the reference core cannot replay
+its channel derivation; it yields `collect_simultaneous_channel_evidence`.
+Statistical/certificate declarations or release bindings that reach the analyzer require
+`repair_sampling_evidence_and_replay` or
+`repair_release_bindings_and_replay` and never emit a decision-bearing ceiling. A missing, malformed,
+or hash-mismatched nested source instead aborts assessment before analyzer execution. Existing LLM,
+vision, training-hook, composition-scaling, and red-team reports remain screens until approved
+state-conditioned recollection under this contract.
+
+The reference statistical pipeline computes Clopper--Pearson cell intervals and searches adjacent
+float candidates outward until the candidate's canonical JSON decimal value satisfies its defining
+binomial-tail inequality under directed decimal enclosures. The verifier interprets serialized
+endpoints and allocated alpha as those exact decimal rationals—the same semantics used by downstream
+certificate replay—and repeats the proof for every endpoint while replaying raw sources. A
+compiler-generated marginal must carry the `confidence-endpoints:outward-validated` claim, and the
+engine requires replay to return `endpoint_validation=validated`; no submitter-set endpoint-validity
+flag is accepted. The plan, counts, committed error-budget allocation, and compiled evidence each carry an identical
+`EvidenceBindingContext` for the release contract, policy, artifact, interface, population scope
+snapshot, and decision game. The engine requires exact equality with the assessment context and
+`sampling_ended_at <= observed_at`.
+The statistical family is bounded to 10,000 state-by-observation cells and each raw state row to
+10,000,000 trials. Endpoint verification permits at most 2,000,000 directed terms for one tail and
+2,000,000 across the complete family. These independent caps all apply; a row below its trial cap can
+still exceed a proof-work cap and fail closed. The submitted `state_trials` values are accepted only
+after exact replay from those bounded raw rows. The count-row sum cap is a runtime cross-field rule,
+not a constraint that standalone JSON Schema can fully express.
+The registered plan is the single typed declaration of the IID multinomial sampling model; the
+finite submission has no duplicate submitter-controlled IID-validity flag. Substantive truth and
+collector authenticity remain external in this offline, non-authorizing core. These mechanical checks
+close the confidence-endpoint rounding obligation for this reference path; they do not authenticate
+the evidence authority, prove the IID model or simultaneous-family registration, or close the
+ordinary binary64 decision boundaries that remain elsewhere under `G7`. The ambiguity ceiling and
+threshold-facing finite-channel evidence preserve exact rational bounds alongside conservatively
+rounded display values.
 
 ### Selection and certificate pipelines
 
@@ -606,7 +721,9 @@ deployed path is within the proved end-to-end mechanism.
 | Boundary | Current contract | Producer -> consumer | Authority |
 |---|---|---|---|
 | Submission and policy | [`assessment-request-v5.json`](../schemas/assessment-request-v5.json) (`5.0`) with nested `ReleaseContract`; [`policy-bundle-v3.json`](../schemas/policy-bundle-v3.json) (`3.0`) by path/hash | External package and policy roles -> validator/engine | Defines candidate, producer allowlist/version floors, attack-battery requirements, and policy context; producer digests are not workload authentication |
+| Generic statistical-floor family | [`statistical-floor-family-plan-v1.json`](../schemas/statistical-floor-family-plan-v1.json) and [`statistical-floor-design-registration-v1.json`](../schemas/statistical-floor-design-registration-v1.json) (`1.0`) | Policy/design authority -> generic attack/controlled-inference/canary producer -> trusted core | Every accepted configuration must be submitted under a required analyzer rule; the family fixes metric, unique members, Bonferroni, >=95% familywise confidence and freeze, while each member binds a typed outcome-free design registration and input-design digest; content integrity does not authenticate the source or prove execution fidelity |
 | Engine and analyzer | Nested `ReleaseContract`, `ThreatContract`, discriminated analyzer input, and `EvidenceRecord`; service envelope `2.0` in Python | Engine -> local analyzer or prospective MCP adapter -> engine | Analyzer emits producer-bound evidence; central engine decides; no standalone public service-envelope schema |
+| Finite-channel evidence | [`finite-channel-ceiling-submission-v1.json`](../schemas/finite-channel-ceiling-submission-v1.json) (`1.0`), nested as `finite_channel_ceiling` in Assessment 5.0; [`finite-decision-game-v1.json`](../schemas/finite-decision-game-v1.json), [`finite-state-prior-evidence-v1.json`](../schemas/finite-state-prior-evidence-v1.json), and [`evidence-binding-context-v1.json`](../schemas/evidence-binding-context-v1.json) (`1.0` each); content-addressed statistical/ambiguity sources | Policy authority plus approved evidence/prior workers -> trusted-core analyzer | Model-family-neutral confidence floor/ceiling for one policy-frozen exact-guess game; complete finite recipient interface, full source-context/temporal binding, typed prior binding and exact/outward replay required; no authorization authority |
 | Attack execution | [`attack-catalog-v1.json`](../schemas/attack-catalog-v1.json), [`attack-battery-configuration-v1.json`](../schemas/attack-battery-configuration-v1.json), [`attack-positive-control-result-v1.json`](../schemas/attack-positive-control-result-v1.json), [`attack-battery-worker-output-v1.json`](../schemas/attack-battery-worker-output-v1.json), and [`attack-battery-submission-v1.json`](../schemas/attack-battery-submission-v1.json) | Policy authority and isolated worker -> trusted-core analyzer | Complete floor/screen evidence and a ceiling-clearance precondition; no direct clearance, execution, attestation verification, or authorization authority |
 | Assessment output | [`assessment-report-v5.json`](../schemas/assessment-report-v5.json) and [`signed-manifest-v3.json`](../schemas/signed-manifest-v3.json) | Engine/assessor -> reviewer, optimizer, or audit store | Explicitly single-release, declared-interface-only, and non-authorizing; the signed manifest directly binds the interface digest |
 | Local audit replay | [`audit-verification-v3.json`](../schemas/audit-verification-v3.json) and [`audit-checkpoint-v1.json`](../schemas/audit-checkpoint-v1.json) | AuditStore -> reviewer/external immutable anchor | Detects intent omissions and local-chain tamper relative to an anchor; not an authoritative, confidential, or immutable ledger |

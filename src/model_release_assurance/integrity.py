@@ -7,7 +7,7 @@ import json
 from datetime import date, datetime, timezone
 from enum import Enum
 from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey, Ed25519PublicKey
@@ -15,7 +15,9 @@ from cryptography.exceptions import InvalidSignature
 from pydantic import BaseModel
 
 from .errors import IntegrityError
-from .models import AssessmentReport, AssessmentRequest, ReleaseContract, SignedManifest
+
+if TYPE_CHECKING:
+    from .models import AssessmentReport, AssessmentRequest, ReleaseContract, SignedManifest
 
 
 def canonical_json_bytes(value: BaseModel | dict[str, Any]) -> bytes:
@@ -194,6 +196,10 @@ def build_signed_manifest(
     request: AssessmentRequest,
     private_key_path: Path,
 ) -> SignedManifest:
+    # Kept local so the finite-channel assessment contract can reuse the
+    # portfolio certificate models without creating an import cycle.
+    from .models import SignedManifest
+
     release = request.release
     if report.request_sha256 != sha256_bytes(canonical_json_bytes(request)):
         raise IntegrityError("report does not bind the supplied assessment request")

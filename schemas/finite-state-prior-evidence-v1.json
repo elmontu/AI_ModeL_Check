@@ -1,0 +1,105 @@
+{
+  "$defs": {
+    "RationalProbability": {
+      "additionalProperties": false,
+      "description": "Canonical exact probability used at security-critical decision boundaries.",
+      "properties": {
+        "denominator": {
+          "exclusiveMinimum": 0,
+          "title": "Denominator",
+          "type": "integer"
+        },
+        "numerator": {
+          "minimum": 0,
+          "title": "Numerator",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "numerator",
+        "denominator"
+      ],
+      "title": "RationalProbability",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "description": "Typed authority statement for the finite decision game's numerical prior.",
+  "properties": {
+    "authority": {
+      "maxLength": 512,
+      "minLength": 1,
+      "title": "Authority",
+      "type": "string"
+    },
+    "decision_game_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Decision Game Sha256",
+      "type": "string"
+    },
+    "evidence_type": {
+      "const": "finite_state_prior",
+      "default": "finite_state_prior",
+      "title": "Evidence Type",
+      "type": "string"
+    },
+    "population_scope_id": {
+      "maxLength": 128,
+      "minLength": 3,
+      "pattern": "^[A-Za-z0-9._:-]+$",
+      "title": "Population Scope Id",
+      "type": "string"
+    },
+    "population_scope_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Population Scope Sha256",
+      "type": "string"
+    },
+    "prior": {
+      "items": {
+        "$ref": "#/$defs/RationalProbability"
+      },
+      "title": "Prior",
+      "type": "array"
+    },
+    "prior_definition": {
+      "maxLength": 4096,
+      "minLength": 1,
+      "title": "Prior Definition",
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "1.0",
+      "default": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "state_ids": {
+      "items": {
+        "type": "string"
+      },
+      "minItems": 2,
+      "title": "State Ids",
+      "type": "array"
+    },
+    "threat_id": {
+      "maxLength": 128,
+      "minLength": 3,
+      "pattern": "^[A-Za-z0-9._:-]+$",
+      "title": "Threat Id",
+      "type": "string"
+    }
+  },
+  "required": [
+    "threat_id",
+    "population_scope_id",
+    "population_scope_sha256",
+    "decision_game_sha256",
+    "state_ids",
+    "prior",
+    "prior_definition",
+    "authority"
+  ],
+  "title": "FiniteStatePriorEvidence",
+  "type": "object"
+}

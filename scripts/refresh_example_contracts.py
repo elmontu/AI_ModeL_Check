@@ -14,6 +14,7 @@ from pathlib import Path
 
 from model_release_assurance.analyzers.attack import clopper_pearson_lower
 from model_release_assurance.analyzers.attack_battery import AttackBatteryAnalyzer
+from model_release_assurance.analyzers.base import statistical_floor_design_sha256
 from model_release_assurance.engine import AssuranceEngine
 from model_release_assurance.integrity import canonical_json_bytes, sha256_bytes, sha256_file
 from model_release_assurance.models import (
@@ -37,6 +38,9 @@ from model_release_assurance.models import (
     PopulationScope,
     ReleaseContract,
     RuntimeIdentity,
+    StatisticalFloorFamilyPlan,
+    StatisticalFloorDesignRegistration,
+    StatisticalFloorFamilyMember,
     ThreatContract,
 )
 from model_release_assurance.decision import (
@@ -203,6 +207,66 @@ def refresh() -> None:
         kind: _service(kind).descriptor
         for kind in ("tree_linkage", "dp", "attack")
     }
+    standalone_family_id = "demo-standalone-membership-floor-v1"
+    standalone_attack_template = _load(EXAMPLES / "evidence" / "attack-counts.json")
+    design_registration = StatisticalFloorDesignRegistration(
+        registration_id=f"{standalone_family_id}:calibrated-loss",
+        analyzer="attack",
+        threat_id="membership-person",
+        population_scope_id="service-participants-2026",
+        member_id="calibrated-loss",
+        decision_metric="equal_prior_membership_success",
+        registered_at="2026-08-16T00:00:00Z",
+        dataset_snapshot_sha256=sha256_bytes(
+            b"demo-private-membership-audit-snapshot-v1"
+        ),
+        procedure_sha256=sha256_file(
+            ROOT / "src" / "model_release_assurance" / "analyzers" / "attack.py"
+        ),
+        execution_plan_sha256=sha256_bytes(
+            b"demo-calibrated-loss-fixed-split-threshold-and-query-plan-v1"
+        ),
+        random_seed=20260817,
+        stopping_rule="collect exactly 1000 disjoint audit decisions",
+        planned_primary_trials=standalone_attack_template["trials"],
+        planned_control_trials=standalone_attack_template["nonmember_trials"] or 0,
+        target_fpr=standalone_attack_template["target_fpr"],
+        notes=(
+            "Demonstration commitment; production must bind the retained private "
+            "dataset snapshot and full attack procedure."
+        ),
+    )
+    design_registration_path = EXAMPLES / "config" / "attack-design-registration.json"
+    _write(
+        design_registration_path,
+        design_registration.model_dump(mode="json", exclude_none=False),
+    )
+    design_registration_sha256 = sha256_file(design_registration_path)
+    standalone_attack_template["preregistration_sha256"] = (
+        design_registration_sha256
+    )
+    standalone_attack_plan = StatisticalFloorFamilyPlan(
+        family_id=standalone_family_id,
+        analyzer="attack",
+        threat_id="membership-person",
+        decision_metric="equal_prior_membership_success",
+        members=(StatisticalFloorFamilyMember(
+            member_id="calibrated-loss",
+            registration_path="config/attack-design-registration.json",
+            registration_sha256=design_registration_sha256,
+            input_design_sha256=statistical_floor_design_sha256(
+                standalone_attack_template
+            ),
+        ),),
+        familywise_confidence=0.95,
+        multiplicity_method="bonferroni",
+        frozen_at="2026-08-17T00:00:00Z",
+        authority="whole-government-model-release-demo policy authority",
+    )
+    _write(
+        EXAMPLES / "config" / "attack-analyzer.json",
+        standalone_attack_plan.model_dump(mode="json"),
+    )
 
     policy_raw = {
         "schema_version": "3.0",
@@ -265,7 +329,7 @@ def refresh() -> None:
                 "accepted_configuration_sha256s": [
                     sha256_file(EXAMPLES / "config" / "attack-analyzer.json")
                 ],
-                "required": False,
+                "required": True,
             },
             {
                 "threat_id": "membership-person",
@@ -323,6 +387,7 @@ def refresh() -> None:
     # Retain the standalone single-attack floor as non-battery evidence. It can
     # block but cannot satisfy the policy's complete-battery precondition.
     standalone_attack = _load(EXAMPLES / "evidence" / "attack-counts.json")
+    standalone_attack["preregistration_sha256"] = design_registration_sha256
     standalone_attack["provenance"] = {
         "tool": "mra-demo-attack",
         "tool_version": "1.0",
@@ -340,6 +405,7 @@ def refresh() -> None:
             "threat_id",
             "population_scope_id",
             "attack_name",
+            "preregistration_sha256",
             "metric",
             "successes",
             "trials",

@@ -3,7 +3,10 @@ from __future__ import annotations
 import hashlib
 import json
 from datetime import date, datetime, timezone
+from decimal import Decimal
 from enum import StrEnum
+from fractions import Fraction
+import math
 from typing import Any, Annotated, Literal
 
 from pydantic import BaseModel, ConfigDict, Field, model_validator
@@ -77,6 +80,24 @@ class EvidenceConsistency(StrEnum):
     CONSISTENT = "consistent"
     INSUFFICIENT = "insufficient"
     CONTRADICTORY = "contradictory"
+
+
+class RationalProbability(StrictModel):
+    """Canonical exact probability used at security-critical decision boundaries."""
+
+    numerator: int = Field(ge=0)
+    denominator: int = Field(gt=0)
+
+    @model_validator(mode="after")
+    def probability_is_canonical(self) -> RationalProbability:
+        if self.numerator > self.denominator:
+            raise ValueError("rational probability must lie in [0,1]")
+        if math.gcd(self.numerator, self.denominator) != 1:
+            raise ValueError("rational probability must be stored in lowest terms")
+        return self
+
+    def as_fraction(self) -> Fraction:
+        return Fraction(self.numerator, self.denominator)
 
 
 class PopulationUnitKind(StrEnum):
@@ -662,12 +683,44 @@ class CeilingAttackBatteryMode(StrEnum):
     WAIVED = "waived"
 
 
+class FiniteGameState(StrictModel):
+    state_id: str = Field(min_length=1, max_length=256)
+    secret_value_definition: str = Field(min_length=1, max_length=4096)
+
+
+class FiniteDecisionGame(StrictModel):
+    """Policy-frozen state semantics and numerical prior for an exact-guess game."""
+
+    schema_version: Literal["1.0"] = "1.0"
+    game_id: str = Field(min_length=3, max_length=128, pattern=r"^[A-Za-z0-9._:-]+$")
+    states: tuple[FiniteGameState, ...] = Field(min_length=2)
+    prior: tuple[RationalProbability, ...]
+    prior_basis: str = Field(min_length=1, max_length=4096)
+    authority: str = Field(min_length=1, max_length=512)
+
+    @model_validator(mode="after")
+    def finite_game_is_complete(self) -> FiniteDecisionGame:
+        state_ids = tuple(state.state_id for state in self.states)
+        if len(state_ids) != len(set(state_ids)):
+            raise ValueError("finite decision-game state identifiers must be unique")
+        if len(self.prior) != len(self.states):
+            raise ValueError("finite decision-game prior must align with the ordered states")
+        if sum((value.as_fraction() for value in self.prior), Fraction(0)) != 1:
+            raise ValueError("finite decision-game rational prior must sum exactly to one")
+        return self
+
+    @property
+    def state_ids(self) -> tuple[str, ...]:
+        return tuple(state.state_id for state in self.states)
+
+
 class PolicyRule(StrictModel):
     threat_id: str = Field(min_length=3, max_length=128, pattern=r"^[A-Za-z0-9._:-]+$")
     kind: ThreatKind
     mandatory: bool
     decision_metric: DecisionMetric
     metric_parameters: dict[str, float] = Field(default_factory=dict)
+    finite_game: FiniteDecisionGame | None = None
     tolerance: float = Field(ge=0.0, le=1.0)
     tolerance_basis: Literal["absolute", "incremental"]
     ceiling_attack_battery_mode: CeilingAttackBatteryMode
@@ -709,6 +762,28 @@ class PolicyRule(StrictModel):
                     "finite_secret_exact_guess_success policy requires "
                     "maximum_secret_prior in (0,1)"
                 )
+        if self.finite_game is not None:
+            finite_metrics = {
+                "bayes_linkage_success",
+                "incremental_bayes_linkage_success",
+                "equal_prior_membership_success",
+                "finite_secret_exact_guess_success",
+            }
+            if self.decision_metric not in finite_metrics:
+                raise ValueError("finite_game is only valid for a finite exact-guess metric")
+            maximum_prior = max(value.as_fraction() for value in self.finite_game.prior)
+            if (
+                self.decision_metric == "equal_prior_membership_success"
+                and (
+                    len(self.finite_game.states) != 2
+                    or maximum_prior != Fraction(1, 2)
+                )
+            ):
+                raise ValueError("equal-prior membership finite_game requires two half-prior states")
+            if self.decision_metric == "finite_secret_exact_guess_success":
+                prior_cap = Fraction(str(self.metric_parameters["maximum_secret_prior"]))
+                if maximum_prior > prior_cap:
+                    raise ValueError("finite_game exceeds maximum_secret_prior")
         if any(not 0.0 <= value <= 1.0 for value in self.metric_parameters.values()):
             raise ValueError("policy metric parameters must be probabilities in [0,1]")
         if self.ceiling_attack_battery_mode is CeilingAttackBatteryMode.WAIVED:
@@ -928,6 +1003,7 @@ class ThreatContract(StrictModel):
     success_metric: str = Field(min_length=1, max_length=1024)
     decision_metric: DecisionMetric
     metric_parameters: dict[str, float] = Field(default_factory=dict)
+    finite_game: FiniteDecisionGame | None = None
     tolerance: float = Field(ge=0.0, le=1.0)
     tolerance_basis: Literal["absolute", "incremental"] = "absolute"
     harm_rationale: str = Field(min_length=1, max_length=4096)
@@ -976,6 +1052,28 @@ class ThreatContract(StrictModel):
                     "finite_secret_exact_guess_success requires "
                     "metric_parameters.maximum_secret_prior in (0,1)"
                 )
+        if self.finite_game is not None:
+            finite_metrics = {
+                "bayes_linkage_success",
+                "incremental_bayes_linkage_success",
+                "equal_prior_membership_success",
+                "finite_secret_exact_guess_success",
+            }
+            if self.decision_metric not in finite_metrics:
+                raise ValueError("finite_game is only valid for a finite exact-guess metric")
+            maximum_prior = max(value.as_fraction() for value in self.finite_game.prior)
+            if (
+                self.decision_metric == "equal_prior_membership_success"
+                and (
+                    len(self.finite_game.states) != 2
+                    or maximum_prior != Fraction(1, 2)
+                )
+            ):
+                raise ValueError("equal-prior membership finite_game requires two half-prior states")
+            if self.decision_metric == "finite_secret_exact_guess_success":
+                prior_cap = Fraction(str(self.metric_parameters["maximum_secret_prior"]))
+                if maximum_prior > prior_cap:
+                    raise ValueError("finite_game exceeds maximum_secret_prior")
         if any(not 0.0 <= value <= 1.0 for value in self.metric_parameters.values()):
             raise ValueError("metric parameters must be probabilities in [0,1]")
         if self.kind is ThreatKind.LINKAGE:
@@ -1007,6 +1105,145 @@ class AnalyzerProvenance(StrictModel):
         if len(set(self.bound_fields)) != len(self.bound_fields):
             raise ValueError("provenance bound_fields must be unique")
         return self
+
+
+class StatisticalFloorFamilyMember(StrictModel):
+    """One outcome-free, preregistered design in a statistical floor family."""
+
+    member_id: str = Field(
+        min_length=1,
+        max_length=256,
+        pattern=r"^[A-Za-z0-9._:-]+$",
+    )
+    registration_path: str = Field(min_length=1)
+    registration_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
+    input_design_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
+
+
+class StatisticalFloorDesignRegistration(StrictModel):
+    """Outcome-free design facts frozen before a generic floor is observed."""
+
+    schema_version: Literal["1.0"] = "1.0"
+    registration_id: str = Field(
+        min_length=3,
+        max_length=128,
+        pattern=r"^[A-Za-z0-9._:-]+$",
+    )
+    analyzer: Literal["attack", "controlled_inference", "llm_canary"]
+    threat_id: str = Field(
+        min_length=3,
+        max_length=128,
+        pattern=r"^[A-Za-z0-9._:-]+$",
+    )
+    population_scope_id: str = Field(
+        min_length=3,
+        max_length=128,
+        pattern=r"^[A-Za-z0-9._:-]+$",
+    )
+    member_id: str = Field(
+        min_length=1,
+        max_length=256,
+        pattern=r"^[A-Za-z0-9._:-]+$",
+    )
+    decision_metric: DecisionMetric
+    registered_at: datetime
+    dataset_snapshot_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
+    procedure_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
+    execution_plan_sha256: str = Field(
+        pattern=r"^[0-9a-f]{64}$",
+        description=(
+            "Pre-outcome commitment to the calibration split, search space, "
+            "threshold/scoring rule, query schedule, and model decoding settings."
+        ),
+    )
+    random_seed: int = Field(ge=0)
+    stopping_rule: str = Field(min_length=1, max_length=2048)
+    planned_primary_trials: int = Field(gt=0)
+    planned_control_trials: int = Field(ge=0)
+    target_fpr: float | None = Field(default=None, gt=0.0, lt=1.0)
+    sealed_assignment_sha256: str | None = Field(
+        default=None,
+        pattern=r"^[0-9a-f]{64}$",
+    )
+    notes: str = Field(default="", max_length=4096)
+
+    @model_validator(mode="after")
+    def registration_is_coherent(self) -> StatisticalFloorDesignRegistration:
+        if self.registered_at.utcoffset() is None:
+            raise ValueError(
+                "statistical floor design registered_at must include a timezone"
+            )
+        if self.decision_metric == "membership_tpr_at_fpr":
+            if self.target_fpr is None:
+                raise ValueError(
+                    "low-FPR statistical floor designs require target_fpr"
+                )
+        elif self.target_fpr is not None:
+            raise ValueError(
+                "target_fpr is only valid for membership_tpr_at_fpr designs"
+            )
+        if self.analyzer == "llm_canary":
+            if self.sealed_assignment_sha256 is None:
+                raise ValueError(
+                    "LLM canary designs require a sealed assignment digest"
+                )
+        elif self.sealed_assignment_sha256 is not None:
+            raise ValueError(
+                "sealed_assignment_sha256 is only valid for LLM canary designs"
+            )
+        return self
+
+
+class StatisticalFloorFamilyPlan(StrictModel):
+    """Policy-approved roster and error family for generic blocking tests."""
+
+    schema_version: Literal["1.0"] = "1.0"
+    family_id: str = Field(min_length=3, max_length=128, pattern=r"^[A-Za-z0-9._:-]+$")
+    analyzer: Literal["attack", "controlled_inference", "llm_canary"]
+    threat_id: str = Field(min_length=3, max_length=128, pattern=r"^[A-Za-z0-9._:-]+$")
+    decision_metric: DecisionMetric
+    members: tuple[StatisticalFloorFamilyMember, ...] = Field(min_length=1)
+    familywise_confidence: float = Field(ge=0.95, lt=1.0)
+    multiplicity_method: Literal["bonferroni"]
+    frozen_at: datetime
+    authority: str = Field(min_length=1, max_length=512)
+
+    @model_validator(mode="after")
+    def family_is_predeclared(self) -> StatisticalFloorFamilyPlan:
+        if self.frozen_at.utcoffset() is None:
+            raise ValueError("statistical floor family frozen_at must include a timezone")
+        member_ids = [member.member_id for member in self.members]
+        if len(member_ids) != len(set(member_ids)):
+            raise ValueError("statistical floor family member identifiers must be unique")
+        return self
+
+    @property
+    def member_ids(self) -> tuple[str, ...]:
+        return tuple(member.member_id for member in self.members)
+
+
+class EvidenceBindingContext(StrictModel):
+    """Immutable release identity carried by raw statistical evidence.
+
+    This deliberately excludes an observation timestamp: plans, counts, and
+    error-budget allocations must agree on the release identity before any
+    observation is made, while ``EvidenceContext.observed_at`` records when an
+    assessment consumed the resulting evidence.
+    """
+
+    schema_version: Literal["1.0"] = "1.0"
+    release_id: str = Field(min_length=3, max_length=128, pattern=r"^[A-Za-z0-9._:-]+$")
+    release_contract_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
+    policy_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
+    artifact_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
+    interface_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
+    population_scope_id: str = Field(
+        min_length=3,
+        max_length=128,
+        pattern=r"^[A-Za-z0-9._:-]+$",
+    )
+    population_scope_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
+    decision_game_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
 
 
 class EvidenceContext(StrictModel):
@@ -1117,7 +1354,7 @@ class AttackPositiveControlPlan(StrictModel):
     reference_dataset_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
     minimum_trials: int = Field(gt=0)
     minimum_detection_lower_bound: float = Field(gt=0.0, le=1.0)
-    confidence: float = Field(gt=0.5, lt=1.0)
+    confidence: float = Field(ge=0.95, lt=1.0)
 
 
 class AttackRunPlan(StrictModel):
@@ -1128,7 +1365,7 @@ class AttackRunPlan(StrictModel):
     evidence_role: Literal["blocking_floor", "screen_only"]
     seed: int = Field(ge=0)
     repetitions: int = Field(ge=1)
-    confidence: float = Field(gt=0.5, lt=1.0)
+    confidence: float = Field(ge=0.95, lt=1.0)
     comparison_family_size: int = Field(ge=1)
     target_fpr: float | None = Field(default=None, gt=0.0, lt=1.0)
     positive_control_ids: tuple[str, ...] = Field(min_length=1)
@@ -1195,6 +1432,15 @@ class AttackBatteryConfiguration(StrictModel):
             raise ValueError(
                 "positive controls must be bound to the attack that consumes them: "
                 f"{sorted(mismatched_controls)}"
+            )
+        blocking_confidences = {
+            run.confidence
+            for run in self.runs
+            if run.evidence_role == "blocking_floor"
+        }
+        if len(blocking_confidences) > 1:
+            raise ValueError(
+                "all blocking runs in one attack battery must use one familywise confidence"
             )
         return self
 
@@ -1638,6 +1884,7 @@ class AttackInput(StrictModel):
     threat_id: str
     population_scope_id: str
     attack_name: str = Field(min_length=1)
+    preregistration_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
     metric: Literal[
         "membership_tpr_at_fpr",
         "equal_prior_membership_success",
@@ -1647,7 +1894,7 @@ class AttackInput(StrictModel):
     ]
     successes: int = Field(ge=0)
     trials: int = Field(gt=0)
-    confidence: float = Field(default=0.95, gt=0.5, lt=1.0)
+    confidence: float = Field(default=0.95, ge=0.95, lt=1.0)
     comparison_family_size: int = Field(default=1, ge=1)
     calibration_disjoint: bool
     audit_disjoint: bool
@@ -1690,6 +1937,7 @@ class ControlledInferenceInput(StrictModel):
     threat_id: str
     population_scope_id: str
     attack_name: str = Field(min_length=1)
+    preregistration_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
     metric: Literal[
         "attribute_attack_success",
         "incremental_attribute_attack_success",
@@ -1701,7 +1949,7 @@ class ControlledInferenceInput(StrictModel):
     baseline_successes: int = Field(ge=0)
     combined_only_successes: int = Field(ge=0)
     baseline_only_successes: int = Field(ge=0)
-    confidence_family: float = Field(default=0.95, gt=0.5, lt=1.0)
+    confidence_family: float = Field(default=0.95, ge=0.95, lt=1.0)
     comparison_family_size: int = Field(default=1, ge=1)
     attack_training_disjoint: bool
     audit_disjoint: bool
@@ -1781,7 +2029,7 @@ class LlmCanaryInput(StrictModel):
     member_canaries: int = Field(gt=0)
     decoy_successes: int = Field(ge=0)
     nonmember_decoys: int = Field(gt=0)
-    confidence: float = Field(default=0.95, gt=0.5, lt=1.0)
+    confidence: float = Field(default=0.95, ge=0.95, lt=1.0)
     comparison_family_size: int = Field(default=1, ge=1)
     target_fpr: float | None = Field(default=None, gt=0.0, lt=1.0)
     assignment_randomized: bool
@@ -1808,10 +2056,94 @@ class LlmCanaryInput(StrictModel):
         return self
 
 
+# Imported after StrictModel and the other contract primitives are defined.  The
+# portfolio module depends on those primitives, while this assessment input
+# embeds its already-solved, portable certificate as a strongly typed object.
+from .incomplete_portfolio import AnalyticPortfolioEvidenceEntry, StatisticalCoverage
+
+
+class FiniteChannelCeilingInput(StrictModel):
+    """Model-family-neutral finite-channel interval submitted to ``assess``.
+
+    The embedded analytic certificate supplies the simultaneous upper bound.
+    The same marginal confidence family also supplies a fixed-decoder lower
+    bound, so a release can clear, block, or receive a concrete recollection /
+    interface-redesign disposition instead of an unactionable screen.
+    """
+
+    analyzer: Literal["finite_channel_ceiling"] = "finite_channel_ceiling"
+    schema_version: Literal["1.0"] = "1.0"
+    threat_id: str = Field(min_length=3, max_length=128, pattern=r"^[A-Za-z0-9._:-]+$")
+    population_scope_id: str = Field(
+        min_length=3,
+        max_length=128,
+        pattern=r"^[A-Za-z0-9._:-]+$",
+    )
+    analytic_evidence: AnalyticPortfolioEvidenceEntry
+    observed_interface_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
+    observed_artifact_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
+    interface_observation_definition: str = Field(min_length=1, max_length=4096)
+    release_enforced_finite_alphabet: bool
+    complete_interface_coverage: bool
+    recipient_realizable: bool
+    bounded_transcript_complete: bool
+    state_trials: tuple[int, ...] | None = None
+    evidence_context: EvidenceContext
+    provenance: AnalyzerProvenance
+
+    @model_validator(mode="after")
+    def certificate_scope_is_coherent(self) -> FiniteChannelCeilingInput:
+        problem = self.analytic_evidence.problem
+        if problem.rational_prior is None:
+            raise ValueError(
+                "finite-channel evidence requires an authoritative exact rational prior"
+            )
+        if problem.threat_id != self.threat_id:
+            raise ValueError("finite-channel certificate targets another threat")
+        if problem.population_scope_id != self.population_scope_id:
+            raise ValueError("finite-channel certificate targets another population scope")
+        if problem.population_scope_sha256 != self.evidence_context.population_scope_sha256:
+            raise ValueError("finite-channel certificate changes the population snapshot")
+        if problem.decision_game_sha256 != self.evidence_context.decision_game_sha256:
+            raise ValueError("finite-channel certificate changes the decision game")
+        if self.observed_interface_sha256 != self.evidence_context.interface_sha256:
+            raise ValueError("observed finite channel is bound to another interface")
+        if self.observed_artifact_sha256 != self.evidence_context.artifact_sha256:
+            raise ValueError("observed finite channel is bound to another artifact")
+        if len(problem.releases) != 1:
+            raise ValueError(
+                "finite-channel assessment requires one complete release transcript; "
+                "cross-release composition belongs to the portfolio gate"
+            )
+        if problem.coverage is StatisticalCoverage.DETERMINISTIC:
+            if self.state_trials is not None:
+                raise ValueError("deterministic finite-channel evidence must not claim trials")
+            if any(
+                lower_row != upper_row
+                for release in problem.releases
+                for lower_row, upper_row in zip(
+                    release.lower,
+                    release.upper,
+                    strict=True,
+                )
+            ):
+                raise ValueError(
+                    "deterministic finite-channel evidence requires point-valued channel rows"
+                )
+        else:
+            if self.state_trials is None:
+                raise ValueError("statistical finite-channel evidence requires state_trials")
+            if len(self.state_trials) != len(problem.state_ids):
+                raise ValueError("state_trials must align with the certificate state order")
+            if any(value < 1 for value in self.state_trials):
+                raise ValueError("every statistical channel state requires at least one trial")
+        return self
+
+
 AnalyzerInput = Annotated[
     TreeLinkageInput | DpInput | AttackInput | AttackBatteryInput
     | PopulationInput | ControlledInferenceInput
-    | LlmWatermarkInput | LlmCanaryInput,
+    | LlmWatermarkInput | LlmCanaryInput | FiniteChannelCeilingInput,
     Field(discriminator="analyzer"),
 ]
 
@@ -1882,6 +2214,10 @@ class EvidenceRecord(StrictModel):
     value: float | None = Field(default=None, ge=0.0, le=1.0)
     lower: float | None = Field(default=None, ge=0.0, le=1.0)
     upper: float | None = Field(default=None, ge=0.0, le=1.0)
+    exact_lower: RationalProbability | None = None
+    exact_upper: RationalProbability | None = None
+    statistical_family_id: str | None = Field(default=None, pattern=r"^[0-9a-f]{64}$")
+    familywise_confidence: float | None = Field(default=None, ge=0.95, lt=1.0)
     baseline: float | None = Field(default=None, ge=0.0, le=1.0)
     realizability: Realizability
     can_clear: bool
@@ -1908,15 +2244,55 @@ class EvidenceRecord(StrictModel):
             raise ValueError("only complete-interface evidence may clear a threat")
         if self.can_block and self.lower is None:
             raise ValueError("evidence that can block must provide a lower bound")
+        if self.can_block and self.evidence_class is not EvidenceClass.EXACT:
+            if self.statistical_family_id is None or self.familywise_confidence is None:
+                raise ValueError(
+                    "statistical blocking evidence requires a typed family digest and "
+                    "familywise confidence of at least 0.95"
+                )
+        if (self.statistical_family_id is None) != (self.familywise_confidence is None):
+            raise ValueError(
+                "statistical family digest and familywise confidence must be present together"
+            )
         if self.lower is not None and self.upper is not None and self.lower > self.upper:
             raise ValueError("evidence lower bound cannot exceed upper bound")
+        if self.exact_lower is not None:
+            if self.lower is None:
+                raise ValueError("an exact rational lower bound requires a display lower bound")
+            if Fraction(Decimal(str(self.lower))) > self.exact_lower.as_fraction():
+                raise ValueError("display lower bound must be rounded downward from the exact bound")
+        if self.exact_upper is not None:
+            if self.upper is None:
+                raise ValueError("an exact rational upper bound requires a display upper bound")
+            if Fraction(Decimal(str(self.upper))) < self.exact_upper.as_fraction():
+                raise ValueError("display upper bound must be rounded upward from the exact bound")
+        if (
+            self.exact_lower is not None
+            and self.exact_upper is not None
+            and self.exact_lower.as_fraction() > self.exact_upper.as_fraction()
+        ):
+            raise ValueError("exact evidence lower bound cannot exceed its upper bound")
         if self.value is not None and self.lower is not None and self.value < self.lower:
             raise ValueError("evidence value cannot be below its lower bound")
         if self.value is not None and self.upper is not None and self.value > self.upper:
             raise ValueError("evidence value cannot exceed its upper bound")
         if self.evidence_class is EvidenceClass.EXACT:
-            if self.lower is None or self.upper is None or abs(self.lower - self.upper) > 1e-12:
-                raise ValueError("exact evidence requires equal lower and upper values")
+            if self.lower is None or self.upper is None:
+                raise ValueError("exact evidence requires lower and upper values")
+            has_exact_lower = self.exact_lower is not None
+            has_exact_upper = self.exact_upper is not None
+            if has_exact_lower != has_exact_upper:
+                raise ValueError(
+                    "exact evidence must provide both rational bounds or neither"
+                )
+            if has_exact_lower:
+                assert self.exact_lower is not None and self.exact_upper is not None
+                if self.exact_lower.as_fraction() != self.exact_upper.as_fraction():
+                    raise ValueError("exact evidence rational bounds must be equal")
+            elif abs(self.lower - self.upper) > 1e-12:
+                raise ValueError(
+                    "exact evidence without rational bounds requires equal display values"
+                )
         if self.evidence_class is EvidenceClass.CEILING and self.upper is None:
             raise ValueError("ceiling evidence requires an upper bound")
         if self.evidence_class is EvidenceClass.FLOOR and self.lower is None:
@@ -1962,6 +2338,34 @@ class AttackBatteryStatus(StrictModel):
         return self
 
 
+class DecisionResolution(StrictModel):
+    """Machine-readable operational consequence of one threat decision."""
+
+    code: str = Field(min_length=3, max_length=128, pattern=r"^[a-z0-9_]+$")
+    release_gate: Literal["clear", "block", "hold"]
+    actions: tuple[str, ...] = ()
+    evidence_ids: tuple[str, ...] = ()
+    missing_obligations: tuple[str, ...] = ()
+    indicative_minimum_trials_per_state: int | None = Field(default=None, gt=0)
+    indicative_additional_trials_per_state: int | None = Field(default=None, ge=0)
+    planning_estimate_is_decision_evidence: Literal[False] = False
+
+    @model_validator(mode="after")
+    def resolution_is_actionable(self) -> DecisionResolution:
+        if self.release_gate == "hold" and not self.actions:
+            raise ValueError("a held release requires at least one actionable next step")
+        if len(self.actions) != len(set(self.actions)):
+            raise ValueError("decision-resolution actions must be unique")
+        if len(self.evidence_ids) != len(set(self.evidence_ids)):
+            raise ValueError("decision-resolution evidence identifiers must be unique")
+        if (
+            self.indicative_additional_trials_per_state is not None
+            and self.indicative_minimum_trials_per_state is None
+        ):
+            raise ValueError("an additional-trials estimate requires a total-trials target")
+        return self
+
+
 class ThreatDecision(StrictModel):
     threat_id: str
     population_scope_id: str
@@ -1978,6 +2382,8 @@ class ThreatDecision(StrictModel):
     tolerance_basis: Literal["absolute", "incremental"]
     lower_bound: float
     upper_bound: float
+    lower_bound_fraction: RationalProbability
+    upper_bound_fraction: RationalProbability
     verdict: Verdict
     evidence_ids: tuple[str, ...]
     excluded_evidence_ids: tuple[str, ...] = ()
@@ -1985,11 +2391,18 @@ class ThreatDecision(StrictModel):
     conflicting_evidence_ids: tuple[str, ...] = ()
     clearance_evidence_class: EvidenceClass | None = None
     ceiling_attack_battery: AttackBatteryStatus
+    resolution: DecisionResolution
     reasons: tuple[str, ...]
 
     @model_validator(mode="after")
     def evidence_consistency_matches_bounds(self) -> ThreatDecision:
-        contradictory = self.lower_bound > self.upper_bound + 1e-12
+        exact_lower = self.lower_bound_fraction.as_fraction()
+        exact_upper = self.upper_bound_fraction.as_fraction()
+        if Fraction(Decimal(str(self.lower_bound))) > exact_lower:
+            raise ValueError("decision lower display must be rounded downward")
+        if Fraction(Decimal(str(self.upper_bound))) < exact_upper:
+            raise ValueError("decision upper display must be rounded upward")
+        contradictory = exact_lower > exact_upper
         if contradictory != (self.evidence_consistency is EvidenceConsistency.CONTRADICTORY):
             raise ValueError("evidence consistency does not match the decision bounds")
         if self.evidence_consistency is EvidenceConsistency.CONTRADICTORY:
@@ -2019,6 +2432,15 @@ class ThreatDecision(StrictModel):
             raise ValueError("excluded evidence identifiers must be unique")
         if set(self.evidence_ids) & set(self.excluded_evidence_ids):
             raise ValueError("included and excluded evidence identifiers must be disjoint")
+        if not set(self.resolution.evidence_ids).issubset(self.evidence_ids):
+            raise ValueError("decision-resolution evidence must belong to the decision")
+        expected_gate = {
+            Verdict.CLEAR: "clear",
+            Verdict.BLOCK: "block",
+            Verdict.INCONCLUSIVE: "hold",
+        }[self.verdict]
+        if self.resolution.release_gate != expected_gate:
+            raise ValueError("decision resolution release gate does not match the verdict")
         if self.verdict is Verdict.CLEAR:
             if self.clearance_evidence_class not in (EvidenceClass.EXACT, EvidenceClass.CEILING):
                 raise ValueError("a clear decision must identify exact or ceiling evidence")

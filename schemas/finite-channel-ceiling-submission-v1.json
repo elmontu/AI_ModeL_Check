@@ -1,5 +1,104 @@
 {
   "$defs": {
+    "AnalyticPortfolioEvidenceEntry": {
+      "additionalProperties": false,
+      "properties": {
+        "envelope_certificate": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/EnvelopePortfolioCertificate"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "exact_certificate": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ExactPortfolioCertificate"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "problem": {
+          "$ref": "#/$defs/IncompletePortfolioProblem"
+        },
+        "rational_upper_audit": {
+          "$ref": "#/$defs/RationalUpperAudit"
+        },
+        "schema_version": {
+          "const": "1.1",
+          "default": "1.1",
+          "title": "Schema Version",
+          "type": "string"
+        }
+      },
+      "required": [
+        "problem",
+        "rational_upper_audit"
+      ],
+      "title": "AnalyticPortfolioEvidenceEntry",
+      "type": "object"
+    },
+    "AnalyzerProvenance": {
+      "additionalProperties": false,
+      "properties": {
+        "bound_fields": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Bound Fields",
+          "type": "array"
+        },
+        "configuration_path": {
+          "minLength": 1,
+          "title": "Configuration Path",
+          "type": "string"
+        },
+        "producer": {
+          "$ref": "#/$defs/EvidenceProducer"
+        },
+        "source_path": {
+          "minLength": 1,
+          "title": "Source Path",
+          "type": "string"
+        },
+        "source_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Source Sha256",
+          "type": "string"
+        },
+        "tool": {
+          "maxLength": 256,
+          "minLength": 1,
+          "title": "Tool",
+          "type": "string"
+        },
+        "tool_version": {
+          "maxLength": 128,
+          "minLength": 1,
+          "title": "Tool Version",
+          "type": "string"
+        }
+      },
+      "required": [
+        "tool",
+        "tool_version",
+        "producer",
+        "configuration_path",
+        "source_path",
+        "source_sha256",
+        "bound_fields"
+      ],
+      "title": "AnalyzerProvenance",
+      "type": "object"
+    },
     "ConditionalMarginalBounds": {
       "additionalProperties": false,
       "properties": {
@@ -229,6 +328,108 @@
         "coverage_confidence"
       ],
       "title": "EnvelopePortfolioCertificate",
+      "type": "object"
+    },
+    "EvidenceContext": {
+      "additionalProperties": false,
+      "properties": {
+        "artifact_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Artifact Sha256",
+          "type": "string"
+        },
+        "decision_game_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Decision Game Sha256",
+          "type": "string"
+        },
+        "interface_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Interface Sha256",
+          "type": "string"
+        },
+        "observed_at": {
+          "format": "date-time",
+          "title": "Observed At",
+          "type": "string"
+        },
+        "policy_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Policy Sha256",
+          "type": "string"
+        },
+        "population_scope_id": {
+          "maxLength": 128,
+          "minLength": 3,
+          "pattern": "^[A-Za-z0-9._:-]+$",
+          "title": "Population Scope Id",
+          "type": "string"
+        },
+        "population_scope_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Population Scope Sha256",
+          "type": "string"
+        },
+        "release_contract_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Release Contract Sha256",
+          "type": "string"
+        },
+        "release_id": {
+          "maxLength": 128,
+          "minLength": 3,
+          "pattern": "^[A-Za-z0-9._:-]+$",
+          "title": "Release Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "release_id",
+        "release_contract_sha256",
+        "policy_sha256",
+        "artifact_sha256",
+        "interface_sha256",
+        "population_scope_id",
+        "population_scope_sha256",
+        "decision_game_sha256",
+        "observed_at"
+      ],
+      "title": "EvidenceContext",
+      "type": "object"
+    },
+    "EvidenceProducer": {
+      "additionalProperties": false,
+      "properties": {
+        "configuration_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Configuration Sha256",
+          "type": "string"
+        },
+        "implementation_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Implementation Sha256",
+          "type": "string"
+        },
+        "service_id": {
+          "maxLength": 128,
+          "minLength": 3,
+          "pattern": "^[A-Za-z0-9._:-]+$",
+          "title": "Service Id",
+          "type": "string"
+        },
+        "service_version": {
+          "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$",
+          "title": "Service Version",
+          "type": "string"
+        }
+      },
+      "required": [
+        "service_id",
+        "service_version",
+        "implementation_sha256",
+        "configuration_sha256"
+      ],
+      "title": "EvidenceProducer",
       "type": "object"
     },
     "EvidenceReference": {
@@ -750,46 +951,105 @@
     }
   },
   "additionalProperties": false,
+  "description": "Model-family-neutral finite-channel interval submitted to ``assess``.\n\nThe embedded analytic certificate supplies the simultaneous upper bound.\nThe same marginal confidence family also supplies a fixed-decoder lower\nbound, so a release can clear, block, or receive a concrete recollection /\ninterface-redesign disposition instead of an unactionable screen.",
   "properties": {
-    "envelope_certificate": {
-      "anyOf": [
-        {
-          "$ref": "#/$defs/EnvelopePortfolioCertificate"
-        },
-        {
-          "type": "null"
-        }
-      ],
-      "default": null
+    "analytic_evidence": {
+      "$ref": "#/$defs/AnalyticPortfolioEvidenceEntry"
     },
-    "exact_certificate": {
-      "anyOf": [
-        {
-          "$ref": "#/$defs/ExactPortfolioCertificate"
-        },
-        {
-          "type": "null"
-        }
-      ],
-      "default": null
+    "analyzer": {
+      "const": "finite_channel_ceiling",
+      "default": "finite_channel_ceiling",
+      "title": "Analyzer",
+      "type": "string"
     },
-    "problem": {
-      "$ref": "#/$defs/IncompletePortfolioProblem"
+    "bounded_transcript_complete": {
+      "title": "Bounded Transcript Complete",
+      "type": "boolean"
     },
-    "rational_upper_audit": {
-      "$ref": "#/$defs/RationalUpperAudit"
+    "complete_interface_coverage": {
+      "title": "Complete Interface Coverage",
+      "type": "boolean"
+    },
+    "evidence_context": {
+      "$ref": "#/$defs/EvidenceContext"
+    },
+    "interface_observation_definition": {
+      "maxLength": 4096,
+      "minLength": 1,
+      "title": "Interface Observation Definition",
+      "type": "string"
+    },
+    "observed_artifact_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Observed Artifact Sha256",
+      "type": "string"
+    },
+    "observed_interface_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Observed Interface Sha256",
+      "type": "string"
+    },
+    "population_scope_id": {
+      "maxLength": 128,
+      "minLength": 3,
+      "pattern": "^[A-Za-z0-9._:-]+$",
+      "title": "Population Scope Id",
+      "type": "string"
+    },
+    "provenance": {
+      "$ref": "#/$defs/AnalyzerProvenance"
+    },
+    "recipient_realizable": {
+      "title": "Recipient Realizable",
+      "type": "boolean"
+    },
+    "release_enforced_finite_alphabet": {
+      "title": "Release Enforced Finite Alphabet",
+      "type": "boolean"
     },
     "schema_version": {
-      "const": "1.1",
-      "default": "1.1",
+      "const": "1.0",
+      "default": "1.0",
       "title": "Schema Version",
+      "type": "string"
+    },
+    "state_trials": {
+      "anyOf": [
+        {
+          "items": {
+            "type": "integer"
+          },
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "State Trials"
+    },
+    "threat_id": {
+      "maxLength": 128,
+      "minLength": 3,
+      "pattern": "^[A-Za-z0-9._:-]+$",
+      "title": "Threat Id",
       "type": "string"
     }
   },
   "required": [
-    "problem",
-    "rational_upper_audit"
+    "threat_id",
+    "population_scope_id",
+    "analytic_evidence",
+    "observed_interface_sha256",
+    "observed_artifact_sha256",
+    "interface_observation_definition",
+    "release_enforced_finite_alphabet",
+    "complete_interface_coverage",
+    "recipient_realizable",
+    "bounded_transcript_complete",
+    "evidence_context",
+    "provenance"
   ],
-  "title": "AnalyticPortfolioEvidenceEntry",
+  "title": "FiniteChannelCeilingInput",
   "type": "object"
 }

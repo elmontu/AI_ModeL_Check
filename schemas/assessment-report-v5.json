@@ -233,6 +233,90 @@
       "title": "DataModality",
       "type": "string"
     },
+    "DecisionResolution": {
+      "additionalProperties": false,
+      "description": "Machine-readable operational consequence of one threat decision.",
+      "properties": {
+        "actions": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Actions",
+          "type": "array"
+        },
+        "code": {
+          "maxLength": 128,
+          "minLength": 3,
+          "pattern": "^[a-z0-9_]+$",
+          "title": "Code",
+          "type": "string"
+        },
+        "evidence_ids": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Evidence Ids",
+          "type": "array"
+        },
+        "indicative_additional_trials_per_state": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Indicative Additional Trials Per State"
+        },
+        "indicative_minimum_trials_per_state": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Indicative Minimum Trials Per State"
+        },
+        "missing_obligations": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Missing Obligations",
+          "type": "array"
+        },
+        "planning_estimate_is_decision_evidence": {
+          "const": false,
+          "default": false,
+          "title": "Planning Estimate Is Decision Evidence",
+          "type": "boolean"
+        },
+        "release_gate": {
+          "enum": [
+            "clear",
+            "block",
+            "hold"
+          ],
+          "title": "Release Gate",
+          "type": "string"
+        }
+      },
+      "required": [
+        "code",
+        "release_gate"
+      ],
+      "title": "DecisionResolution",
+      "type": "object"
+    },
     "ErrorChannelContract": {
       "additionalProperties": false,
       "description": "Declaration of transport status, errors, and retry signals.",
@@ -433,6 +517,42 @@
           "title": "Evidence Id",
           "type": "string"
         },
+        "exact_lower": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/RationalProbability"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "exact_upper": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/RationalProbability"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "familywise_confidence": {
+          "anyOf": [
+            {
+              "exclusiveMaximum": 1.0,
+              "minimum": 0.95,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Familywise Confidence"
+        },
         "interface_sha256": {
           "anyOf": [
             {
@@ -525,6 +645,19 @@
           "pattern": "^[A-Za-z0-9._:-]+$",
           "title": "Release Id",
           "type": "string"
+        },
+        "statistical_family_id": {
+          "anyOf": [
+            {
+              "pattern": "^[0-9a-f]{64}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Statistical Family Id"
         },
         "threat_id": {
           "title": "Threat Id",
@@ -1505,6 +1638,28 @@
       "title": "RateLimitContract",
       "type": "object"
     },
+    "RationalProbability": {
+      "additionalProperties": false,
+      "description": "Canonical exact probability used at security-critical decision boundaries.",
+      "properties": {
+        "denominator": {
+          "exclusiveMinimum": 0,
+          "title": "Denominator",
+          "type": "integer"
+        },
+        "numerator": {
+          "minimum": 0,
+          "title": "Numerator",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "numerator",
+        "denominator"
+      ],
+      "title": "RationalProbability",
+      "type": "object"
+    },
     "Realizability": {
       "enum": [
         "recipient_realizable",
@@ -1757,6 +1912,9 @@
           "title": "Lower Bound",
           "type": "number"
         },
+        "lower_bound_fraction": {
+          "$ref": "#/$defs/RationalProbability"
+        },
         "mandatory": {
           "title": "Mandatory",
           "type": "boolean"
@@ -1776,6 +1934,9 @@
           },
           "title": "Reasons",
           "type": "array"
+        },
+        "resolution": {
+          "$ref": "#/$defs/DecisionResolution"
         },
         "threat_id": {
           "title": "Threat Id",
@@ -1797,6 +1958,9 @@
           "title": "Upper Bound",
           "type": "number"
         },
+        "upper_bound_fraction": {
+          "$ref": "#/$defs/RationalProbability"
+        },
         "verdict": {
           "$ref": "#/$defs/Verdict"
         }
@@ -1817,10 +1981,13 @@
         "tolerance_basis",
         "lower_bound",
         "upper_bound",
+        "lower_bound_fraction",
+        "upper_bound_fraction",
         "verdict",
         "evidence_ids",
         "evidence_consistency",
         "ceiling_attack_battery",
+        "resolution",
         "reasons"
       ],
       "title": "ThreatDecision",

@@ -12,6 +12,7 @@ from .analyzers import (
     AttackBatteryAnalyzer,
     ControlledInferenceAnalyzer,
     DpAnalyzer,
+    FiniteChannelCeilingAnalyzer,
     LlmCanaryAnalyzer,
     LlmWatermarkAnalyzer,
     PopulationAnalyzer,
@@ -169,6 +170,7 @@ def default_analyzer_service_registry() -> AnalyzerServiceRegistry:
     return AnalyzerServiceRegistry((
         LocalAnalyzerService(TreeLinkageAnalyzer()),
         LocalAnalyzerService(DpAnalyzer()),
+        LocalAnalyzerService(FiniteChannelCeilingAnalyzer()),
         LocalAnalyzerService(AttackAnalyzer()),
         LocalAnalyzerService(AttackBatteryAnalyzer()),
         LocalAnalyzerService(ControlledInferenceAnalyzer()),

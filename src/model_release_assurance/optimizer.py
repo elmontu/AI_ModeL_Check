@@ -33,6 +33,8 @@ from .incomplete_portfolio import (
     verify_portfolio_problem_evidence,
     decimal_fraction,
     outward_rounded_fraction,
+    portfolio_prior_fractions,
+    portfolio_prior_values,
     verified_upper_fraction,
 )
 from .models import (
@@ -1002,7 +1004,10 @@ class ReleaseOptimizer:
                         f"analytic portfolio problem for {pair} omits or adds a registered release"
                     )
                 released = released_experiments[decision.threat_id]
-                if problem.state_ids != released.state_ids or problem.prior != released.prior:
+                if (
+                    problem.state_ids != released.state_ids
+                    or portfolio_prior_values(problem) != released.prior
+                ):
                     raise ValueError(
                         f"analytic portfolio problem for {pair} changes the registered secret states or prior"
                     )
@@ -1032,8 +1037,9 @@ class ReleaseOptimizer:
                         f"analytic incomplete-portfolio certificates do not implement "
                         f"decision metric {decision.decision_metric!r}"
                     )
+                exact_prior = portfolio_prior_fractions(problem)
                 if decision.decision_metric == "equal_prior_membership_success" and any(
-                    abs(value - 1.0 / len(problem.prior)) > 1e-10 for value in problem.prior
+                    value != Fraction(1, len(exact_prior)) for value in exact_prior
                 ):
                     raise ValueError("equal-prior membership certificates require a uniform prior")
                 verification = verify_analytic_portfolio(entry)
@@ -1047,7 +1053,7 @@ class ReleaseOptimizer:
                 if decision.decision_metric.startswith("incremental_"):
                     certified_exact = max(
                         0,
-                        certified_exact - max(decimal_fraction(value) for value in problem.prior),
+                        certified_exact - max(exact_prior),
                     )
                 certified_upper = outward_rounded_fraction(certified_exact)
                 rational_bounds[pair] = certified_exact

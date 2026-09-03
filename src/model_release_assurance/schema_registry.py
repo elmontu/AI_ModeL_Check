@@ -12,7 +12,11 @@ from typing import Mapping
 from pydantic import BaseModel
 
 from .audit import AuditCheckpoint, AuditVerification
-from .incomplete_portfolio import AnalyticPortfolioEvidenceEntry, IncompletePortfolioProblem
+from .incomplete_portfolio import (
+    AnalyticPortfolioEvidenceEntry,
+    FiniteStatePriorEvidence,
+    IncompletePortfolioProblem,
+)
 from .models import (
     AssessmentReport,
     AssessmentRequest,
@@ -21,8 +25,13 @@ from .models import (
     AttackBatteryWorkerOutput,
     AttackCatalog,
     AttackPositiveControlResult,
+    EvidenceBindingContext,
+    FiniteDecisionGame,
+    FiniteChannelCeilingInput,
     PolicyBundle,
     SignedManifest,
+    StatisticalFloorFamilyPlan,
+    StatisticalFloorDesignRegistration,
 )
 from .optimizer import (
     OptimizationReport,
@@ -105,6 +114,42 @@ _REGISTRATIONS = (
         "attack-battery-submission",
         AttackBatteryInput,
         "attack-battery-submission-v1.json",
+        "1.0",
+    ),
+    _registration(
+        "finite-channel-ceiling-submission",
+        FiniteChannelCeilingInput,
+        "finite-channel-ceiling-submission-v1.json",
+        "1.0",
+    ),
+    _registration(
+        "finite-state-prior-evidence",
+        FiniteStatePriorEvidence,
+        "finite-state-prior-evidence-v1.json",
+        "1.0",
+    ),
+    _registration(
+        "finite-decision-game",
+        FiniteDecisionGame,
+        "finite-decision-game-v1.json",
+        "1.0",
+    ),
+    _registration(
+        "evidence-binding-context",
+        EvidenceBindingContext,
+        "evidence-binding-context-v1.json",
+        "1.0",
+    ),
+    _registration(
+        "statistical-floor-design-registration",
+        StatisticalFloorDesignRegistration,
+        "statistical-floor-design-registration-v1.json",
+        "1.0",
+    ),
+    _registration(
+        "statistical-floor-family-plan",
+        StatisticalFloorFamilyPlan,
+        "statistical-floor-family-plan-v1.json",
         "1.0",
     ),
     _registration("optimization", OptimizationRequest, "optimization-request-v4.json", "4.0"),

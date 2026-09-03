@@ -56,19 +56,19 @@
       "analyzer": "attack",
       "minimum_service_version": "1.0.0",
       "accepted_implementation_sha256s": [
-        "52f3fcc0b9fcba8cbcdd4cc273f5f73ddded57b99be13694195bc0a932f534e9"
+        "a3949ef2e1d14a7f0a6c2e3999c272114f833cc603771b0f3f5bff09f0905f8e"
       ],
       "accepted_configuration_sha256s": [
-        "d23bfa2964096be53b1f902489484b82c8e5938bc123dbbba11648eece4f4d16"
+        "a0e847216b048e8b180079c8c9ce33b684c5a826cf66ef0020ac793ee289b3a8"
       ],
-      "required": false
+      "required": true
     },
     {
       "threat_id": "membership-person",
       "analyzer": "attack_battery",
       "minimum_service_version": "1.0.0",
       "accepted_implementation_sha256s": [
-        "b19655d0d33390397a38bddc2d9ebe57f58dd6f0f89a1be93223de0bfb4200dd"
+        "f7b2d8689d70dbd9adb53173f113e833355ed336fe61f9e9d521b44aafd44655"
       ],
       "accepted_configuration_sha256s": [
         "b48e0f7369e2c52b00c44ab917013c4dd7b80cadbd33bb81b623f76f0a1d927c"

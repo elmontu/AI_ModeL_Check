@@ -2,12 +2,19 @@ from __future__ import annotations
 
 import json
 import unittest
+from decimal import Decimal
+from fractions import Fraction
 from pathlib import Path
 
 from pydantic import ValidationError
 
 from model_release_assurance.analyzers.llm_canary import LlmCanaryAnalyzer
 from model_release_assurance.analyzers.llm_watermark import LlmWatermarkAnalyzer
+from model_release_assurance.analyzers.attack import (
+    bonferroni_per_bound_confidence,
+    clopper_pearson_lower,
+    clopper_pearson_upper,
+)
 from model_release_assurance.models import (
     AnalyzerProvenance,
     AssessmentRequest,
@@ -178,6 +185,53 @@ class LlmAnalyzerTests(unittest.TestCase):
         self.assertTrue(record.can_block)
         self.assertFalse(record.can_clear)
         self.assertIsNotNone(record.lower)
+
+    def test_equal_prior_canary_composition_is_rounded_outward(self) -> None:
+        release, threat, context = interactive_release_and_threat()
+        value = LlmCanaryInput(
+            threat_id=threat.threat_id,
+            population_scope_id=threat.population_scope_id,
+            study_id="canary-rounding-boundary",
+            preregistration_sha256="b" * 64,
+            transcript_manifest_sha256="c" * 64,
+            sealed_assignment_sha256="d" * 64,
+            metric="equal_prior_membership_success",
+            member_successes=2,
+            member_canaries=3,
+            decoy_successes=2,
+            nonmember_decoys=3,
+            assignment_randomized=True,
+            scoring_frozen_before_unblinding=True,
+            exact_match_pre_registered=True,
+            audit_disjoint=True,
+            raw_counts_retained=True,
+            contamination_scan_passed=True,
+            complete_protocol_binding=True,
+            recipient_realizable=True,
+            evidence_context=context,
+            provenance=provenance(),
+        )
+
+        record = LlmCanaryAnalyzer().analyze(release, threat, value)[0]
+        confidence = bonferroni_per_bound_confidence(0.95, 2)
+        member_lower = clopper_pearson_lower(2, 3, confidence)
+        decoy_upper = clopper_pearson_upper(2, 3, confidence)
+        exact_composite = (
+            Fraction(Decimal(str(member_lower)))
+            + Fraction(1)
+            - Fraction(Decimal(str(decoy_upper)))
+        ) / 2
+        unsafe_binary_composite = 0.5 * (member_lower + 1.0 - decoy_upper)
+
+        self.assertGreater(
+            Fraction(Decimal(str(unsafe_binary_composite))),
+            exact_composite,
+        )
+        self.assertLessEqual(
+            Fraction(Decimal(str(record.lower))),
+            exact_composite,
+        )
+        self.assertLessEqual(record.lower, 0.05135154135492936)
 
     def test_canary_failure_or_contamination_is_only_a_screen(self) -> None:
         release, threat, context = interactive_release_and_threat()

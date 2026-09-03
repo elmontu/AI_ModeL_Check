@@ -4,10 +4,12 @@ The repository contains several independently versioned machine contracts. A sch
 
 ## Current contracts
 
-- `current-schema-manifest-v1.json` is the machine-readable inventory of all 26 current contracts below. It records the package version, CLI kind, Python model import and title, versioned filename, declared `schema_version`, and SHA-256 of the exact schema bytes.
+- `current-schema-manifest-v1.json` is the machine-readable inventory of all 32 current contracts below. It records the package version, CLI kind, Python model import and title, versioned filename, declared `schema_version`, and SHA-256 of the exact schema bytes.
 - Assessment: `assessment-request-v5.json`, `assessment-report-v5.json`, and `policy-bundle-v3.json`.
 - Assessment integrity: `signed-manifest-v3.json`.
 - Attack execution: `attack-catalog-v1.json`, `attack-battery-configuration-v1.json`, `attack-positive-control-result-v1.json`, `attack-battery-worker-output-v1.json`, and `attack-battery-submission-v1.json`.
+- Finite-channel assessment: `finite-channel-ceiling-submission-v1.json` embeds the replayable analytic certificate and complete-interface proof declarations consumed by `AssessmentRequest 5.0`; `finite-decision-game-v1.json` freezes the policy-bound state meanings and exact rational prior; `finite-state-prior-evidence-v1.json` binds the numerical evidence source to that game, threat, scope, and ordered state space; and `evidence-binding-context-v1.json` lets every source in a finite-channel statistical family bind one release, policy, artifact, interface, population snapshot, and decision game.
+- Statistical attack floors: `statistical-floor-design-registration-v1.json` freezes each member's outcome-free dataset, procedure, execution plan, seed, stopping rule, sample sizes, and conditional operating-point fields; `statistical-floor-family-plan-v1.json` binds those registrations into a complete policy-approved Bonferroni family.
 - Optimization: `optimization-request-v4.json`, `optimization-report-v4.json`, and `signed-optimization-manifest-v4.json`.
 - Incomplete portfolio: `incomplete-portfolio-problem-v1.json`, `incomplete-portfolio-certificate-v1.1.json`, and `incomplete-portfolio-specification-v1.json`.
 - Portfolio statistics: the five `portfolio-*-v1.json` count, plan, error-budget, request, and evidence contracts.
@@ -27,7 +29,7 @@ Versioned nested current contracts validate their own exact `schema_version`; ch
 
 Generate a current schema with the CLI and name the output after the model's `schema_version`; do not overwrite an older versioned file with a newer contract.
 
-The first governed distribution must bind this exact manifest and all 26 schema bytes. If any adopter has already governed an earlier draft outside this repository, that draft becomes a historical baseline: preserve its exact bytes, assign new versions to incompatible replacements, and document the migration instead of treating this checkout as a fresh baseline.
+The first governed distribution must bind this exact manifest and all 32 schema bytes. If any adopter has already governed an earlier draft outside this repository, that draft becomes a historical baseline: preserve its exact bytes, assign new versions to incompatible replacements, and document the migration instead of treating this checkout as a fresh baseline.
 
 Run `make schemas` to regenerate and compare every current contract against its committed file and verify the manifest. After intentionally regenerating a versioned current schema, run `PYTHONPATH=src python scripts/generate_schema_manifest.py --write` to update the inventory. Compatibility-only schemas remain retained but are not regenerated from the current models.
 

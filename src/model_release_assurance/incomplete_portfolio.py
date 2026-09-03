@@ -7,19 +7,20 @@ from decimal import Decimal
 from enum import StrEnum
 from fractions import Fraction
 from pathlib import Path
-from typing import Any, Literal
+from typing import Any, Literal, Sequence
 
 from pydantic import Field, model_validator
 
 from .decision_theory import DecisionProblem, FiniteExperiment, decision_value
 from .integrity import canonical_json_bytes, sha256_bytes, verify_source_file
-from .models import StrictModel
+from .models import RationalProbability, StrictModel
 
 
 MAX_EXPLICIT_JOINT_CELLS = 100_000
 MAX_EXACT_DECODERS = 100_000
 MAX_RATIONAL_LINEAR_MECHANISM_CELLS = 64
 MIN_CLEARANCE_COVERAGE_CONFIDENCE = 0.95
+MAX_PRIOR_DISPLAY_ERROR = Fraction(1, 10**12)
 
 
 class StatisticalCoverage(StrEnum):
@@ -91,6 +92,59 @@ class EvidenceReference(StrictModel):
     supports: tuple[str, ...] = Field(min_length=1)
 
 
+class FiniteStatePriorEvidence(StrictModel):
+    """Typed authority statement for the finite decision game's numerical prior."""
+
+    schema_version: Literal["1.0"] = "1.0"
+    evidence_type: Literal["finite_state_prior"] = "finite_state_prior"
+    threat_id: str = Field(min_length=3, max_length=128, pattern=r"^[A-Za-z0-9._:-]+$")
+    population_scope_id: str = Field(
+        min_length=3,
+        max_length=128,
+        pattern=r"^[A-Za-z0-9._:-]+$",
+    )
+    population_scope_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
+    decision_game_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
+    state_ids: tuple[str, ...] = Field(min_length=2)
+    prior: tuple[RationalProbability, ...]
+    prior_definition: str = Field(min_length=1, max_length=4096)
+    authority: str = Field(min_length=1, max_length=512)
+
+    @model_validator(mode="after")
+    def prior_is_complete(self) -> FiniteStatePriorEvidence:
+        if len(set(self.state_ids)) != len(self.state_ids):
+            raise ValueError("finite-state prior identifiers must be unique")
+        if len(self.prior) != len(self.state_ids):
+            raise ValueError("finite-state prior must align with the ordered state space")
+        if sum((value.as_fraction() for value in self.prior), Fraction(0)) != 1:
+            raise ValueError("finite-state rational prior probabilities must sum exactly to one")
+        return self
+
+
+def finite_prior_contract_sha256(
+    state_ids: tuple[str, ...],
+    prior: Sequence[float | RationalProbability],
+) -> str:
+    """Bind the ordered finite state space and exact normalized prior.
+
+    Float inputs remain accepted for generic/legacy callers, but they are first
+    interpreted as canonical JSON decimals and normalized to a rational vector.
+    Finite-channel clearance passes ``rational_prior`` and therefore never
+    reconstructs the policy prior from binary floating-point values.
+    """
+
+    fractions = _prior_sequence_fractions(prior)
+
+    return sha256_bytes(canonical_json_bytes({
+        "domain": "MRA-FINITE-PRIOR-2",
+        "state_ids": state_ids,
+        "prior": tuple(
+            {"numerator": value.numerator, "denominator": value.denominator}
+            for value in fractions
+        ),
+    }))
+
+
 class IncompletePortfolioProblem(StrictModel):
     """Finite ambiguity set built from observable marginals and mechanism constraints."""
 
@@ -102,6 +156,7 @@ class IncompletePortfolioProblem(StrictModel):
     decision_game_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
     state_ids: tuple[str, ...] = Field(min_length=2)
     prior: tuple[float, ...]
+    rational_prior: tuple[RationalProbability, ...] | None = None
     releases: tuple[ConditionalMarginalBounds, ...] = Field(min_length=1)
     decision_problem: DecisionProblem
     coupling_model: CouplingModel
@@ -125,6 +180,20 @@ class IncompletePortfolioProblem(StrictModel):
             raise ValueError("portfolio prior probabilities must lie in [0,1]")
         if abs(sum(self.prior) - 1.0) > 1e-10:
             raise ValueError("portfolio prior must sum to one")
+        if self.rational_prior is not None:
+            if len(self.rational_prior) != len(self.state_ids):
+                raise ValueError("rational portfolio prior must align with states")
+            exact_prior = tuple(value.as_fraction() for value in self.rational_prior)
+            if sum(exact_prior, Fraction(0)) != 1:
+                raise ValueError("rational portfolio prior must sum exactly to one")
+            display_prior = tuple(_fraction(value) for value in self.prior)
+            if any(
+                abs(display - exact) > MAX_PRIOR_DISPLAY_ERROR
+                for display, exact in zip(display_prior, exact_prior, strict=True)
+            ):
+                raise ValueError(
+                    "portfolio prior display does not approximate rational_prior"
+                )
         if len({release.release_id for release in self.releases}) != len(self.releases):
             raise ValueError("portfolio release identifiers must be unique")
         joint_cell_count = 1
@@ -341,7 +410,7 @@ def _clipped_unit(value: Fraction) -> Fraction:
     return min(Fraction(1), max(Fraction(0), value))
 
 
-def _normalized_fraction_weights(values: tuple[float, ...]) -> tuple[Fraction, ...]:
+def _normalized_fraction_weights(values: Sequence[float]) -> tuple[Fraction, ...]:
     weights = tuple(_fraction(value) for value in values)
     total = sum(weights, Fraction(0))
     if total <= 0:
@@ -349,8 +418,46 @@ def _normalized_fraction_weights(values: tuple[float, ...]) -> tuple[Fraction, .
     return tuple(value / total for value in weights)
 
 
+def _prior_sequence_fractions(
+    values: Sequence[float | RationalProbability],
+) -> tuple[Fraction, ...]:
+    if not values:
+        raise ValueError("probability vector must not be empty")
+    rational_flags = tuple(isinstance(value, RationalProbability) for value in values)
+    if any(rational_flags):
+        if not all(rational_flags):
+            raise ValueError("a prior cannot mix rational objects and JSON numbers")
+        fractions = tuple(
+            value.as_fraction()
+            for value in values
+            if isinstance(value, RationalProbability)
+        )
+        if sum(fractions, Fraction(0)) != 1:
+            raise ValueError("rational prior probabilities must sum exactly to one")
+        return fractions
+    return _normalized_fraction_weights(
+        tuple(float(value) for value in values)
+    )
+
+
 def _rational_prior(problem: IncompletePortfolioProblem) -> tuple[Fraction, ...]:
+    if problem.rational_prior is not None:
+        return tuple(value.as_fraction() for value in problem.rational_prior)
     return _normalized_fraction_weights(problem.prior)
+
+
+def portfolio_prior_fractions(
+    problem: IncompletePortfolioProblem,
+) -> tuple[Fraction, ...]:
+    """Return the authoritative exact prior used by certificate replay."""
+
+    return _rational_prior(problem)
+
+
+def portfolio_prior_values(problem: IncompletePortfolioProblem) -> tuple[float, ...]:
+    """Return solver/display values derived from the authoritative prior."""
+
+    return tuple(float(value) for value in _rational_prior(problem))
 
 
 def _rational_marginal_bounds(
@@ -987,6 +1094,7 @@ def solve_exact_portfolio(
             "use the decoder-free envelope certificate or tighten the output alphabet"
         )
 
+    solver_prior = portfolio_prior_values(problem)
     certificates: list[DecoderUpperCertificate] = []
     best_upper = -1.0
     best_primal_value = -1.0
@@ -1001,10 +1109,10 @@ def solve_exact_portfolio(
             primal_row, dual = _solve_state_lp(problem, state_index, rewards)
             channel_rows.append(primal_row)
             state_duals.append(dual)
-            primal_value += problem.prior[state_index] * sum(
+            primal_value += solver_prior[state_index] * sum(
                 probability * reward for probability, reward in zip(primal_row, rewards, strict=True)
             )
-            decoder_upper += problem.prior[state_index] * dual.objective_bound
+            decoder_upper += solver_prior[state_index] * dual.objective_bound
         certificates.append(
             DecoderUpperCertificate(
                 action_indices=tuple(decoder),
@@ -1026,10 +1134,10 @@ def solve_exact_portfolio(
         state_ids=problem.state_ids,
         observation_ids=joint_observation_ids(problem),
         channel=best_channel,
-        prior=problem.prior,
+        prior=solver_prior,
         interface_description="joint channel attaining the certified incomplete-portfolio lower bound",
     )
-    lower_bound = decision_value(witness, problem.decision_problem, problem.prior)
+    lower_bound = decision_value(witness, problem.decision_problem, solver_prior)
     upper_bound = min(1.0, max(0.0, float(best_upper)))
     return ExactPortfolioCertificate(
         certificate_id=certificate_id,
@@ -1197,11 +1305,12 @@ def _envelope_raw_upper(
     problem: IncompletePortfolioProblem,
     cell_bounds: tuple[tuple[float, ...], ...],
 ) -> float:
+    solver_prior = portfolio_prior_values(problem)
     raw = 0.0
     for observation_index in range(len(joint_transcripts(problem))):
         raw += max(
             sum(
-                problem.prior[state_index]
+                solver_prior[state_index]
                 * cell_bounds[state_index][observation_index]
                 * problem.decision_problem.gain[state_index][action_index]
                 for state_index in range(len(problem.state_ids))
@@ -1242,6 +1351,7 @@ def independent_product_experiment(
                 probability *= marginal_points[release_index][observation_index]
             row.append(probability)
         channel.append(tuple(row))
+    solver_prior = portfolio_prior_values(problem)
     return FiniteExperiment(
         experiment_id=experiment_id,
         threat_id=problem.decision_problem.problem_id,
@@ -1249,7 +1359,7 @@ def independent_product_experiment(
         state_ids=problem.state_ids,
         observation_ids=joint_observation_ids(problem),
         channel=tuple(channel),
-        prior=problem.prior,
+        prior=solver_prior,
         interface_description="exact joint channel under certified conditional independence",
     )
 
@@ -1341,6 +1451,7 @@ def verify_exact_certificate(
     if supplied_decoders != expected_decoders:
         reasons.append("decoder certificates do not provide the canonical exhaustive cover")
 
+    solver_prior = portfolio_prior_values(problem)
     replayed_bounds: list[float] = []
     if len(certificate.decoder_certificates) == len(expected_decoders):
         for decoder_certificate in certificate.decoder_certificates:
@@ -1390,7 +1501,7 @@ def verify_exact_certificate(
                     reasons.append("state dual feasibility penalty does not replay")
                 if abs(objective - dual.objective_bound) > tolerance:
                     reasons.append("state dual objective does not replay")
-                decoder_bound += problem.prior[state_index] * objective
+                decoder_bound += solver_prior[state_index] * objective
             if abs(decoder_bound - decoder_certificate.upper_bound) > tolerance:
                 reasons.append("decoder upper bound does not replay")
             replayed_bounds.append(decoder_bound)
@@ -1415,10 +1526,10 @@ def verify_exact_certificate(
             state_ids=problem.state_ids,
             observation_ids=expected_ids,
             channel=certificate.winning_joint_channel,
-            prior=problem.prior,
+            prior=solver_prior,
             interface_description="replayed incomplete-portfolio witness",
         )
-        lower = decision_value(witness, problem.decision_problem, problem.prior)
+        lower = decision_value(witness, problem.decision_problem, solver_prior)
         if abs(lower - certificate.lower_bound) > tolerance:
             reasons.append("lower-bound witness value does not replay")
     if certificate.lower_bound > certificate.upper_bound + tolerance:

@@ -8,7 +8,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from model_release_assurance.integrity import sha256_file
+from model_release_assurance.integrity import canonical_json_bytes, sha256_bytes, sha256_file
 from model_release_assurance.incomplete_portfolio import (
     ConditionalMarginalBounds,
     CouplingModel,
@@ -115,6 +115,10 @@ class CliTests(unittest.TestCase):
                 ("portfolio-multinomial-request", "MultinomialEvidenceRequest"),
                 ("portfolio-multinomial-evidence", "SimultaneousMultinomialEvidence"),
                 ("portfolio-specification", "IncompletePortfolioSpecification"),
+                ("finite-channel-ceiling-submission", "FiniteChannelCeilingInput"),
+                ("finite-state-prior-evidence", "FiniteStatePriorEvidence"),
+                ("finite-decision-game", "FiniteDecisionGame"),
+                ("evidence-binding-context", "EvidenceBindingContext"),
             ):
                 schema = temp / f"{kind}.json"
                 result = subprocess.run(
@@ -240,6 +244,31 @@ class CliTests(unittest.TestCase):
             attack_path.write_text(json.dumps(attack_source, indent=2) + "\n", encoding="utf-8")
             attack_input["provenance"]["source_path"] = "evidence/blocking-attack-counts.json"
             attack_input["provenance"]["source_sha256"] = sha256_file(attack_path)
+
+            # A cross-family statistical block is valid only when every
+            # policy-required family has a lower bound above tolerance.
+            battery_input = next(
+                value
+                for value in raw["analyzer_inputs"]
+                if value["analyzer"] == "attack_battery"
+            )
+            battery_input["worker_output"]["results"][0]["successes"] = 900
+            battery_input["worker_output_sha256"] = sha256_bytes(
+                canonical_json_bytes(battery_input["worker_output"])
+            )
+            battery_path = fixture / battery_input["provenance"]["source_path"]
+            battery_source = json.loads(battery_path.read_text(encoding="utf-8"))
+            battery_source["worker_output"] = battery_input["worker_output"]
+            battery_source["worker_output_sha256"] = battery_input[
+                "worker_output_sha256"
+            ]
+            battery_path.write_text(
+                json.dumps(battery_source, indent=2) + "\n",
+                encoding="utf-8",
+            )
+            battery_input["provenance"]["source_sha256"] = sha256_file(
+                battery_path
+            )
 
             request_path = fixture / "blocking-request.json"
             report_path = temp / "blocking-report.json"

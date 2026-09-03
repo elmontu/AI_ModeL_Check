@@ -587,7 +587,7 @@
         },
         "confidence": {
           "exclusiveMaximum": 1.0,
-          "exclusiveMinimum": 0.5,
+          "minimum": 0.95,
           "title": "Confidence",
           "type": "number"
         },
@@ -826,7 +826,7 @@
         },
         "confidence": {
           "exclusiveMaximum": 1.0,
-          "exclusiveMinimum": 0.5,
+          "minimum": 0.95,
           "title": "Confidence",
           "type": "number"
         },

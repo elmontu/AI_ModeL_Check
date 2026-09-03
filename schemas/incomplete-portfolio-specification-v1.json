@@ -159,6 +159,28 @@
       ],
       "title": "JointEventBound",
       "type": "object"
+    },
+    "RationalProbability": {
+      "additionalProperties": false,
+      "description": "Canonical exact probability used at security-critical decision boundaries.",
+      "properties": {
+        "denominator": {
+          "exclusiveMinimum": 0,
+          "title": "Denominator",
+          "type": "integer"
+        },
+        "numerator": {
+          "minimum": 0,
+          "title": "Numerator",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "numerator",
+        "denominator"
+      ],
+      "title": "RationalProbability",
+      "type": "object"
     }
   },
   "additionalProperties": false,
@@ -226,6 +248,21 @@
     },
     "prior_evidence": {
       "$ref": "#/$defs/EvidenceReference"
+    },
+    "rational_prior": {
+      "anyOf": [
+        {
+          "items": {
+            "$ref": "#/$defs/RationalProbability"
+          },
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Rational Prior"
     },
     "schema_version": {
       "const": "1.0",

@@ -1,10 +1,19 @@
 {
+  "schema_version": "1.0",
+  "family_id": "demo-standalone-membership-floor-v1",
   "analyzer": "attack",
-  "configuration_version": "1.0.0",
-  "attack_family": "precomputed recipient-realizable attack counts",
-  "shadow_model_count": 0,
-  "random_seed": "not_applicable_to_count_replay",
-  "threshold_calibration": "source-declared preregistered threshold",
-  "uncertainty": "multiplicity-adjusted one-sided Clopper-Pearson lower bound",
-  "authority": "floor_only"
+  "threat_id": "membership-person",
+  "decision_metric": "equal_prior_membership_success",
+  "members": [
+    {
+      "member_id": "calibrated-loss",
+      "registration_path": "config/attack-design-registration.json",
+      "registration_sha256": "e42c2b5a00f2555f355a10fb4272022d14d5d141c42ab7afa5d61be50f442c83",
+      "input_design_sha256": "ce8f8636fd88f54cab29dcd5bedd0915b6cf0ab9ac64cd679e4f003cd9796225"
+    }
+  ],
+  "familywise_confidence": 0.95,
+  "multiplicity_method": "bonferroni",
+  "frozen_at": "2026-08-17T00:00:00Z",
+  "authority": "whole-government-model-release-demo policy authority"
 }

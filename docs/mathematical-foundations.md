@@ -136,6 +136,160 @@ U_t\le\tau_t\text{ with complete validated coverage}
 
 Conflicting validated bounds are inconclusive and require investigation.
 
+### Finite-channel confidence theorem
+
+The first-class `finite_channel_ceiling` analyzer implements a statistical version of the finite
+decision problem above. Fix the canonical exact-guess game and write
+
+\[
+\theta=V_{\mathrm{guess}}(\pi,K)
+\]
+
+for the true Bayes success of the complete released recipient channel. From frozen
+state-conditioned observations, construct a selection-valid simultaneous confidence set
+\(\mathcal C(E)\) for that channel. Let the verified upper certificate \(U(E)\) satisfy
+
+\[
+U(E)\ge\sup_{K'\in\mathcal C(E)}V_{\mathrm{guess}}(\pi,K').
+\]
+
+An exact dual may attain the supremum; a verified envelope is permitted to be conservative.
+
+For each observation \(o\), let \(\ell_{s,o}\) be its simultaneous lower endpoint and select the
+fixed decoder \(d_E(o)\in\arg\max_s\pi_s\ell_{s,o}\). The implemented confidence floor is
+
+\[
+L_{\mathrm{fd}}(E)=\sum_o\max_s \pi_s\ell_{s,o}.
+\]
+
+If \(\Pr(K\in\mathcal C(E))\ge1-\alpha\), then
+
+\[
+\Pr\!\left(L_{\mathrm{fd}}(E)\le\theta\le U(E)\right)\ge1-\alpha,
+\quad\text{so in particular}\quad
+\Pr\!\left(\theta\le U(E)\right)\ge1-\alpha.
+\]
+
+**Proof.** On the coverage event, the true channel is an element of \(\mathcal C(E)\). Its decision
+value is no greater than the supremum over that set. The fixed decoder succeeds on the true channel
+with probability at least \(\sum_o\pi_{d_E(o)}\ell_{d_E(o),o}=L_{\mathrm{fd}}(E)\), and the Bayes
+decoder cannot do worse. The claimed probability follows from the coverage probability. \(\square\)
+
+The analyzer emits two directionally distinct records from this one confidence set:
+\(L_{\mathrm{fd}}\) is a confidence floor that may block when \(L_{\mathrm{fd}}>\tau\), while the
+rationally replayed and conservatively outward-rounded \(U\) is a confidence ceiling that may clear
+when \(U\le\tau\). The evidence dispositions are `floor_above_tolerance` and
+`ceiling_below_tolerance`, respectively. For an otherwise eligible interval,
+\(L_{\mathrm{fd}}\le\tau<U\) is fail-closed
+`INCONCLUSIVE` with `recollect_more_state_conditioned_samples`; a separate policy gate can also keep
+a below-tolerance ceiling from clearing. A contradictory over-tolerance floor is never weakened by
+the ceiling.
+
+This theorem is model-family neutral. It can apply to XGBoost and other trees, CNNs, LLMs, or any
+other implementation only when all of its channel premises are true. In particular:
+
+- ordered secret-state semantics and the exact rational prior must be frozen identically in the
+  active `PolicyRule` and submitted `ThreatContract`; this game vector is protocol-authoritative.
+  The analytic problem must repeat it exactly as `rational_prior`, which drives replay and decisions;
+  its float `prior` is a solver/display approximation constrained entrywise within (10^{-12}).
+  Typed rational prior evidence must equal the game and `rational_prior` exactly. Lowest-terms and
+  exact-sum checks are runtime invariants because JSON Schema cannot express those cross-entry
+  arithmetic conditions;
+- observations must be the complete released transcript/interface visible to the recipient;
+- the deployed protocol must enforce the registered finite alphabet, and the measured channel must
+  be recipient-realizable rather than an auditor-only projection;
+- statistical cell bounds must simultaneously cover every selectable state, observation, model,
+  checkpoint, threshold, interface, and other adaptive choice under the allocated error budget;
+- statistical endpoints must have approved conservative outward validation: compiler-generated
+  marginal evidence carries `confidence-endpoints:outward-validated`, and engine replay must return
+  `endpoint_validation=validated`; there is no submitter-set validity flag;
+- plan, counts, prior, mechanism constraints, compilation, and all applicable nested sources must be
+  content-addressed and integrity-verified; typed statistical marginals must replay from retained
+  evidence, and typed finite-state prior evidence must match the game, ordered states, and numerical
+  vector, while authority authenticity and the substantive validity of prior/mechanism claims remain
+  externally governed;
+- plan, counts, committed error-budget allocation, and compiled marginal evidence must carry one identical full binding
+  context that matches the assessment's release contract, policy, artifact, interface, population
+  scope snapshot, and decision game, with sampling ending no later than `observed_at`; and
+- the security-critical ambiguity upper certificate and threshold-facing endpoint must have exact
+  rational verification and conservative outward rounding.
+
+If the real interface has an omitted output or side channel, an unenforced or continuous alphabet,
+unbounded conversation state, adaptive queries, tools, retrieval, memory, updates, or another path
+outside the frozen finite transcript, the finite experiment is not the released channel. The correct
+result is `redesign_interface`, not a decision-bearing ceiling. Existing LLM, vision, training-hook,
+composition, and red-team results were collected as screens and cannot be retroactively promoted;
+decision-bearing use requires approved recollection under the finite-channel contract.
+The reference core also refuses deterministic point tables as decision evidence because it has no
+machine-replayed derivation for that channel; they produce a screen with
+`collect_simultaneous_channel_evidence`, not a floor or ceiling.
+
+The theorem is conditional on the coverage event asserted for \(\mathcal C(E)\). In the reference
+statistical path, the generator searches adjacent float candidates outward until directed decimal
+enclosures prove the defining Clopper--Pearson binomial-tail inequality for the candidate's canonical
+JSON decimal value. Serialized endpoints and allocated alpha are interpreted as exact decimal
+rationals, matching the ambiguity replay semantics. Bonferroni allocation and the assurance-ledger
+sum are replayed exactly; replay regenerates the evidence from raw sources and mechanically validates
+every endpoint again. A `validated` replay plus the compiler-generated support claim establishes the
+endpoint premise without trusting a submitter boolean. Exact-rational ambiguity replay then prevents a later optimizer from weakening those
+endpoints, and exact lower/upper fields preserve threshold-facing equality before conservative display
+rounding. These checks do not prove IID sampling, completeness of the selected family, authority
+authenticity, or live-interface conformance, and they do not close unrelated ordinary binary64 paths
+under `G7`. An unresolved tail proof or decision boundary remains inconclusive.
+
+For one threat, let \(E_i\) be its exact floors. Partition its statistical floors into recognized
+families \(g\), and let \(L_{g,m}\) be the floor from member \(m\) of family \(g\). A generic
+`attack`, `controlled_inference`, or `llm_canary` family is recognized only after the engine verifies
+a policy-allowlisted, content-addressed
+[`StatisticalFloorFamilyPlan 1.0`](../schemas/statistical-floor-family-plan-v1.json): it was frozen
+before observation, declares a unique roster that the request supplies exactly once, fixes the matching
+threat/analyzer/metric and family size, uses supported Bonferroni multiplicity, and declares
+familywise confidence of at least 95%. Moreover, every accepted configuration for a generic
+analyzer/threat pair must be submitted and that analyzer requirement must be mandatory. Thus the
+family index set \(g\) is policy-complete rather than selected after observing the \(F_g\)'s.
+
+Every member also references a hash-verified
+[`StatisticalFloorDesignRegistration 1.0`](../schemas/statistical-floor-design-registration-v1.json)
+and a domain-separated digest of outcome-free analyzer-input fields. The registration fixes the
+population, dataset snapshot, procedure, random seed, stopping rule, planned primary/control trials,
+and, when applicable, the low-FPR target or canary sealed assignment. Its registration time cannot
+follow the family freeze; the family freeze must precede observation. Observed success/failure
+counts are excluded from the input-design digest. These checks establish byte-level registration and
+detect submitted-design changes; they do not authenticate the source, establish the substantive
+truth of the dataset/procedure declarations, or prove faithful collection. Attack-battery and
+finite-channel families obtain equivalent complete-family semantics from their own typed contracts.
+
+Because every member bound is already adjusted for its complete family, define the within-family
+floor by
+
+\[
+F_g=\max_m L_{g,m}.
+\]
+
+The reference decision then uses
+
+\[
+L_{\mathrm{agg}}=\max\left\{\max_i E_i,\min_g F_g\right\},
+\]
+
+where an empty component is zero. Taking the maximum across distinct families would select the most
+favorable realized familywise confidence bound without a cross-family multiplicity guarantee. In
+contrast, \(\min_g F_g>\theta\) implies that every family aggregate failed, so the minimum is
+conservative without an independence assumption. This can sacrifice power. It also cannot erase an
+adverse result: when more than one family is present and another \(F_g\) would cross either the
+policy tolerance or the clearing ceiling while \(L_{\mathrm{agg}}\) would not, the release is held
+with `resolve_statistical_multiplicity`. A stronger decision-valid result requires one
+preregistered cross-family error ledger. Exact floors still aggregate by maximum because they carry
+no sampling failure event.
+
+The finite statistical implementation bounds verification work as well as probability error. It
+permits at most 10,000 simultaneous state-by-observation cells and 10,000,000 trials in one raw state
+row, then permits at most 2,000,000 directed summation terms for any one endpoint and 2,000,000
+across the whole simultaneous family. These limits are simultaneous constraints, not asymptotic
+claims or recommended sample sizes. A balanced row below the trial cap may exceed a term cap and is
+then rejected. The submitted `state_trials` vector is advisory/planning metadata until engine replay
+binds it exactly to the capped raw rows.
+
 ### Theorem 2: simultaneous-coverage clearance bound
 
 Let \(T\) be the complete set of mandatory threats. Suppose the evidence procedure guarantees

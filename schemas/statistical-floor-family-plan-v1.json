@@ -1,0 +1,132 @@
+{
+  "$defs": {
+    "StatisticalFloorFamilyMember": {
+      "additionalProperties": false,
+      "description": "One outcome-free, preregistered design in a statistical floor family.",
+      "properties": {
+        "input_design_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Input Design Sha256",
+          "type": "string"
+        },
+        "member_id": {
+          "maxLength": 256,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9._:-]+$",
+          "title": "Member Id",
+          "type": "string"
+        },
+        "registration_path": {
+          "minLength": 1,
+          "title": "Registration Path",
+          "type": "string"
+        },
+        "registration_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Registration Sha256",
+          "type": "string"
+        }
+      },
+      "required": [
+        "member_id",
+        "registration_path",
+        "registration_sha256",
+        "input_design_sha256"
+      ],
+      "title": "StatisticalFloorFamilyMember",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "description": "Policy-approved roster and error family for generic blocking tests.",
+  "properties": {
+    "analyzer": {
+      "enum": [
+        "attack",
+        "controlled_inference",
+        "llm_canary"
+      ],
+      "title": "Analyzer",
+      "type": "string"
+    },
+    "authority": {
+      "maxLength": 512,
+      "minLength": 1,
+      "title": "Authority",
+      "type": "string"
+    },
+    "decision_metric": {
+      "enum": [
+        "bayes_linkage_success",
+        "incremental_bayes_linkage_success",
+        "worst_observation_success",
+        "membership_tpr_at_fpr",
+        "equal_prior_membership_success",
+        "finite_secret_exact_guess_success",
+        "attribute_attack_success",
+        "incremental_attribute_attack_success",
+        "reconstruction_success",
+        "incremental_reconstruction_success"
+      ],
+      "title": "Decision Metric",
+      "type": "string"
+    },
+    "family_id": {
+      "maxLength": 128,
+      "minLength": 3,
+      "pattern": "^[A-Za-z0-9._:-]+$",
+      "title": "Family Id",
+      "type": "string"
+    },
+    "familywise_confidence": {
+      "exclusiveMaximum": 1.0,
+      "minimum": 0.95,
+      "title": "Familywise Confidence",
+      "type": "number"
+    },
+    "frozen_at": {
+      "format": "date-time",
+      "title": "Frozen At",
+      "type": "string"
+    },
+    "members": {
+      "items": {
+        "$ref": "#/$defs/StatisticalFloorFamilyMember"
+      },
+      "minItems": 1,
+      "title": "Members",
+      "type": "array"
+    },
+    "multiplicity_method": {
+      "const": "bonferroni",
+      "title": "Multiplicity Method",
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "1.0",
+      "default": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "threat_id": {
+      "maxLength": 128,
+      "minLength": 3,
+      "pattern": "^[A-Za-z0-9._:-]+$",
+      "title": "Threat Id",
+      "type": "string"
+    }
+  },
+  "required": [
+    "family_id",
+    "analyzer",
+    "threat_id",
+    "decision_metric",
+    "members",
+    "familywise_confidence",
+    "multiplicity_method",
+    "frozen_at",
+    "authority"
+  ],
+  "title": "StatisticalFloorFamilyPlan",
+  "type": "object"
+}

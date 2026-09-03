@@ -91,7 +91,7 @@
     "execution_id": "demo-membership-battery-execution",
     "release_id": "whole-government-demo-tree-v1",
     "release_contract_sha256": "58fa3564d8445f55834ebdd9699a4d412035a2f96bfb42b27f5c99cd510d035b",
-    "policy_sha256": "8a9c5d6767fae14e11bb5f1ee5427ed1e8a0ce50782b204235c71f0eddb9043d",
+    "policy_sha256": "33952cfe3632958fb82dc53d0035152af485547b7eab601c787f353f4fdedca0",
     "artifact_sha256": "2f42b587627c5b6c4447d781b57a47082743f029b475f560a574553abcedfdd5",
     "interface_sha256": "f13f29ea2027109f4f02992b37713ee9f63bf56672afb800ac9c3fb6966473b8",
     "population_scope_id": "service-participants-2026",
@@ -109,7 +109,7 @@
       "schema_version": "1.0",
       "package_name": "model-release-assurance",
       "package_version": "0.7.0",
-      "package_source_sha256": "1975d738148ab6dd019c57e7c1f12993de7e73f71f882f753ed6893da86c39e3",
+      "package_source_sha256": "0722a0ab9544474670a5a5487cc531e4560fec6942ff96b7bea8946ddc3140a7",
       "component_id": "attack_battery_worker",
       "component_version": "AttackBatteryWorkerOutput/1.0",
       "algorithm_profile": {
@@ -125,13 +125,13 @@
       },
       "algorithm_profile_sha256": "01f23c0208e90a2328eb437cb44231c19df5920fa28ec2289e72dc4a09e98f17",
       "python_implementation": "CPython",
-      "python_version": "3.12.13",
+      "python_version": "3.13.15",
       "dependency_versions": {
-        "cryptography": "48.0.1",
+        "cryptography": "49.0.0",
         "numpy": "2.5.2",
         "pydantic": "2.13.4",
         "scikit-learn": "1.6.1",
-        "scipy": "1.18.0"
+        "scipy": "1.18.1"
       }
     },
     "isolation": {
@@ -165,7 +165,7 @@
         "status": "succeeded",
         "successes": 95,
         "trials": 100,
-        "reported_detection_lower_bound": 0.8977466223567152,
+        "reported_detection_lower_bound": 0.8977466223567254,
         "expected_flag_observed": null,
         "raw_result_sha256": "6cc6ba7a9140db28330b24199e42ac2b3c7c86c332bed2eba88d1ffaf7377b6b"
       }
@@ -193,11 +193,11 @@
     "decision_authority": "none",
     "can_clear": false
   },
-  "worker_output_sha256": "a5b42977a8b49e547e59c13731e0ac85d11f23865685ca8f11a0ff66e284feb5",
+  "worker_output_sha256": "988a017f47fe24d4e1bff945eee986ff378567a40c87effbb6d6835ca228d676",
   "evidence_context": {
     "release_id": "whole-government-demo-tree-v1",
     "release_contract_sha256": "58fa3564d8445f55834ebdd9699a4d412035a2f96bfb42b27f5c99cd510d035b",
-    "policy_sha256": "8a9c5d6767fae14e11bb5f1ee5427ed1e8a0ce50782b204235c71f0eddb9043d",
+    "policy_sha256": "33952cfe3632958fb82dc53d0035152af485547b7eab601c787f353f4fdedca0",
     "artifact_sha256": "2f42b587627c5b6c4447d781b57a47082743f029b475f560a574553abcedfdd5",
     "interface_sha256": "f13f29ea2027109f4f02992b37713ee9f63bf56672afb800ac9c3fb6966473b8",
     "population_scope_id": "service-participants-2026",

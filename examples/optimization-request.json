@@ -18,7 +18,7 @@
     "policy_id": "whole-government-model-release-demo",
     "policy_version": "3.0.0",
     "policy_path": "policy.json",
-    "policy_sha256": "8a9c5d6767fae14e11bb5f1ee5427ed1e8a0ce50782b204235c71f0eddb9043d"
+    "policy_sha256": "33952cfe3632958fb82dc53d0035152af485547b7eab601c787f353f4fdedca0"
   },
   "authorization_expires_at": "2099-01-01T00:00:00Z",
   "portfolio_registry": {
@@ -216,7 +216,7 @@
       "is_proposed_configuration": false,
       "assessment": {
         "report_path": "evidence/assessment-clear-report.json",
-        "report_sha256": "54c67bee1980b3ebf8c96316c84a0ad7c103c9c023825253a8ed87f7bc2e6d8d",
+        "report_sha256": "4deee7c7a8cb3cece613430646d6e1af4428c1c51d3a98c0cf6b84bf13581757",
         "signed_manifest_path": null,
         "signed_manifest_sha256": null,
         "assessor_public_key_path": null,

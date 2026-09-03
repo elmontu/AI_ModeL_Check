@@ -22,7 +22,7 @@
   "evidence_context": {
     "release_id": "whole-government-demo-tree-v1",
     "release_contract_sha256": "58fa3564d8445f55834ebdd9699a4d412035a2f96bfb42b27f5c99cd510d035b",
-    "policy_sha256": "8a9c5d6767fae14e11bb5f1ee5427ed1e8a0ce50782b204235c71f0eddb9043d",
+    "policy_sha256": "33952cfe3632958fb82dc53d0035152af485547b7eab601c787f353f4fdedca0",
     "artifact_sha256": "2f42b587627c5b6c4447d781b57a47082743f029b475f560a574553abcedfdd5",
     "interface_sha256": "f13f29ea2027109f4f02992b37713ee9f63bf56672afb800ac9c3fb6966473b8",
     "population_scope_id": "service-participants-2026",

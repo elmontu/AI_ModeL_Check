@@ -1,0 +1,102 @@
+{
+  "$defs": {
+    "FiniteGameState": {
+      "additionalProperties": false,
+      "properties": {
+        "secret_value_definition": {
+          "maxLength": 4096,
+          "minLength": 1,
+          "title": "Secret Value Definition",
+          "type": "string"
+        },
+        "state_id": {
+          "maxLength": 256,
+          "minLength": 1,
+          "title": "State Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "state_id",
+        "secret_value_definition"
+      ],
+      "title": "FiniteGameState",
+      "type": "object"
+    },
+    "RationalProbability": {
+      "additionalProperties": false,
+      "description": "Canonical exact probability used at security-critical decision boundaries.",
+      "properties": {
+        "denominator": {
+          "exclusiveMinimum": 0,
+          "title": "Denominator",
+          "type": "integer"
+        },
+        "numerator": {
+          "minimum": 0,
+          "title": "Numerator",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "numerator",
+        "denominator"
+      ],
+      "title": "RationalProbability",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "description": "Policy-frozen state semantics and numerical prior for an exact-guess game.",
+  "properties": {
+    "authority": {
+      "maxLength": 512,
+      "minLength": 1,
+      "title": "Authority",
+      "type": "string"
+    },
+    "game_id": {
+      "maxLength": 128,
+      "minLength": 3,
+      "pattern": "^[A-Za-z0-9._:-]+$",
+      "title": "Game Id",
+      "type": "string"
+    },
+    "prior": {
+      "items": {
+        "$ref": "#/$defs/RationalProbability"
+      },
+      "title": "Prior",
+      "type": "array"
+    },
+    "prior_basis": {
+      "maxLength": 4096,
+      "minLength": 1,
+      "title": "Prior Basis",
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "1.0",
+      "default": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "states": {
+      "items": {
+        "$ref": "#/$defs/FiniteGameState"
+      },
+      "minItems": 2,
+      "title": "States",
+      "type": "array"
+    }
+  },
+  "required": [
+    "game_id",
+    "states",
+    "prior",
+    "prior_basis",
+    "authority"
+  ],
+  "title": "FiniteDecisionGame",
+  "type": "object"
+}

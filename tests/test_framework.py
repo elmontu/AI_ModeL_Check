@@ -5,6 +5,8 @@ import math
 import sqlite3
 import tempfile
 import unittest
+from decimal import Decimal
+from fractions import Fraction
 from pathlib import Path
 
 from pydantic import ValidationError
@@ -508,6 +510,29 @@ class ContractTests(unittest.TestCase):
                 "can_block": False,
                 "can_clear": True,
             })
+        with self.assertRaisesRegex(ValidationError, "both rational bounds"):
+            EvidenceRecord.model_validate({
+                **common,
+                "evidence_class": "exact",
+                "value": 0.7,
+                "lower": 0.7,
+                "upper": 0.7,
+                "exact_upper": {"numerator": 1, "denominator": 10},
+                "can_block": True,
+                "can_clear": True,
+            })
+        with self.assertRaisesRegex(ValidationError, "display lower bound"):
+            EvidenceRecord.model_validate({
+                **common,
+                "evidence_class": "exact",
+                "value": 0.7,
+                "lower": 0.7,
+                "upper": 0.7,
+                "exact_lower": {"numerator": 1, "denominator": 10},
+                "exact_upper": {"numerator": 1, "denominator": 10},
+                "can_block": True,
+                "can_clear": True,
+            })
 
     def test_policy_accepts_incremental_controlled_inference_metrics(self) -> None:
         for kind, metric in (
@@ -618,6 +643,8 @@ class EngineTests(unittest.TestCase):
             metric="equal_prior_membership_success",
             value=0.9,
             lower=0.8,
+            statistical_family_id="1" * 64,
+            familywise_confidence=0.95,
             realizability=Realizability.RECIPIENT,
             can_clear=False,
             can_block=True,
@@ -640,6 +667,103 @@ class EngineTests(unittest.TestCase):
             ).verdict,
             Verdict.BLOCK,
         )
+
+    def test_canonical_decimal_floor_equal_to_tolerance_does_not_block(self) -> None:
+        request = AssessmentRequest.model_validate(load_example())
+        threat = request.threats[1]
+        scope = request.population_scopes[0]
+        floor = EvidenceRecord(
+            **request.analyzer_inputs[2].evidence_context.model_dump(mode="python"),
+            evidence_id="floor-at-policy-boundary",
+            threat_id=threat.threat_id,
+            analyzer="attack",
+            producer=request.analyzer_inputs[2].provenance.producer,
+            evidence_class=EvidenceClass.FLOOR,
+            coverage="named_projection",
+            metric="equal_prior_membership_success",
+            value=threat.tolerance,
+            lower=threat.tolerance,
+            statistical_family_id="2" * 64,
+            familywise_confidence=0.95,
+            realizability=Realizability.RECIPIENT,
+            can_clear=False,
+            can_block=True,
+        )
+
+        decision = decide_threat(
+            threat,
+            scope,
+            request.release,
+            (floor,),
+            request.policy.policy_sha256,
+            AttackBatteryStatus(
+                mode="required",
+                requirement_id="test-battery",
+                required_attack_ids=("test-attack",),
+                completed_attack_ids=("test-attack",),
+                passing_positive_control_ids=("test-control",),
+                satisfied=True,
+            ),
+        )
+
+        self.assertEqual(decision.verdict, Verdict.INCONCLUSIVE)
+        self.assertEqual(
+            decision.lower_bound_fraction.as_fraction(),
+            Fraction(str(threat.tolerance)),
+        )
+
+    def test_clear_resolution_names_only_the_evidence_class_used(self) -> None:
+        request = AssessmentRequest.model_validate(load_example())
+        threat = request.threats[1]
+        scope = request.population_scopes[0]
+        context = request.analyzer_inputs[2].evidence_context.model_dump(mode="python")
+        common = {
+            **context,
+            "threat_id": threat.threat_id,
+            "producer": request.analyzer_inputs[2].provenance.producer,
+            "coverage": "complete_interface",
+            "metric": threat.decision_metric,
+            "realizability": Realizability.RECIPIENT,
+            "can_clear": True,
+        }
+        exact = EvidenceRecord(
+            **common,
+            evidence_id="exact-clear",
+            analyzer="exact-test",
+            evidence_class=EvidenceClass.EXACT,
+            value=0.5,
+            lower=0.5,
+            upper=0.5,
+            can_block=True,
+        )
+        ceiling = EvidenceRecord(
+            **common,
+            evidence_id="ceiling-clear",
+            analyzer="ceiling-test",
+            evidence_class=EvidenceClass.CEILING,
+            upper=0.55,
+            can_block=False,
+        )
+
+        decision = decide_threat(
+            threat,
+            scope,
+            request.release,
+            (exact, ceiling),
+            request.policy.policy_sha256,
+            AttackBatteryStatus(
+                mode="required",
+                requirement_id="test-battery",
+                required_attack_ids=("test-attack",),
+                completed_attack_ids=("test-attack",),
+                passing_positive_control_ids=("test-control",),
+                satisfied=True,
+            ),
+        )
+
+        self.assertEqual(decision.verdict, Verdict.CLEAR)
+        self.assertEqual(decision.clearance_evidence_class, EvidenceClass.EXACT)
+        self.assertEqual(decision.resolution.evidence_ids, ("exact-clear",))
 
     def test_hash_mismatch_fails(self) -> None:
         raw = load_example()
@@ -872,6 +996,7 @@ class MathTests(unittest.TestCase):
             "threat_id": threat.threat_id,
             "population_scope_id": threat.population_scope_id,
             "attack_name": "paired-attribute",
+            "preregistration_sha256": "e" * 64,
             "metric": "incremental_attribute_attack_success",
             "trials": 4000,
             "combined_successes": 2400,
@@ -896,6 +1021,65 @@ class MathTests(unittest.TestCase):
         self.assertGreater(evidence.lower, 0.0)
         self.assertAlmostEqual(evidence.baseline, 0.5)
 
+    def test_controlled_gap_composition_is_rounded_outward(self) -> None:
+        raw = load_example()
+        release = AssessmentRequest.model_validate(raw).release
+        threat_raw = raw["threats"][0]
+        threat_raw.update(
+            kind="attribute",
+            secret="sensitive attribute",
+            decision_metric="incremental_attribute_attack_success",
+            tolerance_basis="incremental",
+            tolerance=0.06363930940374495,
+            candidate_set=None,
+            target_signal_source=None,
+            realizability="not_applicable",
+        )
+        threat = ThreatContract.model_validate(threat_raw)
+        value = ControlledInferenceInput.model_validate({
+            "analyzer": "controlled_inference",
+            "threat_id": threat.threat_id,
+            "population_scope_id": threat.population_scope_id,
+            "attack_name": "rounding-boundary",
+            "preregistration_sha256": "e" * 64,
+            "metric": "incremental_attribute_attack_success",
+            "trials": 9,
+            "combined_successes": 7,
+            "baseline_successes": 0,
+            "combined_only_successes": 7,
+            "baseline_only_successes": 0,
+            "confidence_family": 0.95,
+            "comparison_family_size": 1,
+            "attack_training_disjoint": True,
+            "audit_disjoint": True,
+            "raw_paired_counts_retained": True,
+            "comparator_same_side_information": True,
+            "secret_and_metric_pre_registered": True,
+            "ground_truth_verified": True,
+            "success_definition": "exact attribute recovery",
+            "evidence_context": raw["analyzer_inputs"][2]["evidence_context"],
+            "provenance": raw["analyzer_inputs"][2]["provenance"],
+        })
+
+        evidence = ControlledInferenceAnalyzer().analyze(release, threat, value)[0]
+        component_lower = evidence.details["combined_only_probability_lower"]
+        component_upper = evidence.details["baseline_only_probability_upper"]
+        exact_composite = (
+            Fraction(Decimal(str(component_lower)))
+            - Fraction(Decimal(str(component_upper)))
+        )
+        unsafe_binary_composite = component_lower - component_upper
+
+        self.assertGreater(
+            Fraction(Decimal(str(unsafe_binary_composite))),
+            exact_composite,
+        )
+        self.assertLessEqual(
+            Fraction(Decimal(str(evidence.lower))),
+            exact_composite,
+        )
+        self.assertLessEqual(evidence.lower, threat.tolerance)
+
     def test_reconstruction_floor_requires_training_membership_verification(self) -> None:
         raw = load_example()
         release = AssessmentRequest.model_validate(raw).release
@@ -916,6 +1100,7 @@ class MathTests(unittest.TestCase):
             "threat_id": threat.threat_id,
             "population_scope_id": threat.population_scope_id,
             "attack_name": "partial-reconstruction",
+            "preregistration_sha256": "e" * 64,
             "metric": "incremental_reconstruction_success",
             "trials": 100,
             "combined_successes": 70,

@@ -1,0 +1,20 @@
+{
+  "schema_version": "1.0",
+  "registration_id": "demo-standalone-membership-floor-v1:calibrated-loss",
+  "analyzer": "attack",
+  "threat_id": "membership-person",
+  "population_scope_id": "service-participants-2026",
+  "member_id": "calibrated-loss",
+  "decision_metric": "equal_prior_membership_success",
+  "registered_at": "2026-08-16T00:00:00Z",
+  "dataset_snapshot_sha256": "47f3b8c137de4ce8db3f142bb4b6faa8b80e9c8017b92678f7d28ff25d86646b",
+  "procedure_sha256": "a3949ef2e1d14a7f0a6c2e3999c272114f833cc603771b0f3f5bff09f0905f8e",
+  "execution_plan_sha256": "1f98626ec5c64520c3822584b715c46b2613376f1954977832d4c6a0fc515cd8",
+  "random_seed": 20260817,
+  "stopping_rule": "collect exactly 1000 disjoint audit decisions",
+  "planned_primary_trials": 1000,
+  "planned_control_trials": 0,
+  "target_fpr": null,
+  "sealed_assignment_sha256": null,
+  "notes": "Demonstration commitment; production must bind the retained private dataset snapshot and full attack procedure."
+}

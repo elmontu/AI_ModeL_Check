@@ -29,7 +29,9 @@ This directory view maps to the operational model in the root README: protocol a
 - Integrity helpers, signed non-authorizing manifests, and hash-chained local intent/terminal audit records with externally anchorable checkpoints.
 - An abstract Lean model and machine-checked theorems under their stated assumptions.
 - Model-family and threat routing that identifies required review without claiming clearance.
-- Bounded, explicitly non-clearing analyzers, benchmark utilities, and reproducibility materials.
+- Bounded, explicitly scoped analyzers—including the proof-obligation-heavy, model-family-neutral
+  finite-channel floor/ceiling path—plus non-authorizing benchmark utilities and reproducibility
+  materials.
 - Optional advisory retrieval, MCP adapters, and experimental model-worker interfaces.
 
 ## Out of scope

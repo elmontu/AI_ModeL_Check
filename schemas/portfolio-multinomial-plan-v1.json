@@ -1,5 +1,73 @@
 {
   "$defs": {
+    "EvidenceBindingContext": {
+      "additionalProperties": false,
+      "description": "Immutable release identity carried by raw statistical evidence.\n\nThis deliberately excludes an observation timestamp: plans, counts, and\nerror-budget allocations must agree on the release identity before any\nobservation is made, while ``EvidenceContext.observed_at`` records when an\nassessment consumed the resulting evidence.",
+      "properties": {
+        "artifact_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Artifact Sha256",
+          "type": "string"
+        },
+        "decision_game_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Decision Game Sha256",
+          "type": "string"
+        },
+        "interface_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Interface Sha256",
+          "type": "string"
+        },
+        "policy_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Policy Sha256",
+          "type": "string"
+        },
+        "population_scope_id": {
+          "maxLength": 128,
+          "minLength": 3,
+          "pattern": "^[A-Za-z0-9._:-]+$",
+          "title": "Population Scope Id",
+          "type": "string"
+        },
+        "population_scope_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Population Scope Sha256",
+          "type": "string"
+        },
+        "release_contract_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Release Contract Sha256",
+          "type": "string"
+        },
+        "release_id": {
+          "maxLength": 128,
+          "minLength": 3,
+          "pattern": "^[A-Za-z0-9._:-]+$",
+          "title": "Release Id",
+          "type": "string"
+        },
+        "schema_version": {
+          "const": "1.0",
+          "default": "1.0",
+          "title": "Schema Version",
+          "type": "string"
+        }
+      },
+      "required": [
+        "release_id",
+        "release_contract_sha256",
+        "policy_sha256",
+        "artifact_sha256",
+        "interface_sha256",
+        "population_scope_id",
+        "population_scope_sha256",
+        "decision_game_sha256"
+      ],
+      "title": "EvidenceBindingContext",
+      "type": "object"
+    },
     "MultinomialSamplingPlanRelease": {
       "additionalProperties": false,
       "properties": {
@@ -34,6 +102,17 @@
       "minLength": 1,
       "title": "Audit Sample Definition",
       "type": "string"
+    },
+    "binding_context": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/EvidenceBindingContext"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
     },
     "family_id": {
       "maxLength": 128,

@@ -6,6 +6,9 @@ All user-visible changes to Model Release Assurance are recorded here. The proje
 
 ### Added
 
+- An MLSys paper workspace with a start-here guide, draft outline, claims-to-evidence matrix,
+  artifact index, and experiment/reproducibility gates that distinguish retained results from
+  configured studies and prohibited claims.
 - A standalone integrated system audit specification consolidating the complete architecture, normative MRAP roles/messages/states/gates, current release contracts and pipelines, evidence semantics, threat and formal boundaries, production obligations, pass/fail rules, and an auditor checklist.
 - Assessment request/report 5.0, policy 3.0, signed assessment manifest 3.0, optimization request/report 4.0, signed optimization manifest 4.0, release-protocol verification 2.0, and audit-verification 3.0 contracts. Superseded schema bytes remain retained as historical structure.
 - Versioned attack catalog, frozen battery configuration, positive-control result, worker-output, and assessment-submission contracts, plus a non-clearing trusted-core `attack_battery` analyzer.
@@ -22,8 +25,24 @@ All user-visible changes to Model Release Assurance are recorded here. The proje
 - `InterfaceContract 3.0` and nested `LlmProtocolContract 1.0` use required-explicit nullable fields and add a coherent rate-limit value/window/burst/scope/retry/enforcement contract whose compatibility flag must agree.
 - Deterministic runtime identities on assessment, optimization, lifecycle, and audit verification
   outputs, including package-source and transparent algorithm-profile digests.
-- A centralized 26-contract schema registry and deterministic exact-byte current-schema manifest with explicit self-exclusion metadata;
+- A centralized 30-contract schema registry and deterministic exact-byte current-schema manifest with explicit self-exclusion metadata;
   trusted release signing/attestation remains an external protected-identity operation.
+- A first-class, model-family-neutral `finite_channel_ceiling` analyzer and public finite-channel
+  submission, policy-bound finite-decision-game, and typed finite-state-prior contracts. The analyzer
+  emits a fixed-decoder confidence floor and an exact-rational/outward confidence ceiling only for a
+  complete enforced finite recipient channel; it mechanically validates serialized reference
+  Clopper--Pearson endpoints under canonical-JSON decimal semantics and returns actionable hold
+  resolutions when obligations fail.
+- A public `EvidenceBindingContext` carried identically by finite-channel plan, counts, committed error-budget allocation,
+  and compiled marginal evidence, with engine-enforced release/policy/artifact/interface/scope/game
+  equality and sampling-before-observation order; endpoint eligibility is compiler- and replay-derived,
+  never submitter-attested.
+- Exact rational typed finite-state priors, canonical JSON-decimal decisions at policy boundaries,
+  and an aggregate directed-tail work cap remove prior/threshold liveness defects and bound endpoint
+  verification cost.
+- Required machine-readable decision resolutions turn every inconclusive result into a fail-closed
+  hold with an evidence-repair, recollection, interface-redesign, policy-registration, conflict, or
+  attack-battery action; indicative sample targets are explicitly non-decision planning guidance.
 - An executable theorem-to-runtime obligation map naming concrete Python violation behavior, regression tests, coverage status, and external refinement gaps.
 - Dedicated, transcript-bound interactive-LLM analyzers for output-watermark screens and randomized synthetic-canary attack floors.
 - Canary evidence supports low-FPR and equal-prior membership games plus exact reconstruction, while contamination, protocol-binding, preregistration, or recipient-realizability failures downgrade the result to a non-decision-bearing screen.
@@ -45,7 +64,7 @@ All user-visible changes to Model Release Assurance are recorded here. The proje
 
 ### Changed
 
-- Default analyzer-service capabilities are derived from implemented behavior and cannot be widened by adapter configuration; only DP ceilings and recipient-realizable tree exact evidence currently provide shipped clearing paths.
+- Default analyzer-service capabilities are derived from implemented behavior and cannot be widened by adapter configuration. Shipped candidate clearing paths now include DP ceilings, recipient-realizable tree exact evidence, and `finite_channel_ceiling` for a canonical exact-guess game over an enforced complete finite recipient channel; all remain subject to their other policy, portfolio, gateway, and evidence obligations.
 - `model-coverage` names per-threat candidate clearing paths and unmet clearing-path threats without emitting a percentage or safety score.
 - CLI assessment/optimization now requires an audit database; after request parsing/validation,
   intent is appended before analyzer/optimizer execution and completion before report output. Missing,
@@ -75,6 +94,16 @@ All user-visible changes to Model Release Assurance are recorded here. The proje
 
 ### Fixed
 
+- Composite controlled-inference and equal-prior canary floors now combine canonical confidence
+  endpoints as exact rationals and round the final lower bound outward, preventing a one-ULP false
+  block at a policy boundary.
+- Exact rational decision bounds preserve a finite-channel ceiling equal to the policy tolerance
+  across the outward-rounded binary64 display boundary. Exact Bonferroni allocation and directed
+  binomial-tail replay prevent inward confidence endpoints or upward alpha rounding from clearing.
+- Finite-channel evidence cannot substitute an assessor-selected state space or favorable prior:
+  policy and threat contracts freeze identical semantics and rational weights, typed evidence binds
+  the numerical vector, and deterministic point tables remain non-decision-bearing screens until
+  recollected as selection-valid simultaneous multinomial evidence.
 - Contradictory upper evidence can no longer weaken a validated over-tolerance floor from `block` to `inconclusive`; reports distinguish contradictory from insufficient evidence and identify the conflicting evidence records.
 - Direct-joint portfolio evidence can no longer claim an assessed empty release set, and optimization requires exact coverage of the authoritative active registry snapshot plus the candidate.
 - Release-protocol CLI machine output no longer hides structural-profile or skipped-artifact verification degradation.

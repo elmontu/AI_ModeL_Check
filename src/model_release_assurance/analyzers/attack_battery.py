@@ -13,8 +13,16 @@ from ..models import (
     ReleaseContract,
     ThreatContract,
 )
-from .attack import clopper_pearson_lower, clopper_pearson_upper
-from .base import evidence_context_fields, evidence_producer_fields
+from .attack import (
+    bonferroni_per_bound_confidence,
+    clopper_pearson_lower,
+    clopper_pearson_upper,
+)
+from .base import (
+    evidence_context_fields,
+    evidence_producer_fields,
+    statistical_family_sha256,
+)
 
 
 def _positive_control_passes(
@@ -109,8 +117,9 @@ class AttackBatteryAnalyzer:
             fpr_upper = None
             bounds_per_comparison = 2 if plan.metric == "membership_tpr_at_fpr" else 1
             simultaneous_bound_count = plan.comparison_family_size * bounds_per_comparison
-            per_comparison_confidence = 1.0 - (
-                (1.0 - plan.confidence) / simultaneous_bound_count
+            per_comparison_confidence = bonferroni_per_bound_confidence(
+                plan.confidence,
+                simultaneous_bound_count,
             )
             if result.status == "succeeded" and plan.metric == "membership_tpr_at_fpr":
                 assert result.false_positives is not None
@@ -119,10 +128,17 @@ class AttackBatteryAnalyzer:
                 expected_fpr = threat.metric_parameters.get("target_fpr")
                 if expected_fpr is None or abs(result.target_fpr - expected_fpr) > 1e-15:
                     raise AnalyzerError("attack-battery target_fpr does not match the threat")
-                fpr_upper = clopper_pearson_upper(
-                    result.false_positives,
-                    result.nonmember_trials,
-                    per_comparison_confidence,
+                fpr_upper = (
+                    1.0
+                    if (
+                        result.false_positives / result.nonmember_trials
+                        > result.target_fpr
+                    )
+                    else clopper_pearson_upper(
+                        result.false_positives,
+                        result.nonmember_trials,
+                        per_comparison_confidence,
+                    )
                 )
                 operating_point_attained = fpr_upper <= result.target_fpr
 
@@ -172,6 +188,19 @@ class AttackBatteryAnalyzer:
                     value=estimate,
                     lower=lower,
                     upper=None,
+                    statistical_family_id=(
+                        statistical_family_sha256(
+                            analyzer=self.name,
+                            family_definition_sha256=value.configuration_sha256,
+                        )
+                        if plan.evidence_role == "blocking_floor"
+                        else None
+                    ),
+                    familywise_confidence=(
+                        plan.confidence
+                        if plan.evidence_role == "blocking_floor"
+                        else None
+                    ),
                     baseline=None,
                     realizability=Realizability.RECIPIENT,
                     can_clear=False,

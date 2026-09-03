@@ -1,5 +1,8 @@
 from __future__ import annotations
 
+from decimal import Decimal
+from fractions import Fraction
+
 from ..errors import AnalyzerError
 from ..models import (
     AnalyzerInput,
@@ -11,8 +14,17 @@ from ..models import (
     ReleaseContract,
     ThreatContract,
 )
-from .attack import clopper_pearson_lower, clopper_pearson_upper
-from .base import evidence_context_fields, evidence_producer_fields
+from .attack import (
+    bonferroni_per_bound_confidence,
+    clopper_pearson_lower,
+    clopper_pearson_upper,
+    downward_canonical_float,
+)
+from .base import (
+    evidence_context_fields,
+    evidence_producer_fields,
+    statistical_family_sha256,
+)
 
 
 class LlmCanaryAnalyzer:
@@ -43,12 +55,22 @@ class LlmCanaryAnalyzer:
         bounds_per_comparison = 2 if value.metric in (
             "membership_tpr_at_fpr", "equal_prior_membership_success"
         ) else 1
-        per_comparison_confidence = 1.0 - (
-            (1.0 - value.confidence) /
-            (value.comparison_family_size * bounds_per_comparison)
+        per_comparison_confidence = bonferroni_per_bound_confidence(
+            value.confidence,
+            value.comparison_family_size * bounds_per_comparison,
         )
-        decoy_upper = clopper_pearson_upper(
-            value.decoy_successes, value.nonmember_decoys, per_comparison_confidence
+        decoy_rate = value.decoy_successes / value.nonmember_decoys
+        decoy_upper = (
+            1.0
+            if (
+                value.metric == "membership_tpr_at_fpr"
+                and decoy_rate > value.target_fpr  # type: ignore[operator]
+            )
+            else clopper_pearson_upper(
+                value.decoy_successes,
+                value.nonmember_decoys,
+                per_comparison_confidence,
+            )
         )
         operating_point_attained = (
             value.metric != "membership_tpr_at_fpr" or decoy_upper <= value.target_fpr  # type: ignore[operator]
@@ -70,7 +92,15 @@ class LlmCanaryAnalyzer:
         ) if valid else None
         if value.metric == "equal_prior_membership_success":
             estimate = 0.5 * (member_rate + 1.0 - value.decoy_successes / value.nonmember_decoys)
-            lower = 0.5 * (member_lower + 1.0 - decoy_upper) if member_lower is not None else None
+            if member_lower is not None:
+                exact_lower = (
+                    Fraction(Decimal(str(member_lower)))
+                    + Fraction(1)
+                    - Fraction(Decimal(str(decoy_upper)))
+                ) / 2
+                lower = downward_canonical_float(exact_lower)
+            else:
+                lower = None
         else:
             estimate = member_rate
             lower = member_lower
@@ -86,6 +116,13 @@ class LlmCanaryAnalyzer:
             value=estimate,
             lower=lower,
             upper=None,
+            statistical_family_id=statistical_family_sha256(
+                analyzer=self.name,
+                family_definition_sha256=(
+                    value.provenance.producer.configuration_sha256
+                ),
+            ),
+            familywise_confidence=value.confidence,
             baseline=value.decoy_successes / value.nonmember_decoys,
             realizability=Realizability.RECIPIENT if value.recipient_realizable else Realizability.AUDITOR_ONLY,
             can_clear=False,

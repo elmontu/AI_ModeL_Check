@@ -1,6 +1,8 @@
 # Model-family coverage
 
-Model Release Assurance is architecture-neutral at the decision layer, but evidence is never architecture-neutral. The current framework separates three questions:
+Model Release Assurance is architecture-neutral at the decision layer. Its finite-channel theorem is
+also model-family neutral, but evidence is never assumption-free: it must match the released channel,
+decision game, population, and proof contract. The current framework separates three questions:
 
 1. Can the release contract describe the model, task, modalities, interface, population, and portfolio?
 2. Are the relevant privacy threats declared for that family and release surface?
@@ -14,13 +16,13 @@ The executable catalog contains 20 categories:
 
 | Category | Examples | Primary privacy surfaces | Current route |
 |---|---|---|---|
-| Linear/generalized linear | logistic regression, GLM, elastic net | coefficients, scores, membership | generic floors, exact channel, or complete DP mechanism |
-| Trees and ensembles | decision tree, random forest, XGBoost, LightGBM, CatBoost | leaves/paths, scores, membership, extraction | tree linkage, generic floors, exact channel, or complete DP mechanism |
+| Linear/generalized linear | logistic regression, GLM, elastic net | coefficients, scores, membership | generic floors, `finite_channel_ceiling`, exact channel, or complete DP mechanism |
+| Trees and ensembles | decision tree, random forest, XGBoost, LightGBM, CatBoost | leaves/paths, scores, membership, extraction | tree linkage, generic floors, `finite_channel_ceiling`, exact channel, or complete DP mechanism |
 | Kernel methods | SVM, kernel ridge, Gaussian process | support vectors, scores, extraction | generic floors plus a bound channel/mechanism |
 | Nearest neighbour | k-NN and exemplar systems | direct exemplars, membership, linkage | dedicated worker required |
 | Probabilistic/Bayesian | naïve Bayes, Bayesian networks | parameters, posterior outputs, membership | generic floors plus exact/DP evidence |
-| Tabular neural networks | MLP, TabNet, tabular transformer | weights, membership, attribute and reconstruction | dedicated multi-reference/white-box worker or complete DP-SGD |
-| Vision | CNN, ViT, detection, segmentation | memorized images, biometrics, inversion | modality-specific worker required |
+| Tabular neural networks | MLP, TabNet, tabular transformer | weights, membership, attribute and reconstruction | `finite_channel_ceiling` for a complete enforced finite interface; otherwise dedicated multi-reference/white-box worker or complete DP-SGD |
+| Vision | CNN, ViT, detection, segmentation | memorized images, biometrics, inversion | `finite_channel_ceiling` for a complete enforced finite interface; otherwise a modality-specific worker |
 | Speech/audio | ASR, speaker and audio models | identity, memorization, reconstruction | modality-specific worker required |
 | Time series | forecasting, ARIMA, state-space models | trajectory linkage, temporal reconstruction, repeated releases | sequence-aware worker required |
 | Recommender/ranking | collaborative filtering, learning to rank | preferences, user membership, adaptive queries | user-level worker required |
@@ -28,14 +30,36 @@ The executable catalog contains 20 categories:
 | Anomaly detection | isolation forest, one-class SVM | rare-person disclosure and tail behavior | tail-aware worker required |
 | Embeddings/representations | encoders and feature extractors | retrieval linkage, sensitive attributes, inversion | retrieval/inversion worker required |
 | Graph models | GNNs and graph embeddings | node/edge membership, link inference, neighbourhood reconstruction | graph-specific worker required |
-| Generative text/LLMs | language and text-generation models | extraction, membership, RAG/tools/memory, adaptive transcripts | interactive clearance deliberately unsupported |
+| Generative text/LLMs | language and text-generation models | extraction, membership, RAG/tools/memory, adaptive transcripts | `finite_channel_ceiling` only for a complete, bounded, enforced finite transcript; ordinary open-ended interaction remains unsupported |
 | Generative media | diffusion, GAN, image/audio/video generation | training-example extraction, identity/style leakage | modality-specific generation worker required |
-| Multimodal foundation | VLM and multimodal foundation systems | cross-modal extraction and adaptive transcripts | interactive clearance deliberately unsupported |
+| Multimodal foundation | VLM and multimodal foundation systems | cross-modal extraction and adaptive transcripts | `finite_channel_ceiling` only for a complete, bounded, enforced finite transcript; ordinary open-ended interaction remains unsupported |
 | RL systems/agents | policies and agentic systems | histories, state, tools, side effects, adaptive interaction | trajectory/transcript mechanism required |
 | Ensemble/composite | stacking, pipelines, mixture-of-experts | component/routing leakage and cross-component composition | complete component and joint-interface assessment |
 | Custom | an unclassified future family | unidentified family and composition risks | independent review and a new versioned analyzer |
 
 The catalog is intentionally broad enough to route classical, deep, generative, multimodal, and agentic systems. It does not pretend that the same empirical attack is valid for all of them.
+
+The `finite_channel_ceiling` exception applies to every governed non-custom row in the table, even
+where the route cell lists only the family's usual specialized worker. It concerns the observation
+channel, not a shared attack or model internals. The submission must bind the declarations, claim
+labels, and evidence for a canonical exact-guess game whose ordered state semantics and exact
+rational prior are frozen identically in the active policy and submitted threat, complete recipient-visible
+transcript/interface, enforced finite alphabet, recipient-realizable channel, selection-valid
+simultaneous multinomial coverage, approved
+engine-replayed confidence-endpoint validation, exact statistical-source binding contexts, typed
+game-bound prior evidence, verified nested sources, and
+exact-rational outward replay.
+The policy/threat game's lowest-terms rational vector is authoritative and must be repeated exactly
+in the analytic `rational_prior` and typed prior evidence. The legacy float `prior` is only a
+solver/display projection whose canonical-decimal entries must be within \(10^{-12}\) of their
+rational counterparts; it cannot redefine the game or drive exact replay. Statistical collection is
+also implementation-bounded: no more than 10,000 simultaneous cells, 10,000,000 trials per raw state
+row, 2,000,000 directed terms per endpoint, and 2,000,000 directed terms across the submitted family.
+Cross-entry rational and count-sum rules are runtime validations beyond what standalone JSON Schema
+can express.
+The reference core validates those bindings conditionally; a family name alone never activates the
+path and does not prove that a live interface satisfies the claims. Deterministic point tables remain
+screens with `collect_simultaneous_channel_evidence` because their channel derivation is not replayed.
 
 ## Structured model profile
 
@@ -84,7 +108,9 @@ For every model family:
 3. define protected units, population snapshots, secrets, priors and side information;
 4. identify family- and modality-specific threats;
 5. assess the complete cumulative population–secret–interface portfolio;
-6. collect attack floors, screens, exact values, or mechanism ceilings without reversing their meaning;
+6. collect attack floors, screens, exact values, or mechanism ceilings without reversing their
+   meaning; generic statistical floors require every accepted policy family plus a typed,
+   outcome-free design registration for every planned member;
 7. reject missing source context, stale evidence, incomplete interface coverage and unsupported protocols;
 8. apply utility before information minimization; and
 9. authorize only the exact hash-bound release and controls that passed the final gate.
@@ -92,10 +118,14 @@ For every model family:
 ## Honest support boundary
 
 - The core contracts, evidence directions, decision rules, integrity checks and portfolio mathematics apply across families.
-- In the shipped roster, only an end-to-end DP ceiling and recipient-realizable tree-linkage exact evidence under complete declared-interface coverage can clear. Attack and controlled-inference/canary evidence are floors, and watermark/population evidence are screens.
-- A non-DP neural release therefore has no default clearing route for ordinary membership, attribute, or reconstruction threats; it is inconclusive unless an approved new ceiling/exact-evidence worker is added. This is an explicit adoption limitation, not evidence that the model is unsafe.
-- Even the two default paths establish only a single-release result against the declared interface. Portfolio optimization and live gateway conformance remain mandatory external stages.
+- In the shipped roster, an end-to-end DP ceiling, recipient-realizable tree-linkage exact evidence, or a fully replayed `finite_channel_ceiling` may clear under complete declared-interface coverage. Attack and controlled-inference/canary evidence are floors, and watermark/population evidence are screens.
+- A non-DP neural release has a clearing route only when its complete released channel satisfies the finite-channel proof contract. An ordinary continuous, incomplete, or open-ended adaptive interface instead requires `redesign_interface`; more samples of a projection cannot establish a ceiling. This is an explicit adoption limitation, not evidence that the model is unsafe.
+- Every shipped clearing path establishes only a single-release result against the declared interface. Portfolio optimization and live gateway conformance remain mandatory external stages.
 - The XGBoost worker is a strong screening workflow, not a universal tree-privacy certificate.
 - The LLM profile is a preregistration linter and emits no scientific evidence.
-- Most vision, audio, graph, recommender, generative-media, RL and composite releases still require dedicated workers.
+- Generic attack, controlled-inference, and canary floor registration binds declared dataset,
+  procedure, seed, stopping, trial, low-FPR, and sealed-assignment facts by hash, but the offline core
+  neither authenticates their source nor proves those declarations true or faithfully executed.
+- Existing LLM, vision, training-hook, composition-scaling, and red-team runs remain screens. They require approved state-conditioned recollection under the finite-channel contract; completion of an old run cannot be restamped into evidence.
+- Most vision, audio, graph, recommender, generative-media, RL and composite releases still require dedicated workers unless their complete recipient channel meets the finite-channel proof contract.
 - “All models” therefore means every family is classified, scoped and failed closed—not that every family can currently be cleared.
