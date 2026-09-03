@@ -1,0 +1,30 @@
+{
+  "schema_version": "1.0",
+  "experiment_id": "finite-channel-ceiling-ground-truth-v1",
+  "execution_status": "completed_registered_acceptance_passed",
+  "source_snapshot": {
+    "git_commit": "dd08baa3eec7ba8767d70e163181a946559031d0",
+    "source_archive_sha256": "3ff5c459b3efffb9661820d5edad411c057298f62970be2fcd0ec771042186e9",
+    "config_file_sha256": "6de06c2f888f33e11e2af2bed93e3042b7b76f34b163049ed89be1a1f4f3cb6b",
+    "runner_sha256": "29d71d9a0a219a8b13e5c6eedb960bf9a8bcc87fc13df2c467c7ec1efc903b69"
+  },
+  "execution": {
+    "exit_status": 0,
+    "expected_records": 1800,
+    "completed_records": 1800,
+    "full_source_backed_engine_replays": 3,
+    "primary_production_analyzer_replays": 1200
+  },
+  "retained_artifacts": {
+    "artifact_count_including_manifest": 4,
+    "ground_truth_report_sha256": "62ebc17e94c726a5bad4bd084d2d84d71d0637b42380d1c7200a93900b0cefc7",
+    "execution_log_sha256": "40486984d9556def1fb108ce47456ed4f5148b16963e3237f70dd615b7875c66",
+    "resource_usage_sha256": "851306b6b50a4395addc639f47ac57cc291f6a662fb853408640cf1f47d9fa26"
+  },
+  "interpretation": {
+    "evidence_scope": "controlled finite channels with exact known risks",
+    "real_model_evidence": false,
+    "authorization_eligible": false,
+    "release_authorization": "none"
+  }
+}

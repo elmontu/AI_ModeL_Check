@@ -1,0 +1,178 @@
+{
+  "assumptions": [
+    "within each secret-state row, retained observations are IID draws from one fixed multinomial channel row",
+    "the committed ledger contains the complete assurance-wide allocation family",
+    "Bonferroni union bounds require no independence between cells, releases, or allocated families",
+    "every serialized endpoint is replay-proved by directed binomial-tail arithmetic"
+  ],
+  "assurance_wide_alpha": 0.05,
+  "assurance_wide_confidence": 0.95,
+  "binding_context": {
+    "artifact_sha256": "6eeff9d8c285e0f8eb510ccfc20d4e6abac864c37a7dad352e6b31c37fcf043a",
+    "decision_game_sha256": "9acc9a0819afc7c7b0582b2fa621427aebd79c762c9afb04e3e87778e1c263e7",
+    "interface_sha256": "d3d33aa1353ad63cf13be7dba8f9a34216c9950ba9d50dcb9d980a38305ffcaf",
+    "policy_sha256": "0101fa6fa399d033b3b05fafe496078bdb07722db349ac5b37ac9f496b941553",
+    "population_scope_id": "benchmark-compact_transformer_llm_proxy-erasure_0p9",
+    "population_scope_sha256": "e1494dc47f74c2048400c580f5fab2b376de792ef383ebc11edfbd262e699ada",
+    "release_contract_sha256": "db93bd679b00ac7bbae18f5670a1cb284223dbeb31033060be6fc301cf7d0878",
+    "release_id": "model-backed-compact_transformer_llm_proxy-erasure_0p9",
+    "schema_version": "1.0"
+  },
+  "budget_id": "model-backed-finite-channel-assurance-budget",
+  "count_file_id": "counts-compact_transformer_llm_proxy-erasure_0p9",
+  "coverage": "simultaneous",
+  "endpoint_proof_terms": 4080,
+  "evidence_type": "simultaneous_multinomial_marginals",
+  "family_alpha": 0.008333333333333333,
+  "family_coverage_confidence": 0.9916666666666666,
+  "family_id": "family-compact_transformer_llm_proxy-erasure_0p9",
+  "limitations": [],
+  "method": "bonferroni_two_sided_clopper_pearson",
+  "per_tail_alpha": 0.00020833333333333332,
+  "per_tail_alpha_denominator": 25000000000000000000,
+  "per_tail_alpha_numerator": 5208333333333333,
+  "population_scope_id": "benchmark-compact_transformer_llm_proxy-erasure_0p9",
+  "portfolio_id": "portfolio-compact_transformer_llm_proxy-erasure_0p9",
+  "request": {
+    "all_cells_reported": true,
+    "allocation_id": "allocation-compact_transformer_llm_proxy-erasure_0p9",
+    "assurance_ledger_complete": true,
+    "budget_reference": {
+      "source_id": "model-backed-finite-channel-assurance-budget",
+      "source_path": "assurance-error-budget.json",
+      "source_sha256": "1e67882589c1615a42ccfb93683870860f5843c3ce8229bf1c690b20bb250583"
+    },
+    "counts_reference": {
+      "source_id": "counts-compact_transformer_llm_proxy-erasure_0p9",
+      "source_path": "sampled-counts.json",
+      "source_sha256": "ba833b980bbc1857cce5fd86f91a5a8d720759c2f7c073e49bac663897c107d9"
+    },
+    "family_pre_registered": true,
+    "generation_id": "generation-compact_transformer_llm_proxy-erasure_0p9",
+    "sampling_model": "iid_multinomial",
+    "sampling_plan_reference": {
+      "source_id": "plan-compact_transformer_llm_proxy-erasure_0p9",
+      "source_path": "sampling-plan.json",
+      "source_sha256": "53fa4bb2ae9b56aecca998e2cce6272eeaec169aafb13db5901959a357c0fd65"
+    },
+    "schema_version": "1.0",
+    "selection_process_covered": true,
+    "selection_scope": "all three preregistered public-data models, both wrapper variants, both secret states, and every listed categorical observation"
+  },
+  "rows": [
+    {
+      "counts": [
+        0,
+        372,
+        33,
+        41,
+        42,
+        42,
+        0,
+        0,
+        0,
+        4470
+      ],
+      "lower": [
+        0.0,
+        0.06194245190305671,
+        0.0032909540438914764,
+        0.004431723191669669,
+        0.004577611158804242,
+        0.004577611158804242,
+        0.0,
+        0.0,
+        0.0,
+        0.8778514194202854
+      ],
+      "observation_ids": [
+        "nll_negative",
+        "nll_0_to_0p5",
+        "nll_0p5_to_1",
+        "nll_1_to_2",
+        "nll_2_to_4",
+        "nll_4_or_more",
+        "nll_nonfinite",
+        "wrapper_error",
+        "wrapper_timeout",
+        "state_independent_erasure"
+      ],
+      "release_id": "model-backed-compact_transformer_llm_proxy-erasure_0p9",
+      "state_id": "out",
+      "trials": 5000,
+      "upper": [
+        0.0016938380736853857,
+        0.08834238913471096,
+        0.011664581332551412,
+        0.01371365344140298,
+        0.013966577960854284,
+        0.013966577960854284,
+        0.0016938380736853857,
+        0.0016938380736853857,
+        0.0016938380736853857,
+        0.908776023125579
+      ]
+    },
+    {
+      "counts": [
+        0,
+        447,
+        11,
+        25,
+        2,
+        0,
+        0,
+        0,
+        0,
+        4515
+      ],
+      "lower": [
+        0.0,
+        0.07577511576960495,
+        0.0005766000674584926,
+        0.0022099732040353477,
+        4.110926023799249e-06,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.8874273332001892
+      ],
+      "observation_ids": [
+        "nll_negative",
+        "nll_0_to_0p5",
+        "nll_0p5_to_1",
+        "nll_1_to_2",
+        "nll_2_to_4",
+        "nll_4_or_more",
+        "nll_nonfinite",
+        "wrapper_error",
+        "wrapper_timeout",
+        "state_independent_erasure"
+      ],
+      "release_id": "model-backed-compact_transformer_llm_proxy-erasure_0p9",
+      "state_id": "in",
+      "trials": 5000,
+      "upper": [
+        0.0016938380736853857,
+        0.10445624189068102,
+        0.005620712171016526,
+        0.009557404868300227,
+        0.002612584308362378,
+        0.0016938380736853857,
+        0.0016938380736853857,
+        0.0016938380736853857,
+        0.0016938380736853857,
+        0.9171682707054276
+      ]
+    }
+  ],
+  "schema_version": "1.0",
+  "selection_valid": true,
+  "simultaneous_cell_count": 20,
+  "state_ids": [
+    "out",
+    "in"
+  ],
+  "threat_id": "membership-compact_transformer_llm_proxy-erasure_0p9"
+}

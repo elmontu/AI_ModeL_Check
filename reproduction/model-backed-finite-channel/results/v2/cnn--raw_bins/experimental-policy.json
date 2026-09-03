@@ -1,0 +1,64 @@
+{
+  "accepted_selection_policy_sha256s": [
+    "77850b333353bef86d72a1647ed0de50bf6c2d6b7ee7f6d1e26e721e653e3f8e"
+  ],
+  "analyzer_requirements": [
+    {
+      "accepted_configuration_sha256s": [
+        "77850b333353bef86d72a1647ed0de50bf6c2d6b7ee7f6d1e26e721e653e3f8e"
+      ],
+      "accepted_implementation_sha256s": [
+        "abd1eab49e3de2f48e2cf458856321330d2df4bb64ab090663bd8a4925cecc29"
+      ],
+      "analyzer": "finite_channel_ceiling",
+      "minimum_service_version": "1.0.0",
+      "required": true,
+      "threat_id": "membership-cnn-raw_bins"
+    }
+  ],
+  "attack_battery_requirements": [],
+  "effective_from": "2026-09-03T05:31:30Z",
+  "expires_at": "2099-01-01T00:00:00Z",
+  "policy_id": "experimental-cnn-raw_bins",
+  "policy_version": "1.0.0",
+  "rules": [
+    {
+      "ceiling_attack_battery_mode": "waived",
+      "ceiling_attack_battery_waiver_reason": "Experimental finite-population validation only; this waiver cannot authorize deployment.",
+      "decision_metric": "equal_prior_membership_success",
+      "finite_game": {
+        "authority": "MRA experimental benchmark registration",
+        "game_id": "equal-prior-membership-hidden-record-benchmark",
+        "prior": [
+          {
+            "denominator": 2,
+            "numerator": 1
+          },
+          {
+            "denominator": 2,
+            "numerator": 1
+          }
+        ],
+        "prior_basis": "preregistered equal-prior randomized hidden-record benchmark game",
+        "schema_version": "1.0",
+        "states": [
+          {
+            "secret_value_definition": "hidden sampled benchmark record is from target nonmembers",
+            "state_id": "out"
+          },
+          {
+            "secret_value_definition": "hidden sampled benchmark record is from target members",
+            "state_id": "in"
+          }
+        ]
+      },
+      "kind": "membership",
+      "mandatory": true,
+      "metric_parameters": {},
+      "threat_id": "membership-cnn-raw_bins",
+      "tolerance": 0.65,
+      "tolerance_basis": "absolute"
+    }
+  ],
+  "schema_version": "3.0"
+}

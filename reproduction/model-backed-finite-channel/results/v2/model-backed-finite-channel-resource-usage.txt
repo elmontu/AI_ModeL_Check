@@ -1,0 +1,24 @@
+Command exited with non-zero status 2
+	Command being timed: "/home/ubuntu/model-privacy-check/.privacy-venv/bin/python scripts/run_model_backed_finite_channel.py --config reproduction/model-backed-finite-channel/config.json --cache-dir /home/ubuntu/model-privacy-check/reproduction/public-privacy/raw --output-dir output/model-backed-finite-channel/fresh-run"
+	User time (seconds): 559.38
+	System time (seconds): 1.20
+	Percent of CPU this job got: 101%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 9:14.54
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 2360720
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 363375
+	Voluntary context switches: 399
+	Involuntary context switches: 2788
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 6216
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 2

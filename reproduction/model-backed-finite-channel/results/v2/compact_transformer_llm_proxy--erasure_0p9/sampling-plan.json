@@ -1,0 +1,45 @@
+{
+  "audit_sample_definition": "independent with-replacement draws from each complete finite target pool, using the preregistered per-model, per-variant, per-state seeds out=609030303 and in=609030304",
+  "binding_context": {
+    "artifact_sha256": "6eeff9d8c285e0f8eb510ccfc20d4e6abac864c37a7dad352e6b31c37fcf043a",
+    "decision_game_sha256": "9acc9a0819afc7c7b0582b2fa621427aebd79c762c9afb04e3e87778e1c263e7",
+    "interface_sha256": "d3d33aa1353ad63cf13be7dba8f9a34216c9950ba9d50dcb9d980a38305ffcaf",
+    "policy_sha256": "0101fa6fa399d033b3b05fafe496078bdb07722db349ac5b37ac9f496b941553",
+    "population_scope_id": "benchmark-compact_transformer_llm_proxy-erasure_0p9",
+    "population_scope_sha256": "e1494dc47f74c2048400c580f5fab2b376de792ef383ebc11edfbd262e699ada",
+    "release_contract_sha256": "db93bd679b00ac7bbae18f5670a1cb284223dbeb31033060be6fc301cf7d0878",
+    "release_id": "model-backed-compact_transformer_llm_proxy-erasure_0p9",
+    "schema_version": "1.0"
+  },
+  "family_id": "family-compact_transformer_llm_proxy-erasure_0p9",
+  "minimum_trials_per_state": 5000,
+  "plan_id": "plan-compact_transformer_llm_proxy-erasure_0p9",
+  "population_scope_id": "benchmark-compact_transformer_llm_proxy-erasure_0p9",
+  "portfolio_id": "portfolio-compact_transformer_llm_proxy-erasure_0p9",
+  "registered_at": "2026-09-03T05:31:30Z",
+  "releases": [
+    {
+      "observation_ids": [
+        "nll_negative",
+        "nll_0_to_0p5",
+        "nll_0p5_to_1",
+        "nll_1_to_2",
+        "nll_2_to_4",
+        "nll_4_or_more",
+        "nll_nonfinite",
+        "wrapper_error",
+        "wrapper_timeout",
+        "state_independent_erasure"
+      ],
+      "release_id": "model-backed-compact_transformer_llm_proxy-erasure_0p9"
+    }
+  ],
+  "sampling_model": "iid_multinomial",
+  "schema_version": "1.0",
+  "selection_scope": "all three preregistered public-data models, both wrapper variants, both secret states, and every listed categorical observation",
+  "state_ids": [
+    "out",
+    "in"
+  ],
+  "threat_id": "membership-compact_transformer_llm_proxy-erasure_0p9"
+}

@@ -1,0 +1,362 @@
+{
+  "analytic_evidence": {
+    "envelope_certificate": {
+      "cell_upper_bounds": [
+        [
+          0.0016938380736853857,
+          0.08834238913471096,
+          0.011664581332551412,
+          0.01371365344140298,
+          0.013966577960854284,
+          0.013966577960854284,
+          0.0016938380736853857,
+          0.0016938380736853857,
+          0.0016938380736853857,
+          0.908776023125579
+        ],
+        [
+          0.0016938380736853857,
+          0.10445624189068102,
+          0.005620712171016526,
+          0.009557404868300227,
+          0.002612584308362378,
+          0.0016938380736853857,
+          0.0016938380736853857,
+          0.0016938380736853857,
+          0.0016938380736853857,
+          0.9171682707054276
+        ]
+      ],
+      "certificate_id": "certificate-compact_transformer_llm_proxy-erasure_0p9",
+      "coverage_confidence": 0.95,
+      "derivation": "conditional-independence product of marginal upper bounds plus joint-event bounds",
+      "feasible_joint_channel": [
+        [
+          0.0016938380736853857,
+          0.08834238913471096,
+          0.011664581332551412,
+          0.011292549721158313,
+          0.004577611158804242,
+          0.004577611158804242,
+          0.0,
+          0.0,
+          0.0,
+          0.8778514194202854
+        ],
+        [
+          0.0016938380736853857,
+          0.10445624189068102,
+          0.004208502705385315,
+          0.0022099732040353477,
+          4.110926023799249e-06,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.8874273332001892
+        ]
+      ],
+      "joint_observation_ids": [
+        "[\"nll_negative\"]",
+        "[\"nll_0_to_0p5\"]",
+        "[\"nll_0p5_to_1\"]",
+        "[\"nll_1_to_2\"]",
+        "[\"nll_2_to_4\"]",
+        "[\"nll_4_or_more\"]",
+        "[\"nll_nonfinite\"]",
+        "[\"wrapper_error\"]",
+        "[\"wrapper_timeout\"]",
+        "[\"state_independent_erasure\"]"
+      ],
+      "problem_sha256": "eb6d706d744c853905f50bc8521ffc67c5823a635d7a3a4060fbbf9a22102fb3",
+      "raw_upper_bound": 0.5408556277932566,
+      "selection_valid": true,
+      "upper_bound": 0.5408556277932566
+    },
+    "exact_certificate": null,
+    "problem": {
+      "coupling_model": "conditional_independence",
+      "coverage": "simultaneous",
+      "coverage_confidence": 0.95,
+      "decision_game_sha256": "9acc9a0819afc7c7b0582b2fa621427aebd79c762c9afb04e3e87778e1c263e7",
+      "decision_problem": {
+        "action_ids": [
+          "out",
+          "in"
+        ],
+        "gain": [
+          [
+            1.0,
+            0.0
+          ],
+          [
+            0.0,
+            1.0
+          ]
+        ],
+        "interpretation": "exact recovery of the secret state",
+        "problem_id": "9acc9a0819afc7c7b0582b2fa621427aebd79c762c9afb04e3e87778e1c263e7",
+        "state_ids": [
+          "out",
+          "in"
+        ]
+      },
+      "joint_event_bounds": [],
+      "mechanism_assumptions": [
+        "one closed hidden-record query produces the complete categorical transcript",
+        "state-conditioned sampling is IID with replacement from each frozen finite pool",
+        "erasure, if enabled, is independent of the hidden state and underlying bin"
+      ],
+      "mechanism_evidence": [
+        {
+          "evidence_id": "mechanism-compact_transformer_llm_proxy-erasure_0p9",
+          "source_path": "mechanism-evidence.json",
+          "source_sha256": "b8601a89ee57a705b8aa7105cc2772120e409d5f4a341413a73b6384b3f2ae33",
+          "supports": [
+            "coupling:conditional_independence",
+            "artifact:6eeff9d8c285e0f8eb510ccfc20d4e6abac864c37a7dad352e6b31c37fcf043a",
+            "interface:d3d33aa1353ad63cf13be7dba8f9a34216c9950ba9d50dcb9d980a38305ffcaf",
+            "complete-transcript:model-backed-compact_transformer_llm_proxy-erasure_0p9"
+          ]
+        }
+      ],
+      "population_scope_id": "benchmark-compact_transformer_llm_proxy-erasure_0p9",
+      "population_scope_sha256": "e1494dc47f74c2048400c580f5fab2b376de792ef383ebc11edfbd262e699ada",
+      "portfolio_id": "portfolio-compact_transformer_llm_proxy-erasure_0p9",
+      "prior": [
+        0.5,
+        0.5
+      ],
+      "prior_evidence": {
+        "evidence_id": "prior-compact_transformer_llm_proxy-erasure_0p9",
+        "source_path": "finite-prior.json",
+        "source_sha256": "e71a34545950e818fa8df76acc15e871c8e273aeac14f8d8b7385154424c8766",
+        "supports": [
+          "prior",
+          "decision-game:9acc9a0819afc7c7b0582b2fa621427aebd79c762c9afb04e3e87778e1c263e7",
+          "finite-prior:5ee97d5975f9f78b48adebbc2c4699f119ddd58542d1dcdec8305d3d0eb3b9df"
+        ]
+      },
+      "rational_prior": [
+        {
+          "denominator": 2,
+          "numerator": 1
+        },
+        {
+          "denominator": 2,
+          "numerator": 1
+        }
+      ],
+      "releases": [
+        {
+          "evidence": {
+            "evidence_id": "generation-compact_transformer_llm_proxy-erasure_0p9:model-backed-compact_transformer_llm_proxy-erasure_0p9",
+            "source_path": "simultaneous-evidence.json",
+            "source_sha256": "fcc8c554c2370a19cad13d70a16a8daab8b355325d1793247f347f15ec86de91",
+            "supports": [
+              "marginal:model-backed-compact_transformer_llm_proxy-erasure_0p9",
+              "coverage:simultaneous",
+              "error-budget:model-backed-finite-channel-assurance-budget:allocation-compact_transformer_llm_proxy-erasure_0p9",
+              "confidence-endpoints:outward-validated"
+            ]
+          },
+          "lower": [
+            [
+              0.0,
+              0.06194245190305671,
+              0.0032909540438914764,
+              0.004431723191669669,
+              0.004577611158804242,
+              0.004577611158804242,
+              0.0,
+              0.0,
+              0.0,
+              0.8778514194202854
+            ],
+            [
+              0.0,
+              0.07577511576960495,
+              0.0005766000674584926,
+              0.0022099732040353477,
+              4.110926023799249e-06,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.8874273332001892
+            ]
+          ],
+          "observation_ids": [
+            "nll_negative",
+            "nll_0_to_0p5",
+            "nll_0p5_to_1",
+            "nll_1_to_2",
+            "nll_2_to_4",
+            "nll_4_or_more",
+            "nll_nonfinite",
+            "wrapper_error",
+            "wrapper_timeout",
+            "state_independent_erasure"
+          ],
+          "release_id": "model-backed-compact_transformer_llm_proxy-erasure_0p9",
+          "upper": [
+            [
+              0.0016938380736853857,
+              0.08834238913471096,
+              0.011664581332551412,
+              0.01371365344140298,
+              0.013966577960854284,
+              0.013966577960854284,
+              0.0016938380736853857,
+              0.0016938380736853857,
+              0.0016938380736853857,
+              0.908776023125579
+            ],
+            [
+              0.0016938380736853857,
+              0.10445624189068102,
+              0.005620712171016526,
+              0.009557404868300227,
+              0.002612584308362378,
+              0.0016938380736853857,
+              0.0016938380736853857,
+              0.0016938380736853857,
+              0.0016938380736853857,
+              0.9171682707054276
+            ]
+          ]
+        }
+      ],
+      "schema_version": "1.0",
+      "selection_scope": "all three preregistered public-data models, both wrapper variants, both secret states, and every listed categorical observation",
+      "state_ids": [
+        "out",
+        "in"
+      ],
+      "threat_id": "membership-compact_transformer_llm_proxy-erasure_0p9"
+    },
+    "rational_upper_audit": {
+      "audit_version": "1.0",
+      "certificate_id": "certificate-compact_transformer_llm_proxy-erasure_0p9",
+      "certificate_kind": "envelope",
+      "exact_upper_denominator": 5000000000000000000,
+      "exact_upper_numerator": 2704278138966282807,
+      "feasible_joint_channel": [
+        [
+          {
+            "denominator": 10000000000000000000,
+            "numerator": 16938380736853857
+          },
+          {
+            "denominator": 12500000000000000,
+            "numerator": 1104279864183887
+          },
+          {
+            "denominator": 250000000000000000,
+            "numerator": 2916145333137853
+          },
+          {
+            "denominator": 10000000000000000000,
+            "numerator": 112925497211583583
+          },
+          {
+            "denominator": 500000000000000000,
+            "numerator": 2288805579402121
+          },
+          {
+            "denominator": 500000000000000000,
+            "numerator": 2288805579402121
+          },
+          {
+            "denominator": 1,
+            "numerator": 0
+          },
+          {
+            "denominator": 1,
+            "numerator": 0
+          },
+          {
+            "denominator": 1,
+            "numerator": 0
+          },
+          {
+            "denominator": 5000000000000000,
+            "numerator": 4389257097101427
+          }
+        ],
+        [
+          {
+            "denominator": 10000000000000000000,
+            "numerator": 16938380736853857
+          },
+          {
+            "denominator": 50000000000000000,
+            "numerator": 5222812094534051
+          },
+          {
+            "denominator": 1000000000000000000000,
+            "numerator": 4208502705385247351
+          },
+          {
+            "denominator": 10000000000000000000,
+            "numerator": 22099732040353477
+          },
+          {
+            "denominator": 1000000000000000000000,
+            "numerator": 4110926023799249
+          },
+          {
+            "denominator": 1,
+            "numerator": 0
+          },
+          {
+            "denominator": 1,
+            "numerator": 0
+          },
+          {
+            "denominator": 1,
+            "numerator": 0
+          },
+          {
+            "denominator": 1,
+            "numerator": 0
+          },
+          {
+            "denominator": 2500000000000000,
+            "numerator": 2218568333000473
+          }
+        ]
+      ],
+      "number_interpretation": "exact_decimal_weights_normalized_per_probability_vector",
+      "outward_upper_bound": 0.5408556277932566,
+      "problem_sha256": "eb6d706d744c853905f50bc8521ffc67c5823a635d7a3a4060fbbf9a22102fb3"
+    },
+    "schema_version": "1.1"
+  },
+  "analyzer": "finite_channel_ceiling",
+  "bounded_transcript_complete": true,
+  "complete_interface_coverage": true,
+  "evidence_context": {
+    "artifact_sha256": "6eeff9d8c285e0f8eb510ccfc20d4e6abac864c37a7dad352e6b31c37fcf043a",
+    "decision_game_sha256": "9acc9a0819afc7c7b0582b2fa621427aebd79c762c9afb04e3e87778e1c263e7",
+    "interface_sha256": "d3d33aa1353ad63cf13be7dba8f9a34216c9950ba9d50dcb9d980a38305ffcaf",
+    "observed_at": "2026-09-03T05:36:36.292548Z",
+    "policy_sha256": "0101fa6fa399d033b3b05fafe496078bdb07722db349ac5b37ac9f496b941553",
+    "population_scope_id": "benchmark-compact_transformer_llm_proxy-erasure_0p9",
+    "population_scope_sha256": "e1494dc47f74c2048400c580f5fab2b376de792ef383ebc11edfbd262e699ada",
+    "release_contract_sha256": "db93bd679b00ac7bbae18f5670a1cb284223dbeb31033060be6fc301cf7d0878",
+    "release_id": "model-backed-compact_transformer_llm_proxy-erasure_0p9"
+  },
+  "interface_observation_definition": "complete one-query categorical transcript of the closed hidden-record sampler, including negative, nonfinite, wrapper-error, timeout, and erasure outcomes",
+  "observed_artifact_sha256": "6eeff9d8c285e0f8eb510ccfc20d4e6abac864c37a7dad352e6b31c37fcf043a",
+  "observed_interface_sha256": "d3d33aa1353ad63cf13be7dba8f9a34216c9950ba9d50dcb9d980a38305ffcaf",
+  "population_scope_id": "benchmark-compact_transformer_llm_proxy-erasure_0p9",
+  "recipient_realizable": true,
+  "release_enforced_finite_alphabet": true,
+  "schema_version": "1.0",
+  "state_trials": [
+    5000,
+    5000
+  ],
+  "threat_id": "membership-compact_transformer_llm_proxy-erasure_0p9"
+}

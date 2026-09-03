@@ -1,0 +1,169 @@
+{
+  "schema_version": "1.0",
+  "experiment_id": "model-backed-finite-channel-public-data-v2",
+  "registered_at": "2026-09-03T05:31:30Z",
+  "authority": {
+    "experimental_only": true,
+    "benchmark_population_conditional": true,
+    "authorization_eligible": false,
+    "authorization_granted": false,
+    "real_world_privacy_claimed": false,
+    "decision": "no_release_authorization"
+  },
+  "collector": {
+    "experiment_id": "public-data-four-model-membership-audit-v1",
+    "runner_path": "scripts/run_public_privacy_audit.py",
+    "runner_sha256": "177dc20deeb8ea1413f66f473dd92726d7c637cbe8bd325d2fbe7c54ccf1f13a",
+    "seed": 2026090301,
+    "epochs": 5,
+    "raw_output_use": "temporary_disposable_directory_then_aggregate_only_output"
+  },
+  "finite_wrapper": {
+    "wrapper_id": "closed-hidden-record-semantic-nll-v1",
+    "mechanism": "one_query_closed_hidden_record_sampler",
+    "query_budget": 1,
+    "hidden_record_sampling": "auditor selects one target-pool record conditional on the sealed IN/OUT state; recipient cannot select or observe the record",
+    "recipient_input_fields": [],
+    "recipient_observes_only": "one categorical symbol from the complete observation_ids list",
+    "candidate_record_visible": false,
+    "model_or_weights_visible": false,
+    "raw_loss_visible": false,
+    "timing_visible": false,
+    "identifiers_or_metadata_visible": false,
+    "arbitrary_query_path": false,
+    "observation_ids": [
+      "nll_negative",
+      "nll_0_to_0p5",
+      "nll_0p5_to_1",
+      "nll_1_to_2",
+      "nll_2_to_4",
+      "nll_4_or_more",
+      "nll_nonfinite",
+      "wrapper_error",
+      "wrapper_timeout",
+      "state_independent_erasure"
+    ],
+    "finite_nll_bins": [
+      {"observation_id": "nll_negative", "lower": null, "upper": "0", "lower_closed": false, "upper_closed": false},
+      {"observation_id": "nll_0_to_0p5", "lower": "0", "upper": "0.5", "lower_closed": true, "upper_closed": false},
+      {"observation_id": "nll_0p5_to_1", "lower": "0.5", "upper": "1", "lower_closed": true, "upper_closed": false},
+      {"observation_id": "nll_1_to_2", "lower": "1", "upper": "2", "lower_closed": true, "upper_closed": false},
+      {"observation_id": "nll_2_to_4", "lower": "2", "upper": "4", "lower_closed": true, "upper_closed": false},
+      {"observation_id": "nll_4_or_more", "lower": "4", "upper": null, "lower_closed": true, "upper_closed": false}
+    ],
+    "nonfinite_observation_id": "nll_nonfinite",
+    "error_observation_id": "wrapper_error",
+    "timeout_observation_id": "wrapper_timeout",
+    "variants": [
+      {"variant_id": "raw_bins", "state_independent_erasure": {"numerator": 0, "denominator": 1}},
+      {"variant_id": "erasure_0p9", "state_independent_erasure": {"numerator": 9, "denominator": 10}}
+    ]
+  },
+  "models": [
+    {
+      "collector_model": "cnn",
+      "model_family": "cnn",
+      "dataset_key": "mnist",
+      "display_name": "CNN on public MNIST",
+      "sample_seeds": {
+        "raw_bins": {"out": 609030101, "in": 609030102},
+        "erasure_0p9": {"out": 609030103, "in": 609030104}
+      }
+    },
+    {
+      "collector_model": "xgboost",
+      "model_family": "xgboost",
+      "dataset_key": "adult",
+      "display_name": "XGBoost on public Adult Census Income",
+      "sample_seeds": {
+        "raw_bins": {"out": 609030201, "in": 609030202},
+        "erasure_0p9": {"out": 609030203, "in": 609030204}
+      }
+    },
+    {
+      "collector_model": "compact_transformer_llm_proxy",
+      "model_family": "llm_proxy_compact_transformer",
+      "dataset_key": "20newsgroups",
+      "display_name": "Compact Transformer text classifier on public 20 Newsgroups (LLM proxy only)",
+      "llm_proxy_only": true,
+      "sample_seeds": {
+        "raw_bins": {"out": 609030301, "in": 609030302},
+        "erasure_0p9": {"out": 609030303, "in": 609030304}
+      }
+    }
+  ],
+  "sampling": {
+    "model": "iid_multinomial_with_replacement_conditional_on_finite_target_pool",
+    "trials_per_state": 5000,
+    "state_ids": ["out", "in"],
+    "family_selection_scope": "all three preregistered public-data models, both wrapper variants, both secret states, and every listed categorical observation",
+    "assurance_alpha": {"numerator": 1, "denominator": 20},
+    "per_model_variant_alpha": {"numerator": 1, "denominator": 120},
+    "registered_family_count": 6
+  },
+  "repeated_validation": {
+    "replicates_per_model_variant": 200,
+    "master_seed": 609039999,
+    "seed_derivation": "sha256-first-64-bits:MRA-MODEL-BACKED-REPEAT-1:model:variant:replicate:state",
+    "meta_family_alpha": {"numerator": 1, "denominator": 20},
+    "maximum_simultaneous_undercoverage_upper": 0.05,
+    "minimum_simultaneous_clear_rate_lower": 0.95,
+    "retain_all_aggregate_count_rows": true,
+    "production_analyzer_replay_every_replicate": true,
+    "full_engine_replay": "one_independent_primary_draw_per_model_variant"
+  },
+  "decision_game": {
+    "game_id": "equal-prior-membership-hidden-record-benchmark",
+    "prior": [
+      {"numerator": 1, "denominator": 2},
+      {"numerator": 1, "denominator": 2}
+    ],
+    "tolerance": 0.65,
+    "metric": "equal_prior_membership_success"
+  },
+  "production_path": {
+    "experiment_runner_path": "scripts/run_model_backed_finite_channel.py",
+    "experiment_runner_sha256": "75c46cd7232bd2676c282993e255a161be0d2df1ec1e4e3a1824ad093319714d",
+    "assurance_engine_path": "src/model_release_assurance/engine.py",
+    "assurance_engine_sha256": "8500c75f0cc48473e106dcfe0a11f2d3a820d582a0e9a5c4865b681985208739",
+    "analytic_solver_path": "src/model_release_assurance/incomplete_portfolio.py",
+    "analytic_solver_sha256": "0ee381f437b77891664590a4ddbe3c024c4bb7aca87561f6231248a4b95e75a1",
+    "wrapper_conformance_path": "src/model_release_assurance/experimental_finite_wrapper.py",
+    "wrapper_conformance_sha256": "e03646ee29712ab9a85bb0af93d6196ccccbc0b9afe1c41a12676d85aba778d5",
+    "attack_statistics_path": "src/model_release_assurance/analyzers/attack.py",
+    "attack_statistics_sha256": "a3949ef2e1d14a7f0a6c2e3999c272114f833cc603771b0f3f5bff09f0905f8e",
+    "trust_core_path": "src/model_release_assurance",
+    "trust_core_tree_sha256": "4ae4894841f5bd760c4d528f62cd29723d59722ef1368fac2c0923476b3600f2",
+    "project_manifest_path": "pyproject.toml",
+    "project_manifest_sha256": "9ff2ca82cad08b1398a10af9dca1ac144ad6417a8ff39247b60d0e7a65791bdd",
+    "experiment_requirements_path": "requirements-experiments.txt",
+    "experiment_requirements_sha256": "74dfcd43b99f640200c41c7bad01a2ac2f41098f10234c7cda197fc6eacac077",
+    "portfolio_statistics_sha256": "f56067623a7b76695259cf4ea20a70d10b1d4c866b3c16dab302446ab3c822c9",
+    "finite_channel_analyzer_sha256": "abd1eab49e3de2f48e2cf458856321330d2df4bb64ab090663bd8a4925cecc29",
+    "required_stages": [
+      "validate_closed_hidden_record_wrapper",
+      "generate_simultaneous_multinomial_evidence",
+      "compile_multinomial_portfolio_problem",
+      "solve_analytic_portfolio",
+      "AssuranceEngine._verify_finite_channel_sources",
+      "FiniteChannelCeilingAnalyzer.analyze"
+    ]
+  },
+  "negative_controls": [
+    "visible_candidate_or_model_must_be_ineligible",
+    "tampered_counts_must_fail_source_replay",
+    "changed_prior_must_fail_binding",
+    "missing_observation_symbol_must_fail_plan_replay"
+  ],
+  "acceptance_criteria": [
+    "all_six_oracle_risks_covered",
+    "all_source_and_engine_replays_complete",
+    "all_four_negative_controls_pass",
+    "no_raw_scores_retained",
+    "erasure_never_increases_exact_oracle_risk",
+    "all_six_one_shot_engine_decisions_clear",
+    "all_six_simultaneous_clear_rate_lowers_meet_minimum",
+    "all_six_simultaneous_undercoverage_bounds_meet_maximum",
+    "all_executable_wrapper_conformance_checks_pass"
+  ]
+}

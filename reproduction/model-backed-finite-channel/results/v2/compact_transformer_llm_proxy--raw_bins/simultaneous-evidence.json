@@ -1,0 +1,178 @@
+{
+  "assumptions": [
+    "within each secret-state row, retained observations are IID draws from one fixed multinomial channel row",
+    "the committed ledger contains the complete assurance-wide allocation family",
+    "Bonferroni union bounds require no independence between cells, releases, or allocated families",
+    "every serialized endpoint is replay-proved by directed binomial-tail arithmetic"
+  ],
+  "assurance_wide_alpha": 0.05,
+  "assurance_wide_confidence": 0.95,
+  "binding_context": {
+    "artifact_sha256": "6eeff9d8c285e0f8eb510ccfc20d4e6abac864c37a7dad352e6b31c37fcf043a",
+    "decision_game_sha256": "4178d97c3c51d3a6be0f1c49d8667b02eccf9fba912e309ccadb49e357d29b51",
+    "interface_sha256": "d3d33aa1353ad63cf13be7dba8f9a34216c9950ba9d50dcb9d980a38305ffcaf",
+    "policy_sha256": "b9835e306cf462b3e7ed451068b9326a305f4ff004fe83e472be469522f4a9fd",
+    "population_scope_id": "benchmark-compact_transformer_llm_proxy-raw_bins",
+    "population_scope_sha256": "0fce5109fca6b3f123e750ad2d57ea44056dac2456086adee62c94ccbc796d3e",
+    "release_contract_sha256": "3c7fdce00195e4cf005bd09042a49f166c3df0ccf84e890e227fe7bbe398e58e",
+    "release_id": "model-backed-compact_transformer_llm_proxy-raw_bins",
+    "schema_version": "1.0"
+  },
+  "budget_id": "model-backed-finite-channel-assurance-budget",
+  "count_file_id": "counts-compact_transformer_llm_proxy-raw_bins",
+  "coverage": "simultaneous",
+  "endpoint_proof_terms": 7580,
+  "evidence_type": "simultaneous_multinomial_marginals",
+  "family_alpha": 0.008333333333333333,
+  "family_coverage_confidence": 0.9916666666666666,
+  "family_id": "family-compact_transformer_llm_proxy-raw_bins",
+  "limitations": [],
+  "method": "bonferroni_two_sided_clopper_pearson",
+  "per_tail_alpha": 0.00020833333333333332,
+  "per_tail_alpha_denominator": 25000000000000000000,
+  "per_tail_alpha_numerator": 5208333333333333,
+  "population_scope_id": "benchmark-compact_transformer_llm_proxy-raw_bins",
+  "portfolio_id": "portfolio-compact_transformer_llm_proxy-raw_bins",
+  "request": {
+    "all_cells_reported": true,
+    "allocation_id": "allocation-compact_transformer_llm_proxy-raw_bins",
+    "assurance_ledger_complete": true,
+    "budget_reference": {
+      "source_id": "model-backed-finite-channel-assurance-budget",
+      "source_path": "assurance-error-budget.json",
+      "source_sha256": "1e67882589c1615a42ccfb93683870860f5843c3ce8229bf1c690b20bb250583"
+    },
+    "counts_reference": {
+      "source_id": "counts-compact_transformer_llm_proxy-raw_bins",
+      "source_path": "sampled-counts.json",
+      "source_sha256": "6bec99bd4b919392151806b72664650c31cf99467d49bd4f295bfba9481ff8dd"
+    },
+    "family_pre_registered": true,
+    "generation_id": "generation-compact_transformer_llm_proxy-raw_bins",
+    "sampling_model": "iid_multinomial",
+    "sampling_plan_reference": {
+      "source_id": "plan-compact_transformer_llm_proxy-raw_bins",
+      "source_path": "sampling-plan.json",
+      "source_sha256": "5b43f59aafb9b7dd894251f25f238f7d36c3fd6fcd16767f66d83a9d8d743afe"
+    },
+    "schema_version": "1.0",
+    "selection_process_covered": true,
+    "selection_scope": "all three preregistered public-data models, both wrapper variants, both secret states, and every listed categorical observation"
+  },
+  "rows": [
+    {
+      "counts": [
+        0,
+        3510,
+        311,
+        432,
+        386,
+        361,
+        0,
+        0,
+        0,
+        0
+      ],
+      "lower": [
+        0.0,
+        0.6787346244277879,
+        0.0508053024925423,
+        0.07299795026964402,
+        0.0645139292985184,
+        0.05992578188896435,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "observation_ids": [
+        "nll_negative",
+        "nll_0_to_0p5",
+        "nll_0p5_to_1",
+        "nll_1_to_2",
+        "nll_2_to_4",
+        "nll_4_or_more",
+        "nll_nonfinite",
+        "wrapper_error",
+        "wrapper_timeout",
+        "state_independent_erasure"
+      ],
+      "release_id": "model-backed-compact_transformer_llm_proxy-raw_bins",
+      "state_id": "out",
+      "trials": 5000,
+      "upper": [
+        0.0016938380736853857,
+        0.7245636908430061,
+        0.075123415105319,
+        0.10124407259105585,
+        0.09136089547919683,
+        0.0859669415802327,
+        0.0016938380736853857,
+        0.0016938380736853857,
+        0.0016938380736853857,
+        0.0016938380736853857
+      ]
+    },
+    {
+      "counts": [
+        0,
+        4600,
+        131,
+        256,
+        13,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "lower": [
+        0.0,
+        0.9056257175034172,
+        0.01894225028879036,
+        0.04087646062804768,
+        0.0007777956916652081,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "observation_ids": [
+        "nll_negative",
+        "nll_0_to_0p5",
+        "nll_0p5_to_1",
+        "nll_1_to_2",
+        "nll_2_to_4",
+        "nll_4_or_more",
+        "nll_nonfinite",
+        "wrapper_error",
+        "wrapper_timeout",
+        "state_independent_erasure"
+      ],
+      "release_id": "model-backed-compact_transformer_llm_proxy-raw_bins",
+      "state_id": "in",
+      "trials": 5000,
+      "upper": [
+        0.0016938380736853857,
+        0.9329094575535519,
+        0.03512102073487469,
+        0.06309227075360842,
+        0.00621396315584788,
+        0.0016938380736853857,
+        0.0016938380736853857,
+        0.0016938380736853857,
+        0.0016938380736853857,
+        0.0016938380736853857
+      ]
+    }
+  ],
+  "schema_version": "1.0",
+  "selection_valid": true,
+  "simultaneous_cell_count": 20,
+  "state_ids": [
+    "out",
+    "in"
+  ],
+  "threat_id": "membership-compact_transformer_llm_proxy-raw_bins"
+}

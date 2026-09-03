@@ -1,0 +1,30 @@
+{
+  "closed_hidden_record_sampler": true,
+  "complete_recipient_transcript": [
+    "nll_negative",
+    "nll_0_to_0p5",
+    "nll_0p5_to_1",
+    "nll_1_to_2",
+    "nll_2_to_4",
+    "nll_4_or_more",
+    "nll_nonfinite",
+    "wrapper_error",
+    "wrapper_timeout",
+    "state_independent_erasure"
+  ],
+  "experimental_only": true,
+  "mechanism_id": "closed-hidden-record-semantic-nll-v1",
+  "query_budget": 1,
+  "schema_version": "1.0",
+  "state_independent_erasure": {
+    "denominator": 10,
+    "numerator": 9
+  },
+  "supports": [
+    "coupling:conditional_independence",
+    "artifact:4902a13bb382f8e9223471ab6d39c6f465f947b09ad585a3dac490b89a939339",
+    "interface:d3d33aa1353ad63cf13be7dba8f9a34216c9950ba9d50dcb9d980a38305ffcaf",
+    "complete-transcript:model-backed-cnn-erasure_0p9"
+  ],
+  "variant_id": "erasure_0p9"
+}

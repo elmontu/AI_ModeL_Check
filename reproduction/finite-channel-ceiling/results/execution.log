@@ -1,0 +1,10 @@
+{
+  "all_registered_claims_passed": true,
+  "completed_records": 1800,
+  "experiment_id": "finite-channel-ceiling-ground-truth-v1",
+  "maximum_primary_false_clear_exact_upper": 0.015605869352976844,
+  "maximum_primary_undercoverage_exact_upper": 0.015605869352976844,
+  "minimum_primary_ceiling_coverage_rate": 1.0,
+  "output": "output/finite-channel-ceiling/ground-truth-report.json",
+  "runtime_seconds": 503.419905
+}

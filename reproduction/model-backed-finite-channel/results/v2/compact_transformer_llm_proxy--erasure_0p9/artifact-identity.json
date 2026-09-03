@@ -1,0 +1,13 @@
+{
+  "collector_epochs": 5,
+  "collector_model": "compact_transformer_llm_proxy",
+  "collector_seed": 2026090301,
+  "dataset_snapshot_sha256": "28132e3886c1a12476f51ee2bb7f2b33d5f0fa8cb3dd677370cdd498d24dff1e",
+  "ephemeral_model_artifact_sha256": "e4a4fda84fa8f53b6a55bea492b8b110be8583071ff89ff2bc9c471565055090",
+  "finite_population_sha256": "a4cdfbdb3fa68faf26c54d5308b0557b341351780b4bb0497a740b8e24a95f42",
+  "identity_kind": "nondeployable_ephemeral_model_identity_envelope",
+  "llm_proxy_only": true,
+  "model_family": "llm_proxy_compact_transformer",
+  "note": "Weights are hash-bound but intentionally not retained by this experiment.",
+  "schema_version": "1.0"
+}

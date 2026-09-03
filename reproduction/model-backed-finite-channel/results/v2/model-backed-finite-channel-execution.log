@@ -1,0 +1,41 @@
+{
+  "output": "/tmp/mra-public-model-collector-ga0d0vtk/privacy-audit-report.json",
+  "results": {
+    "cnn": {
+      "utility_accuracy": 0.874,
+      "membership_success": 0.4975,
+      "lower_95pct": 0.4678403541380435
+    },
+    "lstm": {
+      "utility_accuracy": 0.66,
+      "membership_success": 0.51375,
+      "lower_95pct": 0.48405644173937157
+    },
+    "xgboost": {
+      "utility_accuracy": 0.852,
+      "membership_success": 0.55375,
+      "lower_95pct": 0.5241039485263375
+    },
+    "compact_transformer_llm_proxy": {
+      "utility_accuracy": 0.6625,
+      "membership_success": 0.6242857142857143,
+      "lower_95pct": 0.5931126669502869
+    }
+  },
+  "decision": "no_release_authorization"
+}
+{
+  "output": "output/model-backed-finite-channel/fresh-run/model-backed-finite-channel-report.json",
+  "families": 6,
+  "oracle_coverage": true,
+  "engine_verdicts": {
+    "cnn/raw_bins": "clear",
+    "cnn/erasure_0p9": "clear",
+    "xgboost/raw_bins": "clear",
+    "xgboost/erasure_0p9": "clear",
+    "compact_transformer_llm_proxy/raw_bins": "clear",
+    "compact_transformer_llm_proxy/erasure_0p9": "clear"
+  },
+  "decision": "no_release_authorization",
+  "acceptance_passed": false
+}

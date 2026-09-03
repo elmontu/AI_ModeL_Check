@@ -1,0 +1,463 @@
+{
+  "artifact_sha256": "4902a13bb382f8e9223471ab6d39c6f465f947b09ad585a3dac490b89a939339",
+  "assessment_id": "5c44175d-b4ac-54d5-8cae-41ca7aaed00c",
+  "assessment_scope": {
+    "authorization_eligible": false,
+    "composition_scope": "single_release_no_portfolio",
+    "declared_previous_release_ids": [],
+    "gateway_interface_conformance_required": true,
+    "interface_assurance": "declared_interface_only",
+    "live_interface_verified": false,
+    "portfolio_assessment_required": true
+  },
+  "created_at": "2026-09-03T05:36:30.960754Z",
+  "decisions": [
+    {
+      "assessed_artifact_sha256": "4902a13bb382f8e9223471ab6d39c6f465f947b09ad585a3dac490b89a939339",
+      "assessed_interface_sha256": "d3d33aa1353ad63cf13be7dba8f9a34216c9950ba9d50dcb9d980a38305ffcaf",
+      "assessed_policy_sha256": "c5dedf7cfb15a474a346f072bc2d2b1f06bd72308a3a31ad7392a99d0fe80fac",
+      "assessed_release_contract_sha256": "95960c67963ac8e74073f41afbda02d04d1070ec5fde33f4a7b8e6caaa0d4d23",
+      "ceiling_attack_battery": {
+        "completed_attack_ids": [],
+        "failure_reasons": [],
+        "mode": "waived",
+        "passing_positive_control_ids": [],
+        "required_attack_ids": [],
+        "requirement_id": null,
+        "satisfied": true,
+        "waiver_reason": "Experimental finite-population validation only; this waiver cannot authorize deployment."
+      },
+      "clearance_evidence_class": "ceiling",
+      "conflicting_evidence_ids": [],
+      "decision_game_sha256": "0cdae32e2bcfa96b066ed223f6936c9304acdbc8684ef74a1c4e19974a7ff725",
+      "decision_metric": "equal_prior_membership_success",
+      "evidence_consistency": "consistent",
+      "evidence_ids": [
+        "membership-cnn-erasure_0p9:finite-channel:floor",
+        "membership-cnn-erasure_0p9:finite-channel:ceiling"
+      ],
+      "excluded_evidence_ids": [],
+      "kind": "membership",
+      "lower_bound": 0.4838905357104266,
+      "lower_bound_fraction": {
+        "denominator": 20000000000000000000,
+        "numerator": 9677810714208532791
+      },
+      "mandatory": true,
+      "population_scope_id": "benchmark-cnn-erasure_0p9",
+      "population_scope_sha256": "176f029db82be0c56836958128fea0956d7eb724c985a430f7f6649ea96b5e4c",
+      "reasons": [
+        "validated ceiling 0.529868 is within tolerance 0.65",
+        "policy explicitly waived the attack battery: Experimental finite-population validation only; this waiver cannot authorize deployment."
+      ],
+      "resolution": {
+        "actions": [],
+        "code": "risk_bound_within_tolerance",
+        "evidence_ids": [
+          "membership-cnn-erasure_0p9:finite-channel:ceiling"
+        ],
+        "indicative_additional_trials_per_state": null,
+        "indicative_minimum_trials_per_state": null,
+        "missing_obligations": [],
+        "planning_estimate_is_decision_evidence": false,
+        "release_gate": "clear"
+      },
+      "threat_id": "membership-cnn-erasure_0p9",
+      "tolerance": 0.65,
+      "tolerance_basis": "absolute",
+      "upper_bound": 0.5298676069303866,
+      "upper_bound_fraction": {
+        "denominator": 10000000000000000000,
+        "numerator": 5298676069303865679
+      },
+      "verdict": "clear"
+    }
+  ],
+  "engine_version": "0.7.0",
+  "evidence": [
+    {
+      "analyzer": "finite_channel_ceiling",
+      "artifact_sha256": "4902a13bb382f8e9223471ab6d39c6f465f947b09ad585a3dac490b89a939339",
+      "assumptions": [
+        "population_scope_id=benchmark-cnn-erasure_0p9",
+        "canonical finite-state exact-guess decision game",
+        "simultaneous state-by-observation confidence family",
+        "released observation alphabet equals the assessed complete transcript"
+      ],
+      "baseline": 0.5,
+      "can_block": true,
+      "can_clear": false,
+      "coverage": "complete_interface",
+      "decision_game_sha256": "0cdae32e2bcfa96b066ed223f6936c9304acdbc8684ef74a1c4e19974a7ff725",
+      "details": {
+        "absolute_ceiling_fraction": {
+          "denominator": 10000000000000000000,
+          "numerator": 5298676069303865679
+        },
+        "absolute_floor_fraction": {
+          "denominator": 20000000000000000000,
+          "numerator": 9677810714208532791
+        },
+        "baseline_fraction": {
+          "denominator": 2,
+          "numerator": 1
+        },
+        "certificate_id": "certificate-cnn-erasure_0p9",
+        "certificate_kind": "envelope",
+        "certificate_sha256": "a31d9f5b07e61ab69958223ea8cd1d8429ccd441f9f53bcaadf57895044300d2",
+        "coverage": "simultaneous",
+        "coverage_confidence": 0.95,
+        "interface_observation_definition": "complete one-query categorical transcript of the closed hidden-record sampler, including negative, nonfinite, wrapper-error, timeout, and erasure outcomes",
+        "interval_width": 0.04597707121995993,
+        "model_family_neutral": true,
+        "observation_ids": [
+          "nll_negative",
+          "nll_0_to_0p5",
+          "nll_0p5_to_1",
+          "nll_1_to_2",
+          "nll_2_to_4",
+          "nll_4_or_more",
+          "nll_nonfinite",
+          "wrapper_error",
+          "wrapper_timeout",
+          "state_independent_erasure"
+        ],
+        "planning_estimate_is_decision_evidence": false,
+        "release_gate": "clear_if_all_other_protocol_gates_pass",
+        "reported_ceiling_fraction": {
+          "denominator": 10000000000000000000,
+          "numerator": 5298676069303865679
+        },
+        "reported_floor_fraction": {
+          "denominator": 20000000000000000000,
+          "numerator": 9677810714208532791
+        },
+        "resolution": "ceiling_below_tolerance",
+        "selection_scope": "all three preregistered public-data models, both wrapper variants, both secret states, and every listed categorical observation",
+        "selection_valid": true,
+        "source_sha256": "47c44e7817c7ecc3f85e2776cd53be09c8dbea1b2773c0cb3477dc30f7ea3109",
+        "state_ids": [
+          "out",
+          "in"
+        ],
+        "state_trials": [
+          5000,
+          5000
+        ],
+        "tolerance": 0.65
+      },
+      "evidence_class": "floor",
+      "evidence_id": "membership-cnn-erasure_0p9:finite-channel:floor",
+      "exact_lower": {
+        "denominator": 20000000000000000000,
+        "numerator": 9677810714208532791
+      },
+      "exact_upper": null,
+      "familywise_confidence": 0.95,
+      "interface_sha256": "d3d33aa1353ad63cf13be7dba8f9a34216c9950ba9d50dcb9d980a38305ffcaf",
+      "limitations": [
+        "the confidence statement is conditional on the registered sampling model",
+        "the assessment covers one release contract; G9 must compose every active release",
+        "live deployment conformance remains an activation-gateway obligation"
+      ],
+      "lower": 0.4838905357104266,
+      "metric": "equal_prior_membership_success",
+      "observed_at": "2026-09-03T05:36:30.255049Z",
+      "policy_sha256": "c5dedf7cfb15a474a346f072bc2d2b1f06bd72308a3a31ad7392a99d0fe80fac",
+      "population_scope_id": "benchmark-cnn-erasure_0p9",
+      "population_scope_sha256": "176f029db82be0c56836958128fea0956d7eb724c985a430f7f6649ea96b5e4c",
+      "producer": {
+        "configuration_sha256": "77850b333353bef86d72a1647ed0de50bf6c2d6b7ee7f6d1e26e721e653e3f8e",
+        "implementation_sha256": "abd1eab49e3de2f48e2cf458856321330d2df4bb64ab090663bd8a4925cecc29",
+        "service_id": "mra.analyzer.finite_channel_ceiling",
+        "service_version": "1.0.0"
+      },
+      "realizability": "recipient_realizable",
+      "release_contract_sha256": "95960c67963ac8e74073f41afbda02d04d1070ec5fde33f4a7b8e6caaa0d4d23",
+      "release_id": "model-backed-cnn-erasure_0p9",
+      "statistical_family_id": "62b083ec641b38ca3ed62b56d3632210ecb87e1aab332d82480a35b9cbd9793f",
+      "threat_id": "membership-cnn-erasure_0p9",
+      "upper": null,
+      "value": 0.4838905357104266
+    },
+    {
+      "analyzer": "finite_channel_ceiling",
+      "artifact_sha256": "4902a13bb382f8e9223471ab6d39c6f465f947b09ad585a3dac490b89a939339",
+      "assumptions": [
+        "population_scope_id=benchmark-cnn-erasure_0p9",
+        "canonical finite-state exact-guess decision game",
+        "simultaneous state-by-observation confidence family",
+        "released observation alphabet equals the assessed complete transcript"
+      ],
+      "baseline": 0.5,
+      "can_block": false,
+      "can_clear": true,
+      "coverage": "complete_interface",
+      "decision_game_sha256": "0cdae32e2bcfa96b066ed223f6936c9304acdbc8684ef74a1c4e19974a7ff725",
+      "details": {
+        "absolute_ceiling_fraction": {
+          "denominator": 10000000000000000000,
+          "numerator": 5298676069303865679
+        },
+        "absolute_floor_fraction": {
+          "denominator": 20000000000000000000,
+          "numerator": 9677810714208532791
+        },
+        "baseline_fraction": {
+          "denominator": 2,
+          "numerator": 1
+        },
+        "certificate_id": "certificate-cnn-erasure_0p9",
+        "certificate_kind": "envelope",
+        "certificate_sha256": "a31d9f5b07e61ab69958223ea8cd1d8429ccd441f9f53bcaadf57895044300d2",
+        "coverage": "simultaneous",
+        "coverage_confidence": 0.95,
+        "interface_observation_definition": "complete one-query categorical transcript of the closed hidden-record sampler, including negative, nonfinite, wrapper-error, timeout, and erasure outcomes",
+        "interval_width": 0.04597707121995993,
+        "model_family_neutral": true,
+        "observation_ids": [
+          "nll_negative",
+          "nll_0_to_0p5",
+          "nll_0p5_to_1",
+          "nll_1_to_2",
+          "nll_2_to_4",
+          "nll_4_or_more",
+          "nll_nonfinite",
+          "wrapper_error",
+          "wrapper_timeout",
+          "state_independent_erasure"
+        ],
+        "planning_estimate_is_decision_evidence": false,
+        "release_gate": "clear_if_all_other_protocol_gates_pass",
+        "reported_ceiling_fraction": {
+          "denominator": 10000000000000000000,
+          "numerator": 5298676069303865679
+        },
+        "reported_floor_fraction": {
+          "denominator": 20000000000000000000,
+          "numerator": 9677810714208532791
+        },
+        "resolution": "ceiling_below_tolerance",
+        "selection_scope": "all three preregistered public-data models, both wrapper variants, both secret states, and every listed categorical observation",
+        "selection_valid": true,
+        "source_sha256": "47c44e7817c7ecc3f85e2776cd53be09c8dbea1b2773c0cb3477dc30f7ea3109",
+        "state_ids": [
+          "out",
+          "in"
+        ],
+        "state_trials": [
+          5000,
+          5000
+        ],
+        "tolerance": 0.65
+      },
+      "evidence_class": "ceiling",
+      "evidence_id": "membership-cnn-erasure_0p9:finite-channel:ceiling",
+      "exact_lower": null,
+      "exact_upper": {
+        "denominator": 10000000000000000000,
+        "numerator": 5298676069303865679
+      },
+      "familywise_confidence": null,
+      "interface_sha256": "d3d33aa1353ad63cf13be7dba8f9a34216c9950ba9d50dcb9d980a38305ffcaf",
+      "limitations": [
+        "the confidence statement is conditional on the registered sampling model",
+        "the assessment covers one release contract; G9 must compose every active release",
+        "live deployment conformance remains an activation-gateway obligation"
+      ],
+      "lower": null,
+      "metric": "equal_prior_membership_success",
+      "observed_at": "2026-09-03T05:36:30.255049Z",
+      "policy_sha256": "c5dedf7cfb15a474a346f072bc2d2b1f06bd72308a3a31ad7392a99d0fe80fac",
+      "population_scope_id": "benchmark-cnn-erasure_0p9",
+      "population_scope_sha256": "176f029db82be0c56836958128fea0956d7eb724c985a430f7f6649ea96b5e4c",
+      "producer": {
+        "configuration_sha256": "77850b333353bef86d72a1647ed0de50bf6c2d6b7ee7f6d1e26e721e653e3f8e",
+        "implementation_sha256": "abd1eab49e3de2f48e2cf458856321330d2df4bb64ab090663bd8a4925cecc29",
+        "service_id": "mra.analyzer.finite_channel_ceiling",
+        "service_version": "1.0.0"
+      },
+      "realizability": "recipient_realizable",
+      "release_contract_sha256": "95960c67963ac8e74073f41afbda02d04d1070ec5fde33f4a7b8e6caaa0d4d23",
+      "release_id": "model-backed-cnn-erasure_0p9",
+      "statistical_family_id": null,
+      "threat_id": "membership-cnn-erasure_0p9",
+      "upper": 0.5298676069303866,
+      "value": 0.5298676069303866
+    }
+  ],
+  "overall_verdict": "clear",
+  "policy_expires_at": "2099-01-01T00:00:00Z",
+  "policy_id": "experimental-cnn-erasure_0p9",
+  "policy_sha256": "c5dedf7cfb15a474a346f072bc2d2b1f06bd72308a3a31ad7392a99d0fe80fac",
+  "policy_version": "1.0.0",
+  "population_scope_sha256s": {
+    "benchmark-cnn-erasure_0p9": "176f029db82be0c56836958128fea0956d7eb724c985a430f7f6649ea96b5e4c"
+  },
+  "population_scopes": [
+    {
+      "custom_unit_definition": null,
+      "data_steward": "MRA experimental benchmark",
+      "exclusion_criteria": [
+        "reference-model calibration records"
+      ],
+      "inclusion_criteria": [
+        "appears in the collector target member or target nonmember audit pool"
+      ],
+      "jurisdictions": [
+        "public-benchmark-only"
+      ],
+      "name": "Frozen target audit pools for CNN on public MNIST",
+      "notes": "Finite empirical benchmark scope; not a deployment population.",
+      "population_snapshot_sha256": "92e2e9b7fc3fd44814fb02e001f1323437275442bec33b7773342ac62c11ac59",
+      "reference_date": "2026-09-03",
+      "scope_id": "benchmark-cnn-erasure_0p9",
+      "size": {
+        "basis": "exact_registry",
+        "lower_bound": 800,
+        "measured_at": "2026-09-03T05:31:30Z",
+        "point_estimate": 800,
+        "source": "aggregate target-pool counts from the registered public-data collector",
+        "upper_bound": 800
+      },
+      "subgroup_dimensions": [
+        "sealed_membership_state"
+      ],
+      "unit_kind": "record",
+      "universe_definition": "The target model's finite member and nonmember audit pools produced by the registered public-data collector seed; no population extrapolation is permitted.",
+      "valid_until": "2099-01-01"
+    }
+  ],
+  "release_contract_sha256": "95960c67963ac8e74073f41afbda02d04d1070ec5fde33f4a7b8e6caaa0d4d23",
+  "release_expires_at": null,
+  "release_id": "model-backed-cnn-erasure_0p9",
+  "release_interface": {
+    "access": "label",
+    "access_paths": {
+      "admin_access": "none",
+      "admin_capabilities": [],
+      "custom_side_channels": [],
+      "local_access": "none",
+      "local_capabilities": [],
+      "side_channels": []
+    },
+    "adaptive_queries": false,
+    "authenticated": true,
+    "errors": {
+      "documented_status_codes": [],
+      "error_content": "none",
+      "error_schema_sha256": null,
+      "retry_metadata": false,
+      "transport_status": "none"
+    },
+    "execution": {
+      "batching": "none",
+      "cross_request_state": "none",
+      "cross_request_state_ttl_seconds": null,
+      "maximum_batch_size": 1,
+      "maximum_concurrent_requests": 1
+    },
+    "llm_protocol": null,
+    "notes": "Experimental closed hidden-record sampler. The caller supplies no X and cannot observe X, model weights, raw NLL, timing, identifiers, metadata, or another path. All underlying failures and timeouts become registered categorical symbols.",
+    "output_channels": {
+      "aggregates": false,
+      "custom_channels": [
+        "fixed semantic NLL-bin category"
+      ],
+      "downloadable_files": [],
+      "embeddings": false,
+      "explanations": false,
+      "gradients": false,
+      "labels": true,
+      "logits": false,
+      "parameters": false,
+      "probabilities": false,
+      "scores": false,
+      "shipped_summary_metadata": [],
+      "text": false
+    },
+    "outputs": [
+      "one categorical hidden-record NLL-bin symbol"
+    ],
+    "precision_bits": null,
+    "protocol_type": "predictive",
+    "query_budget": 1,
+    "rate_limit": {
+      "burst_capacity": 1,
+      "custom_parameters": {},
+      "enabled": true,
+      "enforcement": "shared_strong",
+      "requests_per_window": 1,
+      "retry_after_exposed": false,
+      "scope": "per_identity",
+      "window_seconds": 315360000
+    },
+    "rate_limited": true,
+    "schema_version": "3.0",
+    "serialization": {
+      "compression": [],
+      "encodings": [
+        "utf-8"
+      ],
+      "endianness": "not_applicable",
+      "formats": [
+        "categorical-symbol"
+      ],
+      "media_types": [
+        "application/vnd.mra.hidden-record-bin+json"
+      ],
+      "schema_sha256": "77a63ab53087bc96b41417de6728c3208006e655bcb2b6d4d0b7db64b4c0115e"
+    },
+    "timing": {
+      "includes_queue_time": false,
+      "measurement_resolution_milliseconds": null,
+      "mitigation": "not_applicable",
+      "mitigation_parameters": {},
+      "recipient_observable": false
+    }
+  },
+  "release_model_family": "cnn",
+  "release_model_profile": {
+    "component_model_families": [],
+    "custom_task_definition": null,
+    "generative": false,
+    "input_modalities": [
+      "image"
+    ],
+    "output_modalities": [
+      "tabular"
+    ],
+    "stateful": false,
+    "task": "classification",
+    "training_paradigm": "supervised"
+  },
+  "request_sha256": "0a788bbc1473bc2545f4866c65cf886aaf72d40393d9bdde3914937749a23a52",
+  "runtime_identity": {
+    "algorithm_profile": {
+      "critical_certificate_arithmetic": "analyzer-specific replay",
+      "decision_rule": "mandatory threats clear and no threat blocks",
+      "finite_channel_decision_arithmetic": "exact rational bounds with outward-only binary64 display",
+      "finite_channel_endpoint_validation": "directed-decimal replay of exact binomial tail inequalities",
+      "mrap_g7_exact_or_outward_clearance_eligible": false,
+      "ordinary_decision_arithmetic": "Python binary64",
+      "scipy_invoked_by_assurance_engine": false
+    },
+    "algorithm_profile_sha256": "6351e726fb11dc08312d278f71a81339096f3c8a14ff49e4a76677da57e4af3c",
+    "component_id": "assurance_engine",
+    "component_version": "AssessmentReport/5.0",
+    "dependency_versions": {
+      "cryptography": "49.0.0",
+      "numpy": "2.5.2",
+      "pydantic": "2.13.4",
+      "scikit-learn": "1.6.1",
+      "scipy": "1.18.1"
+    },
+    "package_name": "model-release-assurance",
+    "package_source_sha256": "92d06cf82846bc7b1e0259a1e4580e9bf0a48e1cc7fde15054ca42adbd9276d9",
+    "package_version": "0.7.0",
+    "python_implementation": "CPython",
+    "python_version": "3.13.15",
+    "schema_version": "1.0"
+  },
+  "schema_version": "5.0"
+}

@@ -1,0 +1,391 @@
+{
+  "analytic_evidence": {
+    "envelope_certificate": {
+      "cell_upper_bounds": [
+        [
+          0.0016938380736853857,
+          0.8627462542349744,
+          0.07447018415451502,
+          0.07621143143653858,
+          0.016711314973073356,
+          0.02725176548971658,
+          0.0016938380736853857,
+          0.0016938380736853857,
+          0.0016938380736853857,
+          0.0016938380736853857
+        ],
+        [
+          0.0016938380736853857,
+          0.8621757916597875,
+          0.09372897514396195,
+          0.0582426586778252,
+          0.03259342146803907,
+          0.009824784037334106,
+          0.0016938380736853857,
+          0.0016938380736853857,
+          0.0016938380736853857,
+          0.0016938380736853857
+        ]
+      ],
+      "certificate_id": "certificate-cnn-raw_bins",
+      "coverage_confidence": 0.95,
+      "derivation": "conditional-independence product of marginal upper bounds plus joint-event bounds",
+      "feasible_joint_channel": [
+        [
+          0.0016938380736853857,
+          0.8627462542349744,
+          0.06438617910183116,
+          0.05171367287900701,
+          0.006220664904728435,
+          0.013239390805773622,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0016938380736853857,
+          0.8621757916597875,
+          0.0797684495792704,
+          0.03694225281091619,
+          0.017078681593409934,
+          0.002340986282930601,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "joint_observation_ids": [
+        "[\"nll_negative\"]",
+        "[\"nll_0_to_0p5\"]",
+        "[\"nll_0p5_to_1\"]",
+        "[\"nll_1_to_2\"]",
+        "[\"nll_2_to_4\"]",
+        "[\"nll_4_or_more\"]",
+        "[\"nll_nonfinite\"]",
+        "[\"wrapper_error\"]",
+        "[\"wrapper_timeout\"]",
+        "[\"state_independent_erasure\"]"
+      ],
+      "problem_sha256": "7973e25ccc60b807801887937ce26dd46c29ebb19f3eda22f1a03d13833335de",
+      "raw_upper_bound": 0.5505005190708285,
+      "selection_valid": true,
+      "upper_bound": 0.5505005190708285
+    },
+    "exact_certificate": null,
+    "problem": {
+      "coupling_model": "conditional_independence",
+      "coverage": "simultaneous",
+      "coverage_confidence": 0.95,
+      "decision_game_sha256": "439388c9ae251c0effe6243ac79b635c6735ab33f9de68a9bb5f1bbec142ca38",
+      "decision_problem": {
+        "action_ids": [
+          "out",
+          "in"
+        ],
+        "gain": [
+          [
+            1.0,
+            0.0
+          ],
+          [
+            0.0,
+            1.0
+          ]
+        ],
+        "interpretation": "exact recovery of the secret state",
+        "problem_id": "439388c9ae251c0effe6243ac79b635c6735ab33f9de68a9bb5f1bbec142ca38",
+        "state_ids": [
+          "out",
+          "in"
+        ]
+      },
+      "joint_event_bounds": [],
+      "mechanism_assumptions": [
+        "one closed hidden-record query produces the complete categorical transcript",
+        "state-conditioned sampling is IID with replacement from each frozen finite pool",
+        "erasure, if enabled, is independent of the hidden state and underlying bin"
+      ],
+      "mechanism_evidence": [
+        {
+          "evidence_id": "mechanism-cnn-raw_bins",
+          "source_path": "mechanism-evidence.json",
+          "source_sha256": "677bc17006b9fc41f5c3fa990660a2b8c2d978dd42d265aeb4e5dea5cdfa6922",
+          "supports": [
+            "coupling:conditional_independence",
+            "artifact:4902a13bb382f8e9223471ab6d39c6f465f947b09ad585a3dac490b89a939339",
+            "interface:d3d33aa1353ad63cf13be7dba8f9a34216c9950ba9d50dcb9d980a38305ffcaf",
+            "complete-transcript:model-backed-cnn-raw_bins"
+          ]
+        }
+      ],
+      "population_scope_id": "benchmark-cnn-raw_bins",
+      "population_scope_sha256": "2650f55112eafd24523cbbf23b94be73160d00940807d39758c236f1234ed2f9",
+      "portfolio_id": "portfolio-cnn-raw_bins",
+      "prior": [
+        0.5,
+        0.5
+      ],
+      "prior_evidence": {
+        "evidence_id": "prior-cnn-raw_bins",
+        "source_path": "finite-prior.json",
+        "source_sha256": "85790bcad80429b40601e4550ca2b921a1bc461dd006940b82e10a344895b1b3",
+        "supports": [
+          "prior",
+          "decision-game:439388c9ae251c0effe6243ac79b635c6735ab33f9de68a9bb5f1bbec142ca38",
+          "finite-prior:5ee97d5975f9f78b48adebbc2c4699f119ddd58542d1dcdec8305d3d0eb3b9df"
+        ]
+      },
+      "rational_prior": [
+        {
+          "denominator": 2,
+          "numerator": 1
+        },
+        {
+          "denominator": 2,
+          "numerator": 1
+        }
+      ],
+      "releases": [
+        {
+          "evidence": {
+            "evidence_id": "generation-cnn-raw_bins:model-backed-cnn-raw_bins",
+            "source_path": "simultaneous-evidence.json",
+            "source_sha256": "4a2775fce3ca0330d02217f6e706910b1eb08fbfe6667dae8a9217ee846796f0",
+            "supports": [
+              "marginal:model-backed-cnn-raw_bins",
+              "coverage:simultaneous",
+              "error-budget:model-backed-finite-channel-assurance-budget:allocation-cnn-raw_bins",
+              "confidence-endpoints:outward-validated"
+            ]
+          },
+          "lower": [
+            [
+              0.0,
+              0.8264527460662788,
+              0.05026070309427006,
+              0.05171367287900701,
+              0.006220664904728435,
+              0.013239390805773622,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.8258253102109249,
+              0.06653799130828839,
+              0.03694225281091619,
+              0.017078681593409934,
+              0.002340986282930601,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          ],
+          "observation_ids": [
+            "nll_negative",
+            "nll_0_to_0p5",
+            "nll_0p5_to_1",
+            "nll_1_to_2",
+            "nll_2_to_4",
+            "nll_4_or_more",
+            "nll_nonfinite",
+            "wrapper_error",
+            "wrapper_timeout",
+            "state_independent_erasure"
+          ],
+          "release_id": "model-backed-cnn-raw_bins",
+          "upper": [
+            [
+              0.0016938380736853857,
+              0.8627462542349744,
+              0.07447018415451502,
+              0.07621143143653858,
+              0.016711314973073356,
+              0.02725176548971658,
+              0.0016938380736853857,
+              0.0016938380736853857,
+              0.0016938380736853857,
+              0.0016938380736853857
+            ],
+            [
+              0.0016938380736853857,
+              0.8621757916597875,
+              0.09372897514396195,
+              0.0582426586778252,
+              0.03259342146803907,
+              0.009824784037334106,
+              0.0016938380736853857,
+              0.0016938380736853857,
+              0.0016938380736853857,
+              0.0016938380736853857
+            ]
+          ]
+        }
+      ],
+      "schema_version": "1.0",
+      "selection_scope": "all three preregistered public-data models, both wrapper variants, both secret states, and every listed categorical observation",
+      "state_ids": [
+        "out",
+        "in"
+      ],
+      "threat_id": "membership-cnn-raw_bins"
+    },
+    "rational_upper_audit": {
+      "audit_version": "1.0",
+      "certificate_id": "certificate-cnn-raw_bins",
+      "certificate_kind": "envelope",
+      "exact_upper_denominator": 4000000000000000000,
+      "exact_upper_numerator": 2202002076283315017,
+      "feasible_joint_channel": [
+        [
+          {
+            "denominator": 10000000000000000000,
+            "numerator": 16938380736853857
+          },
+          {
+            "denominator": 625000000000000,
+            "numerator": 539216408896859
+          },
+          {
+            "denominator": 10000000000000000000,
+            "numerator": 643861791018311473
+          },
+          {
+            "denominator": 100000000000000000,
+            "numerator": 5171367287900701
+          },
+          {
+            "denominator": 200000000000000000,
+            "numerator": 1244132980945687
+          },
+          {
+            "denominator": 500000000000000000,
+            "numerator": 6619695402886811
+          },
+          {
+            "denominator": 1,
+            "numerator": 0
+          },
+          {
+            "denominator": 1,
+            "numerator": 0
+          },
+          {
+            "denominator": 1,
+            "numerator": 0
+          },
+          {
+            "denominator": 1,
+            "numerator": 0
+          }
+        ],
+        [
+          {
+            "denominator": 10000000000000000000,
+            "numerator": 16938380736853857
+          },
+          {
+            "denominator": 80000000000000,
+            "numerator": 68974063332783
+          },
+          {
+            "denominator": 10000000000000000000,
+            "numerator": 797684495792703893
+          },
+          {
+            "denominator": 100000000000000000,
+            "numerator": 3694225281091619
+          },
+          {
+            "denominator": 500000000000000000,
+            "numerator": 8539340796704967
+          },
+          {
+            "denominator": 1000000000000000000,
+            "numerator": 2340986282930601
+          },
+          {
+            "denominator": 1,
+            "numerator": 0
+          },
+          {
+            "denominator": 1,
+            "numerator": 0
+          },
+          {
+            "denominator": 1,
+            "numerator": 0
+          },
+          {
+            "denominator": 1,
+            "numerator": 0
+          }
+        ]
+      ],
+      "number_interpretation": "exact_decimal_weights_normalized_per_probability_vector",
+      "outward_upper_bound": 0.5505005190708288,
+      "problem_sha256": "7973e25ccc60b807801887937ce26dd46c29ebb19f3eda22f1a03d13833335de"
+    },
+    "schema_version": "1.1"
+  },
+  "analyzer": "finite_channel_ceiling",
+  "bounded_transcript_complete": true,
+  "complete_interface_coverage": true,
+  "evidence_context": {
+    "artifact_sha256": "4902a13bb382f8e9223471ab6d39c6f465f947b09ad585a3dac490b89a939339",
+    "decision_game_sha256": "439388c9ae251c0effe6243ac79b635c6735ab33f9de68a9bb5f1bbec142ca38",
+    "interface_sha256": "d3d33aa1353ad63cf13be7dba8f9a34216c9950ba9d50dcb9d980a38305ffcaf",
+    "observed_at": "2026-09-03T05:36:28.890790Z",
+    "policy_sha256": "3e68e6e33957ad41ec29f98f873bb51cc07d981986769a23fc2378d6adcbe128",
+    "population_scope_id": "benchmark-cnn-raw_bins",
+    "population_scope_sha256": "2650f55112eafd24523cbbf23b94be73160d00940807d39758c236f1234ed2f9",
+    "release_contract_sha256": "8ffd5a60c7165a42cfdfd8a5a7cc19cb9f8b41dfcb34f116309a405aa023e1ec",
+    "release_id": "model-backed-cnn-raw_bins"
+  },
+  "interface_observation_definition": "complete one-query categorical transcript of the closed hidden-record sampler, including negative, nonfinite, wrapper-error, timeout, and erasure outcomes",
+  "observed_artifact_sha256": "4902a13bb382f8e9223471ab6d39c6f465f947b09ad585a3dac490b89a939339",
+  "observed_interface_sha256": "d3d33aa1353ad63cf13be7dba8f9a34216c9950ba9d50dcb9d980a38305ffcaf",
+  "population_scope_id": "benchmark-cnn-raw_bins",
+  "provenance": {
+    "bound_fields": [
+      "analyzer",
+      "schema_version",
+      "threat_id",
+      "population_scope_id",
+      "analytic_evidence",
+      "observed_interface_sha256",
+      "observed_artifact_sha256",
+      "interface_observation_definition",
+      "release_enforced_finite_alphabet",
+      "complete_interface_coverage",
+      "recipient_realizable",
+      "bounded_transcript_complete",
+      "state_trials",
+      "evidence_context"
+    ],
+    "configuration_path": "experiment-config.json",
+    "producer": {
+      "configuration_sha256": "77850b333353bef86d72a1647ed0de50bf6c2d6b7ee7f6d1e26e721e653e3f8e",
+      "implementation_sha256": "abd1eab49e3de2f48e2cf458856321330d2df4bb64ab090663bd8a4925cecc29",
+      "service_id": "mra.analyzer.finite_channel_ceiling",
+      "service_version": "1.0.0"
+    },
+    "source_path": "finite-channel-input.json",
+    "source_sha256": "43debf4f75689ae1993ca98a50ec21d927d81fb50be823b23f0da8796376c453",
+    "tool": "model-backed-finite-channel-experiment",
+    "tool_version": "1.0"
+  },
+  "recipient_realizable": true,
+  "release_enforced_finite_alphabet": true,
+  "schema_version": "1.0",
+  "state_trials": [
+    5000,
+    5000
+  ],
+  "threat_id": "membership-cnn-raw_bins"
+}

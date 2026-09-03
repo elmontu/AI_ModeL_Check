@@ -1,0 +1,45 @@
+{
+  "audit_sample_definition": "independent with-replacement draws from each complete finite target pool, using the preregistered per-model, per-variant, per-state seeds out=609030103 and in=609030104",
+  "binding_context": {
+    "artifact_sha256": "4902a13bb382f8e9223471ab6d39c6f465f947b09ad585a3dac490b89a939339",
+    "decision_game_sha256": "0cdae32e2bcfa96b066ed223f6936c9304acdbc8684ef74a1c4e19974a7ff725",
+    "interface_sha256": "d3d33aa1353ad63cf13be7dba8f9a34216c9950ba9d50dcb9d980a38305ffcaf",
+    "policy_sha256": "c5dedf7cfb15a474a346f072bc2d2b1f06bd72308a3a31ad7392a99d0fe80fac",
+    "population_scope_id": "benchmark-cnn-erasure_0p9",
+    "population_scope_sha256": "176f029db82be0c56836958128fea0956d7eb724c985a430f7f6649ea96b5e4c",
+    "release_contract_sha256": "95960c67963ac8e74073f41afbda02d04d1070ec5fde33f4a7b8e6caaa0d4d23",
+    "release_id": "model-backed-cnn-erasure_0p9",
+    "schema_version": "1.0"
+  },
+  "family_id": "family-cnn-erasure_0p9",
+  "minimum_trials_per_state": 5000,
+  "plan_id": "plan-cnn-erasure_0p9",
+  "population_scope_id": "benchmark-cnn-erasure_0p9",
+  "portfolio_id": "portfolio-cnn-erasure_0p9",
+  "registered_at": "2026-09-03T05:31:30Z",
+  "releases": [
+    {
+      "observation_ids": [
+        "nll_negative",
+        "nll_0_to_0p5",
+        "nll_0p5_to_1",
+        "nll_1_to_2",
+        "nll_2_to_4",
+        "nll_4_or_more",
+        "nll_nonfinite",
+        "wrapper_error",
+        "wrapper_timeout",
+        "state_independent_erasure"
+      ],
+      "release_id": "model-backed-cnn-erasure_0p9"
+    }
+  ],
+  "sampling_model": "iid_multinomial",
+  "schema_version": "1.0",
+  "selection_scope": "all three preregistered public-data models, both wrapper variants, both secret states, and every listed categorical observation",
+  "state_ids": [
+    "out",
+    "in"
+  ],
+  "threat_id": "membership-cnn-erasure_0p9"
+}

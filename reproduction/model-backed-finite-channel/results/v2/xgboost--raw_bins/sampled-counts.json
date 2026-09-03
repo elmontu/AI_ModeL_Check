@@ -1,0 +1,78 @@
+{
+  "audit_sample_sha256": "7fe6a1d505a45d4d8bd5a7f101bbcb20b069322c9c4dc5a9958b4bf40ccdcb1d",
+  "binding_context": {
+    "artifact_sha256": "18589f7bba116c57fb3e5be8217ce5e16b9b32a92a2ce35c8293965df895c765",
+    "decision_game_sha256": "5dd2156fa6f6e38cec149f1a3ec1fa63afd4602be49bb4e6e13ee4939a567f41",
+    "interface_sha256": "d3d33aa1353ad63cf13be7dba8f9a34216c9950ba9d50dcb9d980a38305ffcaf",
+    "policy_sha256": "aa82cf5af507bf7c43803ec5bdf76f3001af4deb38477e95de2b9c15f7e2adef",
+    "population_scope_id": "benchmark-xgboost-raw_bins",
+    "population_scope_sha256": "39315b865764277ea2f9de97fa1df65c63b38912219caca879cd0aabcbd37fc0",
+    "release_contract_sha256": "8a052c53fc537182b4284cebab19eee369e76f20a01834cb8c333285f32cf924",
+    "release_id": "model-backed-xgboost-raw_bins",
+    "schema_version": "1.0"
+  },
+  "count_file_id": "counts-xgboost-raw_bins",
+  "family_id": "family-xgboost-raw_bins",
+  "population_scope_id": "benchmark-xgboost-raw_bins",
+  "portfolio_id": "portfolio-xgboost-raw_bins",
+  "releases": [
+    {
+      "observation_ids": [
+        "nll_negative",
+        "nll_0_to_0p5",
+        "nll_0p5_to_1",
+        "nll_1_to_2",
+        "nll_2_to_4",
+        "nll_4_or_more",
+        "nll_nonfinite",
+        "wrapper_error",
+        "wrapper_timeout",
+        "state_independent_erasure"
+      ],
+      "release_id": "model-backed-xgboost-raw_bins",
+      "state_rows": [
+        {
+          "counts": [
+            0,
+            3717,
+            689,
+            384,
+            157,
+            53,
+            0,
+            0,
+            0,
+            0
+          ],
+          "state_id": "out"
+        },
+        {
+          "counts": [
+            0,
+            4522,
+            399,
+            64,
+            15,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "state_id": "in"
+        }
+      ]
+    }
+  ],
+  "sampling_ended_at": "2026-09-03T05:36:30.973805Z",
+  "sampling_plan_id": "plan-xgboost-raw_bins",
+  "sampling_plan_sha256": "73cd33b871967e08df7af0d0699f049750112f79c86b0d162d03182d4443a948",
+  "sampling_protocol": "Python random.Random with independent preregistered state seeds; integer-uniform with-replacement finite-population draw followed by exact rational, state-independent erasure; out_seed=609030201; in_seed=609030202; trials_per_state=5000",
+  "sampling_started_at": "2026-09-03T05:36:30.966009Z",
+  "schema_version": "1.0",
+  "state_ids": [
+    "out",
+    "in"
+  ],
+  "threat_id": "membership-xgboost-raw_bins"
+}

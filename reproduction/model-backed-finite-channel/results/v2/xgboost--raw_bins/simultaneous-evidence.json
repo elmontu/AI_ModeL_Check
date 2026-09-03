@@ -1,0 +1,178 @@
+{
+  "assumptions": [
+    "within each secret-state row, retained observations are IID draws from one fixed multinomial channel row",
+    "the committed ledger contains the complete assurance-wide allocation family",
+    "Bonferroni union bounds require no independence between cells, releases, or allocated families",
+    "every serialized endpoint is replay-proved by directed binomial-tail arithmetic"
+  ],
+  "assurance_wide_alpha": 0.05,
+  "assurance_wide_confidence": 0.95,
+  "binding_context": {
+    "artifact_sha256": "18589f7bba116c57fb3e5be8217ce5e16b9b32a92a2ce35c8293965df895c765",
+    "decision_game_sha256": "5dd2156fa6f6e38cec149f1a3ec1fa63afd4602be49bb4e6e13ee4939a567f41",
+    "interface_sha256": "d3d33aa1353ad63cf13be7dba8f9a34216c9950ba9d50dcb9d980a38305ffcaf",
+    "policy_sha256": "aa82cf5af507bf7c43803ec5bdf76f3001af4deb38477e95de2b9c15f7e2adef",
+    "population_scope_id": "benchmark-xgboost-raw_bins",
+    "population_scope_sha256": "39315b865764277ea2f9de97fa1df65c63b38912219caca879cd0aabcbd37fc0",
+    "release_contract_sha256": "8a052c53fc537182b4284cebab19eee369e76f20a01834cb8c333285f32cf924",
+    "release_id": "model-backed-xgboost-raw_bins",
+    "schema_version": "1.0"
+  },
+  "budget_id": "model-backed-finite-channel-assurance-budget",
+  "count_file_id": "counts-xgboost-raw_bins",
+  "coverage": "simultaneous",
+  "endpoint_proof_terms": 7064,
+  "evidence_type": "simultaneous_multinomial_marginals",
+  "family_alpha": 0.008333333333333333,
+  "family_coverage_confidence": 0.9916666666666666,
+  "family_id": "family-xgboost-raw_bins",
+  "limitations": [],
+  "method": "bonferroni_two_sided_clopper_pearson",
+  "per_tail_alpha": 0.00020833333333333332,
+  "per_tail_alpha_denominator": 25000000000000000000,
+  "per_tail_alpha_numerator": 5208333333333333,
+  "population_scope_id": "benchmark-xgboost-raw_bins",
+  "portfolio_id": "portfolio-xgboost-raw_bins",
+  "request": {
+    "all_cells_reported": true,
+    "allocation_id": "allocation-xgboost-raw_bins",
+    "assurance_ledger_complete": true,
+    "budget_reference": {
+      "source_id": "model-backed-finite-channel-assurance-budget",
+      "source_path": "assurance-error-budget.json",
+      "source_sha256": "1e67882589c1615a42ccfb93683870860f5843c3ce8229bf1c690b20bb250583"
+    },
+    "counts_reference": {
+      "source_id": "counts-xgboost-raw_bins",
+      "source_path": "sampled-counts.json",
+      "source_sha256": "08dd9fdc48c6b8c849dfff69e111e93c1d6325d40acc9debfb46eec3536bf6e1"
+    },
+    "family_pre_registered": true,
+    "generation_id": "generation-xgboost-raw_bins",
+    "sampling_model": "iid_multinomial",
+    "sampling_plan_reference": {
+      "source_id": "plan-xgboost-raw_bins",
+      "source_path": "sampling-plan.json",
+      "source_sha256": "73cd33b871967e08df7af0d0699f049750112f79c86b0d162d03182d4443a948"
+    },
+    "schema_version": "1.0",
+    "selection_process_covered": true,
+    "selection_scope": "all three preregistered public-data models, both wrapper variants, both secret states, and every listed categorical observation"
+  },
+  "rows": [
+    {
+      "counts": [
+        0,
+        3717,
+        689,
+        384,
+        157,
+        53,
+        0,
+        0,
+        0,
+        0
+      ],
+      "lower": [
+        0.0,
+        0.7210904826795725,
+        0.12113185540425528,
+        0.06414625496546511,
+        0.023402863186462324,
+        0.006220664904728435,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "observation_ids": [
+        "nll_negative",
+        "nll_0_to_0p5",
+        "nll_0p5_to_1",
+        "nll_1_to_2",
+        "nll_2_to_4",
+        "nll_4_or_more",
+        "nll_nonfinite",
+        "wrapper_error",
+        "wrapper_timeout",
+        "state_independent_erasure"
+      ],
+      "release_id": "model-backed-xgboost-raw_bins",
+      "state_id": "out",
+      "trials": 5000,
+      "upper": [
+        0.0016938380736853857,
+        0.764863783587132,
+        0.1557287522817347,
+        0.09092999966727149,
+        0.04104002637295819,
+        0.016711314973073356,
+        0.0016938380736853857,
+        0.0016938380736853857,
+        0.0016938380736853857,
+        0.0016938380736853857
+      ]
+    },
+    {
+      "counts": [
+        0,
+        4522,
+        399,
+        64,
+        15,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "lower": [
+        0.0,
+        0.8889202937811496,
+        0.06690633367464968,
+        0.007919913157613728,
+        0.0009930270240385403,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "observation_ids": [
+        "nll_negative",
+        "nll_0_to_0p5",
+        "nll_0p5_to_1",
+        "nll_1_to_2",
+        "nll_2_to_4",
+        "nll_4_or_more",
+        "nll_nonfinite",
+        "wrapper_error",
+        "wrapper_timeout",
+        "state_independent_erasure"
+      ],
+      "release_id": "model-backed-xgboost-raw_bins",
+      "state_id": "in",
+      "trials": 5000,
+      "upper": [
+        0.0016938380736853857,
+        0.9184703491766062,
+        0.0941592050273285,
+        0.019400976530338003,
+        0.006793753146530095,
+        0.0016938380736853857,
+        0.0016938380736853857,
+        0.0016938380736853857,
+        0.0016938380736853857,
+        0.0016938380736853857
+      ]
+    }
+  ],
+  "schema_version": "1.0",
+  "selection_valid": true,
+  "simultaneous_cell_count": 20,
+  "state_ids": [
+    "out",
+    "in"
+  ],
+  "threat_id": "membership-xgboost-raw_bins"
+}

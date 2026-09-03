@@ -1,0 +1,78 @@
+{
+  "audit_sample_sha256": "a69d71a262f5955388493ba8735a004ee00b545791fe768bd92a7c6a4a6187b3",
+  "binding_context": {
+    "artifact_sha256": "4902a13bb382f8e9223471ab6d39c6f465f947b09ad585a3dac490b89a939339",
+    "decision_game_sha256": "439388c9ae251c0effe6243ac79b635c6735ab33f9de68a9bb5f1bbec142ca38",
+    "interface_sha256": "d3d33aa1353ad63cf13be7dba8f9a34216c9950ba9d50dcb9d980a38305ffcaf",
+    "policy_sha256": "3e68e6e33957ad41ec29f98f873bb51cc07d981986769a23fc2378d6adcbe128",
+    "population_scope_id": "benchmark-cnn-raw_bins",
+    "population_scope_sha256": "2650f55112eafd24523cbbf23b94be73160d00940807d39758c236f1234ed2f9",
+    "release_contract_sha256": "8ffd5a60c7165a42cfdfd8a5a7cc19cb9f8b41dfcb34f116309a405aa023e1ec",
+    "release_id": "model-backed-cnn-raw_bins",
+    "schema_version": "1.0"
+  },
+  "count_file_id": "counts-cnn-raw_bins",
+  "family_id": "family-cnn-raw_bins",
+  "population_scope_id": "benchmark-cnn-raw_bins",
+  "portfolio_id": "portfolio-cnn-raw_bins",
+  "releases": [
+    {
+      "observation_ids": [
+        "nll_negative",
+        "nll_0_to_0p5",
+        "nll_0p5_to_1",
+        "nll_1_to_2",
+        "nll_2_to_4",
+        "nll_4_or_more",
+        "nll_nonfinite",
+        "wrapper_error",
+        "wrapper_timeout",
+        "state_independent_erasure"
+      ],
+      "release_id": "model-backed-cnn-raw_bins",
+      "state_rows": [
+        {
+          "counts": [
+            0,
+            4226,
+            308,
+            316,
+            53,
+            97,
+            0,
+            0,
+            0,
+            0
+          ],
+          "state_id": "out"
+        },
+        {
+          "counts": [
+            0,
+            4223,
+            397,
+            234,
+            120,
+            26,
+            0,
+            0,
+            0,
+            0
+          ],
+          "state_id": "in"
+        }
+      ]
+    }
+  ],
+  "sampling_ended_at": "2026-09-03T05:36:27.867198Z",
+  "sampling_plan_id": "plan-cnn-raw_bins",
+  "sampling_plan_sha256": "418b0b93ca93b2db50aa3f78b75f3c32938734e132c411cace146480664016a1",
+  "sampling_protocol": "Python random.Random with independent preregistered state seeds; integer-uniform with-replacement finite-population draw followed by exact rational, state-independent erasure; out_seed=609030101; in_seed=609030102; trials_per_state=5000",
+  "sampling_started_at": "2026-09-03T05:36:27.859512Z",
+  "schema_version": "1.0",
+  "state_ids": [
+    "out",
+    "in"
+  ],
+  "threat_id": "membership-cnn-raw_bins"
+}
