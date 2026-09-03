@@ -1,0 +1,67 @@
+{
+  "schema_version": "1.0",
+  "registration_id": "model-backed-finite-channel-public-data-v3-2026-09-03",
+  "registered_at": "2026-09-03T06:21:46Z",
+  "outcome_collection_started": false,
+  "study_role": "prospective_corrective_replication_with_fresh_model_and_sampling_seeds",
+  "predecessor_disclosure": {
+    "v2_outcomes_observed_before_v3_design": true,
+    "v2_registered_acceptance_passed": false,
+    "v2_failed_criterion": "all_six_simultaneous_clear_rate_lowers_meet_minimum",
+    "v2_result_manifest": "reproduction/model-backed-finite-channel/results/v2/manifest.json",
+    "v2_data_or_outcomes_reused_as_v3_outcomes": false,
+    "v2_config_preserved_as": "reproduction/model-backed-finite-channel/config-v2.json"
+  },
+  "corrective_design": {
+    "fresh_collector_seed": 2026090302,
+    "fresh_primary_seed_domain": "MRA-MODEL-BACKED-V3-PRIMARY-1",
+    "fresh_repeat_seed_domain": "MRA-MODEL-BACKED-V3-REPEAT-1",
+    "wrapper_path_change": "Every primary and repeated observation is generated through an auditor-issued one-use ClosedHiddenRecordCategoricalWrapper capability and exact-cross-replayed against the aggregate reference sampler.",
+    "source_binding_change": "Per-variant wrapper execution evidence is a distinct mechanism EvidenceReference verified by AssuranceEngine source replay.",
+    "decision_change": "Acceptance controls undercoverage and wrong-direction error for all families and requires high correct-direction power only for oracle risks at least 0.10 from tolerance; it does not require every newly trained model to be safe.",
+    "meta_simultaneous_endpoint_count": 18,
+    "outcome_independent_acceptance": true
+  },
+  "source_snapshot": {
+    "git_commit": "f98baa460bed95dc44c2a17aceb9f3cb750f8f89",
+    "git_tree": "c41de1732419ddf0b592d7e8f71f4cdea91d577e",
+    "commit_timestamp": "2026-09-03T14:20:36+08:00",
+    "commit_signed": false,
+    "external_timestamp_present_at_registration": false,
+    "source_archive_sha256": "51ccfad22801c4ab3f0ddfa1fe51f90e606c80eb8e2897fa850ca9039e1886b1",
+    "note": "The local Git commit and deterministic archive freeze the complete tracked source before v3 outcome collection. GitHub publication remained pending authentication."
+  },
+  "registered_artifacts": {
+    "config_sha256": "074a138ace5d676ad302faecbfaeef58c3430c9a2a2bbba036fb463b6b388f9f",
+    "experiment_runner_sha256": "06adde03a9d6e80ec7420580ea958952bdb1489bb6ce5a297b9e46132cf1bfb4",
+    "collector_runner_sha256": "177dc20deeb8ea1413f66f473dd92726d7c637cbe8bd325d2fbe7c54ccf1f13a",
+    "wrapper_module_sha256": "5600491f44d294c9c97047c1994502b4799a81a5422786e7cb43850396faae9a",
+    "trust_core_tree_sha256": "afcefed847df96027914603e43deecb14524fafd445bca5ab5261c1480d36064",
+    "model_backed_tests_sha256": "5472b9250061bc0099b3e165df33d405faf9ec4b7eab4332b5bf517e96763d7a",
+    "wrapper_tests_sha256": "fbffda1ad627035a5b60d365009c6b9df51163cf5015694fbba303f0531b75d7"
+  },
+  "pre_outcome_verification": {
+    "target_environment": {
+      "python": "3.13.15",
+      "scipy": "1.18.1",
+      "torch": "2.13.0+cu130",
+      "xgboost": "2.1.4",
+      "scikit_learn": "1.6.1",
+      "cuda_available": true
+    },
+    "focused_tests": {
+      "passed": 91,
+      "failed": 0,
+      "errors": 0,
+      "elapsed_seconds": 31.202
+    },
+    "strict_final_config_source_binding_passed": true,
+    "real_v3_collector_invoked": false,
+    "v3_acceptance_result_computed": false
+  },
+  "authority": {
+    "experimental_only": true,
+    "authorization_eligible": false,
+    "release_authorization": "none"
+  }
+}
