@@ -10,6 +10,7 @@ from model_release_assurance.experimental_finite_wrapper import (
     ClosedWrapperQueryError,
     FORBIDDEN_RECIPIENT_FIELDS,
     WrapperConformanceError,
+    sample_closed_hidden_record_counts,
     validate_closed_hidden_record_wrapper,
     validate_wrapper_interface_config,
 )
@@ -229,6 +230,69 @@ class ClosedHiddenRecordWrapperConformanceTests(unittest.TestCase):
         self.assertIn("real serving-endpoint enforcement are not proven", serialized)
         self.assertNotIn("issuer_seed", serialized)
         self.assertNotIn("sealed_state", serialized)
+
+    def test_batch_sampler_executes_the_exact_registered_wrapper_schedule(self) -> None:
+        config = wrapper_config()
+        forced = (1,) + (0,) * (len(config["observation_ids"]) - 1)
+        population = {"out": forced, "in": forced}
+        raw = sample_closed_hidden_record_counts(
+            config,
+            aggregate_population=population,
+            sealed_state="out",
+            trials=500,
+            issuer_seed=901,
+            state_independent_erasure={"numerator": 0, "denominator": 1},
+        )
+        raw_replay = sample_closed_hidden_record_counts(
+            config,
+            aggregate_population=population,
+            sealed_state="out",
+            trials=500,
+            issuer_seed=901,
+            state_independent_erasure={"numerator": 0, "denominator": 1},
+        )
+        erased = sample_closed_hidden_record_counts(
+            config,
+            aggregate_population=population,
+            sealed_state="out",
+            trials=500,
+            issuer_seed=902,
+            state_independent_erasure={"numerator": 9, "denominator": 10},
+        )
+
+        erasure_index = config["observation_ids"].index("state_independent_erasure")
+        self.assertEqual(raw, raw_replay)
+        self.assertEqual(sum(raw), 500)
+        self.assertEqual(sum(erased), 500)
+        self.assertEqual(raw[erasure_index], 0)
+        self.assertGreater(erased[erasure_index], 400)
+
+    def test_batch_sampler_rejects_invalid_issue_parameters(self) -> None:
+        config = wrapper_config()
+        population = aggregate_population(config)
+        cases = (
+            {"sealed_state": "unknown"},
+            {"trials": 0},
+            {"trials": True},
+            {"issuer_seed": True},
+            {"state_independent_erasure": {"numerator": 1, "denominator": 0}},
+            {"state_independent_erasure": {"numerator": 1, "denominator": 1}},
+            {"state_independent_erasure": {"numerator": True, "denominator": 2}},
+            {"state_independent_erasure": {"numerator": 1, "denominator": 2, "extra": 0}},
+        )
+        defaults = {
+            "sealed_state": "out",
+            "trials": 10,
+            "issuer_seed": 903,
+            "state_independent_erasure": {"numerator": 0, "denominator": 1},
+        }
+        for index, mutation in enumerate(cases):
+            with self.subTest(index=index), self.assertRaises(WrapperConformanceError):
+                sample_closed_hidden_record_counts(
+                    config,
+                    aggregate_population=population,
+                    **{**defaults, **mutation},
+                )
 
 
 if __name__ == "__main__":

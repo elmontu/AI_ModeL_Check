@@ -3,6 +3,7 @@ from __future__ import annotations
 import copy
 import json
 import math
+import shutil
 import sys
 import tempfile
 import unittest
@@ -22,10 +23,69 @@ import run_model_backed_finite_channel as experiment  # noqa: E402
 
 
 CONFIG_PATH = ROOT / "reproduction" / "model-backed-finite-channel" / "config.json"
+V2_CONFIG_PATH = ROOT / "reproduction" / "model-backed-finite-channel" / "config-v2.json"
 
 
 def config() -> dict:
     return experiment.load_json_object(CONFIG_PATH)
+
+
+def finalized_config(*, bind_files: bool = False) -> dict:
+    """Create a finalized test fixture without mutating the pending v3 registration."""
+
+    cfg = copy.deepcopy(config())
+    cfg["registered_at"] = "2020-01-01T00:00:00Z"
+    production = cfg["production_path"]
+    if bind_files:
+        cfg["collector"]["runner_sha256"] = experiment.sha256_file(
+            ROOT / cfg["collector"]["runner_path"]
+        )
+        production["experiment_runner_sha256"] = experiment.sha256_file(
+            ROOT / production["experiment_runner_path"]
+        )
+        production["assurance_engine_sha256"] = experiment.sha256_file(
+            ROOT / production["assurance_engine_path"]
+        )
+        production["analytic_solver_sha256"] = experiment.sha256_file(
+            ROOT / production["analytic_solver_path"]
+        )
+        production["wrapper_conformance_sha256"] = experiment.sha256_file(
+            ROOT / production["wrapper_conformance_path"]
+        )
+        production["attack_statistics_sha256"] = experiment.sha256_file(
+            ROOT / production["attack_statistics_path"]
+        )
+        production["trust_core_tree_sha256"] = experiment.sha256_python_tree(
+            ROOT / production["trust_core_path"]
+        )
+        production["project_manifest_sha256"] = experiment.sha256_file(
+            ROOT / production["project_manifest_path"]
+        )
+        production["experiment_requirements_sha256"] = experiment.sha256_file(
+            ROOT / production["experiment_requirements_path"]
+        )
+        production["portfolio_statistics_sha256"] = experiment.sha256_file(
+            ROOT / "src/model_release_assurance/portfolio_statistics.py"
+        )
+        production["finite_channel_analyzer_sha256"] = experiment.sha256_file(
+            ROOT / "src/model_release_assurance/analyzers/finite_channel.py"
+        )
+    else:
+        cfg["collector"]["runner_sha256"] = "f" * 64
+        for field in (
+            "experiment_runner_sha256",
+            "assurance_engine_sha256",
+            "analytic_solver_sha256",
+            "wrapper_conformance_sha256",
+            "attack_statistics_sha256",
+            "trust_core_tree_sha256",
+            "project_manifest_sha256",
+            "experiment_requirements_sha256",
+            "portfolio_statistics_sha256",
+            "finite_channel_analyzer_sha256",
+        ):
+            production[field] = "f" * 64
+    return cfg
 
 
 def fake_collector(cfg: dict) -> dict:
@@ -126,16 +186,61 @@ def fake_collector(cfg: dict) -> dict:
 
 
 class ModelBackedFiniteChannelTests(unittest.TestCase):
-    def test_registered_config_is_complete_and_source_bound(self) -> None:
-        validated = experiment.validate_config(config(), verify_files=True)
+    def test_registered_v3_config_is_complete_and_pending_edits_fail_closed(self) -> None:
+        registered = config()
+        validated = experiment.validate_config(registered, verify_files=True)
         self.assertEqual(
             [value["collector_model"] for value in validated["models"]],
             list(experiment.EXPECTED_MODELS),
         )
-        self.assertEqual(validated["collector"]["seed"], 2026090301)
-        self.assertNotEqual(validated["collector"]["seed"], 20260830)
+        self.assertEqual(validated["collector"]["seed"], 2026090302)
+        self.assertNotIn(validated["collector"]["seed"], {20260830, 2026090301})
         self.assertEqual(validated["sampling"]["registered_family_count"], 6)
         self.assertFalse(validated["authority"]["authorization_eligible"])
+        self.assertEqual(validated["registered_at"], "2026-09-03T06:16:40Z")
+
+        pending = copy.deepcopy(registered)
+        pending["registered_at"] = None
+        pending["collector"]["runner_sha256"] = experiment.PENDING_SHA256
+        for field in (
+            "experiment_runner_sha256",
+            "assurance_engine_sha256",
+            "analytic_solver_sha256",
+            "wrapper_conformance_sha256",
+            "attack_statistics_sha256",
+            "trust_core_tree_sha256",
+            "project_manifest_sha256",
+            "experiment_requirements_sha256",
+            "portfolio_statistics_sha256",
+            "finite_channel_analyzer_sha256",
+        ):
+            pending["production_path"][field] = experiment.PENDING_SHA256
+        with self.assertRaisesRegex(
+            experiment.ExperimentValidationError,
+            "registration is pending",
+        ):
+            experiment.validate_config(pending, verify_files=True)
+        pending_validated = experiment.validate_config(
+            pending,
+            verify_files=True,
+            allow_pending_registration=True,
+        )
+        self.assertIsNone(pending_validated["registered_at"])
+
+    def test_finalized_fixture_is_source_bound_and_v2_snapshot_is_exact(self) -> None:
+        validated = experiment.validate_config(
+            finalized_config(bind_files=True),
+            verify_files=True,
+        )
+        self.assertEqual(validated["experiment_id"], "model-backed-finite-channel-public-data-v3")
+        self.assertEqual(
+            experiment.sha256_file(V2_CONFIG_PATH),
+            "77850b333353bef86d72a1647ed0de50bf6c2d6b7ee7f6d1e26e721e653e3f8e",
+        )
+        self.assertEqual(
+            experiment.load_json_object(V2_CONFIG_PATH)["experiment_id"],
+            "model-backed-finite-channel-public-data-v2",
+        )
 
     def test_fixed_semantic_bins_cover_edges_errors_and_nonfinite(self) -> None:
         wrapper = config()["finite_wrapper"]
@@ -208,6 +313,27 @@ class ModelBackedFiniteChannelTests(unittest.TestCase):
         self.assertEqual(sum(erased), 500)
         self.assertGreater(erased[3], 400)
 
+    def test_every_state_and_variant_executes_wrapper_with_exact_reference_equivalence(self) -> None:
+        cfg = config()
+        population = {
+            "out": (2, 3, 5, 7, 11, 13, 17, 19, 0, 0),
+            "in": (19, 17, 13, 11, 7, 5, 3, 2, 0, 0),
+        }
+        for variant in cfg["finite_wrapper"]["variants"]:
+            erasure = experiment.rational(variant["state_independent_erasure"])
+            for state in ("out", "in"):
+                with self.subTest(variant=variant["variant_id"], state=state):
+                    counts, equivalent = experiment.sample_state_counts_through_wrapper(
+                        population,
+                        wrapper_config=cfg["finite_wrapper"],
+                        sealed_state=state,
+                        trials=500,
+                        seed=701 if state == "out" else 702,
+                        erasure=erasure,
+                    )
+                    self.assertTrue(equivalent)
+                    self.assertEqual(sum(counts), 500)
+
     def test_executable_wrapper_replays_registered_erasure_variant(self) -> None:
         cfg = config()
         population = {
@@ -253,51 +379,87 @@ class ModelBackedFiniteChannelTests(unittest.TestCase):
         self.assertIn("raw_wrapper_exact_bayes_risk", oracle)
 
     def test_full_aggregate_only_production_and_engine_replay(self) -> None:
-        cfg = copy.deepcopy(config())
+        cfg = finalized_config()
         with tempfile.TemporaryDirectory() as temporary:
             base = Path(temporary)
             config_path = base / "config.json"
             experiment.write_json(config_path, cfg)
             output = base / "output"
-            repeated = [
-                {
-                    "collector_model": model,
-                    "model_family": next(
-                        item["model_family"] for item in cfg["models"]
-                        if item["collector_model"] == model
-                    ),
-                    "variant_id": variant,
-                    "replicates": 200,
-                    "trials_per_state": 5000,
-                    "true_exact_oracle_risk": {"numerator": 1, "denominator": 2},
-                    "undercoverage_count": 0,
-                    "undercoverage_rate": 0.0,
-                    "simultaneous_clopper_pearson_undercoverage_upper": 0.03,
-                    "simultaneous_meta_confidence": 1.0 - 0.05 / 12,
-                    "meta_simultaneous_bound_count": 12,
-                    "meta_multiplicity_method": (
-                        "bonferroni_across_twelve_one_sided_bounds:"
-                        "six_clear_rate_lowers_and_six_undercoverage_uppers"
-                    ),
-                    "clear_count": 200,
-                    "clear_rate": 1.0,
-                    "simultaneous_clopper_pearson_clear_rate_lower": 0.97,
-                    "mean_ceiling": 0.6,
-                    "p95_ceiling": 0.61,
-                    "mean_interval_width": 0.1,
-                    "p95_interval_width": 0.11,
-                    "maximum_interval_width": 0.12,
-                    "mean_ceiling_excess_over_oracle": 0.1,
-                    "p95_ceiling_excess_over_oracle": 0.11,
-                    "maximum_ceiling_excess_over_oracle": 0.12,
-                    "every_production_analyzer_replay_completed": True,
-                    "retained_rows_path": "test.json",
-                    "retained_rows_sha256": "b" * 64,
-                }
-                for model in experiment.EXPECTED_MODELS
-                for variant in experiment.EXPECTED_VARIANTS
-            ]
             collector = fake_collector(cfg)
+            collector_models = {value["model"]: value for value in collector["models"]}
+            oracles = {
+                model["collector_model"]: experiment.compile_oracle(
+                    collector_models[model["collector_model"]],
+                    model,
+                    cfg,
+                    collector["datasets"][model["dataset_key"]],
+                )
+                for model in cfg["models"]
+            }
+            repeated = []
+            tolerance = Fraction(13, 20)
+            erased_index = experiment.EXPECTED_OBSERVATIONS.index(
+                "state_independent_erasure"
+            )
+            for model in experiment.EXPECTED_MODELS:
+                for variant in experiment.EXPECTED_VARIANTS:
+                    true_risk = experiment.exact_channel_risk(
+                        oracles[model]["state_counts"],
+                        erasure=(
+                            Fraction(0)
+                            if variant == "raw_bins"
+                            else Fraction(9, 10)
+                        ),
+                        erased_index=erased_index,
+                    )
+                    margin = abs(true_risk - tolerance)
+                    eligible = margin >= Fraction(1, 10)
+                    repeated.append({
+                        "collector_model": model,
+                        "model_family": next(
+                            item["model_family"] for item in cfg["models"]
+                            if item["collector_model"] == model
+                        ),
+                        "variant_id": variant,
+                        "replicates": 200,
+                        "trials_per_state": 5000,
+                        "true_exact_oracle_risk": experiment.rational_payload(true_risk),
+                        "undercoverage_count": 0,
+                        "undercoverage_rate": 0.0,
+                        "simultaneous_clopper_pearson_undercoverage_upper": 0.03,
+                        "simultaneous_meta_confidence": 1.0 - 0.05 / 18,
+                        "meta_simultaneous_bound_count": 18,
+                        "meta_multiplicity_method": (
+                            "bonferroni_across_eighteen_one_sided_bounds:"
+                            "six_undercoverage_uppers_six_wrong_direction_uppers_"
+                            "six_correct_decision_lowers"
+                        ),
+                        "expected_direction": "CLEAR",
+                        "absolute_margin_from_tolerance": experiment.rational_payload(margin),
+                        "absolute_margin_from_tolerance_decimal": float(margin),
+                        "margin_eligible_for_resolution_claim": eligible,
+                        "decision_counts": {"CLEAR": 200, "HOLD": 0, "BLOCK": 0},
+                        "clear_count": 200,
+                        "clear_rate": 1.0,
+                        "wrong_direction_count": 0,
+                        "wrong_direction_rate": 0.0,
+                        "simultaneous_clopper_pearson_wrong_direction_upper": 0.03,
+                        "correct_direction_count": 200,
+                        "correct_direction_rate": 1.0,
+                        "simultaneous_clopper_pearson_correct_direction_lower": 0.97,
+                        "mean_ceiling": 0.6,
+                        "p95_ceiling": 0.61,
+                        "mean_interval_width": 0.1,
+                        "p95_interval_width": 0.11,
+                        "maximum_interval_width": 0.12,
+                        "mean_ceiling_excess_over_oracle": 0.1,
+                        "p95_ceiling_excess_over_oracle": 0.11,
+                        "maximum_ceiling_excess_over_oracle": 0.12,
+                        "every_production_analyzer_replay_completed": True,
+                        "every_wrapper_sampling_equivalence_check_passed": True,
+                        "retained_rows_path": "test.json",
+                        "retained_rows_sha256": "b" * 64,
+                    })
             with mock.patch.object(
                 experiment,
                 "_run_repeated_validation",
@@ -309,12 +471,14 @@ class ModelBackedFiniteChannelTests(unittest.TestCase):
                     output_dir=output,
                     config_path=config_path,
                     collector_input_bytes=experiment.canonical_json_bytes(collector),
+                    verify_files=False,
                 )
 
             self.assertEqual(len(report["results"]), 6)
-            self.assertTrue(report["checks"]["all_source_and_engine_replays_complete"])
+            self.assertTrue(report["checks"]["all_source_engine_and_repeat_replays_complete"])
             self.assertTrue(all(
-                value["experimental_engine_verdict"] == "clear"
+                value["experimental_engine_verdict"]
+                in {"clear", "inconclusive", "block"}
                 for value in report["results"]
             ))
             self.assertTrue(all(
@@ -323,7 +487,7 @@ class ModelBackedFiniteChannelTests(unittest.TestCase):
             ))
             self.assertEqual(report["decision"], "no_release_authorization")
             self.assertTrue(report["acceptance"]["passed"])
-            self.assertEqual(len(report["negative_controls"]), 4)
+            self.assertEqual(len(report["negative_controls"]), 5)
             self.assertTrue(all(
                 value["executed"] and value["passed"]
                 for value in report["negative_controls"]
@@ -340,6 +504,29 @@ class ModelBackedFiniteChannelTests(unittest.TestCase):
             submission = FiniteChannelCeilingInput.model_validate_json(
                 (first / "finite-channel-submission.json").read_text(encoding="utf-8")
             )
+            mechanism_sources = {
+                value.source_path
+                for value in submission.analytic_evidence.problem.mechanism_evidence
+            }
+            self.assertIn("mechanism-evidence.json", mechanism_sources)
+            self.assertIn("wrapper-execution-evidence.json", mechanism_sources)
+            wrapper_evidence = experiment.load_json_object(
+                first / "wrapper-execution-evidence.json"
+            )
+            self.assertTrue(wrapper_evidence["all_equivalence_checks_pass"])
+            self.assertFalse(wrapper_evidence["individual_transcripts_retained"])
+
+            for mode in ("tampered", "missing"):
+                copied = base / f"wrapper-{mode}"
+                shutil.copytree(first, copied)
+                wrapper_path = copied / "wrapper-execution-evidence.json"
+                if mode == "tampered":
+                    wrapper_path.write_bytes(wrapper_path.read_bytes() + b" ")
+                else:
+                    wrapper_path.rename(copied / "wrapper-execution-evidence.removed")
+                with self.subTest(mode=mode), self.assertRaises((OSError, IntegrityError)):
+                    AssuranceEngine._verify_finite_channel_sources(submission, copied)
+
             counts_path = first / "sampled-counts.json"
             counts_path.write_text(
                 counts_path.read_text(encoding="utf-8") + " ",
@@ -347,6 +534,71 @@ class ModelBackedFiniteChannelTests(unittest.TestCase):
             )
             with self.assertRaises(IntegrityError):
                 AssuranceEngine._verify_finite_channel_sources(submission, first)
+
+    def test_conformance_and_sampling_mismatch_fail_before_analyzer_input(self) -> None:
+        cfg = finalized_config()
+        collector = fake_collector(cfg)
+
+        def fixed_counts(
+            aggregate_population: dict,
+            *,
+            sealed_state: str,
+            **_: object,
+        ) -> tuple[tuple[int, ...], bool]:
+            width = len(cfg["finite_wrapper"]["observation_ids"])
+            return (5000,) + (0,) * (width - 1), True
+
+        cases = (
+            (
+                "conformance",
+                mock.patch.object(
+                    experiment,
+                    "validate_closed_hidden_record_wrapper",
+                    return_value={
+                        "schema_version": "1.0",
+                        "conformant": False,
+                        "interface": {},
+                        "checks": [],
+                    },
+                ),
+                mock.patch.object(
+                    experiment,
+                    "sample_state_counts_through_wrapper",
+                    side_effect=fixed_counts,
+                ),
+            ),
+            (
+                "equivalence",
+                mock.patch.object(
+                    experiment,
+                    "sample_state_counts_through_wrapper",
+                    return_value=((5000,) + (0,) * 9, False),
+                ),
+                mock.patch.object(
+                    experiment,
+                    "_run_repeated_validation",
+                    return_value=[],
+                ),
+            ),
+        )
+        for name, first_patch, second_patch in cases:
+            with self.subTest(name=name), tempfile.TemporaryDirectory() as temporary:
+                base = Path(temporary)
+                config_path = base / "config.json"
+                experiment.write_json(config_path, cfg)
+                output = base / "output"
+                with first_patch, second_patch, self.assertRaises(
+                    experiment.ExperimentValidationError
+                ):
+                    experiment.run_experiment(
+                        cfg,
+                        collector,
+                        output_dir=output,
+                        config_path=config_path,
+                        collector_input_bytes=experiment.canonical_json_bytes(collector),
+                        verify_files=False,
+                    )
+                self.assertFalse(any(output.rglob("finite-channel-submission.json")))
 
     def test_visibility_and_roster_mutations_fail_closed(self) -> None:
         mutations = []
@@ -367,7 +619,11 @@ class ModelBackedFiniteChannelTests(unittest.TestCase):
         mutations.append(candidate)
         for index, candidate in enumerate(mutations):
             with self.subTest(index=index), self.assertRaises(experiment.ExperimentValidationError):
-                experiment.validate_config(candidate, verify_files=False)
+                experiment.validate_config(
+                    candidate,
+                    verify_files=False,
+                    allow_pending_registration=True,
+                )
 
 
 if __name__ == "__main__":

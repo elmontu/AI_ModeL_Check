@@ -216,6 +216,30 @@ class ClosedHiddenRecordCategoricalWrapper:
         self.__rng = random.Random(issuer_seed)
         self.__used = False
 
+    @classmethod
+    def _from_validated_issuer(
+        cls,
+        *,
+        alphabet: tuple[str, ...],
+        cumulative_counts: tuple[int, ...],
+        population_size: int,
+        issuer_rng: random.Random,
+        erasure_numerator: int,
+        erasure_denominator: int,
+    ) -> ClosedHiddenRecordCategoricalWrapper:
+        """Issue one capability from a previously validated auditor context."""
+
+        instance = object.__new__(cls)
+        instance.__alphabet = alphabet
+        instance.__cumulative_counts = cumulative_counts
+        instance.__erasure_numerator = erasure_numerator
+        instance.__erasure_denominator = erasure_denominator
+        instance.__erasure_index = alphabet.index("state_independent_erasure")
+        instance.__population_size = population_size
+        instance.__rng = issuer_rng
+        instance.__used = False
+        return instance
+
     def __repr__(self) -> str:
         return "<ClosedHiddenRecordCategoricalWrapper sealed>"
 
@@ -238,6 +262,64 @@ class ClosedHiddenRecordCategoricalWrapper:
         ):
             index = self.__erasure_index
         return self.__alphabet[index]
+
+
+def sample_closed_hidden_record_counts(
+    wrapper_config: Mapping[str, Any],
+    *,
+    aggregate_population: Mapping[
+        str,
+        Sequence[int] | Mapping[str, int],
+    ],
+    sealed_state: str,
+    trials: int,
+    issuer_seed: int,
+    state_independent_erasure: Mapping[str, Any] | None = None,
+) -> tuple[int, ...]:
+    """Execute fresh auditor-issued, one-use wrapper capabilities.
+
+    Each retained observation is obtained by calling ``query`` on a distinct
+    :class:`ClosedHiddenRecordCategoricalWrapper`.  The issuer owns one seeded
+    random stream for the registered audit row; recipients never receive the
+    issuer, seed, aggregate population, or more than one query capability.
+    Only aggregate categorical counts are returned.
+    """
+
+    alphabet = validate_wrapper_interface_config(wrapper_config)
+    population = _validate_aggregate_population(aggregate_population, alphabet)
+    if sealed_state not in _EXPECTED_STATES:
+        _fail("sealed state is not registered")
+    if type(trials) is not int or not 1 <= trials <= 10_000_000:
+        _fail("audit trial count must be an integer in [1, 10000000]")
+    if type(issuer_seed) is not int:
+        _fail("issuer seed must be an integer")
+    erasure_numerator, erasure_denominator = _validate_erasure_probability(
+        state_independent_erasure
+    )
+
+    running = 0
+    cumulative_counts: list[int] = []
+    for count in population[sealed_state]:
+        running += count
+        cumulative_counts.append(running)
+    cumulative = tuple(cumulative_counts)
+    issuer_rng = random.Random(issuer_seed)
+    observation_index = {
+        observation_id: index for index, observation_id in enumerate(alphabet)
+    }
+    counts = [0] * len(alphabet)
+    for _ in range(trials):
+        capability = ClosedHiddenRecordCategoricalWrapper._from_validated_issuer(
+            alphabet=alphabet,
+            cumulative_counts=cumulative,
+            population_size=running,
+            issuer_rng=issuer_rng,
+            erasure_numerator=erasure_numerator,
+            erasure_denominator=erasure_denominator,
+        )
+        observation = capability.query()
+        counts[observation_index[observation]] += 1
+    return tuple(counts)
 
 
 def validate_closed_hidden_record_wrapper(

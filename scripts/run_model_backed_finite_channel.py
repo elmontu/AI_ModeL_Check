@@ -48,6 +48,7 @@ from model_release_assurance.decision_theory import exact_guess_problem  # noqa:
 from model_release_assurance.engine import AssuranceEngine  # noqa: E402
 from model_release_assurance.errors import IntegrityError  # noqa: E402
 from model_release_assurance.experimental_finite_wrapper import (  # noqa: E402
+    sample_closed_hidden_record_counts,
     validate_closed_hidden_record_wrapper,
 )
 from model_release_assurance.incomplete_portfolio import (  # noqa: E402
@@ -89,7 +90,6 @@ from model_release_assurance.models import (  # noqa: E402
     ThreatContract,
     ThreatKind,
     TrainingParadigm,
-    Verdict,
 )
 from model_release_assurance.portfolio_statistics import (  # noqa: E402
     AssuranceErrorBudget,
@@ -136,6 +136,7 @@ EXPECTED_OBSERVATIONS = (
 )
 EXPECTED_STAGES = (
     "validate_closed_hidden_record_wrapper",
+    "sample_closed_hidden_record_counts",
     "generate_simultaneous_multinomial_evidence",
     "compile_multinomial_portfolio_problem",
     "solve_analytic_portfolio",
@@ -147,17 +148,19 @@ EXPECTED_NEGATIVE_CONTROLS = (
     "tampered_counts_must_fail_source_replay",
     "changed_prior_must_fail_binding",
     "missing_observation_symbol_must_fail_plan_replay",
+    "tampered_or_missing_wrapper_execution_evidence_must_fail_source_replay",
 )
 EXPECTED_ACCEPTANCE_CRITERIA = (
     "all_six_oracle_risks_covered",
-    "all_source_and_engine_replays_complete",
-    "all_four_negative_controls_pass",
+    "all_source_engine_and_repeat_replays_complete",
+    "all_five_negative_controls_pass",
     "no_raw_scores_retained",
-    "erasure_never_increases_exact_oracle_risk",
-    "all_six_one_shot_engine_decisions_clear",
-    "all_six_simultaneous_clear_rate_lowers_meet_minimum",
+    "exact_erasure_contraction_identity_holds",
     "all_six_simultaneous_undercoverage_bounds_meet_maximum",
-    "all_executable_wrapper_conformance_checks_pass",
+    "all_six_simultaneous_wrong_direction_bounds_meet_maximum",
+    "all_margin_eligible_correct_decision_lowers_meet_minimum",
+    "at_least_three_margin_eligible_families_resolve",
+    "all_executable_wrapper_conformance_and_sampling_equivalence_checks_pass",
 )
 FORBIDDEN_RETAINED_KEYS = frozenset({
     "raw_scores",
@@ -167,18 +170,21 @@ FORBIDDEN_RETAINED_KEYS = frozenset({
     "calibration_nonmember_losses",
 })
 HEX64 = re.compile(r"^[0-9a-f]{64}$")
+PENDING_SHA256 = "0" * 64
+PRIMARY_SEED_DOMAIN = "MRA-MODEL-BACKED-V3-PRIMARY-1"
+REPEAT_SEED_DOMAIN = "MRA-MODEL-BACKED-V3-REPEAT-1"
 EXPECTED_PRIMARY_SEEDS = {
     "cnn": {
-        "raw_bins": {"out": 609030101, "in": 609030102},
-        "erasure_0p9": {"out": 609030103, "in": 609030104},
+        "raw_bins": {"out": 609040101, "in": 609040102},
+        "erasure_0p9": {"out": 609040103, "in": 609040104},
     },
     "xgboost": {
-        "raw_bins": {"out": 609030201, "in": 609030202},
-        "erasure_0p9": {"out": 609030203, "in": 609030204},
+        "raw_bins": {"out": 609040201, "in": 609040202},
+        "erasure_0p9": {"out": 609040203, "in": 609040204},
     },
     "compact_transformer_llm_proxy": {
-        "raw_bins": {"out": 609030301, "in": 609030302},
-        "erasure_0p9": {"out": 609030303, "in": 609030304},
+        "raw_bins": {"out": 609040301, "in": 609040302},
+        "erasure_0p9": {"out": 609040303, "in": 609040304},
     },
 }
 EXPECTED_MODEL_IDENTITIES = {
@@ -315,6 +321,7 @@ def validate_config(
     *,
     verify_files: bool = True,
     root: Path = ROOT,
+    allow_pending_registration: bool = False,
 ) -> dict[str, Any]:
     """Fail closed if the prospective design drifts from the registered study."""
 
@@ -326,14 +333,25 @@ def validate_config(
     }, "config top-level schema changed")
     _require(config.get("schema_version") == "1.0", "unsupported config schema")
     _require(
-        config.get("experiment_id") == "model-backed-finite-channel-public-data-v2",
+        config.get("experiment_id") == "model-backed-finite-channel-public-data-v3",
         "unexpected experiment identifier",
     )
-    try:
-        registered_at = datetime.fromisoformat(str(config["registered_at"]).replace("Z", "+00:00"))
-    except (KeyError, ValueError) as exc:
-        raise ExperimentValidationError("registered_at must be timezone-aware ISO-8601") from exc
-    _require(registered_at.utcoffset() is not None, "registered_at must include a timezone")
+    pending_registration = config.get("registered_at") is None
+    if pending_registration:
+        _require(
+            allow_pending_registration,
+            "v3 registration is pending; freeze timestamp and source digests before execution",
+        )
+    else:
+        try:
+            registered_at = datetime.fromisoformat(
+                str(config["registered_at"]).replace("Z", "+00:00")
+            )
+        except (KeyError, ValueError) as exc:
+            raise ExperimentValidationError(
+                "registered_at must be timezone-aware ISO-8601"
+            ) from exc
+        _require(registered_at.utcoffset() is not None, "registered_at must include a timezone")
 
     authority = config.get("authority", {})
     _require(set(authority) == {
@@ -357,8 +375,8 @@ def validate_config(
     }, "collector schema changed")
     _require(bool(HEX64.fullmatch(str(collector.get("runner_sha256", "")))), "collector digest is not lowercase SHA-256")
     _require(collector.get("runner_path") == "scripts/run_public_privacy_audit.py", "collector runner path changed")
-    _require(type(collector.get("seed")) is int and collector["seed"] == 2026090301, "collector seed changed")
-    _require(collector["seed"] != 20260830, "pilot seed cannot be reused")
+    _require(type(collector.get("seed")) is int and collector["seed"] == 2026090302, "collector seed changed")
+    _require(collector["seed"] not in {20260830, 2026090301}, "prior collector seed cannot be reused")
     _require(type(collector.get("epochs")) is int and collector["epochs"] == 5, "collector epochs changed")
     _require(
         collector.get("raw_output_use")
@@ -488,6 +506,7 @@ def validate_config(
     _require(set(sampling) == {
         "model", "trials_per_state", "state_ids", "family_selection_scope",
         "assurance_alpha", "per_model_variant_alpha", "registered_family_count",
+        "primary_seed_domain",
     }, "sampling schema changed")
     _require(
         sampling.get("model") == "iid_multinomial_with_replacement_conditional_on_finite_target_pool",
@@ -495,6 +514,10 @@ def validate_config(
     )
     trials = sampling.get("trials_per_state")
     _require(type(trials) is int and trials == 5000, "trials_per_state changed from the registered 5000")
+    _require(
+        sampling.get("primary_seed_domain") == PRIMARY_SEED_DOMAIN,
+        "primary sampling seed domain changed",
+    )
     _require(tuple(sampling.get("state_ids", ())) == ("out", "in"), "state order changed")
     family_count = len(models) * len(variants)
     _require(sampling.get("registered_family_count") == family_count, "family count changed")
@@ -507,14 +530,18 @@ def validate_config(
     _require(set(repeated) == {
         "replicates_per_model_variant", "master_seed", "seed_derivation",
         "meta_family_alpha", "maximum_simultaneous_undercoverage_upper",
-        "minimum_simultaneous_clear_rate_lower", "retain_all_aggregate_count_rows",
+        "maximum_simultaneous_wrong_direction_upper",
+        "minimum_simultaneous_correct_decision_lower",
+        "minimum_absolute_margin_for_resolution",
+        "minimum_margin_eligible_families",
+        "retain_all_aggregate_count_rows",
         "production_analyzer_replay_every_replicate", "full_engine_replay",
     }, "repeated-validation schema changed")
     _require(type(repeated["replicates_per_model_variant"]) is int and repeated["replicates_per_model_variant"] == 200, "repeat count changed")
-    _require(type(repeated["master_seed"]) is int and repeated["master_seed"] == 609039999, "repeat master seed changed")
+    _require(type(repeated["master_seed"]) is int and repeated["master_seed"] == 609049999, "repeat master seed changed")
     _require(
         repeated["seed_derivation"]
-        == "sha256-first-64-bits:MRA-MODEL-BACKED-REPEAT-1:model:variant:replicate:state",
+        == "sha256-first-64-bits:MRA-MODEL-BACKED-V3-REPEAT-1:model:variant:replicate:state",
         "repeat seed derivation changed",
     )
     _require(rational(repeated["meta_family_alpha"]) == Fraction(1, 20), "meta alpha changed")
@@ -524,9 +551,24 @@ def validate_config(
         "undercoverage acceptance maximum changed",
     )
     _require(
-        type(repeated["minimum_simultaneous_clear_rate_lower"]) is float
-        and repeated["minimum_simultaneous_clear_rate_lower"] == 0.95,
-        "clear-rate lower-bound acceptance minimum changed",
+        type(repeated["maximum_simultaneous_wrong_direction_upper"]) is float
+        and repeated["maximum_simultaneous_wrong_direction_upper"] == 0.05,
+        "wrong-direction acceptance maximum changed",
+    )
+    _require(
+        type(repeated["minimum_simultaneous_correct_decision_lower"]) is float
+        and repeated["minimum_simultaneous_correct_decision_lower"] == 0.95,
+        "correct-decision lower-bound acceptance minimum changed",
+    )
+    _require(
+        rational(repeated["minimum_absolute_margin_for_resolution"])
+        == Fraction(1, 10),
+        "minimum resolution margin changed",
+    )
+    _require(
+        type(repeated["minimum_margin_eligible_families"]) is int
+        and repeated["minimum_margin_eligible_families"] == 3,
+        "minimum eligible-family count changed",
     )
     _require(repeated["retain_all_aggregate_count_rows"] is True, "repeat counts must be retained")
     _require(repeated["production_analyzer_replay_every_replicate"] is True, "every repeat must replay the analyzer")
@@ -573,6 +615,30 @@ def validate_config(
         "finite_channel_analyzer_sha256",
     ):
         _require(bool(HEX64.fullmatch(str(production.get(field, "")))), f"{field} is not lowercase SHA-256")
+    digest_fields = (
+        "experiment_runner_sha256",
+        "assurance_engine_sha256",
+        "analytic_solver_sha256",
+        "wrapper_conformance_sha256",
+        "attack_statistics_sha256",
+        "trust_core_tree_sha256",
+        "project_manifest_sha256",
+        "experiment_requirements_sha256",
+        "portfolio_statistics_sha256",
+        "finite_channel_analyzer_sha256",
+    )
+    if pending_registration:
+        _require(
+            collector["runner_sha256"] == PENDING_SHA256
+            and all(production[field] == PENDING_SHA256 for field in digest_fields),
+            "pending v3 registration must not contain partially finalized source digests",
+        )
+    else:
+        _require(
+            collector["runner_sha256"] != PENDING_SHA256
+            and all(production[field] != PENDING_SHA256 for field in digest_fields),
+            "finalized v3 registration contains a pending source digest",
+        )
     expected_production_paths = {
         "experiment_runner_path": "scripts/run_model_backed_finite_channel.py",
         "assurance_engine_path": "src/model_release_assurance/engine.py",
@@ -632,13 +698,18 @@ def validate_config(
         for relative, expected in bindings:
             path = root / str(relative)
             _require(path.is_file(), f"registered source missing: {relative}")
-            _require(sha256_file(path) == expected, f"registered source digest changed: {relative}")
+            if not pending_registration:
+                _require(
+                    sha256_file(path) == expected,
+                    f"registered source digest changed: {relative}",
+                )
         trust_core = root / str(production["trust_core_path"])
         _require(trust_core.is_dir(), "registered trust-core tree is missing")
-        _require(
-            sha256_python_tree(trust_core) == production["trust_core_tree_sha256"],
-            "registered Python trust-core tree digest changed",
-        )
+        if not pending_registration:
+            _require(
+                sha256_python_tree(trust_core) == production["trust_core_tree_sha256"],
+                "registered Python trust-core tree digest changed",
+            )
     return dict(config)
 
 
@@ -786,6 +857,44 @@ def sample_state_counts(
     return tuple(sampled)
 
 
+def sample_state_counts_through_wrapper(
+    aggregate_population: Mapping[str, Sequence[int]],
+    *,
+    wrapper_config: Mapping[str, Any],
+    sealed_state: str,
+    trials: int,
+    seed: int,
+    erasure: Fraction,
+) -> tuple[tuple[int, ...], bool]:
+    """Execute one-use wrapper capabilities and cross-replay the old sampler.
+
+    The first tuple is authoritative experiment evidence.  The Boolean checks
+    exact schedule equivalence to the independently retained aggregate sampler;
+    callers must fail closed when it is false.
+    """
+
+    erasure_payload = rational_payload(erasure)
+    wrapped = sample_closed_hidden_record_counts(
+        wrapper_config,
+        aggregate_population=aggregate_population,
+        sealed_state=sealed_state,
+        trials=trials,
+        issuer_seed=seed,
+        state_independent_erasure=erasure_payload,
+    )
+    erased_index = tuple(wrapper_config["observation_ids"]).index(
+        "state_independent_erasure"
+    )
+    reference = sample_state_counts(
+        aggregate_population[sealed_state],
+        trials=trials,
+        seed=seed,
+        erasure=erasure,
+        erased_index=erased_index,
+    )
+    return wrapped, wrapped == reference
+
+
 def _derived_repeat_seed(
     master_seed: int,
     model: str,
@@ -794,7 +903,7 @@ def _derived_repeat_seed(
     state: str,
 ) -> int:
     payload = (
-        f"MRA-MODEL-BACKED-REPEAT-1:{master_seed}:{model}:"
+        f"{REPEAT_SEED_DOMAIN}:{master_seed}:{model}:"
         f"{variant}:{replicate}:{state}"
     )
     return int.from_bytes(hashlib.sha256(payload.encode("utf-8")).digest()[:8], "big")
@@ -1280,26 +1389,6 @@ def _write_contract_scaffold(
     prior_path = directory / "finite-prior.json"
     write_json(prior_path, prior.model_dump(mode="json"))
 
-    mechanism_claims = (
-        f"coupling:{CouplingModel.CONDITIONAL_INDEPENDENCE.value}",
-        f"artifact:{release.artifact_sha256}",
-        f"interface:{interface_sha256}",
-        f"complete-transcript:{release.release_id}",
-    )
-    mechanism = {
-        "schema_version": "1.0",
-        "mechanism_id": config["finite_wrapper"]["wrapper_id"],
-        "variant_id": variant["variant_id"],
-        "complete_recipient_transcript": list(config["finite_wrapper"]["observation_ids"]),
-        "closed_hidden_record_sampler": True,
-        "query_budget": 1,
-        "state_independent_erasure": variant["state_independent_erasure"],
-        "supports": list(mechanism_claims),
-        "experimental_only": True,
-    }
-    mechanism_path = directory / "mechanism-evidence.json"
-    write_json(mechanism_path, mechanism)
-
     shutil.copyfile(config_path, directory / "experiment-config.json")
     plan = MultinomialSamplingPlan(
         plan_id=f"plan-{model['collector_model']}-{variant['variant_id']}",
@@ -1317,7 +1406,8 @@ def _write_contract_scaffold(
         selection_scope=config["sampling"]["family_selection_scope"],
         audit_sample_definition=(
             "independent with-replacement draws from each complete finite target pool, "
-            "using the preregistered per-model, per-variant, per-state seeds "
+            f"in seed domain {config['sampling']['primary_seed_domain']}, using the "
+            "preregistered per-model, per-variant, per-state seeds "
             f"out={model['sample_seeds'][variant['variant_id']]['out']} and "
             f"in={model['sample_seeds'][variant['variant_id']]['in']}"
         ),
@@ -1335,8 +1425,6 @@ def _write_contract_scaffold(
         "binding": binding,
         "prior": prior,
         "prior_path": prior_path,
-        "mechanism_path": mechanism_path,
-        "mechanism_claims": mechanism_claims,
         "plan": plan,
         "plan_path": plan_path,
     })
@@ -1370,28 +1458,39 @@ def _execute_contract_path(
     budget_path = directory / "assurance-error-budget.json"
     write_json(budget_path, budget.model_dump(mode="json"))
     sampling_started = datetime.now(timezone.utc)
-    sampled_rows = {
-        state: sample_state_counts(
-            oracle["state_counts"][state],
-            trials=trials,
-            seed=state_seeds[state],
-            erasure=erasure,
-            erased_index=erased_index,
+    sampled_rows: dict[str, tuple[int, ...]] = {}
+    sampling_equivalence: dict[str, bool] = {}
+    replayed_rows: dict[str, tuple[int, ...]] = {}
+    replay_equivalence: dict[str, bool] = {}
+    for state in ("out", "in"):
+        sampled_rows[state], sampling_equivalence[state] = (
+            sample_state_counts_through_wrapper(
+                oracle["state_counts"],
+                wrapper_config=config["finite_wrapper"],
+                sealed_state=state,
+                trials=trials,
+                seed=state_seeds[state],
+                erasure=erasure,
+            )
         )
-        for state in ("out", "in")
-    }
-    replayed_rows = {
-        state: sample_state_counts(
-            oracle["state_counts"][state],
-            trials=trials,
-            seed=state_seeds[state],
-            erasure=erasure,
-            erased_index=erased_index,
+        replayed_rows[state], replay_equivalence[state] = (
+            sample_state_counts_through_wrapper(
+                oracle["state_counts"],
+                wrapper_config=config["finite_wrapper"],
+                sealed_state=state,
+                trials=trials,
+                seed=state_seeds[state],
+                erasure=erasure,
+            )
         )
-        for state in ("out", "in")
-    }
-    if replayed_rows != sampled_rows:
-        raise ExperimentValidationError("primary state seeds did not replay exact counts")
+    if (
+        replayed_rows != sampled_rows
+        or not all(sampling_equivalence.values())
+        or not all(replay_equivalence.values())
+    ):
+        raise ExperimentValidationError(
+            "executable wrapper sampling did not replay the registered aggregate schedule"
+        )
     sampling_ended = datetime.now(timezone.utc)
     sample_binding = {
         "finite_population_sha256": oracle["finite_population_sha256"],
@@ -1399,9 +1498,112 @@ def _execute_contract_path(
         "state_independent_erasure": variant["state_independent_erasure"],
         "trials_per_state": trials,
         "state_seeds": state_seeds,
+        "primary_seed_domain": config["sampling"]["primary_seed_domain"],
         "sampler": config["sampling"]["model"],
     }
     sample_binding_sha256 = sha256_bytes(canonical_json_bytes(sample_binding))
+    conformance = context.get("wrapper_conformance")
+    if not isinstance(conformance, Mapping) or conformance.get("conformant") is not True:
+        raise ExperimentValidationError(
+            "executable wrapper conformance failed before clearance-eligible input construction"
+        )
+    if (
+        conformance.get("collector_model") != model["collector_model"]
+        or conformance.get("variant_id") != variant["variant_id"]
+        or conformance.get("interface", {}).get("state_independent_erasure")
+        != variant["state_independent_erasure"]
+    ):
+        raise ExperimentValidationError(
+            "wrapper conformance is bound to another model or variant"
+        )
+    sampled_count_payload = {
+        "state_ids": ["out", "in"],
+        "observation_ids": list(observation_ids),
+        "state_counts": {
+            state: list(sampled_rows[state]) for state in ("out", "in")
+        },
+    }
+    wrapper_execution = {
+        "schema_version": "1.0",
+        "experimental_only": True,
+        "collector_model": model["collector_model"],
+        "variant_id": variant["variant_id"],
+        "wrapper_id": config["finite_wrapper"]["wrapper_id"],
+        "wrapper_module": {
+            "path": config["production_path"]["wrapper_conformance_path"],
+            "sha256": config["production_path"]["wrapper_conformance_sha256"],
+        },
+        "wrapper_config_sha256": sha256_bytes(
+            canonical_json_bytes(config["finite_wrapper"])
+        ),
+        "finite_population_sha256": oracle["finite_population_sha256"],
+        "state_independent_erasure": variant["state_independent_erasure"],
+        "trials_per_state": trials,
+        "state_seeds": state_seeds,
+        "primary_seed_domain": config["sampling"]["primary_seed_domain"],
+        "issuer_semantics": (
+            "each observation is produced by a fresh auditor-issued one-use "
+            "ClosedHiddenRecordCategoricalWrapper capability"
+        ),
+        "conformance_result_sha256": sha256_bytes(canonical_json_bytes(conformance)),
+        "conformance": conformance,
+        "sampled_count_sha256": sha256_bytes(
+            canonical_json_bytes(sampled_count_payload)
+        ),
+        "exact_reference_schedule_equivalence": sampling_equivalence,
+        "exact_seed_replay_equivalence": replay_equivalence,
+        "all_equivalence_checks_pass": (
+            sampled_rows == replayed_rows
+            and all(sampling_equivalence.values())
+            and all(replay_equivalence.values())
+        ),
+        "individual_transcripts_retained": False,
+        "limitations": [
+            "Python process and operating-system side channels are not established.",
+            "This evidence does not establish enforcement by a deployed serving endpoint.",
+        ],
+    }
+    if wrapper_execution["all_equivalence_checks_pass"] is not True:
+        raise ExperimentValidationError(
+            "wrapper execution equivalence failed before evidence construction"
+        )
+    wrapper_execution_path = directory / "wrapper-execution-evidence.json"
+    write_json(wrapper_execution_path, wrapper_execution)
+    wrapper_execution_sha256 = sha256_file(wrapper_execution_path)
+    wrapper_execution_claims = (
+        f"wrapper-execution:{wrapper_execution_sha256}",
+        f"wrapper-module:{config['production_path']['wrapper_conformance_sha256']}",
+        f"wrapper-variant:{variant['variant_id']}",
+        f"wrapper-conformance:{wrapper_execution['conformance_result_sha256']}",
+    )
+    mechanism_claims = (
+        f"coupling:{CouplingModel.CONDITIONAL_INDEPENDENCE.value}",
+        f"artifact:{release.artifact_sha256}",
+        f"interface:{sha256_bytes(canonical_json_bytes(release.interface))}",
+        f"complete-transcript:{release.release_id}",
+        *wrapper_execution_claims,
+    )
+    mechanism_path = directory / "mechanism-evidence.json"
+    write_json(mechanism_path, {
+        "schema_version": "1.0",
+        "mechanism_id": config["finite_wrapper"]["wrapper_id"],
+        "variant_id": variant["variant_id"],
+        "complete_recipient_transcript": list(observation_ids),
+        "closed_hidden_record_sampler": True,
+        "query_budget_per_issued_capability": 1,
+        "state_independent_erasure": variant["state_independent_erasure"],
+        "wrapper_execution_evidence_path": wrapper_execution_path.name,
+        "wrapper_execution_evidence_sha256": wrapper_execution_sha256,
+        "supports": list(mechanism_claims),
+        "experimental_only": True,
+    })
+    context.update({
+        "mechanism_path": mechanism_path,
+        "mechanism_claims": mechanism_claims,
+        "wrapper_execution_path": wrapper_execution_path,
+        "wrapper_execution_sha256": wrapper_execution_sha256,
+        "wrapper_execution_claims": wrapper_execution_claims,
+    })
     count_file = MultinomialCountsFile(
         count_file_id=f"counts-{model['collector_model']}-{variant['variant_id']}",
         sampling_plan_id=plan.plan_id,
@@ -1414,7 +1616,8 @@ def _execute_contract_path(
         sampling_ended_at=sampling_ended,
         audit_sample_sha256=sample_binding_sha256,
         sampling_protocol=(
-            "Python random.Random with independent preregistered state seeds; integer-uniform "
+            "Python random.Random with independent preregistered state seeds in "
+            f"domain {config['sampling']['primary_seed_domain']}; integer-uniform "
             "with-replacement finite-population draw followed by exact rational, "
             f"state-independent erasure; out_seed={state_seeds['out']}; "
             f"in_seed={state_seeds['in']}; trials_per_state={trials}"
@@ -1487,12 +1690,23 @@ def _execute_contract_path(
             "state-conditioned sampling is IID with replacement from each frozen finite pool",
             "erasure, if enabled, is independent of the hidden state and underlying bin",
         ),
-        mechanism_evidence=(EvidenceReference(
-            evidence_id=f"mechanism-{model['collector_model']}-{variant['variant_id']}",
-            source_path=context["mechanism_path"].name,
-            source_sha256=sha256_file(context["mechanism_path"]),
-            supports=context["mechanism_claims"],
-        ),),
+        mechanism_evidence=(
+            EvidenceReference(
+                evidence_id=f"mechanism-{model['collector_model']}-{variant['variant_id']}",
+                source_path=context["mechanism_path"].name,
+                source_sha256=sha256_file(context["mechanism_path"]),
+                supports=context["mechanism_claims"],
+            ),
+            EvidenceReference(
+                evidence_id=(
+                    f"wrapper-execution-{model['collector_model']}-"
+                    f"{variant['variant_id']}"
+                ),
+                source_path=context["wrapper_execution_path"].name,
+                source_sha256=context["wrapper_execution_sha256"],
+                supports=context["wrapper_execution_claims"],
+            ),
+        ),
     )
     problem = compile_multinomial_portfolio_problem(
         evidence,
@@ -1608,6 +1822,16 @@ def _execute_contract_path(
         "sample_seeds": model["sample_seeds"][variant["variant_id"]],
         "sample_binding_sha256": sample_binding_sha256,
         "sampling_seed_replayed": replayed_rows == sampled_rows,
+        "wrapper_sampling_equivalence": {
+            "reference_schedule": sampling_equivalence,
+            "seed_replay": replay_equivalence,
+            "all_passed": wrapper_execution["all_equivalence_checks_pass"],
+        },
+        "wrapper_execution_evidence": {
+            "path": wrapper_execution_path.name,
+            "sha256": wrapper_execution_sha256,
+            "engine_source_bound": True,
+        },
         "trials_per_state": trials,
         "finite_population_sha256": oracle["finite_population_sha256"],
         "oracle_exact_bayes_risk": rational_payload(true_risk),
@@ -1634,7 +1858,7 @@ def _run_negative_controls(
     context: Mapping[str, Any],
     service: LocalAnalyzerService,
 ) -> list[dict[str, Any]]:
-    """Execute the four preregistered fail-closed controls on one replay."""
+    """Execute the five preregistered fail-closed controls on one replay."""
 
     directory: Path = context["directory"]
     value: FiniteChannelCeilingInput = context["submission"]
@@ -1793,6 +2017,37 @@ def _run_negative_controls(
                 ),
                 "observed_failure_type": failure_type,
             })
+
+    wrapper_failures: dict[str, str | None] = {}
+    for mode in ("tampered", "missing"):
+        with tempfile.TemporaryDirectory(
+            prefix="mra-wrapper-evidence-negative-control-"
+        ) as temporary:
+            copied = Path(temporary) / "replay"
+            shutil.copytree(directory, copied)
+            wrapper_path = copied / context["wrapper_execution_path"].name
+            if mode == "tampered":
+                wrapper_path.write_bytes(wrapper_path.read_bytes() + b" ")
+            else:
+                wrapper_path.rename(copied / "wrapper-execution-evidence.removed")
+            try:
+                AssuranceEngine._verify_finite_channel_sources(value, copied)
+            except (OSError, ValueError, IntegrityError) as exc:
+                wrapper_failures[mode] = type(exc).__name__
+            else:
+                wrapper_failures[mode] = None
+    controls.append({
+        "control_id": (
+            "tampered_or_missing_wrapper_execution_evidence_must_fail_source_replay"
+        ),
+        "executed": True,
+        "passed": all(wrapper_failures.values()),
+        "mechanism": (
+            "independently tamper and remove the Engine-bound wrapper execution "
+            "artifact and require source replay rejection in both cases"
+        ),
+        "observed_failure_types": wrapper_failures,
+    })
     return controls
 
 
@@ -1849,10 +2104,11 @@ def _run_repeated_validation(
         "state_independent_erasure"
     )
     meta_family_alpha = rational(repeated["meta_family_alpha"])
-    # The registered meta family contains both a lower CLEAR-rate bound and an
-    # upper undercoverage-rate bound for each of the six model/variant families.
-    # Spend the single family alpha across all twelve one-sided endpoints.
-    simultaneous_bound_count = 2 * len(contexts)
+    # Allocate before oracle outcomes are known: every family receives an upper
+    # undercoverage bound, an upper wrong-direction bound, and a lower
+    # direction-correct decision bound. Margin eligibility is evaluated only
+    # after all eighteen endpoints have already entered the family.
+    simultaneous_bound_count = 3 * len(contexts)
     simultaneous_meta_confidence = bonferroni_per_bound_confidence(
         1.0 - float(meta_family_alpha),
         simultaneous_bound_count,
@@ -1881,16 +2137,23 @@ def _run_repeated_validation(
                 )
                 for state in ("out", "in")
             }
-            counts = {
-                state: sample_state_counts(
-                    oracle["state_counts"][state],
-                    trials=trials,
-                    seed=seeds[state],
-                    erasure=erasure,
-                    erased_index=erased_index,
+            counts: dict[str, tuple[int, ...]] = {}
+            equivalence: dict[str, bool] = {}
+            for state in ("out", "in"):
+                counts[state], equivalence[state] = (
+                    sample_state_counts_through_wrapper(
+                        oracle["state_counts"],
+                        wrapper_config=config["finite_wrapper"],
+                        sealed_state=state,
+                        trials=trials,
+                        seed=seeds[state],
+                        erasure=erasure,
+                    )
                 )
-                for state in ("out", "in")
-            }
+            if not all(equivalence.values()):
+                raise ExperimentValidationError(
+                    "repeated executable-wrapper sample diverged from reference schedule"
+                )
             row = _repeat_analyzer_replay(
                 context,
                 counts=counts,
@@ -1901,6 +2164,22 @@ def _run_repeated_validation(
                 tolerance=tolerance,
             )
             row["derived_state_seeds"] = seeds
+            row["wrapper_sampling_equivalence"] = equivalence
+            if true_risk < tolerance:
+                expected_direction = "CLEAR"
+                wrong_direction = row["decision"] == "BLOCK"
+            elif true_risk > tolerance:
+                expected_direction = "BLOCK"
+                wrong_direction = row["decision"] == "CLEAR"
+            else:
+                expected_direction = None
+                wrong_direction = False
+            row["expected_direction"] = expected_direction
+            row["correct_direction_decision"] = (
+                expected_direction is not None
+                and row["decision"] == expected_direction
+            )
+            row["wrong_direction_decision"] = wrong_direction
             records.append(row)
 
         repeated_path = context["directory"] / "repeated-analyzer-replays.json"
@@ -1918,6 +2197,14 @@ def _run_repeated_validation(
         })
         undercoverage = sum(not value["covers_oracle"] for value in records)
         clear_count = sum(value["decision"] == "CLEAR" for value in records)
+        hold_count = sum(value["decision"] == "HOLD" for value in records)
+        block_count = sum(value["decision"] == "BLOCK" for value in records)
+        wrong_direction_count = sum(
+            value["wrong_direction_decision"] for value in records
+        )
+        correct_direction_count = sum(
+            value["correct_direction_decision"] for value in records
+        )
         widths = [float(value["interval_width"]) for value in records]
         excesses = [float(value["ceiling_excess_over_oracle"]) for value in records]
         ceilings = [float(value["ceiling"]) for value in records]
@@ -1926,11 +2213,21 @@ def _run_repeated_validation(
             replicates,
             simultaneous_meta_confidence,
         )
-        clear_rate_lower = clopper_pearson_lower(
-            clear_count,
+        wrong_direction_upper = clopper_pearson_upper(
+            wrong_direction_count,
             replicates,
             simultaneous_meta_confidence,
         )
+        correct_direction_lower = clopper_pearson_lower(
+            correct_direction_count,
+            replicates,
+            simultaneous_meta_confidence,
+        )
+        absolute_margin = abs(true_risk - tolerance)
+        margin_threshold = rational(
+            repeated["minimum_absolute_margin_for_resolution"]
+        )
+        margin_eligible = absolute_margin >= margin_threshold
         summaries.append({
             "collector_model": model["collector_model"],
             "model_family": model["model_family"],
@@ -1944,12 +2241,31 @@ def _run_repeated_validation(
             "simultaneous_meta_confidence": simultaneous_meta_confidence,
             "meta_simultaneous_bound_count": simultaneous_bound_count,
             "meta_multiplicity_method": (
-                "bonferroni_across_twelve_one_sided_bounds:"
-                "six_clear_rate_lowers_and_six_undercoverage_uppers"
+                "bonferroni_across_eighteen_one_sided_bounds:"
+                "six_undercoverage_uppers_six_wrong_direction_uppers_"
+                "six_correct_decision_lowers"
             ),
+            "expected_direction": (
+                "CLEAR" if true_risk < tolerance
+                else "BLOCK" if true_risk > tolerance
+                else "AT_BOUNDARY"
+            ),
+            "absolute_margin_from_tolerance": rational_payload(absolute_margin),
+            "absolute_margin_from_tolerance_decimal": float(absolute_margin),
+            "margin_eligible_for_resolution_claim": margin_eligible,
+            "decision_counts": {
+                "CLEAR": clear_count,
+                "HOLD": hold_count,
+                "BLOCK": block_count,
+            },
             "clear_count": clear_count,
             "clear_rate": clear_count / replicates,
-            "simultaneous_clopper_pearson_clear_rate_lower": clear_rate_lower,
+            "wrong_direction_count": wrong_direction_count,
+            "wrong_direction_rate": wrong_direction_count / replicates,
+            "simultaneous_clopper_pearson_wrong_direction_upper": wrong_direction_upper,
+            "correct_direction_count": correct_direction_count,
+            "correct_direction_rate": correct_direction_count / replicates,
+            "simultaneous_clopper_pearson_correct_direction_lower": correct_direction_lower,
             "mean_ceiling": statistics.fmean(ceilings),
             "p95_ceiling": _percentile(ceilings, 0.95),
             "mean_interval_width": statistics.fmean(widths),
@@ -1960,6 +2276,10 @@ def _run_repeated_validation(
             "maximum_ceiling_excess_over_oracle": max(excesses),
             "every_production_analyzer_replay_completed": all(
                 value["production_analyzer_replayed"] for value in records
+            ),
+            "every_wrapper_sampling_equivalence_check_passed": all(
+                all(value["wrapper_sampling_equivalence"].values())
+                for value in records
             ),
             "retained_rows_path": repeated_path.name,
             "retained_rows_sha256": sha256_file(repeated_path),
@@ -2030,6 +2350,10 @@ def run_experiment(
         for model in config["models"]
         for variant in config["finite_wrapper"]["variants"]
     ]
+    conformance_by_key = {
+        (value["collector_model"], value["variant_id"]): value
+        for value in wrapper_conformance
+    }
     write_json(output_dir / "wrapper-conformance.json", {
         "schema_version": "1.0",
         "experimental_only": True,
@@ -2051,6 +2375,9 @@ def run_experiment(
                 "model": model,
                 "variant": variant,
                 "oracle": oracles[model["collector_model"]],
+                "wrapper_conformance": conformance_by_key[
+                    (model["collector_model"], variant["variant_id"])
+                ],
                 "directory": output_dir / name,
                 "release_id": f"model-backed-{model['collector_model']}-{variant['variant_id']}",
             }
@@ -2113,6 +2440,7 @@ def run_experiment(
     )
     repeated_analyzer_replays_complete = all(
         value["every_production_analyzer_replay_completed"]
+        and value["every_wrapper_sampling_equivalence_check_passed"]
         for value in repeated_summaries
     )
     all_replays_complete = (
@@ -2138,6 +2466,9 @@ def run_experiment(
         erased = result_by_key[(model, "erasure_0p9")]
         raw_risk = rational(raw["oracle_exact_bayes_risk"])
         erased_risk = rational(erased["oracle_exact_bayes_risk"])
+        expected_erased_risk = Fraction(1, 2) + (
+            raw_risk - Fraction(1, 2)
+        ) / 10
         raw_ceiling = rational(raw["production_interval"]["exact_ceiling"])
         erased_ceiling = rational(erased["production_interval"]["exact_ceiling"])
         erasure_comparisons.append({
@@ -2145,25 +2476,18 @@ def run_experiment(
             "raw_oracle_risk": raw["oracle_exact_bayes_risk"],
             "erased_oracle_risk": erased["oracle_exact_bayes_risk"],
             "oracle_risk_nonincreasing": erased_risk <= raw_risk,
+            "expected_erased_oracle_risk": rational_payload(expected_erased_risk),
+            "exact_erasure_contraction_identity": (
+                erased_risk == expected_erased_risk
+            ),
             "raw_production_ceiling": raw["production_interval"]["exact_ceiling"],
             "erased_production_ceiling": erased["production_interval"]["exact_ceiling"],
             "observed_production_ceiling_nonincreasing": erased_ceiling <= raw_ceiling,
             "production_ceiling_comparison_role": "descriptive_only_not_an_acceptance_criterion",
         })
-    erasure_never_increases_oracle = all(
-        value["oracle_risk_nonincreasing"] for value in erasure_comparisons
-    )
-    all_one_shot_clear = len(results) == 6 and all(
-        value["experimental_engine_verdict"] == Verdict.CLEAR.value
-        for value in results
-    )
-    minimum_clear_rate_lower = float(
-        config["repeated_validation"]["minimum_simultaneous_clear_rate_lower"]
-    )
-    repeated_clear_rate_lowers_pass = len(repeated_summaries) == 6 and all(
-        value["simultaneous_clopper_pearson_clear_rate_lower"]
-        >= minimum_clear_rate_lower
-        for value in repeated_summaries
+    exact_erasure_contraction = all(
+        value["exact_erasure_contraction_identity"]
+        for value in erasure_comparisons
     )
     maximum_undercoverage = float(
         config["repeated_validation"]["maximum_simultaneous_undercoverage_upper"]
@@ -2173,19 +2497,62 @@ def run_experiment(
         <= maximum_undercoverage
         for value in repeated_summaries
     )
-    all_wrapper_conformance_pass = len(wrapper_conformance) == 6 and all(
-        value["conformant"] for value in wrapper_conformance
+    maximum_wrong_direction = float(
+        config["repeated_validation"][
+            "maximum_simultaneous_wrong_direction_upper"
+        ]
+    )
+    repeated_wrong_direction_pass = len(repeated_summaries) == 6 and all(
+        value["simultaneous_clopper_pearson_wrong_direction_upper"]
+        <= maximum_wrong_direction
+        for value in repeated_summaries
+    )
+    minimum_correct_decision = float(
+        config["repeated_validation"][
+            "minimum_simultaneous_correct_decision_lower"
+        ]
+    )
+    margin_eligible = [
+        value for value in repeated_summaries
+        if value["margin_eligible_for_resolution_claim"]
+    ]
+    eligible_correct_decisions_pass = bool(margin_eligible) and all(
+        value["simultaneous_clopper_pearson_correct_direction_lower"]
+        >= minimum_correct_decision
+        for value in margin_eligible
+    )
+    resolved_margin_families = [
+        value for value in margin_eligible
+        if value["simultaneous_clopper_pearson_correct_direction_lower"]
+        >= minimum_correct_decision
+    ]
+    minimum_resolved = int(
+        config["repeated_validation"]["minimum_margin_eligible_families"]
+    )
+    enough_margin_families_resolve = len(resolved_margin_families) >= minimum_resolved
+    all_wrapper_conformance_pass = (
+        len(wrapper_conformance) == 6
+        and all(value["conformant"] for value in wrapper_conformance)
+        and all(
+            value["wrapper_sampling_equivalence"]["all_passed"]
+            for value in results
+        )
+        and all(
+            value["every_wrapper_sampling_equivalence_check_passed"]
+            for value in repeated_summaries
+        )
     )
     acceptance = {
         "all_six_oracle_risks_covered": all_oracles_covered and len(results) == 6,
-        "all_source_and_engine_replays_complete": all_replays_complete,
-        "all_four_negative_controls_pass": all_negative_controls_pass,
+        "all_source_engine_and_repeat_replays_complete": all_replays_complete,
+        "all_five_negative_controls_pass": all_negative_controls_pass,
         "no_raw_scores_retained": no_raw_scores_retained,
-        "erasure_never_increases_exact_oracle_risk": erasure_never_increases_oracle,
-        "all_six_one_shot_engine_decisions_clear": all_one_shot_clear,
-        "all_six_simultaneous_clear_rate_lowers_meet_minimum": repeated_clear_rate_lowers_pass,
+        "exact_erasure_contraction_identity_holds": exact_erasure_contraction,
         "all_six_simultaneous_undercoverage_bounds_meet_maximum": repeated_undercoverage_pass,
-        "all_executable_wrapper_conformance_checks_pass": all_wrapper_conformance_pass,
+        "all_six_simultaneous_wrong_direction_bounds_meet_maximum": repeated_wrong_direction_pass,
+        "all_margin_eligible_correct_decision_lowers_meet_minimum": eligible_correct_decisions_pass,
+        "at_least_three_margin_eligible_families_resolve": enough_margin_families_resolve,
+        "all_executable_wrapper_conformance_and_sampling_equivalence_checks_pass": all_wrapper_conformance_pass,
     }
     acceptance_passed = tuple(acceptance) == EXPECTED_ACCEPTANCE_CRITERIA and all(
         acceptance.values()
@@ -2231,6 +2598,7 @@ def run_experiment(
         "results": results,
         "repeated_validation": {
             "replicates_per_model_variant": config["repeated_validation"]["replicates_per_model_variant"],
+            "meta_simultaneous_bound_count": 18,
             "full_source_and_engine_replay_scope": (
                 "one independent primary draw per model/variant family (6 total)"
             ),
@@ -2238,6 +2606,28 @@ def run_experiment(
                 "200 independent repeats per model/variant family (1,200 total)"
             ),
             "summaries": repeated_summaries,
+        },
+        "decision_evaluation": {
+            "wrong_direction_definition": {
+                "oracle_below_tolerance": "BLOCK",
+                "oracle_above_tolerance": "CLEAR",
+                "oracle_equal_tolerance": "none; any result is non-directional",
+                "hold": "never a wrong-direction decision",
+            },
+            "margin_threshold": config["repeated_validation"][
+                "minimum_absolute_margin_for_resolution"
+            ],
+            "margin_eligible_family_count": len(margin_eligible),
+            "resolved_margin_family_count": len(resolved_margin_families),
+            "minimum_required_resolved_families": minimum_resolved,
+            "eligible_families": [
+                f"{value['collector_model']}/{value['variant_id']}"
+                for value in margin_eligible
+            ],
+            "resolved_families": [
+                f"{value['collector_model']}/{value['variant_id']}"
+                for value in resolved_margin_families
+            ],
         },
         "wrapper_conformance": {
             "all_conformant": all_wrapper_conformance_pass,
@@ -2252,7 +2642,7 @@ def run_experiment(
         },
         "checks": {
             "all_oracles_covered": all_oracles_covered,
-            "all_source_and_engine_replays_complete": all_replays_complete,
+            "all_source_engine_and_repeat_replays_complete": all_replays_complete,
             "full_source_and_engine_replays": {
                 "completed": sum(
                     value["engine_chain_completed"] and value["sampling_seed_replayed"]
