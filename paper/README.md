@@ -7,25 +7,38 @@ experiments into completed results.
 
 ## Start here
 
-1. Choose the paper's narrow thesis in the [paper outline](paper-outline.md).
+1. Read and edit the current [MLSys manuscript draft](mlsys-draft.md).
 2. Check every proposed statement against the
    [claims-to-evidence matrix](claims-to-evidence.md).
 3. Use the [artifact index](artifact-index.md) as the only starting point for
    numbers, code, contracts, and reproduction entry points.
-4. Before writing any result in past tense, complete the
-   [experiment and reproducibility checklist](experiments-and-reproducibility.md).
+4. Before writing any result in past tense—or starting a remaining ablation—use
+   the [experiment and reproducibility checklist](experiments-and-reproducibility.md).
+5. Use the [government health-agency XGBoost release playbook for restricted
+   healthcare data](xgboost-end-to-end-test-report.md) for a worked ceiling
+   case plus the explicit contract → execution-pipeline → durable-workflow
+   spine, including programme-owner, domain-authority, and governance steps
+   from training through release, hold, rejection, activation, monitoring, or
+   revocation.
 
 The strongest supportable systems framing today is:
 
 > Model Release Assurance is an offline, fail-closed reference system that
-> represents a proposed release, its evidence, and its selection constraints as
-> versioned contracts; keeps empirical attack floors separate from clearing
-> ceilings; and makes ceiling soundness and decision usefulness separately
-> auditable. Controlled exact-ground-truth evidence supports the finite-channel
-> path; a preserved negative predecessor and a prospectively frozen corrective
-> replication show how decision criteria can distinguish a wrong direction from
-> a conservative hold near policy tolerance. Production authorization and
-> serving controls remain external.
+> is answer-complete relative to a closed assessment contract for a release:
+> its report induces a release recommendation plus a scoped risk-ledger view
+> with one disposition for every request-declared check, permits clearance only
+> when each mandatory obligation is discharged by eligible complete-interface
+> evidence, and keeps every detected missing or unresolved mandatory obligation
+> non-clearing. With validation and auxiliary gates fixed, additional records
+> with neither direct nor indirect clearance authority cannot promote a
+> non-clearing result. Producers that can emit or unlock clearing evidence
+> require role-specific policy acceptance and soundness validation. This is not
+> universal completeness: an
+> authority must justify that the declared obligation and interface inventories
+> match the real system. Controlled exact-ground-truth evidence supports the
+> finite-channel path; a preserved negative predecessor and a locally frozen
+> corrective study test wrong-direction decisions and conservative holds.
+> Production authorization and serving controls remain external.
 
 That is a candidate framing, not a final title or an assertion that the system
 is production-ready. The root [README](../README.md),
@@ -123,14 +136,18 @@ roadmap](../docs/reference/production-roadmap.md), and completed hook audit's
 - Mathematics: [mathematical foundations](../docs/mathematical-foundations.md)
   and [formal verification](../docs/formal-verification.md).
 - Empirical evidence: [ceiling experiment results](ceiling-experiment-results.md),
+  [government health-agency XGBoost release playbook for restricted healthcare
+  data](xgboost-end-to-end-test-report.md),
   [machine-readable ceiling summary](../reproduction/ceiling-experiment-summary.json),
   [real-data execution audit](../docs/real-data-training-hook-audit-2026-09-02.md),
   and the [reproduction maturity index](../reproduction/README.md).
-- Related work: [privacy assurance review](../docs/literature-review.md) and
+- Related work: [systems and privacy assurance review](../docs/literature-review.md) and
   [game-theory review](../docs/game-theory-literature-review.md). These are
   targeted narrative reviews, not systematic reviews.
 - Test boundary: [test-suite guide](../tests/README.md).
 
 No LaTeX toolchain is required for this workspace. Draft in Markdown first;
 choose a venue template only after the story, claims, and retained artifacts
-are frozen.
+are frozen. The submission pass must replace local drafting links with an
+anonymous artifact URL and export the primary-source links to the venue's
+bibliography format.

@@ -25,7 +25,7 @@ from sklearn.preprocessing import LabelEncoder
 
 
 ROOT = Path(__file__).resolve().parents[1]
-IMPLEMENTATION_VERSION = 3
+IMPLEMENTATION_VERSION = 4
 SPLIT_NAMES = (
     "target_train",
     "reference_train",
@@ -462,6 +462,98 @@ def artifact_record(path: Path, run_dir: Path) -> dict[str, str]:
     }
 
 
+class AggregateTrainingTelemetry(xgboost.callback.TrainingCallback):
+    """Retain aggregate boosting telemetry without retaining per-row or per-round data."""
+
+    def __init__(self, model_role: str) -> None:
+        self.model_role = model_role
+        self.begin_hook_calls = 0
+        self.end_hook_calls = 0
+        self.iteration_count = 0
+        self._metrics: dict[str, dict[str, float | int | None]] = {}
+
+    def before_training(self, model: Any) -> Any:
+        self.begin_hook_calls += 1
+        return model
+
+    def after_iteration(
+        self,
+        model: Any,
+        epoch: int,
+        evals_log: dict[str, dict[str, list[Any]]],
+    ) -> bool:
+        del model, epoch
+        self.iteration_count += 1
+        for dataset_name, dataset_metrics in evals_log.items():
+            for metric_name, observations in dataset_metrics.items():
+                if not observations:
+                    continue
+                latest = observations[-1]
+                if isinstance(latest, tuple):
+                    latest = latest[0]
+                value = float(latest)
+                key = f"{dataset_name}.{metric_name}"
+                aggregate = self._metrics.setdefault(
+                    key,
+                    {
+                        "count": 0,
+                        "finite_count": 0,
+                        "nonfinite": 0,
+                        "first": None,
+                        "last": None,
+                        "min": None,
+                        "max": None,
+                        "sum": 0.0,
+                    },
+                )
+                aggregate["count"] = int(aggregate["count"]) + 1
+                json_value = value if math.isfinite(value) else None
+                if int(aggregate["count"]) == 1:
+                    aggregate["first"] = json_value
+                aggregate["last"] = json_value
+                if json_value is None:
+                    aggregate["nonfinite"] = int(aggregate["nonfinite"]) + 1
+                    continue
+                aggregate["finite_count"] = int(aggregate["finite_count"]) + 1
+                aggregate["sum"] = float(aggregate["sum"]) + json_value
+                prior_minimum = aggregate["min"]
+                prior_maximum = aggregate["max"]
+                aggregate["min"] = (
+                    json_value if prior_minimum is None else min(float(prior_minimum), json_value)
+                )
+                aggregate["max"] = (
+                    json_value if prior_maximum is None else max(float(prior_maximum), json_value)
+                )
+        return False
+
+    def after_training(self, model: Any) -> Any:
+        self.end_hook_calls += 1
+        return model
+
+    def summary(self) -> dict[str, Any]:
+        metrics: dict[str, dict[str, float | int | None]] = {}
+        for name, aggregate in sorted(self._metrics.items()):
+            finite_count = int(aggregate["finite_count"])
+            metrics[name] = {
+                "count": int(aggregate["count"]),
+                "first": aggregate["first"],
+                "last": aggregate["last"],
+                "min": aggregate["min"],
+                "max": aggregate["max"],
+                "mean": (
+                    float(aggregate["sum"]) / finite_count if finite_count else None
+                ),
+                "nonfinite": int(aggregate["nonfinite"]),
+            }
+        return {
+            "model_role": self.model_role,
+            "begin_hook_calls": self.begin_hook_calls,
+            "end_hook_calls": self.end_hook_calls,
+            "iteration_count": self.iteration_count,
+            "metrics": metrics,
+        }
+
+
 def _score_quantiles(values: np.ndarray) -> dict[str, float]:
     probabilities = (0.0, 0.01, 0.05, 0.25, 0.5, 0.75, 0.95, 0.99, 1.0)
     quantiles = np.quantile(np.asarray(values, dtype=float), probabilities)
@@ -704,6 +796,7 @@ def _cached_manifest(
             "target_model_parameters",
             "reference_model_parameters",
             "preprocessing_fit",
+            "training_telemetry",
             "utility",
             "target_structural",
             "reference_structural",
@@ -712,6 +805,11 @@ def _cached_manifest(
             "release_binding",
         )
         if any(manifest.get(field) != retained_evidence.get(field) for field in protected_fields):
+            return None
+        telemetry_record = artifacts["training_telemetry"]
+        telemetry_path = (run_dir / telemetry_record["path"]).resolve()
+        retained_telemetry = json.loads(telemetry_path.read_text(encoding="utf-8"))
+        if manifest.get("training_telemetry") != retained_telemetry:
             return None
         score_record = artifacts["raw_scores"]
         score_path = (run_dir / score_record["path"]).resolve()
@@ -797,11 +895,31 @@ def run_one(
     parameters = xgboost_parameters(config["model"], len(label_encoder.classes_), seed)
     reference_parameters = {**parameters, "random_state": seed + 10_000}
     learner = _xgb_classifier()
-    target_model = learner(**parameters).fit(X_target, target[target_indices])
-    reference_model = learner(**reference_parameters).fit(
+    target_hook = AggregateTrainingTelemetry("target")
+    reference_hook = AggregateTrainingTelemetry("reference")
+    target_model = learner(**parameters, callbacks=[target_hook]).fit(
+        X_target,
+        target[target_indices],
+        eval_set=[(X_target, target[target_indices])],
+        verbose=False,
+    )
+    reference_model = learner(**reference_parameters, callbacks=[reference_hook]).fit(
         X_reference,
         target[reference_indices],
+        eval_set=[(X_reference, target[reference_indices])],
+        verbose=False,
     )
+    training_telemetry = {
+        "schema_version": "mra-xgboost-training-telemetry-1.0",
+        "evidence_class": "diagnostic",
+        "can_clear": False,
+        "contains_row_level_data": False,
+        "retention": "aggregate_only_no_per_round_history",
+        "models": {
+            "target": target_hook.summary(),
+            "reference": reference_hook.summary(),
+        },
+    }
 
     target_histogram, target_structural = signature_histogram(target_model.apply(X_target))
     reference_histogram, reference_structural = signature_histogram(
@@ -885,6 +1003,8 @@ def run_one(
     reference_histogram_path = run_dir / "reference-leaf-signature-histogram.json.gz"
     write_json_gz(target_histogram_path, target_histogram)
     write_json_gz(reference_histogram_path, reference_histogram)
+    training_telemetry_path = run_dir / "training-telemetry.json"
+    write_json(training_telemetry_path, training_telemetry)
 
     target_model_record = artifact_record(target_model_path, run_dir)
     target_preprocessing_record = artifact_record(target_preprocessing_path, run_dir)
@@ -953,6 +1073,7 @@ def run_one(
         "target_model_parameters": parameters,
         "reference_model_parameters": reference_parameters,
         "preprocessing_fit": "independently fitted on each model's own training split",
+        "training_telemetry": training_telemetry,
     }
     audit_evidence = {
         **provenance_evidence,
@@ -977,6 +1098,7 @@ def run_one(
         "splits": artifact_record(split_path, run_dir),
         "target_histogram": artifact_record(target_histogram_path, run_dir),
         "reference_histogram": artifact_record(reference_histogram_path, run_dir),
+        "training_telemetry": artifact_record(training_telemetry_path, run_dir),
         "audit_evidence": artifact_record(audit_evidence_path, run_dir),
     }
     manifest = {

@@ -1,28 +1,163 @@
-# Literature review: privacy assurance for model releases
+# Literature review: systems and privacy assurance for model releases
 
-**Evidence cutoff:** 2026-08-22
+**Evidence cutoff:** 2026-09-04
 **Review type:** targeted narrative review of primary peer-reviewed work and selected authoritative standards
 
 ## Executive synthesis
 
 The literature supports MRA's core fail-closed direction, but it also narrows what the current evidence can legitimately claim.
 
-1. **Empirical attacks are lower-bound evidence.** A successful membership, extraction, reconstruction, or canary attack establishes leakage under the tested decision game. An unsuccessful attack shows only that this attack failed under this interface, population, side information, and budget. It is not an upper bound on privacy. This distinction follows both the attack literature and the game-based systematization of privacy risks by [Salem et al. (IEEE S&P 2023)](https://www.microsoft.com/en-us/research/publication/sok-let-the-privacy-games-begin-a-unified-treatment-of-data-inference-privacy-in-machine-learning/).
-2. **Operational metrics matter more than average accuracy.** Membership inference should be evaluated at preregistered low false-positive rates, with enough nonmembers to estimate the tail, realistic membership priors, simultaneous uncertainty, and record-level or subgroup heterogeneity. AUROC or balanced accuracy alone can hide the relevant risk ([Jayaraman et al., PoPETs 2021](https://petsymposium.org/popets/2021/popets-2021-0031.php); [Song and Mittal, USENIX Security 2021](https://www.usenix.org/conference/usenixsecurity21/presentation/song); [Carlini et al., IEEE S&P 2022](https://doi.org/10.1109/SP46214.2022.9833649)).
-3. **Formal differential privacy and empirical auditing have different roles.** A correctly scoped and implemented DP mechanism can provide an upper bound; canary or adversarial audits provide implementation-sensitive lower bounds and can expose bugs. Neither substitutes for the other ([Nasr et al., USENIX Security 2023](https://www.usenix.org/conference/usenixsecurity23/presentation/nasr); [Steinke et al., NeurIPS 2023](https://proceedings.neurips.cc/paper_files/paper/2023/hash/9a6f6e0d6781d1cb8689192408946d73-Abstract-Conference.html)).
-4. **Evidence specific to modern released XGBoost ensembles is limited.** Peer-reviewed work establishes membership leakage for general and tree models, and extraction risk for decision-tree APIs, but the evidence base is much deeper for neural networks than for current GBDT artifacts. The local worker is therefore best described as a reference-loss membership **screen**, not a complete XGBoost privacy audit or a LiRA implementation.
-5. **Canary studies answer different questions depending on their design.** Rank/exposure canaries, randomized IN/OUT DP-audit canaries, and naturalistic extraction probes are not interchangeable. Each needs its own preregistered evidence contract: exposure canaries require a randomness space, format, tokenizer, insertion ledger, and scoring interface; randomized IN/OUT audits require committed inclusion randomization and a scoring rule; naturalistic probes require a bound recipient interface, success rule, and query budget.
-6. **LLM membership evidence is highly design-sensitive.** Verbatim extraction is real, but pretraining-membership benchmarks can be confounded by temporal or distribution shift and fuzzy membership labels. Matched controls and near-duplicate analysis are mandatory; null attack results remain inconclusive ([Duan et al., COLM 2024](https://openreview.net/forum?id=av0D19pSkU)).
-7. **A watermark hit is not proof of authorship.** It means only that the registered detector rejected its declared null for that text under the specified key, tokenizer, canonicalization, null population, and calibrated threshold. It does not authenticate the generation channel. Repeated contexts can invalidate nominal null assumptions; span searches and multiple keys introduce multiplicity; adaptive attackers can learn, remove, or spoof studied schemes ([Fernandez et al., IEEE WIFS 2023](https://doi.org/10.1109/WIFS58808.2023.10374576); [Jovanović et al., ICML 2024](https://proceedings.mlr.press/v235/jovanovic24a.html)).
-8. **Interactive services must be assessed as complete protocols.** Model version, tokenizer, system prompt, decoding, RAG, tools, memory, filtering, rate limits, concurrency, retention, updates, and the lifetime transcript all alter the observable channel. A one-shot base-model study cannot authorize a chat service.
+1. **Reliable ML release gates already exist.** ease.ml/ci gives declarative,
+   reliability-constrained pass/fail model tests, and production systems provide
+   validation, lineage, and canary stages. MRA's defensible novelty is not “the
+   first ML gate”; it is the joint treatment of mandatory-obligation closure,
+   exact release context, evidence direction, direct and indirect extension
+   authority, and non-clearance.
+2. **Assurance structure is broader than the MRA kernel.** AMLAS, model cards,
+   datasheets, FactSheets, internal audits, and the NIST AI RMF help people
+   identify hazards, assign responsibility, and construct an assurance case.
+   MRA cannot replace this semantic and institutional work; it can only replay
+   the closed fragment supplied to it.
+3. **Empirical attacks are lower-bound evidence.** A successful membership, extraction, reconstruction, or canary attack establishes leakage under the tested decision game. An unsuccessful attack shows only that this attack failed under this interface, population, side information, and budget. It is not an upper bound on privacy. This distinction follows both the attack literature and the game-based systematization of privacy risks by [Salem et al. (IEEE S&P 2023)](https://www.microsoft.com/en-us/research/publication/sok-let-the-privacy-games-begin-a-unified-treatment-of-data-inference-privacy-in-machine-learning/).
+4. **Operational metrics matter more than average accuracy.** Membership inference should be evaluated at preregistered low false-positive rates, with enough nonmembers to estimate the tail, realistic membership priors, simultaneous uncertainty, and record-level or subgroup heterogeneity. AUROC or balanced accuracy alone can hide the relevant risk ([Jayaraman et al., PoPETs 2021](https://petsymposium.org/popets/2021/popets-2021-0031.php); [Song and Mittal, USENIX Security 2021](https://www.usenix.org/conference/usenixsecurity21/presentation/song); [Carlini et al., IEEE S&P 2022](https://doi.org/10.1109/SP46214.2022.9833649)).
+5. **Formal differential privacy and empirical auditing have different roles.** A correctly scoped and implemented DP mechanism can provide an upper bound; canary or adversarial audits provide implementation-sensitive lower bounds and can expose bugs. Neither substitutes for the other ([Nasr et al., USENIX Security 2023](https://www.usenix.org/conference/usenixsecurity23/presentation/nasr); [Steinke et al., NeurIPS 2023](https://proceedings.neurips.cc/paper_files/paper/2023/hash/9a6f6e0d6781d1cb8689192408946d73-Abstract-Conference.html)).
+6. **Evidence specific to modern released XGBoost ensembles is limited.** Peer-reviewed work establishes membership leakage for general and tree models, and extraction risk for decision-tree APIs, but the evidence base is much deeper for neural networks than for current GBDT artifacts. The local worker is therefore best described as a reference-loss membership **screen**, not a complete XGBoost privacy audit or a LiRA implementation.
+7. **Canary studies answer different questions depending on their design.** Rank/exposure canaries, randomized IN/OUT DP-audit canaries, and naturalistic extraction probes are not interchangeable. Each needs its own preregistered evidence contract: exposure canaries require a randomness space, format, tokenizer, insertion ledger, and scoring interface; randomized IN/OUT audits require committed inclusion randomization and a scoring rule; naturalistic probes require a bound recipient interface, success rule, and query budget.
+8. **LLM membership evidence is highly design-sensitive.** Verbatim extraction is real, but pretraining-membership benchmarks can be confounded by temporal or distribution shift and fuzzy membership labels. Matched controls and near-duplicate analysis are mandatory; null attack results remain inconclusive ([Duan et al., COLM 2024](https://openreview.net/forum?id=av0D19pSkU)).
+9. **A watermark hit is not proof of authorship.** It means only that the registered detector rejected its declared null for that text under the specified key, tokenizer, canonicalization, null population, and calibrated threshold. It does not authenticate the generation channel. Repeated contexts can invalidate nominal null assumptions; span searches and multiple keys introduce multiplicity; adaptive attackers can learn, remove, or spoof studied schemes ([Fernandez et al., IEEE WIFS 2023](https://doi.org/10.1109/WIFS58808.2023.10374576); [Jovanović et al., ICML 2024](https://proceedings.mlr.press/v235/jovanovic24a.html)).
+10. **Interactive services must be assessed as complete protocols.** Model version, tokenizer, system prompt, decoding, RAG, tools, memory, filtering, rate limits, concurrency, retention, updates, and the lifetime transcript all alter the observable channel. A one-shot base-model study cannot authorize a chat service.
 
 ## Review method and limitations
 
-The search prioritized official proceedings and accepted-paper records from USENIX Security, IEEE Symposium on Security and Privacy, IEEE CSF, ACM CCS/FAccT, NDSS, PoPETs, ICML, NeurIPS, ICLR, COLT, ACL, EMNLP, and EACL. PMLR, NeurIPS proceedings, ACL Anthology, USENIX, IEEE/ACM DOI records, and accepted OpenReview records were preferred over aggregators. NIST publications were included as authoritative implementation and governance context.
+The search prioritized official proceedings and accepted-paper records from
+MLSys, USENIX Security, IEEE Symposium on Security and Privacy, IEEE CSF, ACM
+CCS/FAccT/SOSP/POPL, NDSS, PoPETs, ICML, NeurIPS, ICLR, COLT, ACL, EMNLP, and
+EACL. PMLR, MLSys and NeurIPS proceedings, ACL Anthology, USENIX, IEEE/ACM DOI
+records, and accepted OpenReview records were preferred over aggregators. NIST
+publications were included as authoritative implementation and governance
+context.
 
-Included sources are primary empirical or theoretical papers directly relevant to model-release privacy, attack evaluation, GBDT/tree interfaces, LLM memorization, canaries, or text watermarks. Surveys, theses, unaccepted submissions, vendor posts, and unsupported product claims were excluded from the main synthesis. A few systematization papers and standards are retained because they define threat-model or assurance structure rather than report a new attack.
+Included sources are primary empirical or theoretical papers directly relevant
+to ML lifecycle control, statistically reliable release tests, assurance cases,
+provenance, model-release privacy, attack evaluation, GBDT/tree interfaces, LLM
+memorization, canaries, or text watermarks. Peer-reviewed surveys are used only
+to map assurance fields; theses, unaccepted submissions, vendor posts, and
+unsupported product claims were excluded from the main synthesis. A few
+systematization papers and standards are retained because they define
+threat-model or assurance structure rather than report a new attack.
 
 This is a targeted narrative review, not a PRISMA systematic review or meta-analysis. The literature uses heterogeneous datasets, interfaces, adversary knowledge, base rates, metrics, and model families, so numerical effect sizes should not be pooled or transferred without a new validation study. Absence from this review is not evidence that a paper or attack does not exist.
+
+## Systems and assurance positioning
+
+### Lifecycle systems and release tests
+
+Production ML literature establishes that readiness is a property of a system,
+not only a model metric. Sculley et al. identify configuration debt, undeclared
+consumers, feedback loops, and boundary erosion
+([NeurIPS 2015](https://proceedings.neurips.cc/paper/2015/hash/86df7dcfd896fcaf2674f757a2463eba-Abstract.html)).
+TFX integrates data validation, training, evaluation, serving, and canary
+checks ([Baylor et al., 2017](https://doi.org/10.1145/3097983.3098021)); MLflow
+and ModelDB preserve runs, artifacts, and model-building lineage
+([Zaharia et al., 2018](https://people.eecs.berkeley.edu/~matei/papers/2018/ieee_mlflow.pdf);
+[Vartak et al., 2016](https://doi.org/10.1145/2939502.2939516)). These systems
+make reproduction and controlled rollout possible. Their records do not, by
+themselves, establish that a test is scientifically sound, directionally able
+to clear, or complete for the released recipient channel.
+
+The ML Test Score supplies 28 concrete production tests
+([Breck et al., 2017](https://doi.org/10.1109/BigData.2017.8258038)), and Data
+Validation for Machine Learning detects schema anomalies and training-serving
+skew at scale
+([Polyzotis et al., MLSys 2019](https://proceedings.mlsys.org/paper_files/paper/2019/hash/928f1160e52192e3e0017fb63ab65391-Abstract.html)).
+These works support a multi-obligation view but produce a rubric or focused
+validator, not a theorem that every policy-mandatory release obligation has
+been discharged.
+
+The closest statistical gate is ease.ml/ci. It gives a domain-specific language
+for model-comparison conditions, user-selected reliability, and repeated
+adaptive test-set use
+([Renggli et al., MLSys 2019](https://proceedings.mlsys.org/paper_files/paper/2019/hash/4284d31e68c0a4a39dcdad167ac4bd72-Abstract.html)).
+This is strong prior art for reliable pass/fail ML testing. Its guarantee is
+local to a declared predicate. It does not make lower-bound attack evidence
+interchangeable with an upper safety bound, require equality of an
+artifact–population–game–interface tuple, or totalize a finite inventory of
+other mandatory obligations.
+
+Model assertions allow domain experts to write arbitrary predicates over model
+inputs and outputs and can find high-confidence errors that uncertainty
+monitoring misses
+([Kang et al., MLSys 2020](https://proceedings.mlsys.org/paper_files/paper/2020/hash/e851ca7b43815718fbbac8afb2246bf8-Abstract.html)).
+ReLM compiles regular-language queries for efficient LLM validation
+([Kuchnik et al., MLSys 2023](https://proceedings.mlsys.org/paper_files/paper/2023/hash/93c7d9da61ccb2a60ac047e92787c3ef-Abstract-mlsys2023.html)).
+These are plausible MRA evidence producers, but an extensible predicate
+language does not establish predicate completeness, and a detector's silence
+does not become clearance evidence.
+
+### Assurance cases, documentation, and provenance
+
+Ashmore et al. organize ML assurance desiderata and evidence across the
+lifecycle and identify open gaps at every stage
+([ACM Computing Surveys 2021](https://doi.org/10.1145/3453444)). AMLAS adds a
+six-stage process and reusable safety-case patterns for ML components in
+autonomous systems
+([Paterson et al., 2025](https://doi.org/10.1016/j.ress.2025.111311)). Model
+cards, datasheets, and AI FactSheets make intended use, evaluation context,
+data, limitations, and supplier declarations visible; end-to-end internal
+auditing and the NIST AI RMF connect such artifacts to organizational process.
+They provide the broader hazard discovery, responsibility, and argument
+structure that a small checker cannot infer.
+
+A completed assurance case is not automatically a sound certificate. Graydon
+et al. report little empirical basis for trusting quantitative confidence
+calculations over general assurance arguments and give counterexamples in
+which proposed schemes behave implausibly
+([Safety Science 2017](https://doi.org/10.1016/j.ssci.2016.09.014)). MRA should
+therefore not assign a scalar confidence to an arbitrary case. Its probability
+claim is only a union-bound consequence after substantive closure and sound
+component evidence are assumed.
+
+Lineage is another necessary but insufficient layer. in-toto authenticates
+declared actors, steps, materials, and products
+([Torres-Arias et al., USENIX Security 2019](https://www.usenix.org/conference/usenixsecurity19/presentation/torres-arias)).
+That can establish attributable process conformance; it cannot show that an ML
+evaluation answers the right game or that its statistical assumptions hold.
+MRA's current unsigned digests establish content equality more strongly than
+origin and do not match in-toto's authenticated provenance.
+
+### Formal lineage and critical conclusion
+
+MRA's denial-on-missing-evidence rule follows the fail-safe-default and
+complete-mediation principles
+([Saltzer and Schroeder, 1975](https://doi.org/10.1109/PROC.1975.9939)), but
+only within its offline API. Schneider's characterization of enforceable
+security policies makes the boundary precise: monitors constrain observable
+executions, not unobserved semantic properties or actions that bypass them
+([Schneider, 2000](https://doi.org/10.1145/353323.353382)).
+
+Proof-carrying code is the closest extension analogy: an untrusted producer
+supplies an artifact plus a machine-checkable proof against a consumer policy
+([Necula, 1997](https://doi.org/10.1145/263699.263712)). MRA presently proves
+only the fixed-prerequisite record-level property that additions with neither
+direct nor indirect clearance authority cannot create a clearing witness. A
+producer that can emit clearing evidence or satisfy another record's clearance
+prerequisite still requires role-specific soundness validation, a checker for
+its certificate, and any applicable composed failure allocation. Similarly,
+seL4's
+implementation-refinement chain illustrates the stronger evidence needed
+before an abstract protocol theorem becomes an executable-correctness claim
+([Klein et al., 2009](https://doi.org/10.1145/1629575.1629596)). MRA has no
+Python-to-Lean refinement proof.
+
+The literature therefore supports an integration claim, not a primitive or
+universal-completeness claim. Representative systems separately automate
+pipelines, test declared predicates, structure assurance arguments, or
+authenticate lineage. MRA's scoped addition is to require these artifacts to
+meet one direction-aware, exact-context, mandatory-obligation, fail-closed
+decision rule. Its hardest premises remain external: an authority must supply
+a non-vacuous and substantively adequate contract; clearing analyzers must be
+sound; provenance and authority must be authenticated; and a live gateway must
+force every deployment through the result.
 
 ## Conceptual foundations
 
@@ -188,6 +323,32 @@ The core prevents evidence rebinding by checking source-observed context before 
 - Dependence across multiple models, releases, summaries, and interactive observations remains a central composition problem; testing each release independently is insufficient.
 
 ## Curated source list
+
+### ML systems, assurance, provenance, and formal methods
+
+- Sculley et al. [Hidden Technical Debt in Machine Learning Systems](https://proceedings.neurips.cc/paper/2015/hash/86df7dcfd896fcaf2674f757a2463eba-Abstract.html). NeurIPS 2015.
+- Baylor et al. [TFX: A TensorFlow-Based Production-Scale Machine Learning Platform](https://doi.org/10.1145/3097983.3098021). KDD 2017.
+- Breck et al. [The ML Test Score: A Rubric for ML Production Readiness and Technical Debt Reduction](https://doi.org/10.1109/BigData.2017.8258038). IEEE Big Data 2017.
+- Zaharia et al. [Accelerating the Machine Learning Lifecycle with MLflow](https://people.eecs.berkeley.edu/~matei/papers/2018/ieee_mlflow.pdf). IEEE Data Engineering Bulletin 2018.
+- Vartak et al. [ModelDB: A System for Machine Learning Model Management](https://doi.org/10.1145/2939502.2939516). HILDA 2016.
+- Polyzotis et al. [Data Validation for Machine Learning](https://proceedings.mlsys.org/paper_files/paper/2019/hash/928f1160e52192e3e0017fb63ab65391-Abstract.html). MLSys 2019.
+- Renggli et al. [Continuous Integration of Machine Learning Models with ease.ml/ci](https://proceedings.mlsys.org/paper_files/paper/2019/hash/4284d31e68c0a4a39dcdad167ac4bd72-Abstract.html). MLSys 2019.
+- Kang et al. [Model Assertions for Monitoring and Improving ML Models](https://proceedings.mlsys.org/paper_files/paper/2020/hash/e851ca7b43815718fbbac8afb2246bf8-Abstract.html). MLSys 2020.
+- Kuchnik, Smith, Amvrosiadis. [Validating Large Language Models with ReLM](https://proceedings.mlsys.org/paper_files/paper/2023/hash/93c7d9da61ccb2a60ac047e92787c3ef-Abstract-mlsys2023.html). MLSys 2023.
+- Ashmore, Calinescu, Paterson. [Assuring the Machine Learning Lifecycle: Desiderata, Methods, and Challenges](https://doi.org/10.1145/3453444). ACM Computing Surveys 2021.
+- Paterson et al. [Safety Assurance of Machine Learning for Autonomous Systems](https://doi.org/10.1016/j.ress.2025.111311). Reliability Engineering & System Safety 2025.
+- Mitchell et al. [Model Cards for Model Reporting](https://doi.org/10.1145/3287560.3287596). FAT* 2019.
+- Gebru et al. [Datasheets for Datasets](https://doi.org/10.1145/3458723). Communications of the ACM 2021.
+- Arnold et al. [FactSheets: Increasing Trust in AI Services through Supplier's Declarations of Conformity](https://doi.org/10.1147/JRD.2019.2942288). IBM Journal of Research and Development 2019.
+- Raji et al. [Closing the AI Accountability Gap](https://doi.org/10.1145/3351095.3372873). FAccT 2020.
+- Graydon et al. [An Investigation of Proposed Techniques for Quantifying Confidence in Assurance Arguments](https://doi.org/10.1016/j.ssci.2016.09.014). Safety Science 2017.
+- Saltzer and Schroeder. [The Protection of Information in Computer Systems](https://doi.org/10.1109/PROC.1975.9939). Proceedings of the IEEE 1975.
+- Necula. [Proof-Carrying Code](https://doi.org/10.1145/263699.263712). POPL 1997.
+- Schneider. [Enforceable Security Policies](https://doi.org/10.1145/353323.353382). ACM Transactions on Information and System Security 2000.
+- Klein et al. [seL4: Formal Verification of an OS Kernel](https://doi.org/10.1145/1629575.1629596). SOSP 2009.
+- Herlihy and Wing. [Linearizability: A Correctness Condition for Concurrent Objects](https://doi.org/10.1145/78969.78972). ACM Transactions on Programming Languages and Systems 1990.
+- Torres-Arias et al. [in-toto: Providing Farm-to-Table Guarantees for Bits and Bytes](https://www.usenix.org/conference/usenixsecurity19/presentation/torres-arias). USENIX Security 2019.
+- NIST. [Artificial Intelligence Risk Management Framework 1.0](https://doi.org/10.6028/NIST.AI.100-1). NIST AI 100-1, 2023.
 
 ### Privacy games, membership, extraction, and DP
 

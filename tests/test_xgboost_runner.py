@@ -347,6 +347,38 @@ class XGBoostAuditRunnerTests(unittest.TestCase):
             self.assertIn(manifest["attack"]["evidence_class"], {"floor", "screen"})
             self.assertGreaterEqual(manifest["utility"]["balanced_accuracy"], 0.5)
 
+            telemetry = manifest["training_telemetry"]
+            self.assertEqual(telemetry["evidence_class"], "diagnostic")
+            self.assertFalse(telemetry["can_clear"])
+            self.assertFalse(telemetry["contains_row_level_data"])
+            self.assertEqual(telemetry["retention"], "aggregate_only_no_per_round_history")
+            for role in ("target", "reference"):
+                model_telemetry = telemetry["models"][role]
+                self.assertEqual(model_telemetry["model_role"], role)
+                self.assertEqual(model_telemetry["begin_hook_calls"], 1)
+                self.assertEqual(model_telemetry["end_hook_calls"], 1)
+                self.assertEqual(model_telemetry["iteration_count"], 12)
+                self.assertEqual(len(model_telemetry["metrics"]), 1)
+                metric = next(iter(model_telemetry["metrics"].values()))
+                self.assertEqual(metric["count"], 12)
+                self.assertEqual(metric["nonfinite"], 0)
+                for statistic in ("first", "last", "min", "max", "mean"):
+                    self.assertIsInstance(metric[statistic], float)
+
+            telemetry_path = run_dir / manifest["artifacts"]["training_telemetry"]["path"]
+            retained_telemetry = json.loads(telemetry_path.read_text(encoding="utf-8"))
+            self.assertEqual(retained_telemetry, telemetry)
+            retained_evidence = json.loads(
+                (run_dir / manifest["artifacts"]["audit_evidence"]["path"]).read_text(
+                    encoding="utf-8"
+                )
+            )
+            self.assertEqual(retained_evidence["training_telemetry"], telemetry)
+            self.assertEqual(
+                sha256_file(telemetry_path),
+                manifest["artifacts"]["training_telemetry"]["sha256"],
+            )
+
             for record in manifest["artifacts"].values():
                 artifact_path = run_dir / record["path"]
                 self.assertTrue(artifact_path.is_file())
@@ -380,6 +412,7 @@ class XGBoostAuditRunnerTests(unittest.TestCase):
                         "target-preprocessing.joblib",
                     ],
                 )
+                self.assertNotIn("training-telemetry.json", bundle.namelist())
                 self.assertEqual(
                     bundle.read("release-artifact.json"),
                     release_manifest_path.read_bytes(),
@@ -459,6 +492,20 @@ class XGBoostAuditRunnerTests(unittest.TestCase):
             repaired = json.loads(manifest_path.read_text(encoding="utf-8"))
             self.assertEqual(
                 sha256_file(tampered_model), repaired["artifacts"]["target_model"]["sha256"]
+            )
+
+            telemetry_path = run_dir / repaired["artifacts"]["training_telemetry"]["path"]
+            expected_telemetry_sha256 = repaired["artifacts"]["training_telemetry"]["sha256"]
+            telemetry_path.write_bytes(telemetry_path.read_bytes() + b"tamper")
+            run_experiment(config_path, output_dir)
+            repaired = json.loads(manifest_path.read_text(encoding="utf-8"))
+            self.assertEqual(
+                sha256_file(telemetry_path),
+                expected_telemetry_sha256,
+            )
+            self.assertEqual(
+                repaired["training_telemetry"]["models"]["target"]["iteration_count"],
+                12,
             )
 
             crlf_path = directory / "config-crlf.json"

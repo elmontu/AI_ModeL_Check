@@ -35,6 +35,12 @@ registration](../reproduction/model-backed-finite-channel/v3-preregistration.jso
 and fresh result. V3 was designed after v2 outcomes were known but reused no v2
 outcome as v3 evidence.
 
+## Derived reports and interpretations
+
+| Artifact | Derivation | Proper use | Boundary |
+|---|---|---|---|
+| [Government health-agency XGBoost release playbook for restricted healthcare data](xgboost-end-to-end-test-report.md) | Extracts the v3 XGBoost data, training, finite population, wrapper, primary Engine replays, 400 analyzer repeats, and integrity chain; adds a contract → execution-pipeline → durable-workflow application profile | Detailed technical appendix, plain-language public-sector case study, and audit-ready release/no-release guide; every number must trace to a canonical retained artifact above | Narrative, not independent evidence. No worker-to-assessment admission adapter or production orchestrator/registry/gateway/monitor exists. Adult is public census-income data; raw XGBoost is not margin-eligible; no unsafe XGBoost case, live government endpoint, clinical/domain validation, or authorization was tested. |
+
 ## Reference implementation and formal artifacts
 
 | Artifact | Type | Paper use | Reproduction action |

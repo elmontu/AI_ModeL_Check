@@ -19,6 +19,7 @@ manifests; unchecked items remain paper-snapshot or deployment work.
 | E7c | Prospectively frozen corrective model-backed v3 | Completed; all 10 criteria passed | Yes, within its finite-pool, safe-side scope | Report 18-endpoint soundness/wrong-direction bounds, margin-eligible resolution, near-boundary holds, wrapper cross-replay, and the absence of a model-backed above-tolerance case. |
 | E8 | OpenML, stochastic portfolio, strategic, and public-privacy studies | Registered or configured | No completed outcomes | Follow each study's sealing contract and retain complete raw/derived artifacts before use. |
 | E9 | Production authority/registry/gateway evaluation | Not implemented | No | Requires an external system and an independently reviewed operational/refinement study. |
+| E10 | Reference-core and training-hook overhead | Incomplete | No general overhead claim | Run repeated instrumented/uninstrumented trials plus core hashing, validation, assessment, and replay microbenchmarks; do not infer a general cost from one GPU execution. |
 
 ## Result admission gate
 
@@ -49,6 +50,24 @@ A result may enter the paper only when every applicable item is checked:
   and deletion have been reviewed separately from technical success.
 - [ ] The result says whether it is a screen, floor, ceiling, exact result,
   software check, or abstract theorem, and does not exceed that authority.
+
+## Remaining mechanism ablations
+
+These open tests were retained from the superseded paper outline. Register each
+design before observing its result and add a new ledger row above before using
+it in the manuscript.
+
+- [ ] Remove or alter artifact, interface, policy, population, and evidence
+  context bindings and verify fail-closed rejection.
+- [ ] Omit, duplicate, or substitute a registered statistical-family member
+  and verify that family completeness cannot improve the release decision.
+- [ ] Run the registered hook/no-hook and matched-batch controls before making
+  an instrumentation-overhead or non-interference statement.
+- [ ] Compare valid same-population scalar composition with rejected
+  cross-population aggregation while preserving mixed-modal vectors.
+- [ ] Exercise stale registry state, replay, artifact substitution, expiry,
+  retry idempotency, and role-confusion mutations against the relevant
+  protocol boundary.
 
 ## Core and formal snapshot
 

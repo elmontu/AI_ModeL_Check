@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="700" viewBox="0 0 1200 700" role="img" aria-labelledby="title desc">
+  <title id="title">Model Release Assurance architecture</title>
+  <desc id="desc">Three planes separate evidence collection, the implemented offline MRA checker, and external production authorization and serving.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#334155"/>
+    </marker>
+    <style>
+      .heading { font: 700 22px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #0f172a; }
+      .label { font: 650 18px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #0f172a; }
+      .body { font: 15px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #334155; }
+      .small { font: 13px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #475569; }
+      .plane { fill: #f8fafc; stroke: #94a3b8; stroke-width: 2; rx: 18; }
+      .implemented { fill: #e0f2fe; stroke: #0369a1; stroke-width: 2.5; rx: 12; }
+      .experimental { fill: #fef3c7; stroke: #b45309; stroke-width: 2.5; rx: 12; }
+      .external { fill: #f1f5f9; stroke: #475569; stroke-width: 2.5; stroke-dasharray: 9 7; rx: 12; }
+      .arrow { fill: none; stroke: #334155; stroke-width: 2.5; marker-end: url(#arrow); }
+    </style>
+  </defs>
+
+  <rect x="24" y="20" width="1152" height="168" class="plane"/>
+  <text x="48" y="54" class="heading">1  Evidence / model-execution plane</text>
+  <rect x="54" y="76" width="498" height="84" class="external"/>
+  <text x="78" y="107" class="label">Approved isolated evidence workers</text>
+  <text x="78" y="133" class="body">Attested collection • immutable artifacts • typed outputs</text>
+  <rect x="648" y="76" width="498" height="84" class="experimental"/>
+  <text x="672" y="107" class="label">Experimental local workers</text>
+  <text x="672" y="133" class="body">Model execution • aggregate hooks • non-authorizing screens</text>
+
+  <path d="M303 160 L303 222" class="arrow"/>
+  <path d="M897 160 L897 222" class="arrow"/>
+  <text x="376" y="207" class="small">frozen contracts, source-bound evidence, artifact digests</text>
+
+  <rect x="24" y="228" width="1152" height="258" class="plane"/>
+  <text x="48" y="263" class="heading">2  Offline assurance plane — implemented reference core</text>
+  <rect x="52" y="290" width="230" height="142" class="implemented"/>
+  <text x="76" y="322" class="label">Contract validation</text>
+  <text x="76" y="350" class="body">Release + interface</text>
+  <text x="76" y="375" class="body">Policy + population</text>
+  <text x="76" y="400" class="body">Game + source bindings</text>
+
+  <rect x="340" y="290" width="230" height="142" class="implemented"/>
+  <text x="364" y="322" class="label">Analyzer replay</text>
+  <text x="364" y="350" class="body">Capability confinement</text>
+  <text x="364" y="375" class="body">Floors / ceilings / exact</text>
+  <text x="364" y="400" class="body">Finite-channel bounds</text>
+
+  <rect x="628" y="290" width="230" height="142" class="implemented"/>
+  <text x="652" y="322" class="label">Fail-closed decision</text>
+  <text x="652" y="350" class="body">CLEAR from ceilings</text>
+  <text x="652" y="375" class="body">BLOCK from floors</text>
+  <text x="652" y="400" class="body">Otherwise HOLD + action</text>
+
+  <rect x="916" y="290" width="230" height="142" class="implemented"/>
+  <text x="940" y="322" class="label">Selection + replay</text>
+  <text x="940" y="350" class="body">Portfolio constraints</text>
+  <text x="940" y="375" class="body">Signed manifests</text>
+  <text x="940" y="400" class="body">Lifecycle transcript checks</text>
+
+  <path d="M282 361 L334 361" class="arrow"/>
+  <path d="M570 361 L622 361" class="arrow"/>
+  <path d="M858 361 L910 361" class="arrow"/>
+  <text x="52" y="461" class="small">Outputs are assessments, recommendations, and replay results — never production authorization.</text>
+
+  <path d="M1031 432 L1031 526" class="arrow"/>
+  <text x="670" y="510" class="small">non-authorizing records and expected registry predecessor</text>
+
+  <rect x="24" y="532" width="1152" height="130" class="plane"/>
+  <text x="48" y="566" class="heading">3  Production governance / enforcement plane — external</text>
+  <rect x="54" y="587" width="322" height="54" class="external"/>
+  <text x="78" y="620" class="label">Authorizing authority</text>
+  <rect x="439" y="587" width="322" height="54" class="external"/>
+  <text x="463" y="620" class="label">Atomic portfolio registry</text>
+  <rect x="824" y="587" width="322" height="54" class="external"/>
+  <text x="848" y="620" class="label">Gateway + monitoring</text>
+  <path d="M376 614 L433 614" class="arrow"/>
+  <path d="M761 614 L818 614" class="arrow"/>
+
+  <rect x="50" y="677" width="20" height="14" class="implemented"/>
+  <text x="80" y="689" class="small">implemented reference component</text>
+  <rect x="330" y="677" width="20" height="14" class="experimental"/>
+  <text x="360" y="689" class="small">implemented experimental component</text>
+  <rect x="650" y="677" width="20" height="14" class="external"/>
+  <text x="680" y="689" class="small">external adopter-owned component</text>
+</svg>

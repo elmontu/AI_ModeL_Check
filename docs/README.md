@@ -11,6 +11,7 @@ This index separates the normative protocol, reference implementation, operating
 
 ## Start here
 
+- **Guide** — [Government-health training-to-assessment demo](guided-government-health-demo.md): one-command actual XGBoost target/reference training with aggregate hooks, deterministic bundle identity, post-plan same-artifact membership evidence, a typed `AssessmentRequest`, `AssuranceEngine` assessment, and an MRAP prefix ending `ASSESSED`. Its public medical benchmark is not clinical evidence; the outcome is hold or block, never local clearance or authorization. The older core-only fixture is retained as a secondary workflow rehearsal.
 - **Reference** — [Integrated system architecture and MRAP audit specification](system-audit-specification.md): one standalone document covering the complete architecture, normative roles/messages/states/gates, current contracts and pipelines, evidence semantics, security/formal boundaries, production obligations, and audit checklist.
 - **Reference** — [Project scope](project-scope.md): canonical purpose, repository layers, supported responsibilities, and explicit non-goals.
 - **Reference** — [Architecture](architecture.md): complete runtime/container view, commands, analyzers, data and storage, training-to-serving integration, release contracts, deployment, CI/release automation, observability, trust, and failure behavior.
@@ -45,13 +46,12 @@ Executable contract demonstrations are indexed in [`examples/README.md`](../exam
 - **Reference** — [Adaptation profiles](reference/adaptation-profiles.md): common baseline, domain and adopter profiles, release-specific configuration, and a public-sector health example.
 - **Reference** — [Production roadmap](reference/production-roadmap.md): work required to turn the offline core into an accredited service.
 - **Guide** — [Release process](releasing.md): versioning, validation, packaging, and GitHub release controls.
-- **Reference** — [Operational-reference index](reference/README.md): index for the deployment-oriented reference documents.
 
 ## Research and experimental assurance
 
-- **Guide** — [MLSys paper workspace](../paper/README.md): draft outline, claims-to-evidence gate, artifact index, and experiment/reproducibility checklist; it is navigation for authors, not a new evidence source.
+- **Guide** — [MLSys paper workspace](../paper/README.md): manuscript draft, claims-to-evidence gate, artifact index, and experiment/reproducibility checklist; it is navigation for authors, not a new evidence source.
 - **Experimental** — [Ceiling experiment reproduction index](../reproduction/README.md): retained controlled and versioned model-backed reports, preregistrations, manifests, aggregate replay rows, v2 acceptance failure, and v3 corrective pass.
-- **Reference** — [Privacy-assurance literature review](literature-review.md): primary research behind the membership, extraction, differential-privacy, tree, canary, and watermark evidence semantics.
+- **Reference** — [Systems and privacy-assurance literature review](literature-review.md): primary research and critical positioning for ML release gates, assurance cases, provenance, formal kernels, membership, extraction, differential privacy, tree models, canaries, and watermarks.
 - **Reference** — [Game-theory literature review](game-theory-literature-review.md): primary-source audit, security, and strategic-ML review with claim labels and transfer limits.
 - **Experimental** — [Executable strategic assurance](strategic-assurance.md): optional exact-rational incentive stress tests that cannot make a governance decision or override a mandatory gate.
 
@@ -59,6 +59,12 @@ Executable contract demonstrations are indexed in [`examples/README.md`](../exam
 
 - **Reference** — [Documentation index](README.md): this page and its status taxonomy.
 
-The repository does not retain copies of papers, publication drafts, generated academic study reports, office documents, or presentation decks. Targeted reviews may document the primary evidence and limitations behind framework requirements. Generated benchmark output belongs under `output/`, which is excluded from version control.
+Draft manuscripts and paper-navigation aids belong only under [`paper/`](../paper/)
+and remain narrative or derived artifacts, never independent evidence. The
+repository does not retain third-party paper copies, office documents, or
+presentation decks. Generated benchmark output belongs under `output/`, which
+is excluded from version control, unless a deliberately selected,
+publication-safe result is promoted with provenance and a hash manifest under
+`reproduction/`.
 
 New documentation must identify its status, avoid overstating assessment as authorization, and be linked from this index. Release history and migration notes belong in the root changelog rather than in duplicate version-specific documents.

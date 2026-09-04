@@ -178,15 +178,14 @@ python3 \
   scripts/analyze_openml_decision_witnesses.py
 ```
 
-After all validation scripts pass, create the top-level evidence seal:
+The current checkout intentionally has **no current-study sealing command**.
+The obsolete v2-era constructor was removed because it pinned superseded schema
+paths and the fixed date `2026-08-17`; its exact design remains available in
+Git history and must not be described as a current OpenML study seal.
 
-```bash
-python3 \
-  scripts/seal_openml_reproduction.py
-```
-
-When successfully generated, the seal is
-`output/reproduction/openml-study-manifest.json`. It hashes retained
-configurations, code, schemas, examples, summaries, analyses, and the observed
-runtime record. That file and the generated reports remain under the ignored
-`output/` tree and are absent from this checkout.
+Before completing this study, preregister a replacement sealer that inventories
+the current schema manifest, exact source/configuration bytes, generated
+summaries and analyses, runtime, dataset snapshots, and external timestamp or
+attestation policy. Its final manifest and all selected reports must then be
+promoted from ignored `output/` into an immutable evidence store or a deliberate
+hash-manifested `reproduction/` result set.

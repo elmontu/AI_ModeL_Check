@@ -60,6 +60,59 @@ jobs:
       - name: Compile, test, and replay schemas
         run: make PYTHON=python check
 
+  training-release-demo:
+    name: Training-to-assessment demo (offline dataset)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - name: Install core and experiment dependencies
+        run: |
+          python -m pip install --disable-pip-version-check -r requirements.lock
+          python -m pip install --disable-pip-version-check -r requirements-experiments.txt
+          python -m pip install --no-deps --no-build-isolation -e .
+      - name: Verify the real-training pipeline and failure boundaries
+        env:
+          PYTHONPATH: src
+        run: python -m unittest tests.test_training_release_demo -v
+      - name: Train, export, test, and assess one candidate
+        env:
+          PYTHONPATH: src
+        run: >-
+          python scripts/run_training_release_demo.py
+          --dataset-profile sklearn-breast-cancer
+          --run-dir "${RUNNER_TEMP}/mra-training-release-demo"
+
+  demo-reference:
+    name: Reference fixture rehearsal (core only)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - name: Install locked core runtime
+        run: |
+          python -m pip install --disable-pip-version-check -r requirements.lock
+          python -m pip install --no-deps --no-build-isolation -e .
+      - name: Verify the guided demo contract and failure branches
+        env:
+          PYTHONPATH: src
+        run: python -m unittest tests.test_government_health_demo -v
+      - name: Run the nontechnical journey
+        env:
+          PYTHONPATH: src
+        run: >-
+          python scripts/run_government_health_demo.py
+          --output-root "${RUNNER_TEMP}/mra-government-health-demo"
+          --run-id ci
+
   training-hook-runtime:
     name: Training-hook contracts (CPU, no downloads)
     runs-on: ubuntu-latest
@@ -90,7 +143,7 @@ jobs:
 
   package:
     name: Build distribution
-    needs: [formal, test, training-hook-runtime]
+    needs: [formal, test, training-hook-runtime, training-release-demo, demo-reference]
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:

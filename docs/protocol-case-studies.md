@@ -15,6 +15,12 @@ releases are generally safe. No result below is a production authorization.
 | Interactive LLM | Watermark/canary preregistration | Complete binding, multiplicity, tail support, budget, custody, contamination and fail-closed decision semantics are validated | Watermark detection, canary attack execution, transcript assurance or LLM clearance |
 | Other families | Structured model profile and governed 20-family catalogue | Required threat routing and explicit unsupported/custom-review outcomes | Scientific adequacy merely from catalogue coverage |
 
+For a facilitator-led version that connects the current contract, assessment,
+optimization, integrity, audit, and lifecycle-replay pieces, run `make demo` and
+use the [fictional government-health guided demo](guided-government-health-demo.md).
+Its production-role records are explicitly mock workflow rehearsals; its
+`ACTIVE` example is not an authorization or deployment.
+
 ## Case 0: ideal mathematical deployment
 
 `formal/lean/MRAP/Deployment.lean` treats infrastructure as an ideal

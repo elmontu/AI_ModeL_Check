@@ -6,6 +6,14 @@ All user-visible changes to Model Release Assurance are recorded here. The proje
 
 ### Added
 
+- A one-command, core-only government-health guided demo for nontechnical
+  reviewers. It joins a fresh assessment to optimization, verifies signatures
+  and the audit chain, exercises live hold/block/artifact-tamper cases, and
+  replays mock activation, stale-registry, deployment-mismatch, and incident
+  workflows. Its live path is a closed, digest-pinned generic synthetic fixture;
+  the government-health case is explicitly a non-executed discussion overlay.
+  Proxy model labels and all external simulations are disclosed, and every
+  summary records that no production authorization or activation occurred.
 - A preregistered exact-ground-truth finite-channel experiment with retained
   aggregate results: 1,800 completed records, zero undercoverage across 1,200
   primary analyzer replays, simultaneous undercoverage upper bound `0.015606`,
@@ -36,7 +44,7 @@ All user-visible changes to Model Release Assurance are recorded here. The proje
 - Publication copies of ceiling execution/resource logs now replace ephemeral
   machine paths with labeled placeholders while their manifests retain both
   the original raw-output digest and sanitized artifact digest.
-- An MLSys paper workspace with a start-here guide, draft outline, claims-to-evidence matrix,
+- An MLSys paper workspace with a start-here guide, manuscript draft, claims-to-evidence matrix,
   artifact index, and experiment/reproducibility gates that distinguish retained results from
   configured studies and prohibited claims.
 - A standalone integrated system audit specification consolidating the complete architecture, normative MRAP roles/messages/states/gates, current release contracts and pipelines, evidence semantics, threat and formal boundaries, production obligations, pass/fail rules, and an auditor checklist.
@@ -94,6 +102,10 @@ All user-visible changes to Model Release Assurance are recorded here. The proje
 
 ### Changed
 
+- The protocol-feasibility benchmark is now a self-contained synthetic study.
+  It no longer discovers an obsolete ignored OpenML seal or framework report,
+  and it records external evidence, deployment behavior, release yield, safety,
+  and authorization as not evaluated.
 - Default analyzer-service capabilities are derived from implemented behavior and cannot be widened by adapter configuration. Shipped candidate clearing paths now include DP ceilings, recipient-realizable tree exact evidence, and `finite_channel_ceiling` for a canonical exact-guess game over an enforced complete finite recipient channel; all remain subject to their other policy, portfolio, gateway, and evidence obligations.
 - `model-coverage` names per-threat candidate clearing paths and unmet clearing-path threats without emitting a percentage or safety score.
 - CLI assessment/optimization now requires an audit database; after request parsing/validation,
@@ -121,6 +133,13 @@ All user-visible changes to Model Release Assurance are recorded here. The proje
 
 - Removed the dated framework audit/corrigendum documents and the frozen Version 0.5 prospective-study runner, analyzer, configuration, test, and seal requirements. Superseded schemas remain historical structural records for provenance and external schema validation; the current CLI accepts only current contract versions.
 - Removed the self-attested post-critique design-control result, evaluator, and test; executable unit/regression tests are the maintained software evidence, while external custody and scientific adequacy remain outside the repository.
+- Removed the obsolete OpenML v2-era seal constructor, whose hard-coded schema
+  inventory and date could not produce a current study seal. Historical bytes
+  remain available in Git; a replacement must be preregistered.
+- Removed the duplicate operational-reference mini-index and the superseded
+  paper-outline scaffold. Canonical reference links remain in `docs/README.md`,
+  while open paper experiments and ablations now live in the reproducibility
+  ledger beside the current manuscript.
 
 ### Fixed
 

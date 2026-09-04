@@ -1,15 +1,9 @@
 #!/usr/bin/env python3
-"""Exercise the finite protocol frontier and bridge it to retained MRA evidence.
+"""Exercise an exact finite synthetic protocol-feasibility frontier.
 
-This benchmark has two deliberately separated parts:
-
-1. exact finite synthetic experiments with known evidence laws, for which the
-   soundness-liveness frontier is identified and rationally certified; and
-2. an audit of the retained OpenML/effectiveness record showing whether those
-   artifacts are sufficient to instantiate such a frontier for real releases.
-
-The second part must not infer evidence laws that the retained experiments did not
-estimate.
+This benchmark deliberately consumes no external empirical evidence. A future
+empirical bridge must use a separately preregistered, current, sealed evidence
+bundle rather than discovering ignored local output.
 """
 
 from __future__ import annotations
@@ -177,63 +171,22 @@ def monte_carlo_rows(
     return rows
 
 
-def retained_evidence_audit() -> dict[str, Any]:
-    manifest_path = ROOT / "output/reproduction/openml-study-manifest.json"
-    manifest = json.loads(manifest_path.read_text())
-    effectiveness_path = ROOT / "output/evaluation/framework-effectiveness.json"
-    effectiveness = json.loads(effectiveness_path.read_text())
-    tier_roles = {
-        "structural": "recipient-realizability-dependent exact screen; OpenML does not establish the roster",
-        "membership": "attack lower bound or screen",
-        "mlp": "attack lower bound or screen",
-        "composition": "direct finite structural screen",
-        "metadata-adversary": "attack lower bound or screen under exact summaries",
-        "dp-sgd": "mechanism/accountant ceiling plus empirical lower bound",
-        "multi-shadow": "attack lower bound or screen",
-        "attribute": "controlled attack lower bound or screen",
-        "reconstruction": "controlled partial-reconstruction lower bound or screen",
-        "population-validation": "design-based population-bound validation, not a deployment population frame",
-    }
-    tiers = []
-    for name, values in manifest["tiers"].items():
-        tiers.append(
-            {
-                "tier": name,
-                "expected_runs": values["expected_runs"],
-                "completed_runs": values["completed_runs"],
-                "failed_runs": values["failed_runs"],
-                "validation_passed": values["validation_passed"],
-                "protocol_role": tier_roles[name],
-            }
-        )
-    return {
-        "manifest_path": str(manifest_path.relative_to(ROOT)),
-        "datasets": manifest["dataset_corpus"]["datasets"],
-        "total_trained_ml_artifacts": manifest["total_trained_ml_artifacts"],
-        "tiers": tiers,
-        "all_tiers_complete_and_valid": all(
-            row["completed_runs"] == row["expected_runs"]
-            and row["failed_runs"] == 0
-            and row["validation_passed"]
-            for row in tiers
-        ),
-        "decision_oracles": effectiveness["summary"],
-        "frontier_instantiable_from_retained_evidence": False,
-        "reason_frontier_not_instantiable": (
-            "the retained tiers do not define repeated, selection-qualified evidence laws "
-            "P_omega(e) and world-specific acceptable-action tables for representative "
-            "release requests; attack nulls are not safety ceilings"
-        ),
-        "representative_release_yield_identified": False,
-    }
-
-
 def run_benchmark(
     *,
     seeds: tuple[int, ...] = DEFAULT_SEEDS,
     trials_per_world: int = DEFAULT_TRIALS_PER_WORLD,
-    retained_evidence: dict[str, Any] | None = None,
 ) -> tuple[dict[str, Any], dict[str, Any], dict[str, Any]]:
+    if not seeds:
+        raise ValueError("at least one seed is required")
+    if any(isinstance(seed, bool) or not isinstance(seed, int) for seed in seeds):
+        raise ValueError("every seed must be an integer")
+    if (
+        isinstance(trials_per_world, bool)
+        or not isinstance(trials_per_world, int)
+        or trials_per_world < 1
+    ):
+        raise ValueError("trials-per-world must be a positive integer")
+
     q_values = (
         Fraction(0),
         Fraction(1, 100),
@@ -257,40 +210,43 @@ def run_benchmark(
         "trials_per_world_per_seed": trials_per_world,
         "monte_carlo_rows": monte_carlo_rows(q_values, seeds, trials_per_world),
     }
-    retained = retained_evidence if retained_evidence is not None else retained_evidence_audit()
+    claim_boundary = (
+        "exact finite synthetic protocol experiments only; no external empirical "
+        "evidence, deployment behavior, representative release yield, safety claim, "
+        "or release authorization is evaluated"
+    )
+    validation = {
+        "all_binary_frontiers_tight": all(
+            row["lower"] == row["upper"] for row in exact_frontiers
+        ),
+        "open_world_zero_error_is_impossible": special_cases[0]["status"]
+        == "target_impossible",
+        "common_control_enables_exact_release": special_cases[1]["status"]
+        == "target_met",
+        "randomized_single_transcript_target_met": special_cases[2]["status"]
+        == "target_met",
+        "deterministic_single_transcript_target_impossible": special_cases[3]["status"]
+        == "target_impossible",
+    }
+    validation["synthetic_benchmark_passed"] = all(validation.values())
     analysis = {
         "benchmark": "finite_protocol_feasibility",
-        "claim_boundary": (
-            "exact synthetic protocol experiments plus an audit of retained MRA evidence; "
-            "not an estimate of government release yield or proof of deployment safety"
-        ),
+        "claim_boundary": claim_boundary,
         "exact_frontiers": exact_frontiers,
         "special_cases": special_cases,
-        "retained_evidence_audit": retained,
-        "validation": {
-            "all_binary_frontiers_tight": all(
-                row["lower"] == row["upper"] for row in exact_frontiers
+        "external_evidence": {
+            "status": "not_evaluated",
+            "reason": (
+                "no current sealed external evidence bundle is an input to this benchmark"
             ),
-            "open_world_zero_error_is_impossible": special_cases[0]["status"]
-            == "target_impossible",
-            "common_control_enables_exact_release": special_cases[1]["status"]
-            == "target_met",
-            "randomized_single_transcript_target_met": special_cases[2]["status"]
-            == "target_met",
-            "deterministic_single_transcript_target_impossible": special_cases[3]["status"]
-            == "target_impossible",
-            "all_retained_tiers_complete_and_valid": retained[
-                "all_tiers_complete_and_valid"
-            ],
-            "all_decision_oracles_passed": retained["decision_oracles"][
-                "unexpected_decision_failures"
-            ]
-            == 0,
+            "representative_release_yield_identified": False,
+            "release_authorization_issued": False,
         },
+        "validation": validation,
     }
     summary = {
         "benchmark": analysis["benchmark"],
-        "claim_boundary": analysis["claim_boundary"],
+        "claim_boundary": claim_boundary,
         "q_values": [
             {"numerator": value.numerator, "denominator": value.denominator}
             for value in q_values
@@ -299,14 +255,10 @@ def run_benchmark(
         "special_cases": special_cases,
         "monte_carlo_rows": len(raw["monte_carlo_rows"]),
         "monte_carlo_trials": sum(row["trials"] for row in raw["monte_carlo_rows"]),
-        "retained_datasets": retained["datasets"],
-        "retained_trained_ml_artifacts": retained["total_trained_ml_artifacts"],
-        "retained_tiers": len(retained["tiers"]),
-        "decision_oracles": retained["decision_oracles"]["executable_oracle_checks"],
-        "decision_oracles_passed": retained["decision_oracles"][
-            "executable_oracle_checks_passed"
-        ],
+        "synthetic_benchmark_passed": validation["synthetic_benchmark_passed"],
+        "external_evidence_status": "not_evaluated",
         "representative_release_yield_identified": False,
+        "release_authorization_issued": False,
     }
     return raw, summary, analysis
 
@@ -321,12 +273,12 @@ def main() -> None:
     parser.add_argument("--trials-per-world", type=int, default=DEFAULT_TRIALS_PER_WORLD)
     parser.add_argument("--seeds", type=int, nargs="+", default=list(DEFAULT_SEEDS))
     args = parser.parse_args()
-    if args.trials_per_world < 1:
-        raise ValueError("trials-per-world must be positive")
     raw, summary, analysis = run_benchmark(
         seeds=tuple(args.seeds),
         trials_per_world=args.trials_per_world,
     )
+    if not analysis["validation"]["synthetic_benchmark_passed"]:
+        raise RuntimeError("synthetic protocol-feasibility validation failed")
     args.output_dir.mkdir(parents=True, exist_ok=True)
     outputs = {
         "protocol-feasibility-benchmark-raw.json": raw,

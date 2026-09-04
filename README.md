@@ -16,7 +16,14 @@ MRA produces recommendations and replayable certificates. It does **not** author
 | **Pipelines** | Analyze evidence, evaluate gates, optimize configurations, and generate replayable artifacts | `mra` CLI, [`src/model_release_assurance/`](src/model_release_assurance/), [`scripts/`](scripts/) | Supported core plus clearly labelled experimental workers |
 | **Workflows** | Coordinate lifecycle states, authorization, activation, monitoring, suspension, and revocation | MRAP specification and offline transcript verifier | Durable production orchestration is **not implemented** here |
 
-Evidence pipelines feed the reference implementation. Its reports then feed an external authority, registry, and serving gateway. Assessment output is never an authorization.
+Evidence pipelines feed the reference implementation. Its reports then feed an external authority, registry, and serving gateway. Assessment output is never an authorization. The primary training demo makes the layering explicit: an outer application pipeline performs data intake, real model training, export, and post-plan evidence collection, while the nested normative MRAP workflow starts at registration and stops at `ASSESSED` when the available evidence cannot clear the candidate.
+
+The [government health-agency XGBoost case
+study](paper/xgboost-end-to-end-test-report.md#the-operational-spine-contracts-pipeline-and-workflow)
+applies the sector-neutral architecture to one restricted-health-data release
+scenario. Its operational spine shows exact contract → pipeline → workflow
+handoffs, commands, artifacts, actors, states, failure branches, and missing
+joins; it is an application profile, not the project's normative architecture.
 
 The [integrated system audit specification](docs/system-audit-specification.md) provides one standalone view of the architecture, normative MRAP lifecycle, contracts, controls, formal boundary, deployment obligations, and audit checklist. The [full software architecture](docs/architecture.md) remains the detailed implementation map. The [ceiling experiment report](paper/ceiling-experiment-results.md) records the accepted controlled validation, the preserved v2 negative result, and the accepted prospective corrective v3 study; the [2026-09-02 real-data execution audit](docs/real-data-training-hook-audit-2026-09-02.md) records the five-model GPU hook experiments and their non-authorizing release implications. Authors can begin with the dedicated [MLSys paper workspace](paper/README.md), which separates supportable claims from configured or missing experiments.
 
@@ -58,6 +65,40 @@ Production MRAP-L3/L4 deployments still require authenticated identities and sep
 | MCP/RAG, empirical workflows, and red-team execution helpers | **Incubating** | Source-tree evaluation and integration experiments |
 
 The logical Python components are documented in the [project scope](docs/project-scope.md). Internal modules are not automatically stable public APIs merely because they are importable.
+
+## Training-to-assessment demo
+
+The [government-health training demo](docs/guided-government-health-demo.md)
+runs the missing operational spine rather than relabelling a prebuilt fixture:
+dataset intake → outcome-independent plan freeze → actual target/reference
+XGBoost training with aggregate hooks → deterministic release-bundle hashing →
+post-plan membership testing of the same candidate → typed
+`AssessmentRequest` → `AssuranceEngine` → an MRAP transcript ending at
+`ASSESSED`.
+
+Install the experiment dependency tier, then run:
+
+```bash
+python -m pip install -e '.[experiments]'
+make demo
+```
+
+The default profile downloads and digest-checks the 3,772-row OpenML
+`sick`/thyroid public benchmark. For a fast offline software run, use:
+
+```bash
+make demo DEMO_DATASET_PROFILE=sklearn-breast-cancer
+```
+
+The admitted membership result is a floor or screen, never a ceiling. The
+trained candidate therefore ends **HOLD** (`inconclusive`) or **BLOCK**, never
+an invented `CLEAR`, local authorization, or deployment. The public benchmark
+is not clinical evidence for a government or hospital population.
+
+The older core-only synthetic journey remains available as
+`make demo-reference`. It is useful for rehearsing hold/block/tamper and mock
+registry/gateway/monitoring branches, but it does not train a model and is not
+the primary end-to-end pipeline.
 
 ## Quick start
 
@@ -135,6 +176,8 @@ each optional capability to its dependency tier.
 
 | Capability | Entry point | Guide or retained input |
 |---|---|---|
+| Actual XGBoost training-to-assessment journey | `make demo` | [Government-health training demo](docs/guided-government-health-demo.md) |
+| Core-only fixture and workflow rehearsal | `make demo-reference` | [Secondary reference suite](docs/guided-government-health-demo.md#secondary-reference-only-rehearsal) |
 | Local XGBoost classification audit | `scripts/run_xgboost_audit.py` | [XGBoost worker guide](docs/xgboost.md) |
 | XGBoost/MLP empirical and red-team workflow | `scripts/run_empirical_xgboost_mlp_workflow.py` | [SACRO-ML-inspired red-team guide](docs/sacro-ml-red-team.md) |
 | Policy-bound attack-battery demonstration | `examples/request.json` | [Attack catalog, positive-control, worker-output, and submission contracts](schemas/README.md) |
@@ -254,20 +297,25 @@ training-hook claim.
 
 ## Repository map
 
-```text
-src/model_release_assurance/   Installable reference implementation and CLI
-schemas/                       Versioned public machine contracts
-formal/                        Abstract protocol specification and Lean proofs
-examples/                      Small supported CLI examples
-tests/                         Core, integration, and experimental verification
-scripts/                       Developer and study entry points; not public CLI
-reproduction/                  Study inputs, registrations, manifests, and selected aggregate results
-paper/                         MLSys draft outline, evidence map, and reproducibility gates
-docs/                          Product, protocol, operational, and research guidance
-output/                        Generated local artifacts; ignored by Git
-```
+| Path | Maturity and purpose | Cleanup/retention rule |
+|---|---|---|
+| `src/model_release_assurance/` | **Reference core:** installable implementation and `mra` CLI | Current executable source; do not infer stability for undocumented imports. |
+| `schemas/` | **Public contracts:** current generated schemas plus superseded structural history | Preserve versioned historical bytes; the [schema index](schemas/README.md) identifies the current set. |
+| `formal/` | **Scoped formal artifact:** abstract protocol model, proofs, and correspondence records | Preserve with its pinned toolchain and explicit refinement boundary. |
+| `examples/` | **Executable examples:** small inputs for supported commands | Demonstrations only, never release evidence. |
+| `tests/` | **Verification:** core, integration, contract, and bounded experimental checks | A passing fixture is not a completed study or authorization. |
+| `scripts/` | **Experimental/developer tooling:** workers, studies, replay, and maintenance entry points | Not a public API; consult the [script catalog](scripts/README.md) before use. |
+| `reproduction/` | **Scientific record:** registrations, frozen configs, manifests, and selected aggregate results | Preserve negative and positive history and all manifest-bound paths; maturity is listed in the [reproduction index](reproduction/README.md). |
+| `paper/` | **Derived narrative:** manuscript, claim ledger, artifact index, and worked reports | May summarize named evidence but cannot become evidence merely by restating it. |
+| `docs/` | **Normative/reference/guide/experimental documentation** | The [documentation index](docs/README.md) assigns each document its status and source-of-truth boundary. |
+| `output/` | **Local generated artifacts:** ignored by Git | Safe for rerunnable development output; promote selected evidence deliberately rather than citing an ignored file. |
 
 The paths stay intentionally stable because scripts, tests, documentation, and retained manifests cross-reference them. Their ownership and maturity are defined in the [project scope](docs/project-scope.md), [documentation index](docs/README.md), [script catalog](scripts/README.md), and [reproduction index](reproduction/README.md).
+
+Old schema versions, failed preregistered runs, and per-arm manifest-bound
+copies are retained provenance, not disposable clutter. Run `make clean` to
+remove local Python, test, type-checker, lint, and build caches without touching
+`output/` or retained evidence.
 
 ## Core safety invariants
 
