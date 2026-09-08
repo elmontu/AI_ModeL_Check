@@ -52,7 +52,7 @@ llm-experiments = [
   "transformers>=4.48,<6",
 ]
 vision-experiments = [
-  "torch>=2.13,<2.14",
+  "torch>=2.13,<2.15",
   "torchvision>=0.28,<0.29",
 ]
 
