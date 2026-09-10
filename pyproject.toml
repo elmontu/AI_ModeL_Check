@@ -54,7 +54,7 @@ llm-experiments = [
 ]
 vision-experiments = [
   "torch>=2.13,<2.14",
-  "torchvision>=0.28,<0.29",
+  "torchvision>=0.28,<0.30",
 ]
 
 [project.scripts]
