@@ -84,7 +84,7 @@ jobs:
           "${RUNNER_TEMP}/mra-wheel-smoke/bin/mra" --version
           "${RUNNER_TEMP}/mra-wheel-smoke/bin/mra" validate "${GITHUB_WORKSPACE}/examples/request.json"
           "${RUNNER_TEMP}/mra-wheel-smoke/bin/mra" schema --output "${RUNNER_TEMP}/assessment-request.json"
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: model-release-assurance-${{ github.ref_name }}
           path: dist/*

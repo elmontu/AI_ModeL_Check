@@ -48,7 +48,7 @@ jobs:
         run: ${{ matrix.python-path }} scripts/validate_framework_e2e.py --output output/framework-e2e-ci
       - name: Retain local workflow test matrix and evidence
         if: always() && matrix.os == 'ubuntu-latest'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: framework-e2e-matrix
           path: output/framework-e2e-ci/
@@ -209,7 +209,7 @@ jobs:
           "${RUNNER_TEMP}/mra-wheel-smoke/bin/mra" --version
           "${RUNNER_TEMP}/mra-wheel-smoke/bin/mra" validate "${GITHUB_WORKSPACE}/examples/request.json"
           "${RUNNER_TEMP}/mra-wheel-smoke/bin/mra" schema --output "${RUNNER_TEMP}/assessment-request.json"
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: python-distribution
           path: dist/*
