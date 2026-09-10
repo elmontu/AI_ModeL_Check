@@ -252,17 +252,40 @@ the computing platform. Tactics may generate proof terms, but the kernel checks
 those terms. Reviewers should reproduce the check from the pinned source and
 record the repository commit and toolchain digest in an assurance case.
 
+<a id="python-mutation-replay"></a>
+### Python mutation replay
+
+From the repository root, using the environment containing the project dependencies:
+
+```bash
+python scripts/evaluate_protocol_mutations.py --output output/protocol-mutation-evaluation.json
+```
+
+The evaluator runs two synthetic positive controls (structural and authenticated transcript
+replay) and 21 enumerated unsafe mutations. It exits successfully only when both controls pass
+and every registered mutation is rejected. Retain the JSON result, its digest, the exact source
+revision and dirty-tree inventory, and the runtime environment when reporting an observed run.
+
+The resulting mutation score measures this finite case list, not all possible attacks, scientific
+test adequacy, or production authorization. These are concrete Python observations, not a
+Python-to-Lean refinement proof; the kernel-checked theorems apply to their stated abstract models.
+
 ## Correspondence and explicit non-claims
 
 The Python `ReleaseProtocolRun` verifier follows the same lifecycle vocabulary.
-Its `authenticated_v1` profile verifies domain-separated, release-bound
+Its Run 1.2 `authenticated_v2` profile verifies domain-separated, full-context-bound
 Ed25519 signatures for every event and declared artifact against an external
 trust store, rejects supplied compromised-key identifiers, and enforces a
 strictly increasing registry sequence. The machine-readable
 [`../formal/protocol-correspondence-v1.json`](../formal/protocol-correspondence-v1.json)
 and its regression test fail when roles, phases, event/action mappings or role
-permissions drift silently. The [adversarial mutation evaluation](protocol-evaluation.md)
+permissions drift silently. The [Python mutation replay](#python-mutation-replay)
 then checks concrete Python rejection behavior.
+
+Version 0.8.0 also rejects future events, cross-bound or expired typed reports,
+and unsigned population-context substitution. The four-verdict assurance facade
+has separate Python regression and sampled-evidence integration tests, not a new
+Lean refinement theorem. See [current fixes and remaining proof obligations](gap-remediation.md).
 
 The correspondence artifact is JSON, not prose, and now also contains an executable
 `runtime_obligations` map. Each theorem group names (1) the Lean claim IDs, (2) what a Python-side

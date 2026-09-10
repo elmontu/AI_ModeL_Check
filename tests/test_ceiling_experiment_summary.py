@@ -600,11 +600,11 @@ class CeilingExperimentSummaryTests(unittest.TestCase):
             )
             self.assertEqual(
                 markdown_path.read_bytes(),
-                (ROOT / "paper/ceiling-experiment-results.md").read_bytes(),
+                (ROOT / "academic/paper/ceiling-experiment-results.md").read_bytes(),
             )
             self.assertEqual(
                 svg_path.read_bytes(),
-                (ROOT / "paper/figures/ceiling-validation.svg").read_bytes(),
+                (ROOT / "academic/paper/figures/ceiling-validation.svg").read_bytes(),
             )
 
         retained = (

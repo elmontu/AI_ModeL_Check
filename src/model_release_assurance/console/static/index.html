@@ -1,0 +1,82 @@
+<!doctype html>
+
+<html lang="en">
+
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>MRA · Release testing console</title><link rel="stylesheet" href="/assets/style.css"><script defer src="/assets/app.js"></script></head>
+
+<body>
+
+<aside class="sidebar">
+
+  <a class="brand" href="/" aria-label="MRA home"><span class="brand-mark">m</span><span>MRA<span class="brand-sub">MODEL RELEASE ASSURANCE</span></span></a>
+
+  <div class="workspace-label">LOCAL WORKSPACE <span>01</span></div>
+
+  <nav aria-label="Main navigation"><a class="nav-item active" href="#overview"><span>◫</span> Test workspace</a><a class="nav-item" href="#cases"><span>▤</span> Release cases</a><a class="nav-item" href="#activity"><span>↗</span> Run history</a><a class="nav-item" href="/api/docs" target="_blank" rel="noopener"><span>⌘</span> API reference</a></nav>
+
+  <div class="sidebar-note"><span class="tiny-label">ENVIRONMENT</span><strong>Local pre-POC</strong><p>A shared sandbox for trusted testers. Results support review; they do not authorize release.</p><div class="version">REFERENCE LIBRARY <span>0.8</span></div></div>
+
+</aside>
+
+<div class="shell">
+
+<header class="topbar"><div>Workspace <span class="slash">/</span> <strong>Model release testing</strong></div><span class="connection" id="connection"><i></i> Connecting</span></header>
+
+<main id="overview">
+
+  <div class="heading"><div><div class="eyebrow">GOVERNMENT MODEL ASSURANCE</div><h1>Test before you release.</h1><p class="intro">Explore the workflow, prepare a candidate and inspect the evidence.</p></div><button class="primary" id="new-case">＋ Create release case</button></div>
+
+  <div class="notice"><span class="notice-symbol">i</span><div><strong>Assessment is not authorization.</strong> A completed run can still be blocked or inconclusive. This console does not publish or deploy models.</div><span class="notice-tag">PRE-POC</span></div>
+
+  <section class="metrics" aria-label="Workspace totals"><div><span>Release cases</span><strong id="count-cases">0</strong><small>All candidate types</small></div><div><span>Queued & running</span><strong id="count-active">0</strong><small>Processed by a separate worker</small></div><div><span>Completed runs</span><strong id="count-completed">0</strong><small>Inspect each scientific result</small></div><div><span>Failed runs</span><strong id="count-failed">0</strong><small>Artifacts retained for review</small></div></section>
+
+  <section aria-labelledby="start-title"><div class="section-title"><h2 id="start-title">Start with a guided test</h2><span>NO AGENCY DATA REQUIRED</span></div><div class="demo-grid">
+
+    <article class="demo-card"><div class="card-top"><span class="icon-box">◈</span><span class="pill muted">Synthetic fixtures</span></div><h3>Explore decision scenarios</h3><p>See how the workflow responds to missing evidence, demonstrated leakage, tampering and lifecycle changes.</p><div class="card-foot"><span>8 reference scenarios</span><button class="secondary" id="run-reference">Run scenarios <span>↗</span></button></div></article>
+
+    <article class="demo-card"><div class="card-top"><span class="icon-box teal">↗</span><span class="pill muted">Real public data</span></div><h3>Train → export → assess</h3><p>Train a linear, tree, neural-network, SVM or ensemble candidate on bundled public data, then inspect compatible red-team results.</p><div class="card-foot"><span>10 model presets · 4 datasets</span><button class="secondary" id="run-training">Open training wizard <span>↗</span></button></div></article>
+
+  </div></section>
+
+  <section class="flow" aria-label="Service architecture"><div><span class="step">1</span><div><strong>Console & API</strong><small>Create cases and submit jobs</small></div></div><span class="flow-arrow">→</span><div><span class="step">2</span><div><strong>Persistent queue</strong><small>Track queued and running work</small></div></div><span class="flow-arrow">→</span><div><span class="step">3</span><div><strong>Assessment worker</strong><small>Execute, record and return results</small></div></div></section>
+
+  <section><div class="section-title"><h2>Local language red-team</h2><button id="open-language" class="secondary">Test an installed language model</button></div><p>Secret extraction, instruction overrides, poisoned documents and simulated tool requests. Uses synthetic data and inert tools.</p></section><section><div class="section-title"><h2>Framework capabilities</h2><button id="show-capabilities" class="secondary">View support and gaps</button></div><p>Check which model families can train, run attacks or supply registered assessment evidence.</p></section><section id="cases"><div class="section-title"><h2>Release cases <span class="count" id="case-badge">0</span></h2><span>TRAINED · FINE-TUNED · COMBINED</span></div><div class="table-wrap"><table><thead><tr><th>Candidate</th><th>Model profile</th><th>Release route</th><th>Created</th><th><span class="sr-only">Open</span></th></tr></thead><tbody id="case-rows"></tbody></table><div class="empty" id="case-empty"><div class="empty-icon">▤</div><strong>No release cases yet</strong><p>Create a case to organise the candidate, lineage and assessment inputs.</p><button class="text-button" id="new-case-empty">Create your first case →</button></div></div></section>
+
+  <section id="activity"><div class="section-title"><h2>Run history</h2><span>UPDATES AUTOMATICALLY</span></div><div class="table-wrap"><table><thead><tr><th>Run</th><th>Execution</th><th>Assessment / preflight</th><th>Started</th><th><span class="sr-only">Open</span></th></tr></thead><tbody id="job-rows"></tbody></table><div class="empty compact" id="job-empty"><strong>Your test runs will appear here</strong><p>Start a guided test or run a case preflight.</p></div></div></section>
+
+  <footer>LOCAL TESTING CONSOLE <span>Evidence first. Accountable decisions follow.</span></footer>
+
+</main></div>
+
+<dialog id="language-dialog"><form id="language-form"><div class="dialog-head"><h2>Local language red-team</h2><button type="button" id="close-language" class="close" aria-label="Close language tests">×</button></div><label for="language-model">Installed Ollama model</label><select id="language-model" required></select><p>Runs nine fixed attacks and two controls on synthetic secrets. Tool calls are inspected but never executed. Document-injection tests use synthetic retrieved passages.</p><p id="language-error" class="form-error" role="alert"></p><button id="language-start" class="primary" type="submit">Run local tests</button></form></dialog>
+<dialog id="training-dialog">
+  <form id="training-form">
+    <div class="dialog-head"><h2>Train with public data</h2><button class="close" type="button" id="close-training" aria-label="Close training wizard">×</button></div>
+    <p id="training-step" class="eyebrow">STEP 1 OF 3 · SAMPLE DATA</p>
+    <section id="training-data">
+      <label for="training-name">Training case name</label><input id="training-name" required maxlength="100" value="Public data training">
+      <label for="training-dataset">Sample public dataset</label><select id="training-dataset"><option value="sklearn-breast-cancer">Wisconsin Diagnostic Breast Cancer</option><option value="sklearn-wine">Wine classification</option><option value="sklearn-digits">Handwritten digits (8×8 images)</option><option value="sklearn-diabetes">Diabetes progression (regression)</option></select>
+      <p id="training-data-description">569 samples · 30 numeric features · binary classification.</p>
+      <p class="operator-note">Bundled with scikit-learn. No upload, account or download needed. Learn on public sample data; this exercise does not establish clinical validity.</p>
+    </section>
+    <section id="training-settings" hidden>
+      <label for="training-preset">Model family</label><select id="training-preset"><option value="xgboost-small">XGBoost: registered assessment demo</option><option value="logistic">Logistic regression</option><option value="random-forest">Random forest</option><option value="mlp">Small neural network (MLP)</option><option value="mlp-finetuned">Fine-tuned MLP (retains base model)</option><option value="cnn">CPU convolutional digit classifier</option><option value="ridge">Ridge regression</option><option value="forest-regression">Random forest regression</option><option value="svm">RBF support-vector classifier</option><option value="ensemble">Soft-voting linear + forest ensemble</option></select>
+      <p>Local CPU presets with a fixed seed. Scaling is fitted on training data only. Compatible red-team tools run automatically; unsupported tools are shown explicitly.</p>
+      <p id="training-model-note" class="operator-note"></p>
+    </section>
+    <section id="training-review" hidden>
+      <h3>Ready to train</h3><p id="training-summary"></p>
+      <ol><li>Prepare the public dataset and freeze the evaluation plan.</li><li>Train, export and verify the model.</li><li>Run compatible classification or regression attacks and record coverage gaps.</li><li>Create an Education case with model, lineage and a registered membership assessment.</li></ol>
+      <p class="operator-note">Runs on your local worker. The registered assessment may be inconclusive or blocked. Additional exploratory tools do not supply release authorization.</p>
+    </section>
+    <p id="training-error" class="form-error" role="alert"></p>
+    <div class="detail-actions"><button type="button" class="secondary" id="training-back" hidden>Back</button><button type="button" class="primary" id="training-next">Next</button><button type="submit" class="primary" id="training-start" hidden>Start training</button></div>
+  </form>
+</dialog>
+<dialog id="case-dialog"><form id="case-form"><div class="dialog-head"><h2>Create release case</h2><button class="close" type="button" id="close-create" aria-label="Close">×</button></div><p class="dialog-sub">Begin with an empty evidence workspace. No approval is implied.</p><label for="case-name">Case name</label><input id="case-name" name="name" required maxlength="100" placeholder="e.g. Agency service assistant"><label for="case-kind">Model profile</label><select id="case-kind" name="kind"><option value="trained">Trained model</option><option value="fine-tuned">Fine-tuned model</option><option value="adapter">LoRA / adapter</option><option value="merged">Merged model</option><option value="ensemble">Ensemble / routed models</option><option value="distilled">Distilled model</option></select><label for="case-route">Release route</label><select id="case-route" name="route"><option value="named-party-weights">Model files to a named party</option><option value="public-weights">Public model files</option><option value="api">Controlled API</option></select><label for="case-mode">Workflow mode</label><select id="case-mode" name="mode"><option value="education">Education — simplified document requirements</option><option value="review">Review — all document inputs required</option></select><p class="form-error" id="form-error" role="alert"></p><button class="primary full" type="submit">Create case</button></form></dialog>
+
+<dialog id="detail-dialog"><div class="dialog-head"><div><div class="eyebrow" id="detail-label">RUN DETAILS</div><h2 id="detail-title"></h2></div><button class="close" id="close-detail" aria-label="Close">×</button></div><div id="detail-content"></div></dialog>
+
+<div id="toast" role="status" aria-live="polite" hidden></div>
+
+</body></html>

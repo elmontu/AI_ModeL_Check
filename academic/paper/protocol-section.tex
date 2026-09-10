@@ -1,0 +1,532 @@
+\section{The Complete Scoped Assurance Protocol}
+\label{sec:theory-protocol}
+A public body must authorize a model for a specified public function, not
+merely establish that its privacy audit passed. We therefore specify a
+government governance profile over MRAP, with institutional obligations and
+privacy evidence as separate, conjunctive conditions. Within that broader
+decision, the principal statistical guarantee,
+Theorem~\ref{thm:statistics}, controls erroneous ordinary privacy RELEASE
+recommendations across covered selection and repeated opportunities.
+It requires valid ceilings, not simply completed attacks. Soundness alone
+would permit always refusing; the constructive routes below show when
+informative ceilings and decisive comparisons are possible, while the
+observation-relative countermodels identify conditions under which the
+available information cannot support them.
+
+MRAP supplies the complete normative lifecycle connecting these claims to
+review, authorization and mediated service. A risk recommendation and an
+institutional authorization remain distinct outputs: neither a signed
+recommendation nor offline replay authorizes service.
+We specify parties, immutable records, progression and refusal states,
+evidence semantics and transaction boundaries before stating the guarantees.
+Appendix~\ref{app:algorithms} gives pseudocode and
+Appendix~\ref{app:proofs} the written proofs; the specification does not assert
+that Python realizes every normative step.
+
+\subsection{Parties, adversaries, and trusted boundaries}
+The policy authority fixes obligations and tolerances; the population steward
+approves protected units, priors, and scope; the owner and configuration
+generator register artifacts and candidates. Evidence workers collect
+observations, assessors replay them, and the optimizer applies the frozen
+selection rule. An authorizing authority records independent governance
+review, the portfolio registry commits the release, the gateway mediates
+access, and monitors and the incident authority suspend or revoke it. Approved
+keys, conflicts, separation of duties and permitted combinations of roles
+belong to the trust profile; different filenames do not establish independence.
+
+A \emph{privacy adversary} observes the registered export, auxiliary information
+and allowed adaptive transcript to maximize inference gain. A separate
+\emph{protocol adversary} may fabricate evidence, alter or replay messages,
+withhold records, race concurrent proposals, or corrupt actors. Authentication,
+collision-resistant bindings, sound inference/certificate procedures, a
+faithful linearizable registry, trustworthy time/status checks and complete
+per-request mediation are distinct assumptions. They do not imply that a
+corrupted evidence authority measures truthfully or that the declared world
+model is complete.
+
+\subsection{Government governance profile and institutional gates}
+\label{sec:gov-profile}
+The responsible public body approves a profile $P_G$, bound into the existing
+policy, trust and context attachments of instance $I$. It names the agency,
+accountable service owner, competent authorizing office and independent
+reviewers, including delegation limits and conflicts. It fixes the public
+purpose, intended and prohibited uses, affected population, jurisdiction and
+applicable legal/policy instruments. These are profile commitments, not new
+JSON schemas or claims that the reference code already checks government
+compliance. Applicability is decided by the institution's competent authorities;
+the profile is not a universal statement of public law.
+
+Each mandatory obligation has an owner, required evidence, authorized reviewer,
+due stage, review interval, expiry and escalation route. The institution
+registers mandate/delegation review; impact and rights review; appropriate
+fairness, robustness, cybersecurity and procurement assessments; and human
+oversight with specified powers to intervene. It also registers notice and
+public-transparency arrangements, accessible explanation and redress routes,
+incident handling, monitoring, renewal and retirement responsibilities.
+Publication may have a reasoned, competent-authority-approved exemption where
+the governing profile permits one; withholding a record does not erase its
+internal review obligation. An assessor cannot silently delete a requirement
+or invent an exemption after observing an unfavorable result.
+
+Let $M_G^k(t)$ contain all mandatory institutional obligations due by stage
+$k$ at time $t$, including earlier obligations whose evidence must remain
+current and period-identified review obligations whose deadlines have arrived. For each
+$j$, a bounded registered checker $V_j$ consumes scope-bound evidence $e_j$,
+the instance, candidate, authoritative status $\Sigma$ and time $t$, returning
+PASS, FAIL or UNKNOWN. Define
+\[
+ G^k(I,c,t)=\bigwedge_{j\in M_G^k(t)}
+   [V_j(e_j;I,c,\Sigma,t)=\mathrm{PASS}].
+\]
+Evidence binds its issuer's competence/delegation, source material, rationale,
+scope, conditions and current review status. For institutional judgments,
+PASS records the prescribed competent attestation and supporting checks;
+it is not an algorithmic proof that the judgment is legally or ethically
+correct. Missing, expired, conflicting or unverifiable evidence is not PASS.
+The named authority approves the mandatory roster and its applicability;
+an empty caller-supplied roster cannot replace that profile.
+Every successful progression edge checks $G^k$ for its destination before persistence,
+using the authoritative time and status at that transition. Registration,
+plan, evidence, assessment, selection, review, commitment and activation
+therefore cannot skip a due institutional obligation. Later-due evidence
+is not demanded as if its underlying activity had already occurred.
+Refusal, denial, suspension and revocation retain their original authority
+checks and do not require $G^k$ to pass: a failed obligation must not prevent
+the protocol from stopping service.
+
+Selection adds $G^{\rm select}$ to the existing feasible-set conditions.
+Independent governance review is then obtained before commitment, rather
+than assumed to exist at selection. At the authorization transaction define
+\[
+\begin{aligned}
+ \operatorname{GovCommitOK}(I,c,t)={}&\operatorname{PrivEligible}(I,c)\\
+ &{}\land G^{\rm commit}(I,c,t)\\
+ &{}\land\operatorname{MRAPReady}(I,c,t),
+\end{aligned}
+\]
+where PrivEligible is the privacy-disposition/mandatory-CLEAR rule below and
+MRAPReady includes every other original selection, review and commit guard.
+Only a successful atomic commit with this predicate issues a government
+authorization. Privacy RELEASE or RELEASE-WITH-RISK alone never does.
+Risk acceptance cannot waive a mandatory public-law or rights safeguard,
+change the institutional roster, or substitute utility for required review.
+An institutional refusal is recorded separately from the privacy interval:
+a model can have acceptable evidenced privacy and still be unauthorized.
+
+At activation and each service grant, require $G^{\rm serve}$, including
+applicable intended-use, oversight, current-review and renewal conditions.
+Before commit, future monitoring or redress obligations require approved,
+resourced arrangements and responsible owners, not an assertion that all
+future conduct has already occurred. Their due-time evidence is checked when
+due; unknown status, a missed renewal or withdrawal of authority prevents new
+grants. Changed purpose, authority, policy or material impact requires a fresh
+instance and applicable reassessment; retirement ends service eligibility.
+These gates enforce recorded institutional conditions under the trust model.
+The six guarantees below do not become proofs of lawful government,
+substantive fairness, effective redress or democratic legitimacy.
+
+\subsection{Immutable context, messages, and evidence}
+An instance $I$ fixes an identifier, expected registry head $h$, policy and
+population snapshots, artifact and complete-interface commitments, finite
+candidate set $\mathcal C$, nonempty in-scope sets $T_c$, utility requirements,
+evidence plan, trust profile and expiry. Each game states access level,
+auxiliary knowledge, query budget, adaptivity, prior, protected unit and metric.
+The interface inventory covers weights, precision, preprocessing, outputs,
+explanations, retrieval/tools/memory where applicable, metadata, logs and
+related releases. An architecture label cannot replace this inventory.
+
+The approved finite scenario universe $\mathcal D$ must satisfy
+\[
+ \mathcal D=\mathcal O\mathbin{\dot\cup}
+                 \mathop{\dot\bigcup}_{t}\mathcal S_t,
+\]
+where exclusions $\mathcal O$ have reasons and every in-scope cell has an owner
+and decision evidence. Channel-to-scenario witnesses include \emph{joint}
+observations. Overlapping threat names may be converted to membership-profile
+atoms of total predicates; the all-false residual atom stays visible.
+This partitions supplied identifiers, not all real-world attacks.
+
+Each message contains version/type, instance and message identifiers,
+issuer/role, issue/expiry times, predecessor digests and payload. Its signature
+covers a domain-separated digest of the canonical entire envelope. A consumer
+captures source bytes once for hashing and parsing, checks type, role,
+signature, freshness, predecessor state and exact instance binding, then
+replays semantics. Signature validity alone is insufficient.
+The evidence inventory binds data manifests, training configuration, code,
+randomness records, completion metrics and final artifact hashes where policy
+requires them. Pretrained artifacts retain their actual provenance limits.
+Training start/finish are evidenced provenance events, not new MRAP phase
+names; authentic records alone do not prove that training occurred.
+
+For each $(c,t)$ use finite secret, observation and action spaces $S,Y,A$,
+prior $\pi$, row-stochastic channel $K$ and gain $g:S\times A\to[0,1]$.
+The complete joint transcript has value
+\[
+ \theta_{ct}=V_g(\pi,K)
+   =\sum_y\max_a\sum_s\pi(s)K(y\mid s)g(s,a).
+\]
+This is posterior $g$-vulnerability \citep{alvim2012gain}. The definition and
+its decision-theoretic interpretation are established foundations.
+Infinite/continuous interfaces need a justified extension or an enforced
+finite abstraction. For uniform binary guessing, success is $\theta$ and
+normalized advantage is $2\theta-1$; these units must not be mixed with
+attribution loss, canary exposure or another gain.
+
+Admit evidence by \emph{direction}: justified lower endpoint, exact value,
+valid analytic/statistical upper endpoint, or descriptive screen without
+decision authority. For the same game and valid simultaneous coverage,
+\[
+ \begin{gathered}
+ L=\max\{b,\ell_1,\ldots,\ell_r\},\quad U=\min\{1,u_1,\ldots,u_q\},\\
+ b=\max_a\sum_s\pi(s)g(s,a).
+ \end{gathered}
+\]
+Selection of these extrema must be covered. Missing optional endpoints may
+use $b$ and one only after required evidence and control obligations are met.
+A missing required experiment, unsupported endpoint, $L>U$ or invalid context
+is a refusal, not a manufactured uncertainty interval. Gap is $U-L$; a
+crossing is $L\le\tau<U$. Comparisons use exact represented rationals.
+For incremental risk $V_g(\pi,K)-b$, the prior-only floor is zero and both
+absolute endpoints must first have $b$ subtracted (then be bounded by the
+metric's range). A prior upper cap is not an attained baseline. Ignoring $Y$
+and choosing a prior-optimal action proves $V_g(\pi,K)\ge b$; consequently a
+valid absolute ceiling below $b$ is inconsistent, not a reason to lower $L$.
+
+\subsection{Integrated safeguards: repair or justified refusal}
+\label{sec:admission}
+The following O1--O7 rules implement the evidence conditions \emph{inside}
+plan approval, admission, decision reduction and serving. Together with their
+stated scientific and trust premises they provide a sufficient construction,
+not a characterization of every possible sound protocol. The countermodels
+show why particular weaker claims fail in specified observation classes;
+they do not establish that this exact rule set is universally necessary or
+minimal. The abstract total operation $\operatorname{Admit}(I,c,t,E)$
+returns either $\operatorname{Valid}(L,U,r,\Gamma)$ or
+$\operatorname{Refuse}(e,\rho)$, where $r$ is an approved bound route,
+$\Gamma$ its explicit premises, $e$ a
+reason and $\rho$ a remedy or scoped obstruction. These are mathematical
+outputs, not new JSON schemas. Each approved route has a fixed, terminating
+certificate/procedure checker with bounded input/resource limits; unrecognized
+routes, failed checks and resource exhaustion refuse. Its soundness theorem
+and observational trust premises are stated separately. Totality is a
+decision over registered checkable routes, not an oracle deciding arbitrary
+scientific truth. Unsupported inputs never receive a passing validity predicate.
+
+\begin{enumerate}
+\item \textbf{O1: direction and completeness.}
+An upper endpoint must come from an approved analytic/structural theorem,
+exact channel calculation, complete finite-class inference, or valid
+simultaneous channel confidence set. A tested floor cannot fill that role.
+An explicitly permitted worst-case $U=1$ is valid only after every required
+evidence obligation is fulfilled; it is not evidence of low risk.
+\item \textbf{O2: selection-wide accounting.}
+Freeze the inference procedure, selectable family and stopping rules, and
+record a valid simultaneous event and lifetime allocation before observation.
+All influencing failed, abandoned and retried families remain charged.
+Uncovered selection or a merely numerical allocation is refused.
+\item \textbf{O3: scope and observation adequacy.}
+Check the approved partition including residual/exclusions, all declared
+channel witnesses and policy-required evidence of the observation boundary.
+Refuse claims beyond that justified boundary. A partition alone does not
+certify that a real deployment has no hidden interface.
+\item \textbf{O4: joint evidence.}
+Admit only a bound on the entire allowed joint transcript and current
+portfolio, or a sound applicable joint composition theorem. Marginal
+certificates alone cannot satisfy this obligation. Rebase and replay on a
+changed head; absent required joint evidence is refusal.
+\item \textbf{O5: metric-preserving transfer.}
+Verify game, prior, access, decoder and gain identity, the safe direction of
+transfer, and all numerical/structural premises. Charge an approximate
+transfer's proven residual in its supported metric. Expected gain is not
+silently substituted for worst-case posterior or another policy loss.
+\item \textbf{O6: non-overridable decision semantics.}
+Recompute the ordered disposition from every admitted in-scope cell.
+Any refusal, contradictory interval, failed mandatory obligation or
+demonstrated threshold violation blocks. Verify exact acceptance bindings
+for every crossing. Acceptance cannot alter endpoints or substitute for
+a strict mandatory CLEAR in selection or commit.
+\item \textbf{O7: independent semantic and live binding.}
+Require the registered source-observation, control, replay and
+attestation/trust evidence, not just a signed assertion of its existence.
+Before each service, require authoritative current status and faithful
+deployment measurement/binding. Truth beyond the justified measurement
+and trust model is an explicit assumption, not a signature theorem.
+\end{enumerate}
+
+If a required route fails or evidence is missing, Admit returns Refuse and
+O6 makes the outward disposition BLOCK; applicable lifecycle rules then
+abort or require redesign. If all obligations pass but only an allowed
+$[L,1]$ is available, Admit returns Valid: the interval expresses real
+bounded uncertainty and goes to the crossing/acceptance rules. A missing
+mandatory battery, control or joint witness can never be repaired by
+selecting $U=1$.
+
+A no-go annotation identifies the requested claim, restricted observation
+class, quantified safe/unsafe worlds and proof premises. It either explains
+refusal of that claim or why an otherwise admissible interval remains
+uninformative. It is never a clearance certificate, evidence waiver or
+global infeasibility certificate. New observations or stronger enforcement
+may escape its premises, but require a newly justified context/plan.
+Thus the protocol addresses all seven inference hazards by constructive
+admission rules or explicit refusal boundaries; it does not claim that every
+deployment can supply the required evidence.
+
+\subsection{State transitions and invalidation}
+Table~\ref{tab:lifecycle} specifies the full normative machine. Every progression
+consumes the immediately preceding authenticated records and rechecks their
+continuing validity. Registration of an already trained model cannot
+retrospectively preregister its training or audit selection. Plans and error
+allocations precede the observations they purport to cover.
+
+\begin{table*}[t]
+\centering\small
+\caption{Full normative MRAP lifecycle. Gates are conjunctive; records describe obligations, not implemented services.}
+\label{tab:lifecycle}
+\begin{tabular}{>{\raggedright\arraybackslash}p{0.26\textwidth}>{\raggedright\arraybackslash}p{0.23\textwidth}>{\raggedright\arraybackslash}p{0.43\textwidth}}
+\toprule
+Transition & Record and responsible role & Necessary condition beyond valid envelopes \\
+\midrule
+DRAFT $\to$ REGISTERED & Registration; owner & Purpose, parties, artifact, full interface, population, policy and current head bound (G0--G3). \\
+REGISTERED $\to$ PLAN\_FROZEN & EvidencePlan; assessor and required approvers & Complete candidate/threat roster, controls, worker/source bindings, stopping/selection rule and prospective error allocation (G4--G5). \\
+PLAN\_FROZEN $\to$ EVIDENCE\_FROZEN & EvidenceBundles; workers & Collection closed; required training provenance, failures/exclusions, controls and observed source bindings replayed (G6). \\
+EVIDENCE\_FROZEN $\to$ ASSESSED & AssessmentReport; assessor & Every required cell evaluated; evidence direction, scope, arithmetic, transfer and joint portfolio checked (G7--G9). \\
+ASSESSED $\to$ OPTIMIZED & OptimizationReport; optimizer & Mandatory privacy and utility constraints first; deterministic selection second; complete portfolio snapshot bound (G10). \\
+OPTIMIZED $\to$ COMMIT\_PENDING & AuthorizationCommitRequest; authorizer & Independent review, objections, conflicts, conditions, expiry and incident/retirement ownership complete; no mandatory gate overridden (G11). \\
+COMMIT\_PENDING $\to$ AUTHORIZED & AuthorizationReceipt; registry & Expected-head CAS, unused nonce, live evidence, complete portfolio and all budget deltas committed atomically (G12). \\
+AUTHORIZED $\to$ ACTIVE & ActivationReceipt; gateway & Authoritative inclusion/current status, measured bytes/interface/controls and live lease verified (G13). \\
+ACTIVE $\to$ SUSPENDED & Suspension/incident record; gateway/monitor & Material change, drift, budget/lease loss or unknown status stops new access (G14). \\
+AUTHORIZED, ACTIVE, SUSPENDED $\to$ EXPIRED & Expiry record & Deadline elapsed; unused authorization and new service denied. \\
+Nonterminal $\to$ REVOKED & Authorized revocation record & Registry records revocation; gateway denies new access. \\
+Pre-authorization $\to$ REDESIGN\_REQUIRED & Remediation record & Missing/remediable evidence or incomplete feasible search; changed proposal needs a new instance. \\
+ASSESSED/OPTIMIZED $\to$ REJECTED & Infeasibility/completeness certificate & No feasible candidate in a certified complete search; a searched subset is insufficient. \\
+Pre-authorization $\to$ ABORTED & Failure record & Stale head, invalid/replayed/conflicting message, timeout or failed commit; no authorization issued. \\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+REVOKED, EXPIRED, REJECTED and ABORTED are terminal. REDESIGN\_REQUIRED and
+SUSPENDED supply no shortcut to service; a changed or reassessed proposal
+uses a fresh instance. A same-ID, same-digest retry may return its recorded
+receipt, but cannot extend a lease, undo revocation or bypass current service
+checks. Same ID with different content is a violation. Any immutable change
+invalidates downstream applicability; old signatures remain historical bytes,
+not approvals of the new instance. Stale-head retries rebase and repeat
+affected portfolio, budget, selection and review checks. Every evidence
+family influencing later selection consumes its registered statistical
+allocation, including failed or abandoned attempts; abort does not refund
+an already observed experiment.
+
+\paragraph{Persistent disclosure and service revocation}
+Let $H_k$ conservatively contain every release potentially observed by the
+declared adversary by step $k$, including revoked and expired releases, and
+let $A_k$ be the active service roster. Require $A_k\subseteq H_k$ and
+$H_k\subseteq H_{k+1}$. Portfolio evidence covers the joint observations in
+$H_k$ plus the candidate, with adversary auxiliary knowledge and cross-context
+links preserved. Suspension, revocation and retirement may shrink $A_k$, never
+$H_k$. Before a new observable grant, atomically record its exposure or a
+conservative reservation in $H$ with the budget/status transaction; if delivery
+is uncertain, retain the reservation. A renamed purpose, instance or composition
+domain cannot reset an adversary's knowledge. Independence or separation across
+domains needs its own applicable argument. The monotonicity claim follows by
+induction because exposure transitions add identifiers and all other transitions
+leave $H$ unchanged; it assumes a complete initial roster and faithful mediation.
+It is a specified invariant, not a new machine-checked result.
+
+\subsection{Recommendation, selection, and authorization}
+For one candidate let $B$ contain invalid/missing decision evidence for any
+in-scope threat, missing mandatory obligations/controls, inconsistent bounds,
+inadmissible clearance, stale context and invalid supplied acceptance.
+Include every $L_t>\tau_t$. Let $X=\{t:L_t\le\tau_t<U_t\}$. Return, in order:
+BLOCK if $B\ne\varnothing$; RELEASE if $X=\varnothing$;
+RELEASE-WITH-RISK if valid acceptance covers every crossing;
+INCONCLUSIVE if every crossing has a specific applicable resolving
+measurement or bound; otherwise BLOCK.
+A resolving plan identifies its estimand, procedure, allocation and
+decision-relevant target, not a promise that every near-boundary case will
+resolve. It binds the current instance, identifies obtainable data and an
+available fresh error allocation, and justifies why the proposed precision or
+bound can change this decision. A spent allocation, unavailable data, or a
+generic suggestion to rerun the same test is insufficient. At $L=\tau$, a
+plan needing a strictly positive separation must justify that separation or
+be refused. The current outward implementation has no such plan verifier and
+therefore refuses unaccepted crossings; scientific planning text is advisory.
+Missing required evidence is BLOCK in this outward facade. Internal
+scientific appraisal may retain INCONCLUSIVE/HOLD with redesign; neither
+permits authorization.
+
+Acceptance requires policy permission, an externally trusted acceptor,
+current validity, and exact instance, interval, threshold and crossing-ceiling
+bindings. It records risk accepted, not a smaller risk. The facade preserves
+the original assessment's admission status: a below-threshold endpoint alone
+cannot promote a non-CLEAR assessment to ordinary RELEASE. Risk acceptance
+leaves every mandatory assessment status unchanged.
+
+The optimizer admits a candidate only when its disposition is RELEASE or
+RELEASE-WITH-RISK, every mandatory assessment cell is CLEAR, and all utility,
+controls, transfer and portfolio obligations pass. RWR additionally requires
+that every crossing is policy-permitted optional risk with exact valid
+acceptance. An INCONCLUSIVE candidate cannot enter the feasible set.
+It then applies the frozen least-information criterion and tie-break.
+Neither utility nor RELEASE-WITH-RISK converts an unresolved mandatory cell
+to CLEAR. Optional risk acceptance, where permitted, cannot waive a mandatory
+gate. Thus a facade disposition alone is never the commit predicate.
+An infeasible incomplete search yields redesign, not global rejection.
+For a government instance, the feasible set additionally requires
+$G^{\rm select}$; the authorizer obtains newly due independent institutional
+reviews, and the registry requires GovCommitOK at commitment. A failed or
+unknown institutional check refuses authorization even if the privacy
+recommendation is RELEASE.
+
+Within one transaction the registry checks authorizer, expected head, nonce,
+live evidence, complete joint portfolio and all remaining budgets, then
+commits authorization, budget deltas and new head together. No usable receipt
+may escape an uncommitted transition. The gateway independently verifies
+current inclusion/status and measured deployment identity at activation.
+Each new access has a service linearization point that jointly validates the
+current authorization epoch/status, reserves required budgets and grants the
+request against an immutable measured artifact/interface snapshot. This point
+also checks $G^{\rm serve}$ for government instances and is serialized with
+revocation; stale epochs and unknown status deny access.
+Revocation prevents grants linearized afterward, not necessarily completion
+of earlier grants or recovery of delivered weights or outputs.
+
+\subsection{Central guarantee and supporting results}
+The central statistical inference is from valid, selection-wide ceilings to
+controlled false ordinary privacy RELEASE, not from successful tests to
+overall governmental legitimacy. Institutional gates remain additional
+authorization conditions, not privacy confidence endpoints.
+Proposition~\ref{prop:decision} supplies the deterministic implication used
+by Theorem~\ref{thm:statistics}. The remaining results specify the scope of
+that implication, routes for obtaining or transferring its endpoints, and
+the extra enforcement premises needed to extend it to service.
+Appendix~\ref{app:proofs} proves these conditional statements; none proves
+the truth of an imported scientific assertion.
+
+\begin{proposition}[Determinacy and endpoint soundness]
+\label{prop:decision}
+Fixed inputs yield exactly one disposition. On joint interval coverage,
+RELEASE implies $\theta_t\le\tau_t$ for every in-scope threat; a blocking
+floor implies $\theta_t>\tau_t$. Other BLOCK reasons establish inadmissibility,
+not necessarily excessive risk.
+\end{proposition}
+
+\begin{theorem}[Selection- and lifetime-valid ordinary release]
+\label{thm:statistics}
+Before inspecting family $j$, allocate $\mathcal F_{j-1}$-measurable
+$\alpha_j$, with $\sum_j\alpha_j\le\alpha$ almost surely. Its event $E_j$
+covers every selectable candidate, threat, subgroup, portfolio and look,
+with $\Pr(E_j^c\mid\mathcal F_{j-1})\le\alpha_j$. If all used ceilings are
+sound deterministic bounds or belong to these families, and context,
+collection and reduction premises hold, then
+\[
+ \Pr(\exists k,c,t:\ d_{ck}=\Release,\
+                    \theta_{ctk}>\tau_{ctk})\le\alpha .
+\]
+\end{theorem}
+Independence between families is unnecessary. This frequentist guarantee
+excludes RELEASE-WITH-RISK and is not a posterior safety probability.
+An allocated number without a valid procedure does not establish $E_j$.
+Heterogeneous audits enter this argument through justified endpoints in their
+own registered games. Their raw scores need not share a scale and are not
+pooled: the union bound controls failures of the applicable ceiling claims,
+while each risk is compared with its own tolerance. The result can therefore
+combine different admissible evidence routes without treating a membership
+score, canary exposure and provenance signal as interchangeable evidence.
+
+\paragraph{Supporting scope, transfer, and enforcement results}
+The next three results distinguish coverage of declared scenarios, validity
+of transferred risk bounds, and preservation of the recommendation's context
+through service. Their premises complement statistical coverage; none can
+replace it or establish the adequacy of an unobserved deployment boundary.
+
+\begin{proposition}[Relative scope completeness]
+\label{prop:scope}
+The disjoint-union check gives exactly one assignment or reasoned exclusion
+per declared scenario. It establishes neither the correctness of exclusions
+nor completeness of the real-world universe.
+\end{proposition}
+
+\begin{theorem}[Finite safe-direction transfer]
+\label{thm:transfer}
+For state-independent stochastic $Q$, $K_r=K_aQ$ implies
+$V_g(\pi,K_r)\le V_g(\pi,K_a)$. If
+$\max_s d_{\rm TV}(K_r(\cdot\mid s),(K_aQ)(\cdot\mid s))\le\eta$, then
+$V_g(\pi,K_r)\le\min\{1,V_g(\pi,K_a)+\eta\}$.
+\end{theorem}
+This classical Blackwell/TV argument concerns bounded expected gain and the
+complete joint channel. Restricted decoders require closure under composition
+with $Q$, including resource costs. Posterior maxima and fixed-FPR operating
+points need separate guarantees.
+
+\begin{theorem}[Conditional lifecycle integrity and progress]
+\label{thm:lifecycle}
+With correct envelope/guard evaluation, binding and role assumptions, a faithful
+linearizable registry, trusted time/status and atomic status/budget/grant
+mediation serialized with revocation, every
+served request has an unchanged instance, all ordered mandatory predecessors,
+a committed live authorization and matching measured interface. If service
+additionally requires ordinary RELEASE and Theorem~\ref{thm:statistics}'s
+premises, a served registered-threshold violation has probability at most
+$\alpha$. A feasible instance reaches ACTIVE along the finite path if every
+required actor eventually responds successfully, checks terminate, the head
+has no conflicting external change before commit and all deadlines remain live.
+\end{theorem}
+Conditional progress is not availability under withholding, head churn or
+expiring evidence. Existing Lean nonvacuity does not prove this liveness claim.
+
+\paragraph{A constructive route to nontrivial decisions}
+The following finite-game result shows that empirical evidence can supply a
+ceiling when the adversary class is complete and sampling assumptions hold.
+It is deliberately stronger than testing a chosen attack battery: it bounds
+the best allowed decoder, not merely the attacks that happened to succeed.
+
+\begin{theorem}[Ceilings from a complete finite attack class]
+\label{thm:finite-ceiling}
+Fix all $M$ deterministic decoders of a finite game, $0<\alpha<1$, and
+$n\ge1$ IID held-out pairs from its registered joint law $\pi(s)K(y\mid s)$,
+with gains in $[0,1]$. Let
+$e_n=\sqrt{\log(2M/\alpha)/(2n)}$ and
+$h=\max_d\widehat V(d)$. Then
+$[\max\{b,h-e_n\},\min\{1,h+e_n\}]$ covers the unrestricted game value with
+probability at least $1-\alpha$. If $|\theta-\tau|\ge\delta>0$ and
+$2e_n<\delta$, endpoints resolve the correct side on that event.
+\end{theorem}
+Completeness means all mappings $Y\to A$, so $M=|A|^{|Y|}$ and the strategy
+attaining $b$ is included. For an incomplete class the ceiling bounds only
+that class. A sufficient sample size is
+$n>2\log(2M/\alpha)/\delta^2$. Literal enumeration is exponential in $|Y|$,
+but the unrestricted empirical maximum separates by observation and can be
+computed from counts; exponential enumeration is not a computational lower
+bound. The certified transcript alphabet and sufficient labeled sampling
+remain obligations. This applies Hoeffding's inequality
+\citep{hoeffding1963bounded}; it is a
+constructive route, not evidence of scalability to current LLM interfaces.
+Exact channel evaluation or a valid simultaneous channel confidence set
+with $U=\sup_{K'\in\mathcal K}V_g(\pi,K')$ are alternative conditional routes.
+
+\subsection{Constructive sufficiency and observation-relative obstructions}
+\label{sec:gaps}
+O1--O7 constrain the normative protocol above, rather than only a subsequent
+discussion of limitations. Appendix~\ref{app:gaps} pairs the seven inference
+hazards with constructive repairs or explicit observation-relative
+obstructions. These are not seven independent impossibility theorems:
+selection and acceptance errors admit direct protocol repairs, whereas
+nonidentifiability concerns the information available to a verifier.
+Theorem~\ref{thm:observations} shows that safe and unsafe worlds with verifier
+observations within TV distance $\Delta$ cannot have acceptance probabilities
+differing by more than $\Delta$. It explains exactly why weak summaries,
+marginal-only accounts, hidden channels and authentic-but-false statements
+cannot support the excluded stronger claims within the constructed world
+pairs. Richer observations or additional justified restrictions can escape
+those premises; their adequacy must be evidenced through O3/O7. The argument
+does not rule out a different sufficient protocol or prove a universal
+impossibility of privacy assurance.
+
+The constructive routes are explicit: complete finite inference or structural
+ceilings (O1), simultaneous nonrefundable error accounting (O2), declared
+coverage plus justified observation boundaries (O3), joint assessment (O4),
+metric-correct transfer (O5), and non-override plus live mediation (O6/O7).
+Section~\ref{sec:gap-study} reports finite tests of their witnesses and repairs.
+No fixed sampling budget can guarantee uniformly reliable decisive answers
+arbitrarily close to a threshold (Appendix~\ref{app:threshold}); this limits
+promises of progress, not the correctness of a fail-closed refusal.

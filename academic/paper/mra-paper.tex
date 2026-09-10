@@ -1,0 +1,1075 @@
+\documentclass[conference,compsoc]{IEEEtran}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{booktabs,array,tabularx,multirow}
+\usepackage{graphicx}
+\graphicspath{{figures/}}
+\usepackage[numbers,sort&compress]{natbib}
+\usepackage{xurl}
+\urlstyle{same}
+\usepackage[hidelinks]{hyperref}
+\newtheorem{theorem}{Theorem}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{definition}{Definition}
+\newtheorem{counterexample}{Counterexample}
+\newtheorem{securitytheorem}{Security Theorem}
+\renewcommand{\thesecuritytheorem}{S\arabic{securitytheorem}}
+\newtheorem{uctheorem}{Realization Theorem}
+\renewcommand{\theuctheorem}{U\arabic{uctheorem}}
+\newcommand{\mra}{\textsc{MRA}}
+\newcommand{\mrap}{\textsc{MRAP}}
+\newcommand{\Release}{\mathrm{RELEASE}}
+\newcommand{\Risk}{\mathrm{RELEASE\mbox{-}WITH\mbox{-}RISK}}
+\newcommand{\Block}{\mathrm{BLOCK}}
+\newcommand{\Hold}{\mathrm{INCONCLUSIVE}}
+\newcommand{\code}[1]{\texttt{\small #1}}
+\title{Model Governance for Government Bodies:\\An Evidence-Bound Release Assurance Protocol}
+\author{}
+\begin{document}
+\maketitle
+\input{experimental-tables.tex}
+\input{gap-tables.tex}
+\begin{abstract}
+Government bodies must decide not only whether a model performs adequately,
+but whether its intended use is authorized, its impacts are acceptable, and
+responsibility remains identifiable throughout service. We present Model
+Release Assurance (MRA), a lifecycle governance protocol binding evidence
+and institutional decisions to a specified model, public purpose, affected
+population and operating context. A government profile makes mandate,
+impact review, accountable approval, human oversight, redress, transparency
+and continued-use obligations stage-specific conditions. A technical
+recommendation cannot substitute for institutional authorization, and
+residual-risk acceptance cannot waive mandatory safeguards. Privacy is the
+worked formal assurance component: per-threat floors, ceilings and gaps
+support four explicit recommendations, with a conditional lifetime bound
+on erroneous ordinary privacy release. Constructive finite-channel routes
+and observation-relative countermodels characterize what this evidence
+can and cannot establish. Component evaluation separates validity from
+decision usefulness: controlled channels show no observed undercoverage in
+1,200 primary replays; a revised model-backed study resolves four
+margin-eligible families in 200/200 repetitions each but a near-threshold
+family in only 31/200. A new study independently trains 168 synthetic models:
+simultaneous bounds make no observed invalid selections, but miss all 50
+oracle-feasible logistic cases in a boundary-stress context. A separate local
+lifecycle reference passes 37 Python regressions, including transactional
+failure and disclosure-history checks. Tree, image and language-model workloads provide
+additional evidence about technical applicability, not government service
+outcomes. The contribution is a proposed integration of established assurance,
+information-flow and statistical methods, with explicit rules for admitting,
+refusing and invalidating privacy evidence at government decision boundaries.
+An explicit game-based security experiment separates signature/hash-based message
+correspondence from atomic replay prevention and scientific evidence truth.
+A restricted public-record authorization protocol additionally has an ideal
+functionality and a written perfect UC4SS realization proof in an
+authenticated-channel hybrid; concrete transport substitution remains conditional.
+The formal results concern conditional privacy assurance and lifecycle
+integrity; they do not establish legal compliance, institutional effectiveness
+or production enforcement.
+\end{abstract}
+{\raggedright\noindent\textit{Extended research draft; not a submission-length manuscript.}\par}
+\medskip
+
+\section{Introduction}
+Government bodies use models within public functions: supporting decisions
+about services, allocating administrative attention, interpreting imagery,
+or assisting staff with documents. Model governance in this setting concerns
+who may authorize a use, for what public purpose, on which evidence, with
+what safeguards and means of challenge, and for how long. A technically
+successful model does not answer those questions. Nor does a procurement
+contract transfer the public body's responsibility to a supplier
+\citep{ukAIPlaybook}. Research with public-sector practitioners documents
+the importance of organizational context and public values beyond isolated
+technical measures \citep{veale2018publicsector}.
+
+We study \emph{evidence-bound model governance for government bodies}.
+Here, release means an authorization boundary for introducing or materially
+changing a model-backed use, including internal government services,
+cross-agency sharing and externally exposed systems. Continued operation
+also depends on live conditions and renewal. The object under governance is
+the model in its public-service context, not its weights alone. We keep the
+institutional profile jurisdiction-selectable: a competent public authority
+must determine the applicable mandate, obligations and decision rights.
+The paper does not certify compliance with a particular country's law.
+
+\paragraph{An illustrative government decision}
+\label{sec:gov-context}
+Suppose a public body considers a supplier's model for prioritizing benefit
+applications for staff review. This is a design example, not a deployment
+study or a recommendation to automate benefit decisions. The proposed use
+requires an identified authority, a defined advisory role, assessment of
+effects on affected groups, arrangements for staff intervention and
+challenge, and a named owner of ongoing monitoring. Even a justified privacy
+ceiling cannot supply missing authority or an absent impact review.
+A later change from advisory prioritization to automated eligibility
+decisions changes the governed use, even if the weights remain identical.
+
+This example exposes two distinct failure modes. An institutional record
+may be missing or unauthorized; alternatively, an authentic technical
+record may support a weaker claim than the approval assumes. For example,
+two independently harmless-looking exports can disclose a secret jointly:
+if $R$ is independent uniform randomness and $S$ a uniform secret, each of
+$R$ and $S\oplus R$ alone permits guessing success $1/2$, but their pair
+reveals $S$. Valid signatures on both marginal audits do not establish joint
+privacy. The governance process must preserve both institutional conditions
+and the meaning of technical evidence across each change of use or interface.
+
+MRA connects these requirements through an immutable decision context,
+stage-due obligations, separately authorized review and an ordered
+MRAP/1.0 lifecycle. Its government profile specifies what must be evidenced
+before each transition and what remains subject to ongoing oversight.
+For privacy, a worked formal component carries demonstrated adversary
+capability as a floor, a justified upper bound as a ceiling, and the unresolved
+gap. Missing required evidence blocks; acceptance records an explicitly
+permitted risk without lowering it or waiving another mandatory obligation.
+The four privacy recommendations are inputs to government approval,
+not replacements for it.
+
+\paragraph{Research questions}
+We ask (RQ1) how a government body can bind model-use authorization and
+continued operation to stage-specific evidence and accountable decisions;
+(RQ2) when the privacy component supplies sound and decisive evidence,
+rather than merely completed tests; and (RQ3) which parts of this governance
+argument the retained tree, image and language-model studies actually
+validate, and which require institutional or field evaluation.
+
+\paragraph{Contributions}
+First, we specify a government-oriented lifecycle protocol that binds public
+purpose, decision rights and mandatory institutional obligations to
+technical evidence, review, approval and continued use. Its stage-indexed
+profile strengthens the existing lifecycle guards without treating future
+duties as already discharged or turning a signature into proof of legality.
+Second, we instantiate this governance architecture with privacy-assurance
+semantics and six conditional protocol results. A separate standard
+game-based cryptographic reduction and a joint failure-event bound are given in
+Section~\ref{sec:security}. Section~\ref{sec:uc} gives a restricted
+authorization-record functionality, simulator and perfect authenticated-channel
+hybrid realization in UC4SS, with an explicit transport-substitution condition.
+This is not an implementation or full-government-system realization.
+The lifetime theorem bounds erroneous
+ordinary privacy-release recommendations by $\alpha$
+(Theorem~\ref{thm:statistics}); it is not a probability bound on unlawful,
+unfair or otherwise illegitimate government action. Constructive finite
+ceilings and scoped obstructions explain when that component can resolve a
+decision (Theorem~\ref{thm:finite-ceiling} and Appendix~\ref{app:gaps}).
+Third, we evaluate the technical component's validity, resolution and
+applicability, retaining adverse results and separating them from
+unmeasured institutional outcomes.
+
+The strongest defensible contribution is a specified evidence-admission and
+invalidation contract connecting a privacy assurance case to lifecycle decisions.
+This is an integration contribution; improved governance outcomes and superiority
+over existing assurance-case practice are hypotheses requiring comparative study.
+It is not a claim that model governance reduces to privacy, or that public
+accountability is newly invented. Statistical integration
+\citep{renggli2019easeml}, privacy-game analysis
+\citep{salem2023privacygames,steinke2023onerun} and attested workflows
+\citep{torresarias2019intoto} are established foundations. The reference
+implementation remains offline and non-authorizing; neither a government
+field trial nor verified Python or live deployment correctness is claimed.
+
+\section{Related Work and Positioning}
+\paragraph{Closest mathematical and assurance-case antecedents}
+Alvim et al.\ \citep{alvim2012gain} define prior and posterior
+$g$-vulnerability and study channel factorization and leakage ordering.
+Our $V_g(\pi,K)$ is their posterior vulnerability, not a new privacy measure;
+its prior-only baseline and exact-guess specialization are inherited.
+Blackwell transfer is likewise an established decision-theoretic principle.
+The proposed addition is the contract governing when such values may be used
+with evidence from different producers, contexts and disclosure histories.
+
+PRAISE \citep{porter2024praise} organizes contextual ethical claims, arguments
+and evidence to support human justification and challenge; it is not an
+algorithm for deciding ethical acceptability. Powell and Oswald's UK national
+security assurance framework \citep{powell2024assurance} addresses third-party
+systems, procurement, evidence and institutional capability. These are closer
+governance antecedents than a comparison with privacy attacks alone.
+MRA's typed privacy recommendations and invalidation conditions specialize
+this assurance-case approach. We do not claim to introduce evidence-bound
+accountability or demonstrate that automated checks improve these frameworks.
+Appendix~\ref{app:revision-boundaries} compares the inherited methods,
+proposed integration and evidence still needed.
+
+\paragraph{Government accountability and lifecycle governance}
+Veale et al.\ \citep{veale2018publicsector} identify public-sector
+practitioners' institutional and contextual needs that are not captured by
+technical fairness or transparency measures alone. The UK AI Playbook
+\citep{ukAIPlaybook} calls for accountable ownership, meaningful human
+control, supplier engagement and lifecycle management. Canada's Algorithmic
+Impact Assessment \citep{canadaAIA} links the context and impact of covered
+automated administrative decisions to proportionate requirements, including
+human involvement and recourse. NIST's voluntary, cross-sector AI RMF
+\citep{nist2023airmf} organizes risk management around GOVERN, MAP, MEASURE
+and MANAGE. These sources motivate our profile; they have different scopes
+and are not interchangeable compliance standards.
+
+MRA's contribution is not another list of desirable principles. It specifies
+when a declared obligation becomes due, who must substantiate and approve it,
+how that decision is bound to the model's intended use, and what invalidates
+continued permission. Whether the chosen obligations and reviewers are
+adequate remains an institutional question. The formal privacy case tests
+one technical part of that governance architecture, not the full adequacy
+of government oversight.
+
+\paragraph{Privacy games and evidence direction}
+Salem et al.\ \citep{salem2023privacygames} formalize data-inference games and
+prove reductions and separations between them. Such relationships must
+justify any cross-game reuse of evidence; shared terminology such as
+\emph{privacy risk} is insufficient. Steinke et al.\
+\citep{steinke2023onerun} explicitly distinguish empirical privacy lower
+bounds from mathematical upper bounds and analyze a one-run auditing
+procedure. MRA builds on, rather than introduces, this distinction. Its
+role is downstream: retaining a producer's assumptions and restricting the
+release claims its result may support.
+
+LiRA \citep{carlini2022lira} and RMIA \citep{zarifzadeh2024rmia} strengthen
+membership attacks; canary exposure \citep{carlini2019secret} and
+training-data extraction \citep{carlini2021extracting} measure complementary
+disclosure. Confounding can change what a language-model membership
+experiment establishes \citep{duan2024membership}. MRA neither improves
+these attacks nor assumes one attack covers all games. The larger workload
+cases use calibrated loss attacks, not a complete LiRA/RMIA, extraction,
+attribution or canary battery.
+
+\paragraph{Statistical integration and upper guarantees}
+The ease.ml/ci system \citep{renggli2019easeml} specifies model-integration
+conditions with reliability requirements and handles adaptive feedback and
+test-set reuse. Thus statistically controlled gating and evaluation budgets
+are not new here. MRA specializes the admission problem to privacy claims:
+evidence must bound the right adversary in the right direction, including
+the exported joint channel. Its lifetime result is a conditional application
+of simultaneous coverage and a union bound, not an improvement to
+ease.ml/ci's sample-efficiency results.
+
+Differential privacy \citep{dwork2006calibrating,dwork2014foundations} and
+Blackwell ordering \citep{blackwell1953experiments} supply upper-bound and
+safe-transfer foundations when their premises match the release.
+Fixed-sample binomial intervals \citep{clopper1934confidence} and
+time-uniform inference \citep{howard2021confidence} address different
+sampling protocols. Our complete-finite-class route applies Hoeffding's
+inequality \citep{hoeffding1963bounded}; it does not make arbitrary model
+interfaces finitely enumerable.
+
+\paragraph{Integrity, governance and enforcement}
+ML readiness tests \citep{breck2017mltest} and organizational audit processes
+\citep{raji2020accountability} address complementary operational needs.
+In-toto \citep{torresarias2019intoto} protects prescribed step order,
+authorized participants and artifact flow, and analyzes fabricated checks
+under compromise. MRA is not a replacement for that integrity substrate.
+It specifies the privacy semantics a downstream consumer must additionally
+check; no measured superiority over these systems is claimed.
+
+Fail-safe defaults and complete mediation \citep{saltzer1975protection},
+monitor enforceability \citep{schneider2000enforceable}, and linearizability
+\citep{herlihy1990linearizability} inform the lifecycle assumptions.
+The distinction between abstract verification and implementation refinement,
+illustrated by seL4 \citep{klein2009sel4}, remains explicit. Watermarking
+\citep{kirchenbauer2023watermark} is a separate provenance screen, not a
+privacy ceiling or authenticated authorship; spoofing and scrubbing results
+\citep{jovanovic2024stealing} reinforce that separation.
+
+\input{protocol-section.tex}
+
+\subsection{Scope of the proof claims}
+The central privacy guarantee is conditional on the admitted bounds and their
+collection semantics. Government-profile guards preserve the lifecycle's
+conditional safety by restricting its permitted transitions; this does not
+prove the truth of legal, rights or public-interest judgments. The proofs do not turn those premises into trusted
+observations. All six arguments are given in Appendix~\ref{app:proofs};
+the existing Lean artifacts cover narrower abstract lifecycle and finite
+accounting properties, not the Python implementation. Their exact declarations
+and historical receipts are retained in Appendix~\ref{sec:proof-status}.
+This separates mathematical soundness of the specified inference from
+the empirical and systems obligations needed to instantiate it.
+
+\input{security-section.tex}
+\input{uc-section.tex}
+
+\section{Implementation and Evaluation}
+\label{sec:methods}
+The evaluation examines technical mechanisms within the government governance
+argument: evidence admissibility, privacy-decision usefulness and model-family
+applicability. It does not evaluate public officials, citizen outcomes or the
+adequacy of institutional review. The evaluation combines retained studies,
+exact finite constructions, a new locally frozen independent-model synthetic
+study, and separate lifecycle regression checks. The retained studies were
+not jointly preregistered. We retain their original registrations,
+negative results and source versions. Most timing and attack data below
+predate the 0.8 corrections; they do not measure the corrected implementation.
+
+\subsection{Reference Implementation and Execution Boundary}
+\label{sec:implementation}
+The Python reference consumes the original request, assessment, approved
+scope and optional signed risk acceptance. Its gate verifies the signed
+record and replays decision semantics, rather than inferring clearance from
+raw scores. Successful gates remain
+\code{authorization\_eligible=false}. CLI commands are separately invocable;
+their ordering in a harness does not establish an unskippable production
+workflow. Transcript replay records declared authorization and deployment,
+not actual issuance or activation. A SQLite hash chain needs independent
+anchors for rollback detection. These boundaries prevent interpreting the
+evaluation as a test of the ideal live services in
+Theorem~\ref{thm:lifecycle}. Implementation guards, software validation and
+source provenance are detailed in Appendix~\ref{app:extended-evaluation}.
+The government profile is a normative specialization of the protocol, not a
+claim that the current CLI verifies public authority or implements redress.
+The September 9, 2026 review revision closes three unsafe promotions and a
+baseline omission. Absolute finite exact-guess floors include the bound
+prior-only strategy. Selection requires every in-scope threat to clear,
+including optional threats, and their joint portfolio and transfer checks;
+optional RWR selection remains unsupported and is refused. Snapshot version
+1.1 separates cumulative disclosed releases from active service identifiers;
+legacy snapshots without that history cannot pass optimization. The registry
+supplying the optimizer's roster remains a trusted external premise. A separate
+local transactional reference now tests disclosure-history mechanics
+(Section~\ref{sec:local-lifecycle-study}); it is not integrated with this gate
+or optimizer. Finally, generic analyzer recollection advice
+does not establish an applicable resolving plan: the outward gate blocks an
+unaccepted crossing until such a verifier exists. Otherwise complete crossings
+may still receive explicitly signed, context-bound risk acceptance, which
+does not authorize service or make them optimizer-feasible. These are
+conservative restrictions of the normative protocol, not a complete refinement.
+Historical numerical tables and proof receipts have not been regenerated to
+claim validation of these changes.
+Retained analyzer floors keep their original producer semantics and may be
+below the current prior-adjusted decision floor $L$. The reported CLEAR/HOLD
+frequencies are internal analyzer decisions, not outcomes of the corrected
+outward facade, optimizer or government authorization. Historical reports that
+no longer replay under the corrected reducer must be inspected with their
+recorded implementation; the current synthetic example is separately named.
+
+\paragraph{Endpoints and comparators}
+For the technical part of RQ1, a failure is an unjustified promotion of a
+restricted result into a release claim; exact safe/unsafe pairs and weakened decision rules expose
+such failures. These are analytical controls, not competitive system
+baselines. For RQ2, we report interval undercoverage, wrong-direction
+decisions, resolution rates, width and excess over known risk, stratified by
+distance to the threshold. For RQ3, we ask which technical approval premises the measured attack floors
+and available ceiling routes establish, and which remain unevaluated.
+Training time and signed-fixture throughput are secondary execution
+measurements, reported in the appendix rather than evidence for RQ1--RQ2.
+
+\subsection{Exact Finite Tests of Protocol Obligations}
+The new construction study is separate from the retained model experiments.
+It uses exact rational arithmetic, exhaustive finite enumeration and closed
+probability sums, with no random sampling, training or external data. Its
+seven designs follow the proved obstructions, so they are constructive
+validation, not a blinded discovery study or estimates of real-world failure
+rates. The frozen generator and output digests, every construction and its
+limits are retained in \code{gap-construction-results.json}.
+Independent closed-form Bayes values cross-check enumerated decoder maxima.
+The reducer is a standalone mathematical construction; it imports no core
+MRA code and assumes rather than implements acceptance validity. Therefore
+agreement with its declarative specification is not production refinement.
+
+\subsection{Controlled and Model-Backed Ceiling Studies}
+The controlled experiment declares exact finite channels with risks 0.55,
+0.65, and 0.80 at tolerance 0.65. Its model-family names are labels, not trained
+models. Across sample sizes it retains 1,800 records; the primary setting has
+2,000 draws per secret state and 400 repetitions per channel. Exact channel
+knowledge separates ceiling undercoverage from the usefulness of the decision.
+Three Engine integrations additionally exercise source-backed admission using
+experimental attack-battery waivers, which are not deployment-valid.
+
+The model-backed studies use CNN/MNIST, XGBoost/Adult, and a compact
+Transformer classifier on 20 Newsgroups. The last is an LLM proxy, not a
+generative endpoint. They construct frozen finite member/nonmember pools:
+400 per state for CNN/XGBoost and 350 for the proxy. One raw categorical
+negative-log-likelihood channel and one 90\% state-independent erasure channel
+per model give six families. The exact oracle is conditional on that artifact,
+pool, and one-query wrapper. Repeated trials draw from the same pools; they
+are not new model-training replications. Each family has 5,000 samples per
+state and 200 analyzer repetitions, plus a primary Engine replay.
+
+Version 2 required a simultaneous CLEAR-rate lower bound of at least 0.95
+for all six families and failed that requirement. Version 3 was frozen after
+that failure using fresh model/sampling seeds and a different, role-aware
+resolution endpoint. It requires resolution only at absolute oracle margin
+at least 0.10, while retaining all families for coverage and direction checks.
+It is therefore a corrective study with a changed question, not a successful
+rerun of an unchanged v2 hypothesis. Its 18 simultaneous meta-endpoints must
+not be mistaken for 18 independently trained models.
+
+\subsection{Model Evidence and Applicability}
+The applicability matrix contains five XGBoost/Covertype, six
+ResNet-50 or DenseNet-121/EuroSAT, and six GPT-2 or
+Qwen2.5-0.5B/Dolly-15k cells. The game is equal-prior training-membership
+success, with candidate-loss access and, for one language-model attack, a
+public pretrained reference. It concerns fine-tuning membership for the
+language models, not their pretraining data. Thresholds are calibrated on
+disjoint identities; audits draw with replacement from fixed pools.
+One-sided binomial lower bounds for TPR and TNR are averaged, with separate
+within-modality multiplicity allocations. These do not establish one
+joint lifetime guarantee across modalities.
+
+All ceilings in this matrix are the worst-case value one. Raw floors below
+$1/2$ remain recorded, but the guessing baseline raises the game-value floor
+to $\max\{1/2,L\}$. No governance threshold was chosen from these outcomes,
+and the worker issued no release verdict. A stronger roster-aware adversary
+is outside these loss attacks. Complete training configurations, sample
+counts, interface exclusions and all 17 cells are retained in
+Appendix~\ref{app:extended-evaluation}. Historical hook studies and the
+older signed-fixture CLI benchmark are separate workloads, not continuations
+of these model runs.
+
+\section{Results}
+\label{sec:results}
+\subsection{RQ1: Evidence Conditions for Accountable Approval}
+\label{sec:gap-study}
+\GapConstructionTable
+The exact constructions isolate three ways a valid-looking record can fail
+to justify release. First, \emph{the wrong observation can support the wrong
+claim}: weak attack summaries leave stronger attacks unmeasured, and XOR
+marginals leave joint disclosure undetected. Complete finite-channel
+admission distinguishes the corresponding safe and unsafe channels, but a
+marginal-only verifier cannot. Second, \emph{valid local bounds need not
+remain valid after selection}: the constructed twenty-opportunity error
+probability is $1-(19/20)^{20}=0.641514\ldots$ without allocation, versus
+$1-(399/400)^{20}=0.048830\ldots$ with allocation. These are exact
+probabilities of the stated procedures, not MRA runtime failure estimates.
+Third, \emph{authenticity and ordering do not establish scientific truth}:
+both semantic worlds in the ideal-authenticity control authenticate, while
+complete channel admission rejects the false ceiling. A split
+check/revoke/grant admits one stale ordering; an atomic grant serialized
+with revocation eliminates that ordering in the finite control.
+
+The decision construction agrees with its declarative cases on 93,312 grid
+inputs and ten additional boundaries. It preserves a key distinction:
+missing required evidence blocks, while complete crossing intervals retain
+their prescribed uncertainty or risk-acceptance outcome. The construction
+imports no core MRA code, so this agreement checks the finite mathematical
+reducer, not implementation refinement. Exact case counts, selection
+controls and transfer witnesses appear in
+Appendix~\ref{app:construction-detail}.
+
+\paragraph{Answer to RQ1}
+The government profile makes due institutional obligations non-waivable
+conditions of authorization. The controls evaluate a narrower mechanism:
+authentic inputs, individually valid bounds and successful marginal audits
+are insufficient technical decision predicates. The
+protocol's additional admission rules address the specified failures.
+Their general sufficiency follows from the conditional proofs, not a
+pooled success rate across heterogeneous checks. The observation-relative
+results explain refusal when the information needed to distinguish the
+worlds is absent; they do not prohibit stronger observation mechanisms.
+None of these controls measures reviewer independence, lawful authority,
+quality of an impact assessment or effectiveness of public redress.
+
+\subsection{RQ2: Valid Coverage Does Not Ensure Resolution}
+\ControlledTable
+The controlled primary cells had no observed upper-bound undercoverage across
+1,200 replays; each safe/boundary/unsafe role returned its expected decision in
+400/400 repetitions (Table~\ref{tab:controlled}). The simultaneous
+undercoverage upper bound is 0.015606 per primary cell, not a pooled bound
+for all 1,200 replays and not zero. The design allocates the meta-error budget
+across 27 endpoints. Mean interval width at the
+primary setting is 0.1102--0.1146. Smaller-sample calibration cells remain in
+the companion data. This separates the deliberately unsafe channel's blocking
+behavior from conservative HOLD at the exact boundary.
+
+\ModelCeilingTable
+Version 2 passed eight of nine registered criteria. Its raw proxy produced
+109 CLEAR decisions in 200 replays; the simultaneous CLEAR-rate lower bound
+was 0.449431 rather than the required 0.95. This negative result remains in
+Table~\ref{tab:model-ceilings}, not hidden by the corrective study. Version 3
+passed its ten registered criteria, with zero undercoverage and wrong-direction
+events in 1,200 replays. The simultaneous upper bound for each such v3 endpoint
+is 0.029002. Four margin-eligible families resolved in 200/200 repetitions,
+with simultaneous lower bound 0.970998. All six oracle risks were below 0.65:
+these data do not establish model-backed unsafe-side blocking power.
+
+The v3 raw proxy remains near the boundary: its one-shot interval is
+$[0.5784,0.6581]$ and repeated decisions are 31 CLEAR, 169 HOLD, zero BLOCK.
+HOLD is not counted as a wrong-direction release. The erasure identities hold
+exactly for the frozen tables. This is an information-ordering check on the
+declared channel, not evidence that arbitrary deployed LLM services implement
+the same wrapper. Repeated ceilings exceed oracle risk by means of
+0.0279--0.0422 across v3 families. Width and excess diagnose usefulness;
+neither replaces coverage.
+
+\paragraph{Answer to RQ2}
+Coverage and usefulness are separate properties. The failed v2 criterion
+and near-boundary v3 family show that meeting coverage criteria need not
+produce decisive recommendations often. Away from the threshold, the finite-class construction gives
+a sufficient sample requirement proportional to
+$\log(2M/\alpha)/\delta^2$ for margin $\delta$; the reported model-backed
+analyzers use their own registered procedures, so their observed widths are
+not measurements of that Hoeffding bound. At vanishing margins, the
+fixed-budget obstruction in Appendix~\ref{app:gaps} prevents uniform,
+reliably decisive classification under its stated sampling model.
+Changing the v3 endpoint to be margin-aware does not erase v2's failure.
+
+\subsection{RQ3: What the Component Evidence Establishes}
+The larger models reveal the practical distinction between finding leakage
+and certifying its absence. Across the three Qwen fine-tuning cells, the
+strongest recorded membership-success floors are 0.8523, 0.8206 and 0.8215.
+The corresponding ceiling remains one; the raw residual gaps are
+0.1477, 0.1794 and 0.1785. GPT-2's strongest floor rises from 0.5585 to
+0.6381 across the smallest and largest cohorts. These demonstrate adversary
+capability in the registered finite-pool loss-access game, not universal
+population leakage or a causal effect of dataset size.
+
+Low image attack floors do not reverse this conclusion: the same
+uninformative ceiling prevents ordinary clearance at any threshold below
+one. If an acceptable threshold falls below an evidenced floor, the
+decision rule blocks; if it crosses a complete valid interval, the specified
+risk-acceptance or actionable-uncertainty conditions apply. These are
+conditional implications of the protocol, not retrospective release
+decisions issued by the workers. Missing required evidence would instead
+block, regardless of a small measured attack score.
+
+\paragraph{Answer to RQ3}
+The model-family-agnostic evidence interface is applicable to these
+workloads, but informative certification has not been established for
+them. The controlled finite-channel route demonstrates nontrivial release
+decisions only within its explicit finite interface and sampling scope.
+All model cells, adverse utility results, historical timings and incomplete
+runs remain in Appendix~\ref{app:extended-evaluation} and the data companion.
+The current record contains no corrected real-model end-to-end run and no
+competitive decision-level baseline; it cannot support a claim of production
+scalability or improved government-service outcomes. Public datasets are
+not a substitute for evaluating the institutional setting of a government
+use: the studies contain no public-body approval exercise, impact-review
+comparison, citizen challenge process or longitudinal service monitoring.
+
+\input{independent-model-study.tex}
+
+\section{Discussion and Limitations}
+\paragraph{Government governance is the decision problem}
+The public body authorizes a particular use, not an abstract model score.
+MRA binds that permission to purpose, responsible actors, evidenced
+conditions and continuing oversight. In the illustrative benefit case,
+missing impact review prevents approval even if all privacy thresholds
+clear; a supplier or intended-use change invalidates the relevant prior
+approval. Conversely, an unfavorable privacy result can prevent a use that
+has an otherwise complete institutional record. These are consequences of
+the conjunctive protocol, not observations from an agency trial.
+
+\paragraph{Institutional validation still required}
+Legal authority, proportionality, fairness, accessibility, safety, public
+value and meaningful opportunities to challenge decisions are not proved
+by the privacy theorems. Their profile checks represent evidenced judgments
+by competent actors, whose competence and independence must be justified.
+Transparency may require a public decision summary while confidential
+evidence remains access-controlled; exceptions need their own authorized
+reasons, not silent omission. A government evaluation must examine whether
+the process actually supports scrutiny, correction and accountability,
+including supplier changes and retirement. We have not established those
+outcomes or a performance advantage over existing institutional practice.
+
+\paragraph{Sound refusal is not useful release}
+Fail-closed behavior alone is trivial to obtain by rejecting every proposal.
+The finite-channel construction and positive decision controls therefore
+matter: they exhibit admissible regimes in which ordinary release is
+possible. Conversely, a scoped impossibility argument identifies information
+that the current verifier lacks; it is not a certificate of safety or a
+waiver of evidence. Acquiring that information, changing the export, or
+restricting the claim may move an instance into a constructive regime.
+
+\paragraph{Scientific adequacy}
+Finite-pool risk is not population risk. Discrete one-query wrappers omit
+adaptive transcripts unless explicitly modelled. A classifier proxy is not a
+generative service; full-data ingestion is not evidence that all source data
+were trained on. Separate marginal channels cannot certify their joint export.
+In the retained larger workloads, one seed, one epoch, nested cohorts and
+fixed-size audits limit transfer and variance inference. The new study adds
+independently trained synthetic models and unsafe candidate oracles, but its
+fully specified attribute-inference world does not supply population transfer,
+an unsafe-side oracle cell for historical v3, or a competitive attack battery
+at larger scales. Public roster reconstruction may dominate the measured
+historical attacks.
+
+\paragraph{Statistical and numerical validity}
+Zero failures in finitely many repetitions is compatible with positive failure
+probability. Per-family or per-modality confidence cannot be multiplied without
+justification or silently treated as lifetime confidence. Selection-valid coverage remains a
+premise, as do IID finite-pool draws and faithful collection. The reported
+software uses numerical statistical primitives whose whole-program outward
+rounding and parser-to-proof refinement are unproved. Exact comparison after
+parsing cannot recover precision already lost before import.
+
+\paragraph{Systems and governance validity}
+Single-machine timings exclude service contention, network delays, crash
+consistency and distributed failures. Authentication trusts externally enrolled
+keys and does not establish independence or authority. An ideal atomic commit
+does not follow from a local SQLite transaction. The separate lifecycle
+reference exercises local races and crashes, but rollback detection still
+depends on an external checkpoint and actual serving remains unimplemented.
+Honest workers, complete live observations, valid policy and rights, and
+faithful gateways are not consequences of local schemas. Explicit risk
+acceptance does not transform uncertainty into safety or reverse information
+already disclosed. Supplemental incentive analysis can expose fragile audit
+or deterrence assumptions, but uncalibrated utilities cannot determine
+legitimacy or waive a mandatory technical gate.
+
+\section{Ethical Considerations and Reproducibility}
+The retained model evaluations use historical records. The new independent-model
+study trains only on synthetic examples and uses no personal data or deployed
+service. The separate exact finite construction study trains no models;
+software regression fixtures are not additional model-evaluation cells.
+The historical workloads use public sources, but public accessibility
+is not consent, deidentification, or a grant of unrestricted rights. WildChat
+contains human dialogue and its cached source retains fields excluded from
+training. Only curated aggregate results are printed. EuroSAT results do not
+justify deployment to unseen regions or populations. OPT's historical
+non-commercial research restriction is an independent use constraint, not a
+privacy result. Model/dataset terms and intended-use rights need review at the
+time of use; this paper provides no legal clearance.
+
+The available records do not establish institutional ethics approval or a
+waiver; that status must be resolved by the human authors before submission.
+No external vulnerable service was exploited for this paper. Misuse risks
+include laundering weak screens into clearance, disclosing private attack
+examples, and treating test keys as organizational authority. The reference
+system's non-authorizing outputs and provenance boundaries reduce these risks
+but do not enforce an operator's behavior.
+
+Generative AI assisted manuscript drafting, source organization, experimental
+design and code, table generation, and proof exposition. This is not independent scientific review. Human
+authors remain responsible for validating arguments, numerical extraction,
+citations, originality, and any required venue disclosures. No statement that
+the human authors have completed that review is implied. The anonymous draft
+omits author names and repository-owner identifiers; a submission artifact
+package still requires a separate anonymity and sensitive-data review.
+
+For reproducibility, the extraction script records exact input digests and
+row locations, rejects missing required sources, and leaves historical data
+unchanged. Main data and supplementary aggregates are shipped as machine-readable
+material; local-only inputs are labelled rather than presented as publicly
+retrievable. The human authors must govern access to original caches, weights,
+and sensitive replay material. The manuscript's historical experiments must be
+replayed with their recorded source and runtime, not the current parser with
+silently modified registrations. Scientific data are never inferred from a
+plan, a source hash alone, or a newly generated summary.
+
+\section{Conclusion}
+Model governance for government bodies is a decision about authorized
+purpose, evidence, accountability and continued operation. MRA gives that
+decision an explicit lifecycle: public-use conditions are registered,
+stage-due obligations are evidenced, competent actors review and authorize,
+and changed or expired conditions invalidate continued permission.
+Privacy assurance supplies a worked formal component, not a proxy for the
+whole governance decision. Under its stated statistical and binding
+premises, ordinary privacy release inherits a lifetime false-release bound;
+finite-channel constructions and scoped obstructions explain when this
+component can become decisive. Historical experiments, independent synthetic
+model fits and local lifecycle checks support selected technical mechanisms
+while exposing boundary failures and unverified integration. They do not
+establish institutional legitimacy or effectiveness in government. The research contribution is an
+evidence-bound governance protocol with explicit decision rights and
+conditional guarantees, whose public-sector implementation and institutional
+outcomes remain to be evaluated.
+
+\clearpage
+\bibliographystyle{IEEEtran}
+\bibliography{references}
+\appendices
+\input{protocol-appendix.tex}
+\input{security-proofs.tex}
+\input{uc-appendix.tex}
+\input{revision-boundaries.tex}
+
+\section{Extended Model and Systems Evaluation}
+\label{app:extended-evaluation}
+This appendix preserves the complete workload methods, secondary execution
+measurements and negative histories behind the main decision-level analysis.
+They are retained evidence, not additional replications or a combined
+end-to-end release experiment.
+
+\subsection{Reference Implementation and Execution Boundary}
+
+MRA 0.8 is a Python reference library and CLI with Pydantic contracts, exact
+rational comparison in selected decision paths, signed records, and a SQLite
+hash-chain AuditStore. Thirty-seven current JSON schemas describe its public
+objects. The four-verdict facade consumes the original request, assessment,
+approved scope, and optional signed risk acceptance. Its final gate verifies
+the signed record and replays its semantics; it does not read raw test scores
+and infer an informal pass. Successful recommendation gates still set
+\code{authorization\_eligible=false}.
+
+\paragraph{Admission and stale evidence}
+Source imports in the corrected critical paths hash and parse the same captured
+bytes. Imported assessments are revalidated against their request and active
+policy; absence from a supplied report is not permission to erase a mandatory
+threat. Exact represented rational values determine privacy/garbling
+comparisons. Run 1.2's authenticated profile binds the complete declared run
+context, including population scopes, to event and artifact signatures. It
+rejects future events and mismatched or expired typed reports at downstream
+consumption. These are implemented defenses against concrete counterexamples,
+not proof of honest workers or accurate upstream numerical endpoints.
+
+\paragraph{Recorded versus executed lifecycle}
+Training is an external prerequisite, not a native training-start/training-finish
+state pair. CLI calls can be
+invoked separately. The assurance file commands do not establish a durable,
+unskippable AuditStore-linked workflow by themselves. A benchmark harness
+can impose an order that a caller can bypass. Typed transcript verification
+therefore reports recorded authorization/deployment declarations while fixing
+actual issuance and activation to false. SQLite history needs independent
+anchors to detect rollback; hashing a mutable database does not make it an
+authoritative registry.
+
+The proof and implementation boundaries are different: the Lean artifacts in
+Appendix~\ref{sec:proof-status} establish abstract properties, not Python
+refinement or a deployed service. Software checks below exercise concrete
+behaviors within this reference boundary.
+
+\subsection{Software Validation and Evidence Provenance}
+Before paper preparation, the current track-split checkout ran 623 test entries:
+622 passed and one Windows symlink test was skipped, with no failures or errors
+and an unchanged recorded workspace during the run. Earlier studies retain
+their actual test failures and errors. This count is software validation, not
+an empirical estimate of protocol correctness or a proof that no bypass exists.
+Most timing and attack data below predate the 0.8 corrections. They must not be
+described as measurements of the corrected implementation. Replaying a vintage
+study requires its vintage source/runtime; a new performance claim requires
+a new prospective run, not changed hashes on old results.
+
+The evaluation corpus contains distinct studies, not one experiment with a
+single statistical population. Study registrations and failure histories are
+retained alongside their source versions. The companion
+\code{experimental-data.json} contains extracted aggregate tables and an
+inventory linking rows to source digests and JSON pointers or published table
+lines. It also identifies local-only reports and excluded measurements. It is
+an extraction layer, not independent authentication of the source's truth.
+The paper prints primary cells and supplementary aggregate tables; per-trial
+records and machine receipts remain associated with their source artifacts.
+
+\subsection{Real-Model Training and Membership Workloads}
+The 6--7 September (UTC+8) local matrix has five XGBoost/Covertype cells, six
+EuroSAT cells, and six Dolly-15k causal-LLM cells. Covertype has 581,012 rows,
+54 features, and seven classes, with 100,000 holdout rows. At seven classes,
+100, 300, and 600 boosting rounds create 700, 2,100, and 4,200 trees. CPU
+histogram training uses four threads. Initial timings overlapped preparation;
+a separate balanced-order, three-repeat series with no competing experiment
+jobs supplies the appropriate
+dataset-size timing comparison. Repeats used the same seeded computation
+and identical model hashes, not independently trained statistical replicates.
+This window does not control operating-system activity, caches, or laptop
+thermal and power state.
+
+EuroSAT uses all 27,000 RGB images with a fixed 5,400-image holdout and nested
+2,700/10,800/21,600 training subsets. ResNet-50 and DenseNet-121 train from
+scratch for one epoch at $96\times96$, batch 64. Image timing includes MRA
+forward/backward hooks, finite-gradient checks, and step sealing; no paired
+uninstrumented run identifies total hook overhead. The image model weights
+were not retained. A metadata-consistency rejection before initialization and
+its identical-byte retry remain in the execution history.
+
+GPT-2 (124.44M parameters) and Qwen2.5-0.5B (494.03M) start from pinned
+pretrained snapshots and full-fine-tune on 1,024/4,096/8,192 Dolly rows. Inputs
+are padded to 128 tokens; microbatch two and accumulation eight give 64,
+256, and 512 steps. Parameters and Adam state are FP32 with BF16 autocast.
+The local RTX 5080 Laptop GPU executes GPU jobs sequentially. This LLM
+runner does not install the MRA full-gradient collector. Training timers
+exclude acquisition, loading, tokenization, separate evaluation and
+serialization. Allocator GPU peaks are not whole-device memory measurements.
+
+\paragraph{What the privacy floor measures}
+The target is equal-prior training-membership success (fine-tuning membership
+for the LLM cells), not LLM pretraining membership. Candidate-loss access, and
+for one LLM attack a public pretrained
+reference, are assumed. They are stronger interfaces than text-only generation.
+Thresholds are selected on disjoint calibration identities; audit queries are
+sampled with replacement from fixed pools. Audit sizes per membership state
+are 5,000/20,000/40,000 for the tree size sweep, 1,024 for images, and 256 for
+LLMs. Separate one-sided binomial lower endpoints for TPR and TNR are averaged.
+Bonferroni allocation covers ten tree, twelve image, and twenty-four LLM
+endpoints, respectively; it is not one joint 95\% guarantee across modalities.
+The LLM strongest floor accounts for both registered attacks. Numerical beta
+inversion remains outside the formal proof.
+
+Every ceiling in this matrix is one. Raw empirical floors below 0.5 are
+retained, but the trivial guessing strategy raises an adversary-success floor
+to $\max(0.5,L)$. For this balanced game only, distinguishing advantage is
+$2p-1$, hence a derived floor $\max(0,2L-1)$. Public deterministic rosters may
+permit direct membership reconstruction to a stronger adversary; that feature
+is excluded from these loss attacks. No governance/release tolerance was selected
+after observing outcomes; attack thresholds used calibration only, not audit
+outcomes. The worker issued no governance release decision.
+
+\subsection{Historical Hook Integration and Offline Chain Benchmark}
+The separate 2 September NVIDIA L4 experiments comprise DistilGPT2,
+OPT-125M and Pythia-160M on 8,192 WildChat training rows, plus AlexNet and
+DenseNet-121 on 21,600 EuroSAT images. They measured aggregate hook coverage,
+training/evaluation metrics, and bounded metadata or perturbation screens.
+The curated record is the retained publication-safe source: its decimal values
+are rounded observations, not reconstructed raw precision. The studies produce
+neither an MRAP assessment input nor a decision-bearing battery.
+
+The offline chain benchmark uses the older source snapshot beginning
+\code{0145b3c9}, eleven one-axis profiles, and three fresh-process repetitions
+each. The command sequence is assess, sign, verify, optimize, optimization
+sign/verify, checkpoint, audit verify, and authenticated transcript verify.
+Axes vary candidates, threat/evidence record counts, padded artifact bytes,
+prior ledger history, and transcript length. Each run checks all referenced
+files. Model fitting and scientific collection are absent; governance objects
+and accepting transcript states are signed fixtures. All roles use local
+benchmark keys. One four-state linkage problem is copied to scale records,
+so record count is not threat diversity.
+
+\subsection{Larger Workloads Execute but Do Not Clear Privacy}
+\PublicWorkloadTable
+All 17 primary workload cells and nine timing repeats completed
+(Table~\ref{tab:public-workloads}). In the isolated XGBoost series, an eightfold
+increase from 50,000 to 400,000 training rows increases median time from
+3.46 to 24.88 seconds, about 7.19-fold. The original overlapping 400,000-row
+measurement was 44.51 seconds and is retained, not substituted into the
+isolated comparison. For the one-epoch image sweeps, eightfold data growth
+costs approximately 7.7-fold more training time for both architectures. All
+7,700 aggregate image-hook events passed saved-ledger replay. Neither result
+estimates asymptotic complexity, distributed capacity, or lifecycle overhead.
+
+The six LLM cells reveal adverse outcomes that throughput alone would hide.
+GPT-2 holdout NLL improves from 3.3462 to 2.7751 at the largest cohort, while
+its strongest success floor rises from 0.5585 at 1,024 rows to 0.6381 at 8,192.
+Qwen's holdout NLL worsens at all three sizes (2.3733 before versus
+2.5124/2.6304/2.6658 after), while success floors are 0.8523/0.8206/0.8215.
+These are substantial demonstrated signals within the stated finite-pool
+loss-access game. They do not establish population leakage for all Qwen uses,
+nor do changes across sizes isolate a causal data-size effect: optimizer
+steps, data, and exposure all change together.
+
+With ceiling one, the raw recorded Qwen residual gaps are
+0.1477/0.1794/0.1785; the actual risk is not estimated to equal either endpoint.
+The same honest worst-case ceiling applies to low image floors, which cannot
+justify privacy clearance. A declared roster-aware adversary would require a
+different, potentially more revealing observation model. No measured canary
+or watermark result is substituted for a missing class-wide upper bound.
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\textwidth]{academic-scaling.pdf}
+\caption{Observed local training costs, separated by workload. Tree points use
+isolated medians with min--max ranges over three identical-computation timing
+repetitions; image and LLM points are single runs. Image times include MRA
+hooks; LLM times do not. Connecting lines describe only the measured cells,
+not interpolated guarantees or a common cross-family scaling law.}
+\label{fig:scaling}
+\end{figure*}
+
+\subsection{Hook Evidence and CLI Cost Have Different Boundaries}
+The historical L4 language matrix replayed 3,072 forward and 3,072 backward
+aggregate observations with complete registered coverage. Its three models
+processed 512 optimizer steps each; measured throughput ranged from
+28.96 to 42.49 rows/s. The two vision runs each recorded 507 forward and
+507 backward observations; clean-test accuracy after one epoch was 0.2394
+for AlexNet and 0.6898 for DenseNet-121. Full context-screen and perturbation
+tables appear in the appendix. The loss-access membership profiles and
+DenseNet perturbation losses motivate further evidence collection, but the
+experimental screens have no clearing or blocking authority. The reported
+CPU hook/non-hook control is not a CUDA noninterference proof.
+
+\ProtocolTimingTable
+All 33 historical offline chains completed 297 CLI invocations. Independent
+replay checked 66 manifest signatures, 33 AuditStore chains, and 33 all-file
+authenticated transcripts. Median nine-command time is 3.487 seconds at
+baseline, 3.675 with 32 candidates, 3.727 with 64 threat records/192 evidence
+records, and 4.067 with a 512 MiB padded artifact
+(Table~\ref{tab:protocol-timing}). The totals include nine process
+startups/imports; their contribution was not separately measured.
+Fixture generation, historical-ledger population and
+transcript construction/signing are separately measured, not included in the
+nine-command total. Populating 128 prior assessments costs median 8.212
+seconds; constructing/signing the longest transcript costs 0.580 seconds.
+Those excluded costs rule out interpreting the totals as nearly constant
+whole-lifecycle latency.
+
+An initial memory counter measured the small Windows virtual-environment
+launcher rather than the actual interpreter. Those observations are retained
+as invalid for CLI-memory inference. A separately frozen single-observation
+supplement measures actual-interpreter peak working set for six profiles:
+51.52--59.92 MiB. It includes its measurement wrapper, excludes system caches,
+and cannot be pooled with the three-repeat timing series. The benchmark predates
+coverage and signing fixes; it neither repairs those defects nor measures
+corrected code.
+
+\subsection{Failures, Counterexamples, and Incomplete Evidence}
+The local pre-correction focused suite recorded 136 entries: 132 passes,
+one failure and three errors. A second historical suite recorded 183 entries:
+179 passes and four Windows fixture-cleanup errors. These remain separate
+from current regression results. The earlier import-path counterexamples
+included mandatory-policy omission in a validly signed report, empty CLEAR
+content, and authenticated assertions without corresponding execution.
+Signature forgery was not required: a trusted benchmark key signed deficient
+content. The current regression suite checks specific corrections; it is not
+an exhaustive adversary campaign.
+
+Other local public-privacy, strategic, and workflow outputs are included in the
+companion inventory with their evidence status rather than promoted to
+confirmatory comparisons. Configurations without completed runs, interrupted
+attempts, and unavailable raw provenance do not become zero-valued rows.
+The full five-model composition design and full OpenML study are not established
+as completed by their configurations. Most importantly, there is no fresh
+real-model run that couples all measured training scales to the corrected
+four-verdict gate, authoritative registry, and live gateway. The two experiment
+families cannot be concatenated after the fact to fill that gap.
+
+\subsection{Exact Construction Details}
+\label{app:construction-detail}
+All seven exact checks reproduced their stated countermodel and repair control
+(Table~\ref{tab:gap-constructions}). The selected-error probability is
+$1-(19/20)^{20}=0.641514\ldots$ without allocation and
+$1-(399/400)^{20}=0.048830\ldots$ with allocation across twenty bounds.
+These are exact probabilities of the constructed procedures, not estimated
+frequencies or measurements of MRA's runtime. The 42 probability bins represent
+two distributions over $2^{20}$ labeled outcomes each.
+
+The two-threat reducer uses endpoints and thresholds in $\{0,1/2,1\}$,
+including reversed intervals, four missing-evidence masks, two mandatory
+completion flags, four acceptance states and four actionability masks.
+Its 93,312 grid cases yield 91,392 BLOCK, 1,200 RELEASE, 544
+RELEASE-WITH-RISK and 176 INCONCLUSIVE decisions, with no disagreement against
+the declarative cases. Ten additional boundaries test equality, invalid ranges,
+absent threats, contradictions and risk-acceptance precedence. The grid is
+exhaustive only for those stated finite inputs; identity, expiry, signatures
+and source truth are abstracted by validity predicates. Six separate selection
+controls reject an optional INCONCLUSIVE candidate, permit only properly
+accepted policy-allowed optional RWR, reject unresolved mandatory RWR and
+missing acceptance/policy permission, and admit an all-CLEAR RELEASE control.
+
+The residual-atom check rejects all 255 incomplete subsets of eight supplied
+scenarios and admits the full one, while the hidden-world account remains
+indistinguishable. Joint decoder enumeration separates XOR disclosure from
+independent noise despite identical marginal channels. Four rare-disclosure
+probabilities $0.001,0.01,0.1,1$ retain posterior one; four separate binary
+channels attain the additive TV expected-gain penalty. In the ideal-authenticity
+construction, both accounts authenticate but complete finite-channel admission
+rejects the false ceiling. A separate service-order control has one stale grant
+among three split check/revoke/grant orderings, versus none among the two
+atomic-grant/revocation orderings. This validates a finite race witness and
+the specified serialization remedy, not a deployed gateway. These results
+test the protocol's prescribed
+distinctions and refusals; the general proofs, not finite success counts,
+establish their all-instance scope under stated assumptions.
+
+\section{Proof Artifacts and Evidence Provenance}
+\label{app:audit}
+The primary source families are: controlled finite-channel report and manifest;
+v2/v3 model-backed reports, repeated replays and wrapper evidence; the curated
+2 September hook audit; local public-data training/scoring reports and their
+completion/verification records; the historical nine-command benchmark and
+memory supplement; historical counterexample and test receipts; and the
+source-bound Lean proof receipt. Historical numerical tables are generated
+from \code{experimental-data.json}; the new exact finite table comes from
+\code{gap-construction-results.json}. The historical inventory marks configured-only and
+excluded results explicitly. A digest proves equality to inspected bytes,
+not an independently authenticated measurement or a public archival deposit.
+
+An evidence reviewer should reproduce four different checks without conflating
+them: (i) regenerate tables from pinned aggregate sources; (ii) inspect all
+rejected/partial attempts and non-vacuous positive controls; (iii) rebuild only
+the identified Lean source with its pinned toolchain and axiom policy; and
+(iv) replay the exact vintage software experiments where materials are
+available. Current regression passes do not restamp historical timings.
+Manuscript formatting follows the IEEE Computer Society conference class;
+formatting compliance alone establishes none of these scientific checks.
+
+\subsection{Machine-Checked Scope and Supplemental Incentives}
+\label{sec:proof-status}
+
+The results in Section~\ref{sec:theory-protocol} and the appendix are written
+arguments in their stated generality, not newly kernel-checked declarations.
+The existing Lean core proves unbounded inductive
+reachability properties of an
+abstract lifecycle and symbolic authenticated composition, and finite rational
+error accounting. Its named declarations are summarized in
+Table~\ref{tab:lean-scope}; no entry establishes Python refinement.
+
+\begin{table*}[t]
+\centering\small
+\caption{Existing proof scope, not additional machine-checked claims from this draft.}
+\label{tab:lean-scope}
+\begin{tabular}{>{\raggedright\arraybackslash}p{0.18\textwidth}>{\raggedright\arraybackslash}p{0.40\textwidth}>{\raggedright\arraybackslash}p{0.34\textwidth}}
+\hline
+Source under \path{formal/lean/MRAP/} & Representative existing Lean declarations & Exact boundary \\
+\hline
+\texttt{Protocol.lean} &
+\texttt{reachable\_\allowbreak authorization\_\allowbreak integrity};
+\texttt{active\_\allowbreak implies\_\allowbreak committed\_\allowbreak clear\_\allowbreak and\_\allowbreak bound};
+\texttt{valid\_\allowbreak active\_\allowbreak trace\_\allowbreak exists} &
+All reachable abstract states satisfy registered-gate and binding invariants;
+one valid active trace demonstrates nonvacuity. Gate truth is not inferred. \\
+\texttt{Protocol.lean} &
+\texttt{every\_\allowbreak step\_\allowbreak is\_\allowbreak role\_\allowbreak authorized};
+\texttt{terminal\_\allowbreak release\_\allowbreak phase\_\allowbreak is\_\allowbreak absorbing};
+\texttt{stale\_\allowbreak head\_\allowbreak second\_\allowbreak commit\_\allowbreak fails} &
+Typed role/transition constraints and abstract stale-head rejection, not a
+deployed identity or concurrency service. \\
+\texttt{Security.lean} &
+\texttt{authenticated\_\allowbreak reachable\_\allowbreak projects};
+\texttt{authenticated\_\allowbreak reachable\_\allowbreak authorization\_\allowbreak integrity};
+\texttt{accepted\_\allowbreak envelope\_\allowbreak replay\_\allowbreak is\_\allowbreak rejected} &
+Symbolic authentication and declared compromise predicates compose with the
+lifecycle. Neither Ed25519 nor compromise detection is proved. \\
+\texttt{Deployment.lean} &
+\texttt{successful\_\allowbreak commit\_\allowbreak is\_\allowbreak atomic\_\allowbreak and\_\allowbreak bound};
+\texttt{can\_\allowbreak serve\_\allowbreak implies\_\allowbreak current\_\allowbreak live\_\allowbreak bound\_\allowbreak authorization};
+\texttt{revocation\_\allowbreak stops\_\allowbreak existing\_\allowbreak gateway} &
+Ideal registry/commit/gateway functions, exact identifiers and modeled time;
+no concrete durable registry or serving implementation. \\
+\texttt{Statistics.lean} &
+\texttt{finite\_\allowbreak false\_\allowbreak authorization\_\allowbreak bound};
+\texttt{registered\_\allowbreak component\_\allowbreak budget\_\allowbreak controls\_\allowbreak false\_\allowbreak authorization} &
+Finite rational weighted experiments with supplied false-authorization inclusion
+and justified component budgets, not inferred scientific validity. \\
+\hline
+\end{tabular}
+\end{table*}
+
+There is also a separate historical, output-only supplement,
+\texttt{AssuranceExtension.lean}, under
+\texttt{output/mrap-e2e-20260907/proof/}. Its retained successful receipt records
+39 audited core declarations and 24 supplemental declarations using Lean 4.32.1.
+We rechecked seven artifact hashes and all 14 recorded build-input hashes,
+including source and build logs;
+this is historical build evidence, not a fresh kernel run or a tracked-library
+integration. The supplement proves finite-grid results corresponding to parts
+of Proposition 1, predicate-profile partitions, finite ceiling lifting,
+observation-only impossibility, and the four-outcome XOR witness. Representative
+names are \texttt{ideal\_\allowbreak release\_\allowbreak is\_\allowbreak conditionally\_\allowbreak safe},
+\texttt{profile\_\allowbreak atoms\_\allowbreak cover}, \texttt{finite\_\allowbreak coverage\_\allowbreak lifts\_\allowbreak class\_\allowbreak ceilings},
+\texttt{indistinguishable\_\allowbreak unsafe\_\allowbreak world\_\allowbreak defeats\_\allowbreak universal\_\allowbreak soundness}, and
+\texttt{joint\_\allowbreak export\_\allowbreak success\_\allowbreak is\_\allowbreak one}.
+
+The qualifications matter. Its bounds are anonymous natural-number rows on an
+externally normalized common probability grid; only lower--upper ordering is
+checked internally. Completeness and scope coverage are supplied Booleans, and
+approval/resolution is a nonempty reference, not a verified institutional
+signature. The profile theorem is not connected to a proof of one identified
+row per required threat. XOR marginals quantify deterministic Boolean decoders;
+randomized-decoder extension is an averaging argument. The indistinguishability
+lemma uses deterministic functions; the randomized version in
+Appendix~\ref{app:gaps} is handwritten.
+Thus this narrower target specification neither proves the current facade's
+semantic replay nor establishes its equality with the historical target. No
+supplement theorem proves Blackwell transfer, adaptive statistical coverage, or
+Python refinement.
+
+Specifically, \texttt{SoundOutcome.sound} supplies the implication from false
+authorization to some component failure. Lean proves the weighted union-bound
+consequence; it does not establish that a real experiment satisfies that premise.
+The pinned toolchain is Lean 4.32.1. Parsing, canonicalization, numerical
+semantics, and concrete state transitions still need a verified correspondence
+before the abstract proof can cover the Python implementation. The correspondence
+manifest links theorem names to concrete regression obligations; it is not a
+simulation proof.
+
+Strategic incentives remain an optional stress test. For a risk-neutral actor
+whose gain from violation is at most $G^+$, end-to-end detection probability is
+at least $q^-$, and effective enforceable consequence is $F\ge0$, the condition
+$q^-F\ge G^++\delta$, $\delta>0$, makes violation's utility advantage at most
+$-\delta$. This elementary subtraction requires credible parameter bounds and
+consequences; equality without a positive margin permits indifference. It is
+neither a behavioral prediction nor an authorization rule and cannot remove a
+mandatory gate.
+
+\section{Complete Aggregate Evidence Tables}
+\label{app:tables}
+Tables below retain supplementary measurements and adverse results, not new
+replications. The companion JSON preserves additional exact values, identifiers,
+source hashes, per-run timing rows and inclusion/exclusion decisions. Rounded
+curated hook results are labelled as such. No raw dialogue, images, per-example
+loss arrays, training rosters or private keys are included in the paper.
+\SupplementaryTables
+\end{document}

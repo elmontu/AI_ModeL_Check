@@ -518,7 +518,7 @@ def exact_interval_bounds(
         max(prior[state] * upper_fraction[state][observation] for state in range(len(prior)))
         for observation in range(observations)
     )
-    return max(Fraction(0), floor), min(Fraction(1), ceiling)
+    return max(max(prior), floor), min(Fraction(1), ceiling)
 
 
 def _base_contracts(

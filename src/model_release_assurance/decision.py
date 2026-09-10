@@ -3,6 +3,7 @@ from __future__ import annotations
 from collections import defaultdict
 from decimal import Decimal
 from fractions import Fraction
+from math import nextafter
 
 from .integrity import canonical_json_bytes, sha256_bytes
 from .models import (
@@ -172,7 +173,17 @@ def decide_threat(
         for _, _, group_support in statistical_group_bounds
         for record in group_support
     )
-    lower_fraction = max(exact_floor_fraction, statistical_floor_fraction)
+    # Ignoring an observation is an admissible exact-guess strategy. Derive
+    # its value from the bound game, never an unverified producer baseline or
+    # a prior *cap*. Incremental metrics already subtract their baseline.
+    baseline_fraction = Fraction(0)
+    if threat.decision_metric == "equal_prior_membership_success":
+        baseline_fraction = Fraction(1, 2)
+    elif threat.finite_game is not None and threat.decision_metric in {
+        "bayes_linkage_success", "finite_secret_exact_guess_success",
+    }:
+        baseline_fraction = max(p.as_fraction() for p in threat.finite_game.prior)
+    lower_fraction = max(baseline_fraction, exact_floor_fraction, statistical_floor_fraction)
     exact_floor_display = max(
         (
             record.lower
@@ -201,6 +212,11 @@ def decide_threat(
         lower_support_records = tuple(
             (*exact_floor_records, *statistical_aggregate_support_records)
         )
+    if baseline_fraction > max(exact_floor_fraction, statistical_floor_fraction):
+        lower = float(baseline_fraction)
+        if Fraction(Decimal(str(lower))) > baseline_fraction:
+            lower = nextafter(lower, float("-inf"))
+        lower_support_records = ()  # The request's bound game is the support.
     upper_fraction = min(
         (_upper_fraction(record) for record in clearing_records),
         default=Fraction(1),

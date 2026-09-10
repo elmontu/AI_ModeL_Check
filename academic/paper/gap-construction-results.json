@@ -1,0 +1,2196 @@
+{
+  "all_constructed_checks_passed": true,
+  "artifact_role": "finite_constructed_validation_not_MRAP_contract",
+  "claim_limits": [
+    "These are constructed controls, not additional trained-model privacy or scalability experiments.",
+    "Finite checks do not prove universal mathematical statements or implementation refinement.",
+    "There is no cryptographic implementation or deployed registry/gateway test in this artifact.",
+    "General impossibility claims are conditional on the explicitly restricted observations or premises, not claims that every richer design is impossible.",
+    "Counts have different units and must not be pooled into a scientific success rate."
+  ],
+  "format_version": "1.0",
+  "generator": {
+    "path": "academic/scripts/check_academic_gap_constructions.py",
+    "sha256": "55bdcc5bb70437ba6f90a156e23107894fab10ab1fb209a62434ab859575f0b3"
+  },
+  "method": "Exact fractions, finite deterministic decoder enumeration, closed finite probability sums, and exhaustive stated reducer grid. No randomness or statistical sampling.",
+  "reproducibility": {
+    "core_code_imported": false,
+    "dependencies": "Python standard library only",
+    "network_used": false,
+    "production_schema_added": false,
+    "seed": null,
+    "timestamps_in_output": false
+  },
+  "studies": [
+    {
+      "construction": [
+        {
+          "all_decoder_successes": [
+            "1/2",
+            "1/2",
+            "1/2",
+            "1/2"
+          ],
+          "blind_success": "1/2",
+          "enumerated_decoders": 4,
+          "optimal_success": "1/2",
+          "pointwise_bayes_success": "1/2",
+          "world": "constant_output"
+        },
+        {
+          "all_decoder_successes": [
+            "1/2",
+            "1",
+            "0",
+            "1/2"
+          ],
+          "blind_success": "1/2",
+          "enumerated_decoders": 4,
+          "optimal_success": "1",
+          "pointwise_bayes_success": "1",
+          "world": "secret_output"
+        }
+      ],
+      "count_unit": "distinct deterministic channel/decoder cells across two finite channels",
+      "counterexample": "The identical success summary 1/2 is compatible with optimal success 1/2 or 1; no rule using only that summary can distinguish the two.",
+      "finite_check_count": 8,
+      "hypothesis": "Uniform secret bit; auditor receives only the exact blind-attack success, not the channel or raw output transcript.",
+      "id": "G1_floor_nonidentifiability",
+      "passed": true,
+      "remaining_boundary": "No claim that a finite attack battery contains all real adversaries, or that a channel can be reconstructed from this summary.",
+      "repair_control": "Enumerating the complete decoder family for the fully specified finite channel recovers 1/2 and 1 exactly."
+    },
+    {
+      "construction": [
+        {
+          "allocation": "pointwise",
+          "histogram": [
+            {
+              "failures": 0,
+              "false_release": false,
+              "labeled_configurations": 1,
+              "probability": "37589973457545958193355601/104857600000000000000000000"
+            },
+            {
+              "failures": 1,
+              "false_release": true,
+              "labeled_configurations": 20,
+              "probability": "1978419655660313589123979/5242880000000000000000000"
+            },
+            {
+              "failures": 2,
+              "false_release": true,
+              "labeled_configurations": 190,
+              "probability": "1978419655660313589123979/10485760000000000000000000"
+            },
+            {
+              "failures": 3,
+              "false_release": true,
+              "labeled_configurations": 1140,
+              "probability": "312382050893733724598523/5242880000000000000000000"
+            },
+            {
+              "failures": 4,
+              "false_release": true,
+              "labeled_configurations": 4845,
+              "probability": "279499729747024911482889/20971520000000000000000000"
+            },
+            {
+              "failures": 5,
+              "false_release": true,
+              "labeled_configurations": 15504,
+              "probability": "14710512091948679551731/6553600000000000000000000"
+            },
+            {
+              "failures": 6,
+              "false_release": true,
+              "labeled_configurations": 38760,
+              "probability": "774237478523614713249/2621440000000000000000000"
+            },
+            {
+              "failures": 7,
+              "false_release": true,
+              "labeled_configurations": 77520,
+              "probability": "40749340974927090171/1310720000000000000000000"
+            },
+            {
+              "failures": 8,
+              "false_release": true,
+              "labeled_configurations": 125970,
+              "probability": "27881128035476430117/10485760000000000000000000"
+            },
+            {
+              "failures": 9,
+              "false_release": true,
+              "labeled_configurations": 167960,
+              "probability": "489142597113621581/2621440000000000000000000"
+            },
+            {
+              "failures": 10,
+              "false_release": true,
+              "labeled_configurations": 184756,
+              "probability": "283187819381570389/26214400000000000000000000"
+            },
+            {
+              "failures": 11,
+              "false_release": true,
+              "labeled_configurations": 167960,
+              "probability": "1354965642974021/2621440000000000000000000"
+            },
+            {
+              "failures": 12,
+              "false_release": true,
+              "labeled_configurations": 125970,
+              "probability": "213941943627477/10485760000000000000000000"
+            },
+            {
+              "failures": 13,
+              "false_release": true,
+              "labeled_configurations": 77520,
+              "probability": "866161715091/1310720000000000000000000"
+            },
+            {
+              "failures": 14,
+              "false_release": true,
+              "labeled_configurations": 38760,
+              "probability": "45587458689/2621440000000000000000000"
+            },
+            {
+              "failures": 15,
+              "false_release": true,
+              "labeled_configurations": 15504,
+              "probability": "2399339931/6553600000000000000000000"
+            },
+            {
+              "failures": 16,
+              "false_release": true,
+              "labeled_configurations": 4845,
+              "probability": "126281049/20971520000000000000000000"
+            },
+            {
+              "failures": 17,
+              "false_release": true,
+              "labeled_configurations": 1140,
+              "probability": "390963/5242880000000000000000000"
+            },
+            {
+              "failures": 18,
+              "false_release": true,
+              "labeled_configurations": 190,
+              "probability": "6859/10485760000000000000000000"
+            },
+            {
+              "failures": 19,
+              "false_release": true,
+              "labeled_configurations": 20,
+              "probability": "19/5242880000000000000000000"
+            },
+            {
+              "failures": 20,
+              "false_release": true,
+              "labeled_configurations": 1,
+              "probability": "1/104857600000000000000000000"
+            }
+          ],
+          "per_bound_failure_probability": "1/20",
+          "selected_false_release_probability": "67267626542454041806644399/104857600000000000000000000",
+          "sum_allocations": "1"
+        },
+        {
+          "allocation": "bonferroni",
+          "histogram": [
+            {
+              "failures": 0,
+              "false_release": false,
+              "labeled_configurations": 1,
+              "probability": "10458223378311031533936347645068209034322999070392001/10995116277760000000000000000000000000000000000000000"
+            },
+            {
+              "failures": 1,
+              "false_release": true,
+              "labeled_configurations": 20,
+              "probability": "26211086161180530160241472794657165499556388647599/549755813888000000000000000000000000000000000000000"
+            },
+            {
+              "failures": 2,
+              "false_release": true,
+              "labeled_configurations": 190,
+              "probability": "1248146960056215721916260609269388833312208983219/1099511627776000000000000000000000000000000000000000"
+            },
+            {
+              "failures": 3,
+              "false_release": true,
+              "labeled_configurations": 1140,
+              "probability": "9384563609445230991851583528341269423400067543/549755813888000000000000000000000000000000000000000"
+            },
+            {
+              "failures": 4,
+              "false_release": true,
+              "labeled_configurations": 4845,
+              "probability": "399843562307190292885907067623562857638599369/2199023255552000000000000000000000000000000000000000"
+            },
+            {
+              "failures": 5,
+              "false_release": true,
+              "labeled_configurations": 15504,
+              "probability": "1002114191246090959613802174495145006613031/687194767360000000000000000000000000000000000000000"
+            },
+            {
+              "failures": 6,
+              "false_release": true,
+              "labeled_configurations": 38760,
+              "probability": "2511564389087947267202511715526679214569/274877906944000000000000000000000000000000000000000"
+            },
+            {
+              "failures": 7,
+              "false_release": true,
+              "labeled_configurations": 77520,
+              "probability": "6294647591699115957901031868487917831/137438953472000000000000000000000000000000000000000"
+            },
+            {
+              "failures": 8,
+              "false_release": true,
+              "labeled_configurations": 125970,
+              "probability": "205088768651850895871462191203866997/1099511627776000000000000000000000000000000000000000"
+            },
+            {
+              "failures": 9,
+              "false_release": true,
+              "labeled_configurations": 167960,
+              "probability": "171335646325689971488272507271401/274877906944000000000000000000000000000000000000000"
+            },
+            {
+              "failures": 10,
+              "false_release": true,
+              "labeled_configurations": 184756,
+              "probability": "4723539121760876406944856090189/2748779069440000000000000000000000000000000000000000"
+            },
+            {
+              "failures": 11,
+              "false_release": true,
+              "labeled_configurations": 167960,
+              "probability": "1076222174017060015252872201/274877906944000000000000000000000000000000000000000"
+            },
+            {
+              "failures": 12,
+              "false_release": true,
+              "labeled_configurations": 125970,
+              "probability": "8091896045241052746262197/1099511627776000000000000000000000000000000000000000"
+            },
+            {
+              "failures": 13,
+              "false_release": true,
+              "labeled_configurations": 77520,
+              "probability": "1560033939703306872231/137438953472000000000000000000000000000000000000000"
+            },
+            {
+              "failures": 14,
+              "false_release": true,
+              "labeled_configurations": 38760,
+              "probability": "3909859498003275369/274877906944000000000000000000000000000000000000000"
+            },
+            {
+              "failures": 15,
+              "false_release": true,
+              "labeled_configurations": 15504,
+              "probability": "9799146611537031/687194767360000000000000000000000000000000000000000"
+            },
+            {
+              "failures": 16,
+              "false_release": true,
+              "labeled_configurations": 4845,
+              "probability": "24559264690569/2199023255552000000000000000000000000000000000000000"
+            },
+            {
+              "failures": 17,
+              "false_release": true,
+              "labeled_configurations": 1140,
+              "probability": "3620708343/549755813888000000000000000000000000000000000000000"
+            },
+            {
+              "failures": 18,
+              "false_release": true,
+              "labeled_configurations": 190,
+              "probability": "3024819/1099511627776000000000000000000000000000000000000000"
+            },
+            {
+              "failures": 19,
+              "false_release": true,
+              "labeled_configurations": 20,
+              "probability": "399/549755813888000000000000000000000000000000000000000"
+            },
+            {
+              "failures": 20,
+              "false_release": true,
+              "labeled_configurations": 1,
+              "probability": "1/10995116277760000000000000000000000000000000000000000"
+            }
+          ],
+          "per_bound_failure_probability": "1/400",
+          "selected_false_release_probability": "536892899448968466063652354931790965677000929607999/10995116277760000000000000000000000000000000000000000",
+          "sum_allocations": "1/20"
+        }
+      ],
+      "count_unit": "exact binomial histogram cells (21 per allocation), not sampled repetitions",
+      "counterexample": "Pointwise 95% coverage gives selected false-release probability 1-(19/20)^20, not 1/20.",
+      "finite_check_count": 42,
+      "hypothesis": "Twenty independent constructed bounds for true risk 1; each bound is 0 on its failure event and 1 otherwise; select the smallest at tolerance 1/10.",
+      "id": "G2_selection_error",
+      "passed": true,
+      "remaining_boundary": "This does not construct valid data-derived confidence bounds. Conditional coverage and allocation across future selection/stopping remain separate premises.",
+      "repair_control": "Allocate 1/400 to each of twenty bounds. The exact independent construction is below 1/20; the general union-bound repair does not require independence.",
+      "represented_labeled_configurations_per_allocation": 1048576
+    },
+    {
+      "atoms": [
+        {
+          "profile": [
+            0,
+            0
+          ],
+          "scenario_ids": [
+            [
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              1
+            ]
+          ]
+        },
+        {
+          "profile": [
+            0,
+            1
+          ],
+          "scenario_ids": [
+            [
+              0,
+              1,
+              0
+            ],
+            [
+              0,
+              1,
+              1
+            ]
+          ]
+        },
+        {
+          "profile": [
+            1,
+            0
+          ],
+          "scenario_ids": [
+            [
+              1,
+              0,
+              0
+            ],
+            [
+              1,
+              0,
+              1
+            ]
+          ]
+        },
+        {
+          "profile": [
+            1,
+            1
+          ],
+          "scenario_ids": [
+            [
+              1,
+              1,
+              0
+            ],
+            [
+              1,
+              1,
+              1
+            ]
+          ]
+        }
+      ],
+      "count_unit": "all subsets of the supplied eight-scenario universe",
+      "counterexample": "An undeclared secret log changes adversary success from 1/2 to 1 without changing the supplied auditor transcript.",
+      "declaration_masks": [
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 0,
+          "uncovered_count": 8
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 1,
+          "uncovered_count": 7
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 2,
+          "uncovered_count": 7
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 3,
+          "uncovered_count": 6
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 4,
+          "uncovered_count": 7
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 5,
+          "uncovered_count": 6
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 6,
+          "uncovered_count": 6
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 7,
+          "uncovered_count": 5
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 8,
+          "uncovered_count": 7
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 9,
+          "uncovered_count": 6
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 10,
+          "uncovered_count": 6
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 11,
+          "uncovered_count": 5
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 12,
+          "uncovered_count": 6
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 13,
+          "uncovered_count": 5
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 14,
+          "uncovered_count": 5
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 15,
+          "uncovered_count": 4
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 16,
+          "uncovered_count": 7
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 17,
+          "uncovered_count": 6
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 18,
+          "uncovered_count": 6
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 19,
+          "uncovered_count": 5
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 20,
+          "uncovered_count": 6
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 21,
+          "uncovered_count": 5
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 22,
+          "uncovered_count": 5
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 23,
+          "uncovered_count": 4
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 24,
+          "uncovered_count": 6
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 25,
+          "uncovered_count": 5
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 26,
+          "uncovered_count": 5
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 27,
+          "uncovered_count": 4
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 28,
+          "uncovered_count": 5
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 29,
+          "uncovered_count": 4
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 30,
+          "uncovered_count": 4
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 31,
+          "uncovered_count": 3
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 32,
+          "uncovered_count": 7
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 33,
+          "uncovered_count": 6
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 34,
+          "uncovered_count": 6
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 35,
+          "uncovered_count": 5
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 36,
+          "uncovered_count": 6
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 37,
+          "uncovered_count": 5
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 38,
+          "uncovered_count": 5
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 39,
+          "uncovered_count": 4
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 40,
+          "uncovered_count": 6
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 41,
+          "uncovered_count": 5
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 42,
+          "uncovered_count": 5
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 43,
+          "uncovered_count": 4
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 44,
+          "uncovered_count": 5
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 45,
+          "uncovered_count": 4
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 46,
+          "uncovered_count": 4
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 47,
+          "uncovered_count": 3
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 48,
+          "uncovered_count": 6
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 49,
+          "uncovered_count": 5
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 50,
+          "uncovered_count": 5
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 51,
+          "uncovered_count": 4
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 52,
+          "uncovered_count": 5
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 53,
+          "uncovered_count": 4
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 54,
+          "uncovered_count": 4
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 55,
+          "uncovered_count": 3
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 56,
+          "uncovered_count": 5
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 57,
+          "uncovered_count": 4
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 58,
+          "uncovered_count": 4
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 59,
+          "uncovered_count": 3
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 60,
+          "uncovered_count": 4
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 61,
+          "uncovered_count": 3
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 62,
+          "uncovered_count": 3
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 63,
+          "uncovered_count": 2
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 64,
+          "uncovered_count": 7
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 65,
+          "uncovered_count": 6
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 66,
+          "uncovered_count": 6
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 67,
+          "uncovered_count": 5
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 68,
+          "uncovered_count": 6
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 69,
+          "uncovered_count": 5
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 70,
+          "uncovered_count": 5
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 71,
+          "uncovered_count": 4
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 72,
+          "uncovered_count": 6
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 73,
+          "uncovered_count": 5
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 74,
+          "uncovered_count": 5
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 75,
+          "uncovered_count": 4
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 76,
+          "uncovered_count": 5
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 77,
+          "uncovered_count": 4
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 78,
+          "uncovered_count": 4
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 79,
+          "uncovered_count": 3
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 80,
+          "uncovered_count": 6
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 81,
+          "uncovered_count": 5
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 82,
+          "uncovered_count": 5
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 83,
+          "uncovered_count": 4
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 84,
+          "uncovered_count": 5
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 85,
+          "uncovered_count": 4
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 86,
+          "uncovered_count": 4
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 87,
+          "uncovered_count": 3
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 88,
+          "uncovered_count": 5
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 89,
+          "uncovered_count": 4
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 90,
+          "uncovered_count": 4
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 91,
+          "uncovered_count": 3
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 92,
+          "uncovered_count": 4
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 93,
+          "uncovered_count": 3
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 94,
+          "uncovered_count": 3
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 95,
+          "uncovered_count": 2
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 96,
+          "uncovered_count": 6
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 97,
+          "uncovered_count": 5
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 98,
+          "uncovered_count": 5
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 99,
+          "uncovered_count": 4
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 100,
+          "uncovered_count": 5
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 101,
+          "uncovered_count": 4
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 102,
+          "uncovered_count": 4
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 103,
+          "uncovered_count": 3
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 104,
+          "uncovered_count": 5
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 105,
+          "uncovered_count": 4
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 106,
+          "uncovered_count": 4
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 107,
+          "uncovered_count": 3
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 108,
+          "uncovered_count": 4
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 109,
+          "uncovered_count": 3
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 110,
+          "uncovered_count": 3
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 111,
+          "uncovered_count": 2
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 112,
+          "uncovered_count": 5
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 113,
+          "uncovered_count": 4
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 114,
+          "uncovered_count": 4
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 115,
+          "uncovered_count": 3
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 116,
+          "uncovered_count": 4
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 117,
+          "uncovered_count": 3
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 118,
+          "uncovered_count": 3
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 119,
+          "uncovered_count": 2
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 120,
+          "uncovered_count": 4
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 121,
+          "uncovered_count": 3
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 122,
+          "uncovered_count": 3
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 123,
+          "uncovered_count": 2
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 124,
+          "uncovered_count": 3
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 125,
+          "uncovered_count": 2
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 126,
+          "uncovered_count": 2
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 127,
+          "uncovered_count": 1
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 128,
+          "uncovered_count": 7
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 129,
+          "uncovered_count": 6
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 130,
+          "uncovered_count": 6
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 131,
+          "uncovered_count": 5
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 132,
+          "uncovered_count": 6
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 133,
+          "uncovered_count": 5
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 134,
+          "uncovered_count": 5
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 135,
+          "uncovered_count": 4
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 136,
+          "uncovered_count": 6
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 137,
+          "uncovered_count": 5
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 138,
+          "uncovered_count": 5
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 139,
+          "uncovered_count": 4
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 140,
+          "uncovered_count": 5
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 141,
+          "uncovered_count": 4
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 142,
+          "uncovered_count": 4
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 143,
+          "uncovered_count": 3
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 144,
+          "uncovered_count": 6
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 145,
+          "uncovered_count": 5
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 146,
+          "uncovered_count": 5
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 147,
+          "uncovered_count": 4
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 148,
+          "uncovered_count": 5
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 149,
+          "uncovered_count": 4
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 150,
+          "uncovered_count": 4
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 151,
+          "uncovered_count": 3
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 152,
+          "uncovered_count": 5
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 153,
+          "uncovered_count": 4
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 154,
+          "uncovered_count": 4
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 155,
+          "uncovered_count": 3
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 156,
+          "uncovered_count": 4
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 157,
+          "uncovered_count": 3
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 158,
+          "uncovered_count": 3
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 159,
+          "uncovered_count": 2
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 160,
+          "uncovered_count": 6
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 161,
+          "uncovered_count": 5
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 162,
+          "uncovered_count": 5
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 163,
+          "uncovered_count": 4
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 164,
+          "uncovered_count": 5
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 165,
+          "uncovered_count": 4
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 166,
+          "uncovered_count": 4
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 167,
+          "uncovered_count": 3
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 168,
+          "uncovered_count": 5
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 169,
+          "uncovered_count": 4
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 170,
+          "uncovered_count": 4
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 171,
+          "uncovered_count": 3
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 172,
+          "uncovered_count": 4
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 173,
+          "uncovered_count": 3
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 174,
+          "uncovered_count": 3
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 175,
+          "uncovered_count": 2
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 176,
+          "uncovered_count": 5
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 177,
+          "uncovered_count": 4
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 178,
+          "uncovered_count": 4
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 179,
+          "uncovered_count": 3
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 180,
+          "uncovered_count": 4
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 181,
+          "uncovered_count": 3
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 182,
+          "uncovered_count": 3
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 183,
+          "uncovered_count": 2
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 184,
+          "uncovered_count": 4
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 185,
+          "uncovered_count": 3
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 186,
+          "uncovered_count": 3
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 187,
+          "uncovered_count": 2
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 188,
+          "uncovered_count": 3
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 189,
+          "uncovered_count": 2
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 190,
+          "uncovered_count": 2
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 191,
+          "uncovered_count": 1
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 192,
+          "uncovered_count": 6
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 193,
+          "uncovered_count": 5
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 194,
+          "uncovered_count": 5
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 195,
+          "uncovered_count": 4
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 196,
+          "uncovered_count": 5
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 197,
+          "uncovered_count": 4
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 198,
+          "uncovered_count": 4
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 199,
+          "uncovered_count": 3
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 200,
+          "uncovered_count": 5
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 201,
+          "uncovered_count": 4
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 202,
+          "uncovered_count": 4
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 203,
+          "uncovered_count": 3
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 204,
+          "uncovered_count": 4
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 205,
+          "uncovered_count": 3
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 206,
+          "uncovered_count": 3
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 207,
+          "uncovered_count": 2
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 208,
+          "uncovered_count": 5
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 209,
+          "uncovered_count": 4
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 210,
+          "uncovered_count": 4
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 211,
+          "uncovered_count": 3
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 212,
+          "uncovered_count": 4
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 213,
+          "uncovered_count": 3
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 214,
+          "uncovered_count": 3
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 215,
+          "uncovered_count": 2
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 216,
+          "uncovered_count": 4
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 217,
+          "uncovered_count": 3
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 218,
+          "uncovered_count": 3
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 219,
+          "uncovered_count": 2
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 220,
+          "uncovered_count": 3
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 221,
+          "uncovered_count": 2
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 222,
+          "uncovered_count": 2
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 223,
+          "uncovered_count": 1
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 224,
+          "uncovered_count": 5
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 225,
+          "uncovered_count": 4
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 226,
+          "uncovered_count": 4
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 227,
+          "uncovered_count": 3
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 228,
+          "uncovered_count": 4
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 229,
+          "uncovered_count": 3
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 230,
+          "uncovered_count": 3
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 231,
+          "uncovered_count": 2
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 232,
+          "uncovered_count": 4
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 233,
+          "uncovered_count": 3
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 234,
+          "uncovered_count": 3
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 235,
+          "uncovered_count": 2
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 236,
+          "uncovered_count": 3
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 237,
+          "uncovered_count": 2
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 238,
+          "uncovered_count": 2
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 239,
+          "uncovered_count": 1
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 240,
+          "uncovered_count": 4
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 241,
+          "uncovered_count": 3
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 242,
+          "uncovered_count": 3
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 243,
+          "uncovered_count": 2
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 244,
+          "uncovered_count": 3
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 245,
+          "uncovered_count": 2
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 246,
+          "uncovered_count": 2
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 247,
+          "uncovered_count": 1
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 248,
+          "uncovered_count": 3
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 249,
+          "uncovered_count": 2
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 250,
+          "uncovered_count": 2
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 251,
+          "uncovered_count": 1
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 252,
+          "uncovered_count": 2
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 253,
+          "uncovered_count": 1
+        },
+        {
+          "coverage_accepted": false,
+          "declaration_mask": 254,
+          "uncovered_count": 1
+        },
+        {
+          "coverage_accepted": true,
+          "declaration_mask": 255,
+          "uncovered_count": 0
+        }
+      ],
+      "finite_check_count": 256,
+      "hidden_worlds": [
+        {
+          "adversary_success": "1/2",
+          "auditor_view": {
+            "declared_output": 0
+          },
+          "world": "safe"
+        },
+        {
+          "adversary_success": "1",
+          "auditor_view": {
+            "declared_output": 0
+          },
+          "world": "hidden_secret_log"
+        }
+      ],
+      "hypothesis": "Eight supplied scenario identifiers with three binary features; taxonomy predicates read the first two. The separate hidden-world pair gives the auditor only constant declared output.",
+      "id": "G3_scope_and_observation",
+      "passed": true,
+      "remaining_boundary": "No function of identical auditor observations can universally detect an omitted channel; additional observation or an assumption excluding the hidden world is necessary.",
+      "repair_control": "The finite coverage checker retains all-false atoms and rejects each incomplete declaration; explicit justified exclusions must be separate from a claim of full in-scope coverage."
+    },
+    {
+      "channels": [
+        {
+          "enumerated_decoders": 4,
+          "name": "Y1",
+          "optimal_success": "1/2",
+          "pointwise_bayes_success": "1/2",
+          "rows": [
+            [
+              "1/2",
+              "1/2"
+            ],
+            [
+              "1/2",
+              "1/2"
+            ]
+          ]
+        },
+        {
+          "enumerated_decoders": 4,
+          "name": "Y2",
+          "optimal_success": "1/2",
+          "pointwise_bayes_success": "1/2",
+          "rows": [
+            [
+              "1/2",
+              "1/2"
+            ],
+            [
+              "1/2",
+              "1/2"
+            ]
+          ]
+        },
+        {
+          "enumerated_decoders": 16,
+          "name": "XOR_joint",
+          "optimal_success": "1",
+          "pointwise_bayes_success": "1",
+          "rows": [
+            [
+              "1/2",
+              "0",
+              "0",
+              "1/2"
+            ],
+            [
+              "0",
+              "1/2",
+              "1/2",
+              "0"
+            ]
+          ]
+        },
+        {
+          "enumerated_decoders": 16,
+          "name": "independent_noise_joint_control",
+          "optimal_success": "1/2",
+          "pointwise_bayes_success": "1/2",
+          "rows": [
+            [
+              "1/4",
+              "1/4",
+              "1/4",
+              "1/4"
+            ],
+            [
+              "1/4",
+              "1/4",
+              "1/4",
+              "1/4"
+            ]
+          ]
+        }
+      ],
+      "count_unit": "distinct deterministic channel/decoder cells across four finite channels",
+      "counterexample": "The XOR and independent-noise systems have identical marginal channels but different joint risks; marginal certificates alone cannot distinguish them.",
+      "finite_check_count": 40,
+      "hypothesis": "Independent uniform bits S and R; Y1=R and Y2=S XOR R. The control uses two fresh independent noise bits.",
+      "id": "G4_joint_disclosure",
+      "passed": true,
+      "remaining_boundary": "Complete composition must include side information and prior releases; this finite example does not validate a live joint-channel model.",
+      "repair_control": "Complete joint-channel enumeration detects success 1 for XOR and 1/2 for independent noise."
+    },
+    {
+      "count_unit": "exact channel-pair parameter cases (four erasure and four sharpness cases)",
+      "counterexample": "Arbitrarily small positive erasure probability can coexist with posterior one on a rare revealing event; expected gain and worst-observation posterior are different metrics.",
+      "erasure_cases": [
+        {
+          "enumerated_decoders": 8,
+          "epsilon": "1/1000",
+          "expected_success": "1001/2000",
+          "maximum_posterior": "1",
+          "revealing_event_probability": "1/1000",
+          "row_tv": "1/1000"
+        },
+        {
+          "enumerated_decoders": 8,
+          "epsilon": "1/100",
+          "expected_success": "101/200",
+          "maximum_posterior": "1",
+          "revealing_event_probability": "1/100",
+          "row_tv": "1/100"
+        },
+        {
+          "enumerated_decoders": 8,
+          "epsilon": "1/10",
+          "expected_success": "11/20",
+          "maximum_posterior": "1",
+          "revealing_event_probability": "1/10",
+          "row_tv": "1/10"
+        },
+        {
+          "enumerated_decoders": 8,
+          "epsilon": "1",
+          "expected_success": "1",
+          "maximum_posterior": "1",
+          "revealing_event_probability": "1",
+          "row_tv": "1"
+        }
+      ],
+      "expected_gain_sharpness_cases": [
+        {
+          "enumerated_decoders": 4,
+          "eta": "1/100",
+          "expected_success_increase": "1/100",
+          "row_tv": "1/100"
+        },
+        {
+          "enumerated_decoders": 4,
+          "eta": "1/10",
+          "expected_success_increase": "1/10",
+          "row_tv": "1/10"
+        },
+        {
+          "enumerated_decoders": 4,
+          "eta": "1/4",
+          "expected_success_increase": "1/4",
+          "row_tv": "1/4"
+        },
+        {
+          "enumerated_decoders": 4,
+          "eta": "1/2",
+          "expected_success_increase": "1/2",
+          "row_tv": "1/2"
+        }
+      ],
+      "finite_check_count": 8,
+      "hypothesis": "Uniform binary-secret guessing with gain in [0,1]; TV compares rows on a common output space; maximum posterior ranges over positive-probability observations.",
+      "id": "G5_transfer_metric_boundary",
+      "passed": true,
+      "remaining_boundary": "The finite checks instantiate, but do not prove, the all-parameter result. Posterior guarantees need additional assumptions or a different certificate; they cannot be inferred from a small absolute TV error alone.",
+      "repair_control": "Use the additive TV penalty for bounded expected gain only. The randomized-response construction attains the coefficient one, so no smaller universal coefficient works under these premises."
+    },
+    {
+      "count_unit": "standalone reducer input cases (93,312 Cartesian cases plus ten named boundary cases)",
+      "counterexample": "Acceptance cannot override missing or inconsistent evidence or an excessive floor; accepting a crossing does not imply its unknown true risk is below threshold.",
+      "declarative_disagreements": 0,
+      "finite_check_count": 93322,
+      "grid_evaluations": 93312,
+      "hypothesis": "Exactly two threats on rational endpoint/threshold grid {0,1/2,1}, including reversed intervals; four missing-evidence masks, two mandatory-obligation flags, four acceptance states, four actionability masks.",
+      "id": "G6_decision_precedence",
+      "named_boundary_cases": [
+        {
+          "actual": "BLOCK",
+          "expected": "BLOCK",
+          "intervals_and_thresholds": [
+            [
+              "7/10",
+              "9/10",
+              "3/5"
+            ]
+          ],
+          "name": "demonstrated_violation_cannot_be_accepted"
+        },
+        {
+          "actual": "RELEASE-WITH-RISK",
+          "expected": "RELEASE-WITH-RISK",
+          "intervals_and_thresholds": [
+            [
+              "2/5",
+              "4/5",
+              "3/5"
+            ]
+          ],
+          "name": "crossing_accepted_not_proven_safe"
+        },
+        {
+          "actual": "INCONCLUSIVE",
+          "expected": "INCONCLUSIVE",
+          "intervals_and_thresholds": [
+            [
+              "2/5",
+              "4/5",
+              "3/5"
+            ]
+          ],
+          "name": "crossing_with_resolver"
+        },
+        {
+          "actual": "BLOCK",
+          "expected": "BLOCK",
+          "intervals_and_thresholds": [
+            [
+              "2/5",
+              "4/5",
+              "3/5"
+            ]
+          ],
+          "name": "crossing_without_resolver_or_acceptance"
+        },
+        {
+          "actual": "BLOCK",
+          "expected": "BLOCK",
+          "intervals_and_thresholds": [
+            [
+              "7/10",
+              "2/5",
+              "3/5"
+            ]
+          ],
+          "name": "contradictory_interval"
+        },
+        {
+          "actual": "BLOCK",
+          "expected": "BLOCK",
+          "intervals_and_thresholds": [
+            [
+              "0",
+              "1",
+              "1/2"
+            ]
+          ],
+          "name": "missing_evidence_with_acceptance"
+        },
+        {
+          "actual": "BLOCK",
+          "expected": "BLOCK",
+          "intervals_and_thresholds": [],
+          "name": "empty_threat_set"
+        },
+        {
+          "actual": "BLOCK",
+          "expected": "BLOCK",
+          "intervals_and_thresholds": [
+            [
+              "-1",
+              "1",
+              "1/2"
+            ]
+          ],
+          "name": "out_of_range_interval"
+        },
+        {
+          "actual": "RELEASE",
+          "expected": "RELEASE",
+          "intervals_and_thresholds": [
+            [
+              "1/2",
+              "3/5",
+              "3/5"
+            ]
+          ],
+          "name": "ceiling_equal_threshold"
+        },
+        {
+          "actual": "INCONCLUSIVE",
+          "expected": "INCONCLUSIVE",
+          "intervals_and_thresholds": [
+            [
+              "3/5",
+              "4/5",
+              "3/5"
+            ]
+          ],
+          "name": "floor_equal_threshold_is_crossing"
+        }
+      ],
+      "passed": true,
+      "remaining_boundary": "Acceptance validity and actionable resolution are supplied predicates here. This is neither a production acceptance validator nor a proof/refinement of the core Python or deployed gateway.",
+      "repair_control": "The explicit reducer gives BLOCK precedence, requires acceptance of all crossings, and permits INCONCLUSIVE only for actionable crossings with complete admissible evidence. The separate strict-selection predicate rejects INCONCLUSIVE and requires every mandatory CLEAR; RWR is eligible only for permitted optional crossings with exact valid acceptance.",
+      "selection_control_boundary": "Six separate named strict-selection controls, excluded from the 93,312 reducer-grid cases and ten reducer-boundary cases. Supplied trust/policy/gate predicates are not implemented validators.",
+      "selection_control_count": 6,
+      "selection_controls": [
+        {
+          "candidate_verdict": "INCONCLUSIVE",
+          "eligible": false,
+          "expected_eligible": false,
+          "name": "mandatory_CLEAR_optional_INCONCLUSIVE",
+          "supplied_premises": {
+            "crossings_optional_only": true,
+            "exact_valid_acceptance": true,
+            "mandatory_clear": true,
+            "other_gates_pass": true,
+            "policy_allows_risk": true
+          }
+        },
+        {
+          "candidate_verdict": "RELEASE-WITH-RISK",
+          "eligible": true,
+          "expected_eligible": true,
+          "name": "mandatory_CLEAR_accepted_optional_RWR",
+          "supplied_premises": {
+            "crossings_optional_only": true,
+            "exact_valid_acceptance": true,
+            "mandatory_clear": true,
+            "other_gates_pass": true,
+            "policy_allows_risk": true
+          }
+        },
+        {
+          "candidate_verdict": "RELEASE-WITH-RISK",
+          "eligible": false,
+          "expected_eligible": false,
+          "name": "mandatory_unresolved_RWR",
+          "supplied_premises": {
+            "crossings_optional_only": true,
+            "exact_valid_acceptance": true,
+            "mandatory_clear": false,
+            "other_gates_pass": true,
+            "policy_allows_risk": true
+          }
+        },
+        {
+          "candidate_verdict": "RELEASE-WITH-RISK",
+          "eligible": false,
+          "expected_eligible": false,
+          "name": "optional_RWR_missing_acceptance",
+          "supplied_premises": {
+            "crossings_optional_only": true,
+            "exact_valid_acceptance": false,
+            "mandatory_clear": true,
+            "other_gates_pass": true,
+            "policy_allows_risk": true
+          }
+        },
+        {
+          "candidate_verdict": "RELEASE-WITH-RISK",
+          "eligible": false,
+          "expected_eligible": false,
+          "name": "optional_RWR_policy_not_permitted",
+          "supplied_premises": {
+            "crossings_optional_only": true,
+            "exact_valid_acceptance": true,
+            "mandatory_clear": true,
+            "other_gates_pass": true,
+            "policy_allows_risk": false
+          }
+        },
+        {
+          "candidate_verdict": "RELEASE",
+          "eligible": true,
+          "expected_eligible": true,
+          "name": "all_RELEASE_mandatory_CLEAR",
+          "supplied_premises": {
+            "crossings_optional_only": false,
+            "exact_valid_acceptance": false,
+            "mandatory_clear": true,
+            "other_gates_pass": true,
+            "policy_allows_risk": false
+          }
+        }
+      ],
+      "verdict_counts": {
+        "BLOCK": 91392,
+        "INCONCLUSIVE": 176,
+        "RELEASE": 1200,
+        "RELEASE-WITH-RISK": 544
+      }
+    },
+    {
+      "count_unit": "semantic world evaluations; no signatures are generated or attacked",
+      "counterexample": "An authorized issuer can honestly issue bytes containing a false ceiling. Authentication alone cannot establish the proposition those bytes assert.",
+      "finite_check_count": 2,
+      "grant_revocation_controls": {
+        "atomic_stale_grant_orders": 0,
+        "atomic_status_budget_grant_orders": [
+          {
+            "already_granted_request_may_complete_after_revocation": true,
+            "grant_after_revocation": false,
+            "grant_allowed": true,
+            "order": [
+              "atomic_status_budget_grant",
+              "revoke"
+            ],
+            "remaining_budget": 0
+          },
+          {
+            "already_granted_request_may_complete_after_revocation": false,
+            "grant_after_revocation": false,
+            "grant_allowed": false,
+            "order": [
+              "revoke",
+              "atomic_status_budget_grant"
+            ],
+            "remaining_budget": 1
+          }
+        ],
+        "control_count": 5,
+        "count_unit": "three legal split orders plus two atomic serialized orders, separate from the two semantic-authenticity worlds",
+        "hypothesis": "One initially authorized request, one budget unit, one revocation; a captured split check may be stale. The repair assumes a single atomic current-status/budget/grant operation serialized with revocation.",
+        "passed": true,
+        "remaining_boundary": "This exact finite state toy is not a gateway implementation or proof of distributed linearizability. Atomic serialization, faithful enforcement, and one-request grant binding are explicit premises. Revocation blocks later grants; it cannot retract prior disclosures and does not necessarily cancel a previously granted in-flight request.",
+        "split_stale_grant_orders": 1,
+        "split_status_check_orders": [
+          {
+            "grant_after_revocation": true,
+            "grant_allowed": true,
+            "order": [
+              "check",
+              "revoke",
+              "grant"
+            ],
+            "remaining_budget": 0
+          },
+          {
+            "grant_after_revocation": false,
+            "grant_allowed": true,
+            "order": [
+              "check",
+              "grant",
+              "revoke"
+            ],
+            "remaining_budget": 0
+          },
+          {
+            "grant_after_revocation": false,
+            "grant_allowed": false,
+            "order": [
+              "revoke",
+              "check",
+              "grant"
+            ],
+            "remaining_budget": 1
+          }
+        ]
+      },
+      "hypothesis": "An ideal authenticity oracle recognizes an authorized issuer's exact statement; truthful computation and complete live channel identity are deliberately not supplied by that oracle.",
+      "id": "G7_authentication_not_truth",
+      "passed": true,
+      "remaining_boundary": "This is not an Ed25519 experiment, collision, forgery, or claim that the production importer accepts this toy object. No protocol can infer unobserved semantic truth from authenticity alone.",
+      "repair_control": "A separate exact finite-channel admission check rejects the false ceiling. Real deployment needs applicable verified evidence and a justified channel/measurement binding, not a stronger signature on the same assertion.",
+      "semantic_worlds": [
+        {
+          "authentic_by_ideal_oracle": true,
+          "authentication_only_decision": "RELEASE",
+          "ceiling_semantically_valid": true,
+          "complete_finite_channel_admission": "ADMIT",
+          "true_success": "1/2",
+          "world": "truthful_constant_world"
+        },
+        {
+          "authentic_by_ideal_oracle": true,
+          "authentication_only_decision": "RELEASE",
+          "ceiling_semantically_valid": false,
+          "complete_finite_channel_admission": "REJECT",
+          "true_success": "1",
+          "world": "false_secret_export_world"
+        }
+      ],
+      "statement": {
+        "declared_context": "same_declared_context",
+        "issuer": "authorized_test_role",
+        "lower": "1/2",
+        "tolerance": "3/5",
+        "upper": "11/20"
+      }
+    }
+  ]
+}

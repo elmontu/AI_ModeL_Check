@@ -1,0 +1,135 @@
+\section{Proofs of the Security Statements}
+\label{app:security-proofs}
+These proofs use game $G_{\rm bind}$ and its exact winning event in
+Section~\ref{sec:security-game}. S3 is an event-inclusion argument within
+the stated experiment, not a UC composition theorem. They are separate from the existing Lean
+artifact. They quantify over polynomially bounded adversaries and traces
+under the stated encoding, key and infrastructure premises.
+
+\subsection{Proof of Security Theorem~\ref{sec-thm:binding}}
+\begin{proof}
+Maintain, for every protected key $i$, the set $Q_i$ of message digests
+submitted to its signing oracle, together with the typed envelope and all
+original reference preimages for each submission. The simulator can
+evaluate public signature verification and compare captured finite
+inventories, so it can detect the first $\mathrm{BadBind}$ acceptance.
+Let $(i,x^*,(b_\ell^*)_\ell,m^*,\sigma^*)$ be that acceptance.
+
+If $m^*\notin Q_i$, verification under $pk_i$ succeeds on a message never
+queried to that key's signing oracle. This is an EUF-CMA forgery, regardless
+of whether a similar envelope or a signature under another key was seen.
+For a single-key reduction choose a uniform protected-key index $j$ before
+setup, embed the challenge public key there, generate all other keys and
+simulate their signing queries locally. Forward only key $j$'s requests
+to the challenge signing oracle. This is the original distribution because
+the protected keys are independently generated and none is corrupted.
+Stop at the first $\mathrm{BadBind}$ acceptance. If its digest is fresh
+and its issuer is $j$, output
+$(m^*,\sigma^*)$. The simulator has no need to predict the winning
+verification attempt; in every other case it aborts. Its success probability
+is the first win's fresh-digest case probability
+divided by $N$, giving the term $N\epsilon_{\rm sig}$.
+
+Otherwise $m^*\in Q_i$. Choose any recorded query with that digest and call
+its envelope $x$. If $x^*\ne x$ as typed messages, injectivity gives
+\[
+ C(\mathrm{envelope},x^*)\ne C(\mathrm{envelope},x),
+\]
+while their hash outputs equal $m^*$. These two explicit preimages are
+a collision for $H$. Different type, instance, role, epoch, predecessor
+or inline payload fields are included in this case, not treated as
+unprotected metadata.
+
+If $x^*=x$, inventory names, kinds, positions and all commitments coincide.
+If every referenced byte string also coincides with the chosen issuance
+entry, that entry witnesses correspondence, contradicting
+$\mathrm{BadBind}$. Therefore some referenced bytes $b_\ell^*\ne b_\ell$
+differ. Acceptance recomputed the stored commitment from the captured
+bytes, and issuance computed it from its retained original bytes. Thus
+the distinct, explicitly available inputs
+\[
+ \begin{gathered}
+ C(\mathrm{object},\mathrm{kind}_\ell,\mathrm{name}_\ell,b_\ell^*)
+ \\
+ C(\mathrm{object},\mathrm{kind}_\ell,\mathrm{name}_\ell,b_\ell)
+ \end{gathered}
+\]
+have equal hash outputs. For a nested manifest, choose the first differing
+manifest or descendant in the finite reference inventory; the same argument
+applies. No inaccessible original preimage is invented by the reduction.
+
+A collision reduction generates the signature keys itself and simulates the
+whole experiment while retaining these inputs. It also stops at the first
+$\mathrm{BadBind}$ acceptance, outputs the pair in the old-digest case
+and aborts in the fresh-digest case. This single reduction covers all
+typed envelope/object uses and all verification attempts. The fresh-digest
+and old-digest cases exhaust the first win, giving the stated sum.
+Repeated identical signing requests merely add matching log entries;
+the theorem asserts existence of an earlier issuance, not uniqueness of
+its signing event or signature representation.
+\end{proof}
+
+\subsection{Proof of Security Theorem~\ref{sec-thm:replay}}
+\begin{proof}
+Consider the linearized sequence of state-changing operations. Immediately
+after the first successful operation with token $z$, atomic commitment has
+placed $z$ in the persistent consumed-token set together with its effect.
+Every later state retains $z$. A second success with $z$ would require both
+membership (by persistence) and nonmembership (by its precondition), a
+contradiction. A crash before commitment produces no committed effect; a
+crash after commitment may leave the client uncertain but does not undo
+token consumption. Receipt lookup after retry causes no second effect.
+
+If two commits use predecessor $h$, the first successful one changes the
+head to a value different from $h$ in the same operation. The no-head-reuse
+premise prevents an ABA return to $h$. The other commit's comparison
+therefore fails. Signature authenticity alone is irrelevant to this
+ordering argument: even two genuinely issued requests cannot both pass
+the same stale comparison.
+
+After revocation, suspension or epoch replacement linearizes, current
+status or epoch no longer satisfies the old authorization's grant guard.
+At or beyond expiry, the strict time comparison also fails. Atomic grant
+evaluation uses that current state, so an old authorization cannot produce
+a later grant. A grant ordered earlier is already admitted; the argument
+does not cancel in-flight responses. A fresh authorization may satisfy
+the updated guards, which explains the theorem's explicit exception.
+
+This proves at-most-once effect and current admission within the state
+model. It does not derive state durability, correct clock observations,
+linearizability or complete mediation from cryptographic assumptions.
+\end{proof}
+
+\subsection{Proof of Security Theorem~\ref{sec-thm:composition}}
+\begin{proof}
+Use S3's coupled execution with a persistent failure flag; stopping at its
+first setting recovers the S1 game without changing the flag probability.
+Let $V$ be the existence of an ordinary-RELEASE grant violating one of its
+registered thresholds anywhere in the full execution. Let $F=\bigcup_j E_j^c$ for the coverage families
+defined on this same adaptive experiment. On
+$\mathrm{BadBind}^{\,c}\cap F^c$, S1's correspondence and the explicit
+scientific premises give correctly bound, applicable upper endpoints for
+every selected in-scope claim. The deterministic reducer gives
+$\theta_{ctk}\le U_{ctk}\le\tau_{ctk}$ for ordinary RELEASE.
+The current-state, atomic-grant and complete-mediation premises connect
+that same candidate/context to each grant. A changed context cannot
+inherit the earlier evidence without revalidation. Hence
+\[
+ V\subseteq\mathrm{BadBind}\cup F.
+\]
+Theorem~\ref{thm:statistics}'s conditional allocation argument gives
+$\Pr(F)\le\alpha$ on the entire experiment. S1 gives the other term, so
+subadditivity yields
+\[
+ \Pr(V)\le\Pr(\mathrm{BadBind})+\Pr(F)
+       \le N\epsilon_{\rm sig}+\epsilon_H+\alpha.
+\]
+This reasoning never asserts
+$\Pr(F\mid\mathrm{BadBind}^{\,c})\le\alpha$, which need not follow from
+an unconditional coverage guarantee. For a bounded execution, unused
+future allocations may be set to zero. No independence between signature,
+hash and statistical events is used. If authentic measurement fabrication
+or an unmediated output path is allowed, the event inclusion can fail;
+the bound then does not apply rather than silently charging those failures
+to the statistical budget.
+\end{proof}

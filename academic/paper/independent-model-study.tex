@@ -1,0 +1,120 @@
+\subsection{New Independent-Model Synthetic Study}
+\label{sec:independent-study}
+The new study separately trains 84 logistic models and 84 depth-2 decision
+trees on fresh, independent samples of 256 synthetic task examples per fit.
+Training randomness is the replication unit; the four privacy contexts and
+three output controls are paired evaluations of each fitted model. All 168
+planned fits completed, producing 2,016 candidate evaluations. Registration,
+runner and a separately implemented verifier were hash-frozen locally before these fits;
+the timestamps are not independently attested or an external preregistration.
+The companion \code{independent-model-study-data.json} retains every
+model-level result and its source digest. We installed no dependencies and
+changed none of the retained historical experiments.
+
+\paragraph{Finite world and measured disclosure}
+Inputs are uniform on the $6\times6$ grid with coordinates
+$\{-3,-2,-1,1,2,3\}/3$. The binary task label $B$ equals $1$ with
+probability $9/10$ when $x_0+0.7x_1>0$ and with probability $1/10$
+otherwise. The protected secret
+is $S=B\oplus N_q$, with $q\in\{7/16,5/16,1/4,1/16\}$ and independent noise.
+The equal-prior adversary observes one trained-model label after randomized
+response with $\rho\in\{0,1/10,1/5\}$. Inputs, weights, identifiers, timing,
+logs and adaptive queries are excluded from this logical interface. This is
+attribute inference in a fully specified synthetic world, not membership
+privacy or validation of an unrestricted model endpoint.
+Each fitted model's predictions over all 36 inputs determine its exact
+rational channel and task utility. If $u$ is released-label task accuracy,
+\[
+ R=\tfrac12+(1-2q)|u-\tfrac12|.
+\]
+This identity is deliberately imposed by the data-generating construction;
+it is not a discovered general privacy--utility law.
+
+\paragraph{Frozen inference and selection}
+For each candidate we collect 20,000 independent draws per secret state and
+use an exact radius $e=1/50$ for simultaneous Bernoulli channel bands.
+Separate utility samples contain 20,000 draws per model/control and are
+reused across contexts, since unconditional task utility is unchanged.
+All 2,016 channel families and 504 utility families remain in the allocation,
+including unselected controls. Hoeffding's inequality \citep{hoeffding1963bounded}
+gives a simultaneous failure upper bound
+\[
+ (4\cdot2016+504)e^{-16}
+ <\frac{8568}{\sum_{k=0}^{32}16^k/k!}<0.000965.
+\]
+The rational Taylor denominator avoids treating floating-point exponentiation
+as a certified upper bound. The risk interval is the exact minimum and maximum
+of $1/2+|p_1-p_0|/2$ over the two clipped channel bands, so its lower endpoint
+includes prior-only guessing. The utility lower endpoint is its empirical
+success minus $1/50$, clipped at zero.
+
+The rule selects the largest $\rho$ satisfying risk ceiling $\le0.65$ and
+utility floor $\ge0.75$, or redesigns. These randomized-response channels
+are exactly Blackwell ordered: a further flip probability
+$(\rho_2-\rho_1)/(1-2\rho_1)$ realizes the larger control. The point-estimate
+comparator uses identical observations and requirements; always-refuse is a
+negative control. This explicit Hoeffding selector is a study implementation,
+not the complete MRA engine/optimizer or a service-authorization path.
+
+\input{independent-model-study-tables.tex}
+
+\paragraph{Results, including missed opportunities}
+The separately implemented verifier reconstructed predictions from stored model artifacts,
+recounted training/evaluation streams, enumerated the joint finite-world oracle,
+and recomputed all 2,016 candidate results and 16 primary confidence intervals.
+There was no observed channel/risk undercoverage, invalid utility lower bound,
+or invalid selection by the simultaneous-bound rule. Zero observed failures
+does not imply zero failure probability.
+
+Decision usefulness was uneven (Table~\ref{tab:independent-models}). The bound
+rule selected useful candidates for all 84 logistic models in each of the two
+safer contexts, but for none of the 50 oracle-feasible logistic models in the
+boundary-stress context. It found only one of 68 feasible tree cases in that
+context. Point estimates retained substantially more useful selections there
+but made three privacy-invalid logistic selections and six utility-invalid
+tree selections. The same six tree models fail utility in all three low-leakage,
+boundary-safe and boundary-stress contexts, which reuse within-model utility
+samples; these are not 18 independent failures. Always-refuse selected no
+useful candidate. In the high-leakage
+context no model had an oracle-feasible candidate, and correct redesign is
+reported separately from useful release.
+
+The two primary model-level outcomes are invalid selection and a missed
+oracle-feasible opportunity, each divided by all 84 fits in a family/context.
+All 16 means have clipped Hoeffding intervals of halfwidth $0.20$, with joint
+failure at most $32e^{-2\cdot84/25}<0.039$. The companion reports each count,
+denominator and interval. These deliberately broad intervals limit precision;
+conditional usefulness and comparator differences are secondary descriptive
+results. Regimes and controls must not be pooled as independent models.
+The experiment supplies independent synthetic model replications and adverse
+boundary evidence, while leaving real-population transfer, larger architectures,
+joint disclosures and integrated service effectiveness unvalidated.
+
+\subsection{New Local Lifecycle Verification}
+\label{sec:local-lifecycle-study}
+A separate SQLite reference now exercises transactional lifecycle mechanics:
+expected-head and nonce checks, current authority epoch/status, resource
+charges, expiry/leases, disclosure reservation, activation, revocation and
+access-grant recording. Every commitment reserves its disclosure. Extending
+history suspends earlier candidates; activation and access must match the
+frozen cumulative roster. No later candidate's approval is silently inherited
+by an older endpoint. A fresh external checkpoint detects restoration of an
+older database; the database's own internally consistent head cannot.
+
+Thirty-seven Python regressions pass, including independent-connection races,
+abrupt subprocess termination before commit, atomic failure recovery, revoked
+history, stale authority, lock-wait expiry and time advance during preparation.
+An initial 30-test version missed delayed-disclosure composition and expiry-after-
+check cases. Separate review reproduced both; the corrected suite retains those
+counterexamples and the original receipt. The current code rechecks time after
+preparation immediately before commit, but does not prove physical-time atomicity
+at durable storage or later model output.
+
+This is a single-host reference, disconnected from the assessment facade,
+optimizer, Lean development and actual serving process. It trusts gate and
+joint-portfolio attestations, authority inputs, artifact measurements and an
+external checkpoint. Integer resource counters are not a statistical or DP
+accountant. Receipts are audit records, not service credentials. The evidence
+therefore strengthens the implemented-mechanics case without establishing
+production enforcement, distributed correctness or a Python refinement of
+Theorem~\ref{thm:lifecycle}.

@@ -698,7 +698,7 @@ class FiniteChannelCeilingTests(unittest.TestCase):
             tuple(record.evidence_class for record in records),
             (EvidenceClass.FLOOR, EvidenceClass.CEILING),
         )
-        self.assertAlmostEqual(records[0].lower, 0.45)
+        self.assertAlmostEqual(records[0].lower, 0.5)  # Prior-only guessing dominates the cell floor.
         self.assertAlmostEqual(records[1].upper, 0.55)
         self.assertTrue(records[0].can_block)
         self.assertTrue(records[1].can_clear)

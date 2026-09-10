@@ -90,6 +90,12 @@ def _parameter_count(target: RedTeamTarget) -> int:
         return int(sum(np.size(item) for item in estimator.coefs_) + sum(
             np.size(item) for item in estimator.intercepts_
         ))
+    if hasattr(estimator, "coef_"):
+        return int(np.size(estimator.coef_) + np.size(getattr(estimator, "intercept_", [])))
+    if hasattr(estimator, "support_vectors_"):
+        return int(np.size(estimator.support_vectors_) + np.size(estimator.dual_coef_))
+    if hasattr(estimator, "estimators_") and all(hasattr(item, "tree_") for item in estimator.estimators_):
+        return int(sum(item.tree_.node_count * 2 for item in estimator.estimators_))
     return 0
 
 

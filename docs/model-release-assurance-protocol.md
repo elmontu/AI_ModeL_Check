@@ -2,20 +2,72 @@
 
 **Status:** candidate normative specification with a machine-checked authorization-integrity and finite statistical-accounting core
 
-**Framework version:** 0.7.0
+**Framework version:** 0.8.0
 **Implementation status:** the repository implements conformance levels 0--2 only; it cannot issue an MRAP production authorization
 
 ## 1. Purpose and normative boundary
 
 MRAP specifies the end-to-end process by which a proposed model release may become an active, time-limited release. It defines the participants, immutable objects, signed messages, state machine, admissibility gates, atomic registry operation, gateway behavior, monitoring, and scoped assurance claims. Only the authorization-integrity and finite statistical-accounting core identified in Section 13 is machine checked; the entire engineering protocol is not formally verified.
 
-MRAP is an institutional model-governance protocol, not a game-theoretic decision rule. Its governance core defines legitimate purpose and scope, decision rights, accountable ownership, independent challenge, affected-party consideration, conflict controls, non-compensable evidence requirements, reasoned and contestable decisions, deployment binding, incident response, reassessment, and retirement. The [governance-core specification](governance-core.md) states this architecture and its implementation boundary.
+MRAP is an institutional model-governance protocol, not a game-theoretic decision rule. Its governance core defines legitimate purpose and scope, decision rights, accountable ownership, independent challenge, affected-party consideration, conflict controls, non-compensable evidence requirements, reasoned and contestable decisions, deployment binding, incident response, reassessment, and retirement. The [governance-core specification](system-audit-specification.md#4-normative-governance-and-participant-model) states this architecture and its implementation boundary.
 
 The words **MUST**, **MUST NOT**, **REQUIRED**, **SHOULD**, and **MAY** have the meanings in [RFC 2119](https://www.rfc-editor.org/rfc/rfc2119) and [RFC 8174](https://www.rfc-editor.org/rfc/rfc8174) when written in capitals.
 
 An assessment report, optimization report, mathematical certificate, signature, or audit-log entry is **not** an authorization. A release is authorized only when its authorization record and the corresponding portfolio transition have been committed by the authoritative registry. A release is active only when the gateway has independently verified that committed record and emitted an activation receipt.
 
 The finite `protocol-solve` command in this repository solves an evidence-gate soundness--liveness frontier. It is a meta-analysis used while designing an evidence plan; it does not execute MRAP and its certificate cannot authorize a release.
+
+<a id="academic-track"></a>
+
+### 1.1 Academic track: claim boundary and research priority
+
+This subsection sets the research workstream; it does not introduce a new MRAP
+version, change a transition, or weaken a normative requirement. The academic
+track is the current priority. The [industrial track](system-audit-specification.md#industrial-track)
+retains the concrete deployment obligations. Both use one shared reference core.
+
+The proposed central contribution is a conditional argument connecting
+**admissible per-threat risk intervals, reasoned governance recommendations,
+and lifecycle integrity**. This is a research target, not a claim that the
+whole argument is already machine checked or novel relative to all prior work.
+
+Freeze the object of each claim before proving or measuring it: the protected
+unit and population, secret/action spaces and gain or advantage baseline,
+recipient access and auxiliary knowledge, query budget and adaptivity, complete
+declared export channel, related releases, policy thresholds, and evidence
+selection/stopping rule. The privacy adversary optimizing that game and the
+protocol adversary tampering with messages are different adversaries; a theorem
+about the latter does not bound the former's inference risk.
+
+For a declared threat \(T\), let \(R_T\) denote its risk in that fixed game and
+\([L_T,U_T]\) its admitted interval. On the simultaneous-coverage event,
+\(U_T\leq\tau_T\) for every threat implies that all stated risk thresholds
+hold. A valid \(L_T>\tau_T\) demonstrates a violation. A crossing interval
+\(L_T\leq\tau_T<U_T\) does not decide either assertion: explicit acceptance
+is a governance disposition, not a theorem that risk is below threshold.
+Missing or invalid required evidence remains a fail-closed BLOCK, not an
+uncertainty interval manufactured from absent measurements. The exact
+[four-verdict semantics and conditional arguments](gap-remediation.md#conditional-correctness-arguments)
+govern this reference recommendation layer; they are not production authorization.
+
+The academic claim has three distinct obligations:
+
+| Obligation | Evidence to establish it | Present boundary |
+|---|---|---|
+| Conditional decision soundness | Valid simultaneous bounds, exact reduction, and an explicit connection between recommendation and protocol predicates | Written interval arguments and Python checks exist; the four-verdict facade is not proved to refine Lean |
+| Relative scope completeness | An explicit partition of the declared scenario universe with reasoned exclusions and export-channel witnesses | Finite declared coverage can be checked; truth and completeness of the real-world universe are not proved |
+| Lifecycle integrity and executable correspondence | Invariants for the chosen transition model, a non-vacuous valid trace, and counterexamples to stronger claims | Lean covers the documented abstract/ideal semantics; Python regression agreement is not parser or implementation refinement |
+
+The [mathematical appendix](mathematical-foundations.md),
+[formal theorem inventory](formal-verification.md), and
+[academic proof/evaluation plan](../reproduction/README.md#academic-plan) are the
+single supporting references. The plan separates established artifacts from
+unproved bridges and proposed experiments, including reference-pipeline scaling.
+Cryptographic primitives and ideal registry/gateway services may be explicit
+assumptions of an abstract theorem; concrete refinement is not implied by them.
+No academic result may be promoted to a deployment claim without the industrial
+evidence appropriate to that claim. Optional strategic stress tests remain
+supplemental and cannot substitute for any of these obligations.
 
 ## 2. Security and assurance objective
 
@@ -118,7 +170,7 @@ specific validation.
 
 The evidentiary basis and hallucination controls for these requirements are
 recorded in the
-[primary-source game-theory review](game-theory-literature-review.md). The
+[primary-source game-theory review](literature-review.md#strategic-incentives-review). The
 repository implements a design-time exact-rational interval evaluator, not a
 behaviorally calibrated solver or production parameter registry.
 
@@ -764,18 +816,33 @@ Watermark and canary tests remain scheme- and protocol-specific evidence. They d
 
 Only a deployment conforming to all five levels may describe a release as authorized under MRAP/1.0. The current CLI outputs MUST be described as offline assessments, selections, certificates, or structural/authenticated transcript replays. They MUST NOT be relabelled `AuthorizationReceipt` or used directly by a serving gateway.
 
-The repository includes a typed `ReleaseProtocolRun` contract version 1.1 and `release-protocol-verify` command. It replays the normative state machine, actor/role permissions, artifact-producer roles, exact-decimal per-run assurance spending, event hash chain, assessment/selection preconditions, exact registry-sequence increment, the release-bound `MRAP-STATE-1` commitment recurrence, atomic compare-and-swap assertion, deployment digest equality, expiry, monitoring, suspension, revocation, and abort behavior. By default it also rehashes every referenced artifact file. Recomputing the head proves consistency with the supplied portfolio-commit digest; it does not prove the committed artifact is the complete semantic registry delta or that an authoritative registry included it. The `structural_v1` profile does not authenticate actors. The `authenticated_v1` profile verifies domain-separated release-bound Ed25519 signatures for every event and artifact declaration against an external public-key trust store and rejects supplied compromised-key identifiers.
+The repository includes a typed `ReleaseProtocolRun 1.2` and `release-protocol-verify` command. It replays a documented subset of the normative state machine, actor/role permissions, artifact-producer roles, exact-decimal per-run assurance spending, event hash chain, assessment/selection preconditions, exact registry-sequence increment, the release-bound `MRAP-STATE-1` commitment recurrence, atomic compare-and-swap assertion, deployment digest equality, expiry, monitoring, suspension, revocation, and abort behavior. By default it also rehashes every referenced artifact file. Recomputing the head proves consistency with the supplied portfolio-commit digest; it does not prove the committed artifact is the complete semantic registry delta or that an authoritative registry included it. The `structural_v1` profile does not authenticate actors. The `authenticated_v2` profile verifies every event and artifact declaration against an external public-key trust store, using the `MRAP/1.0:event-signature:v2` and `MRAP/1.0:artifact-signature:v2` domains, and rejects supplied compromised-key identifiers.
+
+Both signature domains bind the release ID, release-instance/artifact/interface/policy commitments, population-scope map, initial registry head/sequence, profile/version, and complete actor/role/key/organization declarations. Binding an organization name prevents undetected relabelling; it does not establish organizational authority. Every event must be at or before the supplied verification time, and referenced reports must exist no later than their recording event. With file checks enabled, current `AssessmentReport 6.0` and `OptimizationReport 5.0` artifacts are parsed, hash-bound, and compared to their event/context/predecessor fields. Assessment replay additionally checks the registered `PolicyBundle 3.0`, including its mandatory threat roster. This is report/policy semantic replay, not independent execution of the scientific tests. Other lifecycle blobs without versioned content contracts remain declarations.
+
+The `ReleaseProtocolVerification 3.0` result uses `authorization_recorded` and `deployment_recorded` for the accepted supplied transcript. Its `authorization_issued` and `deployment_active` fields are fixed to `false`: offline replay never issues a production authorization or observes a live endpoint. `valid=true`, even for an `ACTIVE` transcript, MUST NOT be promoted into either claim.
+
+This migration is intentionally incompatible with Run 1.1 / `authenticated_v1` signatures and Verification 2.0 semantics. Review and reissue the complete current context and every producer/event signature; changing a version string is not migration. Current assessment requests remain 5.0, assessment reports are 6.0, signed assessment manifests are 4.0, and optimization requests/reports/manifests are 5.0. Retired schema files are removed from the active `schemas/` directory and recoverable from Git history; historical outputs and the matching schemas, pinned runtime, dependencies, keys/trust snapshot and source hashes must remain available for vintage replay. The current parser is not a historical-version dispatcher.
+
+The separate optional four-verdict assurance-record API/CLI records exact rational comparisons and complete coverage of an approved *declared* scenario universe. Its `RELEASE` and `RELEASE-WITH-RISK` values are scoped recommendations, not MRAP authorization; explicit signed residual-risk acceptance cannot override a blocking floor, establish that the declared world is complete, or waive the mandatory production obligations above.
 
 Both profiles remain conformance harnesses rather than an authoritative protocol service: they do not issue credentials, discover compromise, contact or implement a linearizable registry, enforce a gateway, verify remote attestations, or establish that the scientific contents of an artifact are true. A correspondence manifest prevents silent role/state/action drift, and adversarial mutation tests exercise concrete rejection behavior, but the Python verifier has not been proved to refine the Lean model.
 
-The current ordinary assessment and selection contracts retain Python binary64 fields and comparisons.
-`ReleaseOptimizer` does not invoke SciPy—it replays supplied transfer certificates and uses graph
-reachability—but that fact does not make its ordinary comparisons exact. Whenever a clearance result
-depends on an unresolved binary64 boundary, G7 is not evidenced, the result must remain
-`INCONCLUSIVE`, and the deployment cannot claim MRAP conformance until exact, approved-decimal, or
-outward-rounded replay closes the boundary. Cross-release accumulation of statistical, privacy,
+Current local privacy/portfolio threshold comparisons and optimizer garbling replay use exact rational
+values for declared inputs. Stochastic rows must sum exactly to one; numerical tolerance cannot enlarge
+the declared residual allowance. Only zero-residual relations become exact Blackwell graph edges, and
+nonzero residuals are charged only for supported bounded expected-reward metrics. This is not a proof
+of the true channel, sampling coverage, or precision lost before parsing. Utility/cost fields and some
+upstream statistical/numerical producers still use binary64. Whenever a decision-critical boundary is
+unresolved, G7 is not evidenced and the deployment cannot claim MRAP conformance until exact,
+approved-decimal, or outward-rounded replay closes it. Cross-release accumulation of statistical, privacy,
 query, and operational budgets also remains an authoritative-registry obligation; per-run transcript
 fields do not implement the lifetime ledgers required by Section 11.
+
+The optimizer continues to declare `mrap_g7_exact_or_outward_clearance_eligible=false`. Exact checks
+on the declared values are not a whole-program refinement proof or an independent proof of every
+upstream statistical interval. Strict canonical-decimal normalization also means an approximately
+encoded rational table may be rejected even when an ideal mathematical table exists.
 
 Supply-chain attestations SHOULD link each independent actor's materials and products in the spirit of [in-toto](https://www.usenix.org/conference/usenixsecurity19/presentation/torres-arias), while the registry separately enforces model-release policy and state. NIST's [AI Risk Management Framework](https://doi.org/10.6028/NIST.AI.100-1) motivates lifecycle-wide governance and monitoring, but MRAP's typed messages, scoped formal invariants and conditional assurance argument are project-specific.
 

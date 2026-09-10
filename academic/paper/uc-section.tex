@@ -1,0 +1,97 @@
+\section{A Scoped Simulation-Based Realization}
+\label{sec:uc}
+We now give an ideal functionality, an explicit simulator and a perfect
+real/ideal argument for a restricted authorization-record service.
+The result uses UC for static systems (UC4SS), with its fixed machine
+interfaces and compatible composition operation \citep{canetti2025uc}.
+It is a new written argument for the protocol defined here, not a claim
+that the existing Python or Lean artifacts implement this functionality.
+Its purpose is to establish a precise composable technical boundary;
+the centralized simulation method is standard.
+
+\paragraph{Scope of the realized service}
+The construction has public request and response contents, fixed party
+identities, a fixed static corruption set, one honest persistent coordinator
+and session-local authenticated message channels. The coordinator implements
+the application checks in ordinary local computation; there is no ideal
+registry deciding whether a release is valid. Explicit privileged Tick
+commands supply monotone logical time. The environment and adversary can
+schedule messages and choose inputs adaptively, but cannot corrupt, reset
+or roll back the coordinator. Root directory administration and the clock
+endpoint are also outside the corruption set.
+
+The application is a conservative ordinary-RELEASE specialization:
+it retains attributed evidence, ordered approval, current authority,
+exact record bindings, nonces, disclosure reservations and budgets.
+It returns authorization and grant \emph{records}; it neither executes a
+model nor issues an independently usable serving credential.
+Mandatory institutional judgments remain attributed inputs.
+The construction excludes adaptive corruption, confidential evidence,
+global shared infrastructure and physical-time guarantees. A declaration
+or manifest tag does not establish actual deployment identity.
+
+\paragraph{Functionality and protocol}
+Appendix~\ref{app:uc} defines the deterministic kernel $\Delta$, the
+authenticated channel interface, the ideal functionality
+$F_{\mathrm{MRA}}^\Delta$ and the real hybrid protocol
+$\pi_\Delta^{\mathrm{auth}}$.
+The functionality queues an attributed request and leaks its entire
+contents. A simulator-controlled input-delivery callback executes the
+kernel against \emph{then-current} state. The result is separately queued,
+leaked and delivered by another callback. The real protocol consists of
+client adapters, authenticated request/response channels and the honest
+coordinator executing $\Delta$ atomically at request delivery.
+These two delivery points are essential: a revocation may precede the
+processing of an earlier-submitted grant request, or follow an already
+committed grant whose receipt has not yet arrived.
+
+\begin{uctheorem}[Perfect realization in the authenticated-channel hybrid]
+\label{uc-thm:realization}
+For the specified static interfaces, corruption set, polynomial resource
+bounds and initialized kernel, for every admitted probabilistic
+polynomial-time adversary $\mathcal A$ there is one polynomial-time
+simulator $\mathcal S_{\mathcal A}$ such that, for every admitted
+polynomial-time environment $\mathcal Z$ and auxiliary input $z$,
+\[
+\begin{split}
+ &\Pr[\operatorname{Exec}(\pi_\Delta^{\mathrm{auth}},
+                    \mathcal A,\mathcal Z,z)=1]\\
+ &\quad=\Pr[\operatorname{Exec}(I_\Delta,
+                    \mathcal S_{\mathcal A},\mathcal Z,z)=1].
+\end{split}
+\]
+Here $I_\Delta$ is the ideal protocol for $F_{\mathrm{MRA}}^\Delta$,
+including the dummy parties preserving the external interfaces.
+Equality holds for every security parameter, not merely asymptotically.
+\end{uctheorem}
+
+The simulator runs $\mathcal A$, translates request and response handles,
+and reproduces every allowed public notification. Its state invariant
+equates the two application states, both pending queues and the honest
+output histories. Induction over all interface actions proves identical
+observable executions; the full proof is in Appendix~\ref{app:uc}.
+The statistical failure budget $\alpha$ is absent from the emulation error:
+both systems execute the same potentially fallible evidence procedures.
+The separate scientific soundness premises are still required.
+
+\begin{uctheorem}[Conditional transport substitution]
+\label{uc-thm:transport}
+Suppose a session-local transport protocol $\rho$ UC4SS-realizes the exact
+authenticated-channel network used here, with error
+$\epsilon_{\mathrm{tr}}$ and compatible interfaces, setup, leakage,
+corruption and resource bounds. Then replacing that network in
+$\pi_\Delta^{\mathrm{auth}}$ by $\rho$ realizes
+$F_{\mathrm{MRA}}^\Delta$ with error at most $\epsilon_{\mathrm{tr}}$,
+at the resources of the composed simulation.
+\end{uctheorem}
+
+This corollary is conditional on a transport realization, not a concrete
+Ed25519 implementation theorem. Signature-based UC authentication is
+established literature, with certification and session-management conditions
+\citep{canetti2004authentication}. S1 alone does not discharge this
+substitution premise. Globally verifiable signatures have additional
+transferability issues \citep{canetti2016globalpki}; the result therefore
+does not silently extend to government-wide shared keys or registries.
+Neither theorem upgrades a recorded attestation into truth, nor proves
+model confidentiality, a correct privacy observation boundary, effective
+redress or faithful deployment.

@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "python_contract_version": "1.1",
+  "python_contract_version": "1.2",
   "lean_toolchain": "leanprover/lean4:v4.32.1",
   "roles": {
     "model_owner": "modelOwner",

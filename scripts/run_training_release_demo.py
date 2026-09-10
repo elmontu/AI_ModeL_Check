@@ -516,6 +516,7 @@ def _run_post_registration_attack(
     worker_manifest: dict[str, Any],
     release_bundle_sha256: str,
     config: dict[str, Any],
+    red_team_enabled: bool = False,
 ) -> tuple[dict[str, Any], datetime]:
     """Re-execute the frozen attack after registration on the exact target bytes."""
 
@@ -587,6 +588,25 @@ def _run_post_registration_attack(
                 indices, target_loss, reference_loss, score, strict=True
             )
         )
+
+    if red_team_enabled:
+        # Additional exploratory tools do not alter the registered single-attack evidence.
+        from model_release_assurance.red_team import RedTeamConfig, RedTeamTarget
+        from model_release_assurance.tabular_red_team import run_tabular_suite
+        # Restore the frozen constructor settings for matched in-memory retraining.
+        target_model.set_params(**config["model"])
+        views = []
+        for group in ("member_audit", "nonmember_audit"):
+            indices = np.asarray([index_by_id[row_id] for row_id in group_ids[group]], dtype=int)
+            view = target_pipeline["preprocessor"].transform(features.iloc[indices])
+            views.append((view.toarray() if hasattr(view, "toarray") else np.asarray(view), labels[indices]))
+        red_team = run_tabular_suite(RedTeamTarget("exported-public-model", "xgboost", target_model,
+                                     views[0][0], views[0][1], views[1][0], views[1][1]),
+                                     RedTeamConfig(seed=SEED, membership_repetitions=2))
+        red_team["release_bundle_sha256"] = release_bundle_sha256
+        red_team["dataset_sha256"] = dataset_sha256
+        red_team["split_manifest_sha256"] = sha256_file(split_path)
+        _write_json(evidence_dir / "red-team-report.json", red_team)
 
     raw_scores_path = evidence_dir / "post-registration-membership-scores.parquet"
     save_scores(raw_scores_path, raw_rows)
@@ -1053,6 +1073,7 @@ def run_training_release_demo(
     dataset_path: Path | None = None,
     target_column: str | None = None,
     force: bool = False,
+    red_team_enabled: bool = False,
 ) -> dict[str, Any]:
     """Execute a real model-training pipeline and stop fail-closed after assessment."""
 
@@ -1311,6 +1332,7 @@ def run_training_release_demo(
         worker_manifest=worker_manifest,
         release_bundle_sha256=release_bundle_sha256,
         config=config,
+        red_team_enabled=red_team_enabled,
     )
     attack = attack_result["attack"]
     evidence_context = EvidenceContext(
@@ -1565,6 +1587,8 @@ def run_training_release_demo(
     }
     if not report["bindings"]["all_equal"]:
         raise RuntimeError("the pipeline changed release artifact identity between stages")
+    if red_team_enabled:
+        report["artifacts"]["exploratory_red_team"] = _artifact_record(run_dir, run_dir / "evidence" / "red-team-report.json")
     report_path = run_dir / "pipeline-report.json"
     _write_json(report_path, report)
     verify_pipeline_bindings(run_dir, report)
@@ -1611,6 +1635,7 @@ def main() -> int:
     )
     parser.add_argument("--output-root", type=Path, default=DEFAULT_OUTPUT_ROOT)
     parser.add_argument("--run-id", help="safe output directory name; defaults to a UTC timestamp")
+    parser.add_argument("--red-team", action="store_true", help="run additional bounded exploratory tabular screens")
     parser.add_argument("--force", action="store_true", help="replace only the selected run directory")
     args = parser.parse_args()
     run_id = args.run_id or _utc_now().strftime("run-%Y%m%dT%H%M%S%fZ")
@@ -1628,6 +1653,7 @@ def main() -> int:
             dataset_path=args.dataset_path,
             target_column=args.target_column,
             force=args.force,
+            red_team_enabled=args.red_team,
         )
     except Exception as exc:
         print(f"error: {type(exc).__name__}: {exc}", file=sys.stderr)

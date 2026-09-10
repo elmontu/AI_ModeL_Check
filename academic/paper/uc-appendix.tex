@@ -1,0 +1,522 @@
+\section{Ideal Functionality, Simulator and Real/Ideal Proof}
+\label{app:uc}
+This appendix specifies the restricted construction of Section~\ref{sec:uc}.
+The model is UC4SS: a fixed network of machines with declared input,
+subroutine-output and adversarial interfaces, dummy parties for the ideal
+service, and an external environment choosing inputs and interacting with
+the adversary \citep{canetti2025uc}. All descriptions below denote
+families indexed by $\lambda$; encodings, inventory lengths, number of
+registered instances and work per operation have fixed polynomial bounds.
+Resource exhaustion produces the specified refusal without a partial
+application effect. The result concerns these static interfaces, not
+dynamic-party general UC or a global-setup composition theorem.
+
+\subsection{Public parameters and deterministic application state}
+\label{app:uc-kernel}
+Fix a service identifier $s$, a finite party roster, root directory
+administrator $D$, clock endpoint $T$ and coordinator $R$.
+A static set $C$ of other parties may be corrupted before execution;
+$R,D,T\notin C$. A corrupted party may submit any bytes as itself.
+Honest clients forward their caller's inputs; honesty of that adapter
+does not assert that an input measurement or institutional judgment is true.
+The authenticated channel's source identity, never an issuer string
+inside a payload, identifies the submitting principal.
+
+Initialization installs a public directory, root policy and bounded
+deterministic checker programs $\Gamma$.
+The programs fix admissible schemas, required attributed evidence,
+stage-due obligations, the admitted inference procedures, the selection
+rule, review conditions and resource-charge rules. Their identifiers
+and parameters are immutable within an instance. They compute over the
+supplied records and current state; no caller supplies an unchecked
+\emph{all gates pass} flag. Missing inputs, UNKNOWN, contradictory evidence,
+unsupported procedures or exceeded checker fuel fail the relevant gate.
+Scientific soundness of these programs' observational premises is separate.
+
+The application state is
+\[
+ W=(n,p,H,t,e,D_{\rm cur},P_{\rm cur},B,J,\mathcal N,\mathcal R).
+\]
+Here $n$ is an event sequence number; $p$ is a disclosure-reservation version;
+$H$ is the cumulative reservation ledger; $t$ is logical time; $e$ is the
+current directory/policy epoch; $D_{\rm cur}$ and $P_{\rm cur}$ are the
+current directory and policy;
+$B$ contains remaining registered resources; $J$ contains instance records;
+$\mathcal N$ is the consumed logical-token map; and $\mathcal R$ is the
+immutable receipt store. Event numbering and disclosure versioning are
+different: ordinary evidence progression must not stale its own frozen
+portfolio snapshot merely by appending a record.
+
+Every instance fixes its exact context bytes, candidate/artifact/interface
+tags, checker identifiers, policy epoch, deadline and precommit portfolio
+snapshot $(p_I,H_I)$. Stored predecessor references resolve to complete
+captured records, with exact byte equality and recorded provenance.
+This construction uses explicit byte strings and unique record identifiers;
+it does not replace equality by a hash assumption. Artifact/interface
+tags are declarations checked for equality, not measurements of model
+execution. All transmitted record bytes and metadata are public leakage.
+No confidentiality is promised for an evidence object, even if a caller
+unwisely includes a secret in it.
+
+\paragraph{Common command processing}
+A request contains the service and instance identifiers, action, unique
+logical token $u$, expected instance revision, epoch, issue/expiry times,
+predecessor identifiers and payload. The lookup key for an effect is
+$(s,\mathrm{sender},u)$; changing an epoch cannot free a consumed token.
+Define
+\[
+       (W',y)=\Delta(W,i,q)
+\]
+as the following total deterministic computation on authenticated sender
+$i$ and request bytes $q$.
+First apply bounded unambiguous parsing and service/type checks. An
+invalid request returns a fixed error and leaves application state unchanged.
+For a recorded token, unequal request bytes yield CONFLICT. Equal bytes
+return a typed HISTORICAL receipt containing the earlier result, without
+changing state, renewing authority or creating a grant. Receipt lookup is
+not a current-eligibility query.
+
+For a fresh request, check the current directory permission for the action,
+the applicable instance/epoch/revision and exact predecessor bindings,
+and $q.\mathrm{issued}\le t<q.\mathrm{expires}$. A rejected fresh request
+has no authorization, resource or nonce effect; it may be retried and is
+rechecked against then-current state. A successful action atomically
+records its effect, request bytes and receipt under the token and increments
+$n$ and any affected instance revision. Later rejection does not erase
+earlier resource reservations or receipts. Output records identify the
+action, token, instance revision, logical time and applicable versions.
+All arithmetic and comparisons are exact on bounded represented values.
+Admin and Tick are separately typed global commands: they carry service,
+token and their action payload, but no instance revision or predecessors.
+Admin additionally checks the current root authority and epoch; Tick
+checks the fixed clock identity and a monotone timestamp. Neither is
+blocked by an unrelated instance's expiry. They use the same permanent
+token/receipt rule. Each charged operation derives a nonnegative vector
+$d$ from the frozen charge program, requires $d\le B$ componentwise,
+and installs $B-d$ atomically with its effect. No action replenishes $B$.
+Response encodings are bounded by construction; a checker result exceeding
+the bound becomes a fixed-size refusal before any effect is committed.
+An admissible Assess command may successfully store negative scientific
+results and enter ASSESSED: successful recording is distinct from a passing
+cell result. Such results prevent ordinary selection.
+Statistical reservations have permanent unique family identifiers checked
+before observation-record admission; a repeated family cannot obtain a
+fresh allocation by changing its command token.
+
+\begin{table*}[tp]
+\centering\normalsize
+\caption{The ordinary-RELEASE authorization-record kernel.
+Each successful row also satisfies the common checks above.
+The coordinator implements these checks; they are not a setup oracle.}
+\label{tab:uc-kernel}
+\begin{tabularx}{\textwidth}{@{}p{0.14\textwidth}p{0.17\textwidth}XX@{}}
+\toprule
+Command & Required actor/state & Additional checks & Atomic effect \\
+\midrule
+Register & Permitted owner; unused instance &
+Complete immutable context, current epoch and $(p,H)$; registration-due checks. &
+Store context, $(p_I,H_I)=(p,H)$ and REGISTERED. \\
+FreezePlan & Assessor and prescribed recorded approvals; REGISTERED &
+Exact required roster, procedures, sources, selection/stopping rule and available prospective allocation. &
+Reserve allocation without refund on later failure; store plan; PLAN\_FROZEN. \\
+CloseEvidence & Permitted collector; PLAN\_FROZEN &
+Every required source is a previously attributed immutable submission; retain failures and exclusions; run closure/control checks. &
+Store exact closed inventory; EVIDENCE\_FROZEN. \\
+Assess & Assessor; EVIDENCE\_FROZEN &
+Run the frozen bounded admission procedures over captured evidence and current portfolio; no authentic-input shortcut. &
+Store all cell results and refusals; ASSESSED. \\
+Select & Optimizer; ASSESSED &
+Replay ordinary RELEASE, mandatory CLEAR, utility, transfer, joint-portfolio and stage-due requirements; apply frozen tie-break. &
+Store selected candidate and complete result set; OPTIMIZED, or REDESIGN with no selection. \\
+Review & Permitted authorizer; OPTIMIZED &
+Current recorded independent reviews, conflict/objection dispositions, conditions and deadlines; all due requirements. &
+Store review request with immutable selection; COMMIT\_PENDING. \\
+Commit & Permitted authorizer; COMMIT\_PENDING &
+Recheck selection/review/current obligations, $p_I=p$, $H_I=H$, live evidence and all remaining charges. &
+Reserve candidate in $H$; advance $p$; charge resources; bind authorization to new $(p,H)$; AUTHORIZED; invalidate other old-portfolio instances and suspend older authorizations. \\
+Activate & Permitted gateway actor; AUTHORIZED &
+Exact declared artifact/interface, current postcommit portfolio and epoch, live authorization/lease and due service obligations. &
+Store bounded lease; ACTIVE. No model execution occurs. \\
+Grant & Permitted requester; ACTIVE &
+Current postcommit portfolio, epoch, exact context/tags, live strict deadlines, allowed request, due obligations and available charges. &
+Reserve charges; record one NEW\_GRANT within the already committed interface at this linearization point. \\
+Stop & Permitted incident/retirement authority; nonterminal &
+Authority and target binding; passing positive gates is not required to stop. &
+SUSPENDED or REVOKED; preserve $H$, consumed tokens and spent resources. \\
+Admin & Root $D$ &
+Well-formed authorized directory/policy update. &
+Advance $e$, replace directory/policy snapshot, invalidate pending old-epoch instances and suspend existing authorizations; preserve history. \\
+Tick & Clock $T$ &
+Well-formed timestamp $t'\ge t$; dedicated schema without an application expiry check. &
+Set $t=t'$; expire affected live instances. No guarantee of timely ticks. \\
+\bottomrule
+\end{tabularx}
+\end{table*}
+
+\paragraph{Attributed submissions and references}
+An additional SubmitEvidence command records an attributed evidence or
+approval object without progressing the instance. Its sender must have
+the current type-specific permission. It can contain a false statement.
+A fixed record-kind table admits plan endorsements only while REGISTERED,
+observation records only after their plan allocation is reserved and before
+evidence closure, and authorization reviews only for the exact selected
+candidate and existing predecessors. Closure and every subsequent checker
+resolve required objects from this store, recheck current issuer authority
+and scope, and reject missing, substituted or conflicting records.
+Collection failure records remain available. Evidence bytes cannot be
+retrospectively changed after closure; new context or corrected evidence
+requires a fresh instance and applicable new stages. This input mechanism
+supplies records, not an evidence-truth functionality. Recorded allocation
+ordering does not prove the physical observation was collected prospectively.
+
+\paragraph{Mechanical evidence checks}
+Independently of the selected scientific route, the kernel requires exact
+candidate/game/population/interface and portfolio identities, the fixed
+nonempty threat and witness inventories, admitted evidence directions,
+rational ranges with baseline inclusion and $L\le U$, pre-reserved
+coverage-family identifiers, and the current mandatory obligation roster.
+Select examines every in-scope cell, not just mandatory ones, and admits
+only ordinary RELEASE with $U\le\tau$ throughout.
+Utility, control and resource charges use the frozen programs and constants.
+No optional-risk acceptance or unresolved-crossing plan can authorize
+service in this restricted construction.
+
+\paragraph{Current guards, reservations and invalidation}
+Every successful progression checks its destination's current due
+obligations, plus still-current required predecessors. Precommit progression
+requires $(p_I,H_I)=(p,H)$; a stale instance cannot progress or silently rebase.
+Commit creates a separate postcommit binding
+$(p_{\rm auth},H_{\rm auth})=(p+1,H\cup\{r_c\})$,
+where $r_c$ is the unique immutable release reference consisting of the
+instance, selected candidate and committed record identifiers, with the
+full declared context. A reused candidate label cannot merge two releases.
+That binding, rather than the old precommit snapshot, governs activation
+and grants. Other old-portfolio authorizations are suspended.
+This first construction permits only requests within the already reserved
+candidate's fixed interface; a request expanding that portfolio requires
+a fresh instance and new commitment. The conservative rule may stop more
+service than a sound transfer-based construction. Stopping, refusal, expiry
+and administrative replacement never remove reservations or refund
+observed allocations. Invalidated or suspended authorizations cannot be
+reactivated through an old receipt; a fresh instance must repeat the stages.
+
+The ledger is the declared reservation history of this API.
+It is not a proof that every real-world disclosure has been inventoried.
+In particular, the public protocol transcript may itself disclose
+information before a Commit. Any privacy application must include that
+transcript and external observations in its complete channel analysis;
+the UC result establishes no such completeness.
+
+\paragraph{Nonvacuity and kernel invariants}
+Nonvacuity is existential over admissible initialization, not a claim that
+every checker suite accepts a candidate. Choose a fixed suite admitting
+the required exact finite-channel witness, compatible utility/control
+records and complete attributed approvals. At epoch zero and portfolio version
+zero, an owner registers a candidate; required parties submit complete
+records, freeze the plan, close evidence, assess and select ordinary RELEASE,
+then review and commit. With sufficient resources, live deadlines and
+passing current checks, commit installs portfolio version one; activation
+and a grant use that postcommit version. The trace needs no intervention
+from an ideal approval oracle. Its evidence premises can be instantiated
+by a finite channel whose exact value is below its registered threshold.
+It is a constructed possible trace, not a deployment observation.
+The realization theorem also applies to a fixed reject-all checker suite;
+real/ideal equality alone does not establish decision usefulness.
+
+Induction on successful kernel actions gives: every new grant has a
+currently ACTIVE, applicable authorization at logical time $t$; no
+consumed logical token causes two new effects; $H$ never shrinks; reserved
+resources are not refunded by refusal or retirement; and a stale
+precommit portfolio cannot commit. The base state has no grants or
+consumed tokens. For the induction step, only Grant appends a new grant,
+and its guards establish current eligibility; every successful action
+checks and records the token atomically; only Commit changes $H$, by
+addition. The invalidation rows preserve these facts while disabling
+old authorizations. These invariants are about the stated kernel.
+They neither prove the semantic truth of attributed inputs nor refinement
+of A1--A6 or Python.
+
+\subsection{Authenticated transport and activation conventions}
+\label{app:uc-channel}
+For each permitted ordered pair of endpoints use an independent,
+session-local public authenticated channel. Its Send ingress first checks
+the fixed bounded transport schema: a bounded local-number field and
+bounded request/result bytes. Failure has no allocation, notification or
+delivery effect; arbitrary bounded application bytes remain permitted.
+Its Send interface obtains
+the sender from its declared endpoint, allocates a unique channel-local
+handle $a$, stores $(a,i,j,m)$ and emits the adversarial notification
+$(\mathrm{sent},a,i,j,m)$. Emitting a notification yields control.
+The adversary may later call Deliver$(a)$; the channel atomically marks
+the handle delivered and passes exactly $m$ with source $i$ to destination
+$j$. Unknown or already delivered handles have no effect. There is no
+adversarial message-edit or source-relabel operation.
+The adversary may withhold delivery indefinitely.
+Different Send calls, including identical bytes, obtain different handles.
+
+Static corrupted endpoints are controlled by the adversary and may send
+any bytes under their own identities or ignore received outputs.
+They cannot call an honest endpoint's sender interface. Corrupted-party
+caller traffic is forwarded to/from the adversary in both executions;
+the theorem imposes no honest-output requirement on a corrupted client.
+Transport identity is fixed while the application's directory permissions
+can change: after revocation the source is still attributable, but its
+new action can be refused by $\Delta$.
+
+The service uses request channels from clients to $R$ and response channels
+from $R$ to clients. Each client Send has a fresh local request number
+separate from the command's logical token. The coordinator response
+contains that local number and the exact result $y$.
+A client accepts a response only from $R$, for a pending local number.
+It deletes that pending entry before yielding the result to its caller
+and outputs it once; it does not execute a model or redeem a credential.
+Requests carry the service identifier inside their bytes as well as
+being routed through session-specific endpoints.
+
+The fixed network has no application side channel other than these
+notifications and declared outputs. Its external main-party interfaces
+are client Submit/Result, including those of $D$ and $T$.
+$R$ has no direct environment-facing command or state-read interface:
+it processes application requests only as authenticated channel deliveries.
+The adversarial channel ports are Send for statically corrupted endpoints
+and Deliver for known channel handles; honest endpoint Send calls use
+their internal declared ports. Unspecified direct messages to an honest
+client or $R$ are ignored. These same interface restrictions and identity
+names hold in the ideal dummy-party network.
+One delivered request permits the
+coordinator to complete its bounded local computation and commit
+atomically before it initiates the response Send. No external action
+interleaves within that local computation. Notifications are emitted
+one at a time, with later callbacks resuming the appropriate continuation.
+Application outcomes do not depend on the number of internal machine
+activations; time changes only through delivered Tick commands.
+Persistent local state and atomic activations are modeling assumptions,
+not results about databases, crashes, distributed consensus or clocks.
+
+\subsection{The ideal functionality}
+\label{app:uc-functionality}
+The functionality $F_{\mathrm{MRA}}^\Delta$ owns initialized $W$,
+a pending-input map $Q_{\rm in}$, a pending-output map $Q_{\rm out}$,
+delivered-handle sets, honest-client pending maps and local request counters.
+It exposes the following interfaces through dummy parties preserving the
+real client identities. Handle namespaces include service, direction
+and endpoint; allocation is deterministic, public and unique.
+
+\begin{enumerate}
+\item \textbf{Submit$(q)$ from honest client $i$.}
+First apply the same transport-bound check as the real adapter; on failure,
+ignore the input without advancing a counter or allocating an entry.
+Otherwise allocate its next local request number $k$ and input handle $a$.
+Record $k$ as pending, store $(a,i,k,q)$ in $Q_{\rm in}$ and emit
+$(\mathrm{request},a,i,k,q)$ to the simulator, then yield.
+No kernel action is performed at submission.
+\item \textbf{CorruptSubmit$(i,k,q)$ from the simulator.}
+Permit only $i\in C$ and the bounded transport schema.
+Allocate an input handle and store the attributed request exactly as for
+the corresponding corrupted endpoint's Send. Corrupted endpoints can
+choose their local-number bytes; they cannot impersonate an honest party.
+Emit the same request notification and yield.
+\item \textbf{DeliverIn$(a)$ from the simulator.}
+If $a$ is pending and undelivered, consume it, compute
+$(W',y)=\Delta(W,i,q)$, and atomically install $W'$.
+Allocate output handle $b$, store $(b,i,k,y)$ in $Q_{\rm out}$,
+and emit $(\mathrm{response},b,i,k,y)$, then yield.
+Otherwise do nothing. The simulator chooses timing, not $W'$ or $y$.
+\item \textbf{DeliverOut$(b)$ from the simulator.}
+If $b$ is pending and undelivered, consume it. For an honest client,
+forward $(k,y)$ through its dummy party as that client's one output
+for pending request $k$, deleting its pending entry before yielding
+the output; for a corrupted client, deliver it to the
+simulator. Do not run $\Delta$ or reinterpret $y$ as a current grant.
+An unknown or already delivered handle has no effect.
+\end{enumerate}
+
+Bounded transport-schema failure is ignored before queuing in both
+systems; bounded application-schema failure is processed by $\Delta$
+and can yield a response. These two levels are distinct.
+The full honest request is deliberately leaked, including malformed
+application bytes. The ideal service leaks every produced response even
+if its client never receives it. These leakage and withholding interfaces
+match the real public channels; they are not discretionary extra powers
+to alter honest inputs, authorize unsupported actions or forge outputs.
+
+\subsection{The real hybrid protocol and simulator}
+\label{app:uc-simulator}
+The real protocol $\pi_\Delta^{\mathrm{auth}}$ has honest client adapters,
+the authenticated channels above, and coordinator $R$ with local state $W$.
+An honest client's Submit first validates the transport bounds, allocates
+$k$ and records $k$ as pending, then initiates Send$(k,q)$ on its request
+channel. No state installation is deferred until after that yielding Send.
+When that channel delivers the request, $R$
+uses its authenticated source identity $i$, executes $\Delta(W,i,q)$
+and atomically installs the result. It then sends $(k,y)$ on the
+response channel to $i$. Client adapters use the response rule above.
+The coordinator computes parsing, current guards, predecessor lookup,
+bounded evidence checks, version comparisons, resource accounting,
+invalidation and receipts itself. Authenticated transport provides
+none of those application decisions.
+
+For an arbitrary real adversary $\mathcal A$, construct a single simulator
+$\mathcal S_{\mathcal A}$ independent of $\mathcal Z$ and $z$.
+It runs $\mathcal A$ with the same public parameters and simulates its
+channel-facing interface. It maintains bidirectional handle maps
+$\phi_{\rm in}$ and $\phi_{\rm out}$, counters and delivery flags.
+On a Request notification from $F$, it creates the corresponding simulated
+channel handle, records the mapping, presents the identical Sent
+notification with the real protocol's tags and yields to $\mathcal A$.
+On a Response notification it does the same for the response channel.
+
+When $\mathcal A$ calls Deliver on an undelivered simulated input handle,
+the simulator invokes DeliverIn on its mapped ideal handle. For a response
+handle it invokes DeliverOut. Duplicate or unknown calls have the same
+no-effect behavior as the real channel. It marks its delivery flag consumed
+before invoking either callback. For an invalid callback it yields control
+without waiting for a notification that will never arrive.
+On a corrupted endpoint's Send,
+it first applies the same transport guard locally. Failure yields with
+no callback or expected notification. Otherwise it invokes CorruptSubmit,
+then converts the resulting notification to
+the corresponding real Sent notification. It relays corrupted endpoint
+deliveries and environment/adversary traffic without restricting their
+contents. It refuses attempts to use an honest sender interface, matching
+the real channel's source-authentication rule.
+Continuations preserve the specified yields: receipt production never
+also forces receipt delivery, and a simulator notification alone never
+forces input processing.
+
+The simulator does not need hidden evidence, a signing key, a hash
+preimage, a trapdoor or a scientific oracle. It is using the assumed
+authenticated-channel interface. Its work is polynomial in the admitted
+execution length and total byte length, with polynomial queue/handle
+bookkeeping. The same simulator handles every adaptive input strategy
+of the environment.
+
+\subsection{Proof of Theorem~\ref{uc-thm:realization}}
+\begin{proof}
+Couple the real and ideal executions with identical public initialization
+and identical random tapes for $\mathcal Z$ and $\mathcal A$. The honest
+adapters, channels, kernel and handle allocation are deterministic.
+At corresponding external interaction boundaries maintain:
+(i) equal coordinator/functionality state $W$;
+(ii) a bijection between pending and delivered real request handles and
+ideal input handles, preserving sender, local number and exact bytes;
+(iii) the analogous bijection for responses, preserving destination and
+result bytes; (iv) equal honest-client pending/output state; and
+(v) equal notifications delivered to $\mathcal A$ and equal outputs
+delivered to $\mathcal Z$. The bijections include direction and service
+namespaces. The initial empty queues and identical $W_0$ establish the
+invariant.
+
+An honest Submit sees the same bytes because the environment views agree.
+The real adapter and ideal interface allocate equal local numbers and
+corresponding fresh handles. They queue equal attributed requests and
+emit the same public notification after the simulator's tag translation.
+Neither changes $W$. A corrupted Send is chosen by the identically
+executing adversary; the corruption check permits exactly the same
+sender identities and bytes in both systems. The simulator queues that
+request through CorruptSubmit and gives the matching notification.
+Invalid transport requests and attempts at honest impersonation have
+the same no-effect behavior.
+
+For an input delivery, the mapped queues contain the same $(i,k,q)$.
+Both consume the corresponding handle before processing, and the
+induction hypothesis supplies identical current $W$. Determinism of
+$\Delta$ therefore gives the same $(W',y)$. This covers ordinary
+progression, failed checks, token conflicts, historical retries,
+administrative replacement, ticks, revocation, expiry and resource
+exhaustion; no separate truth assumption about the supplied evidence
+is used. Both store $W'$ before producing corresponding response handles
+with identical $(i,k,y)$. The response notification gives the adversary
+control in both executions before any receipt delivery.
+
+For an output delivery, the mapped responses have equal bytes and
+destination. Both consume the transport handle and produce the same
+client output once, without a state transition in $\Delta$.
+Thus delivery after revocation exposes an earlier recorded outcome,
+not a new grant. An exact-byte retry with an old logical token is a separate
+input-delivery case returning HISTORICAL; changed bytes return CONFLICT.
+Duplicate or unknown transport-handle delivery changes neither system.
+Withholding leaves the corresponding queues pending in both worlds.
+The identically executing environment and adversary choose identical
+next actions at their respective interaction points; explicit
+continuations ensure internal bookkeeping creates no additional
+observable messages or forced progress.
+
+These cases exhaust the declared interfaces. Induction establishes
+pathwise equality of all environment observations up to any admitted
+finite execution horizon. Consequently its output bits are equal for
+every coupled pair of random tapes. Taking probabilities proves the
+displayed equality. The construction of $\mathcal S_{\mathcal A}$ uses
+only $\mathcal A$ and public interfaces, not the environment or its
+auxiliary input, establishing the required quantifier order.
+\end{proof}
+
+\subsection{Proof and limits of transport substitution}
+\begin{proof}[Proof of Theorem~\ref{uc-thm:transport}]
+Apply compatible UC4SS substitution to the declared channel subnetwork,
+leaving the coordinator, clients, checker programs and initialized policy
+unchanged. The transport realization supplies a simulator and bounds
+the environment's distinguishing probability between that replaced
+protocol and the authenticated-channel hybrid by
+$\epsilon_{\mathrm{tr}}$. Theorem~\ref{uc-thm:realization} replaces the
+hybrid by its ideal protocol with zero additional error.
+Compose the two simulators and use the triangle inequality. Simulation
+overhead must be included in the resources used to evaluate
+$\epsilon_{\mathrm{tr}}$. If one starts with per-link bounds, the
+channel-network realization must first account for their composition;
+the displayed bound is for that entire network, not an uncharged
+single-message advantage.
+\end{proof}
+
+No claimed concrete transport has been supplied in this repository.
+Canetti's corrected signature/certification/authentication constructions
+\citep{canetti2004authentication} establish why local certification,
+recipient binding and session discipline matter. They do not make an
+arbitrary signing helper an implementation of the channel above.
+The global-PKI setting additionally changes which signatures an
+environment can verify independently \citep{canetti2016globalpki}.
+Outside protocols accessing the same keys, registry, clock or budgets
+therefore require a corresponding shared-resource model and proof.
+
+\paragraph{Scientific and implementation boundary}
+The ideal functionality enforces a deterministic decision procedure over
+attributed inputs, not omniscient true-risk classification. Perfect
+hybrid equality holds even when an authorized actor supplies false
+measurements and both worlds refuse or accept them identically.
+Thus a fixed statistical $\alpha$ is not cryptographic emulation error.
+Relating this procedure to true channel risk still requires the separate
+coverage, applicability, complete-observation and mediation premises.
+Computational emulation alone transfers efficiently observable tests;
+one cannot silently use it to transfer an arbitrary inaccessible
+true-risk predicate.
+
+The construction intentionally uses one trusted atomic coordinator and
+records-only outputs. It adds no proof of crash recovery, physical-time
+commitment, actual model serving, distributed enforcement, key custody,
+legal authority or confidential storage. It does not establish that the
+current normative A1--A6 text or the Python implementation refines this
+restricted kernel. The written realization concerns the separately
+specified protocol above; claiming an end-to-end deployed UC system would
+require those additional implementation and environmental results.
+
+\paragraph{Bounded scheduling sanity check}
+A separate standard-library checker independently expresses a small real
+coordinator and an ideal deferred-input/deferred-output machine.
+Across six fixed three-request scenarios it examines every interleaving
+of Submit, Receive and Deliver, at most nine actions:
+10,080 complete schedules and 31,488 scenario-indexed prefix comparisons,
+including six empty prefixes. All normalized states and public
+input/response/return traces agree. Three deliberate mutations---processing
+at submission, executing an action again at receipt delivery, and reapplying
+a duplicate token's effect---produce public counterexamples; the last can
+produce two grants and a negative remaining budget.
+
+This check covers only an initially ACTIVE Grant/Revoke/Tick scheduling
+skeleton, with different cache semantics for rejected requests. It does
+not implement the kernel above, adversarial arbitrary bytes, corruption,
+UC machine wiring, cryptography or the theorem's quantifiers.
+The two transition implementations and harness were written by the same
+AI agent; separate expressions are not external independent validation.
+The source, scenario catalog, bounds and counterexamples are retained by
+\code{academic/scripts/check\_uc\_scheduling.py} and its fresh
+September 9, 2026 receipt, separately from historical evidence.

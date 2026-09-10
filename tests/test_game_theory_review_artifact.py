@@ -8,17 +8,24 @@ from urllib.parse import urlparse
 
 
 ROOT = Path(__file__).resolve().parents[1]
-REVIEW = ROOT / "docs" / "game-theory-literature-review.md"
+REVIEW = ROOT / "docs" / "literature-review.md"
 LEDGER = ROOT / "formal" / "game-theory-claim-ledger-v1.json"
 FOUNDATIONS = ROOT / "docs" / "mathematical-foundations.md"
 PROTOCOL = ROOT / "docs" / "model-release-assurance-protocol.md"
-GOVERNANCE_CORE = ROOT / "docs" / "governance-core.md"
+GOVERNANCE_CORE = ROOT / "docs" / "system-audit-specification.md"
 
 
 class GameTheoryReviewArtifactTests(unittest.TestCase):
     def setUp(self) -> None:
         self.review = REVIEW.read_text(encoding="utf-8")
         self.ledger = json.loads(LEDGER.read_text(encoding="utf-8"))
+
+    def test_consolidated_review_and_execution_have_stable_anchors(self) -> None:
+        foundations = FOUNDATIONS.read_text(encoding="utf-8")
+        self.assertIn('<a id="strategic-incentives-review"></a>', self.review)
+        self.assertIn('<a id="strategic-stress-test-execution"></a>', foundations)
+        self.assertIn("not a new literature search", self.review)
+        self.assertIn("No historical count/status table is asserted", foundations)
 
     def test_source_ledger_is_complete_and_unique(self) -> None:
         sources = self.ledger["sources"]

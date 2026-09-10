@@ -14,12 +14,11 @@ from .decision_theory import (
     FiniteExperiment,
     GarblingCertificate,
     GarblingVerification,
-    decision_value,
     exact_guess_problem,
-    verify_garbling,
 )
 from .integrity import (
     canonical_json_bytes,
+    read_verified_source_bytes,
     sign_canonical,
     sha256_bytes,
     verify_canonical_signature,
@@ -34,11 +33,11 @@ from .incomplete_portfolio import (
     decimal_fraction,
     outward_rounded_fraction,
     portfolio_prior_fractions,
-    portfolio_prior_values,
     verified_upper_fraction,
 )
 from .models import (
     AssessmentReport,
+    AssessmentRequest,
     InterfaceAssurance,
     InterfaceContract,
     OverallVerdict,
@@ -111,6 +110,8 @@ class ControlType(StrEnum):
 class AssessmentReportReference(StrictModel):
     report_path: str = Field(min_length=1)
     report_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
+    assessment_request_path: str = Field(min_length=1)
+    assessment_request_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
     signed_manifest_path: str | None = None
     signed_manifest_sha256: str | None = Field(default=None, pattern=r"^[0-9a-f]{64}$")
     assessor_public_key_path: str | None = None
@@ -221,14 +222,19 @@ class PortfolioCertificate(StrictModel):
 
 
 class PortfolioRegistrySnapshot(StrictModel):
-    """Hash-bound authoritative view of releases active before the candidate."""
+    """Hash-bound service roster and cumulative disclosure roster.
 
-    schema_version: Literal["1.0"] = "1.0"
+    Revocation removes service permission, never observations already received.
+    Legacy snapshots parse for inspection but cannot pass verification.
+    """
+
+    schema_version: Literal["1.0", "1.1"] = "1.1"
     registry_id: str = Field(min_length=3, max_length=128, pattern=r"^[A-Za-z0-9._:-]+$")
     registry_head_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
     registry_sequence: int = Field(ge=0)
     composition_domain_id: str = Field(min_length=3, max_length=256)
     active_release_ids: tuple[str, ...] = ()
+    disclosed_release_ids: tuple[str, ...] | None = None
     observed_at: datetime
     expires_at: datetime
     source_path: str = Field(min_length=1)
@@ -238,6 +244,11 @@ class PortfolioRegistrySnapshot(StrictModel):
     def snapshot_is_coherent(self) -> PortfolioRegistrySnapshot:
         if len(set(self.active_release_ids)) != len(self.active_release_ids):
             raise ValueError("active portfolio release identifiers must be unique")
+        if self.disclosed_release_ids is not None:
+            if len(set(self.disclosed_release_ids)) != len(self.disclosed_release_ids):
+                raise ValueError("disclosed portfolio release identifiers must be unique")
+            if not set(self.active_release_ids) <= set(self.disclosed_release_ids):
+                raise ValueError("disclosure roster must conservatively include every active release")
         if self.observed_at.utcoffset() is None or self.expires_at.utcoffset() is None:
             raise ValueError("portfolio registry timestamps must include timezone offsets")
         if self.expires_at <= self.observed_at:
@@ -295,7 +306,7 @@ class ReleaseConfiguration(StrictModel):
 
 
 class OptimizationRequest(StrictModel):
-    schema_version: Literal["4.0"] = "4.0"
+    schema_version: Literal["5.0"] = "5.0"
     optimization_id: str = Field(min_length=3, max_length=128, pattern=r"^[A-Za-z0-9._:-]+$")
     objective: str = Field(
         default="utility feasibility, then Blackwell-minimal disclosure, then cost and utility tie-breaks",
@@ -345,7 +356,7 @@ class CandidateEvaluation(StrictModel):
 
 
 class OptimizationReport(StrictModel):
-    schema_version: Literal["4.0"] = "4.0"
+    schema_version: Literal["5.0"] = "5.0"
     optimization_id: str
     created_at: datetime
     expires_at: datetime
@@ -419,7 +430,7 @@ class OptimizationReport(StrictModel):
             raise ValueError("optimization report selection-policy hash does not replay")
         if self.runtime_identity.component_id != "release_optimizer":
             raise ValueError("optimization report runtime identity must name release_optimizer")
-        if self.runtime_identity.component_version != "OptimizationReport/4.0":
+        if self.runtime_identity.component_version != "OptimizationReport/5.0":
             raise ValueError("optimization report runtime identity has the wrong component version")
         if self.runtime_identity.package_version != self.engine_version:
             raise ValueError("optimization report engine version does not match its runtime identity")
@@ -427,7 +438,7 @@ class OptimizationReport(StrictModel):
 
 
 class SignedOptimizationManifest(StrictModel):
-    schema_version: Literal["4.0"] = "4.0"
+    schema_version: Literal["5.0"] = "5.0"
     optimization_id: str
     request_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
     report_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
@@ -491,7 +502,7 @@ def build_signed_optimization_manifest(
     private_key_path: Path,
 ) -> SignedOptimizationManifest:
     unsigned = {
-        "schema_version": "4.0",
+        "schema_version": "5.0",
         "optimization_id": report.optimization_id,
         "request_sha256": report.request_sha256,
         "report_sha256": sha256_bytes(canonical_json_bytes(report)),
@@ -590,6 +601,9 @@ class ReleaseOptimizer:
     """
 
     def optimize(self, request: OptimizationRequest, base_dir: Path) -> OptimizationReport:
+        # Frozen Pydantic models can still be copied without validation by callers.
+        # Every trust-boundary entry re-establishes the current contract first.
+        request = OptimizationRequest.model_validate(request.model_dump(mode="python"))
         now = datetime.now(timezone.utc)
         if request.authorization_expires_at <= now:
             raise ValueError("requested release authorization is already expired")
@@ -598,14 +612,12 @@ class ReleaseOptimizer:
             base_dir,
             now,
         )
-        active_policy_path = verify_source_file(
+        active_policy_bytes = read_verified_source_bytes(
             request.active_policy.policy_path,
             request.active_policy.policy_sha256,
             base_dir,
         )
-        active_policy = PolicyBundle.model_validate_json(
-            active_policy_path.read_text(encoding="utf-8")
-        )
+        active_policy = PolicyBundle.model_validate_json(active_policy_bytes.decode("utf-8"))
         if (
             request.active_policy.policy_id != active_policy.policy_id
             or request.active_policy.policy_version != active_policy.policy_version
@@ -625,6 +637,7 @@ class ReleaseOptimizer:
         experiments = {item.experiment_id: item for item in request.experiments}
         certificates = {item.certificate_id: item for item in request.garbling_certificates}
         verifications: dict[str, GarblingVerification] = {}
+        exact_penalties: dict[str, Fraction] = {}
         exact_edges: dict[str, set[str]] = defaultdict(set)
         for certificate in request.garbling_certificates:
             try:
@@ -632,13 +645,18 @@ class ReleaseOptimizer:
                 dominated = experiments[certificate.dominated_experiment_id]
             except KeyError as exc:
                 raise ValueError(f"garbling certificate references unknown experiment: {exc.args[0]}") from exc
-            verification = verify_garbling(dominant, dominated, certificate)
+            verification, exact_penalty = self._verify_garbling_exact(
+                dominant, dominated, certificate
+            )
             if not verification.valid:
                 raise ValueError(
                     f"garbling certificate {certificate.certificate_id} failed replay: {verification.reasons}"
                 )
             verifications[certificate.certificate_id] = verification
-            if verification.maximum_row_total_variation <= certificate.numerical_tolerance:
+            exact_penalties[certificate.certificate_id] = exact_penalty
+            # Near equality is not an exact Blackwell relation. Approximate
+            # witnesses can justify a paid penalty, never a zero-cost graph edge.
+            if exact_penalty == 0:
                 exact_edges[dominant.experiment_id].add(dominated.experiment_id)
 
         self._verify_search_space(request, base_dir)
@@ -647,7 +665,12 @@ class ReleaseOptimizer:
         policy_hashes: set[str] = set()
         expiries = [request.authorization_expires_at]
         for configuration in request.configurations:
-            report = self._load_assessment(configuration.assessment, request.trust_profile, base_dir)
+            report = self._load_assessment(
+                configuration.assessment, request.trust_profile, base_dir,
+                active_policy=active_policy,
+                policy_sha256=request.active_policy.policy_sha256,
+                as_of=now,
+            )
             reports[configuration.configuration_id] = report
             policy_hashes.add(report.policy_sha256)
             if report.release_expires_at is not None:
@@ -661,6 +684,7 @@ class ReleaseOptimizer:
             )
             self._verify_utility(configuration, report, base_dir)
             self._verify_controls(configuration, base_dir)
+            self._verify_configuration_games(configuration, report, experiments, active_policy)
             rational_portfolio_bounds = self._verify_portfolio(
                 configuration,
                 report,
@@ -681,6 +705,7 @@ class ReleaseOptimizer:
                     registry_snapshot,
                     now,
                     rational_portfolio_bounds,
+                    exact_penalties,
                 )
             )
         if policy_hashes != {request.active_policy.policy_sha256}:
@@ -791,10 +816,12 @@ class ReleaseOptimizer:
             reasons=reasons,
             runtime_identity=current_runtime_identity(
                 component_id="release_optimizer",
-                component_version="OptimizationReport/4.0",
+                component_version="OptimizationReport/5.0",
                 algorithm_profile={
-                    "frontier_construction": "verified submitted garbling certificates and graph reachability",
-                    "ordinary_comparison_arithmetic": "Python binary64",
+                    "frontier_construction": "exact-zero rational garbling residuals and graph reachability",
+                    "ordinary_comparison_arithmetic": "Python binary64 for utility/cost ordering only",
+                    "clearance_comparison_arithmetic": "exact canonical-decimal rationals with outward-only displays",
+                    "imported_assessment_request_and_policy_replayed": True,
                     "scipy_invoked_by_optimizer": False,
                     "mrap_g7_exact_or_outward_clearance_eligible": False,
                     "selection_policy_authorized_by_active_policy": True,
@@ -822,9 +849,25 @@ class ReleaseOptimizer:
         reference: AssessmentReportReference,
         trust_profile: TrustProfile,
         base_dir: Path,
+        *,
+        active_policy: PolicyBundle,
+        policy_sha256: str,
+        as_of: datetime,
     ) -> AssessmentReport:
-        report_path = verify_source_file(reference.report_path, reference.report_sha256, base_dir)
-        report = AssessmentReport.model_validate_json(report_path.read_text(encoding="utf-8"))
+        from .integrity import validate_report_against_policy, validate_report_against_request
+
+        report_bytes = read_verified_source_bytes(reference.report_path, reference.report_sha256, base_dir)
+        report = AssessmentReport.model_validate_json(report_bytes.decode("utf-8"))
+        request_bytes = read_verified_source_bytes(
+            reference.assessment_request_path, reference.assessment_request_sha256, base_dir
+        )
+        assessment_request = AssessmentRequest.model_validate_json(request_bytes.decode("utf-8"))
+        # Policy comparison precedes request replay so the submitter cannot
+        # rewrite both its report and request to invent a different authority rule.
+        validate_report_against_policy(
+            report, active_policy, policy_sha256=policy_sha256, request=assessment_request, as_of=as_of
+        )
+        validate_report_against_request(report, assessment_request, as_of=as_of)
         expected_scope_hashes = {
             scope.scope_id: sha256_bytes(canonical_json_bytes(scope))
             for scope in report.population_scopes
@@ -844,16 +887,16 @@ class ReleaseOptimizer:
                 raise ValueError("separated_assessor trust requires a signed assessment manifest")
             assert reference.signed_manifest_sha256 is not None
             assert reference.assessor_public_key_path is not None
-            manifest_path = verify_source_file(
+            manifest_bytes = read_verified_source_bytes(
                 reference.signed_manifest_path,
                 reference.signed_manifest_sha256,
                 base_dir,
             )
-            manifest = SignedManifest.model_validate_json(manifest_path.read_text(encoding="utf-8"))
+            manifest = SignedManifest.model_validate_json(manifest_bytes.decode("utf-8"))
             public_key = Path(reference.assessor_public_key_path)
             if not public_key.is_absolute():
                 public_key = base_dir / public_key
-            verify_signed_manifest(manifest, report, public_key.resolve(strict=True))
+            verify_signed_manifest(manifest, report, public_key.resolve(strict=True), as_of=as_of)
             if manifest.signer_key_id not in reference.accepted_signer_key_ids:
                 raise ValueError("assessment signer is not in the accepted assessor-key allowlist")
         return report
@@ -861,16 +904,18 @@ class ReleaseOptimizer:
     @staticmethod
     def _verify_utility(configuration: ReleaseConfiguration, report: AssessmentReport, base_dir: Path) -> None:
         utility = configuration.utility
-        source = verify_source_file(utility.source_path, utility.source_sha256, base_dir)
+        source = read_verified_source_bytes(utility.source_path, utility.source_sha256, base_dir)
         verify_provenance_binding(
             utility,
-            source,
+            Path(utility.source_path),
             (
                 "configuration_id", "artifact_sha256", "interface_sha256",
                 "population_scope_sha256s", "evaluation_split_sha256", "metric",
                 "lower_bound", "point_estimate", "minimum_required", "evaluation_population",
                 "confidence", "uncertainty_method", "audit_disjoint", "raw_evidence_retained",
             ),
+            source_bytes=source,
+            expected_sha256=utility.source_sha256,
         )
         interface_hash = sha256_bytes(canonical_json_bytes(configuration.release_interface))
         if utility.artifact_sha256 != configuration.release_artifact_sha256:
@@ -885,20 +930,57 @@ class ReleaseOptimizer:
     def _verify_controls(configuration: ReleaseConfiguration, base_dir: Path) -> None:
         interface_hash = sha256_bytes(canonical_json_bytes(configuration.release_interface))
         for control in configuration.controls:
-            source = verify_source_file(control.evidence_path, control.evidence_sha256, base_dir)
+            source = read_verified_source_bytes(control.evidence_path, control.evidence_sha256, base_dir)
             verify_provenance_binding(
                 control,
-                source,
+                Path(control.evidence_path),
                 (
                     "control_id", "control_type", "kind", "description",
                     "changes_information_structure", "credited_for_privacy",
                     "artifact_sha256", "interface_sha256", "valid_until",
                 ),
+                source_bytes=source,
+                expected_sha256=control.evidence_sha256,
             )
             if control.artifact_sha256 != configuration.release_artifact_sha256:
                 raise ValueError(f"control {control.control_id} is bound to another artifact")
             if control.interface_sha256 != interface_hash:
                 raise ValueError(f"control {control.control_id} is bound to another interface")
+
+    @staticmethod
+    def _verify_configuration_games(
+        configuration: ReleaseConfiguration,
+        report: AssessmentReport,
+        experiments: dict[str, FiniteExperiment],
+        policy: PolicyBundle,
+    ) -> None:
+        """Bind every optimizer finite table to policy-frozen state semantics/prior.
+
+        A copied game digest alone does not establish that a submitted table is
+        for that game. Channel measurement truth remains an external assumption.
+        """
+        rules = {rule.threat_id: rule for rule in policy.rules}
+        expected_games = {decision.threat_id: decision.decision_game_sha256 for decision in report.decisions}
+        referenced: dict[str, set[str]] = defaultdict(set)
+        for binding in configuration.threat_experiments:
+            referenced[binding.threat_id].update((binding.assessed_experiment_id, binding.released_experiment_id))
+        for pair, experiment_id in configuration.portfolio.joint_experiment_ids.items():
+            referenced[pair.split("|", 1)[1]].add(experiment_id)
+        for threat_id, experiment_ids in referenced.items():
+            rule = rules.get(threat_id)
+            if rule is None or rule.finite_game is None:
+                raise ValueError(f"optimizer finite replay for {threat_id} requires a policy-frozen finite_game")
+            game = rule.finite_game
+            expected_prior = tuple(value.as_fraction() for value in game.prior)
+            for experiment_id in experiment_ids:
+                experiment = experiments.get(experiment_id)
+                if experiment is None:
+                    raise ValueError(f"finite-game binding references unknown experiment {experiment_id}")
+                prior, _ = ReleaseOptimizer._exact_experiment(experiment)
+                if experiment.threat_id != threat_id or experiment.decision_game_sha256 != expected_games.get(threat_id):
+                    raise ValueError(f"experiment {experiment_id} changes the bound decision game")
+                if experiment.state_ids != game.state_ids or prior != expected_prior:
+                    raise ValueError(f"experiment {experiment_id} changes policy-frozen ordered states or exact prior")
 
     @staticmethod
     def _verify_portfolio(
@@ -916,31 +998,34 @@ class ReleaseOptimizer:
             raise ValueError(f"portfolio record for {configuration.configuration_id} uses another registry sequence")
         if portfolio.composition_domain_id != registry_snapshot.composition_domain_id:
             raise ValueError(f"portfolio record for {configuration.configuration_id} uses another composition domain")
-        expected_release_ids = set(registry_snapshot.active_release_ids) | {report.release_id}
+        if registry_snapshot.schema_version != "1.1" or registry_snapshot.disclosed_release_ids is None:
+            raise ValueError("portfolio registry lacks the cumulative disclosure history")
+        expected_release_ids = set(registry_snapshot.disclosed_release_ids) | {report.release_id}
         if set(portfolio.registered_release_ids) != expected_release_ids:
             raise ValueError(
                 f"portfolio record for {configuration.configuration_id} does not cover exactly "
-                "the active registry snapshot plus the candidate release"
+                "the cumulative disclosure history plus the candidate release"
             )
         expected_pairs = tuple(sorted(
             f"{decision.population_scope_id}|{decision.threat_id}"
             for decision in report.decisions
-            if decision.mandatory
         ))
         if tuple(sorted(portfolio.population_secret_pairs)) != expected_pairs:
             raise ValueError(f"portfolio record for {configuration.configuration_id} omits a population-secret pair")
         if portfolio.status is PortfolioAssuranceStatus.UNASSESSED:
             return rational_bounds
         assert portfolio.evidence_path is not None and portfolio.evidence_sha256 is not None
-        source = verify_source_file(portfolio.evidence_path, portfolio.evidence_sha256, base_dir)
+        source = read_verified_source_bytes(portfolio.evidence_path, portfolio.evidence_sha256, base_dir)
         verify_provenance_binding(
             portfolio,
-            source,
+            Path(portfolio.evidence_path),
             (
                 "status", "composition_domain_id", "population_secret_pairs",
                 "registry_head_sha256", "registry_sequence", "registered_release_ids", "method",
                 "joint_upper_bounds", "joint_experiment_ids",
             ),
+            source_bytes=source,
+            expected_sha256=portfolio.evidence_sha256,
         )
         released_experiments = {
             binding.threat_id: experiments[binding.released_experiment_id]
@@ -950,7 +1035,6 @@ class ReleaseOptimizer:
             decisions = {
                 f"{decision.population_scope_id}|{decision.threat_id}": decision
                 for decision in report.decisions
-                if decision.mandatory
             }
             for pair, experiment_id in portfolio.joint_experiment_ids.items():
                 experiment = experiments.get(experiment_id)
@@ -968,17 +1052,22 @@ class ReleaseOptimizer:
                     raise ValueError(
                         f"joint experiment for {pair} changes the registered secret states or prior"
                     )
-                exact = ReleaseOptimizer._finite_success_metric(
+                exact = ReleaseOptimizer._finite_success_metric_exact(
                     experiment,
                     decision_metric=decision.decision_metric,
                 )
                 claimed = portfolio.joint_upper_bounds[pair]
-                if abs(exact - claimed) > 1e-10:
+                claimed_exact = decimal_fraction(claimed)
+                if claimed_exact < exact:
                     raise ValueError(
-                        f"portfolio upper bound for {pair} does not replay: claimed {claimed:.6g}, exact {exact:.6g}"
+                        f"portfolio upper bound for {pair} does not replay: claimed {claimed!r} "
+                        f"understates exact rational {exact}"
                     )
+                # Conservative overstatement is safe, but cannot silently become a
+                # smaller clearance ceiling than the one the assessor asserted.
+                rational_bounds[pair] = claimed_exact
         elif portfolio.status is PortfolioAssuranceStatus.ANALYTICALLY_COMPOSED:
-            payload = json.loads(source.read_text(encoding="utf-8"))
+            payload = json.loads(source.decode("utf-8"))
             raw_assessments = payload.get("analytic_assessments")
             if not isinstance(raw_assessments, dict):
                 raise ValueError("analytic portfolio evidence requires an analytic_assessments object")
@@ -987,7 +1076,6 @@ class ReleaseOptimizer:
             decisions = {
                 f"{decision.population_scope_id}|{decision.threat_id}": decision
                 for decision in report.decisions
-                if decision.mandatory
             }
             for pair, raw_entry in raw_assessments.items():
                 entry = AnalyticPortfolioEvidenceEntry.model_validate(raw_entry)
@@ -1006,7 +1094,7 @@ class ReleaseOptimizer:
                 released = released_experiments[decision.threat_id]
                 if (
                     problem.state_ids != released.state_ids
-                    or portfolio_prior_values(problem) != released.prior
+                    or portfolio_prior_fractions(problem) != tuple(decimal_fraction(value) for value in released.prior)
                 ):
                     raise ValueError(
                         f"analytic portfolio problem for {pair} changes the registered secret states or prior"
@@ -1038,10 +1126,10 @@ class ReleaseOptimizer:
                         f"decision metric {decision.decision_metric!r}"
                     )
                 exact_prior = portfolio_prior_fractions(problem)
-                if decision.decision_metric == "equal_prior_membership_success" and any(
-                    value != Fraction(1, len(exact_prior)) for value in exact_prior
+                if decision.decision_metric == "equal_prior_membership_success" and (
+                    len(exact_prior) != 2 or any(value != Fraction(1, 2) for value in exact_prior)
                 ):
-                    raise ValueError("equal-prior membership certificates require a uniform prior")
+                    raise ValueError("equal-prior membership certificates require a binary equal prior")
                 verification = verify_analytic_portfolio(entry)
                 selection_valid = problem.selection_valid
                 if not verification.valid:
@@ -1070,11 +1158,91 @@ class ReleaseOptimizer:
         return rational_bounds
 
     @staticmethod
-    def _finite_success_metric(
+    def _exact_experiment(
+        experiment: FiniteExperiment,
+    ) -> tuple[tuple[Fraction, ...], tuple[tuple[Fraction, ...], ...]]:
+        """Interpret serialized decimal probabilities exactly; never normalize silently.
+
+        The general experiment contract permits small float normalization error for
+        exploratory calculations. Clearance needs an actual stochastic channel;
+        closeness to one is not a proof that a purported ceiling is conservative.
+        """
+        experiment = FiniteExperiment.model_validate(experiment.model_dump(mode="python"))
+        prior = tuple(decimal_fraction(value) for value in experiment.prior)
+        channel = tuple(tuple(decimal_fraction(value) for value in row) for row in experiment.channel)
+        if sum(prior) != 1:
+            raise ValueError("clearance experiment prior must sum to exactly one as canonical decimals")
+        if any(sum(row) != 1 for row in channel):
+            raise ValueError("clearance experiment channel rows must sum to exactly one as canonical decimals")
+        return prior, channel
+
+    @staticmethod
+    def _verify_garbling_exact(
+        dominant: FiniteExperiment,
+        dominated: FiniteExperiment,
+        certificate: GarblingCertificate,
+    ) -> tuple[GarblingVerification, Fraction]:
+        """Replay clearance/order certificates without a numerical acceptance slack."""
+        certificate = GarblingCertificate.model_validate(certificate.model_dump(mode="python"))
+        reasons: list[str] = []
+        if certificate.dominant_experiment_id != dominant.experiment_id:
+            reasons.append("certificate dominant identifier mismatch")
+        if certificate.dominated_experiment_id != dominated.experiment_id:
+            reasons.append("certificate dominated identifier mismatch")
+        if dominant.threat_id != dominated.threat_id:
+            reasons.append("experiments concern different threats")
+        if dominant.population_scope_id != dominated.population_scope_id:
+            reasons.append("experiments use different population scopes")
+        if dominant.state_ids != dominated.state_ids:
+            reasons.append("experiments use different ordered state spaces")
+        if len(certificate.kernel) != len(dominant.observation_ids):
+            reasons.append("kernel row count does not match dominant observations")
+        elif any(len(row) != len(dominated.observation_ids) for row in certificate.kernel):
+            reasons.append("kernel column count does not match dominated observations")
+        dominant_prior, dominant_channel = ReleaseOptimizer._exact_experiment(dominant)
+        dominated_prior, dominated_channel = ReleaseOptimizer._exact_experiment(dominated)
+        if dominant_prior != dominated_prior:
+            reasons.append("experiments use different anchored priors")
+        if dominant.decision_game_sha256 != dominated.decision_game_sha256:
+            reasons.append("experiments use different decision-game hashes")
+        kernel = tuple(tuple(decimal_fraction(value) for value in row) for row in certificate.kernel)
+        if any(sum(row) != 1 for row in kernel):
+            reasons.append("clearance garbling kernel rows must sum to exactly one as canonical decimals")
+        maximum_error = Fraction(1)
+        maximum_tv = Fraction(1)
+        if not reasons:
+            maximum_error = Fraction(0)
+            maximum_tv = Fraction(0)
+            for left_row, right_row in zip(dominant_channel, dominated_channel, strict=True):
+                residuals = tuple(
+                    abs(sum(left_row[source] * kernel[source][target] for source in range(len(left_row))) - right_row[target])
+                    for target in range(len(right_row))
+                )
+                maximum_error = max(maximum_error, max(residuals, default=Fraction(0)))
+                maximum_tv = max(maximum_tv, sum(residuals) / 2)
+            if maximum_tv > decimal_fraction(certificate.maximum_row_total_variation):
+                reasons.append(
+                    f"exact maximum row total-variation residual {maximum_tv} exceeds declared bound "
+                    f"{certificate.maximum_row_total_variation!r}; numerical tolerance cannot enlarge a privacy bound"
+                )
+        verification = GarblingVerification(
+            certificate_id=certificate.certificate_id,
+            dominant_experiment_id=dominant.experiment_id,
+            dominated_experiment_id=dominated.experiment_id,
+            valid=not reasons,
+            maximum_absolute_error=outward_rounded_fraction(maximum_error),
+            maximum_row_total_variation=outward_rounded_fraction(maximum_tv),
+            decision_value_penalty=outward_rounded_fraction(maximum_tv),
+            reasons=tuple(reasons),
+        )
+        return verification, maximum_tv
+
+    @staticmethod
+    def _finite_success_metric_exact(
         experiment: FiniteExperiment,
         decision_metric: str,
-    ) -> float:
-        exact = decision_value(experiment, exact_guess_problem(experiment.state_ids))
+    ) -> Fraction:
+        prior, channel = ReleaseOptimizer._exact_experiment(experiment)
         supported = {
             "bayes_linkage_success",
             "incremental_bayes_linkage_success",
@@ -1086,30 +1254,34 @@ class ReleaseOptimizer:
             raise ValueError(
                 f"direct finite portfolio replay does not implement decision metric {decision_metric!r}"
             )
+        if decision_metric == "equal_prior_membership_success" and (
+            len(prior) != 2 or prior != (Fraction(1, 2), Fraction(1, 2))
+        ):
+            raise ValueError("equal-prior membership replay requires a binary equal prior")
+        joints = tuple(
+            tuple(prior[state] * channel[state][observation] for state in range(len(prior)))
+            for observation in range(len(experiment.observation_ids))
+        )
         if decision_metric == "worst_observation_success":
-            values = []
-            for observation in range(len(experiment.observation_ids)):
-                mass = sum(
-                    experiment.prior[state] * experiment.channel[state][observation]
-                    for state in range(len(experiment.state_ids))
-                )
-                if mass > 0.0:
-                    values.append(max(
-                        experiment.prior[state] * experiment.channel[state][observation] / mass
-                        for state in range(len(experiment.state_ids))
-                    ))
-            return max(values, default=0.0)
+            return max((max(column) / sum(column) for column in joints if sum(column) > 0), default=Fraction(0))
+        exact = sum((max(column) for column in joints), Fraction(0))
         if decision_metric.startswith("incremental_"):
-            return max(0.0, exact - max(experiment.prior))
+            return max(Fraction(0), exact - max(prior))
         return exact
+
+    @staticmethod
+    def _finite_success_metric(experiment: FiniteExperiment, decision_metric: str) -> float:
+        """Outward display of exact finite replay; never used as the clearance comparator."""
+        return outward_rounded_fraction(ReleaseOptimizer._finite_success_metric_exact(experiment, decision_metric))
 
     @staticmethod
     def _verify_search_space(request: OptimizationRequest, base_dir: Path) -> None:
         certificate = request.search_space_certificate
         if certificate is None:
             return
-        source = verify_source_file(certificate.evidence_path, certificate.evidence_sha256, base_dir)
-        verify_provenance_binding(certificate, source, ("method", "configuration_ids"))
+        source = read_verified_source_bytes(certificate.evidence_path, certificate.evidence_sha256, base_dir)
+        verify_provenance_binding(certificate, Path(certificate.evidence_path), ("method", "configuration_ids"),
+                                  source_bytes=source, expected_sha256=certificate.evidence_sha256)
         actual = tuple(sorted(item.configuration_id for item in request.configurations))
         if tuple(sorted(certificate.configuration_ids)) != actual:
             raise ValueError("search-space certificate does not enumerate exactly the submitted configurations")
@@ -1120,10 +1292,12 @@ class ReleaseOptimizer:
         base_dir: Path,
         now: datetime,
     ) -> PortfolioRegistrySnapshot:
-        source = verify_source_file(snapshot.source_path, snapshot.source_sha256, base_dir)
+        if snapshot.schema_version != "1.1" or snapshot.disclosed_release_ids is None:
+            raise ValueError("portfolio registry lacks the cumulative disclosure history")
+        source = read_verified_source_bytes(snapshot.source_path, snapshot.source_sha256, base_dir)
         verify_provenance_binding(
             snapshot,
-            source,
+            Path(snapshot.source_path),
             (
                 "schema_version",
                 "registry_id",
@@ -1131,9 +1305,12 @@ class ReleaseOptimizer:
                 "registry_sequence",
                 "composition_domain_id",
                 "active_release_ids",
+                "disclosed_release_ids",
                 "observed_at",
                 "expires_at",
             ),
+            source_bytes=source,
+            expected_sha256=snapshot.source_sha256,
         )
         if snapshot.expires_at <= now:
             raise ValueError("portfolio registry snapshot has expired")
@@ -1151,6 +1328,7 @@ class ReleaseOptimizer:
         registry_snapshot: PortfolioRegistrySnapshot,
         now: datetime,
         rational_portfolio_bounds: dict[str, Fraction],
+        exact_penalties: dict[str, Fraction],
     ) -> CandidateEvaluation:
         reasons: list[str] = []
         penalties: dict[str, float] = {}
@@ -1196,32 +1374,33 @@ class ReleaseOptimizer:
                 "interactive LLM transcript/channel assurance is not implemented; a finite one-shot surrogate cannot clear it"
             )
 
-        mandatory_decisions = {decision.threat_id: decision for decision in report.decisions if decision.mandatory}
-        for threat_id, decision in mandatory_decisions.items():
+        # Conservative supported subset of A4: every in-scope threat must clear.
+        # Optional crossings require a future bound acceptance/optimizer path;
+        # the legacy mandatory-only overall verdict is insufficient.
+        in_scope_decisions = {decision.threat_id: decision for decision in report.decisions}
+        for threat_id, decision in in_scope_decisions.items():
+            if decision.upper_bound_fraction.as_fraction() > decimal_fraction(decision.tolerance):
+                reasons.append(f"in-scope threat {threat_id} has a certified ceiling above tolerance")
             pair = f"{decision.population_scope_id}|{threat_id}"
             joint_upper = configuration.portfolio.joint_upper_bounds.get(pair)
             rational_upper = rational_portfolio_bounds.get(pair)
-            if rational_upper is not None:
-                exceeds_tolerance = rational_upper > decimal_fraction(decision.tolerance)
-            else:
-                exceeds_tolerance = (
-                    joint_upper is not None and joint_upper > decision.tolerance
-                )
-            if joint_upper is not None and exceeds_tolerance:
+            if joint_upper is None or rational_upper is None:
+                reasons.append(f"portfolio pair {pair} lacks an exactly replayed upper bound")
+            elif rational_upper > decimal_fraction(decision.tolerance):
                 reasons.append(
                     f"portfolio joint upper bound {joint_upper:.6g} for {pair} exceeds tolerance {decision.tolerance:.6g}"
                 )
         bindings = {binding.threat_id: binding for binding in configuration.threat_experiments}
-        missing = set(mandatory_decisions) - set(bindings)
-        extra = set(bindings) - set(mandatory_decisions)
+        missing = set(in_scope_decisions) - set(bindings)
+        extra = set(bindings) - set(in_scope_decisions)
         if missing:
-            reasons.append(f"missing information-structure bindings for mandatory threats: {sorted(missing)}")
+            reasons.append(f"missing information-structure bindings for in-scope threats: {sorted(missing)}")
         if extra:
-            reasons.append(f"bindings reference non-mandatory or unknown report threats: {sorted(extra)}")
+            reasons.append(f"bindings reference unknown report threats: {sorted(extra)}")
         assessed_interface_sha256 = sha256_bytes(canonical_json_bytes(report.release_interface))
         released_interface_sha256 = sha256_bytes(canonical_json_bytes(configuration.release_interface))
         for threat_id, binding in bindings.items():
-            decision = mandatory_decisions.get(threat_id)
+            decision = in_scope_decisions.get(threat_id)
             try:
                 assessed = experiments[binding.assessed_experiment_id]
                 released = experiments[binding.released_experiment_id]
@@ -1247,25 +1426,36 @@ class ReleaseOptimizer:
             if released.interface_sha256 != released_interface_sha256:
                 reasons.append(f"released experiment for {threat_id} is not bound to the release interface")
             if decision.verdict is not Verdict.CLEAR:
-                reasons.append(f"mandatory threat {threat_id} is not clear")
-            penalty = 0.0
+                reasons.append(f"in-scope threat {threat_id} is not clear")
+            exact_penalty = Fraction(0)
             if binding.assessed_experiment_id != binding.released_experiment_id:
                 certificate = certificates.get(binding.substitution_certificate_id or "")
                 if certificate is None:
                     reasons.append(f"binding for {threat_id} lacks its referenced garbling certificate")
                 else:
-                    verification = verifications[certificate.certificate_id]
                     if certificate.dominant_experiment_id != assessed.experiment_id or certificate.dominated_experiment_id != released.experiment_id:
                         reasons.append(f"substitution certificate for {threat_id} has the wrong direction or endpoints")
                     else:
-                        penalty = verification.decision_value_penalty
-                        if min(1.0, decision.upper_bound + penalty) > decision.tolerance:
+                        exact_penalty = exact_penalties[certificate.certificate_id]
+                        # A row-TV residual bounds bounded expected reward, not
+                        # conditional posterior maxima or fixed-FPR operating points.
+                        expected_reward_metrics = {
+                            "bayes_linkage_success", "incremental_bayes_linkage_success",
+                            "equal_prior_membership_success", "finite_secret_exact_guess_success",
+                        }
+                        if exact_penalty and decision.decision_metric not in expected_reward_metrics:
+                            reasons.append(
+                                f"approximate substitution for {threat_id} has no proved TV transfer bound "
+                                f"for decision metric {decision.decision_metric!r}"
+                            )
+                        transferred = min(Fraction(1), decision.upper_bound_fraction.as_fraction() + exact_penalty)
+                        if transferred > decimal_fraction(decision.tolerance):
                             reasons.append(
                                 f"approximate substitution for {threat_id} raises the certified ceiling "
-                                f"from {decision.upper_bound:.6g} to {min(1.0, decision.upper_bound + penalty):.6g}, "
+                                f"from {decision.upper_bound:.6g} to {outward_rounded_fraction(transferred):.6g}, "
                                 f"above tolerance {decision.tolerance:.6g}"
                             )
-            penalties[threat_id] = penalty
+            penalties[threat_id] = outward_rounded_fraction(exact_penalty)
         return CandidateEvaluation(
             configuration_id=configuration.configuration_id,
             feasible=not reasons,
@@ -1273,7 +1463,7 @@ class ReleaseOptimizer:
             utility_margin=utility_margin,
             implementation_cost=configuration.implementation_cost,
             substitution_penalties=penalties,
-            reasons=tuple(reasons) if reasons else ("all mandatory release constraints passed",),
+            reasons=tuple(reasons) if reasons else ("all in-scope release constraints passed",),
         )
 
     @staticmethod

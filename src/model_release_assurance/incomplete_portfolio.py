@@ -12,7 +12,7 @@ from typing import Any, Literal, Sequence
 from pydantic import Field, model_validator
 
 from .decision_theory import DecisionProblem, FiniteExperiment, decision_value
-from .integrity import canonical_json_bytes, sha256_bytes, verify_source_file
+from .integrity import canonical_json_bytes, read_verified_source_bytes, sha256_bytes, verify_source_file
 from .models import RationalProbability, StrictModel
 
 
@@ -874,18 +874,24 @@ def verify_portfolio_problem_evidence(
         verify_source_file(reference.source_path, reference.source_sha256, base_dir)
         for reference in portfolio_evidence_references(problem)
     )
-    statistical_sources: dict[Path, EvidenceReference] = {}
+    statistical_sources: dict[Path, tuple[str, bytes]] = {}
     for release in problem.releases:
         if any(value.startswith("error-budget:") for value in release.evidence.supports):
-            path = verify_source_file(
-                release.evidence.source_path,
-                release.evidence.source_sha256,
-                base_dir,
+            path = Path(release.evidence.source_path)
+            if not path.is_absolute():
+                path = base_dir / path
+            path = path.resolve(strict=True)
+            if path in statistical_sources:
+                if statistical_sources[path][0] != release.evidence.source_sha256:
+                    raise ValueError("statistical marginal source has conflicting declared digests")
+                continue
+            document = read_verified_source_bytes(
+                str(path), release.evidence.source_sha256, base_dir,
             )
-            statistical_sources[path] = release.evidence
-    for path in statistical_sources:
+            statistical_sources[path] = (release.evidence.source_sha256, document)
+    for path, (_expected_sha256, document) in statistical_sources.items():
         try:
-            payload = json.loads(path.read_text(encoding="utf-8"))
+            payload = json.loads(document.decode("utf-8"))
         except (UnicodeDecodeError, json.JSONDecodeError) as exc:
             raise ValueError(f"statistical marginal evidence is not valid UTF-8 JSON: {path}") from exc
         if payload.get("evidence_type") != "simultaneous_multinomial_marginals":

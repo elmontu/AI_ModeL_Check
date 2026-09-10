@@ -1,1 +1,10 @@
 * text=auto eol=lf
+
+# Evidence manifests bind exact bytes, including frozen implementation sources.
+# Preserve these bytes on every platform so a checkout can replay their hashes.
+/src/** -text
+/scripts/** -text
+/schemas/** -text
+/examples/** -text
+/reproduction/** -text
+/academic/** -text

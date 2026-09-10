@@ -10,7 +10,19 @@ Run scripts from the repository root so that their repository-relative inputs
 and outputs resolve consistently. Generated output belongs under `output/` and
 is excluded from version control.
 
+Historical study registrations bind their original source and runtime; they
+are not validation of the current MRA 0.8 implementation. Replaying them
+requires the pinned source/runtime, or a separately approved prospective
+registration for changed code. Do not update old study hashes to make a new
+worker pass. The [reproduction index](../reproduction/README.md#frozen-replay-and-new-runs)
+distinguishes retained results, configured workloads, and fresh runs.
+
 ## Status vocabulary
+
+The cross-platform `setup_pipeline.py` installer and the packaged `mra-workflow`
+commands provide [case setup, preflight and assessment](../docs/pipeline-quickstart.md).
+Use `--dry-run` to inspect installation commands or `--wheelhouse` for a local
+package source. Neither setup nor case preflight is a release approval.
 
 | Status | Meaning |
 |---|---|
@@ -19,10 +31,25 @@ is excluded from version control.
 | Experimental | Exercises a bounded research or integration path and cannot authorize a release. |
 | Maintenance check | Verifies repository artifacts, schemas, proofs, profiles, or test behavior. |
 
+## Academic paper assembly
+
+These tools live in [academic/scripts/](../academic/scripts/); run the commands
+from the repository root using that path.
+
+| Script | Purpose | Boundary |
+|---|---|---|
+| [build_academic_paper_data.py](../academic/scripts/build_academic_paper_data.py) | Extract the explicitly allowlisted aggregate evidence into `academic/paper/experimental-data.json`; `--check` revalidates retained bytes. | Requires the original local source files, including ignored outputs. It performs no experiments and does not create an MRAP contract. |
+| [build_academic_paper.py](../academic/scripts/build_academic_paper.py) | Generate manuscript tables and a vector scaling figure from the retained companion; `--check` compares generated artifacts. | Optional ReportLab/font dependency for the figure only; no MRA core or schema changes. |
+| [check_academic_gap_constructions.py](../academic/scripts/check_academic_gap_constructions.py) | Reproduce seven exact finite countermodels and repair controls in `academic/paper/gap-construction-results.json`; `--check` compares bytes. | Standard library only, seed-free and offline; no model training, core imports, cryptographic implementation or universal-refinement claim. |
+
+The committed paper companion, tables and figure are deliberate aggregate-only
+exceptions to the usual `output/` convention. See the
+[paper build and evidence-access instructions](../reproduction/README.md#paper-draft).
+
 ## OpenML reproduction study
 
-These utilities implement the registered OpenML-CC18 study described in
-[`reproduction/openml/README.md`](../reproduction/openml/README.md). The current
+These utilities implement the registered OpenML-CC18 study described in the
+[reproduction index](../reproduction/README.md#openml-design). The current
 checkout retains the design and dataset manifests, not the raw snapshots,
 trained models, complete run outputs, or final study seal.
 
@@ -45,8 +72,8 @@ trained models, complete run outputs, or final study seal.
 
 | Scripts | Purpose | Status |
 |---|---|---|
-| `run_finite_channel_ceiling_experiment.py` | Replay exact controlled safe, boundary, and unsafe channels through the production analyzer, selected full Engine paths, simultaneous meta-evaluation, and tamper controls. | Completed experimental validation with [retained accepted results](../reproduction/finite-channel-ceiling/results/manifest.json). Its model names are labels, only three replays traverse the Engine, and the experimental battery waiver is not deployment-valid. |
-| `run_model_backed_finite_channel.py` | Train CNN, XGBoost, and compact-Transformer-proxy collectors on public data, compile finite-pool categorical channels, execute observations through one-use wrappers with exact aggregate cross-replay, and run six primary Engine plus 1,200 repeated analyzer replays. | Prospectively frozen v3 completed with [all 10 criteria passed](../reproduction/model-backed-finite-channel/results/v3/manifest.json); v2's [8/9 negative result](../reproduction/model-backed-finite-channel/results/v2/manifest.json) remains retained. V3 proves Python-path execution/equivalence, not deployed endpoint or OS semantics, and contains no above-tolerance model-backed case. |
+| `run_finite_channel_ceiling_experiment.py` | Replay exact controlled safe, boundary, and unsafe channels through the reference analyzer, selected full Engine paths, simultaneous meta-evaluation, and tamper controls. | Historical experimental validation with [retained accepted results](../reproduction/finite-channel-ceiling/results/manifest.json). Its model names are labels, only three replays traverse the Engine, and the experimental battery waiver is not deployment-valid. |
+| `run_model_backed_finite_channel.py` | Train CNN, XGBoost, and compact-Transformer-proxy collectors on public data, compile finite-pool categorical channels, execute observations through one-use wrappers with exact aggregate cross-replay, and run six primary Engine plus 1,200 repeated analyzer replays. | Prospectively frozen v3 completed with [all 10 criteria passed](../reproduction/model-backed-finite-channel/results/v3/manifest.json); v2's [8/9 negative result](../reproduction/model-backed-finite-channel/results/v2/manifest.json) remains retained. V3 demonstrates execution and exact agreement on the recorded Python paths, not deployed endpoint or OS semantics, and contains no above-tolerance model-backed case. |
 | `run_portfolio_stochastic_benchmark.py`<br>`analyze_portfolio_stochastic_benchmark.py` | Generate and replay stochastic incomplete-portfolio coverage, certificate, and false-clear stress tests. | Experimental benchmark with a retained configuration; outputs are generated under `output/`. |
 | `run_protocol_feasibility_benchmark.py` | Generate the finite protocol solver's exact synthetic frontiers, Monte Carlo rows, summary, and analysis in one self-contained command. | Experimental synthetic benchmark; there is no separate analyzer and it consumes no external empirical evidence. Its output explicitly records that deployment behavior, representative release yield, safety, and authorization were not evaluated. |
 | `run_strategic_assurance_experiment.py` | Replay exact-rational strategic certificates and run seeded incentive, tie, deterrence, and monitoring stress tests. | Experimental governance stress test; explicitly emits no governance decision or authorization. |
@@ -61,19 +88,20 @@ trained models, complete run outputs, or final study seal.
 | `run_xgboost_audit.py` | Train trusted local CSV/Parquet XGBoost target/reference pipelines; measure utility, structure, and calibrated membership attacks; emit hash-bound artifacts and a release bundle. | Experimental local worker; floor/screen evidence only. See [`docs/xgboost.md`](../docs/xgboost.md). |
 | `run_sample_model_audit_workflow.py` | Exercise the hash-bound sample CNN, LSTM, XGBoost, and LLM artifact workflow and family-specific assurance routing. | Experimental synthetic functional workflow; every model result has `can_clear: false`. |
 | `run_empirical_xgboost_mlp_workflow.py` | Train native XGBoost and MLP models over repeated synthetic datasets, measure utility and attacks, and invoke the focused red-team registry. | Experimental empirical workflow; emits screens or attack floors and always returns `no_release_authorization`. |
-| `run_public_privacy_audit.py` | Run the RAG-planned public-data CNN, LSTM, XGBoost, and compact Transformer privacy experiment. | Experimental worker requiring network access, experiment dependencies, and PyTorch; weak or null attacks never clear. See [`reproduction/public-privacy/README.md`](../reproduction/public-privacy/README.md). |
+| `run_public_privacy_audit.py` | Run the RAG-planned public-data CNN, LSTM, XGBoost, and compact Transformer privacy experiment. | Experimental worker requiring network access, experiment dependencies, and PyTorch; weak or null attacks never clear. See [public-data privacy workflow](../reproduction/README.md#public-data-privacy-workflow). |
 | `llm_training_hooks.py` | Provide the shared bounded, aggregate-only PyTorch activation/gradient/loss hook collector used by the LLM and vision workers. It enforces an allowlist, event cap, complete per-step hook coverage, cleanup, and hash-chain replay without retaining tensors or examples. | Experimental support library imported by workers and tests; not a standalone release pipeline or public CLI. |
-| `run_llm_training_hook_audit.py` | Sequentially fine-tune pinned DistilGPT2, OPT-125M, and Pythia-160M revisions for 512 steps each on the same deterministic 8,192-row projection from a digest-verified WildChat-4.8M shard; collect model-specific bounded aggregate activation/gradient telemetry; evaluate the untouched 1,024-row holdout before and after; and compare prior, metadata, loss, combined, and exact-roster knowledge profiles. | Experimental network/GPU worker using separate telemetry streams and a fresh run directory per invocation. Its disjoint 256-member/256-nonmember calibration and audit cells are underpowered, descriptive, noncausal, and nonmonotone; exact roster disclosure is separate; real human-user/ChatGPT content requires independent rights review; OPT's production/commercial legal gate is blocked; Pythia deployment requires policy/manual review; and no result clears or authorizes. See [`reproduction/llm-training-hook/README.md`](../reproduction/llm-training-hook/README.md). |
-| `run_vision_training_hook_audit.py` | Train canonical torchvision AlexNet and DenseNet-121 from scratch for one epoch each on the complete deterministic 21,600-image training split from the digest-pinned 27,000-image EuroSAT RGB archive; evaluate the complete 5,400-image test split before and after; collect bounded aggregate hook telemetry; and run brightness, Gaussian-noise, and FGSM screens on 512 real test images. | Experimental network/GPU worker using a fresh run directory and separate telemetry ledger per architecture. It measures execution and scale over a real satellite-image corpus; one epoch and the bounded perturbations do not establish quality, privacy, security, robustness, fairness, or production readiness. Dataset/modified Sentinel terms remain under manual review, and every result is non-clearing and non-authorizing. See [`reproduction/vision-training-hook/README.md`](../reproduction/vision-training-hook/README.md). |
+| `run_llm_training_hook_audit.py` | Sequentially fine-tune pinned DistilGPT2, OPT-125M, and Pythia-160M revisions for 512 steps each on the same deterministic 8,192-row projection from a digest-verified WildChat-4.8M shard; collect model-specific bounded aggregate activation/gradient telemetry; evaluate the untouched 1,024-row holdout before and after; and compare prior, metadata, loss, combined, and exact-roster knowledge profiles. | Experimental network/GPU worker using separate telemetry streams and a fresh run directory per invocation. Its disjoint 256-member/256-nonmember calibration and audit cells are underpowered, descriptive, noncausal, and nonmonotone; exact roster disclosure is separate; real human-user/ChatGPT content requires independent rights review; OPT's production/commercial legal gate is blocked; Pythia deployment requires policy/manual review; and no result clears or authorizes. See [training-hook designs and limits](../reproduction/README.md#training-hook-and-composition-designs). |
+| `run_vision_training_hook_audit.py` | Train canonical torchvision AlexNet and DenseNet-121 from scratch for one epoch each on the complete deterministic 21,600-image training split from the digest-pinned 27,000-image EuroSAT RGB archive; evaluate the complete 5,400-image test split before and after; collect bounded aggregate hook telemetry; and run brightness, Gaussian-noise, and FGSM screens on 512 real test images. | Experimental network/GPU worker using a fresh run directory and separate telemetry ledger per architecture. It measures execution and scale over a real satellite-image corpus; one epoch and the bounded perturbations do not establish quality, privacy, security, robustness, fairness, or production readiness. Dataset/modified Sentinel terms remain under manual review, and every result is non-clearing and non-authorizing. See [training-hook designs and limits](../reproduction/README.md#training-hook-and-composition-designs). |
 | `run_llm_composition_scaling.py` | Run fresh DistilGPT2/OPT-125M/Pythia-160M cells at 2,048, 4,096, and 8,192 WildChat training rows over five seeds, then evaluate seven same-roster output subsets and a separately labelled cumulative-exposure sensitivity path. | Experimental child worker with a bounded resumable journal and aggregate-only suite export. Subset contrasts use the mean of their constituent singleton results; protected-roster exposure and license/policy gates remain separate. |
 | `run_vision_composition_scaling.py` | Run AlexNet/DenseNet-121 at 5,400, 10,800, and 21,600 EuroSAT training images over five seeds, with matched batch-size and hook/no-hook cells, probability-average output composition, real-image perturbations, and registered FGSM source-to-target transfer. | Experimental child worker. Hook effects, batch effects, ensemble screens, and attack transfer remain descriptive and cannot block, clear, or authorize. |
-| `run_composition_scaling_suite.py` | Validate and optionally serialize both child workers, verify their completion manifests and aggregate exports, construct all 31 non-empty five-model resource/gate portfolios, and publish a final suite manifest last. | Experimental coordinator with a 12-hour/20-GiB fail-closed envelope. It composes scalars only within a shared protected-unit population; mixed-modality portfolios remain vectors. See [`reproduction/composition-scaling/README.md`](../reproduction/composition-scaling/README.md). |
+| `run_composition_scaling_suite.py` | Validate and optionally serialize both child workers, verify their completion manifests and aggregate exports, construct all 31 non-empty five-model resource/gate portfolios, and publish a final suite manifest last. | Experimental coordinator with a 12-hour/20-GiB fail-closed envelope. It composes scalars only within a shared protected-unit population; mixed-modality portfolios remain vectors. See [composition design and limits](../reproduction/README.md#training-hook-and-composition-designs). |
 
 ## Validation and maintenance
 
 | Script | Purpose | Status |
 |---|---|---|
 | `check_markdown_links.py` | Verify that every repository Markdown link to a local file or directory resolves. | Maintenance check run by `make check`; external URLs and fragment identifiers are outside its scope. |
+| `validate_framework_e2e.py` | Execute every console model/dataset combination through API, queue, trainer, attacks, evidence downloads, case checks and reassessment; test intake variants, mode switches, tampering, cancellation and retry. | Offline public-data integration matrix with retained Markdown/JSON results. Add repeated `--language-model` arguments for installed local Ollama models. Unsupported attacks remain explicit; execution success is not model safety or release authorization. |
 | `generate_schema_manifest.py` | Replay every registered current JSON Schema and generate or verify the exact-byte schema inventory. | Maintenance check run by `make schemas`; release signing/attestation is an external protected-key operation. |
 | `validate_llm_audit_profile.py` | Validate the LLM watermark/canary preregistration template and optionally enforce collection readiness. | Maintenance check and protocol linter; it does not execute an audit or emit scientific evidence. |
 | `evaluate_knowledge_retrieval.py` | Measure deterministic retrieval hit rate and reciprocal rank over the repository knowledge index. | Maintenance evaluation for the RAG corpus. |
@@ -94,7 +122,8 @@ trained models, complete run outputs, or final study seal.
   `run_government_health_demo.py` fixture rehearsal uses only core dependencies.
 - The controlled ceiling runner uses the experiment dependency tier for exact
   interval calculations. Its default retained study executed 1,800 records;
-  use the frozen configuration when reproducing the published result.
+  replay of the published result requires its frozen configuration, source,
+  and runtime together, not merely the current package with an old JSON file.
 - The model-backed ceiling runner additionally uses the public-privacy
   collector stack and PyTorch. Its compact Transformer is an LLM proxy, its
   target pools are small finite benchmark populations, and its repeated trials

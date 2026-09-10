@@ -10,6 +10,7 @@ import sys
 import tempfile
 import types
 import unittest
+import warnings
 from pathlib import Path
 
 
@@ -742,13 +743,24 @@ class LlmTrainingWorkerTests(unittest.TestCase):
             target = Path(temporary_directory) / "report.json"
             _atomic_write_bytes(target, b"first\n")
             self.assertEqual(target.read_bytes(), b"first\n")
-            self.assertEqual(os.stat(target).st_mode & 0o777, 0o600)
+            if os.name != "nt":
+                self.assertEqual(os.stat(target).st_mode & 0o777, 0o600)
 
             with self.assertRaisesRegex(ValueError, "refusing to overwrite"):
                 _atomic_write_bytes(target, b"second\n")
 
             self.assertEqual(target.read_bytes(), b"first\n")
             self.assertEqual(list(target.parent.glob("*.partial-*")), [])
+
+    @unittest.skipUnless(os.name == "nt", "Windows directory-flush warning policy")
+    def test_warning_as_error_cannot_fail_an_already_committed_artifact(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary, warnings.catch_warnings():
+            warnings.simplefilter("error", RuntimeWarning)
+            path = Path(temporary) / "complete.json"
+            _atomic_write_bytes(path, b"{\"complete\":true}\n")
+            self.assertEqual(path.read_bytes(), b"{\"complete\":true}\n")
+            with self.assertRaisesRegex(ValueError, "refusing to overwrite"):
+                _atomic_write_bytes(path, b"replacement")
 
     def test_verified_hook_loader_ignores_ambient_module_substitution(self) -> None:
         ambient_name = "llm_training_hooks"

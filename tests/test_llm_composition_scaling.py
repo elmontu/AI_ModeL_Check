@@ -41,6 +41,8 @@ from run_llm_composition_scaling import (  # noqa: E402
     expected_journal_keys,
     finalize_publication,
     load_config,
+    load_verified_baseline_module,
+    host_peak_rss_bytes,
     release_interface_matrix,
     roc_auc,
     validate_completion_manifest,
@@ -57,7 +59,12 @@ def config() -> dict:
 
 
 class LlmCompositionScalingTests(unittest.TestCase):
-    def test_frozen_config_and_completed_baseline_bindings_are_exact(self) -> None:
+    def test_host_peak_memory_has_real_positive_byte_measurement(self) -> None:
+        value = host_peak_rss_bytes()
+        self.assertIsInstance(value, int)
+        self.assertGreater(value, 0)
+
+    def test_frozen_config_is_immutable_and_revised_baseline_is_rejected(self) -> None:
         validated, payload = load_config(CONFIG_PATH)
         self.assertEqual(hashlib.sha256(payload).hexdigest(), EXPECTED_CONFIG_FILE_SHA256)
         self.assertEqual(canonical_sha256(validated), EXPECTED_CONFIG_CANONICAL_SHA256)
@@ -65,10 +72,15 @@ class LlmCompositionScalingTests(unittest.TestCase):
             hashlib.sha256((ROOT / "reproduction/llm-training-hook/config.json").read_bytes()).hexdigest(),
             EXPECTED_BASELINE_CONFIG_SHA256,
         )
-        self.assertEqual(
+        self.assertNotEqual(
             hashlib.sha256((ROOT / "scripts/run_llm_training_hook_audit.py").read_bytes()).hexdigest(),
             EXPECTED_BASELINE_RUNNER_SHA256,
         )
+        # Portability changes are not retroactively part of the completed study.
+        # A fresh run needs a fresh registration, never a silently updated digest.
+        with mock.patch("run_llm_composition_scaling._BASELINE_MODULE", None):
+            with self.assertRaisesRegex(ValueError, "baseline helper runner hash mismatch"):
+                load_verified_baseline_module()
         self.assertEqual(
             hashlib.sha256((ROOT / "scripts/llm_training_hooks.py").read_bytes()).hexdigest(),
             EXPECTED_HOOK_SHA256,
@@ -257,7 +269,8 @@ class LlmCompositionScalingTests(unittest.TestCase):
                 payload=payload,
                 artifact_bytes_ceiling=20 * 1024**3,
             )
-            self.assertEqual(os.stat(path).st_mode & 0o777, 0o600)
+            if os.name != "nt":
+                self.assertEqual(os.stat(path).st_mode & 0o777, 0o600)
             parsed = _parse_journal(path, context_sha256=context_sha256, repair_trailing_partial=False)
             self.assertEqual(parsed, records)
             clean_size = path.stat().st_size

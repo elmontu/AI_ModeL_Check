@@ -2256,16 +2256,24 @@ class EvidenceRecord(StrictModel):
             )
         if self.lower is not None and self.upper is not None and self.lower > self.upper:
             raise ValueError("evidence lower bound cannot exceed upper bound")
+        if self.evidence_class is EvidenceClass.EXACT and (
+            (self.exact_lower is None) != (self.exact_upper is None)
+        ):
+            raise ValueError("exact evidence must provide both rational bounds or neither")
         if self.exact_lower is not None:
             if self.lower is None:
                 raise ValueError("an exact rational lower bound requires a display lower bound")
             if Fraction(Decimal(str(self.lower))) > self.exact_lower.as_fraction():
                 raise ValueError("display lower bound must be rounded downward from the exact bound")
+            if abs(Fraction(Decimal(str(self.lower))) - self.exact_lower.as_fraction()) > Fraction(1, 10**12):
+                raise ValueError("display lower bound must agree with its exact bound within 1e-12")
         if self.exact_upper is not None:
             if self.upper is None:
                 raise ValueError("an exact rational upper bound requires a display upper bound")
             if Fraction(Decimal(str(self.upper))) < self.exact_upper.as_fraction():
                 raise ValueError("display upper bound must be rounded upward from the exact bound")
+            if abs(Fraction(Decimal(str(self.upper))) - self.exact_upper.as_fraction()) > Fraction(1, 10**12):
+                raise ValueError("display upper bound must agree with its exact bound within 1e-12")
         if (
             self.exact_lower is not None
             and self.exact_upper is not None
@@ -2327,13 +2335,26 @@ class AttackBatteryStatus(StrictModel):
                 raise ValueError("a required attack battery cannot carry a waiver reason")
             if self.satisfied == bool(self.failure_reasons):
                 raise ValueError("attack-battery satisfaction must match its failure reasons")
+            if not set(self.completed_attack_ids).issubset(self.required_attack_ids):
+                raise ValueError("completed attack IDs must belong to the required battery")
+            if self.satisfied and set(self.completed_attack_ids) != set(self.required_attack_ids):
+                raise ValueError("a satisfied attack battery must complete every required attack")
+            if self.completed_attack_ids and not self.passing_positive_control_ids:
+                raise ValueError("completed attacks require passing positive-control identifiers")
         elif self.mode is CeilingAttackBatteryMode.WAIVED:
             if not self.satisfied or self.waiver_reason is None:
                 raise ValueError("a waived attack battery must record its reason")
-            if self.requirement_id is not None or self.required_attack_ids or self.failure_reasons:
+            if (
+                self.requirement_id is not None or self.required_attack_ids or self.failure_reasons
+                or self.completed_attack_ids or self.passing_positive_control_ids
+            ):
                 raise ValueError("a waived attack battery cannot claim a required execution")
         else:
-            if self.satisfied or self.waiver_reason is not None or self.requirement_id is not None:
+            if (
+                self.satisfied or self.waiver_reason is not None or self.requirement_id is not None
+                or self.required_attack_ids or self.completed_attack_ids
+                or self.passing_positive_control_ids or self.failure_reasons
+            ):
                 raise ValueError("a prohibited ceiling cannot claim a battery or waiver")
         return self
 
@@ -2378,10 +2399,10 @@ class ThreatDecision(StrictModel):
     decision_metric: DecisionMetric
     kind: ThreatKind
     mandatory: bool
-    tolerance: float
+    tolerance: float = Field(ge=0.0, le=1.0)
     tolerance_basis: Literal["absolute", "incremental"]
-    lower_bound: float
-    upper_bound: float
+    lower_bound: float = Field(ge=0.0, le=1.0)
+    upper_bound: float = Field(ge=0.0, le=1.0)
     lower_bound_fraction: RationalProbability
     upper_bound_fraction: RationalProbability
     verdict: Verdict
@@ -2402,6 +2423,18 @@ class ThreatDecision(StrictModel):
             raise ValueError("decision lower display must be rounded downward")
         if Fraction(Decimal(str(self.upper_bound))) < exact_upper:
             raise ValueError("decision upper display must be rounded upward")
+        if any(
+            abs(Fraction(Decimal(str(display))) - exact) > Fraction(1, 10**12)
+            for display, exact in ((self.lower_bound, exact_lower), (self.upper_bound, exact_upper))
+        ):
+            raise ValueError("decision displays must agree with exact bounds within 1e-12")
+        tolerance = Fraction(Decimal(str(self.tolerance)))
+        if self.verdict is Verdict.BLOCK and exact_lower <= tolerance:
+            raise ValueError("a blocking decision requires an exact floor above tolerance")
+        if exact_lower > tolerance and self.verdict is not Verdict.BLOCK:
+            raise ValueError("an exact floor above tolerance must produce a blocking decision")
+        if self.verdict is Verdict.CLEAR and exact_upper > tolerance:
+            raise ValueError("a clear decision requires an exact ceiling within tolerance")
         contradictory = exact_lower > exact_upper
         if contradictory != (self.evidence_consistency is EvidenceConsistency.CONTRADICTORY):
             raise ValueError("evidence consistency does not match the decision bounds")
@@ -2480,7 +2513,7 @@ class AssessmentScope(StrictModel):
 
 
 class AssessmentReport(StrictModel):
-    schema_version: Literal["5.0"] = "5.0"
+    schema_version: Literal["6.0"] = "6.0"
     assessment_id: str
     release_id: str
     policy_id: str
@@ -2499,7 +2532,7 @@ class AssessmentReport(StrictModel):
     population_scope_sha256s: dict[str, str]
     population_scopes: tuple[PopulationScope, ...]
     evidence: tuple[EvidenceRecord, ...]
-    decisions: tuple[ThreatDecision, ...]
+    decisions: tuple[ThreatDecision, ...] = Field(min_length=1)
     overall_verdict: OverallVerdict
     runtime_identity: RuntimeIdentity
     engine_version: str
@@ -2507,14 +2540,19 @@ class AssessmentReport(StrictModel):
     @model_validator(mode="after")
     def report_bindings_are_complete(self) -> AssessmentReport:
         expected = {scope.scope_id for scope in self.population_scopes}
+        if not expected or len(expected) != len(self.population_scopes):
+            raise ValueError("report population scopes must be non-empty and unique")
         if set(self.population_scope_sha256s) != expected:
             raise ValueError("report population-scope hashes do not match its declared scopes")
+        for scope in self.population_scopes:
+            if self.population_scope_sha256s[scope.scope_id] != _canonical_model_sha256(scope):
+                raise ValueError("report population-scope hash does not match its content")
         for value in (self.created_at, self.release_expires_at, self.policy_expires_at):
             if value is not None and value.utcoffset() is None:
                 raise ValueError("assessment report timestamps must include timezone offsets")
         if self.runtime_identity.component_id != "assurance_engine":
             raise ValueError("assessment report runtime identity must name assurance_engine")
-        if self.runtime_identity.component_version != "AssessmentReport/5.0":
+        if self.runtime_identity.component_version != "AssessmentReport/6.0":
             raise ValueError("assessment report runtime identity has the wrong component version")
         if self.runtime_identity.package_version != self.engine_version:
             raise ValueError("assessment report engine version does not match its runtime identity")
@@ -2524,6 +2562,11 @@ class AssessmentReport(StrictModel):
         decision_ids = [decision.threat_id for decision in self.decisions]
         if len(decision_ids) != len(set(decision_ids)):
             raise ValueError("assessment report threat decisions must be unique")
+        # Import after contract construction to avoid a models/decision cycle.
+        from .decision import decide_overall
+
+        if self.overall_verdict is not decide_overall(self.decisions):
+            raise ValueError("assessment report overall verdict does not match its decisions")
         decisions_by_threat = {decision.threat_id: decision for decision in self.decisions}
         evidence_by_threat: dict[str, set[str]] = {}
         for record in self.evidence:
@@ -2532,6 +2575,12 @@ class AssessmentReport(StrictModel):
             raise ValueError("assessment report contains evidence without a threat decision")
         interface_sha256 = _canonical_model_sha256(self.release_interface)
         for decision in self.decisions:
+            if (
+                decision.population_scope_id not in self.population_scope_sha256s
+                or decision.population_scope_sha256
+                != self.population_scope_sha256s[decision.population_scope_id]
+            ):
+                raise ValueError(f"decision {decision.threat_id} does not bind a report population scope")
             disposition = set(decision.evidence_ids) | set(decision.excluded_evidence_ids)
             if disposition != evidence_by_threat.get(decision.threat_id, set()):
                 raise ValueError(
@@ -2557,7 +2606,7 @@ class AssessmentReport(StrictModel):
 
 
 class SignedManifest(StrictModel):
-    schema_version: Literal["3.0"] = "3.0"
+    schema_version: Literal["4.0"] = "4.0"
     assessment_id: str
     release_id: str
     policy_id: str

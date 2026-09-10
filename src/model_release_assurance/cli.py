@@ -9,6 +9,11 @@ from pathlib import Path
 from pydantic import ValidationError
 
 from .audit import AuditStore
+from .assurance_record import (
+    AssuranceGateResult, AssuranceScope, AssuranceVerdict, ReleaseAssuranceRecord,
+    ResidualRiskAcceptance, SignedReleaseAssuranceRecord, build_assurance_record,
+    gate_assurance_record, sign_assurance_record, sign_residual_risk_acceptance,
+)
 from .engine import AssuranceEngine
 from .errors import AssuranceError
 from .integrity import (
@@ -77,6 +82,15 @@ def _write_text_lf(path: Path, value: str) -> None:
         stream.write(value)
 
 
+def _trust_store(path: Path | None) -> dict[str, Path]:
+    if path is None:
+        return {}
+    raw = _read_json(path)
+    if not isinstance(raw, dict) or not all(isinstance(k, str) and isinstance(v, str) for k, v in raw.items()):
+        raise ValueError("trust store must map key identifiers to PEM paths")
+    return {key: Path(value) if Path(value).is_absolute() else path.parent / value for key, value in raw.items()}
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="mra",
@@ -87,6 +101,35 @@ def build_parser() -> argparse.ArgumentParser:
 
     validate = subparsers.add_parser("validate", help="validate a release assessment contract")
     validate.add_argument("request", type=Path)
+
+    assurance_record = subparsers.add_parser("assurance-record", help="derive an exact four-verdict governance record from an assessment")
+    assurance_record.add_argument("request", type=Path)
+    assurance_record.add_argument("report", type=Path)
+    assurance_record.add_argument("--scope", type=Path, required=True, help="independently approved adversary/scenario/channel scope")
+    assurance_record.add_argument("--acceptance", type=Path)
+    assurance_record.add_argument("--acceptor-trust-store", type=Path)
+    assurance_record.add_argument("--output", type=Path, required=True)
+
+    assurance_sign = subparsers.add_parser("assurance-sign", help="authenticate a governance record; signing alone does not establish validity")
+    assurance_sign.add_argument("record", type=Path)
+    assurance_sign.add_argument("--private-key", type=Path, required=True)
+    assurance_sign.add_argument("--output", type=Path, required=True)
+
+    assurance_accept = subparsers.add_parser("assurance-accept-risk", help="explicitly sign acceptance of every crossing ceiling; cannot override a BLOCK")
+    assurance_accept.add_argument("record", type=Path)
+    assurance_accept.add_argument("--private-key", type=Path, required=True)
+    assurance_accept.add_argument("--reason", required=True)
+    assurance_accept.add_argument("--expires-at", type=datetime.fromisoformat, required=True)
+    assurance_accept.add_argument("--output", type=Path, required=True)
+
+    assurance_gate = subparsers.add_parser("assurance-gate", help="verify and semantically replay a signed four-verdict recommendation; never authorize deployment")
+    assurance_gate.add_argument("record", type=Path)
+    assurance_gate.add_argument("--request", type=Path, required=True)
+    assurance_gate.add_argument("--report", type=Path, required=True)
+    assurance_gate.add_argument("--scope", type=Path, required=True)
+    assurance_gate.add_argument("--trust-store", type=Path, required=True)
+    assurance_gate.add_argument("--acceptor-trust-store", type=Path)
+    assurance_gate.add_argument("--output", type=Path, required=True)
 
     model_coverage = subparsers.add_parser(
         "model-coverage",
@@ -298,6 +341,38 @@ def main(argv: list[str] | None = None) -> int:
         if args.command == "validate":
             AssessmentRequest.model_validate(_read_json(args.request))
             print("valid")
+        elif args.command in {"assurance-record", "assurance-gate"}:
+            try:
+                request = AssessmentRequest.model_validate(_read_json(args.request))
+                report = AssessmentReport.model_validate(_read_json(args.report))
+                scope = AssuranceScope.model_validate(_read_json(args.scope))
+                policy_path = Path(request.policy.policy_path)
+                policy_bytes = (policy_path if policy_path.is_absolute() else args.request.parent / policy_path).read_bytes()
+                acceptors = _trust_store(args.acceptor_trust_store)
+                if args.command == "assurance-record":
+                    acceptance = ResidualRiskAcceptance.model_validate(_read_json(args.acceptance)) if args.acceptance else None
+                    record = build_assurance_record(request, report, scope, policy_bytes=policy_bytes, acceptance=acceptance, trusted_acceptors=acceptors)
+                    _write_model(args.output, record)
+                    print(record.verdict.value)
+                    return 0 if record.verdict is not AssuranceVerdict.BLOCK else 1
+                signed = SignedReleaseAssuranceRecord.model_validate(_read_json(args.record))
+                result = gate_assurance_record(signed, request, report, scope,
+                    policy_bytes=policy_bytes, trusted_record_keys=_trust_store(args.trust_store), trusted_acceptors=acceptors)
+            except Exception as exc:
+                result = AssuranceGateResult(verdict=AssuranceVerdict.BLOCK, recommendation_passed=False,
+                    reasons=(f"missing, malformed or unverifiable assurance input: {type(exc).__name__}: {exc}",))
+            _write_model(args.output, result)
+            print(result.verdict.value)
+            return 0 if result.recommendation_passed else 1
+        elif args.command == "assurance-sign":
+            record = ReleaseAssuranceRecord.model_validate(_read_json(args.record))
+            _write_model(args.output, sign_assurance_record(record, args.private_key))
+            print("signed recommendation; semantic gate and external authorization still required")
+        elif args.command == "assurance-accept-risk":
+            record = ReleaseAssuranceRecord.model_validate(_read_json(args.record))
+            acceptance = sign_residual_risk_acceptance(record, args.private_key, reason=args.reason, expires_at=args.expires_at)
+            _write_model(args.output, acceptance)
+            print("signed residual-risk acceptance; verifier trust and policy permission remain required")
         elif args.command == "model-coverage":
             result = (
                 catalog_as_dicts()
@@ -495,7 +570,7 @@ def main(argv: list[str] | None = None) -> int:
                 _write_model(args.output, verification)
             profile_label = (
                 "authenticated_verified"
-                if run.verification_profile.value == "authenticated_v1"
+                if run.verification_profile is ReleaseProtocolVerificationProfile.AUTHENTICATED
                 else "structurally_verified"
             )
             limitation = (
@@ -506,8 +581,8 @@ def main(argv: list[str] | None = None) -> int:
             )
             print(
                 f"{profile_label} state={verification.final_state.value} "
-                f"authorization_recorded={str(verification.authorization_issued).lower()} "
-                f"active={str(verification.deployment_active).lower()} "
+                f"authorization_recorded={str(verification.authorization_recorded).lower()} "
+                f"deployment_recorded={str(verification.deployment_recorded).lower()} "
                 f"artifact_files_verified={str(verification.artifact_files_verified).lower()} "
                 f"skipped_checks={','.join(verification.skipped_checks) or 'none'}; "
                 f"{limitation}"

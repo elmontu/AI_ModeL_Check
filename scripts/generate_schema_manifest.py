@@ -33,6 +33,10 @@ def schema_replay_errors(schemas_dir: Path) -> list[str]:
     """Return deterministic diagnostics for missing or stale current schemas."""
 
     errors: list[str] = []
+    allowed = {entry.filename for entry in SCHEMA_REGISTRY.values()} | {SCHEMA_MANIFEST_FILENAME}
+    for path in sorted(schemas_dir.glob("*.json")):
+        if path.name not in allowed:
+            errors.append(f"unregistered or retired schema in active directory: {path.name}")
     for kind in sorted(SCHEMA_REGISTRY):
         registration = SCHEMA_REGISTRY[kind]
         path = schemas_dir / registration.filename
@@ -83,6 +87,8 @@ def build_parser() -> argparse.ArgumentParser:
         help="fail if a current schema or the committed manifest differs from generation",
     )
     parser.add_argument("--schemas-dir", type=Path, default=DEFAULT_SCHEMAS_DIR)
+    parser.add_argument("--refresh-schemas", action="store_true",
+                        help="with --write, regenerate every currently registered versioned schema before manifesting")
     parser.add_argument(
         "--output",
         type=Path,
@@ -101,6 +107,12 @@ def main(argv: list[str] | None = None) -> int:
     )
     try:
         validate_schema_registry()
+        if args.refresh_schemas and not args.write:
+            raise ValueError("--refresh-schemas requires --write")
+        if args.refresh_schemas:
+            schemas_dir.mkdir(parents=True, exist_ok=True)
+            for registration in SCHEMA_REGISTRY.values():
+                (schemas_dir / registration.filename).write_bytes(registration.rendered_bytes())
         if args.check:
             errors = manifest_check_errors(schemas_dir, manifest_path)
             if errors:

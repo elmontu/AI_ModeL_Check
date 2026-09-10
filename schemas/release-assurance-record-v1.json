@@ -1,0 +1,287 @@
+{
+  "$defs": {
+    "AssuranceVerdict": {
+      "enum": [
+        "RELEASE",
+        "RELEASE-WITH-RISK",
+        "BLOCK",
+        "INCONCLUSIVE"
+      ],
+      "title": "AssuranceVerdict",
+      "type": "string"
+    },
+    "RationalProbability": {
+      "additionalProperties": false,
+      "description": "Canonical exact probability used at security-critical decision boundaries.",
+      "properties": {
+        "denominator": {
+          "exclusiveMinimum": 0,
+          "title": "Denominator",
+          "type": "integer"
+        },
+        "numerator": {
+          "minimum": 0,
+          "title": "Numerator",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "numerator",
+        "denominator"
+      ],
+      "title": "RationalProbability",
+      "type": "object"
+    },
+    "ResidualRiskAcceptance": {
+      "additionalProperties": false,
+      "properties": {
+        "accepted_ceilings": {
+          "additionalProperties": {
+            "$ref": "#/$defs/RationalProbability"
+          },
+          "minProperties": 1,
+          "title": "Accepted Ceilings",
+          "type": "object"
+        },
+        "context_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Context Sha256",
+          "type": "string"
+        },
+        "expires_at": {
+          "format": "date-time",
+          "title": "Expires At",
+          "type": "string"
+        },
+        "issued_at": {
+          "format": "date-time",
+          "title": "Issued At",
+          "type": "string"
+        },
+        "reason": {
+          "minLength": 20,
+          "title": "Reason",
+          "type": "string"
+        },
+        "schema_version": {
+          "const": "1.0",
+          "default": "1.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "signature_b64": {
+          "minLength": 1,
+          "title": "Signature B64",
+          "type": "string"
+        },
+        "signer_key_id": {
+          "minLength": 1,
+          "title": "Signer Key Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "context_sha256",
+        "accepted_ceilings",
+        "reason",
+        "issued_at",
+        "expires_at",
+        "signer_key_id",
+        "signature_b64"
+      ],
+      "title": "ResidualRiskAcceptance",
+      "type": "object"
+    },
+    "ThreatRiskInterval": {
+      "additionalProperties": false,
+      "properties": {
+        "ceiling": {
+          "$ref": "#/$defs/RationalProbability"
+        },
+        "decision_flips_in_gap": {
+          "title": "Decision Flips In Gap",
+          "type": "boolean"
+        },
+        "evidence_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Evidence Ids",
+          "type": "array"
+        },
+        "floor": {
+          "$ref": "#/$defs/RationalProbability"
+        },
+        "game_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Game Sha256",
+          "type": "string"
+        },
+        "gap": {
+          "$ref": "#/$defs/RationalProbability"
+        },
+        "metric": {
+          "title": "Metric",
+          "type": "string"
+        },
+        "resolution_code": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Resolution Code"
+        },
+        "resolving_actions": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Resolving Actions",
+          "type": "array"
+        },
+        "threat_id": {
+          "title": "Threat Id",
+          "type": "string"
+        },
+        "threshold": {
+          "$ref": "#/$defs/RationalProbability"
+        }
+      },
+      "required": [
+        "threat_id",
+        "metric",
+        "game_sha256",
+        "floor",
+        "ceiling",
+        "gap",
+        "threshold",
+        "evidence_ids",
+        "decision_flips_in_gap"
+      ],
+      "title": "ThreatRiskInterval",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "acceptance": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/ResidualRiskAcceptance"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "accepted_residual_risks": {
+      "default": [],
+      "items": {
+        "type": "string"
+      },
+      "title": "Accepted Residual Risks",
+      "type": "array"
+    },
+    "assessment_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Assessment Sha256",
+      "type": "string"
+    },
+    "authorization_eligible": {
+      "const": false,
+      "default": false,
+      "title": "Authorization Eligible",
+      "type": "boolean"
+    },
+    "blocking_reasons": {
+      "default": [],
+      "items": {
+        "type": "string"
+      },
+      "title": "Blocking Reasons",
+      "type": "array"
+    },
+    "context_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Context Sha256",
+      "type": "string"
+    },
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    },
+    "equality_convention": {
+      "const": "ceiling_le_threshold;floor_gt_threshold",
+      "default": "ceiling_le_threshold;floor_gt_threshold",
+      "title": "Equality Convention",
+      "type": "string"
+    },
+    "expires_at": {
+      "format": "date-time",
+      "title": "Expires At",
+      "type": "string"
+    },
+    "release_id": {
+      "title": "Release Id",
+      "type": "string"
+    },
+    "request_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Request Sha256",
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "1.0",
+      "default": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "scope_coverage": {
+      "const": "complete_relative_to_approved_declared_universe",
+      "default": "complete_relative_to_approved_declared_universe",
+      "title": "Scope Coverage",
+      "type": "string"
+    },
+    "scope_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Scope Sha256",
+      "type": "string"
+    },
+    "threats": {
+      "items": {
+        "$ref": "#/$defs/ThreatRiskInterval"
+      },
+      "title": "Threats",
+      "type": "array"
+    },
+    "verdict": {
+      "$ref": "#/$defs/AssuranceVerdict"
+    },
+    "world_scope_truth_verified": {
+      "const": false,
+      "default": false,
+      "title": "World Scope Truth Verified",
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "release_id",
+    "context_sha256",
+    "request_sha256",
+    "assessment_sha256",
+    "scope_sha256",
+    "created_at",
+    "expires_at",
+    "verdict",
+    "threats"
+  ],
+  "title": "ReleaseAssuranceRecord",
+  "type": "object"
+}

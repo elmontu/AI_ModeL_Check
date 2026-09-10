@@ -2,7 +2,7 @@
 
 ## Supported versions
 
-The current `0.7.x` line is an offline reference release. Security fixes are applied to the latest commit only until a stable release process is established.
+The current `0.8.x` line is an offline reference release. Security fixes are applied to the latest commit only until a stable release process is established.
 
 ## Reporting
 
@@ -16,7 +16,7 @@ Do not place confidential data, model artifacts, credentials, signing keys, atta
 
 ## Security boundary
 
-The Python package is the assurance decision core. It does not itself sandbox untrusted model deserialization, provide authentication, manage production signing keys, or establish a UC-secure deployment. A service embedding it must implement the controls in `docs/reference/production-roadmap.md`.
+The Python package is the assurance decision core. It does not itself sandbox untrusted model deserialization, operate production identity services, manage production signing keys, or establish a UC-secure deployment. A service embedding it must implement the [external production controls](docs/system-audit-specification.md#production-readiness-exit-gates).
 
 Never load pickle, joblib, arbitrary PyTorch checkpoints, or executable model formats in the trusted decision process. Format-specific adapters must run in isolated workers and export inert JSON evidence that is hash-bound to the request.
 

@@ -91,12 +91,12 @@
     "execution_id": "demo-membership-battery-execution",
     "release_id": "whole-government-demo-tree-v1",
     "release_contract_sha256": "58fa3564d8445f55834ebdd9699a4d412035a2f96bfb42b27f5c99cd510d035b",
-    "policy_sha256": "33952cfe3632958fb82dc53d0035152af485547b7eab601c787f353f4fdedca0",
+    "policy_sha256": "6f3fd343ce5b5fa6305fb32e6c1b77efdbbd88112bc29ce41e84fc22c1906c3e",
     "artifact_sha256": "2f42b587627c5b6c4447d781b57a47082743f029b475f560a574553abcedfdd5",
     "interface_sha256": "f13f29ea2027109f4f02992b37713ee9f63bf56672afb800ac9c3fb6966473b8",
     "population_scope_id": "service-participants-2026",
     "population_scope_sha256": "f85f632a9ac034ed0bd4f21cd3256729443a901de4ab95d89c52898615f25604",
-    "decision_game_sha256": "686901249c969d5c1a631f1a617c319f9c235842745ea34c6956b6c5c2fef38c",
+    "decision_game_sha256": "3af0b6299a353e6d3fccfb6a049a7a38e64ee9936e18536572f3cc40734a2c5e",
     "catalog_sha256": "94c9d8423df94f361c3a0471502a0b38ad060c620ae545bc74ed7046d7934477",
     "configuration_sha256": "3669134f76c0b52f1f1458a34556418bf11dd795bed8e2b95c3b04a386664203",
     "worker": {
@@ -108,8 +108,8 @@
     "worker_runtime_identity": {
       "schema_version": "1.0",
       "package_name": "model-release-assurance",
-      "package_version": "0.7.0",
-      "package_source_sha256": "0722a0ab9544474670a5a5487cc531e4560fec6942ff96b7bea8946ddc3140a7",
+      "package_version": "0.8.0",
+      "package_source_sha256": "bae82903ade6bb028a41b09c8a7caefaf805635abe750dcba438011cc1502dc6",
       "component_id": "attack_battery_worker",
       "component_version": "AttackBatteryWorkerOutput/1.0",
       "algorithm_profile": {
@@ -125,11 +125,11 @@
       },
       "algorithm_profile_sha256": "01f23c0208e90a2328eb437cb44231c19df5920fa28ec2289e72dc4a09e98f17",
       "python_implementation": "CPython",
-      "python_version": "3.13.15",
+      "python_version": "3.12.14",
       "dependency_versions": {
-        "cryptography": "49.0.0",
+        "cryptography": "50.0.1",
         "numpy": "2.5.2",
-        "pydantic": "2.13.4",
+        "pydantic": "2.13.5",
         "scikit-learn": "1.6.1",
         "scipy": "1.18.1"
       }
@@ -193,16 +193,16 @@
     "decision_authority": "none",
     "can_clear": false
   },
-  "worker_output_sha256": "988a017f47fe24d4e1bff945eee986ff378567a40c87effbb6d6835ca228d676",
+  "worker_output_sha256": "eec3bf471251f4324d61a1dc49cfe30c20aba698f80fd5502ff9fa8e9c102185",
   "evidence_context": {
     "release_id": "whole-government-demo-tree-v1",
     "release_contract_sha256": "58fa3564d8445f55834ebdd9699a4d412035a2f96bfb42b27f5c99cd510d035b",
-    "policy_sha256": "33952cfe3632958fb82dc53d0035152af485547b7eab601c787f353f4fdedca0",
+    "policy_sha256": "6f3fd343ce5b5fa6305fb32e6c1b77efdbbd88112bc29ce41e84fc22c1906c3e",
     "artifact_sha256": "2f42b587627c5b6c4447d781b57a47082743f029b475f560a574553abcedfdd5",
     "interface_sha256": "f13f29ea2027109f4f02992b37713ee9f63bf56672afb800ac9c3fb6966473b8",
     "population_scope_id": "service-participants-2026",
     "population_scope_sha256": "f85f632a9ac034ed0bd4f21cd3256729443a901de4ab95d89c52898615f25604",
-    "decision_game_sha256": "686901249c969d5c1a631f1a617c319f9c235842745ea34c6956b6c5c2fef38c",
+    "decision_game_sha256": "3af0b6299a353e6d3fccfb6a049a7a38e64ee9936e18536572f3cc40734a2c5e",
     "observed_at": "2026-08-18T00:00:00Z"
   }
 }

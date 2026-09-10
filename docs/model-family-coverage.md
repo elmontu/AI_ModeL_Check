@@ -10,7 +10,7 @@ decision game, population, and proof contract. The current framework separates t
 
 Only the third question can contribute to a release decision. Catalog membership is not evidence and the coverage command always emits `can_clear: false`.
 
-The [completed ceiling experiments](../paper/ceiling-experiment-results.md)
+The [completed ceiling experiments](../academic/paper/ceiling-experiment-results.md)
 test the shared finite-channel path without establishing family-wide coverage.
 Controlled XGBoost, CNN, and LLM names are labels only. The model-backed tier
 uses one CNN/MNIST artifact, one XGBoost/Adult artifact, and one compact

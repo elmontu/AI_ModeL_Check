@@ -1,0 +1,540 @@
+\section{Protocol Pseudocode}
+\label{app:algorithms}
+These six procedures specify the normative protocol, not the current CLI.
+They consume authenticated predecessors; they do not accept a caller's
+assertion that an omitted stage happened. $\Sigma$ denotes authoritative
+registry/trust/budget state; $J$ denotes the lifecycle record store.
+The event types and permitted edges are those of Table~\ref{tab:lifecycle}.
+For a government instance, the bound profile $P_G$ and stage-due predicates
+$G^k$ are those of Section~\ref{sec:gov-profile}; they strengthen existing
+guards without creating new phases or JSON schemas.
+Every successful progression destination checks the current $M_G^k(t)$ at authoritative
+transition time, not the due set captured during an earlier successful call.
+Denial and other no-service transitions keep their original authority checks;
+they do not require passing institutional obligations.
+A \emph{refusal} preserves a failure record, emits no new authorization, and
+returns BLOCK as the recommendation for missing/invalid evidence.
+Its lifecycle state is ABORTED for integrity/conflict/stale-head failure,
+REDESIGN\_REQUIRED for an incomplete/remediable proposal, or no service for a
+serving failure. Legacy internal gate vocabulary is not a facade disposition.
+
+\subsection{Algorithm A1: VerifyEnvelope$(M,I,q,J,\Sigma)$}
+\begin{enumerate}
+\item Capture the exact envelope and referenced source bytes. Reject unknown
+version/type, malformed or noncanonical encoding and invalid field ranges.
+Hash and parse the same captured bytes, not two reads of mutable paths.
+\item Check the domain-separated signed envelope, live issuer key, role/type
+permission, instance digest, issue/expiry times and required trust profile.
+A caller-supplied public key is not by itself an approved authority.
+\item If message ID was seen with different digest, abort. If identical,
+return the recorded historical receipt with \emph{no new state transition}.
+Historical receipt reuse does not certify current serving eligibility.
+\item Require phase $q$ and the exact allowed edge; load every required
+predecessor by committed identifier. Check its digest, signature, instance,
+continuing validity and semantic linkage. Reject absence or substitution.
+\item Replay payload-specific semantics using captured inputs. Return the
+validated payload and captured digests, never a bare signature-success flag.
+\end{enumerate}
+
+\subsection{Algorithm A2: Freeze$(R,P,N,\Sigma)$}
+\begin{enumerate}
+\item Verify owner Registration from DRAFT with A1. Require current head,
+policy/trust/population snapshots, legitimate purpose, accountable owner,
+recipients, artifacts, complete interface, candidates and governance context.
+For a government instance, bind the competent authority's approved $P_G$,
+delegations, intended/prohibited uses, affected population and mandatory
+institutional roster; require $G^{\rm register}$.
+Persist REGISTERED bound to immutable $I$.
+\item Register each requested claim's approved O1--O7 witness route and failure
+action. A scoped no-go annotation binds its observation class and premises;
+it never waives evidence or supplies a safety certificate.
+Check finite scenario partition, nonempty in-scope threat sets, channel
+and joint-observation witnesses, exclusions and utility/search requirements.
+Freeze the complete evidence roster and allowed evidence directions.
+For $P_G$, freeze stage-due owners, bounded checkers, review/expiry conditions,
+oversight/redress arrangements and approved disclosure exemptions. Later-due
+judgments are scheduled obligations, not assumed completed reviews.
+\item Obtain EvidencePlan approval by the assessor and required approvers.
+Require bound workers, training/source provenance obligations, positive
+controls, exclusions, sampling/selection/stopping rules and failure retention.
+\item Before covered observations, reserve the family's statistical allocation
+in the authoritative lifetime ledger. Include related failed/retried attempts;
+require a justified simultaneous procedure, not merely a numerical budget.
+\item Verify the approved plan envelope, including $G^{\rm plan}$ where
+applicable, and persist PLAN\_FROZEN. Any changed
+instance field requires a new identifier and applicable stages again.
+\end{enumerate}
+
+\subsection{Algorithm A3: CollectAndAssess$(I,J)$}
+\begin{enumerate}
+\item Require PLAN\_FROZEN. Run the registered workers against bound sources;
+retain successes, failures and exclusions. Verify each EvidenceBundle with
+A1, including observed provenance, controls and required training/completion
+records. Missing evidence refuses; worker signatures do not prove truth.
+Collect profile-required institutional evidence assigned to these workers;
+keep its review status separate from the numerical privacy endpoints.
+\item Close the exact bundle inventory. For government instances require
+$G^{\rm evidence}$ before persisting EVIDENCE\_FROZEN.
+For each candidate and every in-scope threat, replay evidence directions,
+game/population identity, arithmetic and admissibility.
+\item Call Admit under O1--O5/O7 for every cell; require every prescribed
+source, control, scope and trust witness. Refuse missing/failed required
+routes, recording the precise reason and remedy or scoped obstruction.
+When no nontrivial upper endpoint is available, only an explicitly allowed
+worst-case ceiling with complete required evidence may return Valid rather
+than Refuse. Run each approved bounded route checker; timeout, an unsupported
+route or failed check refuses. Derive $L,U$ only from compatible jointly
+covered evidence. Verify direct
+release binding or a safe-direction transfer certificate with its error
+penalty. Check the full joint portfolio at the expected head. Preserve
+unsupported or contradictory inputs as failures, not zero observations.
+\item Set internal cell status to BLOCK if a valid $L>\tau$, CLEAR only when
+all cell obligations pass and $U\le\tau$, otherwise INCONCLUSIVE for genuine
+unresolved valid evidence. Invalid/missing obligations yield refusal at the
+facade even if a lower-level gate uses another vocabulary.
+\item Sign the complete AssessmentReport including failures and assumptions;
+for government instances require $G^{\rm assess}$ before persisting ASSESSED.
+A report is not authorization and cannot certify live service.
+\end{enumerate}
+
+\subsection{Algorithm A4: RecommendAndSelect$(I,A,Z)$}
+\begin{enumerate}
+\item Require ASSESSED; apply O6 and revalidate assessment $A$, original request/scope and
+optional risk acceptance $Z$. For each candidate form $B$ and $X$ exactly as
+in Section~\ref{sec:theory-protocol}; include missing in-scope evidence and
+blocking floors regardless of mandatory/optional labels.
+Validate any resolving plan against the instance, estimand, procedure,
+obtainable data, unspent allocation and decision-changing target. An advisory
+action string or a budget already consumed by inspected evidence is not a
+valid plan. Portfolio conditions below cover $H$ plus the candidate, not only
+the active service roster.
+\item \textbf{If} $B\ne\varnothing$, set $d=$BLOCK.
+\textbf{Else if} $X=\varnothing$, set $d=$RELEASE.
+\textbf{Else if} $Z$ is valid and binds every crossing, set $d=$RELEASE-WITH-RISK.
+\textbf{Else if} every crossing has a valid resolving plan, set $d=$INCONCLUSIVE.
+\textbf{Else} set $d=$BLOCK. Emit the bound per-threat record.
+\item Build $F$ only from dispositions RELEASE or RELEASE-WITH-RISK that also
+pass every mandatory CLEAR, utility, control, transfer, portfolio and policy
+condition. RWR requires every crossing to be optional, policy-permitted and
+exactly accepted. BLOCK and INCONCLUSIVE are ineligible. Acceptance cannot
+replace a mandatory CLEAR.
+For government instances also require $G^{\rm select}$; FAIL or UNKNOWN
+excludes the candidate without converting the institutional judgment into
+a privacy score. Independent authorization review remains due in A5.
+\item If $F$ is empty, return REDESIGN\_REQUIRED, unless an approved complete
+candidate-search certificate proves infeasibility; only then return REJECTED.
+Neither refusal implies that an unrestricted alternative model is impossible.
+\item Otherwise choose the candidate by the frozen objective/tie-break,
+retaining every candidate's result. Sign OptimizationReport bound to
+the complete portfolio and persist OPTIMIZED. A recommendation or selection
+alone cannot start A6.
+\end{enumerate}
+
+\subsection{Algorithm A5: ReviewAndCommit$(I,O,J,\Sigma)$}
+\begin{enumerate}
+\item Require OPTIMIZED. Revalidate assessment, recommendation, selection $O$,
+policy, populations, evidence and all mandatory G0--G11 obligations. Replay
+A4's disposition eligibility, including the optional-crossing acceptance rule;
+a mandatory-only test cannot admit an INCONCLUSIVE candidate.
+Require the authorizer's reasoned decision, independent challenge,
+conflict/objection dispositions, conditions, expiry and incident/retirement
+ownership. An RWR record cannot discharge an unresolved mandatory gate.
+For $P_G$, obtain the competent independent institutional reviews now due;
+require $G^{\rm review}$ with current reasons, conditions and delegation status.
+A privacy RELEASE cannot replace a mandate, rights or redress obligation.
+\item Verify AuthorizationCommitRequest; recheck $G^{\rm review}$ where
+applicable before recording it and entering COMMIT\_PENDING.
+Within one registry transaction require expected head, unused nonce and
+unchanged selection. Recheck live evidence, trust, revocations, full current
+portfolio over the cumulative disclosure history $H$, including retired and
+revoked releases, and availability of every cumulative budget delta. Check
+history continuity across rebasing or changes of purpose; a new instance does
+not establish a new adversary. Reserve the candidate's possible exposure in
+the history if the authorization transaction itself discloses it.
+For government instances recheck GovCommitOK against the same policy,
+delegation and review-status snapshot and bind that snapshot to the transition.
+\item Compute the complete transition digest and next head; prepare the
+authorization. Atomically persist transition, nonce, budget deltas,
+authorization and head. On failure abort without exposing a usable receipt.
+\item After successful commit publish AuthorizationReceipt and independently
+verifiable inclusion/consistency evidence; enter AUTHORIZED.
+A stale retry rebases into a new instance and replays affected obligations.
+Already inspected statistical evidence is not refunded.
+\end{enumerate}
+
+\subsection{Algorithm A6: ActivateServeMonitor$(I,\Sigma)$}
+\begin{enumerate}
+\item Require AUTHORIZED; enforce O7 through authentic current registry inclusion/status.
+Remeasure served artifact, complete interface and controls; compare exact
+bindings, verify current evidence/trust and issue a policy-bounded lease.
+Require $G^{\rm serve}$ for government instances, including the operational
+oversight, redress, intended-use and renewal conditions currently due.
+Only then record ActivationReceipt and enter ACTIVE.
+\item \textbf{For every new access:} capture the immutable measured
+artifact/interface snapshot. At one service linearization point serialized
+with revocation, validate ACTIVE, current authorization epoch/inclusion,
+snapshot identity, live lease/evidence, allowed query and no drift/incident.
+For government instances also require current $G^{\rm serve}$ against the
+same authoritative status/epoch; unmet, stale or unknown institutional
+conditions prevent a grant even when privacy remains CLEAR.
+Jointly reserve required budgets, append any newly exposed release to $H$,
+and grant access to that snapshot. Uncertain completion cannot remove an
+exposure reservation. A stale
+epoch or failed budget/status check aborts the grant.
+\item \textbf{On unknown status or failed check:} deny access before or
+atomically with suspension recording. Expiry yields EXPIRED; authorized
+revocation yields REVOKED. Preserve incidents and require a fresh applicable
+assessment path for changed or suspended service.
+Profile renewal deadlines, withdrawal of authority and retirement conditions
+use these same no-service transitions; a new purpose or mandate cannot reuse
+the former instance's authorization.
+\item Independently monitor registry consistency, gateway conformance,
+interface changes and incidents. Never use a cached historical signature
+to bypass the per-access guard. Revocation prevents grants linearized after
+it; completion of an earlier grant is not ruled out. Disclosed information
+is not recalled. Preserve $H$ after expiry, revocation and retirement. These
+terminal service states do not terminate applicable records, redress or
+correction obligations; keep an accountable successor owner and an authorized
+retention/access policy. Stopping a model-backed public service invokes the
+approved continuity or human-service fallback, not automatic abandonment of
+the underlying public function.
+\end{enumerate}
+
+\section{Proofs of the Protocol Guarantees}
+\label{app:proofs}
+All proofs in this appendix are mathematical arguments about the specified
+objects. They are not new Lean kernel checks or verified Python refinements.
+
+\subsection{Proof of Proposition~\ref{prop:decision}}
+\begin{proof}
+The ordered branches are mutually exclusive after precedence is applied and
+exhaust all inputs, including the final refusal branch. RELEASE excludes $B$
+and $X$, hence every valid interval has $U_t\le\tau_t$.
+On joint coverage, $\theta_t\le U_t\le\tau_t$ for every in-scope threat.
+A blocking floor gives $\theta_t\ge L_t>\tau_t$. A crossing contains values
+on both sides of tolerance and establishes neither assertion by endpoints
+alone. Missing/invalid evidence enters $B$ irrespective of endpoint displays
+or acceptance; thus an administrative BLOCK need not demonstrate high risk.
+Acceptance has no influence on the earlier blocking branch.
+\end{proof}
+
+\subsection{Proof of Theorem~\ref{thm:statistics}}
+\begin{proof}
+On $\bigcap_j E_j$, all upper bounds selected at any covered opportunity are
+valid, regardless of selection's dependence on covered observations.
+Sound deterministic ceilings remain valid as well.
+Proposition~\ref{prop:decision} excludes any false ordinary RELEASE there.
+Thus the false-release event is a subset of $\bigcup_jE_j^c$ and
+\[
+\begin{aligned}
+ \Pr\Big(\bigcup_jE_j^c\Big)
+ &\le \sum_j\mathbb E[\Pr(E_j^c\mid\mathcal F_{j-1})]\\
+ &\le \mathbb E\Big[\sum_j\alpha_j\Big]\le\alpha .
+\end{aligned}
+\]
+For countably many families take increasing finite unions and use monotone
+convergence. Independence between families is not used.
+A failed/aborted family capable of influencing later choices belongs in this
+union. Reusing exactly covered evidence adds no new failure event, whereas
+new uncovered looks require fresh valid coverage. The argument assumes
+scientific adequacy and correct reduction; it does not assign their failures
+probability zero or include RWR as below-threshold clearance.
+\end{proof}
+
+\subsection{Proof of Proposition~\ref{prop:scope}}
+\begin{proof}
+Set equality establishes coverage; pairwise disjointness establishes uniqueness.
+For predicates $P_1,\ldots,P_m$ that are total on a finite universe, each element
+has exactly one Boolean profile, hence exactly one atom
+$A_b=\{x:(P_i(x))_i=b\}$. Omitting the all-false atom fails equality whenever
+it is nonempty. Neither proof establishes that these predicates or this
+universe describe all real attackers. The hidden-channel worlds in
+Appendix~\ref{app:gaps}, together with Theorem~\ref{thm:observations}, disprove
+that stronger implication for observation-limited verifiers.
+\end{proof}
+
+\subsection{Proof of Theorem~\ref{thm:transfer}}
+\begin{proof}
+For a released decoder $D$, compose $Q$ and $D$. When $K_r=K_aQ$, the
+composition gives exactly the same conditional action law under $K_a$.
+Maximization over assessed decoders yields the claimed order.
+For approximate transfer let
+$f_s(y)=\sum_aD(a\mid y)g(s,a)\in[0,1]$.
+For each state, its expected value under $K_r(\cdot\mid s)$ differs from
+that under $(K_aQ)(\cdot\mid s)$ by at most row TV, hence by $\eta$.
+Average with $\pi$, maximize over $D$, then intersect with the trivial
+ceiling one. The composed decoder must be allowed by the adversary class;
+without that closure or with a different loss metric the proof does not apply.
+All observations used by $D$, including prior releases and side channels,
+must be in the channel being compared.
+\end{proof}
+
+\subsection{Proof of Theorem~\ref{thm:lifecycle}}
+\begin{proof}
+Induct on successful transitions from DRAFT. The base state serves nothing.
+A1 admits only a role-authorized edge with all exact, live predecessors.
+A2 binds O1--O7 witness routes before observation; A3 refuses missing routes,
+invalid direction, uncovered selection, absent joint evidence and unsupported
+metric transfer. A4 propagates refusals and preserves blocking precedence;
+A5 cannot use acceptance to waive mandatory CLEAR. A6 supplies the separate
+live-binding guard. A no-go annotation changes none of these acceptance
+predicates. Thus dropping a witness does not become a successful transition.
+Each successive pre-commit procedure adds its required record without changing
+$I$. Invalid events add no successful progression. Identical-message retry
+adds no edge; conflicting content is rejected. Therefore any COMMIT\_PENDING
+state has the ordered mandatory predecessor chain and bound selection.
+
+A5 is the only authorizing transition. Linearizability gives one successful
+comparison against the expected head, and atomic persistence makes the
+authorization inseparable from its portfolio/budget update. Two races against
+the same head cannot both commit that transition: the first changes the head,
+so the second aborts. An uncommitted signature is not sufficient for A6,
+which checks authoritative inclusion and current status.
+
+A6 is the only serving path. Its service linearization point checks committed
+live authorization, exact immutable measured bindings, allowed budget and
+absence of suspension, expiry or revocation while reserving budget and granting
+access atomically. Serialization excludes a revocation between the checked
+status and a later grant. If revocation linearizes first, the status/epoch
+check fails; if the grant linearizes first it is an already granted request,
+not post-revocation admission. A failed or unknown check denies access. Thus
+every served request has the stated integrity properties. This is a safety
+argument under faithful transition evaluation and complete mediation, not a
+proof that a host cannot serve through an unmodeled path.
+
+If service also requires ordinary RELEASE with matching current context, every
+served threshold violation is a false RELEASE in
+Theorem~\ref{thm:statistics}'s event. The probability bound follows by inclusion.
+This bound assumes the stated scientific and infrastructure premises in the
+same probability model as the evidence guarantees. No unconditional numerical
+bound is claimed when those premises fail. Accepted optional residual risk is not
+silently included in this ordinary-release guarantee.
+
+For conditional progress, the principal path has eight successful edges to
+ACTIVE. Induct on the remaining edges: eventual successful responses and
+terminating guards advance the next edge; no conflicting external head change
+before the instance's own commit and live deadlines
+prevent abort/expiry. After finitely many such advances A6 activates.
+Withheld messages, repeated conflicting head changes or expiring evidence
+invalidate those hypotheses. A single valid Lean trace establishes
+nonvacuity, not this progress statement or distributed availability.
+\end{proof}
+
+\paragraph{Government-profile restriction}
+Ignoring additional institutional annotations, every successful transition
+under $P_G$ is an existing MRAP transition: the predicates $G^k$ only remove
+permitted successes. At each transition they use the then-current due set
+$M_G^k(t)$ and authoritative status; advancing time or an arrived review
+deadline cannot reuse an earlier PASS without the required current evidence.
+Induction therefore preserves the conditional lifecycle
+safety invariant. The ordinary-release probability bound also remains valid
+when all government-influenced choices remain inside its covered family;
+it does not bound legal, fairness or institutional failure probabilities.
+Conditional progress additionally requires the stronger institutional guards
+to be satisfiable, with competent responses and live reviews. This argument
+proves no substantive institutional judgment from its attestation.
+
+\subsection{Proof of Theorem~\ref{thm:finite-ceiling}}
+\begin{proof}
+Write $\mu_a$ and $\widehat\mu_a$ for true and empirical gain of decoder $a$.
+For each fixed decoder, Hoeffding gives
+$\Pr(|\widehat\mu_a-\mu_a|>e_n)\le2\exp(-2ne_n^2)=\alpha/M$.
+Union over all $M$ decoders gives simultaneous accuracy at least $1-\alpha$.
+Shared samples across decoders do not require independence between these
+error events. On that event,
+\[
+ \max_a\mu_a-e_n\le h\le\max_a\mu_a+e_n.
+\]
+Randomized decoders cannot improve a linear objective beyond a deterministic
+one, so completeness gives $\max_a\mu_a=\theta$.
+Intersect with $[b,1]$ to obtain the reported interval.
+An inconsistent interval off the coverage event must be rejected, not sorted
+or silently repaired.
+
+On the same event $U\le\theta+2e_n$ and $L\ge\theta-2e_n$.
+If $\theta\le\tau-\delta$ and $2e_n<\delta$, then $U<\tau$; if
+$\theta\ge\tau+\delta$, then $L>\tau$.
+Solving $2e_n<\delta$ gives the sufficient sample size.
+There are $|A|$ independent action choices for each of $|Y|$ observations,
+giving $M=|A|^{|Y|}$. Nevertheless the empirical maximization separates:
+\[
+ h=\frac1n\sum_y\max_a\sum_{i:Y_i=y}g(S_i,a).
+\]
+Grouping labeled observations and evaluating all actions costs at most
+$O(n|A|)$ gain evaluations, or $O(n+|S||Y||A|)$ using joint counts and a
+gain table. Thus enumerating all decoders is not necessary for this complete,
+unrestricted finite class. A certified finite alphabet and sufficient labeled
+IID samples, potentially enormous for adaptive transcripts, are still required.
+Incomplete/data-selected decoders without valid joint
+coverage, non-IID sampling, or an unmodeled transcript invalidate the inference.
+With a simultaneous channel set $\mathcal K$ containing the true $K$,
+$\theta\le\sup_{K'\in\mathcal K}V_g(\pi,K')$ follows directly; calculating
+that supremum soundly is a separate obligation.
+\end{proof}
+
+\section{Gap-Closure and Impossibility Proofs}
+\label{app:gaps}
+\begin{theorem}[Observation-relative nonidentifiability]
+\label{thm:observations}
+Let admissible worlds $W_0,W_1$ have
+$\theta(W_0)\le\tau<\theta(W_1)$. Let $P_0,P_1$ be the distributions of
+everything a verifier observes, including available records. Every randomized
+verifier satisfies
+\[
+ P_1(\Release)\ge P_0(\Release)-d_{\rm TV}(P_0,P_1).
+\]
+Thus soundness $P_1(\Release)\le\alpha$ entails
+$P_0(\Release)\le\alpha+d_{\rm TV}(P_0,P_1)$.
+\end{theorem}
+\begin{proof}
+Given an observation $o$, write $r(o)\in[0,1]$ for the probability that the
+verifier returns RELEASE, integrating its independent random coins.
+The two release probabilities are $\int r\,dP_i$; their difference is at
+most total variation by its bounded-function characterization. Identical
+observation laws give identical release probabilities.
+This restricts the chosen observation map, not every conceivable instrument.
+\end{proof}
+
+\subsection{G1: floor nonidentifiability and its repair}
+\begin{proof}
+Let $S$ be a uniform bit. A constant-output channel $K_0$ has guessing value
+$1/2$; $K_1$ reveals $S$ and has value one. A decoder that always answers zero
+has success $1/2$ in both. If the observed evidence is this success summary,
+the two observation laws agree. At any $\tau\in(1/2,1)$,
+Theorem~\ref{thm:observations} forbids informative sound clearance from that
+summary alone. A deterministic upper bound valid for every compatible
+world must be at least one. This does not apply when additional information
+identifies the channel. Exact channel evaluation enumerates
+$\sum_y\max_a\sum_s\pi(s)K(y\mid s)g(s,a)$; complete finite-decoder estimation
+is justified by Theorem~\ref{thm:finite-ceiling}. The repair therefore adds
+information/completeness assumptions, not an inversion of empirical failure.
+\end{proof}
+
+\subsection{G2: multiplicity, repair, and resolution limits}
+\begin{proof}
+Let every true risk be one, and let each upper bound be zero with probability
+$p$ and one otherwise. Its marginal coverage is $1-p$.
+With $m$ independent bounds and a tolerance below one, choosing the smallest
+falsely clears with probability $1-(1-p)^m$. At $p=1/20,m=20$ this is
+$1-(19/20)^{20}$. Replacing each allocation by $p=\alpha/m$ gives
+$1-(1-\alpha/m)^m\le\alpha$ by the union bound. The bound remains valid
+without independence if each error probability is at most $\alpha/m$.
+This proves the concrete repair, not validity of arbitrary imported intervals.
+An unbounded sequence at fixed $p>0$ makes the independent failure probability
+tend to one. Predictable nonrefundable spending with genuine family validity
+instead satisfies Theorem~\ref{thm:statistics}.
+\end{proof}
+
+\subsubsection{No uniform finite-budget resolution at vanishing margins}
+\label{app:threshold}
+\begin{proposition}[Fixed-budget threshold boundary]
+\label{prop:threshold}
+Fix $0<\tau<1$, $n\ge1$, and $0\le\alpha<1/2$. A possibly randomized rule
+observes $n$ IID Bernoulli$(p)$ samples and outputs LOW, HIGH or UNRESOLVED.
+Assume uniformly
+$\sup_{p\le\tau}P_p(\mathrm{HIGH})\le\alpha$ and
+$\sup_{p>\tau}P_p(\mathrm{LOW})\le\alpha$.
+For $p_\pm=\tau\pm\varepsilon$ inside $(0,1)$,
+\[
+ P_{p_\pm}(\mathrm{LOW\ or\ HIGH})
+ \le 2\alpha+\Delta_n
+ \le 2\alpha+\min\{1,2n\varepsilon\},
+\]
+where $\Delta_n=d_{\rm TV}(\mathrm{Ber}(p_-)^{\otimes n},
+\mathrm{Ber}(p_+)^{\otimes n})$.
+\end{proposition}
+\begin{proof}
+Under $p_-$, LOW has probability at most its probability under $p_+$ plus
+$\Delta_n$, hence at most $\alpha+\Delta_n$; HIGH has probability at most
+$\alpha$. Interchange the sides for the other conclusion.
+Couple each Bernoulli pair with a common uniform variate; the probability of
+a mismatched pair is $2\varepsilon$.
+Therefore $\Delta_n\le1-(1-2\varepsilon)^n\le2n\varepsilon$, also at most one.
+For fixed $n$, each event probability is a polynomial in $p$, even with
+randomized decisions. Continuity as $p\downarrow\tau$ gives
+$P_\tau(\mathrm{LOW})\le\alpha$, so conclusive probability at the threshold
+is at most $2\alpha$. No fixed-$n$ rule satisfying the error guarantees
+has conclusive probability uniformly greater than $2\alpha$ over every
+positive margin.
+\end{proof}
+LOW/HIGH mean scientific conclusions. Missing-evidence BLOCK and RWR count
+as unresolved risk, not successful scientific resolution. This result does
+not forbid increasing samples for each fixed margin, exact analytic
+certificates, or useful power at a registered positive margin.
+
+\subsection{G3: finite coverage and invisible channels}
+\begin{proof}
+Proposition~\ref{prop:scope} proves the finite declared check, including its
+residual cell. For the unqualified claim take one world with only a declared
+constant output and another with the same supplied records but an unobserved
+log revealing $S$. The verifier's observation laws coincide while risks differ.
+Apply Theorem~\ref{thm:observations}. Externally justified closed-world
+instrumentation may distinguish the worlds; the impossibility no longer
+applies when its observation premise is removed. Partition tests alone do
+not verify such instrumentation or the reasons for exclusions.
+\end{proof}
+
+\subsection{G4: marginal equivalence does not imply joint equivalence}
+\begin{proof}
+In the safe world let $Y_1,Y_2$ be independent uniform bits independent of $S$.
+In the unsafe world take independent uniform $S,R$ and
+$(Y_1,Y_2)=(R,S\oplus R)$. In both worlds each conditional marginal given
+$S=s$ is uniform. Marginal observation channels, not only marginal success
+scores, therefore agree. The safe joint channel is independent of $S$, giving
+value $1/2$; the unsafe joint pair determines $S=Y_1\oplus Y_2$, giving one.
+Consequently a universal joint upper rule using only these marginals cannot
+return a ceiling below one for this pair.
+Full joint observation distinguishes the worlds and exact joint Bayes
+evaluation recovers their values. A valid joint garbling certificate invokes
+Theorem~\ref{thm:transfer}; no such conclusion follows from marginal garbling
+certificates alone.
+\end{proof}
+
+\subsection{G5: TV sharpness and the posterior obstruction}
+\begin{proof}
+For a uniform bit, compare a channel whose binary output is uniform and independent of
+$S$ with a channel that answers $S$ correctly with probability $1/2+\eta$,
+$0\le\eta\le1/2$. Row TV is $\eta$ and guessing values are $1/2$ and
+$1/2+\eta$, attaining the additive bound with identity $Q$.
+
+Separately, let the assessed channel always emit $\bot$, and let the released
+channel emit $S$ with probability $\varepsilon>0$, otherwise $\bot$.
+Row TV is $\varepsilon$ and expected guessing is $1/2+\varepsilon/2$,
+consistent with the TV theorem. Conditional on either revealing output,
+posterior success is one for every positive $\varepsilon$.
+Thus no uniformly nontrivial maximum-posterior ceiling follows from arbitrarily
+small row TV alone. A likelihood-ratio constraint or other suitable
+observation-specific premise would be additional information, not a consequence
+of the expected-gain transfer theorem.
+\end{proof}
+
+\subsection{G6: acceptance noninterference}
+\begin{proof}
+In A4, $B$ is evaluated before acceptance. If evidence is missing, invalid,
+stale, contradictory or a floor violates tolerance, all later acceptance
+branches are unreachable. For a valid crossing, acceptance writes a different
+disposition without changing $L,U,\tau$ or the channel. Choose any
+$\theta\in(\tau,U]$ compatible with the interval: RWR can coexist with
+excessive true risk. At $[0.4,0.8]$, $\tau=0.6$, both $\theta=0.5$ and
+$\theta=0.7$ fit. The same interval therefore supports neither a safety proof
+nor an inevitable violation. A4's strict feasibility and A5's conjunctive
+gates separately exclude override of a mandatory non-CLEAR cell.
+The finite-grid experiment checks a concrete reducer implementation, not
+all parsing, signing, authority or state-transition behavior.
+\end{proof}
+
+\subsection{G7: authentic false accounts}
+\begin{proof}
+Fix an ideal authenticated record claiming interval $[1/2,11/20]$ at
+$\tau=3/5$. Its signer is authorized and its bytes are unchanged.
+One world implements a constant-output channel of value $1/2$; another
+implements a revealing channel of value one but its signer reports the same
+account. A verifier restricted to that authenticated account has identical
+observations, so Theorem~\ref{thm:observations} applies.
+No signature was forged and the displayed interval is internally coherent.
+Semantic source replay can refute the lie only if trustworthy observed sources
+distinguish these worlds; an ideal signature by itself does not supply them.
+Trustworthy measurement, proof checking for faithfully encoded premises and
+gateway mediation are possible assumptions/repairs, not proved properties of
+arbitrary signers or organizations.
+\end{proof}

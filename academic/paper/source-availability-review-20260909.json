@@ -1,0 +1,884 @@
+{
+  "review_date": "2026-09-09",
+  "scope": "Local availability and digest check only; Git tracking does not prove publication or public access.",
+  "companion_sha256": "5f1b00e38b157fa0d6c67d3a4163c488d3a559f87fd3424268350366e0518557",
+  "sources": [
+    {
+      "source_id": "publication_validator",
+      "path": "scripts/summarize_ceiling_experiments.py",
+      "expected_sha256": "5aad8b26409619d879539c01079643101076db9dd5c3e6a9c549a87a2d67af38",
+      "local_sha256_matches": true,
+      "tracked_in_current_git_index": true,
+      "independent_public_access_verified": false
+    },
+    {
+      "source_id": "controlled",
+      "path": "reproduction/finite-channel-ceiling/results/ground-truth-report.json",
+      "expected_sha256": "62ebc17e94c726a5bad4bd084d2d84d71d0637b42380d1c7200a93900b0cefc7",
+      "local_sha256_matches": true,
+      "tracked_in_current_git_index": true,
+      "independent_public_access_verified": false
+    },
+    {
+      "source_id": "controlled_manifest",
+      "path": "reproduction/finite-channel-ceiling/results/manifest.json",
+      "expected_sha256": "7b649b9644301b137b781c1921c0685c95341e778ed7dd24dec4be9462511be1",
+      "local_sha256_matches": true,
+      "tracked_in_current_git_index": true,
+      "independent_public_access_verified": false
+    },
+    {
+      "source_id": "model_v2",
+      "path": "reproduction/model-backed-finite-channel/results/v2/model-backed-finite-channel-report.json",
+      "expected_sha256": "87f46778b65a23a3fc4b8a3187dd211a747481640ea86ad6279be82ed750bd89",
+      "local_sha256_matches": true,
+      "tracked_in_current_git_index": true,
+      "independent_public_access_verified": false
+    },
+    {
+      "source_id": "model_v2_manifest",
+      "path": "reproduction/model-backed-finite-channel/results/v2/manifest.json",
+      "expected_sha256": "096eb84a1b4c678fdbb1417931728c888e6076d167b1269f0f487fc65122a76c",
+      "local_sha256_matches": true,
+      "tracked_in_current_git_index": true,
+      "independent_public_access_verified": false
+    },
+    {
+      "source_id": "model_v3",
+      "path": "reproduction/model-backed-finite-channel/results/v3/model-backed-finite-channel-report.json",
+      "expected_sha256": "3645f695eaf3bf322e44ff6ea143b11894d3dbe5650b3d318ffd1df9c2f0b050",
+      "local_sha256_matches": true,
+      "tracked_in_current_git_index": true,
+      "independent_public_access_verified": false
+    },
+    {
+      "source_id": "model_v3_manifest",
+      "path": "reproduction/model-backed-finite-channel/results/v3/manifest.json",
+      "expected_sha256": "0258ad3d5415617c374176b799fd186ae3d430da2ef4e76f8a67dc10efc7de08",
+      "local_sha256_matches": true,
+      "tracked_in_current_git_index": true,
+      "independent_public_access_verified": false
+    },
+    {
+      "source_id": "model_v2_repeats_0",
+      "path": "reproduction/model-backed-finite-channel/results/v2/cnn--raw_bins/repeated-analyzer-replays.json",
+      "expected_sha256": "983a4c9ed534b288bddf31784121aed80136a4beb7647013740a8dc04eb41672",
+      "local_sha256_matches": true,
+      "tracked_in_current_git_index": true,
+      "independent_public_access_verified": false
+    },
+    {
+      "source_id": "model_v2_repeats_1",
+      "path": "reproduction/model-backed-finite-channel/results/v2/cnn--erasure_0p9/repeated-analyzer-replays.json",
+      "expected_sha256": "149fcdd29b6daf5142c5618e62ea756a5dac97c0b3db08e315daad2b547e1b3b",
+      "local_sha256_matches": true,
+      "tracked_in_current_git_index": true,
+      "independent_public_access_verified": false
+    },
+    {
+      "source_id": "model_v2_repeats_2",
+      "path": "reproduction/model-backed-finite-channel/results/v2/xgboost--raw_bins/repeated-analyzer-replays.json",
+      "expected_sha256": "496a6b8a1c39ce7f529cf260056ff9a52f33a9bece7d4eea4a10b5bd9850f686",
+      "local_sha256_matches": true,
+      "tracked_in_current_git_index": true,
+      "independent_public_access_verified": false
+    },
+    {
+      "source_id": "model_v2_repeats_3",
+      "path": "reproduction/model-backed-finite-channel/results/v2/xgboost--erasure_0p9/repeated-analyzer-replays.json",
+      "expected_sha256": "b5539e038d659353fd9ad85f7c3b00561ce3d857e798c0ac0cea0e7b4d3c599e",
+      "local_sha256_matches": true,
+      "tracked_in_current_git_index": true,
+      "independent_public_access_verified": false
+    },
+    {
+      "source_id": "model_v2_repeats_4",
+      "path": "reproduction/model-backed-finite-channel/results/v2/compact_transformer_llm_proxy--raw_bins/repeated-analyzer-replays.json",
+      "expected_sha256": "43ee918c9d9a136deeb9c293ec0466e47dd692b719a7f92c8648f582d29c4ef0",
+      "local_sha256_matches": true,
+      "tracked_in_current_git_index": true,
+      "independent_public_access_verified": false
+    },
+    {
+      "source_id": "model_v2_repeats_5",
+      "path": "reproduction/model-backed-finite-channel/results/v2/compact_transformer_llm_proxy--erasure_0p9/repeated-analyzer-replays.json",
+      "expected_sha256": "61753ff010afd22cd7ec6ed6676e4f3b60ed6b8f82e530f2c4ccb569914133df",
+      "local_sha256_matches": true,
+      "tracked_in_current_git_index": true,
+      "independent_public_access_verified": false
+    },
+    {
+      "source_id": "model_v3_repeats_0",
+      "path": "reproduction/model-backed-finite-channel/results/v3/cnn--raw_bins/repeated-analyzer-replays.json",
+      "expected_sha256": "b703f8cbf99259f26a3505785ec9348dab7b10beebcb3a5a02789db93e51797e",
+      "local_sha256_matches": true,
+      "tracked_in_current_git_index": true,
+      "independent_public_access_verified": false
+    },
+    {
+      "source_id": "model_v3_repeats_1",
+      "path": "reproduction/model-backed-finite-channel/results/v3/cnn--erasure_0p9/repeated-analyzer-replays.json",
+      "expected_sha256": "9f561aaf0cd5596949ce47ea75ed1f151a6b9e056d3455c04913a7ca8388dad9",
+      "local_sha256_matches": true,
+      "tracked_in_current_git_index": true,
+      "independent_public_access_verified": false
+    },
+    {
+      "source_id": "model_v3_repeats_2",
+      "path": "reproduction/model-backed-finite-channel/results/v3/xgboost--raw_bins/repeated-analyzer-replays.json",
+      "expected_sha256": "18fb83c25c8a3021f9add7a5d121c42992f537bc589bff57f3ab332488d2f248",
+      "local_sha256_matches": true,
+      "tracked_in_current_git_index": true,
+      "independent_public_access_verified": false
+    },
+    {
+      "source_id": "model_v3_repeats_3",
+      "path": "reproduction/model-backed-finite-channel/results/v3/xgboost--erasure_0p9/repeated-analyzer-replays.json",
+      "expected_sha256": "d444e1026ca3bf8abde13cc9bfdff578291dbaf5c6ad8fd69dfce946c550a6c8",
+      "local_sha256_matches": true,
+      "tracked_in_current_git_index": true,
+      "independent_public_access_verified": false
+    },
+    {
+      "source_id": "model_v3_repeats_4",
+      "path": "reproduction/model-backed-finite-channel/results/v3/compact_transformer_llm_proxy--raw_bins/repeated-analyzer-replays.json",
+      "expected_sha256": "99892e87a4009c71f12f3d4bef8bdeb8b570925b0810f5b71d47ac69e67c92b4",
+      "local_sha256_matches": true,
+      "tracked_in_current_git_index": true,
+      "independent_public_access_verified": false
+    },
+    {
+      "source_id": "model_v3_repeats_5",
+      "path": "reproduction/model-backed-finite-channel/results/v3/compact_transformer_llm_proxy--erasure_0p9/repeated-analyzer-replays.json",
+      "expected_sha256": "b6d9406e64b8ab2c69bc6223348e776b5480649b22b5c02c713427cff6e5e64e",
+      "local_sha256_matches": true,
+      "tracked_in_current_git_index": true,
+      "independent_public_access_verified": false
+    },
+    {
+      "source_id": "hook_audit",
+      "path": "docs/real-data-training-hook-audit-2026-09-02.md",
+      "expected_sha256": "3639cfca96788f4590c25f119b24f50cda065cd481f6979ab78d7a1c8dbe5075",
+      "local_sha256_matches": true,
+      "tracked_in_current_git_index": true,
+      "independent_public_access_verified": false
+    },
+    {
+      "source_id": "local_scaling_manifest",
+      "path": "output/public-data-validation-20260906/RESULTS-MANIFEST.json",
+      "expected_sha256": "d917fc48ba71c76e44720b400671c74f71b6eec81a85b79b5ad10701b5ad75fe",
+      "local_sha256_matches": true,
+      "tracked_in_current_git_index": false,
+      "independent_public_access_verified": false
+    },
+    {
+      "source_id": "local_tests",
+      "path": "output/public-data-validation-20260906/focused-tests/results.json",
+      "expected_sha256": "729041cbeae65d293885f4a4aaf95db861e0c6b523715be5fea191517d70888a",
+      "local_sha256_matches": true,
+      "tracked_in_current_git_index": false,
+      "independent_public_access_verified": false
+    },
+    {
+      "source_id": "local_tree",
+      "path": "output/public-data-validation-20260906/tree/report.json",
+      "expected_sha256": "085f836007248908003e955532eb554f96d5944a6964d6abd41d3c77b9fb7cf1",
+      "local_sha256_matches": true,
+      "tracked_in_current_git_index": false,
+      "independent_public_access_verified": false
+    },
+    {
+      "source_id": "local_tree_repeats",
+      "path": "output/public-data-validation-20260906/tree/isolated-timing-replay/report.json",
+      "expected_sha256": "aae45246dd3484cfa6e261db19dc7d721ba83abd450b1945fb2683f2908e7b09",
+      "local_sha256_matches": true,
+      "tracked_in_current_git_index": false,
+      "independent_public_access_verified": false
+    },
+    {
+      "source_id": "local_vision",
+      "path": "output/public-data-validation-20260906/vision/results/report.json",
+      "expected_sha256": "5d5384853d4c7b23194a276208c68eaf02006aaf6a83fc288c76bbb3932b9a52",
+      "local_sha256_matches": true,
+      "tracked_in_current_git_index": false,
+      "independent_public_access_verified": false
+    },
+    {
+      "source_id": "local_llm",
+      "path": "output/public-data-validation-20260906/llm/scaling-run-v2/report.json",
+      "expected_sha256": "4521cbbaae6dc8d3dbfc173b775b78939f44f21f51db0b231d35b211cea9e6fd",
+      "local_sha256_matches": true,
+      "tracked_in_current_git_index": false,
+      "independent_public_access_verified": false
+    },
+    {
+      "source_id": "local_support_00",
+      "path": "output/public-data-validation-20260906/METHODS.md",
+      "expected_sha256": "21e18dc91c7d1688ebf4595a82194c04d29a0291200f24b61cc999e6acf4947f",
+      "local_sha256_matches": true,
+      "tracked_in_current_git_index": false,
+      "independent_public_access_verified": false
+    },
+    {
+      "source_id": "local_support_01",
+      "path": "output/public-data-validation-20260906/llm/scaling-run-v2.verification.json",
+      "expected_sha256": "faff1205029cef9b79ecd2da6be82ac15778d5d84ad93e5f7bbdda3bfb3aef16",
+      "local_sha256_matches": true,
+      "tracked_in_current_git_index": false,
+      "independent_public_access_verified": false
+    },
+    {
+      "source_id": "local_support_02",
+      "path": "output/public-data-validation-20260906/vision/results/verification.json",
+      "expected_sha256": "15da4c100b4128cda5b9e75d335093c446e4d8edd7d96d94019db7cf87d531fd",
+      "local_sha256_matches": true,
+      "tracked_in_current_git_index": false,
+      "independent_public_access_verified": false
+    },
+    {
+      "source_id": "local_support_03",
+      "path": "output/public-data-validation-20260906/tree/isolated-timing-replay/verification.json",
+      "expected_sha256": "c31ac1171511a37ab3ae7d4edb527b6c3fe8f3fbd7ce2c7bd57c444e05b41284",
+      "local_sha256_matches": true,
+      "tracked_in_current_git_index": false,
+      "independent_public_access_verified": false
+    },
+    {
+      "source_id": "local_support_04",
+      "path": "output/public-data-validation-20260906/tree/plan.json",
+      "expected_sha256": "558597d588b602750772cb7ba55eb01557c95006c3333c4a28734a2d23af8bfa",
+      "local_sha256_matches": true,
+      "tracked_in_current_git_index": false,
+      "independent_public_access_verified": false
+    },
+    {
+      "source_id": "local_support_05",
+      "path": "output/public-data-validation-20260906/tree/run_tree_scalability.py",
+      "expected_sha256": "7c55eee8aaae7c630b0798584ca35d95c645c16fb736e5ccfbe98d7a4c72bdc3",
+      "local_sha256_matches": true,
+      "tracked_in_current_git_index": false,
+      "independent_public_access_verified": false
+    },
+    {
+      "source_id": "local_support_06",
+      "path": "output/public-data-validation-20260906/tree/timing-replay-plan.json",
+      "expected_sha256": "105c203a9d63fea43d56c5b32865fdf1a1f6052a928d3e38b48977c7078a8ab9",
+      "local_sha256_matches": true,
+      "tracked_in_current_git_index": false,
+      "independent_public_access_verified": false
+    },
+    {
+      "source_id": "local_support_07",
+      "path": "output/public-data-validation-20260906/tree/run_timing_replay.py",
+      "expected_sha256": "b694ee60020c6d154cbc3019f4ab7b2df8b0a2463e2663a604e0ed66532624b3",
+      "local_sha256_matches": true,
+      "tracked_in_current_git_index": false,
+      "independent_public_access_verified": false
+    },
+    {
+      "source_id": "local_support_08",
+      "path": "output/public-data-validation-20260906/vision/plan.json",
+      "expected_sha256": "7b041ba6c17b9c4baae7df85f29f9b60fed2c8a08162cc47f41b156763c7b032",
+      "local_sha256_matches": true,
+      "tracked_in_current_git_index": false,
+      "independent_public_access_verified": false
+    },
+    {
+      "source_id": "local_support_09",
+      "path": "output/public-data-validation-20260906/vision/run_scalability.py",
+      "expected_sha256": "70948235ea6a4e366f382ff96e127ca133c3b0e12b10175b90ef6cb0b46dac92",
+      "local_sha256_matches": true,
+      "tracked_in_current_git_index": false,
+      "independent_public_access_verified": false
+    },
+    {
+      "source_id": "local_support_10",
+      "path": "output/public-data-validation-20260906/llm/scaling-plan.json",
+      "expected_sha256": "3d62c72db4d48db390b917cb25a66225fbde51e35b50916a55237836c01c0ca2",
+      "local_sha256_matches": true,
+      "tracked_in_current_git_index": false,
+      "independent_public_access_verified": false
+    },
+    {
+      "source_id": "local_support_11",
+      "path": "output/public-data-validation-20260906/llm/run_gpt2_qwen_scaling.py",
+      "expected_sha256": "1205f26f01fc0878522d5b5451cadf7c9b070359e2c95cca0f78161f88b329dd",
+      "local_sha256_matches": true,
+      "tracked_in_current_git_index": false,
+      "independent_public_access_verified": false
+    },
+    {
+      "source_id": "local_support_12",
+      "path": "output/public-data-validation-20260906/execution/final-package-lock/output.log",
+      "expected_sha256": "3a2339eb73b8d62bfc42d3e311fac14eaeedc52e0475f7e9474410d071b4f439",
+      "local_sha256_matches": true,
+      "tracked_in_current_git_index": false,
+      "independent_public_access_verified": false
+    },
+    {
+      "source_id": "local_support_13",
+      "path": "output/public-data-validation-20260906/execution/final-package-check/output.log",
+      "expected_sha256": "672aec65a45bed50e70229c70934a7eebf0462595c459b83023027645d57cccf",
+      "local_sha256_matches": true,
+      "tracked_in_current_git_index": false,
+      "independent_public_access_verified": false
+    },
+    {
+      "source_id": "local_support_14",
+      "path": "output/public-data-validation-20260906/vision/training.log",
+      "expected_sha256": "70d5098b0437d7f914b154b7b895282aa623bbac1aa249537de44d50c53826d7",
+      "local_sha256_matches": true,
+      "tracked_in_current_git_index": false,
+      "independent_public_access_verified": false
+    },
+    {
+      "source_id": "local_support_15",
+      "path": "output/public-data-validation-20260906/vision/training-attempt2.log",
+      "expected_sha256": "1d640c78ff682cbed3616837345059543612594fdd40f45f26c6d64b3687cdd3",
+      "local_sha256_matches": true,
+      "tracked_in_current_git_index": false,
+      "independent_public_access_verified": false
+    },
+    {
+      "source_id": "llm_completion",
+      "path": "output/public-data-validation-20260906/llm/scaling-run-v2/RUN_COMPLETE.json",
+      "expected_sha256": "3865c8c8e041c5d149e2cd8c191ee8f7505e9c44de6c0811a2be4629c907174d",
+      "local_sha256_matches": true,
+      "tracked_in_current_git_index": false,
+      "independent_public_access_verified": false
+    },
+    {
+      "source_id": "llm_complete_file_00",
+      "path": "output/public-data-validation-20260906/llm/scaling-run-v2/cell-gpt2-1024.json",
+      "expected_sha256": "8475e36d12efc7601c4e0ae8cd11e2353e3d584cce5084bd1f56ffef653ff4f1",
+      "local_sha256_matches": true,
+      "tracked_in_current_git_index": false,
+      "independent_public_access_verified": false
+    },
+    {
+      "source_id": "llm_complete_file_01",
+      "path": "output/public-data-validation-20260906/llm/scaling-run-v2/cell-gpt2-4096.json",
+      "expected_sha256": "08293c743fc1b8590d76e6cf5ed158b535bf3a84ba402ed4d3865555424636e2",
+      "local_sha256_matches": true,
+      "tracked_in_current_git_index": false,
+      "independent_public_access_verified": false
+    },
+    {
+      "source_id": "llm_complete_file_02",
+      "path": "output/public-data-validation-20260906/llm/scaling-run-v2/cell-gpt2-8192.json",
+      "expected_sha256": "a972b790b786316b73a75300334d48672c67c82f87d9785eb008a0c4175e3963",
+      "local_sha256_matches": true,
+      "tracked_in_current_git_index": false,
+      "independent_public_access_verified": false
+    },
+    {
+      "source_id": "llm_complete_file_03",
+      "path": "output/public-data-validation-20260906/llm/scaling-run-v2/cell-qwen2_5_0_5b-1024.json",
+      "expected_sha256": "6ed74d72d28b19fed5981c6b08595181b010688d51aeafe64574d3b8c979cca0",
+      "local_sha256_matches": true,
+      "tracked_in_current_git_index": false,
+      "independent_public_access_verified": false
+    },
+    {
+      "source_id": "llm_complete_file_04",
+      "path": "output/public-data-validation-20260906/llm/scaling-run-v2/cell-qwen2_5_0_5b-4096.json",
+      "expected_sha256": "659af293e6597a8c407f3395c8b3b5a0d4967885deefa938401c9ac683cf9164",
+      "local_sha256_matches": true,
+      "tracked_in_current_git_index": false,
+      "independent_public_access_verified": false
+    },
+    {
+      "source_id": "llm_complete_file_05",
+      "path": "output/public-data-validation-20260906/llm/scaling-run-v2/cell-qwen2_5_0_5b-8192.json",
+      "expected_sha256": "5de61524c201d2be1ae1cd31f311f4cc169a52e48bd249446ed458ef6a1be86f",
+      "local_sha256_matches": true,
+      "tracked_in_current_git_index": false,
+      "independent_public_access_verified": false
+    },
+    {
+      "source_id": "llm_complete_file_06",
+      "path": "output/public-data-validation-20260906/llm/scaling-run-v2/FROZEN_COHORTS.json",
+      "expected_sha256": "07c19d2aa32ca7ce5be04dc381ae27af43ad439329d875d61f5f7cfd431783c1",
+      "local_sha256_matches": true,
+      "tracked_in_current_git_index": false,
+      "independent_public_access_verified": false
+    },
+    {
+      "source_id": "llm_complete_file_07",
+      "path": "output/public-data-validation-20260906/llm/scaling-run-v2/PRE_MEASUREMENT.json",
+      "expected_sha256": "aa7c31f56572a3d799b3629e5e417a6653317218aacefb7c632951cb835532bb",
+      "local_sha256_matches": true,
+      "tracked_in_current_git_index": false,
+      "independent_public_access_verified": false
+    },
+    {
+      "source_id": "llm_complete_file_08",
+      "path": "output/public-data-validation-20260906/llm/scaling-run-v2/reference-gpt2.json",
+      "expected_sha256": "4880c8faf3e404ca7a950492f288dead2c3c777ae065c59d9a68cc7efb595169",
+      "local_sha256_matches": true,
+      "tracked_in_current_git_index": false,
+      "independent_public_access_verified": false
+    },
+    {
+      "source_id": "llm_complete_file_09",
+      "path": "output/public-data-validation-20260906/llm/scaling-run-v2/reference-qwen2_5_0_5b.json",
+      "expected_sha256": "2d2e7015b33e33c81da87e9e1bcc2d274ccbbfd62e20ef72a7856aee4cdcf627",
+      "local_sha256_matches": true,
+      "tracked_in_current_git_index": false,
+      "independent_public_access_verified": false
+    },
+    {
+      "source_id": "llm_complete_file_10",
+      "path": "output/public-data-validation-20260906/llm/scaling-run-v2/report.json",
+      "expected_sha256": "4521cbbaae6dc8d3dbfc173b775b78939f44f21f51db0b231d35b211cea9e6fd",
+      "local_sha256_matches": true,
+      "tracked_in_current_git_index": false,
+      "independent_public_access_verified": false
+    },
+    {
+      "source_id": "vision_verification",
+      "path": "output/public-data-validation-20260906/vision/results/verification.json",
+      "expected_sha256": "15da4c100b4128cda5b9e75d335093c446e4d8edd7d96d94019db7cf87d531fd",
+      "local_sha256_matches": true,
+      "tracked_in_current_git_index": false,
+      "independent_public_access_verified": false
+    },
+    {
+      "source_id": "tree_timing_verification",
+      "path": "output/public-data-validation-20260906/tree/isolated-timing-replay/verification.json",
+      "expected_sha256": "c31ac1171511a37ab3ae7d4edb527b6c3fe8f3fbd7ce2c7bd57c444e05b41284",
+      "local_sha256_matches": true,
+      "tracked_in_current_git_index": false,
+      "independent_public_access_verified": false
+    },
+    {
+      "source_id": "llm_verification",
+      "path": "output/public-data-validation-20260906/llm/scaling-run-v2.verification.json",
+      "expected_sha256": "faff1205029cef9b79ecd2da6be82ac15778d5d84ad93e5f7bbdda3bfb3aef16",
+      "local_sha256_matches": true,
+      "tracked_in_current_git_index": false,
+      "independent_public_access_verified": false
+    },
+    {
+      "source_id": "cli_summary",
+      "path": "output/mrap-e2e-20260907/benchmark/summary.json",
+      "expected_sha256": "bcb99ce9cedfe4bb2383b3d362f3665ba7b946d0faeabdc6f08c6d7de3bcd988",
+      "local_sha256_matches": true,
+      "tracked_in_current_git_index": false,
+      "independent_public_access_verified": false
+    },
+    {
+      "source_id": "cli_plan",
+      "path": "output/mrap-e2e-20260907/benchmark/plan.json",
+      "expected_sha256": "04efe52550fa66da5efbaa695a52206cbcc1c3ffc94668912d68562f4664d329",
+      "local_sha256_matches": true,
+      "tracked_in_current_git_index": false,
+      "independent_public_access_verified": false
+    },
+    {
+      "source_id": "cli_verification",
+      "path": "output/mrap-e2e-20260907/benchmark/verification.json",
+      "expected_sha256": "6c1b889e7317e75da1579380c8f62ff683239a312a3d91bce4d33bec77dea773",
+      "local_sha256_matches": true,
+      "tracked_in_current_git_index": false,
+      "independent_public_access_verified": false
+    },
+    {
+      "source_id": "cli_run_rep-1-baseline",
+      "path": "output/mrap-e2e-20260907/benchmark/timed-runs/rep-1-baseline/result.json",
+      "expected_sha256": "a5ed9f6dbdb1b0213693c4f9b9d6f67e2fac4ad94cdd4980a8f80e2df909cf69",
+      "local_sha256_matches": true,
+      "tracked_in_current_git_index": false,
+      "independent_public_access_verified": false
+    },
+    {
+      "source_id": "cli_run_rep-1-candidates-8",
+      "path": "output/mrap-e2e-20260907/benchmark/timed-runs/rep-1-candidates-8/result.json",
+      "expected_sha256": "715897316983deec742a4383eb5e7c4c456f579b84ef68fe90fa0824d0ff29f7",
+      "local_sha256_matches": true,
+      "tracked_in_current_git_index": false,
+      "independent_public_access_verified": false
+    },
+    {
+      "source_id": "cli_run_rep-1-candidates-32",
+      "path": "output/mrap-e2e-20260907/benchmark/timed-runs/rep-1-candidates-32/result.json",
+      "expected_sha256": "40ed71ca2539b47c18ebb64a657daaeb36709181e2d16d46c4ac44c171fcaff7",
+      "local_sha256_matches": true,
+      "tracked_in_current_git_index": false,
+      "independent_public_access_verified": false
+    },
+    {
+      "source_id": "cli_run_rep-1-threats-16",
+      "path": "output/mrap-e2e-20260907/benchmark/timed-runs/rep-1-threats-16/result.json",
+      "expected_sha256": "71dd9977e82c7cabb1b6946daf28539da5ba9c20fdf3ce8e89d60b8429301835",
+      "local_sha256_matches": true,
+      "tracked_in_current_git_index": false,
+      "independent_public_access_verified": false
+    },
+    {
+      "source_id": "cli_run_rep-1-threats-64",
+      "path": "output/mrap-e2e-20260907/benchmark/timed-runs/rep-1-threats-64/result.json",
+      "expected_sha256": "c7691172bd7a289b35d4add19d4ee0174879f707c84d31ac6aafb1057a5fa707",
+      "local_sha256_matches": true,
+      "tracked_in_current_git_index": false,
+      "independent_public_access_verified": false
+    },
+    {
+      "source_id": "cli_run_rep-1-artifact_mib-16",
+      "path": "output/mrap-e2e-20260907/benchmark/timed-runs/rep-1-artifact_mib-16/result.json",
+      "expected_sha256": "0587e65e6fc1768696ab37796d7c37f5afcf0269b9680cc6c5db644e75b9c8fa",
+      "local_sha256_matches": true,
+      "tracked_in_current_git_index": false,
+      "independent_public_access_verified": false
+    },
+    {
+      "source_id": "cli_run_rep-1-artifact_mib-512",
+      "path": "output/mrap-e2e-20260907/benchmark/timed-runs/rep-1-artifact_mib-512/result.json",
+      "expected_sha256": "e6d9fc183c2570d4faa7a50d8a84ed5003c43617db1ff89ddc4d9c21d0c1f172",
+      "local_sha256_matches": true,
+      "tracked_in_current_git_index": false,
+      "independent_public_access_verified": false
+    },
+    {
+      "source_id": "cli_run_rep-1-prefix_runs-32",
+      "path": "output/mrap-e2e-20260907/benchmark/timed-runs/rep-1-prefix_runs-32/result.json",
+      "expected_sha256": "a9fb524e3472a4a7e9949f6553e561de2faffb7ef0513b38fa8db71d8aab9b17",
+      "local_sha256_matches": true,
+      "tracked_in_current_git_index": false,
+      "independent_public_access_verified": false
+    },
+    {
+      "source_id": "cli_run_rep-1-prefix_runs-128",
+      "path": "output/mrap-e2e-20260907/benchmark/timed-runs/rep-1-prefix_runs-128/result.json",
+      "expected_sha256": "148eb14e33b769a2ec5cb9f863df760e1a724a9331913710ea6eaacb6b8b99a0",
+      "local_sha256_matches": true,
+      "tracked_in_current_git_index": false,
+      "independent_public_access_verified": false
+    },
+    {
+      "source_id": "cli_run_rep-1-monitoring_events-64",
+      "path": "output/mrap-e2e-20260907/benchmark/timed-runs/rep-1-monitoring_events-64/result.json",
+      "expected_sha256": "70c7ccbc2b8015707d61eca92b246ae06de36cf88878bba281642fe89f01be40",
+      "local_sha256_matches": true,
+      "tracked_in_current_git_index": false,
+      "independent_public_access_verified": false
+    },
+    {
+      "source_id": "cli_run_rep-1-monitoring_events-256",
+      "path": "output/mrap-e2e-20260907/benchmark/timed-runs/rep-1-monitoring_events-256/result.json",
+      "expected_sha256": "ec01e227236f8ab768966e72489edc0167a7cf59873ce8c9380640e40e940be3",
+      "local_sha256_matches": true,
+      "tracked_in_current_git_index": false,
+      "independent_public_access_verified": false
+    },
+    {
+      "source_id": "cli_run_rep-2-threats-16",
+      "path": "output/mrap-e2e-20260907/benchmark/timed-runs/rep-2-threats-16/result.json",
+      "expected_sha256": "6dfc268acbc3fa97b7adb7523f72e3e24e2ce3ff66952dd9dcfca67e8286cd7d",
+      "local_sha256_matches": true,
+      "tracked_in_current_git_index": false,
+      "independent_public_access_verified": false
+    },
+    {
+      "source_id": "cli_run_rep-2-candidates-32",
+      "path": "output/mrap-e2e-20260907/benchmark/timed-runs/rep-2-candidates-32/result.json",
+      "expected_sha256": "62b266c84160a609c56f362fcdfc4233ad0fa8c0f89e2ab79cf6c314b7e83d6f",
+      "local_sha256_matches": true,
+      "tracked_in_current_git_index": false,
+      "independent_public_access_verified": false
+    },
+    {
+      "source_id": "cli_run_rep-2-candidates-8",
+      "path": "output/mrap-e2e-20260907/benchmark/timed-runs/rep-2-candidates-8/result.json",
+      "expected_sha256": "02fe8e813c6fe3a9430a68a18e1a130649ed6e21eb09930b917b934304408796",
+      "local_sha256_matches": true,
+      "tracked_in_current_git_index": false,
+      "independent_public_access_verified": false
+    },
+    {
+      "source_id": "cli_run_rep-2-baseline",
+      "path": "output/mrap-e2e-20260907/benchmark/timed-runs/rep-2-baseline/result.json",
+      "expected_sha256": "3e81873ccb713e222660ea40b3766e8eca136e52f4e2c99426336fbb7442bc45",
+      "local_sha256_matches": true,
+      "tracked_in_current_git_index": false,
+      "independent_public_access_verified": false
+    },
+    {
+      "source_id": "cli_run_rep-2-monitoring_events-256",
+      "path": "output/mrap-e2e-20260907/benchmark/timed-runs/rep-2-monitoring_events-256/result.json",
+      "expected_sha256": "18eb7f732ddda9e58958f8654d8947456d7babcbf5dba7d81fa4ae1e0e745751",
+      "local_sha256_matches": true,
+      "tracked_in_current_git_index": false,
+      "independent_public_access_verified": false
+    },
+    {
+      "source_id": "cli_run_rep-2-monitoring_events-64",
+      "path": "output/mrap-e2e-20260907/benchmark/timed-runs/rep-2-monitoring_events-64/result.json",
+      "expected_sha256": "1c1e6e8c82563b98626e920c1dc58901aec15497ae22601a77d6a43c11f3e4e2",
+      "local_sha256_matches": true,
+      "tracked_in_current_git_index": false,
+      "independent_public_access_verified": false
+    },
+    {
+      "source_id": "cli_run_rep-2-prefix_runs-128",
+      "path": "output/mrap-e2e-20260907/benchmark/timed-runs/rep-2-prefix_runs-128/result.json",
+      "expected_sha256": "d87ad825554ca3d86c26d6434b48f3daf848371dd68ab8ec9bf3d35b898696be",
+      "local_sha256_matches": true,
+      "tracked_in_current_git_index": false,
+      "independent_public_access_verified": false
+    },
+    {
+      "source_id": "cli_run_rep-2-prefix_runs-32",
+      "path": "output/mrap-e2e-20260907/benchmark/timed-runs/rep-2-prefix_runs-32/result.json",
+      "expected_sha256": "8ac514d101dfbf74e245c952c9685032d00ad8c6d216da1a6bfa565ed46b2494",
+      "local_sha256_matches": true,
+      "tracked_in_current_git_index": false,
+      "independent_public_access_verified": false
+    },
+    {
+      "source_id": "cli_run_rep-2-artifact_mib-512",
+      "path": "output/mrap-e2e-20260907/benchmark/timed-runs/rep-2-artifact_mib-512/result.json",
+      "expected_sha256": "87daa5a324d1875d0ad0a482477ef4ca66b20bec9801fdff0d097412dfe780e8",
+      "local_sha256_matches": true,
+      "tracked_in_current_git_index": false,
+      "independent_public_access_verified": false
+    },
+    {
+      "source_id": "cli_run_rep-2-artifact_mib-16",
+      "path": "output/mrap-e2e-20260907/benchmark/timed-runs/rep-2-artifact_mib-16/result.json",
+      "expected_sha256": "a2af9c7bcb8fa14e1214cbdcd37fb678be7ce20ffc1eb4e370ccfbe49f7d1425",
+      "local_sha256_matches": true,
+      "tracked_in_current_git_index": false,
+      "independent_public_access_verified": false
+    },
+    {
+      "source_id": "cli_run_rep-2-threats-64",
+      "path": "output/mrap-e2e-20260907/benchmark/timed-runs/rep-2-threats-64/result.json",
+      "expected_sha256": "0dae970c3cd357631f4446ad82ccfb44901b2cd8211da048ed7dbb9e4d959f5d",
+      "local_sha256_matches": true,
+      "tracked_in_current_git_index": false,
+      "independent_public_access_verified": false
+    },
+    {
+      "source_id": "cli_run_rep-3-prefix_runs-128",
+      "path": "output/mrap-e2e-20260907/benchmark/timed-runs/rep-3-prefix_runs-128/result.json",
+      "expected_sha256": "fd0f828b455acca26773585b4a8d1857c00ee3f8b8bf41ed59ae03fef7126cd6",
+      "local_sha256_matches": true,
+      "tracked_in_current_git_index": false,
+      "independent_public_access_verified": false
+    },
+    {
+      "source_id": "cli_run_rep-3-monitoring_events-64",
+      "path": "output/mrap-e2e-20260907/benchmark/timed-runs/rep-3-monitoring_events-64/result.json",
+      "expected_sha256": "0195c08bf421104afd7000f078919bbb0e6539c210db98c35962579fa2657851",
+      "local_sha256_matches": true,
+      "tracked_in_current_git_index": false,
+      "independent_public_access_verified": false
+    },
+    {
+      "source_id": "cli_run_rep-3-monitoring_events-256",
+      "path": "output/mrap-e2e-20260907/benchmark/timed-runs/rep-3-monitoring_events-256/result.json",
+      "expected_sha256": "ded9e1de886ba32c797e05cc65c929ee10141d5afc5412766f64f81e473c3d88",
+      "local_sha256_matches": true,
+      "tracked_in_current_git_index": false,
+      "independent_public_access_verified": false
+    },
+    {
+      "source_id": "cli_run_rep-3-baseline",
+      "path": "output/mrap-e2e-20260907/benchmark/timed-runs/rep-3-baseline/result.json",
+      "expected_sha256": "df1d6ebca102ee8da858cfed66c81d501c895f4c6d90ee04730ab91bae31549d",
+      "local_sha256_matches": true,
+      "tracked_in_current_git_index": false,
+      "independent_public_access_verified": false
+    },
+    {
+      "source_id": "cli_run_rep-3-candidates-8",
+      "path": "output/mrap-e2e-20260907/benchmark/timed-runs/rep-3-candidates-8/result.json",
+      "expected_sha256": "96b0b8e8f3632efc6ae96e908128a39732eeff3800dfcaf5c7f4d2b344abfcf7",
+      "local_sha256_matches": true,
+      "tracked_in_current_git_index": false,
+      "independent_public_access_verified": false
+    },
+    {
+      "source_id": "cli_run_rep-3-candidates-32",
+      "path": "output/mrap-e2e-20260907/benchmark/timed-runs/rep-3-candidates-32/result.json",
+      "expected_sha256": "b82a390da9073f38c14d5fdc2fb90e287ecadb4519ad175341475d5d503184b5",
+      "local_sha256_matches": true,
+      "tracked_in_current_git_index": false,
+      "independent_public_access_verified": false
+    },
+    {
+      "source_id": "cli_run_rep-3-threats-16",
+      "path": "output/mrap-e2e-20260907/benchmark/timed-runs/rep-3-threats-16/result.json",
+      "expected_sha256": "c0ccb426a4b532d878d6f5f44bc125eb00e501a6c86fa02ef4c80e3da58de664",
+      "local_sha256_matches": true,
+      "tracked_in_current_git_index": false,
+      "independent_public_access_verified": false
+    },
+    {
+      "source_id": "cli_run_rep-3-threats-64",
+      "path": "output/mrap-e2e-20260907/benchmark/timed-runs/rep-3-threats-64/result.json",
+      "expected_sha256": "38b96c4e6f3d7234001ec0c1589d5251a8249574e447d0c62289385183ff8a28",
+      "local_sha256_matches": true,
+      "tracked_in_current_git_index": false,
+      "independent_public_access_verified": false
+    },
+    {
+      "source_id": "cli_run_rep-3-artifact_mib-16",
+      "path": "output/mrap-e2e-20260907/benchmark/timed-runs/rep-3-artifact_mib-16/result.json",
+      "expected_sha256": "55ab766d197029c0c623c3ee263995388610833d6f0861d06de5aa4b4645dacd",
+      "local_sha256_matches": true,
+      "tracked_in_current_git_index": false,
+      "independent_public_access_verified": false
+    },
+    {
+      "source_id": "cli_run_rep-3-artifact_mib-512",
+      "path": "output/mrap-e2e-20260907/benchmark/timed-runs/rep-3-artifact_mib-512/result.json",
+      "expected_sha256": "90ceb6686e798a5bfa216b55a69d01e3027ae0dc01f45355e52e88cee1369997",
+      "local_sha256_matches": true,
+      "tracked_in_current_git_index": false,
+      "independent_public_access_verified": false
+    },
+    {
+      "source_id": "cli_run_rep-3-prefix_runs-32",
+      "path": "output/mrap-e2e-20260907/benchmark/timed-runs/rep-3-prefix_runs-32/result.json",
+      "expected_sha256": "0d0c98361d2ec1d04ab1ad17fc46477349199d6ae134c30d9fd79016d5ab8e9a",
+      "local_sha256_matches": true,
+      "tracked_in_current_git_index": false,
+      "independent_public_access_verified": false
+    },
+    {
+      "source_id": "cli_memory",
+      "path": "output/mrap-e2e-20260907/benchmark/memory-summary.json",
+      "expected_sha256": "dd97b03d31b354e99ab7af7e9e26b4c5c605d5c2067acf3c24f838b7f5bb391d",
+      "local_sha256_matches": true,
+      "tracked_in_current_git_index": false,
+      "independent_public_access_verified": false
+    },
+    {
+      "source_id": "cli_memory_verification",
+      "path": "output/mrap-e2e-20260907/benchmark/memory-verification.json",
+      "expected_sha256": "987fc9d9fa6f60dfd4be7e3b11c1d10f9b2037408462da4d77df908f474cad1f",
+      "local_sha256_matches": true,
+      "tracked_in_current_git_index": false,
+      "independent_public_access_verified": false
+    },
+    {
+      "source_id": "legacy_privacy_0",
+      "path": "output/public-privacy-audit/privacy-audit-report.json",
+      "expected_sha256": "1457ded96463abb86e894821cba23872e2afc9ed2630dda249a638db4941e17c",
+      "local_sha256_matches": true,
+      "tracked_in_current_git_index": false,
+      "independent_public_access_verified": false
+    },
+    {
+      "source_id": "legacy_privacy_1",
+      "path": "output/public-privacy-audit/0aa761f3b1311a03/privacy-audit-report.json",
+      "expected_sha256": "3db597acf755d9e19729d1c20934a51457299fc08a6f14824c7fbce4188a4660",
+      "local_sha256_matches": true,
+      "tracked_in_current_git_index": false,
+      "independent_public_access_verified": false
+    },
+    {
+      "source_id": "strategic_full",
+      "path": "output/reproduction/strategic-assurance-experiment.json",
+      "expected_sha256": "3c7dffd780533d5469462d9cee837f2cdd2e9453d778f020d575f5aa2f8b378c",
+      "local_sha256_matches": true,
+      "tracked_in_current_git_index": false,
+      "independent_public_access_verified": false
+    },
+    {
+      "source_id": "strategic_smoke",
+      "path": "output/reproduction/strategic-assurance-smoke.json",
+      "expected_sha256": "98d6b7b81b5b4966bbd5e8b55f13b886a2596b9673cf7450742b38f456730207",
+      "local_sha256_matches": true,
+      "tracked_in_current_git_index": false,
+      "independent_public_access_verified": false
+    },
+    {
+      "source_id": "synthetic_workflow",
+      "path": "output/model-audit-workflow/report.json",
+      "expected_sha256": "e42fac8fbee4cedddfe4a70a516be81a5caec942b3b284a8d6954638ea0d7885",
+      "local_sha256_matches": true,
+      "tracked_in_current_git_index": false,
+      "independent_public_access_verified": false
+    },
+    {
+      "source_id": "current_software_tests",
+      "path": "output/track-split-20260907/tests-20260907T034228.335093Z/results.json",
+      "expected_sha256": "152ddbf7d291e169639d025ac26b9a838ef775d3189ea90518776a0ba00c6853",
+      "local_sha256_matches": true,
+      "tracked_in_current_git_index": false,
+      "independent_public_access_verified": false
+    },
+    {
+      "source_id": "supplementary_proof_receipt",
+      "path": "output/mrap-e2e-20260907/proof/PROOF_COMPLETE.json",
+      "expected_sha256": "441144a34ae1edf9c18bc92e4e1e4120e36fe85d6629b8b21c2da3388975f740",
+      "local_sha256_matches": true,
+      "tracked_in_current_git_index": false,
+      "independent_public_access_verified": false
+    },
+    {
+      "source_id": "proof_artifact_0",
+      "path": "output/mrap-e2e-20260907/proof/AssuranceExtension.lean",
+      "expected_sha256": "ef21135049f1c0d7e1c0b0f461bcf0ec89f686d09be26299375ce1e28cb530b2",
+      "local_sha256_matches": true,
+      "tracked_in_current_git_index": false,
+      "independent_public_access_verified": false
+    },
+    {
+      "source_id": "proof_artifact_1",
+      "path": "output/mrap-e2e-20260907/proof/verify_proof_bundle.py",
+      "expected_sha256": "866a78889915502854eee308475180395ab1b8d579f3e392821581c8459e53be",
+      "local_sha256_matches": true,
+      "tracked_in_current_git_index": false,
+      "independent_public_access_verified": false
+    },
+    {
+      "source_id": "proof_artifact_2",
+      "path": "output/mrap-e2e-20260907/proof/PROOF.md",
+      "expected_sha256": "45177fc0472960b651a1b2a35af1787032083b9113c79462382640ea8d329cc6",
+      "local_sha256_matches": true,
+      "tracked_in_current_git_index": false,
+      "independent_public_access_verified": false
+    },
+    {
+      "source_id": "proof_artifact_3",
+      "path": "output/mrap-e2e-20260907/proof/attempt-20260907T011452.020108Z/verification.json",
+      "expected_sha256": "da291cd1968265ac623a37983e4d3bd1f65fc2e9d126c4cc44498be22a0c1d4e",
+      "local_sha256_matches": true,
+      "tracked_in_current_git_index": false,
+      "independent_public_access_verified": false
+    },
+    {
+      "source_id": "proof_artifact_4",
+      "path": "output/mrap-e2e-20260907/proof/attempt-20260907T011452.020108Z/version.log",
+      "expected_sha256": "65470d5bb380149f69f24114f6154dde3a8c16c3ebc5ee85ce6e1400aa1f6d3b",
+      "local_sha256_matches": true,
+      "tracked_in_current_git_index": false,
+      "independent_public_access_verified": false
+    },
+    {
+      "source_id": "proof_artifact_5",
+      "path": "output/mrap-e2e-20260907/proof/attempt-20260907T011452.020108Z/existing-formal-wrapper.log",
+      "expected_sha256": "dbc2fa18989bf7f0af0b9f096ac9efddefdf31e473d237f0efaa986c34d833f9",
+      "local_sha256_matches": true,
+      "tracked_in_current_git_index": false,
+      "independent_public_access_verified": false
+    },
+    {
+      "source_id": "proof_artifact_6",
+      "path": "output/mrap-e2e-20260907/proof/attempt-20260907T011452.020108Z/extension-kernel-check.log",
+      "expected_sha256": "1b05765b3892ec2dcad5d9ac2e889ecfdcf5967675614bddeaa161b073243164",
+      "local_sha256_matches": true,
+      "tracked_in_current_git_index": false,
+      "independent_public_access_verified": false
+    }
+  ],
+  "unresolved": [
+    "Original image weights are not retained in the available study record.",
+    "Human authors must specify access rights, redaction and a portable submission artifact.",
+    "No external timestamp or independent retrieval of local historical evidence is established."
+  ]
+}

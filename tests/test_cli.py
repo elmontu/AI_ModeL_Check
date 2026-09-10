@@ -162,6 +162,8 @@ class CliTests(unittest.TestCase):
             optimization["configurations"][0]["assessment"] = {
                 "report_path": str(report),
                 "report_sha256": sha256_file(report),
+                "assessment_request_path": str(request),
+                "assessment_request_sha256": sha256_file(request),
             }
             optimization["configurations"][0]["release_artifact_path"] = str(
                 ROOT / "examples" / "artifacts" / "demo-tree.json"

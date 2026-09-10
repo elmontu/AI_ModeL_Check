@@ -10,13 +10,13 @@ from model_release_assurance.knowledge import KnowledgeIndex
 ROOT = Path(__file__).resolve().parents[1]
 CASES = (
     ("What creates a model release authorization?", {"docs/model-release-assurance-protocol.md"}),
-    ("How are lower-bound attack results used?", {"docs/architecture.md", "docs/mathematical-foundations.md"}),
+    ("How are lower-bound attack results used?", {"docs/system-audit-specification.md", "docs/mathematical-foundations.md"}),
     ("What is the trusted computing base of the Lean proof?", {"docs/formal-verification.md"}),
-    ("Which controls apply to interactive LLM watermark and canary tests?", {"docs/llm-watermark-canary.md", "docs/protocol-case-studies.md"}),
+    ("Which controls apply to interactive LLM watermark and canary tests?", {"docs/llm-watermark-canary.md", "docs/system-audit-specification.md"}),
     ("What model families and modalities are covered?", {"docs/model-family-coverage.md"}),
     ("What fields are required in assessment request schema version 5?", {"schemas/assessment-request-v5.json"}),
-    ("How is the production registry and gateway expected to work?", {"docs/reference/production-roadmap.md", "docs/model-release-assurance-protocol.md", "docs/architecture.md"}),
-    ("What governance obligations cover contestation and affected parties?", {"docs/governance-core.md", "docs/model-release-assurance-protocol.md"}),
+    ("How is the production registry and gateway expected to work?", {"docs/model-release-assurance-protocol.md", "docs/system-audit-specification.md"}),
+    ("What governance obligations cover contestation and affected parties?", {"docs/system-audit-specification.md", "docs/model-release-assurance-protocol.md"}),
 )
 
 

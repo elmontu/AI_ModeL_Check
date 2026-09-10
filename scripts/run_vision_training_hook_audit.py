@@ -234,6 +234,7 @@ def read_bounded_regular_file(path: Path, max_bytes: int, label: str) -> bytes:
     _require(before.st_size <= max_bytes, f"{label} exceeds its byte cap")
 
     flags = os.O_RDONLY
+    flags |= getattr(os, "O_BINARY", 0)
     flags |= getattr(os, "O_CLOEXEC", 0)
     flags |= getattr(os, "O_NOFOLLOW", 0)
     try:

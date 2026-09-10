@@ -719,6 +719,7 @@ class AttackBatteryRegressionTests(unittest.TestCase):
             value for value in raw["threats"] if value["threat_id"] == "membership-person"
         )
         threat["decision_metric"] = "membership_tpr_at_fpr"
+        threat["finite_game"] = None
         threat["metric_parameters"] = {"target_fpr": target_fpr}
         rule = next(
             value
@@ -726,6 +727,7 @@ class AttackBatteryRegressionTests(unittest.TestCase):
             if value["threat_id"] == "membership-person"
         )
         rule["decision_metric"] = "membership_tpr_at_fpr"
+        rule["finite_game"] = None
         rule["metric_parameters"] = {"target_fpr": target_fpr}
 
         raw["analyzer_inputs"] = [

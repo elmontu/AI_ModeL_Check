@@ -4,5 +4,5 @@ contact_links:
     url: https://github.com/elmontu/AI_ModeL_Check/security/advisories/new
     about: Report vulnerabilities or decision-integrity failures privately; do not open a public issue.
   - name: Support and usage guidance
-    url: https://github.com/elmontu/AI_ModeL_Check/blob/main/SUPPORT.md
+    url: https://github.com/elmontu/AI_ModeL_Check/blob/main/CONTRIBUTING.md#support
     about: Review the supported scope and issue-routing guidance before filing a request.

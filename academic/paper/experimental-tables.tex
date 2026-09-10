@@ -1,0 +1,304 @@
+% Generated from academic/paper/experimental-data.json; do not hand-edit numeric cells.
+\newcommand{\ControlledTable}{%
+\begin{table*}[t]
+\centering\small
+\caption{Controlled primary finite channels; $n=2{,}000$ per state. Model-family names are synthetic labels.}
+\label{tab:controlled}
+\begin{tabular}{lrrrrr}
+\toprule
+Role & $R^*$ & Mean $L$ & Mean $U$ & Decision & Correct \\
+\midrule
+safe & 0.55 & 0.5008 & 0.6110 & CLEAR & 400/400 \\
+boundary & 0.65 & 0.5992 & 0.7133 & HOLD & 400/400 \\
+unsafe & 0.80 & 0.7438 & 0.8584 & BLOCK & 400/400 \\
+\bottomrule
+\end{tabular}
+\par\smallskip
+\begin{minipage}{\textwidth}\small All primary cells observed zero upper undercoverage; per-cell simultaneous upper 0.015606. HOLD at the exact threshold is expected.\end{minipage}
+\end{table*}
+}
+
+\newcommand{\ModelCeilingTable}{%
+\begin{table*}[t]
+\centering\small
+\caption{All primary model-backed intervals and repeated decisions (C/H/B). The v2 and v3 hypotheses differ.}
+\label{tab:model-ceilings}
+\begin{tabular}{lrrrrr}
+\toprule
+Version / model & Wrapper & $R^*$ & $L$ & $U$ & C/H/B \\
+\midrule
+v2 CNN & raw & 0.5150 & 0.4875 & 0.5505 & 200/0/0 \\
+v2 CNN & erased & 0.5015 & 0.4839 & 0.5299 & 200/0/0 \\
+v2 XGBoost & raw & 0.5775 & 0.5519 & 0.6157 & 200/0/0 \\
+v2 XGBoost & erased & 0.5078 & 0.4896 & 0.5372 & 200/0/0 \\
+v2 Transformer proxy & raw & 0.6114 & 0.5769 & 0.6475 & 109/91/0 \\
+v2 Transformer proxy & erased & 0.5111 & 0.4900 & 0.5409 & 200/0/0 \\
+v3 CNN & raw & 0.5125 & 0.4859 & 0.5456 & 200/0/0 \\
+v3 CNN & erased & 0.5012 & 0.4821 & 0.5288 & 200/0/0 \\
+v3 XGBoost & raw & 0.5587 & 0.5311 & 0.5896 & 200/0/0 \\
+v3 XGBoost & erased & 0.5059 & 0.4906 & 0.5367 & 200/0/0 \\
+v3 Transformer proxy & raw & 0.6129 & 0.5784 & 0.6581 & 31/169/0 \\
+v3 Transformer proxy & erased & 0.5113 & 0.4915 & 0.5432 & 200/0/0 \\
+\bottomrule
+\end{tabular}
+\par\smallskip
+\begin{minipage}{\textwidth}\small Each row has 200 repeated analyzer trials. V2 raw-proxy CLEAR lower bound 0.449431 failed its target. V3 resolution applies only at margin $\geq0.10$; no oracle risk exceeds 0.65.\end{minipage}
+\end{table*}
+}
+
+\newcommand{\PublicWorkloadTable}{%
+\begin{table*}[t]
+\centering\small
+\caption{All 17 local primary workload cells (historical source version). Raw attack floors are not adjusted to the trivial guessing strategy.}
+\label{tab:public-workloads}
+\begin{tabular}{lrrrrrrr}
+\toprule
+Model & Train rows & Train s & Privacy s & Peak memory & Utility after & Raw $L$ & $1-L$ \\
+\midrule
+XGB 300r & 50,000 & 3.45 & 0.124 & 428.9 M host & 84.89\% acc & 0.5185 & 0.4815 \\
+XGB 300r & 200,000 & 12.21 & 0.304 & 511.1 M host & 86.03\% acc & 0.4996 & 0.5004 \\
+XGB 300r & 400,000 & 44.51 & 0.551 & 602.7 M host & 86.25\% acc & 0.5017 & 0.4983 \\
+XGB 100r & 400,000 & 8.89 & 0.196 & 579.9 M host & 80.94\% acc & 0.4971 & 0.5029 \\
+XGB 600r & 400,000 & 51.84 & 1.146 & 674.8 M host & 90.42\% acc & 0.5059 & 0.4941 \\
+resnet50 & 2,700 & 7.64 & 2.00 & 1.48 G GPU & 31.98\% acc & 0.4644 & 0.5356 \\
+resnet50 & 10,800 & 28.83 & 2.02 & 1.49 G GPU & 33.76\% acc & 0.4652 & 0.5348 \\
+resnet50 & 21,600 & 58.85 & 2.09 & 1.49 G GPU & 62.07\% acc & 0.4541 & 0.5459 \\
+densenet121 & 2,700 & 12.71 & 2.18 & 1.58 G GPU & 55.20\% acc & 0.4463 & 0.5537 \\
+densenet121 & 10,800 & 49.22 & 2.11 & 1.58 G GPU & 69.93\% acc & 0.4434 & 0.5566 \\
+densenet121 & 21,600 & 97.68 & 2.26 & 1.58 G GPU & 72.02\% acc & 0.4592 & 0.5408 \\
+GPT-2 & 1,024 & 25.26 & 39.61 & 2.58 G GPU & 2.8696 NLL & 0.5585 & 0.4415 \\
+GPT-2 & 4,096 & 83.75 & 38.41 & 2.57 G GPU & 2.7938 NLL & 0.6144 & 0.3856 \\
+GPT-2 & 8,192 & 204.42 & 37.96 & 2.57 G GPU & 2.7751 NLL & 0.6381 & 0.3619 \\
+Qwen-0.5B & 1,024 & 72.58 & 118.27 & 9.42 G GPU & 2.5124 NLL & 0.8523 & 0.1477 \\
+Qwen-0.5B & 4,096 & 234.68 & 112.67 & 9.42 G GPU & 2.6304 NLL & 0.8206 & 0.1794 \\
+Qwen-0.5B & 8,192 & 504.49 & 114.52 & 9.42 G GPU & 2.6658 NLL & 0.8215 & 0.1785 \\
+\bottomrule
+\end{tabular}
+\par\smallskip
+\begin{minipage}{\textwidth}\small Every ceiling is one. Host M denotes MiB working set; GPU G denotes GiB allocated. Tasks, instrumentation and utility metrics differ. Primary tree times overlap preparation; use isolated repeats for timing comparisons.\end{minipage}
+\end{table*}
+}
+
+\newcommand{\ProtocolTimingTable}{%
+\begin{table*}[t]
+\centering\small
+\caption{Historical nine-command CLI chains: three timing repeats per profile. Corrected interpreter-memory supplement is separate, $n=1$ for six profiles.}
+\label{tab:protocol-timing}
+\begin{tabular}{lrrr}
+\toprule
+One-axis profile & Median s & Min--max s & Interpreter MiB \\
+\midrule
+Baseline & 3.487 & 3.486--3.545 & 51.52 \\
+8 candidates & 3.555 & 3.524--3.589 & not measured \\
+32 candidates & 3.675 & 3.626--3.798 & 54.50 \\
+16 threat records & 3.592 & 3.555--3.614 & not measured \\
+64 threat records & 3.727 & 3.715--3.734 & 59.92 \\
+16 MiB artifact & 3.508 & 3.280--3.558 & not measured \\
+512 MiB artifact & 4.067 & 4.053--4.096 & 51.95 \\
+68 audit events & 3.597 & 3.456--3.604 & not measured \\
+260 audit events & 3.922 & 3.890--3.940 & 54.00 \\
+72 transcript events & 3.462 & 3.433--3.625 & not measured \\
+264 transcript events & 3.854 & 3.809--3.858 & 52.39 \\
+\bottomrule
+\end{tabular}
+\par\smallskip
+\begin{minipage}{\textwidth}\small Synthetic linkage/governance fixtures; no training or live registry/gateway. Invalid launcher-memory readings are excluded here and retained separately in the companion data.\end{minipage}
+\end{table*}
+}
+
+\newcommand{\SupplementaryTables}{%
+\begin{table*}[t]
+\centering\small
+\caption{Appendix: All controlled diagnostic cells (not additional primary evidence).}
+\label{tab:diagnostics}
+\begin{tabular}{lrrrrrr}
+\toprule
+Role & $n$/state & Repeats & Mean $L$ & Mean $U$ & Width & C/H/B \\
+\midrule
+boundary & 100 & 100 & 0.4325 & 0.9506 & 0.5181 & 0/100/0 \\
+boundary & 500 & 100 & 0.5481 & 0.7781 & 0.2301 & 0/100/0 \\
+unsafe & 100 & 100 & 0.5558 & 1.0000 & 0.4442 & 0/99/1 \\
+unsafe & 500 & 100 & 0.6863 & 0.9169 & 0.2306 & 0/0/100 \\
+safe & 100 & 100 & 0.3480 & 0.8505 & 0.5025 & 0/100/0 \\
+safe & 500 & 100 & 0.4551 & 0.6776 & 0.2225 & 3/97/0 \\
+\bottomrule
+\end{tabular}
+\end{table*}
+\begin{table*}[t]
+\centering\small
+\caption{Appendix: Repeated ceiling tightness: all v2/v3 families. Tightness is not a substitute for coverage.}
+\label{tab:tightness}
+\begin{tabular}{lrrrrr}
+\toprule
+Model & Wrapper & Mean $U$ & Mean width & Mean $U-R^*$ & P95 $U-R^*$ \\
+\midrule
+v2 CNN & raw & 0.5500 & 0.0621 & 0.0350 & 0.0395 \\
+v2 CNN & erased & 0.5304 & 0.0460 & 0.0289 & 0.0323 \\
+v2 XGBoost & raw & 0.6122 & 0.0628 & 0.0347 & 0.0405 \\
+v2 XGBoost & erased & 0.5363 & 0.0478 & 0.0286 & 0.0322 \\
+v2 Transformer proxy & raw & 0.6498 & 0.0706 & 0.0384 & 0.0456 \\
+v2 Transformer proxy & erased & 0.5411 & 0.0506 & 0.0299 & 0.0332 \\
+v3 CNN & raw & 0.5472 & 0.0607 & 0.0347 & 0.0382 \\
+v3 CNN & erased & 0.5300 & 0.0457 & 0.0287 & 0.0318 \\
+v3 XGBoost & raw & 0.5908 & 0.0576 & 0.0320 & 0.0380 \\
+v3 XGBoost & erased & 0.5338 & 0.0463 & 0.0279 & 0.0317 \\
+v3 Transformer proxy & raw & 0.6550 & 0.0788 & 0.0422 & 0.0499 \\
+v3 Transformer proxy & erased & 0.5419 & 0.0517 & 0.0306 & 0.0345 \\
+\bottomrule
+\end{tabular}
+\end{table*}
+\begin{table*}[t]
+\centering\small
+\caption{Appendix: All nine isolated tree timing repetitions. These are identical seeded computations, not independent training replications.}
+\label{tab:tree-repeats}
+\begin{tabular}{lrrrr}
+\toprule
+Train rows & Repeat & Train s & Privacy s & Host peak MiB \\
+\midrule
+50,000 & 1 & 3.462 & 0.125 & 431.64 \\
+200,000 & 1 & 12.569 & 0.308 & 523.18 \\
+400,000 & 1 & 24.475 & 0.555 & 619.75 \\
+200,000 & 2 & 12.399 & 0.315 & 517.06 \\
+400,000 & 2 & 24.881 & 0.553 & 607.33 \\
+50,000 & 2 & 3.319 & 0.124 & 430.60 \\
+400,000 & 3 & 25.005 & 0.554 & 613.37 \\
+50,000 & 3 & 3.587 & 0.129 & 422.40 \\
+200,000 & 3 & 12.975 & 0.318 & 524.16 \\
+\bottomrule
+\end{tabular}
+\end{table*}
+\begin{table*}[t]
+\centering\small
+\caption{Appendix: LLM utility, throughput and adverse membership evidence for all six local cells.}
+\label{tab:llm-utility}
+\begin{tabular}{lrrrrrr}
+\toprule
+Model & Rows & NLL before & NLL after & Input tokens/s & Raw $L$ & Derived advantage floor \\
+\midrule
+GPT-2 & 1,024 & 3.3462 & 2.8696 & 3272 & 0.5585 & 0.1169 \\
+GPT-2 & 4,096 & 3.3462 & 2.7938 & 3893 & 0.6144 & 0.2289 \\
+GPT-2 & 8,192 & 3.3462 & 2.7751 & 3188 & 0.6381 & 0.2762 \\
+Qwen-0.5B & 1,024 & 2.3733 & 2.5124 & 1091 & 0.8523 & 0.7046 \\
+Qwen-0.5B & 4,096 & 2.3733 & 2.6304 & 1330 & 0.8206 & 0.6412 \\
+Qwen-0.5B & 8,192 & 2.3733 & 2.6658 & 1236 & 0.8215 & 0.6429 \\
+\bottomrule
+\end{tabular}
+\end{table*}
+\begin{table*}[t]
+\centering\small
+\caption{Appendix: Historical L4 language hook matrix: published rounded observations, one run per model, 512 steps each.}
+\label{tab:llm-hooks}
+\begin{tabular}{lrrrrr}
+\toprule
+Model & Parameters & NLL/PPL before & NLL/PPL after & Rows/s & GPU GiB \\
+\midrule
+DistilGPT2 & 81,912,576 & 2.9170 / 18.49 & 2.4882 / 12.04 & 42.49 & 6.11 \\
+Meta OPT-125M & 125,239,296 & 2.5223 / 12.46 & 2.1913 / 8.95 & 31.16 & 6.37 \\
+Pythia-160M & 162,322,944 & 2.4589 / 11.69 & 2.3998 / 11.02 & 28.96 & 7.43 \\
+\bottomrule
+\end{tabular}
+\end{table*}
+\begin{table*}[t]
+\centering\small
+\caption{Appendix: Historical L4 vision hook matrix: published rounded observations, one epoch and 169 steps each.}
+\label{tab:vision-hooks}
+\begin{tabular}{lrrrrr}
+\toprule
+Model & Parameters & CE before/after & Accuracy before/after & Images/s & GPU GiB \\
+\midrule
+AlexNet & 57,044,810 & 2.302356/1.937292 & 0.0980/0.2394 & 937.02 & 1.59 \\
+DenseNet-121 & 6,964,106 & 2.374993/0.893837 & 0.1094/0.6898 & 369.04 & 3.02 \\
+\bottomrule
+\end{tabular}
+\end{table*}
+\begin{table*}[t]
+\centering\small
+\caption{Appendix: All 12 measured historical LLM context screens. K0: prior; K1: metadata; K2: candidate loss; K3: metadata and loss. Published rounded values.}
+\label{tab:contexts}
+\begin{tabular}{lrrr}
+\toprule
+Model & Profile & Before BA/AUC & After BA/AUC \\
+\midrule
+DistilGPT2 & K0 & 0.500 / 0.500 & 0.500 / 0.500 \\
+DistilGPT2 & K1 & 0.486 / 0.460 & 0.486 / 0.460 \\
+DistilGPT2 & K2 & 0.496 / 0.495 & 0.553 / 0.566 \\
+DistilGPT2 & K3 & 0.488 / 0.456 & 0.518 / 0.510 \\
+Meta OPT-125M & K0 & 0.500 / 0.500 & 0.500 / 0.500 \\
+Meta OPT-125M & K1 & 0.486 / 0.460 & 0.486 / 0.460 \\
+Meta OPT-125M & K2 & 0.500 / 0.497 & 0.666 / 0.672 \\
+Meta OPT-125M & K3 & 0.496 / 0.459 & 0.604 / 0.634 \\
+Pythia-160M & K0 & 0.500 / 0.500 & 0.500 / 0.500 \\
+Pythia-160M & K1 & 0.488 / 0.452 & 0.488 / 0.452 \\
+Pythia-160M & K2 & 0.500 / 0.490 & 0.641 / 0.676 \\
+Pythia-160M & K3 & 0.486 / 0.457 & 0.586 / 0.630 \\
+\bottomrule
+\end{tabular}
+\par\smallskip
+\begin{minipage}{\textwidth}\small K2/K3 require candidate-scoring access, not merely generation. K4 is a separate exact-roster disclosure condition, not a numerical screen. These workers cannot clear or block an MRAP release.\end{minipage}
+\end{table*}
+\begin{table*}[t]
+\centering\small
+\caption{Appendix: All eight historical vision perturbation cells on 512 images; published rounded values, not robustness guarantees.}
+\label{tab:perturbations}
+\begin{tabular}{lrrrrrr}
+\toprule
+Model & Condition & CE & Accuracy & Acc. drop & Attack success & $L_\infty$ \\
+\midrule
+AlexNet & clean & 1.961986 & 0.2344 & 0.0000 & 0.0000 & 0.00000000 \\
+AlexNet & brightness x1.25 & 2.024098 & 0.2148 & 0.0195 & 0.1583 & 0.19999999 \\
+AlexNet & Gaussian noise sigma=0.05 & 1.961695 & 0.2266 & 0.0078 & 0.0500 & 0.27677843 \\
+AlexNet & FGSM 2/255 & 2.015042 & 0.2305 & 0.0039 & 0.0750 & 0.00784317 \\
+DenseNet-121 & clean & 1.044175 & 0.6523 & 0.0000 & 0.0000 & 0.00000000 \\
+DenseNet-121 & brightness x1.25 & 1.822046 & 0.4766 & 0.1758 & 0.3982 & 0.19999999 \\
+DenseNet-121 & Gaussian noise sigma=0.05 & 3.183635 & 0.2715 & 0.3809 & 0.6497 & 0.27677843 \\
+DenseNet-121 & FGSM 2/255 & 2.951896 & 0.2422 & 0.4102 & 0.6287 & 0.00784317 \\
+\bottomrule
+\end{tabular}
+\par\smallskip
+\begin{minipage}{\textwidth}\small Attack success is conditional on clean-correct examples. Brightness/noise and FGSM are different perturbations; their scores cannot be pooled into privacy risk.\end{minipage}
+\end{table*}
+\begin{table*}[t]
+\centering\small
+\caption{Appendix: Unsealed legacy public-privacy outputs: descriptive point values only. Their pooled binomial lower bounds are not endorsed.}
+\label{tab:legacy}
+\begin{tabular}{lrrrrrr}
+\toprule
+Report & Model & Train rows & Accuracy & Member $n$ & Nonmember $n$ & Success \\
+\midrule
+legacy 0 & cnn & 1200 & 0.8380 & 400 & 400 & 0.5038 \\
+legacy 0 & lstm & 1200 & 0.5780 & 400 & 400 & 0.4975 \\
+legacy 0 & xgboost & 1200 & 0.8360 & 400 & 400 & 0.5312 \\
+legacy 0 & compact\_transformer\_llm\_proxy & 1000 & 0.6250 & 350 & 350 & 0.5943 \\
+legacy 1 & cnn & 1200 & 0.8380 & 400 & 400 & 0.5038 \\
+legacy 1 & lstm & 1200 & 0.5780 & 400 & 400 & 0.4975 \\
+legacy 1 & xgboost & 1200 & 0.8360 & 400 & 400 & 0.5312 \\
+legacy 1 & compact\_transformer\_llm\_proxy & 1000 & 0.6250 & 350 & 350 & 0.5943 \\
+\bottomrule
+\end{tabular}
+\par\smallskip
+\begin{minipage}{\textwidth}\small No verified simultaneous family or completed publication bundle. Unequal group success probabilities need not yield a single binomial count; reported confidence fields remain labelled as unsupported in the companion JSON.\end{minipage}
+\end{table*}
+\begin{table*}[t]
+\centering\small
+\caption{Appendix: Synthetic strategic samples: all five registered sample-claim rows in each local report. No behavioral validation.}
+\label{tab:strategic}
+\begin{tabular}{lrrrrrr}
+\toprule
+Report & Claim row & Status & Tuples & Strict-margin tuples & Min margin & Max margin \\
+\midrule
+smoke & 1 & supported & 500 & 500 & 2.929 & 12.377 \\
+smoke & 2 & supported & 500 & 500 & 5.160 & 15.320 \\
+smoke & 3 & supported & 500 & 500 & 3.123 & 10.738 \\
+smoke & 4 & supported & 500 & 500 & 10.184 & 15.088 \\
+smoke & 5 & contradicted & 500 & 0 & -8.640 & -3.272 \\
+full & 1 & supported & 10000 & 10000 & 2.796 & 12.651 \\
+full & 2 & supported & 10000 & 10000 & 4.523 & 15.732 \\
+full & 3 & supported & 10000 & 10000 & 2.564 & 11.259 \\
+full & 4 & supported & 10000 & 10000 & 9.368 & 15.235 \\
+full & 5 & contradicted & 10000 & 0 & -9.022 & -3.201 \\
+\bottomrule
+\end{tabular}
+\par\smallskip
+\begin{minipage}{\textwidth}\small Exact claim IDs and synthetic parameter contracts remain in the companion data. Sampled consistency is not proof of institutional compliance, deterrence, or deployment readiness.\end{minipage}
+\end{table*}
+}

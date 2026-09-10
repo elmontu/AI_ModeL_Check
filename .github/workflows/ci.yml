@@ -14,6 +14,46 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  pipeline-bootstrap:
+    name: Pipeline setup (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            python-path: .local/pipeline-ci/bin/python
+          - os: windows-latest
+            python-path: .local/pipeline-ci/Scripts/python.exe
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Bootstrap a fresh training environment
+        run: python scripts/setup_pipeline.py --profile console --venv .local/pipeline-ci
+      - name: Test case setup and failure boundaries
+        shell: bash
+        run: ${{ matrix.python-path }} -m unittest discover -s tests -p test_pipeline_workflow.py -v
+      - name: Test console API and job queue
+        shell: bash
+        run: ${{ matrix.python-path }} -m unittest discover -s tests -p test_console.py -v
+      - name: Run the offline training workflow
+        shell: bash
+        run: ${{ matrix.python-path }} -m model_release_assurance.workflow demo --output output/pipeline-ci-demo
+      - name: Validate every local training option and adversary
+        if: matrix.os == 'ubuntu-latest'
+        shell: bash
+        run: ${{ matrix.python-path }} scripts/validate_framework_e2e.py --output output/framework-e2e-ci
+      - name: Retain local workflow test matrix and evidence
+        if: always() && matrix.os == 'ubuntu-latest'
+        uses: actions/upload-artifact@v4
+        with:
+          name: framework-e2e-matrix
+          path: output/framework-e2e-ci/
+          if-no-files-found: warn
+
   formal:
     name: Lean protocol proof
     runs-on: ubuntu-latest

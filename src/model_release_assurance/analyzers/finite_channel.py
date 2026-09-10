@@ -355,8 +355,8 @@ class FiniteChannelCeilingAnalyzer:
             absolute_upper = verified_upper_fraction(verification)
         except ValueError:
             absolute_upper = Fraction(1)
-        absolute_lower = _exact_guess_floor(value)
         baseline = max(prior)
+        absolute_lower = max(baseline, _exact_guess_floor(value))
         if threat.decision_metric.startswith("incremental_"):
             lower = max(Fraction(0), absolute_lower - baseline)
             upper = max(Fraction(0), absolute_upper - baseline)
@@ -364,7 +364,9 @@ class FiniteChannelCeilingAnalyzer:
             lower = absolute_lower
             upper = absolute_upper
         upper = min(Fraction(1), upper)
-        lower = min(upper, min(Fraction(1), lower))
+        # Keep an inconsistent ceiling visible; it must not erase a sound
+        # prior-only floor. Valid certificates necessarily dominate baseline.
+        lower = min(Fraction(1), lower)
 
         tolerance = decimal_fraction(threat.tolerance)
         disposition = _planning_disposition(

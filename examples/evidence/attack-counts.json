@@ -19,12 +19,12 @@
   "evidence_context": {
     "release_id": "whole-government-demo-tree-v1",
     "release_contract_sha256": "58fa3564d8445f55834ebdd9699a4d412035a2f96bfb42b27f5c99cd510d035b",
-    "policy_sha256": "33952cfe3632958fb82dc53d0035152af485547b7eab601c787f353f4fdedca0",
+    "policy_sha256": "6f3fd343ce5b5fa6305fb32e6c1b77efdbbd88112bc29ce41e84fc22c1906c3e",
     "artifact_sha256": "2f42b587627c5b6c4447d781b57a47082743f029b475f560a574553abcedfdd5",
     "interface_sha256": "f13f29ea2027109f4f02992b37713ee9f63bf56672afb800ac9c3fb6966473b8",
     "population_scope_id": "service-participants-2026",
     "population_scope_sha256": "f85f632a9ac034ed0bd4f21cd3256729443a901de4ab95d89c52898615f25604",
-    "decision_game_sha256": "686901249c969d5c1a631f1a617c319f9c235842745ea34c6956b6c5c2fef38c",
+    "decision_game_sha256": "3af0b6299a353e6d3fccfb6a049a7a38e64ee9936e18536572f3cc40734a2c5e",
     "observed_at": "2026-08-18T00:00:00Z"
   }
 }

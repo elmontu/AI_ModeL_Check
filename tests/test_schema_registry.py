@@ -24,8 +24,8 @@ SCHEMAS = ROOT / "schemas"
 class SchemaRegistryTests(unittest.TestCase):
     def test_registry_is_unique_and_matches_model_declarations(self) -> None:
         validate_schema_registry()
-        self.assertEqual(len(SCHEMA_REGISTRY), 32)
-        self.assertEqual(len({entry.filename for entry in SCHEMA_REGISTRY.values()}), 32)
+        self.assertEqual(len(SCHEMA_REGISTRY), 37)
+        self.assertEqual(len({entry.filename for entry in SCHEMA_REGISTRY.values()}), 37)
         for kind, registration in SCHEMA_REGISTRY.items():
             self.assertEqual(kind, registration.kind)
             schema = registration.rendered_schema()
@@ -80,6 +80,18 @@ class SchemaRegistryTests(unittest.TestCase):
         for entry in manifest["contracts"]:
             self.assertEqual(set(entry), required)
             self.assertRegex(entry["sha256"], r"^[0-9a-f]{64}$")
+
+    def test_retired_or_unknown_schema_cannot_reenter_active_inventory(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            schemas = Path(directory)
+            for registration in SCHEMA_REGISTRY.values():
+                (schemas / registration.filename).write_bytes(registration.rendered_bytes())
+            manifest_path = schemas / SCHEMA_MANIFEST_FILENAME
+            manifest_path.write_bytes(render_schema_manifest(schemas))
+            (schemas / "assessment-report-v5.json").write_bytes(b"{}")
+            errors = manifest_check_errors(schemas, manifest_path)
+            self.assertEqual(len(errors), 1)
+            self.assertIn("unregistered or retired", errors[0])
 
 
 if __name__ == "__main__":

@@ -1,0 +1,15 @@
+{
+  "academic-tests.log": "ac056f68a5cf4dcea65c93b0908b242a3978f9a8ae38c86380fbe6f8bc05d9cc",
+  "fresh-setup.log": "a79db31d19b788bc5c6e6a8aefcf172e1cccdd1b57a0547e9cf8b3620d122965",
+  "full-test-suite.log": "7546ce17d3f1d4172b5891405da67b45ac519057825ca7d768ecd90996cb9fe8",
+  "optional-runtime/focused-results.json": "0dd3eb6f8588826f4bdbe6db92e39360ce581485e03fa69e8cad2778cd0848d3",
+  "optional-runtime/install.log": "76da44d8a86bbc4c298f62c795d3462333386a0b8f27cf9a82db1abc47df358d",
+  "optional-runtime/pip-check.log": "672aec65a45bed50e70229c70934a7eebf0462595c459b83023027645d57cccf",
+  "optional-runtime/runtime.json": "432ad5e6366f43d625475f790d5ee0e47cc2465494ddd43172bb65e4f79929b7",
+  "optional-runtime/test_llm_training_hooks.py.log": "f71ffebef0be8ddf6668b5f54fbaa5ca8b728f4e8f40000ccb2d278474ae599d",
+  "optional-runtime/test_llm_training_worker.py.log": "c1ebda84d29780b0ce5fe2ff7103c3ebdb26f9db1ec0bf64c54fc5daf6cbddf3",
+  "optional-runtime/test_public_privacy_audit_artifact_hash.py.log": "83c0162f361da4a4d31f0606b9f4152df7720f8dbbfa442496a26238695ddea0",
+  "optional-runtime/test_vision_training_worker.py.log": "4186a35088d79f2287a44cfb3f02d50c3de2f8f74e1e7cc7e9eaa597e491233b",
+  "validation-report.json": "e66e6d6c08aad2b26c138c77dbde7f81b386ea740853240ada2979d7a3362e63",
+  "validation-report.md": "d6375dd41905b9cf6d8fdcfdd5c5306a57a12541638798bc7b1c376928116cff"
+}

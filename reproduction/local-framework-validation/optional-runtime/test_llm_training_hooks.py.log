@@ -1,0 +1,26 @@
+test_body_exception_cannot_finalize_as_a_pass (test_llm_training_hooks.AggregateTrainingHookCollectorTests.test_body_exception_cannot_finalize_as_a_pass) ... C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\tests\test_llm_training_hooks.py:109: UserWarning: Full backward hook is firing when gradients are computed with respect to module outputs since no inputs require gradients. See https://docs.pytorch.org/docs/main/generated/torch.nn.Module.html#torch.nn.Module.register_full_backward_hook for more details.
+  loss.backward()
+ok
+test_event_cap_fails_before_unbounded_append (test_llm_training_hooks.AggregateTrainingHookCollectorTests.test_event_cap_fails_before_unbounded_append) ... ok
+test_exact_allowlist_rejects_missing_module_without_partial_hooks (test_llm_training_hooks.AggregateTrainingHookCollectorTests.test_exact_allowlist_rejects_missing_module_without_partial_hooks) ... ok
+test_expected_step_shortfall_fails_after_cleanup (test_llm_training_hooks.AggregateTrainingHookCollectorTests.test_expected_step_shortfall_fails_after_cleanup) ... ok
+test_expected_steps_preflights_event_capacity (test_llm_training_hooks.AggregateTrainingHookCollectorTests.test_expected_steps_preflights_event_capacity) ... ok
+test_finalize_detects_event_tampering (test_llm_training_hooks.AggregateTrainingHookCollectorTests.test_finalize_detects_event_tampering) ... ok
+test_nonfinite_forward_fails_and_context_removes_hooks (test_llm_training_hooks.AggregateTrainingHookCollectorTests.test_nonfinite_forward_fails_and_context_removes_hooks) ... ok
+test_nonfinite_loss_is_recorded_as_null_then_fails (test_llm_training_hooks.AggregateTrainingHookCollectorTests.test_nonfinite_loss_is_recorded_as_null_then_fails) ... ok
+test_runner_compatible_scalar_interface (test_llm_training_hooks.AggregateTrainingHookCollectorTests.test_runner_compatible_scalar_interface) ... ok
+test_step_fails_before_optimizer_on_missing_hook_coverage (test_llm_training_hooks.AggregateTrainingHookCollectorTests.test_step_fails_before_optimizer_on_missing_hook_coverage) ... C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\tests\test_llm_training_hooks.py:208: UserWarning: Full backward hook is firing when gradients are computed with respect to module outputs since no inputs require gradients. See https://docs.pytorch.org/docs/main/generated/torch.nn.Module.html#torch.nn.Module.register_full_backward_hook for more details.
+  loss.backward()
+ok
+test_step_fails_when_a_trainable_parameter_has_no_gradient (test_llm_training_hooks.AggregateTrainingHookCollectorTests.test_step_fails_when_a_trainable_parameter_has_no_gradient) ... C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\tests\test_llm_training_hooks.py:228: UserWarning: Full backward hook is firing when gradients are computed with respect to module outputs since no inputs require gradients. See https://docs.pytorch.org/docs/main/generated/torch.nn.Module.html#torch.nn.Module.register_full_backward_hook for more details.
+  loss.backward()
+ok
+test_success_is_aggregate_only_hash_chained_and_cleans_up (test_llm_training_hooks.AggregateTrainingHookCollectorTests.test_success_is_aggregate_only_hash_chained_and_cleans_up) ... ok
+test_event_digest_is_canonical_and_strict_json (test_llm_training_hooks.OptionalDependencyTests.test_event_digest_is_canonical_and_strict_json) ... ok
+test_module_imports_without_mandatory_torch_dependency (test_llm_training_hooks.OptionalDependencyTests.test_module_imports_without_mandatory_torch_dependency) ... ok
+test_worker_facing_signature_is_available_without_importing_torch (test_llm_training_hooks.OptionalDependencyTests.test_worker_facing_signature_is_available_without_importing_torch) ... ok
+
+----------------------------------------------------------------------
+Ran 15 tests in 0.042s
+
+OK

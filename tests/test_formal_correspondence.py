@@ -8,6 +8,7 @@ import unittest
 from model_release_assurance.release_protocol import (
     ReleaseProtocolEventType,
     ReleaseProtocolRole,
+    ReleaseProtocolRun,
     ReleaseProtocolState,
     _EVENT_ROLES,
 )
@@ -72,6 +73,9 @@ class FormalCorrespondenceTests(unittest.TestCase):
 
     def test_manifest_refuses_to_claim_refinement(self) -> None:
         self.assertIn("not a semantic refinement proof", self.manifest["claim"])
+
+    def test_correspondence_names_the_current_python_contract(self) -> None:
+        self.assertEqual(self.manifest["python_contract_version"], ReleaseProtocolRun.model_fields["schema_version"].default)
 
     def test_theorem_groups_name_runtime_violations_and_live_tests(self) -> None:
         obligations = self.manifest["runtime_obligations"]

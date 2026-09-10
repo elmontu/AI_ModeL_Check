@@ -360,7 +360,8 @@ class ReleaseProtocolTests(unittest.TestCase):
                 trusted_public_keys=trust_store,
             )
         self.assertTrue(result.valid, result.reasons)
-        self.assertTrue(result.deployment_active)
+        self.assertTrue(result.deployment_recorded)
+        self.assertFalse(result.deployment_active)
 
     def test_authenticated_profile_rejects_event_tampering(self) -> None:
         with TemporaryDirectory() as directory:
@@ -511,8 +512,10 @@ class ReleaseProtocolTests(unittest.TestCase):
         verification = self.replay(self.happy_run())
         self.assertTrue(verification.valid, verification.reasons)
         self.assertEqual(verification.final_state, ReleaseProtocolState.ACTIVE)
-        self.assertTrue(verification.authorization_issued)
-        self.assertTrue(verification.deployment_active)
+        self.assertTrue(verification.authorization_recorded)
+        self.assertTrue(verification.deployment_recorded)
+        self.assertFalse(verification.authorization_issued)
+        self.assertFalse(verification.deployment_active)
 
     def test_cli_structurally_replays_a_complete_transcript(self) -> None:
         run = self.happy_run()
@@ -607,7 +610,7 @@ class ReleaseProtocolTests(unittest.TestCase):
                     ]
                 )
         self.assertEqual(exit_code, 2)
-        self.assertIn("requires profile authenticated_v1", stderr.getvalue())
+        self.assertIn("requires profile authenticated_v2", stderr.getvalue())
 
     def test_failed_atomic_commit_cannot_authorize_or_activate(self) -> None:
         run = self.happy_run()

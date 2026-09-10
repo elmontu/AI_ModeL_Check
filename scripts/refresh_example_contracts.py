@@ -62,7 +62,7 @@ def _load(path: Path) -> dict:
 
 def _write(path: Path, value: object) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(value, indent=2, sort_keys=False) + "\n", encoding="utf-8")
+    path.write_text(json.dumps(value, indent=2, sort_keys=False) + "\n", encoding="utf-8", newline="\n")
 
 
 def _model_hash(value: object) -> str:
@@ -107,7 +107,7 @@ def refresh() -> None:
     request_raw = _load(EXAMPLES / "request.json")
     optimization_raw = _load(EXAMPLES / "optimization-request.json")
     request_raw["schema_version"] = "5.0"
-    optimization_raw["schema_version"] = "4.0"
+    optimization_raw["schema_version"] = "5.0"
     _upgrade_interface(request_raw["release"]["interface"])
     for configuration_raw in optimization_raw["configurations"]:
         _upgrade_interface(configuration_raw["release_interface"])
@@ -268,6 +268,30 @@ def refresh() -> None:
         standalone_attack_plan.model_dump(mode="json"),
     )
 
+    # Freeze state meaning and exact prior in policy and request before hashing
+    # either. A matching game digest on an unrelated numerical table is not enough.
+    finite_games = {
+        "linkage-person": {
+            "game_id": "demo-exact-linkage-four-candidates",
+            "states": [{"state_id": value, "secret_value_definition": f"target identity is candidate {value}"} for value in ("a", "b", "c", "d")],
+            "prior": [{"numerator": 1, "denominator": 4} for _ in range(4)],
+            "prior_basis": "demonstration uniform prior over the frozen four-candidate roster",
+            "authority": "whole-government-model-release-demo policy authority",
+        },
+        "membership-person": {
+            "game_id": "demo-equal-prior-membership",
+            "states": [
+                {"state_id": "member", "secret_value_definition": "target record was included in training"},
+                {"state_id": "nonmember", "secret_value_definition": "target record was not included in training"},
+            ],
+            "prior": [{"numerator": 1, "denominator": 2} for _ in range(2)],
+            "prior_basis": "balanced membership challenge with equal prior mass on both states",
+            "authority": "whole-government-model-release-demo policy authority",
+        },
+    }
+    for threat_raw in request_raw["threats"]:
+        threat_raw["finite_game"] = finite_games[threat_raw["threat_id"]]
+
     policy_raw = {
         "schema_version": "3.0",
         "policy_id": "whole-government-model-release-demo",
@@ -281,6 +305,7 @@ def refresh() -> None:
                 "mandatory": True,
                 "decision_metric": "incremental_bayes_linkage_success",
                 "metric_parameters": {},
+                "finite_game": finite_games["linkage-person"],
                 "tolerance": 0.3,
                 "tolerance_basis": "incremental",
                 "ceiling_attack_battery_mode": "ceiling_prohibited",
@@ -291,6 +316,7 @@ def refresh() -> None:
                 "mandatory": True,
                 "decision_metric": "equal_prior_membership_success",
                 "metric_parameters": {},
+                "finite_game": finite_games["membership-person"],
                 "tolerance": 0.6,
                 "tolerance_basis": "absolute",
                 "ceiling_attack_battery_mode": "required",
@@ -620,6 +646,8 @@ def refresh() -> None:
     )
     for configuration_raw in optimization_raw["configurations"]:
         configuration_raw["assessment"]["report_sha256"] = sha256_file(report_path)
+        configuration_raw["assessment"]["assessment_request_path"] = "request.json"
+        configuration_raw["assessment"]["assessment_request_sha256"] = sha256_file(EXAMPLES / "request.json")
         released_interface = InterfaceContract.model_validate(
             configuration_raw["release_interface"]
         )
@@ -651,6 +679,8 @@ def refresh() -> None:
             control_raw["evidence_sha256"] = sha256_file(control_source_path)
 
         for experiment_raw in optimization_raw["experiments"]:
+            threat = threats_by_id[experiment_raw["threat_id"]]
+            experiment_raw["decision_game_sha256"] = decision_game_sha256(threat, scopes_by_id[threat.population_scope_id])
             if experiment_raw["experiment_id"].endswith("-full-artifact"):
                 experiment_raw["interface_sha256"] = interface_sha256
             elif experiment_raw["experiment_id"].endswith("-bounded-api"):

@@ -1,5 +1,5 @@
 {
-  "schema_version": "4.0",
+  "schema_version": "5.0",
   "optimization_id": "whole-government-demo-release-search",
   "objective": "utility feasibility, then Blackwell-minimal disclosure, then cost and utility tie-breaks",
   "selection_policy": {
@@ -18,11 +18,11 @@
     "policy_id": "whole-government-model-release-demo",
     "policy_version": "3.0.0",
     "policy_path": "policy.json",
-    "policy_sha256": "33952cfe3632958fb82dc53d0035152af485547b7eab601c787f353f4fdedca0"
+    "policy_sha256": "6f3fd343ce5b5fa6305fb32e6c1b77efdbbd88112bc29ce41e84fc22c1906c3e"
   },
   "authorization_expires_at": "2099-01-01T00:00:00Z",
   "portfolio_registry": {
-    "schema_version": "1.0",
+    "schema_version": "1.1",
     "registry_id": "demo-release-registry",
     "registry_head_sha256": "1111111111111111111111111111111111111111111111111111111111111111",
     "registry_sequence": 0,
@@ -31,14 +31,15 @@
     "observed_at": "2026-08-18T00:00:00Z",
     "expires_at": "2099-01-01T00:00:00Z",
     "source_path": "evidence/portfolio-registry-snapshot.json",
-    "source_sha256": "2a73d705b33ea11f7b4446dfe27b14e4c07d0a7876babc2ef5fed35120b8c6d0"
+    "source_sha256": "3f2aad058ab398394aedf4507e9d82ce1c51f3799594e2f459fbc49556a02025",
+    "disclosed_release_ids": []
   },
   "experiments": [
     {
       "experiment_id": "linkage-full-artifact",
       "threat_id": "linkage-person",
       "population_scope_id": "service-participants-2026",
-      "decision_game_sha256": "4bb158d840ec659005d778c0443f537245d03ba7dfdef279ff98e11f5e271430",
+      "decision_game_sha256": "769e6c42bb948ad3afddf9ba5fa69db1414d1cbd6539d54e875b61a9a63e5435",
       "state_ids": [
         "a",
         "b",
@@ -81,7 +82,7 @@
       "experiment_id": "linkage-bounded-api",
       "threat_id": "linkage-person",
       "population_scope_id": "service-participants-2026",
-      "decision_game_sha256": "4bb158d840ec659005d778c0443f537245d03ba7dfdef279ff98e11f5e271430",
+      "decision_game_sha256": "769e6c42bb948ad3afddf9ba5fa69db1414d1cbd6539d54e875b61a9a63e5435",
       "state_ids": [
         "a",
         "b",
@@ -119,7 +120,7 @@
       "experiment_id": "membership-full-artifact",
       "threat_id": "membership-person",
       "population_scope_id": "service-participants-2026",
-      "decision_game_sha256": "686901249c969d5c1a631f1a617c319f9c235842745ea34c6956b6c5c2fef38c",
+      "decision_game_sha256": "3af0b6299a353e6d3fccfb6a049a7a38e64ee9936e18536572f3cc40734a2c5e",
       "state_ids": [
         "member",
         "nonmember"
@@ -150,7 +151,7 @@
       "experiment_id": "membership-bounded-api",
       "threat_id": "membership-person",
       "population_scope_id": "service-participants-2026",
-      "decision_game_sha256": "686901249c969d5c1a631f1a617c319f9c235842745ea34c6956b6c5c2fef38c",
+      "decision_game_sha256": "3af0b6299a353e6d3fccfb6a049a7a38e64ee9936e18536572f3cc40734a2c5e",
       "state_ids": [
         "member",
         "nonmember"
@@ -215,8 +216,10 @@
       "name": "Authenticated bounded-output API",
       "is_proposed_configuration": false,
       "assessment": {
-        "report_path": "evidence/assessment-clear-report.json",
-        "report_sha256": "4deee7c7a8cb3cece613430646d6e1af4428c1c51d3a98c0cf6b84bf13581757",
+        "report_path": "evidence/assessment-clear-report-review-20260909.json",
+        "report_sha256": "712868cb96315fcee04fccbf9bfabddd0f9f2f5d58353d024cef455c247910f1",
+        "assessment_request_path": "request.json",
+        "assessment_request_sha256": "faf93f7d8b2fdcb4b841a54728c25f2ab225d5b42f684d8dbd5a549d31ef875c",
         "signed_manifest_path": null,
         "signed_manifest_sha256": null,
         "assessor_public_key_path": null,

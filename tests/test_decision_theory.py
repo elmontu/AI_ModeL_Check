@@ -245,12 +245,13 @@ class ReleaseOptimizerTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory_name:
             directory = Path(directory_name)
             payload = {
-                "schema_version": "1.0",
+                "schema_version": "1.1",
                 "registry_id": "future-registry",
                 "registry_head_sha256": "1" * 64,
                 "registry_sequence": 1,
                 "composition_domain_id": "future-composition-domain",
                 "active_release_ids": [],
+                "disclosed_release_ids": [],
                 "observed_at": "2027-01-01T00:00:00Z",
                 "expires_at": "2028-01-01T00:00:00Z",
             }
@@ -271,6 +272,7 @@ class ReleaseOptimizerTests(unittest.TestCase):
     def _write_clear_report(self, directory: Path):
         request = AssessmentRequest.model_validate(load_example())
         report = AssuranceEngine().assess(request, ROOT / "examples")
+        (directory / "assessment-request.json").write_text(request.model_dump_json(indent=2) + "\n", encoding="utf-8")
         path = directory / "assessment.json"
         path.write_text(report.model_dump_json(indent=2, exclude_none=False) + "\n")
         return path, report
@@ -411,6 +413,8 @@ class ReleaseOptimizerTests(unittest.TestCase):
             "assessment": {
                 "report_path": str(report_path),
                 "report_sha256": sha256_file(report_path),
+                "assessment_request_path": str(report_path.parent / "assessment-request.json"),
+                "assessment_request_sha256": sha256_file(report_path.parent / "assessment-request.json"),
             },
             "release_artifact_path": str(ROOT / "examples" / "artifacts" / "demo-tree.json"),
             "release_artifact_sha256": report.artifact_sha256,
@@ -458,12 +462,13 @@ class ReleaseOptimizerTests(unittest.TestCase):
             (ROOT / "examples" / "policy.json").read_text(encoding="utf-8")
         )
         registry_payload = {
-            "schema_version": "1.0",
+            "schema_version": "1.1",
             "registry_id": "unit-test-registry",
             "registry_head_sha256": "1" * 64,
             "registry_sequence": 0,
             "composition_domain_id": "unit-test-composition-domain",
             "active_release_ids": [],
+            "disclosed_release_ids": [],
             "observed_at": "2026-01-01T00:00:00Z",
             "expires_at": "2099-01-01T00:00:00Z",
         }
@@ -783,6 +788,28 @@ class ReleaseOptimizerTests(unittest.TestCase):
 
             self.assertTrue(result.fail_safe_gate_passed)
             self.assertEqual(result.selected_portfolio_status, "analytically_composed")
+
+            # An exact prior can differ while both priors display as the same
+            # floats. Recompute a valid certificate for that altered game: the
+            # optimizer must reject the policy mismatch, not rely on stale proof
+            # bytes happening to fail their checksum.
+            pair = "service-participants-2026|linkage-person"
+            changed_problem = IncompletePortfolioProblem.model_validate({
+                **problems[pair]["problem"],
+                "rational_prior": [
+                    {"numerator": 25_000_000_000_000_000_001, "denominator": 100_000_000_000_000_000_000},
+                    {"numerator": 24_999_999_999_999_999_999, "denominator": 100_000_000_000_000_000_000},
+                    {"numerator": 1, "denominator": 4},
+                    {"numerator": 1, "denominator": 4},
+                ],
+            })
+            changed_entry = solve_analytic_portfolio(changed_problem, method="exact")
+            problems[pair] = changed_entry.model_dump(mode="json")
+            portfolio_path.write_text(json.dumps(portfolio_payload) + "\n", encoding="utf-8")
+            candidate["portfolio"]["evidence_sha256"] = sha256_file(portfolio_path)
+            changed_request = self._request(self._experiments(report), [candidate])
+            with self.assertRaisesRegex(ValueError, "changes the registered secret states or prior"):
+                ReleaseOptimizer().optimize(changed_request, directory)
 
     def test_separated_assessor_refuses_an_unsigned_assessment(self) -> None:
         with tempfile.TemporaryDirectory() as directory_name:

@@ -188,7 +188,11 @@ def fake_collector(cfg: dict) -> dict:
 class ModelBackedFiniteChannelTests(unittest.TestCase):
     def test_registered_v3_config_is_complete_and_pending_edits_fail_closed(self) -> None:
         registered = config()
-        validated = experiment.validate_config(registered, verify_files=True)
+        # This frozen study predates the current core. Preserve its registration;
+        # structural readability does not authorize execution against changed code.
+        validated = experiment.validate_config(registered, verify_files=False)
+        with self.assertRaisesRegex(experiment.ExperimentValidationError, "registered source digest changed"):
+            experiment.validate_config(registered, verify_files=True)
         self.assertEqual(
             [value["collector_model"] for value in validated["models"]],
             list(experiment.EXPECTED_MODELS),

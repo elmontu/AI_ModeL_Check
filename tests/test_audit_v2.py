@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from contextlib import closing
 import json
 import sqlite3
 import tempfile
@@ -328,7 +329,7 @@ class AuditV2Tests(unittest.TestCase):
             run = store.append_assessment_intent(request)
             store.append_assessment_failed(run, "worker_failed", "original")
 
-            with sqlite3.connect(path) as connection:
+            with closing(sqlite3.connect(path)) as connection, connection:
                 (
                     occurred_at,
                     event_type,
@@ -588,7 +589,7 @@ class AuditV2Tests(unittest.TestCase):
 
             self.assertEqual(run.release_id, request.release.release_id)
             self.assertEqual(run.release_instance_sha256, expected_instance)
-            with sqlite3.connect(store.path) as connection:
+            with closing(sqlite3.connect(store.path)) as connection, connection:
                 payload_json, hash_format = connection.execute(
                     """
                     SELECT payload_json, hash_format
@@ -648,7 +649,7 @@ class AuditV2Tests(unittest.TestCase):
             store.append_assessment_failed(run, "test_terminal")
             verified = store.verify()
 
-            with sqlite3.connect(path) as connection:
+            with closing(sqlite3.connect(path)) as connection, connection:
                 row = connection.execute(
                     """
                     SELECT occurred_at, event_type, assessment_id, payload_json,
@@ -663,7 +664,7 @@ class AuditV2Tests(unittest.TestCase):
                 sha256_bytes(original_material), sha256_bytes(other_material)
             )
 
-            with sqlite3.connect(path) as connection:
+            with closing(sqlite3.connect(path)) as connection, connection:
                 connection.execute(
                     "UPDATE audit_metadata SET value = ? WHERE key = 'ledger_id'",
                     (str(other_ledger_id),),
@@ -685,7 +686,7 @@ class AuditV2Tests(unittest.TestCase):
             self.assertNotEqual(
                 source_verification.ledger_id, target_verification.ledger_id
             )
-            with sqlite3.connect(source.path) as source_connection:
+            with closing(sqlite3.connect(source.path)) as source_connection, source_connection:
                 source_rows = source_connection.execute(
                     """
                     SELECT sequence, occurred_at, event_type, assessment_id,
@@ -693,7 +694,7 @@ class AuditV2Tests(unittest.TestCase):
                     FROM audit_events ORDER BY sequence
                     """
                 ).fetchall()
-            with sqlite3.connect(target.path) as target_connection:
+            with closing(sqlite3.connect(target.path)) as target_connection, target_connection:
                 target_connection.executemany(
                     """
                     INSERT INTO audit_events

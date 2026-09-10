@@ -162,9 +162,12 @@ def assess_request_model_coverage(request: AssessmentRequest) -> dict[str, objec
         "default_clearing_paths": default_clearing_paths,
         "threats_without_default_clearing_path": threats_without_default_clearing_path,
         "coverage_ready": not reasons,
+        "taxonomy_complete": False,
+        "scope_truth_verified": False,
+        "readiness_scope": "analyzer-routing-only; approved scenario/channel partition and exclusions required separately",
         "can_clear": False,
         "advisories": advisories,
-        "reasons": reasons or ["catalog coverage is complete, but scientific evidence and the final policy gate remain required"],
+        "reasons": reasons or ["catalog routing is available; threat completeness, evidence and the assurance gate remain required"],
     }
 
 

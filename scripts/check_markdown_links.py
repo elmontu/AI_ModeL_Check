@@ -9,7 +9,7 @@ from urllib.parse import unquote
 
 
 ROOT = Path(__file__).resolve().parents[1]
-SKIP_DIRECTORIES = {".git", ".venv", "build", "dist", "output"}
+SKIP_DIRECTORIES = {".git", ".venv", ".venv-pipeline", ".local", ".privacy-venv", "build", "dist", "output"}
 LINK_PATTERN = re.compile(r"!?\[[^\]]*\]\(([^)]+)\)")
 EXTERNAL_PREFIXES = ("#", "http://", "https://", "mailto:")
 

@@ -22,7 +22,7 @@ from pydantic import Field, model_validator
 
 from .analyzers.attack import clopper_pearson_lower, clopper_pearson_upper
 from .decision_theory import DecisionProblem
-from .integrity import canonical_json_bytes, sha256_file, verify_source_file
+from .integrity import canonical_json_bytes, read_verified_source_bytes, sha256_file, verify_source_file
 from .incomplete_portfolio import (
     ConditionalMarginalBounds,
     CouplingModel,
@@ -327,9 +327,14 @@ class IncompletePortfolioSpecification(StrictModel):
         return self
 
 
-def _load_model(path: Path, model_type):
+def _load_verified_model(reference: SourceFileReference, base_dir: Path, model_type):
+    path = Path(reference.source_path)
+    if not path.is_absolute():
+        path = base_dir / path
+    path = path.resolve(strict=True)
+    document = read_verified_source_bytes(str(path), reference.source_sha256, base_dir)
     try:
-        return model_type.model_validate(json.loads(path.read_text(encoding="utf-8")))
+        return path, model_type.model_validate(json.loads(document.decode("utf-8")))
     except (UnicodeDecodeError, json.JSONDecodeError) as exc:
         raise ValueError(f"invalid UTF-8 JSON evidence source: {path}") from exc
 
@@ -751,28 +756,22 @@ def _resolve_sources(
     MultinomialCountsFile,
     AssuranceErrorBudget,
 ]:
-    plan_path = verify_source_file(
-        request.sampling_plan_reference.source_path,
-        request.sampling_plan_reference.source_sha256,
-        base_dir,
+    plan_path, plan = _load_verified_model(
+        request.sampling_plan_reference, base_dir, MultinomialSamplingPlan,
     )
-    counts_path = verify_source_file(
-        request.counts_reference.source_path,
-        request.counts_reference.source_sha256,
-        base_dir,
+    counts_path, counts = _load_verified_model(
+        request.counts_reference, base_dir, MultinomialCountsFile,
     )
-    budget_path = verify_source_file(
-        request.budget_reference.source_path,
-        request.budget_reference.source_sha256,
-        base_dir,
+    budget_path, budget = _load_verified_model(
+        request.budget_reference, base_dir, AssuranceErrorBudget,
     )
     return (
         plan_path,
         counts_path,
         budget_path,
-        _load_model(plan_path, MultinomialSamplingPlan),
-        _load_model(counts_path, MultinomialCountsFile),
-        _load_model(budget_path, AssuranceErrorBudget),
+        plan,
+        counts,
+        budget,
     )
 
 

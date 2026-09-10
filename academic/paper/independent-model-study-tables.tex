@@ -1,0 +1,19 @@
+\begin{table*}[t]
+\centering\footnotesize
+\caption{New synthetic study: 84 independent trained models per family; regimes and controls are paired within models. Useful means the selected candidate satisfies exact oracle privacy and utility constraints. Point-error columns count model/regime selections, not independent repeated trials.}
+\label{tab:independent-models}
+\begin{tabular}{@{}llrrrrr@{}}
+\toprule
+Family & Regime & Oracle feasible & Bound useful & Point useful & Point privacy errors & Point utility errors \\
+\midrule
+Logistic & Low leakage & 84 & 84 & 84 & 0 & 0 \\
+Logistic & Boundary-safe & 84 & 84 & 84 & 0 & 0 \\
+Logistic & Boundary stress & 50 & 0 & 50 & 3 & 0 \\
+Logistic & High leakage & 0 & 0 & 0 & 0 & 0 \\
+Depth-2 tree & Low leakage & 81 & 54 & 75 & 0 & 6 \\
+Depth-2 tree & Boundary-safe & 81 & 54 & 75 & 0 & 6 \\
+Depth-2 tree & Boundary stress & 68 & 1 & 67 & 0 & 6 \\
+Depth-2 tree & High leakage & 0 & 0 & 0 & 0 & 0 \\
+\bottomrule
+\end{tabular}
+\end{table*}

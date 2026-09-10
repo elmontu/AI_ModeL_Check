@@ -12,6 +12,7 @@ from typing import Mapping
 from pydantic import BaseModel
 
 from .audit import AuditCheckpoint, AuditVerification
+from .assurance_record import AssuranceScope, ReleaseAssuranceRecord, SignedReleaseAssuranceRecord, ResidualRiskAcceptance, AssuranceGateResult
 from .incomplete_portfolio import (
     AnalyticPortfolioEvidenceEntry,
     FiniteStatePriorEvidence,
@@ -89,8 +90,13 @@ def _registration(
 _REGISTRATIONS = (
     _registration("request", AssessmentRequest, "assessment-request-v5.json", "5.0"),
     _registration("policy", PolicyBundle, "policy-bundle-v3.json", "3.0"),
-    _registration("report", AssessmentReport, "assessment-report-v5.json", "5.0"),
-    _registration("manifest", SignedManifest, "signed-manifest-v3.json", "3.0"),
+    _registration("report", AssessmentReport, "assessment-report-v6.json", "6.0"),
+    _registration("manifest", SignedManifest, "signed-manifest-v4.json", "4.0"),
+    _registration("assurance-scope", AssuranceScope, "assurance-scope-v1.json", "1.0"),
+    _registration("assurance-record", ReleaseAssuranceRecord, "release-assurance-record-v1.json", "1.0"),
+    _registration("signed-assurance-record", SignedReleaseAssuranceRecord, "signed-release-assurance-record-v1.json", "1.0"),
+    _registration("residual-risk-acceptance", ResidualRiskAcceptance, "residual-risk-acceptance-v1.json", "1.0"),
+    _registration("assurance-gate", AssuranceGateResult, "assurance-gate-result-v1.json", "1.0"),
     _registration("attack-catalog", AttackCatalog, "attack-catalog-v1.json", "1.0"),
     _registration(
         "attack-battery-configuration",
@@ -152,15 +158,15 @@ _REGISTRATIONS = (
         "statistical-floor-family-plan-v1.json",
         "1.0",
     ),
-    _registration("optimization", OptimizationRequest, "optimization-request-v4.json", "4.0"),
+    _registration("optimization", OptimizationRequest, "optimization-request-v5.json", "5.0"),
     _registration(
-        "optimization-report", OptimizationReport, "optimization-report-v4.json", "4.0"
+        "optimization-report", OptimizationReport, "optimization-report-v5.json", "5.0"
     ),
     _registration(
         "optimization-manifest",
         SignedOptimizationManifest,
-        "signed-optimization-manifest-v4.json",
-        "4.0",
+        "signed-optimization-manifest-v5.json",
+        "5.0",
     ),
     _registration(
         "portfolio-problem",
@@ -225,14 +231,14 @@ _REGISTRATIONS = (
     _registration(
         "release-protocol-run",
         ReleaseProtocolRun,
-        "release-protocol-run-v1.1.json",
-        "1.1",
+        "release-protocol-run-v1.2.json",
+        "1.2",
     ),
     _registration(
         "release-protocol-verification",
         ReleaseProtocolVerification,
-        "release-protocol-verification-v2.json",
-        "2.0",
+        "release-protocol-verification-v3.json",
+        "3.0",
     ),
     _registration(
         "audit-verification", AuditVerification, "audit-verification-v3.json", "3.0"

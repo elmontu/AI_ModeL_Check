@@ -1,0 +1,17 @@
+# Allowlist the source and synthetic fixtures required by the local console.
+*
+!Dockerfile.console
+!pyproject.toml
+!README.md
+!requirements.lock
+!requirements-experiments.txt
+!requirements-console.txt
+!src/
+!src/**
+!scripts/
+!scripts/**
+!examples/
+!examples/**
+**/__pycache__/
+**/*.pyc
+**/*.egg-info/

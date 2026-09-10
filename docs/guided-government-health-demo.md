@@ -275,7 +275,7 @@ repository must establish:
 
 - [Normative MRAP/1.0](model-release-assurance-protocol.md)
 - [Integrated system audit specification](system-audit-specification.md)
-- [Full software architecture](architecture.md)
+- [Full software architecture](system-audit-specification.md#2-operational-model-contracts-pipelines-and-workflows)
 - [Local XGBoost worker](xgboost.md)
-- [Government-health XGBoost case study](../paper/xgboost-end-to-end-test-report.md)
-- [Production roadmap](reference/production-roadmap.md)
+- [Government-health XGBoost case study](../reproduction/README.md#evidence-boundary)
+- [Production roadmap](system-audit-specification.md#production-readiness-exit-gates)

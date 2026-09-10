@@ -1,0 +1,26 @@
+[
+  {
+    "suite": "test_llm_training_hooks.py",
+    "exit_code": 0,
+    "seconds": 1.516,
+    "log": "output\\framework-e2e-20260910\\optional-runtime\\test_llm_training_hooks.py.log"
+  },
+  {
+    "suite": "test_llm_training_worker.py",
+    "exit_code": 0,
+    "seconds": 1.578,
+    "log": "output\\framework-e2e-20260910\\optional-runtime\\test_llm_training_worker.py.log"
+  },
+  {
+    "suite": "test_public_privacy_audit_artifact_hash.py",
+    "exit_code": 0,
+    "seconds": 3.391,
+    "log": "output\\framework-e2e-20260910\\optional-runtime\\test_public_privacy_audit_artifact_hash.py.log"
+  },
+  {
+    "suite": "test_vision_training_worker.py",
+    "exit_code": 0,
+    "seconds": 4.312,
+    "log": "output\\framework-e2e-20260910\\optional-runtime\\test_vision_training_worker.py.log"
+  }
+]

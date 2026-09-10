@@ -27,14 +27,19 @@ import os
 import platform
 import random
 import re
-import resource
 import statistics
 import sys
 import time
 import types
+import warnings
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Iterable, Mapping, Sequence
+
+try:
+    import resource
+except ImportError:  # POSIX-only standard-library module.
+    resource = None
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -827,7 +832,10 @@ def _parse_journal(
     if not path.exists():
         return []
     _require(path.is_file() and not path.is_symlink(), "journal must be a regular non-symlink file")
-    _require((path.stat().st_mode & 0o777) == 0o600, "journal mode must remain 0600")
+    if os.name == "nt":
+        warnings.warn("POSIX journal mode 0o600 is not enforceable here; Windows ACL confidentiality has not been verified", RuntimeWarning, stacklevel=2)
+    else:
+        _require((path.stat().st_mode & 0o777) == 0o600, "journal mode must remain 0600")
     payload = path.read_bytes()
     if payload and not payload.endswith(b"\n"):
         boundary = payload.rfind(b"\n") + 1
@@ -906,7 +914,7 @@ def append_journal_record(
         [existing_bytes, len(encoded)], artifact_bytes_ceiling
     )
     path.parent.mkdir(parents=True, exist_ok=True)
-    descriptor = os.open(path, os.O_WRONLY | os.O_CREAT | os.O_APPEND, 0o600)
+    descriptor = os.open(path, os.O_WRONLY | os.O_CREAT | os.O_APPEND | getattr(os, "O_BINARY", 0), 0o600)
     try:
         os.chmod(path, 0o600)
         written = 0
@@ -917,11 +925,7 @@ def append_journal_record(
         os.fsync(descriptor)
     finally:
         os.close(descriptor)
-    directory_fd = os.open(path.parent, os.O_RDONLY)
-    try:
-        os.fsync(directory_fd)
-    finally:
-        os.close(directory_fd)
+    _sync_directory(path.parent)
     records.append(record)
     return record
 
@@ -965,7 +969,55 @@ def _assert_aggregate_only(value: Any, *, path: str = "report") -> None:
         _require(math.isfinite(value), f"durable aggregate contains non-finite number at {path}")
 
 
+def _sync_directory(path: Path) -> bool:
+    if os.name == "nt":
+        message = "directory fsync is unavailable through the Windows standard library; file contents are flushed but power-loss-durable publication is not claimed"
+        try:
+            warnings.warn(message, RuntimeWarning, stacklevel=2)
+        except Warning:
+            try:
+                print(message, file=sys.stderr)
+            except Exception:
+                pass  # Diagnostic transport cannot invalidate a committed append.
+        return False
+    descriptor = os.open(path, os.O_RDONLY)
+    try:
+        os.fsync(descriptor)
+    finally:
+        os.close(descriptor)
+    return True
+
+
 def host_peak_rss_bytes() -> int:
+    """Process high-water resident bytes; Windows uses PeakWorkingSetSize.
+
+    Measurement failure is explicit and aborts budget enforcement; it is never
+    replaced with zero or silently omitted.
+    """
+    if os.name == "nt":
+        import ctypes
+        from ctypes import wintypes
+
+        class ProcessMemoryCounters(ctypes.Structure):
+            _fields_ = [("cb", wintypes.DWORD), ("PageFaultCount", wintypes.DWORD)] + [
+                (name, ctypes.c_size_t) for name in (
+                    "PeakWorkingSetSize", "WorkingSetSize", "QuotaPeakPagedPoolUsage", "QuotaPagedPoolUsage",
+                    "QuotaPeakNonPagedPoolUsage", "QuotaNonPagedPoolUsage", "PagefileUsage", "PeakPagefileUsage",
+                )
+            ]
+
+        kernel = ctypes.WinDLL("kernel32", use_last_error=True)
+        memory = ctypes.WinDLL("psapi", use_last_error=True)
+        kernel.GetCurrentProcess.restype = wintypes.HANDLE
+        memory.GetProcessMemoryInfo.argtypes = [wintypes.HANDLE, ctypes.POINTER(ProcessMemoryCounters), wintypes.DWORD]
+        memory.GetProcessMemoryInfo.restype = wintypes.BOOL
+        counters = ProcessMemoryCounters()
+        counters.cb = ctypes.sizeof(counters)
+        if not memory.GetProcessMemoryInfo(kernel.GetCurrentProcess(), ctypes.byref(counters), counters.cb):
+            raise OSError(ctypes.get_last_error(), "Windows peak working-set measurement unavailable")
+        return int(counters.PeakWorkingSetSize)
+    if resource is None:
+        raise RuntimeError("process peak RSS measurement unavailable on this platform")
     observed = int(resource.getrusage(resource.RUSAGE_SELF).ru_maxrss)
     return observed if platform.system() == "Darwin" else observed * 1024
 

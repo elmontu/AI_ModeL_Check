@@ -26,6 +26,7 @@ import stat
 import subprocess
 import sys
 import time
+import warnings
 from pathlib import Path, PurePosixPath
 from typing import Any, Iterable, Mapping, Sequence
 
@@ -1331,7 +1332,7 @@ def build_markdown_report(report: Mapping[str, Any]) -> str:
 
 
 def _atomic_write_new(path: Path, payload: bytes, *, mode: int = 0o600) -> None:
-    flags = os.O_WRONLY | os.O_CREAT | os.O_EXCL
+    flags = os.O_WRONLY | os.O_CREAT | os.O_EXCL | getattr(os, "O_BINARY", 0)
     descriptor = os.open(path, flags, mode)
     try:
         with os.fdopen(descriptor, "wb", closefd=True) as destination:
@@ -1343,6 +1344,25 @@ def _atomic_write_new(path: Path, payload: bytes, *, mode: int = 0o600) -> None:
             path.unlink(missing_ok=True)
         finally:
             raise
+
+
+def _sync_directory(path: Path) -> bool:
+    if os.name == "nt":
+        message = "directory fsync is unavailable through the Windows standard library; no power-loss-durable publication guarantee is made"
+        try:
+            warnings.warn(message, RuntimeWarning, stacklevel=2)
+        except Warning:
+            try:
+                print(message, file=sys.stderr)
+            except Exception:
+                pass  # The completion manifest already records this limitation.
+        return False
+    descriptor = os.open(path, os.O_RDONLY)
+    try:
+        os.fsync(descriptor)
+    finally:
+        os.close(descriptor)
+    return True
 
 
 def publish_suite_report(output_dir: Path, config: Mapping[str, Any], report: Mapping[str, Any]) -> dict[str, Any]:
@@ -1363,6 +1383,13 @@ def publish_suite_report(output_dir: Path, config: Mapping[str, Any], report: Ma
         "status": "complete",
         "protocol_name": "five-model-composition-scaling-v1",
         "authority": dict(AUTHORITY),
+        "filesystem_durability": {
+            "file_contents_fsynced": True,
+            "directory_fsync_supported": os.name != "nt",
+            "power_loss_durability_guaranteed": False,
+            "posix_permission_enforcement_supported": os.name != "nt",
+            "windows_acl_confidentiality_verified": False,
+        },
         "artifacts": {
             "aggregate_json": {
                 "bytes": len(json_bytes),
@@ -1377,11 +1404,7 @@ def publish_suite_report(output_dir: Path, config: Mapping[str, Any], report: Ma
     assert_safe_aggregate(completion)
     completion_bytes = json.dumps(completion, allow_nan=False, indent=2, sort_keys=True).encode("utf-8") + b"\n"
     _atomic_write_new(output_dir / output["completion_manifest"], completion_bytes)
-    directory_fd = os.open(output_dir, os.O_RDONLY)
-    try:
-        os.fsync(directory_fd)
-    finally:
-        os.close(directory_fd)
+    _sync_directory(output_dir)
     return completion
 
 

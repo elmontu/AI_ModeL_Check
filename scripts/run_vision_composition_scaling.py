@@ -13,14 +13,19 @@ import hashlib
 import json
 import math
 import os
-import resource
 import stat
 import statistics
 import sys
 import time
+import warnings
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any, Iterable, Mapping
+
+try:
+    import resource
+except ImportError:  # POSIX-only standard-library module.
+    resource = None
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -418,7 +423,33 @@ def ordered_hook_profiles(pair: str, profiles: list[Mapping[str, Any]]) -> list[
 
 
 def process_peak_rss_bytes() -> int:
-    """Return the process-wide high-water RSS with explicit platform units."""
+    """Process high-water resident bytes; Windows uses PeakWorkingSetSize.
+
+    An unavailable measurement raises instead of disabling the memory budget.
+    """
+
+    if os.name == "nt":
+        import ctypes
+        from ctypes import wintypes
+
+        class ProcessMemoryCounters(ctypes.Structure):
+            _fields_ = [("cb", wintypes.DWORD), ("PageFaultCount", wintypes.DWORD)] + [
+                (name, ctypes.c_size_t) for name in (
+                    "PeakWorkingSetSize", "WorkingSetSize", "QuotaPeakPagedPoolUsage", "QuotaPagedPoolUsage",
+                    "QuotaPeakNonPagedPoolUsage", "QuotaNonPagedPoolUsage", "PagefileUsage", "PeakPagefileUsage",
+                )
+            ]
+
+        kernel = ctypes.WinDLL("kernel32", use_last_error=True)
+        memory = ctypes.WinDLL("psapi", use_last_error=True)
+        kernel.GetCurrentProcess.restype = wintypes.HANDLE
+        memory.GetProcessMemoryInfo.argtypes = [wintypes.HANDLE, ctypes.POINTER(ProcessMemoryCounters), wintypes.DWORD]
+        memory.GetProcessMemoryInfo.restype = wintypes.BOOL
+        counters = ProcessMemoryCounters()
+        counters.cb = ctypes.sizeof(counters)
+        if not memory.GetProcessMemoryInfo(kernel.GetCurrentProcess(), ctypes.byref(counters), counters.cb):
+            raise OSError(ctypes.get_last_error(), "Windows peak working-set measurement unavailable")
+        return int(counters.PeakWorkingSetSize)
 
     proc_status = Path("/proc/self/status")
     if proc_status.is_file():
@@ -427,6 +458,8 @@ def process_peak_rss_bytes() -> int:
                 fields = line.split()
                 _require(len(fields) == 3 and fields[2] == "kB", "unexpected VmHWM format")
                 return int(fields[1]) * 1024
+    if resource is None:
+        raise RuntimeError("process peak RSS measurement unavailable on this platform")
     observed = int(resource.getrusage(resource.RUSAGE_SELF).ru_maxrss)
     return observed if sys.platform == "darwin" else observed * 1024
 
@@ -1307,6 +1340,7 @@ def append_checkpoint_record(
             "checkpoint ledger must be one bounded regular file",
         )
     flags = os.O_WRONLY | os.O_CREAT | os.O_APPEND
+    flags |= getattr(os, "O_BINARY", 0)
     flags |= getattr(os, "O_CLOEXEC", 0)
     flags |= getattr(os, "O_NOFOLLOW", 0)
     descriptor = os.open(ledger_path, flags, 0o600)
@@ -1324,7 +1358,12 @@ def append_checkpoint_record(
                 == (opened.st_dev, opened.st_ino, opened.st_size),
                 "checkpoint ledger changed before append",
             )
-        os.fchmod(descriptor, 0o600)
+        if hasattr(os, "fchmod"):
+            os.fchmod(descriptor, 0o600)
+        elif os.name == "nt":
+            warnings.warn("POSIX mode 0o600 is not enforceable here; Windows ACL confidentiality has not been verified", RuntimeWarning, stacklevel=2)
+        else:
+            raise RuntimeError("descriptor permission enforcement is unavailable")
         offset = 0
         while offset < len(payload):
             written = os.write(descriptor, payload[offset:])

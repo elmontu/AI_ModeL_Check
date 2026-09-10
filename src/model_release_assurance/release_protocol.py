@@ -1,16 +1,18 @@
-"""Normative model-release lifecycle transcript verifier.
+"""Offline model-release lifecycle transcript verifier.
 
 The finite protocol-feasibility solver answers whether a declared family of
 evidence laws can support a sound and live gate.  This module answers a
-different question: whether one concrete release followed the mandatory
-end-to-end lifecycle from registration through evidence, assessment,
-authorization, atomic portfolio commit, deployment, monitoring, and terminal
-action.
+different question: whether a supplied record consistently declares the ordered
+lifecycle from registration through evidence, assessment, authorization,
+portfolio commit, deployment, monitoring, and terminal action. It does not
+establish that an authoritative service actually executed those declarations.
 
 The structural profile checks typed state transitions, hash chaining, role
 separation, artifact digests, and fail-closed authorization preconditions.  The
 authenticated profile additionally verifies trust-anchored Ed25519 signatures
-over domain-separated, release-bound events and artifacts.  Neither profile
+over versioned, domain-separated, context-bound events and artifacts. Existing
+assessment/optimization report contracts are replayed when files are checked.
+Neither profile
 proves that referenced evidence is scientifically true or replaces protected
 production identity, registry, gateway, and key-management services.
 """
@@ -30,11 +32,12 @@ from .integrity import (
     canonical_json_bytes,
     sha256_bytes,
     sign_canonical,
+    validate_report_against_policy,
     verify_canonical_signature,
     verify_source_file,
 )
-from .models import OverallVerdict, StrictModel
-from .optimizer import OptimizationOutcome
+from .models import AssessmentReport, OverallVerdict, PolicyBundle, StrictModel
+from .optimizer import OptimizationOutcome, OptimizationReport
 from .runtime_identity import RuntimeIdentity, current_runtime_identity
 
 
@@ -125,7 +128,9 @@ class MonitoringOutcome(StrEnum):
 
 class ReleaseProtocolVerificationProfile(StrEnum):
     STRUCTURAL = "structural_v1"
-    AUTHENTICATED = "authenticated_v1"
+    # Version 1 omitted population and actor context from signed payloads. It
+    # must not be silently accepted under the stronger version-2 semantics.
+    AUTHENTICATED = "authenticated_v2"
 
 
 class ReleaseProtocolVerificationCheck(StrEnum):
@@ -291,7 +296,7 @@ class ReleaseProtocolEvent(StrictModel):
 
 
 class ReleaseProtocolRun(StrictModel):
-    schema_version: Literal["1.1"] = "1.1"
+    schema_version: Literal["1.2"] = "1.2"
     protocol_id: Literal["MRAP/1.0"] = "MRAP/1.0"
     verification_profile: ReleaseProtocolVerificationProfile = (
         ReleaseProtocolVerificationProfile.STRUCTURAL
@@ -342,7 +347,7 @@ class ReleaseProtocolRun(StrictModel):
 
 
 class ReleaseProtocolVerification(StrictModel):
-    schema_version: Literal["2.0"] = "2.0"
+    schema_version: Literal["3.0"] = "3.0"
     verification_profile: ReleaseProtocolVerificationProfile
     artifact_files_verified: bool
     authenticated_signatures_verified: bool
@@ -353,8 +358,13 @@ class ReleaseProtocolVerification(StrictModel):
     degradations: frozenset[ReleaseProtocolVerificationDegradation] = frozenset()
     valid: bool
     final_state: ReleaseProtocolState
-    authorization_issued: bool
-    deployment_active: bool
+    authorization_recorded: bool
+    deployment_recorded: bool
+    # Compatibility names now have explicit, fail-closed production meaning.
+    # The version-3 result reports replay state separately; this offline
+    # function never issues a credential or observes a live deployment.
+    authorization_issued: Literal[False] = False
+    deployment_active: Literal[False] = False
     event_sha256s: tuple[str, ...]
     reasons: tuple[str, ...]
 
@@ -364,6 +374,12 @@ class ReleaseProtocolVerification(StrictModel):
             raise ValueError("protocol verification time must include a timezone offset")
         if self.runtime_identity.component_id != "release_protocol_verifier":
             raise ValueError("protocol verification names the wrong runtime component")
+        if not self.valid and (self.authorization_recorded or self.deployment_recorded):
+            raise ValueError("invalid replay cannot record authorization or active deployment")
+        if self.deployment_recorded and (
+            not self.authorization_recorded or self.final_state is not ReleaseProtocolState.ACTIVE
+        ):
+            raise ValueError("recorded active deployment requires an authorized ACTIVE replay")
         artifact_skipped = (
             ReleaseProtocolVerificationCheck.ARTIFACT_FILE_DIGESTS
             in self.skipped_checks
@@ -541,6 +557,34 @@ def portfolio_registry_head_sha256(
     )
 
 
+def _release_signature_context(run: ReleaseProtocolRun) -> dict[str, object]:
+    """Immutable governed context shared by both version-2 signature domains.
+
+    Actors/organizations are bound declarations, not independently established
+    organizational authority. The claimed terminal state is replay-derived and
+    deliberately not an assertion that any production service executed it.
+    """
+    if run.schema_version != "1.2":
+        raise IntegrityError(
+            "current protocol signatures require ReleaseProtocolRun/1.2; "
+            "legacy signatures must be reviewed and reissued, not relabelled"
+        )
+    return {
+        "schema_version": run.schema_version,
+        "protocol_id": run.protocol_id,
+        "verification_profile": run.verification_profile,
+        "release_id": run.release_id,
+        "release_instance_sha256": run.release_instance_sha256,
+        "artifact_sha256": run.artifact_sha256,
+        "interface_sha256": run.interface_sha256,
+        "policy_sha256": run.policy_sha256,
+        "population_scope_sha256s": run.population_scope_sha256s,
+        "registered_portfolio_head_sha256": run.registered_portfolio_head_sha256,
+        "registered_portfolio_sequence": run.registered_portfolio_sequence,
+        "actors": [actor.model_dump(mode="json") for actor in run.actors],
+    }
+
+
 def release_protocol_artifact_signature_payload(
     run: ReleaseProtocolRun,
     event: ReleaseProtocolEvent,
@@ -548,12 +592,8 @@ def release_protocol_artifact_signature_payload(
 ) -> dict[str, object]:
     """Return the domain-separated payload signed by an artifact producer."""
     return {
-        "domain": "MRAP/1.0:artifact-signature:v1",
-        "schema_version": run.schema_version,
-        "protocol_id": run.protocol_id,
-        "verification_profile": run.verification_profile,
-        "release_id": run.release_id,
-        "release_instance_sha256": run.release_instance_sha256,
+        "domain": "MRAP/1.0:artifact-signature:v2",
+        **_release_signature_context(run),
         "event_id": event.event_id,
         "event_type": event.event_type,
         "artifact": artifact.model_dump(mode="json", exclude={"signature"}, exclude_none=True),
@@ -566,16 +606,8 @@ def release_protocol_event_signature_payload(
 ) -> dict[str, object]:
     """Return the domain-separated payload signed by a protocol event actor."""
     return {
-        "domain": "MRAP/1.0:event-signature:v1",
-        "schema_version": run.schema_version,
-        "protocol_id": run.protocol_id,
-        "verification_profile": run.verification_profile,
-        "release_id": run.release_id,
-        "release_instance_sha256": run.release_instance_sha256,
-        "artifact_sha256": run.artifact_sha256,
-        "interface_sha256": run.interface_sha256,
-        "registered_portfolio_head_sha256": run.registered_portfolio_head_sha256,
-        "registered_portfolio_sequence": run.registered_portfolio_sequence,
+        "domain": "MRAP/1.0:event-signature:v2",
+        **_release_signature_context(run),
         "event": event.model_dump(mode="json", exclude={"signature"}, exclude_none=True),
     }
 
@@ -672,6 +704,83 @@ def _verify_protocol_signature(
     return True
 
 
+def _verify_report_artifact(
+    run: ReleaseProtocolRun,
+    event: ReleaseProtocolEvent,
+    artifact: ReleaseProtocolArtifact,
+    path: Path,
+    *,
+    assessment: tuple[AssessmentReport, str] | None,
+    policy: PolicyBundle | None = None,
+) -> AssessmentReport | OptimizationReport | None:
+    """Replay existing report contracts, without inventing governance schemas.
+
+    This checks declared semantics and predecessor bindings, not worker execution
+    or scientific truth. Assessment and selected interfaces may legitimately
+    differ: the optimizer's existing transfer machinery governs that relation.
+    """
+    if artifact.kind not in (
+        ReleaseProtocolArtifactKind.ASSESSMENT_REPORT,
+        ReleaseProtocolArtifactKind.OPTIMIZATION_REPORT,
+    ):
+        return None
+    document = path.read_bytes()
+    if sha256_bytes(document) != artifact.sha256:
+        raise IntegrityError("report artifact changed between digest and contract replay")
+    if artifact.kind is ReleaseProtocolArtifactKind.ASSESSMENT_REPORT:
+        report = AssessmentReport.model_validate_json(document)
+        if (
+            report.release_id != run.release_id
+            or report.release_contract_sha256 != run.release_instance_sha256
+            or report.policy_sha256 != run.policy_sha256
+            or report.population_scope_sha256s != run.population_scope_sha256s
+        ):
+            raise IntegrityError("assessment artifact does not bind the registered release/policy/population context")
+        expected_scopes = {
+            scope.scope_id: sha256_bytes(canonical_json_bytes(scope))
+            for scope in report.population_scopes
+        }
+        if report.population_scope_sha256s != expected_scopes:
+            raise IntegrityError("assessment artifact population-scope digests do not replay")
+        if report.overall_verdict is not event.assessment_verdict:
+            raise IntegrityError("assessment event verdict disagrees with its report artifact")
+        expiries = (report.release_expires_at, report.policy_expires_at)
+    elif artifact.kind is ReleaseProtocolArtifactKind.OPTIMIZATION_REPORT:
+        report = OptimizationReport.model_validate_json(document)
+        if (
+            report.policy_sha256 != run.policy_sha256
+            or report.portfolio_registry_head_sha256 != run.registered_portfolio_head_sha256
+            or report.portfolio_registry_sequence != run.registered_portfolio_sequence
+            or report.outcome is not event.optimization_outcome
+            or report.selected_configuration_id != event.selected_configuration_id
+        ):
+            raise IntegrityError("optimization event disagrees with its report context or selection")
+        if report.fail_safe_gate_passed:
+            if assessment is None:
+                raise IntegrityError("optimization artifact has no verified predecessor assessment artifact")
+            prior_report, prior_file_sha256 = assessment
+            if (
+                report.selected_assessment_id != prior_report.assessment_id
+                or report.selected_assessment_report_sha256 != prior_file_sha256
+                or report.selected_release_artifact_sha256 != run.artifact_sha256
+                or report.selected_release_interface_sha256 != run.interface_sha256
+                or run.release_id not in report.selected_covered_release_ids
+            ):
+                raise IntegrityError("optimization artifact does not bind its assessment or selected release")
+        expiries = (report.expires_at,)
+    if report.created_at > event.occurred_at:
+        raise IntegrityError("report artifact was created after the event that records it")
+    if any(expiry is not None and event.occurred_at >= expiry for expiry in expiries):
+        raise IntegrityError("report artifact is expired at its recording event")
+    if isinstance(report, AssessmentReport):
+        if policy is None:
+            raise IntegrityError("assessment artifact has no hash-verified registered policy")
+        validate_report_against_policy(
+            report, policy, policy_sha256=run.policy_sha256, as_of=event.occurred_at
+        )
+    return report
+
+
 def verify_release_protocol_run(
     run: ReleaseProtocolRun,
     base_dir: Path,
@@ -687,6 +796,11 @@ def verify_release_protocol_run(
     if verification_time.utcoffset() is None:
         raise ValueError("protocol verification time must include a timezone offset")
     reasons: list[str] = []
+    if run.schema_version != "1.2":
+        raise IntegrityError(
+            "current replay requires ReleaseProtocolRun/1.2; legacy signed runs "
+            "must be explicitly migrated and re-signed"
+        )
     if required_profile is not None and run.verification_profile is not required_profile:
         reasons.append(
             f"verification policy requires profile {required_profile.value}; "
@@ -730,6 +844,9 @@ def verify_release_protocol_run(
     authorization_expiry: datetime | None = None
     committed_registry_head: str | None = None
     authorization_issued = False
+    verified_assessment: tuple[AssessmentReport, str] | None = None
+    verified_report_expiries: list[datetime] = []
+    verified_policy_bytes: bytes | None = None
 
     for event in run.events:
         event_reason_start = len(reasons)
@@ -743,6 +860,9 @@ def verify_release_protocol_run(
         next_authorization_expiry = authorization_expiry
         next_committed_registry_head = committed_registry_head
         next_authorization_issued = authorization_issued
+        next_verified_assessment = verified_assessment
+        next_report_expiries = list(verified_report_expiries)
+        next_policy_bytes = verified_policy_bytes
 
         actor = actors.get(event.actor_id)
         if actor is None or actor.role is not event.actor_role:
@@ -770,6 +890,8 @@ def verify_release_protocol_run(
             reasons.append(f"event {event.event_id} breaks the protocol hash chain")
         if previous_time is not None and event.occurred_at < previous_time:
             reasons.append(f"event {event.event_id} precedes an earlier protocol event")
+        if event.occurred_at > verification_time:
+            reasons.append(f"event {event.event_id} occurs after the verification time")
         previous_time = event.occurred_at
 
         kinds = {artifact.kind for artifact in event.artifacts}
@@ -821,10 +943,60 @@ def verify_release_protocol_run(
                         raise IntegrityError(
                             "protocol artifact resolves outside the declared artifact base"
                         )
-                    verify_source_file(artifact.path, artifact.sha256, base_dir)
+                    verified_path = verify_source_file(artifact.path, artifact.sha256, base_dir)
+                    if artifact.kind is ReleaseProtocolArtifactKind.POLICY_SNAPSHOT:
+                        document = verified_path.read_bytes()
+                        if sha256_bytes(document) != artifact.sha256:
+                            raise IntegrityError("policy changed between digest replay and snapshot capture")
+                        next_policy_bytes = document
+                    policy = None
+                    if artifact.kind is ReleaseProtocolArtifactKind.ASSESSMENT_REPORT:
+                        if verified_policy_bytes is None:
+                            raise IntegrityError("assessment has no verified policy snapshot")
+                        policy = PolicyBundle.model_validate_json(verified_policy_bytes)
+                    report = _verify_report_artifact(
+                        run, event, artifact, verified_path,
+                        assessment=verified_assessment, policy=policy,
+                    )
+                    if isinstance(report, AssessmentReport):
+                        next_verified_assessment = (report, artifact.sha256)
+                        next_report_expiries.extend(
+                            expiry for expiry in (report.release_expires_at, report.policy_expires_at)
+                            if expiry is not None
+                        )
+                    elif isinstance(report, OptimizationReport):
+                        next_report_expiries.append(report.expires_at)
                 except (IntegrityError, OSError, ValueError) as exc:
-                    reasons.append(f"artifact {artifact.artifact_id} failed digest replay: {exc}")
+                    reasons.append(f"artifact {artifact.artifact_id} failed file/contract replay: {exc}")
                     artifact_files_verified = False
+
+        consumes_live_evidence = event.event_type in (
+            ReleaseProtocolEventType.SUBMIT_AUTHORIZATION,
+            ReleaseProtocolEventType.COMMIT_PORTFOLIO,
+            ReleaseProtocolEventType.ACTIVATE_DEPLOYMENT,
+        ) or (
+            event.event_type is ReleaseProtocolEventType.RECORD_SELECTION
+            and event.optimization_outcome in (
+                OptimizationOutcome.RELEASE_AS_PROPOSED,
+                OptimizationOutcome.RELEASE_WITH_CONTROLS,
+            )
+        ) or (
+            event.event_type is ReleaseProtocolEventType.REVIEW_MONITORING
+            and event.monitoring_outcome is MonitoringOutcome.CONTINUE
+        )
+        # Check the predecessor at the consuming event, not only at the final
+        # replay cutoff: a later terminal action cannot erase an earlier stale
+        # authorization/activation. Stop/revoke/expire actions remain possible.
+        if consumes_live_evidence and any(
+            event.occurred_at >= expiry for expiry in verified_report_expiries
+        ):
+            reasons.append(f"event {event.event_id} consumes an expired report or policy")
+        if (
+            event.event_type is ReleaseProtocolEventType.REVIEW_MONITORING
+            and event.monitoring_outcome is MonitoringOutcome.CONTINUE
+            and (authorization_expiry is None or event.occurred_at >= authorization_expiry)
+        ):
+            reasons.append(f"event {event.event_id} continues an absent or expired authorization")
 
         event_hash = release_protocol_event_sha256(event)
         event_hashes.append(event_hash)
@@ -1086,6 +1258,9 @@ def verify_release_protocol_run(
             authorization_expiry = next_authorization_expiry
             committed_registry_head = next_committed_registry_head
             authorization_issued = next_authorization_issued
+            verified_assessment = next_verified_assessment
+            verified_report_expiries = next_report_expiries
+            verified_policy_bytes = next_policy_bytes
 
     if state is not run.claimed_state:
         reasons.append(
@@ -1102,6 +1277,13 @@ def verify_release_protocol_run(
         reasons.append(
             f"claimed state {state.value} has an absent or expired authorization at verification time"
         )
+    if state in (
+        ReleaseProtocolState.COMMIT_PENDING,
+        ReleaseProtocolState.AUTHORIZED,
+        ReleaseProtocolState.ACTIVE,
+        ReleaseProtocolState.SUSPENDED,
+    ) and any(verification_time >= expiry for expiry in verified_report_expiries):
+        reasons.append("claimed live authorization relies on an expired report or policy")
 
     return ReleaseProtocolVerification(
         verification_profile=run.verification_profile,
@@ -1111,12 +1293,16 @@ def verify_release_protocol_run(
         run_sha256=sha256_bytes(canonical_json_bytes(run)),
         runtime_identity=current_runtime_identity(
             component_id="release_protocol_verifier",
-            component_version="ReleaseProtocolVerification/2.0",
+            component_version="ReleaseProtocolVerification/3.0",
             algorithm_profile={
                 "artifact_contract": "ReleaseProtocolArtifact/1",
                 "event_contract": "ReleaseProtocolEvent/1",
-                "run_contract": "ReleaseProtocolRun/1.1",
+                "run_contract": "ReleaseProtocolRun/1.2",
                 "state_machine": "offline_declared_transition_replay_v1",
+                "production_authorization_issued": False,
+                "production_deployment_observed": False,
+                "signature_context": "MRAP/1.0:event-and-artifact-signature:v2",
+                "known_report_contracts_replayed": verify_artifact_files,
                 "state_head_recomputed": True,
                 "state_head_recurrence": "MRAP-STATE-1/release-bound-commitment-v1",
                 "state_delta_semantic_completeness_verified": False,
@@ -1126,8 +1312,8 @@ def verify_release_protocol_run(
         degradations=frozenset(degradations),
         valid=not reasons,
         final_state=state,
-        authorization_issued=authorization_issued,
-        deployment_active=not reasons and state is ReleaseProtocolState.ACTIVE,
+        authorization_recorded=not reasons and authorization_issued,
+        deployment_recorded=not reasons and state is ReleaseProtocolState.ACTIVE,
         event_sha256s=tuple(event_hashes),
         reasons=tuple(reasons),
     )

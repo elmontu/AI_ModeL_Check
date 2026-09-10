@@ -1,0 +1,34 @@
+name: mra-local-console
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile.console
+    image: mra-local-console:dev
+    command: ["python", "-m", "model_release_assurance.console", "serve", "--host", "0.0.0.0", "--data", "/data"]
+    ports:
+      - "127.0.0.1:8765:8765"
+    volumes:
+      - console-data:/data
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8765/healthz', timeout=3)"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+  worker:
+    image: mra-local-console:dev
+    command: ["python", "-m", "model_release_assurance.console", "worker", "--data", "/data"]
+    depends_on:
+      api:
+        condition: service_healthy
+    volumes:
+      - console-data:/data
+    environment:
+      OMP_NUM_THREADS: "2"
+    healthcheck:
+      test: ["CMD", "python", "-c", "from pathlib import Path; from model_release_assurance.console.store import Store; raise SystemExit(0 if Store(Path('/data')).status()['worker_online'] else 1)"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+volumes:
+  console-data:

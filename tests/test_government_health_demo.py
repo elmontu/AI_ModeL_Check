@@ -5,12 +5,14 @@ import json
 import shutil
 import tempfile
 import unittest
-from datetime import datetime, timezone
+from contextlib import nullcontext
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
+from unittest.mock import patch
 
 from model_release_assurance.audit import AuditStore
-from model_release_assurance.integrity import sha256_file, verify_signed_manifest
-from model_release_assurance.models import AssessmentReport, SignedManifest
+from model_release_assurance.integrity import canonical_json_bytes, sha256_file, verify_signed_manifest
+from model_release_assurance.models import AssessmentReport, AssessmentRequest, SignedManifest
 from model_release_assurance.optimizer import (
     OptimizationReport,
     SignedOptimizationManifest,
@@ -18,8 +20,10 @@ from model_release_assurance.optimizer import (
 )
 from model_release_assurance.release_protocol import (
     ReleaseProtocolRun,
+    ReleaseProtocolEventType,
     ReleaseProtocolState,
     ReleaseProtocolVerificationDegradation,
+    release_protocol_event_sha256,
     verify_release_protocol_run,
 )
 
@@ -200,6 +204,17 @@ class GovernmentHealthDemoTests(unittest.TestCase):
                 optimization.selected_assessment_report_sha256,
                 rebound_reference["report_sha256"],
             )
+            rebound_assessment_request_path = (
+                run_dir / "fixtures" / "controlled-candidate"
+                / rebound_reference["assessment_request_path"]
+            )
+            self.assertEqual(
+                rebound_reference["assessment_request_sha256"],
+                sha256_file(rebound_assessment_request_path),
+            )
+            assessment_request = AssessmentRequest.model_validate_json(
+                rebound_assessment_request_path.read_text(encoding="utf-8")
+            )
 
             public_key = run_dir / report["integrity"]["demo_public_key_path"]
             assessment_manifest = SignedManifest.model_validate_json(
@@ -207,7 +222,9 @@ class GovernmentHealthDemoTests(unittest.TestCase):
                     encoding="utf-8"
                 )
             )
-            verify_signed_manifest(assessment_manifest, controlled_report, public_key)
+            verify_signed_manifest(
+                assessment_manifest, controlled_report, public_key, request=assessment_request
+            )
             optimization_manifest = SignedOptimizationManifest.model_validate_json(
                 (run_dir / "integrity" / "optimization-manifest.json").read_text(
                     encoding="utf-8"
@@ -235,15 +252,70 @@ class GovernmentHealthDemoTests(unittest.TestCase):
             full_run = ReleaseProtocolRun.model_validate_json(
                 full_run_path.read_text(encoding="utf-8")
             )
+            self.assertEqual(full_run.schema_version, "1.2")
+            self.assertGreaterEqual(
+                full_run.events[0].occurred_at,
+                max(controlled_report.created_at, optimization.created_at),
+            )
+            replay_time = full_run.events[-1].occurred_at + timedelta(minutes=12)
             replay = verify_release_protocol_run(
                 full_run,
                 full_run_path.parent,
                 verify_artifact_files=True,
-                as_of=reference_time.replace(minute=20),
+                as_of=replay_time,
             )
             self.assertTrue(replay.valid, replay.reasons)
             self.assertTrue(replay.artifact_files_verified)
             self.assertEqual(replay.final_state, ReleaseProtocolState.ACTIVE)
+            self.assertTrue(replay.authorization_recorded)
+            self.assertTrue(replay.deployment_recorded)
+            self.assertFalse(replay.authorization_issued)
+            self.assertFalse(replay.deployment_active)
+
+            # A terminal revocation must not hide an earlier authorization or
+            # activation performed after its optimization predecessor expired.
+            incident_run = ReleaseProtocolRun.model_validate_json(
+                (full_run_path.parent / "monitoring_incident-release-protocol-run.json")
+                .read_text(encoding="utf-8")
+            )
+            revoked = full_run.model_copy(update={
+                "claimed_state": ReleaseProtocolState.REVOKED,
+                "events": full_run.events + (incident_run.events[-1].model_copy(update={
+                    "event_type": ReleaseProtocolEventType.REVOKE_RELEASE,
+                }),),
+            })
+            self.assertTrue(verify_release_protocol_run(
+                revoked, full_run_path.parent, as_of=replay_time,
+            ).valid)
+            optimization_artifact = revoked.events[4].artifacts[0]
+            optimization_artifact_path = full_run_path.parent / optimization_artifact.path
+            original_optimization_bytes = optimization_artifact_path.read_bytes()
+            try:
+                for consumer_index in (5, 6, 7):
+                    with self.subTest(expired_before=revoked.events[consumer_index].event_type.value):
+                        expired = optimization.model_copy(update={
+                            "expires_at": revoked.events[consumer_index].occurred_at,
+                        })
+                        OptimizationReport.model_validate(expired.model_dump(mode="python"))
+                        optimization_artifact_path.write_bytes(canonical_json_bytes(expired))
+                        changed_events = list(revoked.events)
+                        changed_events[4] = changed_events[4].model_copy(update={"artifacts": (
+                            optimization_artifact.model_copy(update={
+                                "sha256": sha256_file(optimization_artifact_path),
+                            }),
+                        )})
+                        previous = None
+                        for index, event in enumerate(changed_events):
+                            changed_events[index] = event.model_copy(update={"previous_event_sha256": previous})
+                            previous = release_protocol_event_sha256(changed_events[index])
+                        stale = revoked.model_copy(update={"events": tuple(changed_events)})
+                        result = verify_release_protocol_run(
+                            stale, full_run_path.parent, as_of=replay_time,
+                        )
+                        self.assertFalse(result.valid)
+                        self.assertTrue(any("consumes an expired report or policy" in reason for reason in result.reasons))
+            finally:
+                optimization_artifact_path.write_bytes(original_optimization_bytes)
 
             registration = (
                 run_dir
@@ -255,12 +327,12 @@ class GovernmentHealthDemoTests(unittest.TestCase):
                 full_run,
                 full_run_path.parent,
                 verify_artifact_files=True,
-                as_of=reference_time.replace(minute=20),
+                as_of=replay_time,
             )
             self.assertFalse(tampered_replay.valid)
             self.assertFalse(tampered_replay.artifact_files_verified)
             self.assertTrue(
-                any("failed digest replay" in reason for reason in tampered_replay.reasons)
+                any("failed file/contract replay" in reason for reason in tampered_replay.reasons)
             )
 
             plain_report = (run_dir / "START-HERE.md").read_text(encoding="utf-8")
@@ -381,9 +453,22 @@ class GovernmentHealthDemoTests(unittest.TestCase):
             shutil.copytree(ROOT / "examples", symlink_source)
             symlink_target = symlink_source / "request.json"
             symlink_target.unlink()
-            symlink_target.symlink_to(ROOT / "examples" / "request.json")
+            try:
+                symlink_target.symlink_to(ROOT / "examples" / "request.json")
+                symlink_check = nullcontext()
+            except OSError as exc:
+                if getattr(exc, "winerror", None) != 1314:
+                    raise
+                # Unprivileged Windows cannot create a native symlink. Exercise
+                # the application rejection guard using the reported file type;
+                # this fallback is not a native symlink integration test.
+                native_is_symlink = Path.is_symlink
+                symlink_check = patch.object(
+                    Path, "is_symlink",
+                    lambda path: path == symlink_target or native_is_symlink(path),
+                )
             symlink_destination = temporary_root / "symlink-destination"
-            with self.assertRaisesRegex(ValueError, "symlink"):
+            with symlink_check, self.assertRaisesRegex(ValueError, "symlink"):
                 MODULE._copy_examples(symlink_destination, symlink_source)
             self.assertFalse(symlink_destination.exists())
 

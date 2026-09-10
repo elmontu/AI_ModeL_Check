@@ -76,23 +76,23 @@ MODEL_PREVIEW_MANIFEST_SHA256 = (
 # directory. The pins make the suite's no-real-data statement independent of
 # untracked files that may be present beside the examples.
 DEMO_FIXTURE_SHA256 = {
-    "request.json": "66f0622ce5671a2e8124f5ce4b9dca8ed2cf6a490d36c2b019f81aee1209f917",
-    "optimization-request.json": "a122da96696974f83fe7915ffefb5f513ce6f8ce92217b22bfb7223d51f6681b",
-    "policy.json": "33952cfe3632958fb82dc53d0035152af485547b7eab601c787f353f4fdedca0",
+    "request.json": "faf93f7d8b2fdcb4b841a54728c25f2ab225d5b42f684d8dbd5a549d31ef875c",
+    "optimization-request.json": "391d1189bb0e3e5d9faa2894305d1bfa26d03e89d2939fe74c9958bd0ca0936b",
+    "policy.json": "6f3fd343ce5b5fa6305fb32e6c1b77efdbbd88112bc29ce41e84fc22c1906c3e",
     "artifacts/demo-tree.json": "2f42b587627c5b6c4447d781b57a47082743f029b475f560a574553abcedfdd5",
     "config/tree-linkage-analyzer.json": "d462c2564b587a5429a5814e95f918003120cced4268db975a9fb6395a4715b3",
     "config/dp-analyzer.json": "f4d1c3ee56b6b9eddfa5b93e55400725dfdc3df92a3a652de4f09c0ad369e12c",
     "config/attack-analyzer.json": "a0e847216b048e8b180079c8c9ce33b684c5a826cf66ef0020ac793ee289b3a8",
     "config/attack-design-registration.json": "e42c2b5a00f2555f355a10fb4272022d14d5d141c42ab7afa5d61be50f442c83",
     "config/attack-battery-analyzer.json": "b48e0f7369e2c52b00c44ab917013c4dd7b80cadbd33bb81b623f76f0a1d927c",
-    "evidence/tree-linkage.json": "3aed038499ee7cae81b67b483e024264117e78423528538a4a2e3288fafea79e",
-    "evidence/dp-accountant.json": "94b6272e44832081a3f37a5be0743d820fdf2914fbe2d06a3c5261882dffe59c",
-    "evidence/attack-counts.json": "5e026a5cc9a2e4e6d39e96ce08e7461449ce55f323b8189755fc6972bb703dd1",
-    "evidence/attack-battery.json": "8a9c4dbd8c4814794c8f5658562f4b398a4d246742a3e0738885137d234ff4bd",
+    "evidence/tree-linkage.json": "bac08c2a10aca47063039cde92ea3b405cae86aa0cc8af55e03dc300343fe049",
+    "evidence/dp-accountant.json": "0bbf19450fb76246c16b8e14ca3eafa3027fc79110b4469726b0ab6bbc9943a2",
+    "evidence/attack-counts.json": "87abfbe3805928ad555bad5dde7d253c6f1fb9ca1ca2e0116a7418679cc48a01",
+    "evidence/attack-battery.json": "18376b3f14be844f2591f6fd2c918c0653b445e5da5dc047cb930539964279b7",
     "evidence/optimization-utility.json": "5b4023684dc651ef34ea37d18fd91433b9cdb3b706cf061b20bf7ce225af1e9b",
     "evidence/bounded-api-control.json": "095a53f4f80b6578c77155e81144fa9d8e782cd4efb52a0c69ee1c3956614c52",
     "evidence/bounded-api-portfolio.json": "8245d7ea28c7fb7460dcd6dfae26167e8e15b95a585bc320ea53f25ff677bc46",
-    "evidence/portfolio-registry-snapshot.json": "2a73d705b33ea11f7b4446dfe27b14e4c07d0a7876babc2ef5fed35120b8c6d0",
+    "evidence/portfolio-registry-snapshot.json": "3f2aad058ab398394aedf4507e9d82ce1c51f3799594e2f459fbc49556a02025",
 }
 MODEL_PROXY_DESCRIPTIONS = {
     "cnn": "hand-coded convolution/ReLU proxy over a tiny JSON artifact; not PyTorch, AlexNet, or DenseNet",
@@ -356,7 +356,7 @@ def _assessment_scenario(
         "threats": _threat_summary(report),
         "artifacts": [
             {
-                "kind": "assessment_report_v5",
+                "kind": f"assessment_report_v{report.schema_version.split('.')[0]}",
                 "path": report_path.relative_to(run_dir).as_posix(),
                 "sha256": sha256_file(report_path),
             }
@@ -428,6 +428,10 @@ def _build_workflow_bundle(
     policy_path: Path,
     reference_time: datetime,
 ) -> dict[str, Any]:
+    # A historical discussion clock may not backdate reports produced by the
+    # live core. The later events below remain explicitly simulated records;
+    # their replay clock is not a claim of completed production activity.
+    reference_time = max(reference_time, assessment.created_at, optimization.created_at)
     bundle_dir.mkdir(parents=True, exist_ok=False)
     boundary_notice_path = bundle_dir / "00-DEMO-ONLY-NOT-AUTHORIZED.md"
     boundary_notice_path.write_text(
@@ -440,9 +444,10 @@ def _build_workflow_bundle(
                 "was contacted or changed.",
                 "",
                 "Raw MRAP transcript and verification fields such as",
-                "`authorization_issued=true`, `deployment_active=true`, or `ACTIVE` describe",
-                "only the state recorded by a supplied mock transcript. They are not claims",
-                "about a production model. Read `../START-HERE.md` for the decision boundary.",
+                "`authorization_recorded=true`, `deployment_recorded=true`, or `ACTIVE` describe",
+                "only the state recorded by a supplied mock transcript. The production fields",
+                "`authorization_issued` and `deployment_active` remain false. Read",
+                "`../START-HERE.md` for the decision boundary.",
                 "",
                 "The healthcare scenario is a discussion overlay. The live reference core",
                 "assessed the separate generic synthetic fixture identified in the suite",
@@ -946,10 +951,10 @@ def _workflow_scenario(
         "protocol_profile": verification.verification_profile.value,
         "artifact_files_verified": verification.artifact_files_verified,
         "protocol_degradations": sorted(value.value for value in verification.degradations),
-        "authorization_recorded_in_mock_transcript": verification.authorization_issued,
+        "authorization_recorded_in_mock_transcript": verification.authorization_recorded,
         "production_authorization_issued": False,
         "deployment_active": False,
-        "mock_transcript_records_active": verification.deployment_active,
+        "mock_transcript_records_active": verification.deployment_recorded,
         "what_happened": {
             "mock_full_lifecycle": (
                 "Mock registry and gateway records formed a structurally consistent ACTIVE transcript."
@@ -1286,6 +1291,8 @@ def run_demo_suite(
     assessment_reference = optimization_raw["configurations"][0]["assessment"]
     assessment_reference["report_path"] = "evidence/generated-assessment.json"
     assessment_reference["report_sha256"] = sha256_file(copied_assessment_path)
+    assessment_reference["assessment_request_path"] = "request.json"
+    assessment_reference["assessment_request_sha256"] = sha256_file(controlled_root / "request.json")
     controlled_optimization_request = OptimizationRequest.model_validate(
         optimization_raw
     )
@@ -1328,7 +1335,7 @@ def run_demo_suite(
     )
     controlled_scenario["artifacts"].append(
         {
-            "kind": "optimization_report_v4",
+            "kind": f"optimization_report_v{controlled_optimization.schema_version.split('.')[0]}",
             "path": controlled_optimization_path.relative_to(run_dir).as_posix(),
             "sha256": sha256_file(controlled_optimization_path),
         }
@@ -1469,6 +1476,7 @@ def run_demo_suite(
             assessment_manifest,
             controlled_report,
             temporary_public_key,
+            request=controlled_request,
         )
         optimization_manifest = build_signed_optimization_manifest(
             controlled_optimization,

@@ -11,6 +11,48 @@
       "mandatory": true,
       "decision_metric": "incremental_bayes_linkage_success",
       "metric_parameters": {},
+      "finite_game": {
+        "schema_version": "1.0",
+        "game_id": "demo-exact-linkage-four-candidates",
+        "states": [
+          {
+            "state_id": "a",
+            "secret_value_definition": "target identity is candidate a"
+          },
+          {
+            "state_id": "b",
+            "secret_value_definition": "target identity is candidate b"
+          },
+          {
+            "state_id": "c",
+            "secret_value_definition": "target identity is candidate c"
+          },
+          {
+            "state_id": "d",
+            "secret_value_definition": "target identity is candidate d"
+          }
+        ],
+        "prior": [
+          {
+            "numerator": 1,
+            "denominator": 4
+          },
+          {
+            "numerator": 1,
+            "denominator": 4
+          },
+          {
+            "numerator": 1,
+            "denominator": 4
+          },
+          {
+            "numerator": 1,
+            "denominator": 4
+          }
+        ],
+        "prior_basis": "demonstration uniform prior over the frozen four-candidate roster",
+        "authority": "whole-government-model-release-demo policy authority"
+      },
       "tolerance": 0.3,
       "tolerance_basis": "incremental",
       "ceiling_attack_battery_mode": "ceiling_prohibited"
@@ -21,6 +63,32 @@
       "mandatory": true,
       "decision_metric": "equal_prior_membership_success",
       "metric_parameters": {},
+      "finite_game": {
+        "schema_version": "1.0",
+        "game_id": "demo-equal-prior-membership",
+        "states": [
+          {
+            "state_id": "member",
+            "secret_value_definition": "target record was included in training"
+          },
+          {
+            "state_id": "nonmember",
+            "secret_value_definition": "target record was not included in training"
+          }
+        ],
+        "prior": [
+          {
+            "numerator": 1,
+            "denominator": 2
+          },
+          {
+            "numerator": 1,
+            "denominator": 2
+          }
+        ],
+        "prior_basis": "balanced membership challenge with equal prior mass on both states",
+        "authority": "whole-government-model-release-demo policy authority"
+      },
       "tolerance": 0.6,
       "tolerance_basis": "absolute",
       "ceiling_attack_battery_mode": "required"

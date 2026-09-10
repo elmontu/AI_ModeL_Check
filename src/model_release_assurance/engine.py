@@ -17,6 +17,7 @@ from .integrity import (
     verify_provenance_binding,
     verify_release_artifact,
     verify_source_file,
+    read_verified_source_bytes,
 )
 from .models import (
     AttackInput,
@@ -89,12 +90,12 @@ class AssuranceEngine:
         request = AssessmentRequest.model_validate(
             request.model_dump(mode="python", exclude_none=False)
         )
-        policy_path = verify_source_file(
+        policy_bytes = read_verified_source_bytes(
             request.policy.policy_path,
             request.policy.policy_sha256,
             base_dir,
         )
-        policy = PolicyBundle.model_validate_json(policy_path.read_text(encoding="utf-8"))
+        policy = PolicyBundle.model_validate_json(policy_bytes.decode("utf-8"))
         self._validate_policy(request, policy)
         self._verify_statistical_floor_family_plans(request, policy, base_dir)
         verify_release_artifact(request.release, base_dir)
@@ -136,7 +137,7 @@ class AssuranceEngine:
                 raise ValueError("analyzer implementation digest is not accepted by policy")
             if producer.configuration_sha256 not in requirement.accepted_configuration_sha256s:
                 raise ValueError("analyzer configuration digest is not accepted by policy")
-            source_path = verify_source_file(
+            source_bytes = read_verified_source_bytes(
                 value.provenance.source_path,
                 value.provenance.source_sha256,
                 base_dir,
@@ -148,9 +149,11 @@ class AssuranceEngine:
             )
             verify_provenance_binding(
                 value,
-                source_path,
+                Path(value.provenance.source_path),
                 value.provenance.bound_fields,
                 require_complete=True,
+                source_bytes=source_bytes,
+                expected_sha256=value.provenance.source_sha256,
             )
             if isinstance(value, FiniteChannelCeilingInput):
                 self._verify_finite_channel_sources(value, base_dir)
@@ -335,10 +338,10 @@ class AssuranceEngine:
             overall_verdict=decide_overall(decisions),
             runtime_identity=current_runtime_identity(
                 component_id="assurance_engine",
-                component_version="AssessmentReport/5.0",
+                component_version="AssessmentReport/6.0",
                 algorithm_profile={
                     "ordinary_decision_arithmetic": "Python binary64",
-                    "decision_rule": "mandatory threats clear and no threat blocks",
+                    "decision_rule": "all mandatory threats clear; mandatory blocking decisions take precedence",
                     "critical_certificate_arithmetic": "analyzer-specific replay",
                     "finite_channel_decision_arithmetic": (
                         "exact rational bounds with outward-only binary64 display"
@@ -361,13 +364,13 @@ class AssuranceEngine:
         """Replay every nested source and bind advisory trial counts to raw rows."""
 
         problem = value.analytic_evidence.problem
-        prior_path = verify_source_file(
+        prior_bytes = read_verified_source_bytes(
             problem.prior_evidence.source_path,
             problem.prior_evidence.source_sha256,
             base_dir,
         )
         try:
-            prior_payload = json.loads(prior_path.read_text(encoding="utf-8"))
+            prior_payload = json.loads(prior_bytes.decode("utf-8"))
         except (UnicodeDecodeError, json.JSONDecodeError) as exc:
             raise ValueError("finite-state prior evidence is not valid UTF-8 JSON") from exc
         prior_evidence = FiniteStatePriorEvidence.model_validate(prior_payload)
@@ -411,13 +414,17 @@ class AssuranceEngine:
                 "statistical finite-channel assessment requires replayable, "
                 "error-budgeted multinomial evidence"
             )
-        evidence_path = verify_source_file(
-            release.evidence.source_path,
+        evidence_path = Path(release.evidence.source_path)
+        if not evidence_path.is_absolute():
+            evidence_path = base_dir / evidence_path
+        evidence_path = evidence_path.resolve(strict=True)
+        evidence_bytes = read_verified_source_bytes(
+            str(evidence_path),
             release.evidence.source_sha256,
             base_dir,
         )
         try:
-            payload = json.loads(evidence_path.read_text(encoding="utf-8"))
+            payload = json.loads(evidence_bytes.decode("utf-8"))
         except (UnicodeDecodeError, json.JSONDecodeError) as exc:
             raise ValueError("finite-channel marginal evidence is not valid UTF-8 JSON") from exc
         evidence = SimultaneousMultinomialEvidence.model_validate(payload)
@@ -460,13 +467,13 @@ class AssuranceEngine:
                 "policy, artifact, interface, population snapshot, or decision game"
             )
 
-        counts_path = verify_source_file(
+        counts_bytes = read_verified_source_bytes(
             evidence.request.counts_reference.source_path,
             evidence.request.counts_reference.source_sha256,
             evidence_path.parent,
         )
         try:
-            counts_payload = json.loads(counts_path.read_text(encoding="utf-8"))
+            counts_payload = json.loads(counts_bytes.decode("utf-8"))
         except (UnicodeDecodeError, json.JSONDecodeError) as exc:
             raise ValueError("finite-channel count evidence is not valid UTF-8 JSON") from exc
         counts = MultinomialCountsFile.model_validate(counts_payload)
@@ -568,14 +575,14 @@ class AssuranceEngine:
                 raise ValueError(
                     "statistical floor family plan is not accepted by policy"
                 )
-            plan_path = verify_source_file(
+            plan_bytes = read_verified_source_bytes(
                 family[0].provenance.configuration_path,
                 configuration_sha256,
                 base_dir,
             )
             try:
                 plan = StatisticalFloorFamilyPlan.model_validate_json(
-                    plan_path.read_text(encoding="utf-8")
+                    plan_bytes.decode("utf-8")
                 )
             except (UnicodeDecodeError, ValueError) as exc:
                 raise ValueError(
@@ -644,14 +651,14 @@ class AssuranceEngine:
                     else value.study_id
                 )
                 member = planned_members[member_id]
-                registration_path = verify_source_file(
+                registration_bytes = read_verified_source_bytes(
                     member.registration_path,
                     member.registration_sha256,
                     base_dir,
                 )
                 try:
                     registration = StatisticalFloorDesignRegistration.model_validate_json(
-                        registration_path.read_text(encoding="utf-8")
+                        registration_bytes.decode("utf-8")
                     )
                 except (UnicodeDecodeError, ValueError) as exc:
                     raise ValueError(

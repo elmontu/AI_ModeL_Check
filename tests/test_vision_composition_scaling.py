@@ -503,17 +503,21 @@ class VisionCompositionScalingTests(unittest.TestCase):
             ):
                 self.assertFalse((output / name).exists())
 
-    def test_registered_source_bindings_match_workspace_files(self) -> None:
+    def test_frozen_profile_rejects_revised_worker_and_retains_other_bindings(self) -> None:
         config = _config()["base_vision_protocol"]
-        for logical, digest_field in (
-            (config["runner_logical_name"], "runner_sha256"),
-            (config["hook_logical_name"], "hook_sha256"),
-        ):
-            self.assertEqual(vision.sha256_file(ROOT / logical), config[digest_field])
+        self.assertNotEqual(vision.sha256_file(ROOT / config["runner_logical_name"]), config["runner_sha256"])
+        self.assertEqual(vision.sha256_file(ROOT / config["hook_logical_name"]), config["hook_sha256"])
+        with self.assertRaisesRegex(ValueError, "base vision runner digest mismatch"):
+            composition.load_base_protocol(_config())
         self.assertEqual(
             hashlib.sha256((ROOT / config["config_logical_name"]).read_bytes()).hexdigest(),
             config["config_bytes_sha256"],
         )
+
+    def test_process_peak_memory_has_real_positive_byte_measurement(self) -> None:
+        value = composition.process_peak_rss_bytes()
+        self.assertIsInstance(value, int)
+        self.assertGreater(value, 0)
 
 
 if __name__ == "__main__":

@@ -5,6 +5,37 @@
 > implemented controls, formal-assurance boundary, production obligations, and an audit procedure.
 > It does not issue or evidence a model-release authorization.
 
+<a id="industrial-track"></a>
+## Industrial track: deployment obligations, deferred
+
+The academic track is the current priority: the [protocol](model-release-assurance-protocol.md),
+[mathematical foundations](mathematical-foundations.md), [formal results and their
+limits](formal-verification.md), and [reproduction inventory](../reproduction/README.md) define
+the research claims and evidence. This document is the industrial-track entry point and retains
+the complete integrated specification. Both tracks share the same offline reference core,
+contracts, and tests; they are workstreams, not separate or differently permissive protocols.
+
+Industrial implementation is deferred. Its outstanding work includes authoritative identity and
+role enrollment, key custody and worker attestation, durable evidence and workflow services,
+externally anchored history, a linearizable portfolio registry, an enforcing release gateway,
+concurrency and recovery behavior, monitoring, and incident operations. Deferral changes priority,
+not conformance: existing implemented controls remain implemented, external services remain
+external, and every applicable lifecycle requirement and gate remains mandatory.
+
+Conditional or offline academic results support deployment claims only when the additional
+obligations for that claim are evidenced:
+
+| Claim boundary | Evidence needed beyond the academic result |
+|---|---|
+| Abstract property to concrete implementation | A version-bound assurance argument for parsing, canonicalization, numerical decisions, and state transitions; a verified refinement is required to claim that the abstract proof covers the implementation. Finite tests alone do not establish it. |
+| Declared context to actual release | Independently validated artifact, complete live interface, population, mechanism, evidence provenance, and operating assumptions; hashes and signatures do not establish their truth or scientific adequacy. |
+| Offline replay to authoritative operation | Governed identities and approvals, durable atomic registry commits, gateway enforcement, and independent concurrency, failure/recovery, security, and incident exercises on the actual deployment. A self-consistent transcript cannot substitute for those services. |
+
+The [production-readiness exit gates](#production-readiness-exit-gates) organize acceptance evidence;
+the conformance levels in section 15 and the full normative lifecycle still determine eligibility.
+Research reproducibility, a passing local test suite, or a kernel-checked conditional theorem does
+not by itself issue authorization, establish live enforcement, or satisfy MRAP-L3/L4.
+
 ## 0. Document control and interpretation
 
 | Item | Value |
@@ -13,7 +44,7 @@
 | Approval/effective status | Unapproved repository reference; an adopter MUST assign an owner, approver, effective date, and review date before governed use |
 | Version binding | The exact repository commit/tree hash and dirty/untracked inventory; this draft has no independent release identity |
 | Supersedes | None |
-| Framework | Model Release Assurance (MRA) `0.7.0` |
+| Framework | Model Release Assurance (MRA) `0.8.0` |
 | Lifecycle protocol | MRAP/1.0, candidate normative specification |
 | Implemented reference capability, not full conformance | MRAP-L0 through MRAP-L2 offline capabilities; any applicable failed or unevidenced gate, including an unresolved clearance-critical binary64 boundary under G7, precludes an MRAP-conformance conclusion |
 | Not implemented | Authoritative MRAP-L3 authorization and MRAP-L4 enforcement services |
@@ -24,7 +55,7 @@
 The framework value above is the package version string, not proof that the inspected checkout is a
 published release. An auditor MUST also record the commit or tree hash, annotated release tag where
 claimed, and the complete dirty/untracked-file inventory. An uncommitted working tree cannot be
-accepted as a released artifact merely because its package version is `0.7.0`.
+accepted as a released artifact merely because its package version is `0.8.0`.
 
 The contracts in this draft were iterated before the first governed schema baseline. Earlier draft
 bytes are not a released compatibility promise and artifacts produced from them MUST NOT be
@@ -54,16 +85,17 @@ for the claim being audited and record every disagreement as a finding:
 
 | Claim domain | Authoritative source |
 |---|---|
-| Candidate normative roles, messages, lifecycle, gates, authority and conformance | [`docs/model-release-assurance-protocol.md`](model-release-assurance-protocol.md), with [`docs/governance-core.md`](governance-core.md) for the governance rationale and required decision record |
+| Candidate normative roles, messages, lifecycle, gates, authority and conformance | [`docs/model-release-assurance-protocol.md`](model-release-assurance-protocol.md), with [`docs/system-audit-specification.md`](system-audit-specification.md#4-normative-governance-and-participant-model) for the governance rationale and required decision record |
 | Objects and commands accepted by the current Python runtime | Pydantic models and executable paths under [`src/model_release_assurance/`](../src/model_release_assurance/) |
 | Public machine-readable contract exports | Current files under [`schemas/`](../schemas/); any drift from the runtime models is a release-blocking defect |
 | Exact machine-checked theorem statements | Lean sources under [`formal/lean/`](../formal/lean/); [`docs/formal-verification.md`](formal-verification.md) and the correspondence manifest delimit their runtime interpretation |
 | Definitions, finite theorems, statistical guarantees and empirical-screen interpretation | [`docs/mathematical-foundations.md`](mathematical-foundations.md) |
-| Supported product and nonclaim boundary | [`docs/project-scope.md`](project-scope.md) |
-| External threat assumptions and production controls | [`docs/reference/threat-model.md`](reference/threat-model.md) and [`docs/reference/production-roadmap.md`](reference/production-roadmap.md) |
+| Supported product and nonclaim boundary | [`docs/system-audit-specification.md`](system-audit-specification.md#1-system-purpose-and-scope) |
+| External threat assumptions and production controls | [`docs/system-audit-specification.md`](system-audit-specification.md#12-security-and-adversary-model) and [`docs/system-audit-specification.md`](system-audit-specification.md#production-readiness-exit-gates) |
 | Integrated audit navigation | This document; it summarizes but does not silently enlarge any source's authority |
 
-Retained historical schemas preserve old structure but do not override current runtime models.
+Historical schemas in Git history preserve old structure but do not override current runtime models.
+Only current registered contract exports and their manifest remain in the active `schemas/` directory.
 Examples demonstrate behavior but are not normative evidence. Scripts and reproduction inputs are
 research tooling and do not become production evidence merely because they are committed.
 
@@ -213,9 +245,9 @@ EXPORT / PACKAGE [X]
      dependencies, runtime, precision/calibration, configuration and entry points
   -> create deterministic content manifest and final bundle digest
 ASSESS [I]
-  -> AssessmentRequest 5.0 -> AssessmentReport 5.0
+  -> AssessmentRequest 5.0 -> AssessmentReport 6.0
 SELECT [I]
-  -> OptimizationRequest 4.0 -> OptimizationReport 4.0
+  -> OptimizationRequest 5.0 -> OptimizationReport 5.0
 AUTHORIZE [X]
   -> authority request -> atomic registry commit -> AuthorizationReceipt
 ACTIVATE [X]
@@ -264,6 +296,28 @@ MUST independently verify the live gateway, and `live_interface_verified` remain
 
 ### 4.1 Governance functions [N]
 
+MRAP is an institutional model-governance protocol, not a game-theoretic score that grants
+permission to deploy. Its four layers have different decision effects:
+
+| Layer | Question and decision effect |
+|---|---|
+| Governance core | Is the decision legitimate, accountable, contestable, and within authority? Establishes decision rights and mandatory process. |
+| Assurance evidence | Are the required privacy, safety, security, fairness, utility, legal, and operational claims adequately evidenced? Supports a clear, blocked, or inconclusive conclusion for each applicable gate. |
+| Strategic stress tests | Could conflicts, selective disclosure, weak review, risk externalization, or noncredible enforcement undermine the arrangement? Provides advisory challenge, not authorization or an override. |
+| Technical enforcement | Are the authorized artifact and interface actually deployed under current controls? Enforces the bounded authorization through registry, gateway, monitoring, suspension, and revocation. |
+
+These are institutional responsibilities, not a claim that the offline core implements every
+evidence domain or the production enforcement layer. Supplemental strategic certificates retain:
+
+```text
+governance_decision_effect = none
+authorization_effect = none
+hard_gate_effect = cannot_override_or_remove
+```
+
+An incentive calculation cannot remove a mandatory gate, substitute for accountable review, or
+turn an unevidenced obligation into permission to release.
+
 A conforming institution MUST:
 
 1. define legitimate purpose, prohibited uses, recipients, affected populations, jurisdictions,
@@ -303,6 +357,25 @@ active trust profile and recorded as trust concentration.
 
 The repository can provide part of `AS` and `OP`. It does not implement authoritative `PA`, `PS`,
 `EW` attestation, `AR`, `PR`, `GW`, continuous `MO`, or `IA` services.
+
+<a id="profile-resolution"></a>
+### 4.3 Policy and population profile resolution [X]
+
+An adopter resolves the common baseline, domain/population profile, adopter profile, and
+release-specific contract into one effective policy before candidate-dependent results are used.
+The runtime evaluates one resolved, hash-bound `PolicyBundle`; it does not implement an
+institutional inheritance or approval service. The external resolver MUST retain every mandatory
+parent rule, record provenance and approval for each permitted override, and seal the effective
+bundle before a submitter references it. A child profile may strengthen requirements but MUST NOT
+weaken inherited mandatory threats or minimum safeguards.
+
+The resolved context identifies its authority, protected unit, dated population frame and scope,
+recipients, priors, tolerances, and expiry. An `open_dynamic` population requires a defined reachable
+universe and time window; it does not justify a finite-population denominator shortcut. Population
+size alone establishes neither privacy nor anonymity: recipient-reachable scope, rare subgroups,
+and drift need separate justification. Changes to the population, recipients, interface, protected
+unit, or tolerance require reassessment or explicitly authorized reuse whose validity for the new
+context is demonstrated, not merely an unchanged policy name.
 
 ## 5. Normative object, state, and message model
 
@@ -411,7 +484,7 @@ proofs remain required.
 Every message MUST retain the immediate predecessors required to replay its decision. Negative,
 failed, blocked, and inconclusive evidence MUST remain in the trace.
 
-The implemented `AssessmentReport 5.0` is always `single_release_no_portfolio`,
+The implemented `AssessmentReport 6.0` is always `single_release_no_portfolio`,
 `declared_interface_only`, `live_interface_verified=false`, and `authorization_eligible=false`.
 Declared `previous_release_ids` record lineage only. A portfolio-capable downstream stage MUST use a
 current authoritative registry snapshot and exact active-release inventory instead.
@@ -589,7 +662,7 @@ AssessmentRequest 5.0
  10. aggregate applicable floors and complete-declared-interface exact/ceiling evidence
  11. produce per-threat and overall decisions
  12. append exactly one content-bearing completion or failure event referencing the intent
- 13. emit AssessmentReport 5.0 only after the completion event commits
+ 13. emit AssessmentReport 6.0 only after the completion event commits
 ```
 
 Direct Python engine calls remain pure and may lack an audit record; their reports are still
@@ -846,12 +919,13 @@ analyzers can still block or diagnose other families.
 
 ### 9.5 Selection and portfolio workflow [I]
 
-`OptimizationRequest 4.0` binds:
+`OptimizationRequest 5.0` binds:
 
 - active policy identity, version, path, and digest;
 - caller-declared portfolio-registry identity, head, sequence, composition domain, exact active
   release identifiers, observation/expiry, and source digest;
-- all candidate assessment reports and, where required, signed assessment manifests;
+- all candidate assessment reports and their exact assessment-request file/digest references,
+  plus signed assessment manifests where required;
 - candidate artifact/interface bindings, utility certificates, controls, and implementation cost;
 - assessed and released finite experiments plus safe-direction garbling certificates;
 - complete joint-portfolio evidence for the active releases plus candidate;
@@ -863,11 +937,17 @@ The optimizer computes the canonical selection-policy digest and requires it to 
 the in-band preference-order authorization defect; it does not authenticate the registry, utility,
 control, search-space, experiment, transfer, or portfolio inputs.
 
+Each report is compared to the active policy's mandatory threat/analyzer roster and replayed against
+its supplied hash-bound assessment request before selection. A submitter cannot obtain acceptance
+merely by consistently changing a report, its signature and its request to omit an active-policy
+requirement. This protects local contract semantics, not the authority or scientific truth of the
+input policy, raw measurements, worker identity or population assumptions.
+
 The optimizer aborts the request on invalid structure, source/hash/provenance mismatch, an expired
 or future-dated registry snapshot, expired requested authorization or active policy, unsupported trust-profile value,
-an invalid transfer certificate, or a portfolio release set different from the snapshot's declared
-active set plus the candidate. An expired assessment release/policy/population scope, unassessed
-portfolio, failed privacy decision or utility floor, or expired control makes the affected candidate
+an invalid transfer certificate, invalid/expired assessment predecessor, or a portfolio release set
+different from the snapshot's declared active set plus the candidate. An expired population scope,
+unassessed portfolio, failed privacy decision or utility floor, or expired control makes the affected candidate
 infeasible; another feasible candidate can still be selected. With no feasible candidate, the result
 is `redesign_required` or, under the declared exhaustive-search status, `reject`.
 
@@ -887,23 +967,28 @@ generator or prove that the real candidate space is complete, so production use 
 external approval and independent completeness replay. Otherwise infeasibility yields
 `redesign_required`.
 
-Every `OptimizationReport 4.0` echoes the policy and registry identity/head/sequence/domain, the
+Every `OptimizationReport 5.0` echoes the policy and registry identity/head/sequence/domain, the
 selection policy and hash, all candidate evaluations, and `authorization_eligible=false`. Only
 `release_as_proposed` or `release_with_controls` outcomes populate selected
 artifact/interface/assessment/control bindings, portfolio status, and covered release identifiers;
 `reject` and `redesign_required` reports must leave those selected fields empty.
 
-The optimizer itself does **not** call SciPy to construct the Blackwell frontier. It replays the
-submitted transfer certificates, constructs a directed reachability relation, and applies the
-declared deterministic ordering to the resulting frontier. The garbling replay and the edge predicate
-`maximum_row_total_variation <= numerical_tolerance` use Python binary64. That predicate determines
-whether an edge exists, so a boundary case can change graph topology, frontier membership and final
-selection rather than merely perturbing a reported scalar. Utility, cost, evidence tolerance and
-uncertified portfolio fields also use binary64. Separate certificate-generation and statistical
-helper paths may use the optional SciPy dependency; neither fact makes ordinary comparisons exact or
-outward rounded. The runtime still computes a report, but any result that turns on an unresolved
-garbling/transfer edge or other clearance-critical binary64 boundary fails G7 and cannot support an
-MRAP-conformance conclusion.
+The optimizer itself does **not** call SciPy to construct the Blackwell frontier. It reconstructs
+exact rational values from the declared canonical decimals, checks exact stochastic-row sums and
+garbling residuals, and requires the actual total-variation residual not to exceed the declared
+allowance. Numerical tolerance cannot enlarge the privacy bound. Only zero-residual certificates
+create exact Blackwell reachability edges. A nonzero residual is charged to the transferred ceiling
+only for supported bounded expected-reward metrics; it cannot silently justify transfer for posterior
+maxima or fixed-FPR operating points. Privacy/portfolio ceilings and thresholds are compared exactly;
+displayed residuals are outward rounded. Utility/cost feasibility and tie-break fields still use
+binary64, and statistical producers/optional SciPy paths need their own numerical and coverage
+validation. Exact replay of declared decimals is not proof of the true data-generating channel or
+of precision that was already lost before parsing. Any remaining unresolved decision-critical
+boundary still prevents G7 and an MRAP-conformance conclusion. The optimizer's runtime profile still
+sets `mrap_g7_exact_or_outward_clearance_eligible=false`; these local repairs are not blanket G7 or
+Python-refinement proof. Approximate decimal stochastic normalization fails closed (for example,
+three rounded `1/3` entries need not sum exactly to one), so not every rational game has a compatible
+finite-experiment representation under the current float-valued transport contract.
 
 Supported trust profiles are:
 
@@ -969,10 +1054,19 @@ a valid v2 event into a different ledger without invalidating its hash. Rows car
 cannot establish v2 governance coverage. The v2 format is still a local unsigned event chain; a
 production format additionally needs authenticated writers and externally protected custody.
 
+Before each append, the writer holds `BEGIN IMMEDIATE` and verifies the entire committed prefix
+before writing a new intent or terminal. Corrupt hashes, payloads, sequence or run bindings therefore
+fail transactionally without adding a row; legitimate open worker intents do not prevent an append.
+This is O(ledger length) verification per append, not an authenticated append-only store. A writer
+that rewrites an entire self-consistent unkeyed history can still evade local checks without an
+independently retained ledger-ID/count/head checkpoint. Earlier retained timing experiments measured
+their pinned earlier implementation and must not be reported as timings of this stronger path.
+
 The v2 envelope is not a historical document dispatcher. The current verifier accepts embedded
-Assessment 5.0 and Optimization 4.0 requests/reports; it does not promise replay of prior-draft
-Assessment 4.0 or Optimization 3.0 intent/completion rows. Preserve the corresponding vintage runtime
-for any governed baseline instead of treating envelope-version equality as document compatibility.
+AssessmentRequest 5.0, AssessmentReport 6.0, and OptimizationRequest/OptimizationReport 5.0;
+it does not promise replay or extension of older intent/completion documents. Preserve the
+corresponding vintage runtime and ledger for any governed baseline instead of treating
+envelope-version equality as document compatibility. Do not rehash historical rows as current ones.
 
 The audit counters classify independent axes and can overlap. `legacy_event_count` counts legacy
 completion-only `assessment_report` and `optimization_report` event types regardless of hash format.
@@ -1005,7 +1099,7 @@ For audit reporting, distinguish these profiles. They are audit-review categorie
 
 | Audit profile | Requirements | Current status |
 |---|---|---|
-| `local_v2` | SQLite v2 current-document intent/terminal chain with both legacy counters and `plaintext_failure_diagnostic_count` equal to zero, canonical replay, ledger/release identity, sequence and orphan checks | Implemented for current Assessment 5.0/Optimization 4.0 documents in v2 envelopes |
+| `local_v2` | SQLite v2 current-document intent/terminal chain with both legacy counters and `plaintext_failure_diagnostic_count` equal to zero, canonical replay, ledger/release identity, sequence and orphan checks | Implemented for current AssessmentRequest 5.0 / AssessmentReport 6.0 and Optimization 5.0 documents in v2 envelopes |
 | `anchored_v1` | `local_v2` plus independently retained expected identity/count/head and anchor receipt on a governed schedule | External integration required |
 | `production_v1` | Authenticated actors, append-only replicated custody, signed/transparency-logged checkpoints, managed keys, retention/legal hold, independent read-only verification and incident handling | External production profile |
 
@@ -1033,12 +1127,15 @@ separately controlled.
 Assessment and optimization manifests are domain-specific, non-authorizing Ed25519 integrity
 objects. They are not interchangeable with MRAP event/artifact signatures.
 
-`release-protocol-verify` accepts `ReleaseProtocolRun 1.1` and emits
-`ReleaseProtocolVerification 2.0` containing `verification_profile`,
+`release-protocol-verify` accepts `ReleaseProtocolRun 1.2` and emits
+`ReleaseProtocolVerification 3.0` containing `verification_profile`,
 `artifact_files_verified`, `authenticated_signatures_verified`, `verification_time`, `run_sha256`,
 `runtime_identity`,
 `skipped_checks`, `degradations`, `valid`, `final_state`, `authorization_issued`,
-`deployment_active`, `event_sha256s`, and `reasons`. There is no separate performed-check list.
+`deployment_active`, `authorization_recorded`, `deployment_recorded`, `event_sha256s`, and `reasons`.
+There is no separate performed-check list. The first two production fields are typed literal `false`.
+Only the `*_recorded` fields describe successful replay of the supplied authorization/activation
+declarations; neither they nor `final_state=ACTIVE` establish a production event.
 
 The current transcript event vocabulary is `register_scope`, `approve_evidence_plan`,
 `close_evidence`, `record_assessment`, `record_selection`, `submit_authorization`,
@@ -1073,13 +1170,21 @@ the supplied commitment; it does not prove that the artifact semantically contai
 registry delta or that an authoritative registry included it. Activation checks the
 artifact/interface digests, a committed head, and authorization expiry, but has no live-registry
 lookup, deployed-control digest, endpoint binding, or activation-lease field. Event times must be
-ordered and timezone-aware, but are not rejected merely for occurring after the verification time.
+ordered, timezone-aware, and no later than the verification time. Referenced reports must have been
+created by their recording event and unexpired then; a claimed live authorization must not outlive
+its verified report/policy predecessors. Selection, authorization, activation and continuing-monitoring
+events also require live predecessors at consumption, so a later terminal action cannot hide a stale
+earlier authorization. Stop/revoke/expire actions remain possible. The verifier does not authenticate
+the external clock.
 These limitations prevent transcript replay from standing in for L3/L4 services.
 
 - `structural_v1` checks declared roles, messages, state transitions, hashes, sequences, CAS
   assertions, expiry, and deployment bindings but does not authenticate actors.
-- `authenticated_v1` additionally verifies release-bound Ed25519 event and artifact signatures
-  against an external trust store and rejects declared compromised keys.
+- `authenticated_v2` additionally verifies Ed25519 event and artifact signatures against an external
+  trust store and rejects declared compromised keys. Both version-2 domains bind schema/protocol/
+  profile, release ID, instance/artifact/interface/policy digests, population-scope map, initial
+  registry head/sequence, and every actor/role/key/organization declaration. Signed organizational
+  claims remain declarations, not independently established authority.
 
 Neither profile contacts an authoritative registry, performs live identity enrollment, verifies
 remote attestation, enforces a gateway, or proves the scientific truth of artifact content.
@@ -1088,6 +1193,32 @@ Many MRAP lifecycle artifact kinds do not yet have standalone semantic content s
 checks their declared kind, relative path, digest, producer role, signature when required, and
 state-machine placement, but does not semantically validate every field inside registration,
 evidence-plan/bundle, authorization, activation, monitoring, incident, retirement, or abort content.
+
+With artifact checks enabled, it does parse current assessment and optimization report contracts,
+hash the exact bytes parsed, compare the assessment to its registered release/population/policy
+context and event verdict, enforce policy-required threat/analyzer coverage, and bind a releasable
+optimization to its actual predecessor assessment ID/file hash and selected release/interface.
+This closes local substitution/omission counterexamples; it does not independently execute evidence
+workers or prove generic governance blobs true. A skipped file check remains an explicit degradation.
+
+Run 1.1 / `authenticated_v1` and Verification 2.0 must not be relabelled as this stronger contract.
+Migration requires reviewed current inputs and newly issued version-2 event/artifact signatures.
+Preserve prior outputs for their pinned vintage verifier; the current runtime does not dispatch by
+historical schema version.
+
+### 9.7.1 Optional four-verdict assurance recommendations [I]
+
+`assurance-record`, `assurance-sign`, `assurance-accept-risk`, and `assurance-gate` use a separate
+versioned `AssuranceScope` with a declared adversary, channel inventory and finite scenario partition.
+The scoped `ReleaseAssuranceRecord` carries exact rational floor/ceiling/threshold/gap comparisons,
+evidence references and `RELEASE`, `RELEASE-WITH-RISK`, `BLOCK`, or `INCONCLUSIVE`. The gate checks
+signatures and replays the record against its bound request/report/policy/scope; signing alone is not
+semantic validation. A permitted crossing interval requires explicit context/ceiling-bound signed
+residual-risk acceptance, which cannot override a blocking floor. Missing/inadmissible evidence is
+not repaired by accepting risk. This is an optional offline recommendation path, not a newly
+implemented authoritative MRAP stage. The finite scope partition does not prove world completeness,
+and every result remains `authorization_eligible=false`. In particular a `RELEASE-WITH-RISK`
+recommendation is not evidence that every mandatory MRAP gate passed.
 
 ### 9.8 Experimental MCP and evidence lab [E]
 
@@ -1202,6 +1333,57 @@ simultaneous-coverage, confidence-endpoint outward-validation, nested-source, an
 rational-replay obligations. Neither path permits an existing composition report to be restamped
 after the fact.
 
+### 9.9 Local case setup and assessment orchestration [I]
+
+The [pipeline quickstart](pipeline-quickstart.md) exposes `mra-workflow` for
+creating an incomplete case, inventorying files, binding immediate model
+parents and transformation inputs, checking preflight and invoking the current
+AssuranceEngine. Profiles cover trained, fine-tuned, adapter, merged, ensemble
+and distilled candidates. A cross-platform source-checkout installer creates
+a new environment; the demo delegates to the existing offline training runner.
+
+Local `local-workflow/1` and `local-lineage/1` formats are preparation records,
+not additional governed MRAP schemas. Preflight checks hashes, required slots,
+parent structure, candidate identity, previous-release declarations and the
+API/full-artifact distinction. It does not authenticate inventoried review
+documents, establish population overlap or completeness, execute a training
+recipe, or prove a composite privacy bound. A complete file inventory is not
+admissible evidence by itself; the Engine still validates its own inputs.
+
+Each assessment attempt retains a project snapshot, preflight result and
+non-authorizing result in a unique directory. Engine execution uses local
+audit intent/completion/failure events and successful runs include local audit
+verification and runtime versions. Input bindings are rechecked after execution.
+The case is single-writer and uses referenced files, not an immutable evidence
+archive or isolation against a hostile concurrent filesystem actor. This
+orchestrator does not emit an authenticated MRAP lifecycle transcript or close
+the durable orchestration, identity, custody, registry or gateway obligations
+in section 19. No new agency-data experiment or formal refinement is claimed.
+
+### 9.10 Trusted local testing console [E]
+
+The [local console](local-console.md) serves a bundled browser interface over a
+FastAPI API and runs allowlisted preflight, assessment and demo jobs in a
+separate worker. A single-host SQLite queue persists execution status; case
+jobs cannot overlap, stale-heartbeat jobs fail without automatic retry, and
+scientific verdicts remain distinct from successful execution. Docker Compose
+and a native local launcher are provided. New console cases default to Education
+mode: agency-scope, security-report and independent-review documents are optional,
+with omissions recorded in preflight/results. Review mode and legacy cases require
+all eight inputs. Education cases accept absolute local file bindings through the
+console; case edits cannot overlap queued/running jobs. The API accepts ordinary
+JSON without a custom header. Commands and uploads remain unsupported, and no
+endpoint signs or authorizes a release. Evidence integrity and Engine checks are
+unchanged. Docker runtime hardening is an optional Compose overlay.
+
+This is a trusted local pre-POC, with loopback publication and no individual
+accounts or tenant isolation. The queue is not an MRAP authorization registry
+or immutable evidence ledger; heartbeat recovery is not proof that orphaned
+execution stopped. Generic assessments have no hard resource/time sandbox.
+Container settings, where used, require independent runtime verification.
+The section 19 identity, attestation, distributed coordination, custody and
+production enforcement obligations remain open.
+
 ## 10. Current machine-contract inventory
 
 Schema suffixes version individual contracts, not the framework as a whole.
@@ -1216,29 +1398,36 @@ Schema suffixes version individual contracts, not the framework as a whole.
 | Generic statistical-floor family plan | [`statistical-floor-family-plan-v1.json`](../schemas/statistical-floor-family-plan-v1.json) (`1.0`) | Required policy-allowlisted generic attack/controlled-inference/canary roster fixing threat, analyzer, decision metric, unique member registrations/design hashes, Bonferroni method, >=95% familywise confidence, freeze time and authority; every accepted family and exact member completeness are replayed before analysis |
 | Statistical-floor design registration | [`statistical-floor-design-registration-v1.json`](../schemas/statistical-floor-design-registration-v1.json) (`1.0`) | Outcome-free member registration binding analyzer/threat/population/metric, dataset and procedure digests, seed, stopping, planned primary/control trials and conditional low-FPR/canary fields; source authenticity, declaration truth and execution fidelity remain external |
 | Policy | `policy-bundle-v3.json` (`3.0`) | Mandatory rules; analyzer and selection-policy allowlists; per-threat ceiling/battery mode; accepted catalog/configuration/worker/image/isolation and positive-control thresholds |
-| Assessment output | `assessment-report-v5.json` (`5.0`) | Per-threat results and required actionable resolutions, attack-battery status, complete evidence disposition, runtime identity and explicit single-release/declared-interface/non-authorizing scope |
-| Assessment integrity | `signed-manifest-v3.json` (`3.0`) | Direct artifact/interface plus request/report/policy hashes, scope and interface-assurance echo for Assessment 5.0 |
+| Assessment output | `assessment-report-v6.json` (`6.0`) | Nonempty internally consistent per-threat decisions, recomputed overall verdict, actionable resolutions, attack-battery status, complete evidence disposition, runtime identity and explicit single-release/declared-interface/non-authorizing scope |
+| Assessment integrity | `signed-manifest-v4.json` (`4.0`) | Direct artifact/interface plus request/report/policy hashes, scope and interface-assurance echo for AssessmentReport 6.0; request/report semantics are checked when signing |
+| Declared assurance scope | `assurance-scope-v1.json` (`1.0`) | Explicit adversary, channels, uniquely assigned finite declared scenarios and reasoned exclusions; no claim that the declared universe exhausts the real world |
+| Four-verdict assurance recommendation | `release-assurance-record-v1.json` (`1.0`) | Request/report/scope-bound exact rational risk intervals, gap, verdict and residual-risk references; permanently non-authorizing |
+| Signed assurance recommendation | `signed-release-assurance-record-v1.json` (`1.0`) | Authenticated record container; signature validity alone does not establish semantic validity |
+| Residual-risk acceptance | `residual-risk-acceptance-v1.json` (`1.0`) | Context-bound, expiring, signed explicit acceptance of named crossing ceilings; cannot override a blocking floor |
+| Assurance gate result | `assurance-gate-result-v1.json` (`1.0`) | Replayed scoped recommendation and reasons; production authorization remains ineligible |
 | Attack catalog | `attack-catalog-v1.json` (`1.0`) | Versioned attack applicability, implementation, evidence role, control kind and no-clearance authority |
 | Attack-battery configuration | `attack-battery-configuration-v1.json` (`1.0`) | Complete frozen runs, controls, seeds, supported Bonferroni multiplicity, stopping rule and declared resource limits |
 | Attack positive-control result | `attack-positive-control-result-v1.json` (`1.0`) | Catalog-bound executor service/version/implementation identity, typed known-leak binomial or expected-flag result and raw-result digest |
 | Attack worker output | `attack-battery-worker-output-v1.json` (`1.0`) | Release/context/catalog/configuration bindings, battery-orchestrator producer/runtime identity, isolation declaration, all per-result executor triples, controls/results and retained raw-bundle digest |
 | Attack-battery submission | `attack-battery-submission-v1.json` (`1.0`) | Content hashes and exact catalog/configuration/output/run/control disposition supplied to the core |
-| Optimization input | `optimization-request-v4.json` (`4.0`) | Active PolicyBundle 3.0, AssessmentReport 5.0 references, caller-declared source-bound portfolio snapshot, candidates, controls, utility, transfer, search, and selection policy |
-| Optimization output | `optimization-report-v4.json` (`4.0`) | Complete candidate evaluation, selected bindings and runtime identity |
-| Optimization integrity | `signed-optimization-manifest-v4.json` (`4.0`) | Signed final selection and scope bindings |
+| Optimization input | `optimization-request-v5.json` (`5.0`) | Active PolicyBundle 3.0; AssessmentReport 6.0 plus exact assessment-request file/hash references; caller-declared source-bound portfolio snapshot, candidates, controls, utility, transfer, search, and selection policy |
+| Optimization output | `optimization-report-v5.json` (`5.0`) | Complete candidate evaluation, selected bindings and runtime identity |
+| Optimization integrity | `signed-optimization-manifest-v5.json` (`5.0`) | Signed final selection and scope bindings |
 | Portfolio specification | `incomplete-portfolio-specification-v1.json` | Approved finite portfolio semantics |
 | Portfolio problem/certificate | `incomplete-portfolio-problem-v1.json`; `incomplete-portfolio-certificate-v1.1.json` | Conservative or exact composition result and replay |
 | Portfolio statistics | `portfolio-multinomial-counts-v1.json`, `portfolio-multinomial-plan-v1.json`, `portfolio-error-budget-v1.json`, `portfolio-multinomial-request-v1.json`, `portfolio-multinomial-evidence-v1.json` | Frozen counts, plan, budget, simultaneous evidence, exact shared `EvidenceBindingContext`, sampling interval, engine-replayed endpoint validation, and compilation |
 | Protocol design | `protocol-feasibility-problem-v1.json`; `protocol-feasibility-certificate-v1.json` | Finite design-time soundness/liveness frontier |
-| Lifecycle transcript | `release-protocol-run-v1.1.json` | Supplied lifecycle artifacts, events, roles, hashes, signatures, and states |
-| Lifecycle replay result | `release-protocol-verification-v2.json` (`2.0`) | Verification profile, checks, skips, degradation, run digest and runtime identity |
+| Lifecycle transcript | `release-protocol-run-v1.2.json` (`1.2`) | Supplied lifecycle artifacts, events, roles, hashes, signatures and states; authenticated_v2 binds the full immutable declared context |
+| Lifecycle replay result | `release-protocol-verification-v3.json` (`3.0`) | Verification profile, checks, skips, degradation, run digest/runtime identity and recorded-state fields; production issuance/activation fields fixed false |
 | Local audit result | `audit-verification-v3.json` (`3.0`) | Chain/release identity, independently defined event/hash-format counts, head, terminals, orphans, completeness and runtime identity |
-| Current schema inventory | `current-schema-manifest-v1.json` | Deterministic inventory of all 32 registered contract schemas; excludes its own digest by design and requires exact-byte regeneration plus detached protected attestation |
+| Current schema inventory | `current-schema-manifest-v1.json` | Deterministic inventory of all 37 registered contract schemas; excludes its own digest by design and requires exact-byte regeneration plus detached protected attestation |
 | Local audit anchor | `audit-checkpoint-v1.json` | Portable expected ledger identity/count/head |
 | Analyzer service envelope | Python-only request/response contract `2.0` | Prospective transport-neutral evidence exchange; no standalone public JSON Schema |
 | Supplemental strategic stress test | Python-only `StrategicAssuranceProblem 1.0`, `StrategicAssuranceCertificate 1.0`, and unversioned verification result | Exact-rational supplemental replay through the Python API or experimental script; no public schema or `mra` command and no governance-decision effect |
 
-Older schema files are retained for structural provenance. The current CLI intentionally rejects
+Retired schema files have been removed from the active `schemas/` directory; their original bytes
+are recoverable from Git history, not regenerated under new names. Historical output bundles remain
+unchanged. The current CLI intentionally rejects
 superseded top-level versions. The current containing Pydantic models also reject unsupported nested
 versions: `InterfaceContract 3.0`, `LlmProtocolContract 1.0`, `SelectionPolicy 1.0`,
 `PortfolioRegistrySnapshot 1.0`, the finite-channel submission/game/prior `1.0` contracts, the attack
@@ -1249,7 +1438,7 @@ trust metadata, artifact hashes, and vintage replay fixtures until a version-dis
 exists. Missing modern evidence fields must be recollected or migrated by an authorized process;
 they must not be invented or restamped.
 
-This inventory is the pre-governed candidate for the first baseline described in Section 0. Its 32 entries cover
+This inventory is the pre-governed candidate for the first baseline described in Section 0. Its 37 entries cover
 registered contract-schema bytes, not the manifest file itself: embedding the digest of the final
 manifest bytes inside those same bytes would be recursive. Maintenance MUST separately compare the
 manifest byte-for-byte with deterministic regeneration. A released claim MUST additionally verify a
@@ -1258,8 +1447,10 @@ and the retained release tuple. Source control or the unsigned digest list alone
 
 The standalone finite-channel submission, typed finite-state prior evidence, finite decision game,
 and statistical evidence binding context expanded the registry from 26 to 30 contracts. The typed
-generic statistical-floor family plan and member design registration expand it from 30 to 32. The
-submission, game, and binding-context shapes are also embedded in Assessment 5.0, Policy 3.0, and the
+generic statistical-floor family plan and member design registration expanded it from 30 to 32. The
+five optional assurance scope/record/signature/acceptance/gate contracts expand the active registry to
+37. The submission, game, and binding-context shapes are also embedded in AssessmentRequest 5.0,
+AssessmentReport 6.0, Policy 3.0, and the
 statistical contracts as applicable. These expansions occurred inside the
 explicitly pre-governed draft window. An adopter that already governed earlier Assessment 5.0 or
 Policy 3.0 bytes MUST preserve that baseline and assign a new contract version; it must not silently
@@ -1299,7 +1490,7 @@ logical object has its own file.
 | `PortfolioRegistrySnapshot` | Registry ID/head/sequence/domain, exact active IDs, observed/expiry times and source path/hash; source binding does not authenticate the registry or prove the head is live |
 | `ReleaseConfiguration` | Candidate ID/proposed status, assessment reference, released artifact/interface, utility, cost, controls, threat-experiment bindings and portfolio certificate |
 | `FiniteExperiment` | Threat/population/game, secret states, observations, channel/prior, interface description and optional artifact/interface hashes |
-| `GarblingCertificate` | Dominant/dominated experiment IDs, stochastic kernel, total-variation allowance, numerical tolerance and construction; its binary64 tolerance comparison controls reachability-edge existence and therefore frontier topology |
+| `GarblingCertificate` | Dominant/dominated experiment IDs, stochastic kernel, total-variation allowance, numerical tolerance and construction; current optimizer replay requires exact canonical-decimal stochastic rows/residuals, charges supported nonzero transfer penalties and creates Blackwell graph edges only for zero residual |
 | `ThreatExperimentBinding` | Threat plus assessed/released experiment IDs and required substitution-certificate reference when they differ |
 | `SearchSpaceCertificate` | Declared method, submitted configuration IDs and source path/hash; runtime does not prove generator or real-space completeness |
 | `UtilityCertificate` | Configuration/artifact/interface/population/split hashes, metric, lower bound/estimate/floor, population, uncertainty, disjointness and retained source |
@@ -1340,8 +1531,9 @@ access, and any execution worker MUST be isolated separately.
 
 The `ReleaseOptimizer` does not invoke SciPy: it verifies supplied transfer relations, computes graph
 reachability, and applies Python ordering. SciPy is confined to optional solver/statistical generation
-paths. Regardless of dependency, ordinary float-valued clearance comparisons remain binary64 unless
-an exact or approved outward-rounded certificate path is explicitly selected and replayed.
+paths. The current optimizer always replays privacy/portfolio thresholds and garbling relations
+exactly for the declared values; utility/cost ordering and some upstream statistical producers
+retain binary64 and their own numerical/coverage obligations.
 
 The repository provides no Dockerfile, Kubernetes/Helm/Terraform deployment, Kafka/ZeroMQ/Redis
 broker, ClickHouse/Prometheus/MinIO telemetry stack, or production HTTP service. Those technologies
@@ -1360,7 +1552,7 @@ evidence. The package job depends on this focused job as well as the formal and 
 building and smoke-testing wheel/sdist artifacts. A tagged
 release requires an annotated `vX.Y.Z` tag reachable from `main`, exact tag/package-version equality,
 the release checks, package validation, a clean-environment wheel smoke test, and creation of a draft
-GitHub release. Schema maintenance verifies the deterministic current-schema manifest against all 32
+GitHub release. Schema maintenance verifies the deterministic current-schema manifest against all 37
 registered current contract-schema bytes and separately compares the manifest itself with
 deterministic regeneration; the manifest does not recursively inventory its own final bytes. The
 repository does not hold the protected key needed for the detached signature or attestation required
@@ -1458,9 +1650,10 @@ Any unsupported or unbound premise yields `inconclusive`, not a presumption of s
 - Exact transfer from assessed to released behavior is valid only when the released experiment is a
   verified garbling/information reduction of the assessed experiment for the same states and prior.
 - Approximate transfer MUST add the verified error penalty conservatively.
-- Garbling residual, allowance and numerical-tolerance comparisons that decide whether a reachability
-  edge exists MUST be exact or conservatively outward rounded. An unresolved binary64 boundary can
-  change the graph, Blackwell frontier and selection and therefore fails G7.
+- Garbling residuals and allowances MUST be replayed exactly or conservatively outward rounded.
+  An approximate relation MUST NOT become a zero-cost exact Blackwell edge merely because it is
+  within a numerical tolerance. The current optimizer uses zero exact residual for these edges;
+  numerical/coverage validity of upstream evidence remains a separate G7 obligation.
 - Where policy permits a ceiling to clear only after empirical challenge, the complete frozen attack
   family and its multiplicity allocation MUST run, every required known-leak/expected-flag positive
   control MUST pass its policy threshold, and any non-attainment, failed control, incomplete run or
@@ -1589,6 +1782,22 @@ Before production accreditation, the adopter MUST provide and test:
 15. retained released wheels, dependency locks, trust metadata and vintage replay fixtures for the
     full records-retention period.
 
+<a id="production-readiness-exit-gates"></a>
+### 15.2 Production-readiness exit gates [X]
+
+The following acceptance gates organize those external obligations. They are not completed
+repository milestones: successful offline tests or transcript replay cannot attest that a service,
+population, or institution satisfies them.
+
+| Exit gate | Minimum independent acceptance evidence |
+|---|---|
+| Governance and policy | Named accountable roles, independent approvals, documented profile overrides, and threats, tolerances, and utility requirements frozen independently of candidate results. |
+| Trusted-core integration | Every approved analyzer has positive-control, malformed-input, scope-binding, and replay tests; retained bundles and provenance are complete; applicable accounting and certificates receive independent replay. |
+| Service security and operations | Independent penetration review, backup/restore exercise, load test, and operational-readiness approval cover the actual deployment, including isolated workers, managed identities and keys, and protected evidence custody. |
+| Atomic portfolio registry | Concurrency and stale-head tests show that competing releases cannot both commit against the same predecessor; authoritative history and atomic budget/portfolio changes are durable and replayable. A transcript flag is not evidence of a linearizable service. |
+| Population and mechanism validation | Dated frames, protected-unit contributions, complete mechanism accounting, representative intended operating conditions, and live-interface conformance are validated; statistical adequacy is independently justified. |
+| Multi-domain pilot and accreditation | Independent security, statistical, legal, and operational reviewers assess adopter profiles, residual risk, and materially different intended deployment scopes. Successful pilots do not establish universal safety or authorize unreviewed domains. |
+
 ## 16. Explicit non-claims
 
 Neither MRA nor MRAP/1.0 proves:
@@ -1619,7 +1828,7 @@ rather than inventing an identifier.
 
 - [ ] Record repository commit, framework version, dirty-tree status, platform, Python versions, and
   dependency locks.
-- [ ] Verify every one of the 32 registered current contract schemas byte-for-byte against
+- [ ] Verify every one of the 37 registered current contract schemas byte-for-byte against
   `current-schema-manifest-v1.json`, confirm its model/version inventory matches Section 10, and
   ensure no retained historical schema is presented as current executable support. The manifest
   excludes its own digest by design; separately compare its exact bytes with deterministic
@@ -1734,9 +1943,10 @@ rather than inventing an identifier.
   experiments and portfolio evidence.
 - [ ] Verify any changed assessed-to-released experiment has a safe-direction exact or conservatively
   approximate transfer certificate.
-- [ ] Replay the garbling residual/allowance and edge-existence comparison conservatively. If
-  `maximum_row_total_variation <= numerical_tolerance` is unresolved at binary64 precision, treat the
-  reachability graph, frontier and selection as G7-inconclusive.
+- [ ] Replay exact canonical-decimal stochastic rows and residual/allowance comparison. Require
+  exactly zero residual for every exact Blackwell edge; charge nonzero penalties only for supported
+  bounded expected-reward metrics. Numerical tolerance must not create a zero-cost edge or enlarge
+  the allowed privacy bound. Independently validate upstream numerical/statistical assumptions.
 - [ ] Verify each population-secret pair covers the exact active portfolio plus candidate.
 - [ ] Verify utility passes before Blackwell/disclosure minimization.
 - [ ] Verify selection policy version, rationale, ordered criteria, final deterministic tie, hash,
@@ -1773,12 +1983,15 @@ rather than inventing an identifier.
   types regardless of hash format; `legacy_hash_event_count` is missing/`legacy-v1` hash rows
   regardless of event type; the diagnostic counters partition failed terminals. Investigate any
   plaintext failure diagnostic or nonzero legacy count and do not sum independent axes together.
-- [ ] Confirm the embedded document versions match the verifier's current Assessment 5.0 and
-  Optimization 4.0 profile. Use a preserved vintage runtime for any prior governed document baseline;
+- [ ] Confirm the embedded document versions match the verifier's current AssessmentRequest 5.0,
+  AssessmentReport 6.0 and Optimization 5.0 profile. Use a preserved vintage runtime for any prior governed document baseline;
   a v2 envelope alone is not evidence that prior-draft documents are replay-compatible.
 - [ ] Verify that the externally governed ledger namespace identifies this database as the canonical
   ledger for the release; an internally valid fresh ledger does not establish complete run history.
 - [ ] Investigate every orphan, gap, duplicate terminal, tail replacement or identity mismatch.
+- [ ] Corrupt a prior row and prove the append transaction adds no new row or sequence allocation;
+  verify open legitimate workers remain appendable. Do not confuse this prefix-corruption test with
+  protection against an attacker who rewrites a whole self-consistent local history.
 - [ ] Export `audit-checkpoint` and verify its separate immutable custody and schedule.
 - [ ] Verify request, evidence, config, report, manifest/receipt, checkpoint, trust metadata, released
   software/dependency lock, and vintage fixtures meet retention/legal-hold/backup/restore policy.
@@ -1907,7 +2120,7 @@ that result as MRAP-conformant authorization.
 | Audit content confidentiality | New writers bound diagnostics before retaining a redacted fingerprint; AuditVerification counts plaintext-compatible failure fields as explicit degradation, but v2 intents/completions still store full canonical request/report content | Approved minimization or protected content-reference design, encryption, least-privilege access, retention/legal hold/deletion, separately governed content availability and privacy review |
 | Anchored-verification receipt | Verification output does not bind supplied expectations or an anchor receipt | Versioned result containing expected tuple, anchor/checkpoint digest, source, time and `anchor_checked` status |
 | Public production audit-event model | New rows use a versioned domain-separated ledger/release-bound hash and reject legacy hashes by default; payload/envelope models remain Python-private and events are unsigned | Public versioned event/envelope/anchor schemas, authenticated writer signatures, protected actor identity and legacy migration/retirement evidence |
-| Schema-manifest signing custody | A deterministic manifest inventories all 32 registered contract schemas, explicitly excludes its own recursive digest, and is compared with exact-byte regeneration; source control alone is not a release signature | Detached protected release signature or transparency-backed attestation over the exact manifest bytes, signer/threshold policy, consumer verification, rotation/revocation and retained signed manifests |
+| Schema-manifest signing custody | A deterministic manifest inventories all 37 registered contract schemas, explicitly excludes its own recursive digest, and is compared with exact-byte regeneration; source control alone is not a release signature | Detached protected release signature or transparency-backed attestation over the exact manifest bytes, signer/threshold policy, consumer verification, rotation/revocation and retained signed manifests |
 | Durable workflow orchestration | Not implemented | Idempotent scheduler, retries, cancellation, human approvals and recovery |
 | Managed key infrastructure | Local PEM reference | KMS/HSM lifecycle and identity enrollment evidence |
 | Historical version-dispatched verifier | Not implemented; this document declares the pre-governed draft cutoff and requires the first protected manifest attestation to establish the version floor | Preserve each governed schema/runtime/lock/trust/fixture baseline; add prior-manifest compatibility checks, future dispatch and authorized migration tests |
@@ -1915,7 +2128,7 @@ that result as MRAP-conformant authorization.
 | Interactive LLM/agent clearance | A fully bounded, enumerated, enforced finite transcript may use `finite_channel_ceiling`; ordinary continuous, open-ended, or uncovered adaptive interaction remains unsupported | Redesign the interface or supply a complete transcript-level mechanism and portfolio accounting |
 | Fairness decision contracts | Adopter-policy gap | Versioned population/group, metric, authority, evidence and remedy contracts |
 | Normative/runtime lifecycle parity | Transcript replay implements a narrower transition relation than MRAP/1.0; rejecting all duplicate event IDs is a deliberate stricter replay rule and liveness/transport-deduplication cost, not a safety violation | Align the remaining actions/fields with the protocol and add transition-conformance fixtures for every origin/event pair; document retry handling |
-| Binary64 decision boundaries — current G7 blocker | Ordinary tolerance/evidence/utility/portfolio fields and comparisons use Python floats. Garbling residual/allowance/tolerance comparisons are especially consequential because `maximum_row_total_variation <= numerical_tolerance` decides reachability-edge existence and can change the Blackwell frontier. `ReleaseOptimizer` itself does not invoke SciPy; optional upstream solver/statistical paths may. Any unresolved clearance-critical boundary prevents G7 and therefore MRAP conformance | Exact or approved-decimal contracts, solver-independent exact/outward replay and scalar plus graph-topology boundary fixtures; keep the affected result inconclusive until closure |
+| Binary64 decision boundaries — remaining G7 obligations | Local privacy/portfolio threshold and garbling replay now uses exact rational values for the declared inputs; only zero residual creates an exact graph edge and supported nonzero penalties are charged. Utility/cost fields and some upstream statistical/numerical producers remain binary64; exact parsed decimals do not recover information already rounded away or prove sampling coverage | Retain exact-threshold/TV/graph regressions, validate every upstream producer and remaining decision-critical boundary, and keep any unresolved affected result inconclusive; no blanket whole-pipeline arithmetic proof |
 | Python-to-Lean refinement | Not proved | Verified/independently validated refinement and expanded property testing |
 | Production observability/accreditation | Not implemented | Telemetry, SLOs, incident exercises and independent accreditation |
 
@@ -1944,11 +2157,11 @@ was corrected, never that the external production obligation disappeared.
 | `F2` an unused authorization could not expire normatively | Corrected: both normative and runtime transitions allow `AUTHORIZED -> EXPIRED` | Exercise expiry-before-activation in registry and gateway conformance tests |
 | `F3` audit events were spliceable and lacked release-instance identity | New v2 events bind ledger, operation, release, instance, full canonical request/report content, predecessor and time under a versioned domain separator; legacy hashes require explicit opt-in | Operate one authenticated canonical ledger namespace, protected ingress, sensitive-content controls and external anchoring; local self-consistency cannot prove every run was routed there |
 | `F4` excluded evidence lacked identifiers | Corrected: each decision names excluded IDs and report validation requires applicable plus excluded IDs to cover every retained record | Review exclusion applicability and reasons; authenticated evidence custody remains external |
-| `F5` ordinary binary64 paths conflict with G7 | Valid and explicitly a current conformance blocker at unresolved clearance boundaries; the optimizer does not itself call SciPy, but its binary64 garbling tolerance predicate can add/remove a reachability edge and change the frontier | Move decision-critical fields/comparisons to exact or outward-rounded replay and retain scalar and topology-edge boundary tests plus producer/runtime provenance |
+| `F5` ordinary binary64 paths conflict with G7 | Narrow local defects corrected: exact privacy/portfolio comparisons, exact residual/allowance replay, zero-residual-only Blackwell edges and metric-qualified nonzero transfer penalties replace tolerance-slack acceptance. Remaining utility/cost and upstream statistical/numerical obligations are not claimed proved | Preserve exact scalar/TV/topology regressions and producer/runtime provenance; discharge remaining decision-critical numerical and coverage obligations for each deployment |
 | `F6` registry state head was accepted without recomputation | Corrected narrowly: replay enforces `+1` and recomputes the release-bound state-head commitment | Prove portfolio-commit semantic completeness, authoritative registry execution and inclusion/consistency externally |
 | `F7` the gap register omitted disclosed lifecycle and enforcement limitations | Corrected by the explicit state-head, lifecycle-event, role-concentration, activation/lease, gateway-suspension and cumulative-budget rows above | Keep this register synchronized with executable contracts and transition-conformance tests on every release |
-| `N1` draft contracts changed without a governed version boundary | Current breaking changes use new top-level versions: PolicyBundle 3.0, Assessment 5.0, signed assessment manifest 3.0, Optimization 4.0, lifecycle verification 2.0 and audit verification 3.0; Section 0 defines the first-governed-baseline rule | Establish and retain the first detached signed/attested manifest; compare every later release with the last governed baseline and preserve vintage replay artifacts |
-| `N2` the schema manifest appeared required to digest itself | Corrected: the manifest declares 32 registered contract entries, explicit self-exclusion, deterministic exact-byte regeneration and detached-attestation semantics | Verify the detached protected signature/attestation over the exact manifest bytes; never substitute a recursive self-hash or Git tracking for release provenance |
+| `N1` draft contracts changed without a governed version boundary | Current breaking changes use AssessmentReport 6.0, signed assessment manifest 4.0, Optimization 5.0, ReleaseProtocolRun 1.2 / authenticated_v2 and lifecycle verification 3.0; AssessmentRequest 5.0, PolicyBundle 3.0 and audit verification 3.0 remain current. Section 0 defines the first-governed-baseline rule; retired schemas remain recoverable from Git rather than in the active export directory | Establish and retain the first detached signed/attested manifest; compare every later release with the last governed baseline and preserve vintage replay artifacts; do not restamp earlier signatures |
+| `N2` the schema manifest appeared required to digest itself | Corrected: the manifest declares 37 registered contract entries, explicit self-exclusion, deterministic exact-byte regeneration and detached-attestation semantics | Verify the detached protected signature/attestation over the exact manifest bytes; never substitute a recursive self-hash or Git tracking for release provenance |
 | `N3` audit prose disagreed on request content versus hash | Corrected: v2 intents contain full canonical request plus hash and completions contain full canonical report plus hash; replay is structurally self-contained and does not reopen external sources | The content-bearing SQLite design is unsuitable for sensitive production without minimization/encryption/access/retention controls or a separately governed protected reference design |
 | Red-team execution and mandatory empirical challenge were uncontracted | PolicyBundle 3.0 plus five public attack contracts, central positive-control/statistical replay, floor-only analyzer authority and ceiling-battery gating close the in-band composition path; actual target execution remains external | Deploy and attest the isolated worker, approve threat/family-specific catalogs and reference controls, retain raw evidence, govern waivers and keep authority-negative fixtures current |
 | Additional migration, opaque-bundle, score, retention and formal-runtime concerns | Preserved as explicit nonclaims, controls and gap-register entries; coverage percentage was removed | Preserve vintage verifiers, inspect complete bundles, retain outputs outside ignored `output/`, and establish Python/deployment refinement separately |
@@ -1960,6 +2173,7 @@ was corrected, never that the external production obligation disappeared.
 | Command family | Commands |
 |---|---|
 | Contracts and assessment | `validate`, `model-coverage`, `assess` |
+| Scoped assurance recommendations | `assurance-record`, `assurance-sign`, `assurance-accept-risk`, `assurance-gate` |
 | Selection | `optimize` |
 | Portfolio statistics | `portfolio-multinomial-generate`, `portfolio-multinomial-verify`, `portfolio-multinomial-compile` |
 | Portfolio certificates | `portfolio-solve`, `portfolio-verify` |
@@ -1968,7 +2182,7 @@ was corrected, never that the external production obligation disappeared.
 | Integrity | `keygen`, `sign`, `verify`, `optimize-sign`, `optimize-verify`, `audit-verify`, `audit-checkpoint` |
 | Schema export | `schema` |
 
-There are 20 supported CLI commands. A successfully completed assessment or optimization returns
+There are 24 supported CLI commands. A successfully completed assessment or optimization returns
 exit code `0` even when its domain outcome is `block`, `inconclusive`, `redesign_required`, or
 `reject`; automation MUST read the typed JSON verdict/outcome rather than treating process success as
 release success. Malformed input, failed validation, integrity/replay failure, and other expected
@@ -2015,7 +2229,7 @@ replay additionally requires an external trust store and `--require-authenticate
 | Path | Audit responsibility |
 |---|---|
 | `src/model_release_assurance/` | Executable contracts, assessment, selection, integrity and replay semantics |
-| `schemas/` | Current and retained historical public contract shapes |
+| `schemas/` | Current registered public contract shapes and manifest; retired shapes are recoverable from Git history |
 | `formal/lean/` | Abstract formal semantics and proof terms |
 | `formal/protocol-correspondence-v1.json` | Theorem-to-runtime obligation and test mapping |
 | `examples/` | Small current contract demonstrations, not authoritative evidence |

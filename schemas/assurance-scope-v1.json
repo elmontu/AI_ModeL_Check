@@ -1,0 +1,231 @@
+{
+  "$defs": {
+    "AdversaryModel": {
+      "additionalProperties": false,
+      "properties": {
+        "access_levels": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Access Levels",
+          "type": "array"
+        },
+        "adaptive_queries": {
+          "title": "Adaptive Queries",
+          "type": "boolean"
+        },
+        "auxiliary_knowledge": {
+          "additionalProperties": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "title": "Auxiliary Knowledge",
+          "type": "object"
+        },
+        "joint_transcript_description": {
+          "minLength": 20,
+          "title": "Joint Transcript Description",
+          "type": "string"
+        },
+        "metadata_profiles": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "title": "Metadata Profiles",
+          "type": "object"
+        },
+        "query_budget": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Query Budget"
+        }
+      },
+      "required": [
+        "access_levels",
+        "auxiliary_knowledge",
+        "metadata_profiles",
+        "query_budget",
+        "adaptive_queries",
+        "joint_transcript_description"
+      ],
+      "title": "AdversaryModel",
+      "type": "object"
+    },
+    "ExportChannel": {
+      "additionalProperties": false,
+      "properties": {
+        "channel_id": {
+          "minLength": 1,
+          "title": "Channel Id",
+          "type": "string"
+        },
+        "exported": {
+          "title": "Exported",
+          "type": "boolean"
+        },
+        "reason": {
+          "minLength": 3,
+          "title": "Reason",
+          "type": "string"
+        },
+        "threat_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Threat Ids",
+          "type": "array"
+        }
+      },
+      "required": [
+        "channel_id",
+        "exported",
+        "threat_ids",
+        "reason"
+      ],
+      "title": "ExportChannel",
+      "type": "object"
+    },
+    "ScopeExclusion": {
+      "additionalProperties": false,
+      "properties": {
+        "reason": {
+          "minLength": 10,
+          "title": "Reason",
+          "type": "string"
+        },
+        "scenario_id": {
+          "minLength": 1,
+          "title": "Scenario Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "scenario_id",
+        "reason"
+      ],
+      "title": "ScopeExclusion",
+      "type": "object"
+    },
+    "ThreatScenario": {
+      "additionalProperties": false,
+      "properties": {
+        "channel_ids": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Channel Ids",
+          "type": "array"
+        },
+        "description": {
+          "minLength": 3,
+          "title": "Description",
+          "type": "string"
+        },
+        "scenario_id": {
+          "minLength": 1,
+          "title": "Scenario Id",
+          "type": "string"
+        },
+        "threat_id": {
+          "minLength": 1,
+          "title": "Threat Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "scenario_id",
+        "threat_id",
+        "description",
+        "channel_ids"
+      ],
+      "title": "ThreatScenario",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "adversary": {
+      "$ref": "#/$defs/AdversaryModel"
+    },
+    "approved_at": {
+      "format": "date-time",
+      "title": "Approved At",
+      "type": "string"
+    },
+    "channels": {
+      "items": {
+        "$ref": "#/$defs/ExportChannel"
+      },
+      "minItems": 5,
+      "title": "Channels",
+      "type": "array"
+    },
+    "declared_scenario_ids": {
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Declared Scenario Ids",
+      "type": "array"
+    },
+    "expires_at": {
+      "format": "date-time",
+      "title": "Expires At",
+      "type": "string"
+    },
+    "out_of_scope": {
+      "items": {
+        "$ref": "#/$defs/ScopeExclusion"
+      },
+      "title": "Out Of Scope",
+      "type": "array"
+    },
+    "residual_risk_acceptance_permitted": {
+      "default": false,
+      "title": "Residual Risk Acceptance Permitted",
+      "type": "boolean"
+    },
+    "scenarios": {
+      "items": {
+        "$ref": "#/$defs/ThreatScenario"
+      },
+      "minItems": 1,
+      "title": "Scenarios",
+      "type": "array"
+    },
+    "schema_version": {
+      "const": "1.0",
+      "default": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "scope_id": {
+      "minLength": 3,
+      "title": "Scope Id",
+      "type": "string"
+    }
+  },
+  "required": [
+    "scope_id",
+    "adversary",
+    "declared_scenario_ids",
+    "scenarios",
+    "out_of_scope",
+    "channels",
+    "approved_at",
+    "expires_at"
+  ],
+  "title": "AssuranceScope",
+  "type": "object"
+}

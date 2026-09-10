@@ -24,10 +24,11 @@ demo-reference:
 	PYTHONPATH=src $(PYTHON) scripts/run_government_health_demo.py
 
 compile:
-	PYTHONPYCACHEPREFIX=$(COMPILE_CACHE) $(PYTHON) -m compileall -q src tests scripts
+	PYTHONPYCACHEPREFIX=$(COMPILE_CACHE) $(PYTHON) -m compileall -q src tests scripts academic/scripts academic/tests
 
 test:
 	PYTHONPATH=src $(PYTHON) -m unittest discover -s tests -v
+	PYTHONPATH=src $(PYTHON) -m unittest discover -s academic/tests -v
 
 schemas:
 	PYTHONPATH=src $(PYTHON) scripts/generate_schema_manifest.py --check

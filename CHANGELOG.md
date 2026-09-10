@@ -4,6 +4,64 @@ All user-visible changes to Model Release Assurance are recorded here. The proje
 
 ## [Unreleased]
 
+### Local training, adversarial testing and review console
+
+- Added an easy-setup local pre-POC with separate API and worker processes, a public-data training wizard, durable jobs, review cases, evidence downloads, cancellation of queued jobs and explicit retry attempts.
+- Added ten CPU model presets across four bundled datasets, including classification, regression, a small CNN, fine-tuning and ensembles. Training freezes the recipe, split, implementation and runtime; exported models and preprocessing are checked by reload and evidence replay.
+- Added eleven classifier, three regression and nine local language-model adversarial tool groups with explicit unsupported and incomplete outcomes, plus fine-tuned/base and ensemble comparisons. Attacks can expose problems; unsuccessful attacks do not establish a privacy ceiling or authorize release.
+- Retained the 10 September 2026 validation: 745 main tests with 18 skips, 43 academic tests, and 66 optional-runtime tests covering 17 dependency skips. The end-to-end matrix covers all 40 preset/dataset choices (22 valid, 18 rejected), 36 case configurations, artifact integrity, review and queue recovery. Docker execution and the local Lean rebuild remain unverified.
+- Added the implementation and motivation guide, setup and console instructions, capability boundaries, detailed validation reports and hash-bound aggregate results. Raw training artifacts and local stores remain ignored. Git preserves exact bytes for evidence and bound source directories so checkout line-ending conversion cannot invalidate their hashes.
+
+### Government-body model-governance framing
+
+- Reframed the academic paper as *Model Governance for Government Bodies: An Evidence-Bound Release Assurance Protocol*. The governed decision is authorization of model use, update or renewal; privacy remains the worked mathematical assurance case rather than the whole governance framework.
+- Added a jurisdiction-neutral government profile covering accountable authority, purpose/impact review, procurement and vendor limits, human oversight and redress, transparency records with justified exemptions, monitoring and retirement. Mandatory evidence is due at specified lifecycle stages. Privacy RELEASE is not institutional authorization, and residual-risk acceptance cannot waive mandatory legal or rights obligations.
+- Kept all technical proofs, counterexamples and experimental data with their existing scope. The revision claims neither legal/fairness verification nor government field validation or agency approval; it changes no core code, schemas or measured data and creates no new Markdown pages or model experiments.
+
+### Argument-first academic manuscript
+
+- Reframed the paper as *When Does Privacy Evidence Justify Model Release? A Protocol for Sound Decisions and Scoped Refusal*, with a central conditional evidence-admission argument and three linked questions: soundness, resolution versus coverage, and applicability of available model evidence. Venue formatting does not establish novelty or acceptance.
+- Kept the complete protocol in Section 3 and organized implementation/evaluation around the research questions. Moved detailed workloads, timings, software provenance and proof inventory into the appendices alongside pseudocode, proofs and aggregate tables; retained positive, failed and unsupported evidence remains available.
+- This is an extended research draft, not a submission-length manuscript. The argument-first rewrite changes no core code, schemas, measured values or retained experimental-data bytes, introduces no new trained-model experiments, and makes no verified-Python claim.
+
+### Integrated protocol safeguards and full proof appendix
+
+- Merged the paper's former implementation and experimental-design sections into one methodology section. Consolidated repeated proof-scope discussion in Section 3 while retaining execution, software-version and evidence-provenance boundaries; experimental data, core code and schemas are unchanged by this structural edit.
+- Made the seven limitations actual admission/transition obligations in the academic protocol: approved ceiling routes, simultaneous nonrefundable error accounting, justified declared scope and full joint evidence, metric-correct transfer, non-overridable decision semantics and independently justified source/live bindings. Missing required evidence refuses; a scoped no-go argument is not a safety certificate or evidence waiver.
+- Expanded Section 3 to cover parties, immutable messages, the complete normative state machine, invalidation/retry rules, recommendation versus authorization and six conditional guarantees. Added six appendix procedures, full proofs, and observation-relative and finite-budget threshold impossibility results. These are written proofs, not newly kernel-verified Python or cryptographic implementations.
+- Added seven reproducible exact finite construction studies, including 93,312 decision-grid cases and ten boundaries, with explicit hypotheses and limitations. Historical experimental data remain unchanged. The complete IEEE-format paper is now labelled an extended draft beyond the submission appendix allowance; no new Markdown pages, core changes or schema changes are part of this revision.
+
+### Full academic paper draft
+
+- Added one IEEE S&P-oriented LaTeX manuscript with four conditional proof arguments, seven counterexamples, 22 primary-source references, a scope-specific evaluation and explicit limitations. These are written arguments, not newly machine-checked results or a Python refinement proof.
+- Added a source-linked aggregate companion: 109 hashed sources, 63 tables and 4,754 rows, including 4,200 retained replay records, all 17 local tree/image/LLM workload cells and all 33 historical offline CLI-chain runs. Failed, unsealed and invalid measurements retain their status rather than becoming clearance evidence.
+- Added deterministic table/figure assembly and artifact checks, and integrated build instructions into existing navigation. No new Markdown pages, privacy experiments, core implementation changes or schema changes are part of this paper-drafting change. Some source artifacts remain local-only, and a fresh corrected end-to-end study remains proposed.
+
+### Academic-first and industrial workstreams
+
+- Made the academic track the default reading and contribution path: conditional decision soundness, declared-scope completeness, lifecycle proof boundaries, counterexamples and prospectively registered reference-pipeline evaluation.
+- Separated industrial deployment/refinement obligations and acceptance evidence without weakening MRAP conformance requirements. Both tracks retain one shared library, schema set and formal artifact set.
+- Reused the existing protocol, audit specification and reproduction index; no new Markdown files, measurements, proof claims or contract changes were introduced by this split.
+
+### Documentation consolidation
+
+- Removed 25 redundant or superseded Markdown pages: duplicate architecture/governance references, paper drafts, repeated study indexes and separate support navigation. Canonical material now lives in the root README, integrated audit specification, mathematical/formal references, combined literature review and reproduction index.
+- Preserved current working copies in the local, byte-checked `output/md-cleanup-20260907/retired-markdown.zip`; historical Git versions remain available. No retained measurements, preregistrations, data manifests or generated ceiling-report bytes were removed or restamped.
+- Corrected stale claims about worker sandboxing, authenticated registry state, demo routing, canary/watermark capabilities, contradiction handling, numerical comparisons and the linear-program assumptions for portfolio bounds. Conditional theorems and valid negative experimental results were retained.
+
+### 0.8.0 breaking contract and enforcement update
+
+- Assessment report 6.0 and signed manifest 4.0 revalidate exact bounds, decision reduction, evidence coverage and request/policy semantics on import. Request 5.0 and policy 3.0 retain their shapes.
+- Optimization request/report/manifest 5.0 require the original assessment request path and hash, replay its report against active policy, bind ordered finite games and priors, and use exact rational channel/garbling arithmetic for clearance decisions.
+- Release protocol run 1.2 introduces `authenticated_v2` signatures binding the full run context including population scopes. Verification 3.0 distinguishes recorded authorization/deployment declarations from actual issuance or activation, which remain false. Future events, stale or mismatched typed reports and invalid predecessor chains fail replay.
+- Added separate version-1 assurance scope, exact per-threat four-verdict record, signed record, residual-risk acceptance and fail-closed gate contracts. Scope access, per-threat auxiliary knowledge, metadata profiles and channel inventory must match the evidenced request. The gate is explicitly non-authorizing.
+- Audit appends validate the existing ledger prefix within a write transaction. SQLite remains mutable storage requiring external anchors.
+- Clearance-critical engine, optimizer and portfolio JSON imports hash and parse the same captured bytes; concurrent file replacement cannot substitute unverified parsed content. Typed report expiry is checked at downstream consumption even in transcripts that later terminate.
+- Removed 32 superseded schema files from the active schema directory; historical bytes remain in Git and the local byte-checked `output/retired-schemas-20260907/` recovery archive. No historical experiment registration or result was restamped. Current schemas are indexed by the 37-entry manifest.
+- Added regression coverage for contract, lifecycle, optimizer and assurance-record counterexamples, and Windows-compatible worker byte handling/publication. See [migration and limitations](docs/gap-remediation.md).
+
+The entries below describe earlier additions and their original contract versions; they are release history, not the current schema registry.
+
 ### Added
 
 - A one-command, core-only government-health guided demo for nontechnical
@@ -137,9 +195,9 @@ All user-visible changes to Model Release Assurance are recorded here. The proje
   inventory and date could not produce a current study seal. Historical bytes
   remain available in Git; a replacement must be preregistered.
 - Removed the duplicate operational-reference mini-index and the superseded
-  paper-outline scaffold. Canonical reference links remain in `docs/README.md`,
-  while open paper experiments and ablations now live in the reproducibility
-  ledger beside the current manuscript.
+  paper-outline scaffold. Those historical navigation and manuscript ledgers
+  were subsequently consolidated into the root README and reproduction index;
+  see the documentation-consolidation entry above.
 
 ### Fixed
 

@@ -38,7 +38,7 @@ class AssessmentContractV5Tests(unittest.TestCase):
     def test_report_and_manifest_expose_non_authorizing_scope(self) -> None:
         request = AssessmentRequest.model_validate(assessment_raw())
         report = AssuranceEngine().assess(request, ROOT / "examples")
-        self.assertEqual(report.schema_version, "5.0")
+        self.assertEqual(report.schema_version, "6.0")
         self.assertEqual(
             report.assessment_scope.composition_scope,
             "single_release_no_portfolio",
@@ -63,7 +63,7 @@ class AssessmentContractV5Tests(unittest.TestCase):
             )
             with self.assertRaisesRegex(IntegrityError, "release_interface_sha256"):
                 verify_signed_manifest(tampered_interface, report, public)
-        self.assertEqual(manifest.schema_version, "3.0")
+        self.assertEqual(manifest.schema_version, "4.0")
         self.assertEqual(manifest.composition_scope, "single_release_no_portfolio")
         self.assertEqual(manifest.interface_assurance, "declared_interface_only")
         self.assertFalse(manifest.authorization_eligible)
@@ -151,12 +151,12 @@ class AssessmentContractV5Tests(unittest.TestCase):
             AssuranceEngine().assess(request, ROOT / "examples")
 
 
-class OptimizationContractV4Tests(unittest.TestCase):
+class OptimizationContractV5Tests(unittest.TestCase):
     def test_selection_and_portfolio_scope_are_replayable_outputs(self) -> None:
         path = ROOT / "examples" / "optimization-request.json"
         request = OptimizationRequest.model_validate_json(path.read_text(encoding="utf-8"))
         report = ReleaseOptimizer().optimize(request, path.parent)
-        self.assertEqual(report.schema_version, "4.0")
+        self.assertEqual(report.schema_version, "5.0")
         self.assertEqual(report.selection_policy, request.selection_policy)
         self.assertEqual(report.composition_scope, "portfolio_registry_bound")
         self.assertEqual(
@@ -203,7 +203,7 @@ class OptimizationContractV4Tests(unittest.TestCase):
                 }
             )
             request = OptimizationRequest.model_validate(raw)
-            with self.assertRaisesRegex(ValueError, "active policy hash"):
+            with self.assertRaisesRegex(IntegrityError, "active policy identity and hash"):
                 ReleaseOptimizer().optimize(request, path.parent)
 
 

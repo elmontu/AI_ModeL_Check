@@ -966,6 +966,7 @@ class MathTests(unittest.TestCase):
         release = AssessmentRequest.model_validate(load_example()).release
         threat_raw = load_example()["threats"][1]
         threat_raw["decision_metric"] = "membership_tpr_at_fpr"
+        threat_raw["finite_game"] = None
         threat_raw["metric_parameters"] = {"target_fpr": 0.001}
         threat = ThreatContract.model_validate(threat_raw)
         evidence = AttackAnalyzer().analyze(release, threat, attack)[0]
@@ -983,6 +984,7 @@ class MathTests(unittest.TestCase):
             kind="attribute",
             secret="sensitive attribute",
             decision_metric="incremental_attribute_attack_success",
+            finite_game=None,
             tolerance_basis="incremental",
             tolerance=0.01,
             candidate_set=None,
@@ -1029,6 +1031,7 @@ class MathTests(unittest.TestCase):
             kind="attribute",
             secret="sensitive attribute",
             decision_metric="incremental_attribute_attack_success",
+            finite_game=None,
             tolerance_basis="incremental",
             tolerance=0.06363930940374495,
             candidate_set=None,
@@ -1088,6 +1091,7 @@ class MathTests(unittest.TestCase):
             kind="reconstruction",
             secret="training-record feature",
             decision_metric="incremental_reconstruction_success",
+            finite_game=None,
             tolerance_basis="incremental",
             tolerance=0.01,
             candidate_set=None,

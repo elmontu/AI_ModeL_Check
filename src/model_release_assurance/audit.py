@@ -237,7 +237,7 @@ def _intent_release_identity(
     requests describe a frozen release-selection instance rather than one
     necessarily selectable release. Its instance digest is therefore the
     canonical request digest. When every candidate portfolio identifies one
-    common release beyond the active registry set, that release ID is exposed
+    common release beyond the cumulative disclosure set, that release ID is exposed
     as a searchable convenience; inconclusive/refusal-only searches may have no
     such ID and remain identified by their instance digest.
     """
@@ -248,13 +248,12 @@ def _intent_release_identity(
             sha256_bytes(canonical_json_bytes(release)),
         )
 
-    active = set(
-        _required_value(
-            _required_mapping(raw, "portfolio_registry", "optimization request"),
-            "active_release_ids",
-            "optimization request",
-        )
-    )
+    registry = _required_mapping(raw, "portfolio_registry", "optimization request")
+    # Historical audit indexing may inspect legacy snapshots; it never grants
+    # optimizer eligibility. New snapshots use persistent disclosure history.
+    history = registry.get("disclosed_release_ids")
+    disclosed = set(history if isinstance(history, list) else
+                    _required_value(registry, "active_release_ids", "optimization request"))
     candidate_release_ids: set[str] = set()
     configurations = _required_value(raw, "configurations", "optimization request")
     if not isinstance(configurations, list):
@@ -278,7 +277,7 @@ def _intent_release_identity(
             raise ValueError(
                 "optimization request registered_release_ids must be an array"
             )
-        candidate_release_ids.update(set(registered) - active)
+        candidate_release_ids.update(set(registered) - disclosed)
     release_id = (
         next(iter(candidate_release_ids))
         if len(candidate_release_ids) == 1
@@ -361,8 +360,9 @@ class _AuditIntentPayload(StrictModel):
     """Current v2 envelope for current embedded request contracts.
 
     The envelope version is not a vintage-document dispatcher. This verifier
-    deliberately does not promise replay of the prior AssessmentRequest 4.0 or
-    OptimizationRequest 3.0 document shapes.
+    deliberately does not promise replay of retired embedded document shapes.
+    Historical ledgers must be verified with their pinned historical verifier;
+    do not relabel or rewrite their signed/hashed documents as current ones.
     """
 
     schema_version: Literal["2.0"] = _AUDIT_SCHEMA_VERSION
@@ -388,8 +388,8 @@ class _AuditIntentPayload(StrictModel):
         if sha256_bytes(self.request_json.encode("utf-8")) != self.request_sha256:
             raise ValueError("audit intent request hash does not match request_json")
         if self.operation == "assessment":
-            if raw.get("schema_version") != "5.0":
-                raise ValueError("assessment intent requires an assessment request v5")
+            if raw.get("schema_version") != AssessmentRequest.model_fields["schema_version"].default:
+                raise ValueError("assessment intent requires the current assessment request schema")
             _required_model_fields(raw, AssessmentRequest, "assessment request")
             release = raw.get("release")
             if not isinstance(release, dict):
@@ -401,8 +401,8 @@ class _AuditIntentPayload(StrictModel):
             if self.authorization_expires_at is not None:
                 raise ValueError("assessment intents have no optimization authorization")
         else:
-            if raw.get("schema_version") != "4.0":
-                raise ValueError("optimization intent requires an optimization request v4")
+            if raw.get("schema_version") != OptimizationRequest.model_fields["schema_version"].default:
+                raise ValueError("optimization intent requires the current optimization request schema")
             _required_model_fields(raw, OptimizationRequest, "optimization request")
             if raw.get("optimization_id") != self.subject_id:
                 raise ValueError("optimization intent subject does not match the request")
@@ -463,8 +463,8 @@ class _AuditCompletedPayload(StrictModel):
         if raw.get("request_sha256") != self.request_sha256:
             raise ValueError("audit completion report binds a different request")
         if self.operation == "assessment":
-            if raw.get("schema_version") != "5.0":
-                raise ValueError("assessment completion requires an assessment report v5")
+            if raw.get("schema_version") != AssessmentReport.model_fields["schema_version"].default:
+                raise ValueError("assessment completion requires the current assessment report schema")
             _required_model_fields(raw, AssessmentReport, "assessment report")
             AssessmentReport.model_validate(raw)
             if self.result_expires_at is not None:
@@ -481,8 +481,8 @@ class _AuditCompletedPayload(StrictModel):
                     "audit completion release-instance digest does not match report_json"
                 )
         else:
-            if raw.get("schema_version") != "4.0":
-                raise ValueError("optimization completion requires an optimization report v4")
+            if raw.get("schema_version") != OptimizationReport.model_fields["schema_version"].default:
+                raise ValueError("optimization completion requires the current optimization report schema")
             _required_model_fields(raw, OptimizationReport, "optimization report")
             OptimizationReport.model_validate(raw)
             created_at = datetime.fromisoformat(
@@ -1186,6 +1186,19 @@ class AuditStore:
     ) -> tuple[int, str, str, str]:
         with self._connect() as connection:
             connection.execute("BEGIN IMMEDIATE")
+            # Hold the writer lock while validating the entire committed prefix,
+            # before admitting any new event. A second read-only connection sees
+            # that same prefix: this transaction has not written anything yet,
+            # and BEGIN IMMEDIATE excludes competing SQLite writers. Open runs
+            # are legitimate while workers execute, so completeness is required
+            # by the release/checkpoint gate, not by an individual append.
+            # This detects corruption, not a fully rewritten unkeyed history;
+            # protection against a local file writer still needs an independent
+            # ledger-ID/count/head checkpoint.
+            try:
+                self.verify(require_complete=False)
+            except IntegrityError as exc:
+                raise IntegrityError(f"refusing to extend a corrupt audit prefix: {exc}") from exc
             occurred_at = datetime.now(timezone.utc).isoformat()
             ledger_row = connection.execute(
                 "SELECT value FROM audit_metadata WHERE key = 'ledger_id'"

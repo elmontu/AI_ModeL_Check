@@ -1,0 +1,62 @@
+{
+  "$defs": {
+    "AssuranceVerdict": {
+      "enum": [
+        "RELEASE",
+        "RELEASE-WITH-RISK",
+        "BLOCK",
+        "INCONCLUSIVE"
+      ],
+      "title": "AssuranceVerdict",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "authorization_eligible": {
+      "const": false,
+      "default": false,
+      "title": "Authorization Eligible",
+      "type": "boolean"
+    },
+    "external_enforcement_required": {
+      "default": [
+        "authenticated complete active-portfolio state and atomic budget commit",
+        "independent evidence execution and complete live-channel correspondence",
+        "enforcing gateway, current lease/revocation and lifetime monitoring"
+      ],
+      "items": {
+        "type": "string"
+      },
+      "title": "External Enforcement Required",
+      "type": "array"
+    },
+    "reasons": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Reasons",
+      "type": "array"
+    },
+    "recommendation_passed": {
+      "title": "Recommendation Passed",
+      "type": "boolean"
+    },
+    "schema_version": {
+      "const": "1.0",
+      "default": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "verdict": {
+      "$ref": "#/$defs/AssuranceVerdict"
+    }
+  },
+  "required": [
+    "verdict",
+    "recommendation_passed",
+    "reasons"
+  ],
+  "title": "AssuranceGateResult",
+  "type": "object"
+}

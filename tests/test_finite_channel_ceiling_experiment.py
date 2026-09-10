@@ -35,6 +35,11 @@ class FiniteChannelCeilingExperimentTests(unittest.TestCase):
             )
         )
 
+    def test_interval_floor_retains_prior_only_guessing(self):
+        floor, ceiling = exact_interval_bounds(((0., 0.), (0., 0.)), ((1., 1.), (1., 1.)), (Fraction(3,4),Fraction(1,4)))
+        self.assertEqual(floor,Fraction(3,4))
+        self.assertEqual(ceiling,Fraction(1))
+
     def test_frozen_known_channels_replay_exact_risk_roles(self) -> None:
         validate_config(self.config)
         prior = _prior(self.config)

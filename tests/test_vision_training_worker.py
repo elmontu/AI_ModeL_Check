@@ -600,6 +600,15 @@ class VisionTrainingWorkerTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "changed between"):
                 load_bound_hook_collector(hook, digest)
 
+    def test_bounded_reader_preserves_crlf_and_control_z_bytes(self) -> None:
+        import run_vision_training_hook_audit as worker
+
+        with tempfile.TemporaryDirectory() as temporary:
+            path = Path(temporary) / "exact-bytes.txt"
+            payload = b"first\r\nsecond\r\n\x1afinal\n"
+            path.write_bytes(payload)
+            self.assertEqual(worker.read_bounded_regular_file(path, 1024, "binary regression"), payload)
+
     def test_public_source_provenance_contains_no_absolute_machine_paths(self) -> None:
         source = source_snapshot(CONFIG_PATH)
         hook = ROOT / "scripts" / "llm_training_hooks.py"

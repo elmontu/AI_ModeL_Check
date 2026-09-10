@@ -1,0 +1,51 @@
+{
+  "checked_on": "2026-09-09",
+  "scope": "Primary-source checks for the review revision; not a systematic literature review or legal clearance.",
+  "sources": [
+    {
+      "citation_key": "alvim2012gain",
+      "url": "https://meals-project.eu/sites/default/files/gleakage_0.pdf",
+      "access": "full primary paper PDF available through project site",
+      "supports": "Prior and posterior g-vulnerability, generalized gain functions and channel-factorization ordering are antecedents, not MRA inventions.",
+      "limit": "The paper presents the general converse ordering claim as a conjecture; the revision does not attribute a general converse proof to it."
+    },
+    {
+      "citation_key": "powell2024assurance",
+      "url": "https://cetas.turing.ac.uk/publications/assurance-third-party-ai-systems-uk-national-security",
+      "access": "full report HTML available",
+      "published": "2024-01-17",
+      "jurisdiction_context": "UK national security",
+      "supports": "A close antecedent for third-party AI assurance, procurement and institutional capability.",
+      "limit": "Research report, not a legal instrument or general proof of institutional effectiveness."
+    },
+    {
+      "citation_key": "porter2024praise",
+      "url": "https://link.springer.com/article/10.1007/s43681-023-00297-2",
+      "access": "full primary publisher article available",
+      "online_publication": "2023-06-06",
+      "volume_year": 2024,
+      "supports": "PRAISE structures contextual ethical assurance arguments and human justification and challenge.",
+      "limit": "Its hypothetical application and argument pattern do not establish empirical superiority; it is explicitly not an algorithmic ethical decision procedure."
+    },
+    {
+      "citation_key": "canadaAIA",
+      "url": "https://www.canada.ca/en/government/system/digital-government/digital-government-innovations/responsible-use-ai/algorithmic-impact-assessment.html",
+      "access": "official guidance HTML available",
+      "jurisdiction_context": "Covered Canadian federal automated administrative decisions",
+      "supports": "Impact-level-dependent mitigations, concept-stage legal consultation, scheduled and change-triggered AIA review.",
+      "limit": "The manuscript's responsible roles and hypothetical records are proposed mappings, not an approved departmental profile."
+    },
+    {
+      "citation_key": "canadaDirectiveScope",
+      "url": "https://www.canada.ca/en/government/system/digital-government/digital-government-innovations/responsible-use-ai/guide-scope-directive-automated-decision-making.html",
+      "access": "official scope guide available",
+      "supports": "Department, development/modification date, administrative decision, assistance/replacement of judgment and production scope conditions.",
+      "limit": "Applicability must be determined for the actual institution and system; it does not cover all Canadian AI."
+    },
+    {
+      "url": "https://www.tbs-sct.canada.ca/pol/doc-eng.aspx?id=32592",
+      "access": "Request Rejected",
+      "limit": "Direct Directive text was inaccessible during this revision. No exhaustive clause-by-clause legal verification is claimed."
+    }
+  ]
+}

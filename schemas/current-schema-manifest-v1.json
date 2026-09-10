@@ -7,6 +7,30 @@
   "contracts": [
     {
       "declared_schema_version": "1.0",
+      "filename": "assurance-gate-result-v1.json",
+      "kind": "assurance-gate",
+      "model_import": "model_release_assurance.assurance_record.AssuranceGateResult",
+      "model_title": "AssuranceGateResult",
+      "sha256": "e976bbd1f20c7e2fbd68a02595d3e7e99287d00575cd607c287e6bc7ccb832c2"
+    },
+    {
+      "declared_schema_version": "1.0",
+      "filename": "release-assurance-record-v1.json",
+      "kind": "assurance-record",
+      "model_import": "model_release_assurance.assurance_record.ReleaseAssuranceRecord",
+      "model_title": "ReleaseAssuranceRecord",
+      "sha256": "d1c15948971a0e7bd2950b3afbc1d96676d130abb3f95b1c621ce688cc9df3ee"
+    },
+    {
+      "declared_schema_version": "1.0",
+      "filename": "assurance-scope-v1.json",
+      "kind": "assurance-scope",
+      "model_import": "model_release_assurance.assurance_record.AssuranceScope",
+      "model_title": "AssuranceScope",
+      "sha256": "0f62631ddfe91442b6300f3e73b44ee55fc8a7c1747e34d857b564e4b729055d"
+    },
+    {
+      "declared_schema_version": "1.0",
       "filename": "attack-battery-configuration-v1.json",
       "kind": "attack-battery-configuration",
       "model_import": "model_release_assurance.models.AttackBatteryConfiguration",
@@ -94,36 +118,36 @@
       "sha256": "77aebfe042394a173aa032558164a75fccb8f00325224a789afb0aaaf966c65e"
     },
     {
-      "declared_schema_version": "3.0",
-      "filename": "signed-manifest-v3.json",
+      "declared_schema_version": "4.0",
+      "filename": "signed-manifest-v4.json",
       "kind": "manifest",
       "model_import": "model_release_assurance.models.SignedManifest",
       "model_title": "SignedManifest",
-      "sha256": "7439c177956e5a715c82df6163a35a57e6499783e09ce55773214a6ec1021c23"
+      "sha256": "9c130386b2fdeabf09d5c401fdebf2ddee018e449dfc3c0840777a60f95f8c13"
     },
     {
-      "declared_schema_version": "4.0",
-      "filename": "optimization-request-v4.json",
+      "declared_schema_version": "5.0",
+      "filename": "optimization-request-v5.json",
       "kind": "optimization",
       "model_import": "model_release_assurance.optimizer.OptimizationRequest",
       "model_title": "OptimizationRequest",
-      "sha256": "ee71bdbdd4c87cb631141a70ccee6db7fef8a3c73349d9c6bdcd18f9484f9ded"
+      "sha256": "cdc94bff9b4ac8e4710290b1efcd1be2defc4e0cc519df0ceda0a06f8bc07878"
     },
     {
-      "declared_schema_version": "4.0",
-      "filename": "signed-optimization-manifest-v4.json",
+      "declared_schema_version": "5.0",
+      "filename": "signed-optimization-manifest-v5.json",
       "kind": "optimization-manifest",
       "model_import": "model_release_assurance.optimizer.SignedOptimizationManifest",
       "model_title": "SignedOptimizationManifest",
-      "sha256": "0e38a691cc7fe8c1cbc5529b551b92ef66b16acdf5addfe9ae468cb44bc2ffed"
+      "sha256": "85c9ec2121985c2d877f537bc6e570ba71e4ebe73e56a1c1f8c0e2082c6a1498"
     },
     {
-      "declared_schema_version": "4.0",
-      "filename": "optimization-report-v4.json",
+      "declared_schema_version": "5.0",
+      "filename": "optimization-report-v5.json",
       "kind": "optimization-report",
       "model_import": "model_release_assurance.optimizer.OptimizationReport",
       "model_title": "OptimizationReport",
-      "sha256": "9ca97e24c65370a7d96dfb92aa27101edc7787ceb08408dd1588095dd4c29cf8"
+      "sha256": "4356772151b79478c63f99dd5abc15ecda435ed3ab4b531d92c9bf377e19ede8"
     },
     {
       "declared_schema_version": "3.0",
@@ -214,28 +238,28 @@
       "sha256": "dc2955ac8b0b4e1d1098e5e7aad8959b6b60e8c781ebdf61c6f15c8e08f84a2d"
     },
     {
-      "declared_schema_version": "1.1",
-      "filename": "release-protocol-run-v1.1.json",
+      "declared_schema_version": "1.2",
+      "filename": "release-protocol-run-v1.2.json",
       "kind": "release-protocol-run",
       "model_import": "model_release_assurance.release_protocol.ReleaseProtocolRun",
       "model_title": "ReleaseProtocolRun",
-      "sha256": "9593bececcc2f6f48ed0dcb7fd9e4c6a27258cf34495ab53fa0305fcc63f3d54"
+      "sha256": "f5ca745d96c1ca18c9eef1eb4fe70fb14ec4a52b0cc79d9a62d26539cb9dcec6"
     },
     {
-      "declared_schema_version": "2.0",
-      "filename": "release-protocol-verification-v2.json",
+      "declared_schema_version": "3.0",
+      "filename": "release-protocol-verification-v3.json",
       "kind": "release-protocol-verification",
       "model_import": "model_release_assurance.release_protocol.ReleaseProtocolVerification",
       "model_title": "ReleaseProtocolVerification",
-      "sha256": "ddf60e46cb31b37664d4cb46b95e220fe8311b1d02781c9f1932c097ce3046f2"
+      "sha256": "38888adb303491123403508d0d5fd2581f0ec52a1e16eac082b1c0a2bd748cf4"
     },
     {
-      "declared_schema_version": "5.0",
-      "filename": "assessment-report-v5.json",
+      "declared_schema_version": "6.0",
+      "filename": "assessment-report-v6.json",
       "kind": "report",
       "model_import": "model_release_assurance.models.AssessmentReport",
       "model_title": "AssessmentReport",
-      "sha256": "5045ddb0a556fbae909a9c48b28d6b20ba57f42581a3d6f4d17a14e1e2f1d228"
+      "sha256": "ae1e83b2e375425115d1a7ed3d04c80b2e1c7056866fe433de48a9b6ad8142bc"
     },
     {
       "declared_schema_version": "5.0",
@@ -244,6 +268,22 @@
       "model_import": "model_release_assurance.models.AssessmentRequest",
       "model_title": "AssessmentRequest",
       "sha256": "b83d46858ea9858b0d273a03c3366cccef5a6858bf2c93f04d44adbb32becb4d"
+    },
+    {
+      "declared_schema_version": "1.0",
+      "filename": "residual-risk-acceptance-v1.json",
+      "kind": "residual-risk-acceptance",
+      "model_import": "model_release_assurance.assurance_record.ResidualRiskAcceptance",
+      "model_title": "ResidualRiskAcceptance",
+      "sha256": "9b0f418a847197d3f40961b7f2c9c02d96f9a2a49803968afe623ac993c32cbd"
+    },
+    {
+      "declared_schema_version": "1.0",
+      "filename": "signed-release-assurance-record-v1.json",
+      "kind": "signed-assurance-record",
+      "model_import": "model_release_assurance.assurance_record.SignedReleaseAssuranceRecord",
+      "model_title": "SignedReleaseAssuranceRecord",
+      "sha256": "659f411ef7eea1f49c485249fbb0561c65a53a40e1ddfb0c2bde183941c820e5"
     },
     {
       "declared_schema_version": "1.0",
@@ -265,13 +305,13 @@
   "coverage": {
     "manifest_integrity": "deterministic exact-byte regeneration plus detached protected release attestation",
     "manifest_self_included": false,
-    "registered_contract_count": 32,
+    "registered_contract_count": 37,
     "self_exclusion_reason": "A byte inventory cannot recursively contain the digest of its own final bytes."
   },
   "digest_algorithm": "sha256",
   "digest_scope": "exact_file_bytes",
   "manifest_type": "current_schema_registry",
   "package_name": "model-release-assurance",
-  "package_version": "0.7.0",
+  "package_version": "0.8.0",
   "schema_version": "1.0"
 }

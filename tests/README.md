@@ -10,7 +10,22 @@ Run tests from the repository root. Several tests import utilities directly
 from the top-level `scripts/` directory, so an arbitrary working directory is
 not a supported invocation context.
 
+Paper consistency and finite-construction checks live in
+[academic/tests/](../academic/tests/). They use retained artifacts and exact
+constructions without rerunning historical model studies or building the PDF.
+Both test directories are included by `make test` and the CI `make check` target.
+
 ## Test categories
+
+`test_pipeline_workflow.py` exercises local case preflight, immediate-parent
+lineage, file substitution, route mismatch, Engine execution, retained failures
+and setup dry runs. It does not authenticate the inventoried agency documents.
+The pipeline bootstrap CI job installs a new environment and runs the offline
+training demo on Windows and Linux.
+
+`test_console.py` covers the separate-worker queue and the optional HTTP API.
+API tests need `requirements-console.txt` and otherwise explicitly skip. The
+bootstrap CI job installs the console profile so those tests run there.
 
 | Category | Files | Coverage |
 |---|---|---|
@@ -54,6 +69,7 @@ Run the Python suite:
 
 ```bash
 PYTHONPATH=src python -m unittest discover -s tests -v
+python -m unittest discover -s academic/tests -v
 ```
 
 Run compile checks, Python tests, current-schema replay, and local Markdown-link checks:

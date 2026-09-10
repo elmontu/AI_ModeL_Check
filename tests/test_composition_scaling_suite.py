@@ -9,6 +9,7 @@ import stat
 import sys
 import tempfile
 import unittest
+import warnings
 from pathlib import Path
 from unittest import mock
 
@@ -135,8 +136,12 @@ class CompositionScalingSuiteTests(unittest.TestCase):
         self.assertNotIn("torch", imported)
         self.assertNotIn("torchvision", imported)
 
-    def test_frozen_config_and_every_registered_source_digest_validate(self) -> None:
-        validated = suite.validate_config(config(), verify_files=True, root=ROOT)
+    def test_frozen_config_rejects_revised_workspace_worker_digests(self) -> None:
+        validated = suite.validate_config(config(), verify_files=False, root=ROOT)
+        # The registered completed study stays immutable after current-worker
+        # portability changes; executing it with revised sources must fail.
+        with self.assertRaisesRegex(suite.SuiteValidationError, "source digest mismatch"):
+            suite.validate_config(config(), verify_files=True, root=ROOT)
         self.assertEqual(validated["decision"], "no_release_authorization")
         self.assertEqual(validated["execution"]["max_wall_clock_seconds"], 43_200)
         self.assertEqual(validated["execution"]["max_gpu_reserved_bytes"], 20 * 1024**3)
@@ -361,9 +366,13 @@ class CompositionScalingSuiteTests(unittest.TestCase):
                 path.stat().st_mtime_ns for path in output_dir.iterdir() if path != manifest
             ]
             self.assertGreaterEqual(manifest.stat().st_mtime_ns, max(other_mtimes))
-            self.assertEqual(stat.S_IMODE(output_dir.stat().st_mode), 0o700)
-            for path in output_dir.iterdir():
-                self.assertEqual(stat.S_IMODE(path.stat().st_mode), 0o600)
+            if os.name != "nt":
+                self.assertEqual(stat.S_IMODE(output_dir.stat().st_mode), 0o700)
+                for path in output_dir.iterdir():
+                    self.assertEqual(stat.S_IMODE(path.stat().st_mode), 0o600)
+            self.assertEqual(completion["filesystem_durability"]["directory_fsync_supported"], os.name != "nt")
+            self.assertFalse(completion["filesystem_durability"]["power_loss_durability_guaranteed"])
+
             serialized = manifest.read_text(encoding="utf-8")
             self.assertNotIn("path", serialized)
             self.assertNotIn("run_id", serialized)
@@ -380,6 +389,18 @@ class CompositionScalingSuiteTests(unittest.TestCase):
                 )
             with self.assertRaises(suite.SuiteValidationError):
                 suite.publish_suite_report(output_dir, cfg, report)
+
+    @unittest.skipUnless(os.name == "nt", "Windows directory-flush warning policy")
+    def test_warning_as_error_does_not_fail_after_suite_completion(self) -> None:
+        cfg = config()
+        report = suite.build_suite_report(cfg, {"llm": child_export("llm"), "vision": child_export("vision")}, observed_wall_clock_seconds=1.0)
+        with tempfile.TemporaryDirectory() as temporary, warnings.catch_warnings():
+            warnings.simplefilter("error", RuntimeWarning)
+            directory = Path(temporary) / "fresh"
+            completion = suite.publish_suite_report(directory, cfg, report)
+            self.assertEqual(completion["status"], "complete")
+            self.assertFalse(completion["filesystem_durability"]["directory_fsync_supported"])
+            self.assertTrue((directory / "RUN_COMPLETE.json").is_file())
 
     def test_atomic_writer_refuses_overwrite(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:

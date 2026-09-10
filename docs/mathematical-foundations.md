@@ -1,6 +1,13 @@
 # Proof obligations and mathematical appendix
 
-**Framework version:** 0.7.0
+**Framework version:** 0.8.0 (theory retained; implementation bindings updated)
+
+The [0.8.0 remediation guide](gap-remediation.md) supplies the current exact
+four-verdict semantics, conditional soundness arguments and implementation
+limitations. Earlier-version references below identify when an existing result or
+check was introduced; they do not make old evidence current or claim Python
+refinement. Optimizer privacy/garbling comparisons are now exact for represented
+inputs; upstream numerical, statistical and production assumptions remain explicit.
 **Scope:** proof layer for [MRAP/1.0](model-release-assurance-protocol.md): finite release experiments, evidence-gate feasibility, optional strategic governance stress tests, incomplete portfolios, binomial evidence, and pairwise differential-privacy consequences
 
 This document is the mathematical appendix to the candidate normative [Model Release Assurance Protocol](model-release-assurance-protocol.md). It is not itself a lifecycle protocol and none of its certificates is a production authorization. MRAP/1.0 defines the actors, signed messages, state machine, atomic registry transition, gateway enforcement and monitoring. Its authorization-integrity and finite statistical-accounting core is machine checked; the broader active-implies-acceptable statement remains a conditional engineering corollary with explicit adequacy and implementation-refinement obligations.
@@ -22,7 +29,7 @@ experiment. It is not a multi-player strategic game and has no Nash,
 Stackelberg, or sequential equilibrium. Section 5 adds a separate supplemental strategic
 layer with explicit players, timing, payoffs, information, and a pessimistic
 solution concept. The distinction follows the primary-source review in
-[Game theory for model-release assurance](game-theory-literature-review.md).
+[strategic-incentives literature review](literature-review.md#strategic-incentives-review).
 
 ### Definition 1: release experiment
 
@@ -87,6 +94,11 @@ V_g(\pi,K_{\mathrm{released}})
 
 For finite experiments, Blackwell's comparison theorem also gives the converse: dominance for every bounded decision problem is equivalent to the existence of a garbling. MRA uses a replayable garbling matrix as a sufficient transfer certificate; it does not infer dominance from a few measured metrics.
 
+These statements optimize over all randomized decoders. For a computationally or
+query-restricted adversary class, composing the decoder with \(Q\) must remain
+admissible, including its resource cost; otherwise use the unrestricted Bayes value
+as the upper bound rather than claiming restricted-class equivalence.
+
 ### Proposition 1: approximate transfer
 
 Suppose a kernel \(Q\) satisfies
@@ -123,7 +135,7 @@ For threat \(t\), let \(\theta_t=V_{g_t}(\pi_t,K_t)\) be the true recipient risk
 - exact finite evidence supplies \(L_t=U_t\); and
 - a screen supplies neither decision-valid endpoint.
 
-Let \(\tau_t\) be the policy tolerance. MRA's per-threat rule is
+Let \(\tau_t\) be the policy tolerance. The internal `AssessmentReport` reducer uses the following three-label per-threat rule (not the four-verdict governance disposition):
 
 \[
 \begin{aligned}
@@ -134,7 +146,20 @@ U_t\le\tau_t\text{ with complete validated coverage}
 \end{aligned}
 \]
 
-Conflicting validated bounds are inconclusive and require investigation.
+Contradictory evidence never clears. The internal reducer preserves `BLOCK` if
+the validated floor exceeds tolerance, even when a conflicting ceiling is supplied;
+otherwise it records `INCONCLUSIVE`. The four-verdict assurance facade rejects
+contradictions as `BLOCK`, including cases requiring adjudication.
+
+The facade also makes missing admissible evidence, incomplete required obligations,
+or invalid imports blocking conditions. For a valid, complete assessment it uses
+the inclusive acceptance convention \(U_t\le\tau_t\): all upper bounds below or
+equal to tolerance permit `RELEASE`; a crossing \(L_t\le\tau_t<U_t\) needs
+either authorized, signed acceptance of every crossing threat's exact ceiling
+(`RELEASE-WITH-RISK`) or an applicable named resolving measurement/bound
+(`INCONCLUSIVE`). Bounds alone cannot distinguish acceptance from deferral.
+Accepting residual risk is an institutional decision, not a theorem that the
+threshold is satisfied. See the [current assurance-record semantics](gap-remediation.md).
 
 ### Finite-channel confidence theorem
 
@@ -175,13 +200,17 @@ value is no greater than the supremum over that set. The fixed decoder succeeds 
 with probability at least \(\sum_o\pi_{d_E(o)}\ell_{d_E(o),o}=L_{\mathrm{fd}}(E)\), and the Bayes
 decoder cannot do worse. The claimed probability follows from the coverage probability. \(\square\)
 
-The analyzer emits two directionally distinct records from this one confidence set:
-\(L_{\mathrm{fd}}\) is a confidence floor that may block when \(L_{\mathrm{fd}}>\tau\), while the
+The analyzer emits two directionally distinct records from this one confidence set.
+Since the adversary can ignore the output, the absolute floor is
+\(L=\max\{\max_s\pi_s,L_{\mathrm{fd}}\}\). It may block when \(L>\tau\), while the
 rationally replayed and conservatively outward-rounded \(U\) is a confidence ceiling that may clear
 when \(U\le\tau\). The evidence dispositions are `floor_above_tolerance` and
 `ceiling_below_tolerance`, respectively. For an otherwise eligible interval,
-\(L_{\mathrm{fd}}\le\tau<U\) is fail-closed
-`INCONCLUSIVE` with `recollect_more_state_conditioned_samples`; a separate policy gate can also keep
+\(L\le\tau<U\) is internally fail-closed
+`INCONCLUSIVE` with advisory `recollect_more_state_conditioned_samples`.
+The outward facade instead blocks an unaccepted crossing until an applicable
+resolving-plan verifier exists; a named suggestion is not a verified plan.
+A separate policy gate can also keep
 a below-tolerance ceiling from clearing. A contradictory over-tolerance floor is never weakened by
 the ceiling.
 
@@ -234,8 +263,11 @@ every endpoint again. A `validated` replay plus the compiler-generated support c
 endpoint premise without trusting a submitter boolean. Exact-rational ambiguity replay then prevents a later optimizer from weakening those
 endpoints, and exact lower/upper fields preserve threshold-facing equality before conservative display
 rounding. These checks do not prove IID sampling, completeness of the selected family, authority
-authenticity, or live-interface conformance, and they do not close unrelated ordinary binary64 paths
-under `G7`. An unresolved tail proof or decision boundary remains inconclusive.
+authenticity, or live-interface conformance. They do not certify every upstream numerical
+operation elsewhere in the system or supply a Python-to-Lean refinement proof.
+An unresolved tail proof cannot supply a clearing ceiling. The inner scientific
+assessment may remain inconclusive; missing required admissible evidence is
+`BLOCK` at the four-verdict assurance facade.
 
 For one threat, let \(E_i\) be its exact floors. Partition its statistical floors into recognized
 families \(g\), and let \(L_{g,m}\) be the floor from member \(m\) of family \(g\). A generic
@@ -390,10 +422,10 @@ not required merely to use the Bayesian leakage value in Section 1. The model
 is motivated by Stackelberg audit games, strategic classification,
 principal–agent information acquisition, limited-surveillance security games,
 and the failure of optimistic follower tie-breaking documented in the
-[review](game-theory-literature-review.md). It is not the governance core and
+[review](literature-review.md#strategic-incentives-review). It is not the governance core and
 does not decide legitimate purpose, authority, affected-party acceptability,
 accountability, contestation, or authorization. Those are institutional
-requirements of the [governance core](governance-core.md).
+requirements of the [governance core](system-audit-specification.md#4-normative-governance-and-participant-model).
 
 ### 5.1 Timing, players, and information
 
@@ -663,9 +695,100 @@ risk-sensitive utility, behavioral transportability, or social welfare. A
 repeated or performative claim must define the response transition law, horizon,
 discounting, learning rule, and its own equilibrium or stability concept.
 
+<a id="strategic-stress-test-execution"></a>
+
+### Executable strategic stress tests
+
+`strategic_assurance.py` implements the exact-rational, one-shot interval stress
+tests in this section: submitter compliance, assessor effort, attacker effort
+versus abstention, and Blackwell-compatible control improvement. It is an optional
+design-time diagnostic, not an empirically calibrated behavioral model or a
+governance decision. It cannot authorize release or override a mandatory gate.
+
+Each problem binds the accountable owner, decision authority, independent review,
+affected-party groups, governance objective, conflict controls, contestation, and
+incident/retirement authority. Recording these fields does not establish their
+legitimacy or practical effectiveness.
+
+#### Exact intervals, evidence and interpretation
+
+Endpoints are canonical rational numbers. Numerical intervals name an evidence
+record, claim and unit; detection/validation probabilities also require a positive
+control. Validation rejects missing or mismatched records, units, and future-dated
+evidence. Deployment-eligible records require a source digest. This records a
+claimed content identity: the strategic evaluator does not independently retrieve
+or authenticate that source, prove its truth, or validate its external applicability.
+
+The evaluator uses adverse endpoints of the registered rectangular uncertainty
+set. `supported` means the required positive margin holds throughout that set;
+`contradicted` means the set cannot attain it; `inconclusive` covers a crossing
+or an unavailable behavioral premise. Pessimistic ties and positive margins
+prevent equality at zero from establishing unique compliance or abstention.
+An unenforceable consequence must be exactly zero and earns no deterrence credit.
+
+`registered_model_status` concerns the mathematical input model;
+`deployment_evidence_status` additionally refuses support when actor types or
+commitment/evidence eligibility are inadequate. Synthetic assumptions cannot become
+deployment evidence. Both remain distinct from the four privacy-assurance verdicts.
+Every certificate fixes `governance_decision_effect = none`,
+`authorization_effect = none`, and `hard_gate_effect = cannot_override_or_remove`.
+
+#### Library use
+
+```python
+from pathlib import Path
+
+from model_release_assurance.strategic_assurance import (
+    StrategicAssuranceProblem,
+    solve_strategic_assurance,
+    verify_strategic_assurance,
+)
+
+problem = StrategicAssuranceProblem.model_validate_json(
+    Path("reproduction/strategic-assurance/config.json").read_text(encoding="utf-8")
+)
+certificate = solve_strategic_assurance(
+    problem,
+    certificate_id="local-strategic-certificate",
+)
+verification = verify_strategic_assurance(problem, certificate)
+assert verification.valid
+```
+
+Certificate replay recomputes the problem digest and every exact interval. A
+changed status, bound, or input fails verification.
+
+#### Reproduction and regression checks
+
+Run the retained synthetic problem into a fresh output path:
+
+```bash
+python scripts/run_strategic_assurance_experiment.py --output output/strategic-stress-test-new/experiment.json
+PYTHONPATH=src python -m unittest discover -s tests -p "test_strategic_assurance*.py" -v
+```
+
+Choose an unused output path so prior results are preserved. The script records
+the supplied problem, sampling parameters and certificate results. Its samples
+are regression checks; the exact interval calculation supplies the conditional
+certificate. No historical count/status table is asserted here as a current result.
+The synthetic anonymous-attacker case provides a negative control: an unenforceable
+consequence is zero, so increasing detection alone does not change its payoff.
+This is algebra under the registered synthetic model, not a calibrated finding
+about a real hospital, attacker or jurisdiction.
+
+Tests cover certificate tampering, missing or unsupported evidence, unit mismatch,
+missing positive controls, favorable ties, incomplete types, hidden commitment,
+conflicted review, unenforceable sanctions, non-risk-neutral behavior and invalid
+Blackwell transfer.
+
 ## 6. Incomplete release portfolios
 
-For releases \(j=1,\ldots,k\), marginal channels do not determine the joint transcript channel. Let \(K\) denote a candidate joint channel over \(\mathcal Y_1\times\cdots\times\mathcal Y_k\), and let \(\Gamma\) be the ambiguity polytope defined by normalization, non-negativity, marginal intervals, coupling assumptions, and registered joint-event constraints.
+For releases \(j=1,\ldots,k\), marginal channels do not determine the joint transcript channel. Let \(K\) denote a candidate joint channel over \(\mathcal Y_1\times\cdots\times\mathcal Y_k\). For the exact linear-program formulation below, \(\Gamma\) is a nonempty finite-dimensional ambiguity polytope defined by normalization, non-negativity, marginal intervals, and registered **linear** coupling and joint-event constraints.
+
+Conditional independence with uncertain marginals is generally nonlinear and is
+not included in that LP formulation. The implementation refuses this mode in
+`solve_incomplete_portfolio_exact`; it instead supports an exact independent
+product for fixed exact marginals or a conservative envelope for uncertain ones.
 
 The robust portfolio risk is
 
@@ -696,7 +819,7 @@ Let \(\mathcal D_{\mathrm{det}}\) be the finite set of deterministic decoders fr
 \ \sup_{K\in\Gamma}V_g(\pi,K;d).
 \]
 
-For fixed \(d\), the inner problem is a linear program in the channel cells. Enumerating every deterministic decoder and solving each LP is therefore complete for the declared finite ambiguity set.
+For fixed \(d\), the inner problem is a linear program in the channel cells **under the linear-polytope premise above**. Enumerating every deterministic decoder and solving each LP is therefore complete for that declared finite linear ambiguity set. The max/sup identity itself does not require linearity, but a nonlinear ambiguity set does not thereby become an LP.
 
 **Proof.** A deterministic decoder attains \(V_g(\pi,K)\) for each fixed \(K\). Because \(\mathcal D_{\mathrm{det}}\) is finite,
 \(\sup_K\max_d f(K,d)=\max_d\sup_K f(K,d)\). The fixed-decoder objective and all constraints defining \(\Gamma\) are linear. \(\square\)
@@ -860,14 +983,14 @@ The binomial model requires independent Bernoulli trials, or a separately justif
 |---|---|---|
 | Finite channel, prior, decision value | `decision_theory.py` | Implemented for finite binary64 inputs |
 | Exact/approximate garbling witness | `decision_theory.py` | Forward certificate replay; approximate penalty implemented |
-| Threat interval gate | `decision.py` | Fail closed; boundary comparisons still use binary64 |
+| Threat interval gate and governance disposition | `decision.py`, `assurance_record.py` | Exact rational/represented-decimal endpoint and tolerance comparisons; missing required evidence blocks the governance disposition |
 | Source/game/population binding | `engine.py`, `integrity.py` | Implemented with hashes and exact source payload matching |
 | Finite evidence-gate soundness–liveness frontier | `protocol_feasibility.py` | Design-time meta-analysis; rational primal/dual replay after numerical search |
 | Incomplete-portfolio robust bound | `incomplete_portfolio.py` | Exact decoder enumeration or conservative envelope |
 | Simultaneous multinomial marginals | `portfolio_statistics.py` | Bonferroni Clopper–Pearson family with ledger checks |
 | Membership and finite-secret DP ceilings | `analyzers/dp.py` | Stable formulas; prior cap and pairwise premises required |
 | Empirical attack floors | `analyzers/attack.py`, `controlled_inference.py` | May block; cannot clear |
-| XGBoost and LLM tests | experiment/linter scripts | Screens only; no general theorem |
+| XGBoost and LLM evidence | experiment/linter scripts and typed analyzers | Retained descriptive experiments remain screens; admissible attack/canary inputs can supply floors, and approved finite-channel evidence has its own scoped theorem; no general model-family safety theorem |
 | Supplemental Stackelberg audit/release and attack-effort stress test | `strategic_assurance.py` and `run_strategic_assurance_experiment.py` | Exact-rational adverse-endpoint certificates, governance-context binding, no-decision/no-authorization markers, provenance checks, replay, and synthetic stress test implemented; no behavioral calibration or production parameter registry |
 
 ## 10. Explicit non-claims and open proof obligations
@@ -876,7 +999,7 @@ The current repository does **not** prove:
 
 - that a supplied finite channel is a faithful model of a continuous, adaptive, or changing deployment;
 - that the world set, evidence laws, ambiguity set, population prior, threat list, or acceptability relation is complete or true;
-- exact arithmetic for ordinary assessment tolerances and evidence endpoints—binary64 boundary decisions remain a high-priority gap;
+- certified numerical error bounds for every upstream endpoint calculation—exact comparison of represented rational/decimal values is implemented, but does not prove those values enclose the true risk;
 - correctness of an external DP implementation merely because an accountant record exists;
 - independence or exchangeability of empirical audit trials without a valid collection design;
 - safe composition for an interactive LLM with unmodelled retrieval, tools, memory, updates, concurrency, or lifetime transcripts;
@@ -886,7 +1009,7 @@ The current repository does **not** prove:
 - exhaustive configuration search unless the generator and enumeration certificate are replayed; or
 - production authorization, key custody, identity, atomic portfolio commits, monitoring, or accreditation.
 
-Unsupported premises produce `inconclusive`, not a mathematical presumption of safety.
+Unsupported premises cannot justify clearance. Scientific interval uncertainty is distinct from missing or invalid required evidence: the four-verdict facade makes the latter `BLOCK`; a valid gap-crossing case is `INCONCLUSIVE` only with a named resolving measurement or bound, unless all residual risks are explicitly accepted through the signed institutional disposition.
 
 ## Primary foundations
 

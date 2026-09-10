@@ -26,6 +26,7 @@ import sys
 import time
 import types
 import urllib.request
+import warnings
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Iterable, Sequence
@@ -819,11 +820,7 @@ def _download_verified_object(
         except FileExistsError as exc:
             raise ValueError(f"refusing to overwrite concurrently published cache object: {destination}") from exc
         os.chmod(destination, 0o600)
-        directory_fd = os.open(destination.parent, os.O_RDONLY)
-        try:
-            os.fsync(directory_fd)
-        finally:
-            os.close(directory_fd)
+        _sync_directory(destination.parent)
     finally:
         if partial.exists():
             partial.unlink()
@@ -1964,6 +1961,28 @@ def train_model(
     }, hook_report
 
 
+def _sync_directory(path: Path) -> bool:
+    """Flush directory entries where supported; never suppress POSIX failures."""
+    if os.name == "nt":
+        message = "directory fsync is unavailable through the Windows standard library; no power-loss-durable publication guarantee is made"
+        try:
+            warnings.warn(message, RuntimeWarning, stacklevel=2)
+        except Warning:
+            # Warning policy cannot turn an already committed artifact into a
+            # failed return. The report also records this limitation explicitly.
+            try:
+                print(message, file=sys.stderr)
+            except Exception:
+                pass  # Diagnostic transport is not part of publication success.
+        return False
+    descriptor = os.open(path, os.O_RDONLY)
+    try:
+        os.fsync(descriptor)
+    finally:
+        os.close(descriptor)
+    return True
+
+
 def _atomic_write_bytes(path: Path, payload: bytes) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     partial = path.with_name(f"{path.name}.partial-{os.getpid()}")
@@ -1981,20 +2000,12 @@ def _atomic_write_bytes(path: Path, payload: bytes) -> None:
             raise ValueError(f"refusing to overwrite experiment artifact: {path}") from exc
         published = True
         os.chmod(path, 0o600)
-        directory_fd = os.open(path.parent, os.O_RDONLY)
-        try:
-            os.fsync(directory_fd)
-        finally:
-            os.close(directory_fd)
+        _sync_directory(path.parent)
     finally:
         if partial.exists():
             partial.unlink()
             if published:
-                directory_fd = os.open(path.parent, os.O_RDONLY)
-                try:
-                    os.fsync(directory_fd)
-                finally:
-                    os.close(directory_fd)
+                _sync_directory(path.parent)
 
 
 def _atomic_write_text(path: Path, value: str) -> None:
@@ -2627,7 +2638,10 @@ def run(config_path: Path, output_dir: Path, cache_dir: Path, *, offline: bool) 
             "suitable_for_protected_training_data_without_redesign": False,
             "reason": "public selection IDs, seed, algorithm, and unsalted batch commitments prioritize replay and make the experiment roster reconstructible",
             "run_directory_mode": oct(output_dir.stat().st_mode & 0o777),
-            "artifact_file_mode": "0o600",
+            "artifact_file_mode": "0o600" if os.name != "nt" else "windows_acl_not_verified",
+            "posix_permission_enforcement_supported": os.name != "nt",
+            "directory_fsync_supported": os.name != "nt",
+            "power_loss_durability_guaranteed": False,
         },
         "execution": {"status": "completed", "test_verdict": "passed", "failure_reasons": []},
         "source_provenance": {
@@ -2887,11 +2901,7 @@ def main() -> int:
     except BaseException:
         if completion_path.exists() and not completion_path.is_symlink():
             completion_path.unlink()
-            directory_fd = os.open(output_dir, os.O_RDONLY)
-            try:
-                os.fsync(directory_fd)
-            finally:
-                os.close(directory_fd)
+            _sync_directory(output_dir)
         raise
     print(json.dumps({
         "execution": report["execution"],
