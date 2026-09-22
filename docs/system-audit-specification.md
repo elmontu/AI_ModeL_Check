@@ -11,7 +11,11 @@
 The academic track is the current priority: the [protocol](model-release-assurance-protocol.md),
 [mathematical foundations](mathematical-foundations.md), [formal results and their
 limits](formal-verification.md), and [reproduction inventory](../reproduction/README.md) define
-the research claims and evidence. This document is the industrial-track entry point and retains
+the reference-core claims and evidence. The separately maintained working manuscript
+studies data minimization and dependency accounting for repeated model export.
+The [22 September audit update](#911-repeated-export-agency-audit-update-e) translates its
+bounded results and newer local release workflows into agency review questions.
+This document is the industrial-track entry point and retains
 the complete integrated specification. Both tracks share the same offline reference core,
 contracts, and tests; they are workstreams, not separate or differently permissive protocols.
 
@@ -135,9 +139,16 @@ MRA is an offline, fail-closed reference toolkit for:
 - structurally or cryptographically replaying supplied MRAP lifecycle transcripts.
 
 The repository does not train, export, deploy, serve, authorize, suspend, revoke, or continuously
-monitor production models. It does not operate a durable workflow engine, identity provider,
+monitor production models. It does not operate a production workflow engine, identity provider,
 attestation service, immutable evidence store, authoritative portfolio registry, deployment gateway,
 telemetry platform, KMS/HSM, or incident-management system.
+
+This production boundary does not mean the local experimental paths are absent. The
+educational console trains public samples; the synthetic export lab produces and delivers
+its fixed-fixture models; and the temporal release service persistently checks, reviews,
+commits and delivers registered public-ACS packages. Their local SQLite workflows are
+described in sections 9.10--9.11. They are not authoritative MRAP services, a general
+agency-data trainer, or evidence of production deployment.
 
 The supported core validates and replays submitted attack-battery content; it does not deserialize
 or execute the submitted release model. The local SACRO-ML-inspired red-team utilities can execute
@@ -231,6 +242,10 @@ remeasures the exact live artifact, interface, controls, registry status, and ex
 | Evidence-lab and exploratory red-team workers | [E] | Local process/subprocess | Generate bounded measurements, candidate floors, screens, and non-authorizing red-team reports | Output is not automatically an admissible attack-battery submission or evidence |
 | Real-data LLM training-hook worker | [E] | Separate PyTorch/Transformers/PyArrow experiment process | Train three pinned causal LMs sequentially on one pinned WildChat cohort, collect aggregate hook telemetry, and compare interface/context profiles | Emits no assessment input, attack-battery output, blocking evidence, clearance, or authorization |
 | Real-data vision training-hook worker | [E] | Separate registered PyTorch/torchvision/Pillow CPU/CUDA experiment process | Train canonical AlexNet and DenseNet-121 from scratch on the pinned full-EuroSAT workload, collect aggregate hook telemetry, and run bounded real-image perturbation screens | Emits no assessment input, attack-battery output, blocking evidence, clearance, or authorization |
+| Educational training console | [E] | Local FastAPI API, separate worker, SQLite queue and files | Train public samples, run bounded adversaries, bind cases and inspect evidence | Successful jobs and downloadable evidence do not authorize a model release |
+| Synthetic two-stage export lab | [E] | Separate loopback HTTP service and SQLite history | Produce fixed-fixture protected models, atomically commit and deliver exact bytes, retain spending after revocation | Narrow synthetic adjacency and two-stage history; no arbitrary agency input or production authority |
+| Temporal release workflow | [E] | Local HTTP service and transactional SQLite registry | Prepare, check, record review, commit channel--unit charges and receipt, reauthorize exact package delivery | Trusted initialized public-data registry; no authenticated role separation, hostile-administrator protection, whole-record DP or MRAP-L3/L4 conformance |
+| Comparative accounting kernels | [E] | Separate experimental SQLite implementations | Compare record pairs, grouped pairs and bounded masks under the same accounting predicate | Kernel benchmarks are not full-service benchmarks or an integrated replacement for the HTTP gate |
 | Identity, immutable stores, registry, gateway, monitoring | [X] | Adopter services | Perform production trust, authorization, enforcement, and operations | Specified but absent from this repository |
 
 ## 3. External training-to-serving integration
@@ -1383,6 +1398,148 @@ execution stopped. Generic assessments have no hard resource/time sandbox.
 Container settings, where used, require independent runtime verification.
 The section 19 identity, attestation, distributed coordination, custody and
 production enforcement obligations remain open.
+
+### 9.11 Repeated-export agency audit update [E]
+
+This update, dated **22 September 2026**, draws review questions from the
+separately maintained working paper, especially its
+package contract,
+full-corpus study, and
+release boundary.
+It distinguishes newly implemented local controls from research evidence and
+outstanding agency obligations. It does not replace any normative MRAP gate. The revised manuscript and its
+new study archives are outside this government implementation publication;
+published academic files retain their earlier revision.
+
+#### 9.11.1 Scientific questions before choosing a release route
+
+An agency pre-POC should freeze the following in its experiment plan and retain
+the resulting comparisons in the case evidence pack:
+
+| Question | Evidence to retain | Failure or unresolved condition |
+|---|---|---|
+| Is each protected field needed for the task? | Physical feature-omission and protected-input fits; a task-specific useful-gain/noninferiority requirement set before the decision; matched evaluation records; training/cache repeats appropriate to the claim | Do not infer necessity from statistical significance or from a raw-versus-protected comparison alone. A missing requirement leaves necessity unestablished. |
+| Which privacy promise is being assessed? | Protected unit, neighboring changes, field/version, public covariates, labels, fixed memberships, recipient and time horizon | The paper's fixed-roster attribute replacement result cannot stand in for membership, household, whole-record or longitudinal privacy. |
+| What can this recipient combine? | Complete package manifest, weights, preprocessing, metadata, scores, prior releases, parents/components and auxiliary-information assumptions | A restricted API assessment does not cover retained weights or additional linked scores. Derivative lineage alone does not establish a combined bound. |
+| Which protected values influence this export? | Canonical channel identities, affected unit rosters and both training and scoring dependencies; evidence of the producer's declared information flow | Training-only accounting can omit scoring exposure. Hash agreement cannot prove that arbitrary training or selection code avoided raw protected inputs. |
+| Is a channel being reused or regenerated? | Binding to the same cached sanitized values and attribute version; independent channel registration for new draws | A new model or dataset name cannot reset expenditure. Reusing a noise coin on a changed value is not the identical-value reuse argument. |
+| Are selection and review in the privacy claim? | A declared recipient transcript and evidence that covered choices, refusals and publication depend only on charged protected values and fixed public inputs | Raw-data-dependent selection, raw-truth results, full-cache fingerprints or review text can fall outside the claimed package bound. Hashing them does not sanitize them. |
+| What do attacks establish? | Equally informed no-model baseline; disjoint attack fitting, calibration and evaluation; precise query-only versus linked-score access; positive controls and retained failed/unsupported tests | A finite attack is not a risk ceiling. Recovering an intentionally supplied scoring input is different from training memorization or identity recovery. |
+| Does the cap reflect the full history? | Per-unit union of committed channel dependencies, proposed incremental charges, conservative parameter representation and cap rationale | Do not count the same pair twice, omit a new pair, refund revoked releases, reset histories, or equate epsilon with attack accuracy. A cap pass is not broader clearance. |
+
+The paper's sufficient rule sums each distinct exposed channel--unit pair once.
+Reuse of the same cache can therefore support multiple model families without
+new RR charges, while independently randomized training or scoring adds charges.
+Disjoint training sets may still overlap through scoring. The rule assumes fixed
+dependencies, correct private randomization and mechanism parameters, stable unit
+identities and the complete post-processing premise. Adaptive release selection
+requires its own justification; the observed ledger footprint alone is insufficient.
+Stable benchmark keys are trusted inputs, not verified citizen linkage.
+
+Choose accounting complexity for the actual dependency contract. One reusable
+static channel needs only a charged flag per record; two independently reusable
+static channels can use a two-bit mask. Many descendant model names alone do not
+justify a more elaborate ledger. Direct publication of the relevant sanitized
+table has the same sufficient bound under the stated contract and can be more
+informative than its model post-processing; the study does not establish that
+model packaging yields a tighter privacy bound.
+
+Fine-tuning, adapters, merges, ensembles and distillation should be reviewed as
+new candidate contexts. Retain the parents available to the recipient, all newly
+read protected data and all scoring dependencies. A derivative using only an
+already charged sanitized view may be post-processing under a valid contract;
+reading new raw data or independent caches requires additional evidence and
+accounting. The ACS study does not validate arbitrary large-model fine-tuning or
+merging implementations.
+
+The current empirical comparisons motivate an omission-first review; they do
+not supply agency thresholds. The full-corpus study reports cached RR minus
+omission mean AUC **0.00124** for its fixed ten-family mixture. Three new training
+seeds for three tree families give **0.00107**, with the decision tree favoring
+omission. The two-attribute extension's second channel adds **0.00063** over the
+better single channel. These are different estimands and adjacencies. Conditional
+record intervals, limited seed repeats and one cached realization do not establish
+population robustness, service-specific usefulness or a requirement to spend
+privacy budget. See the seed results
+and two-attribute results.
+
+Fresh RR1 scoring and cached RR1 scoring have equal expected per-model utility
+under the stated disjoint utility-record/fixed-predictor experiment, while fresh
+draws accumulate disclosure. This motivates accounting for the serving path;
+it does not establish that fresh scoring is needed. Alternative study arms and
+separate hypothetical recipient ledgers must not be combined and assigned the
+bound of a single arm.
+
+#### 9.11.2 Implemented local publication sequence
+
+The [temporal service](temporal-release-assurance.md) and
+[enforced workflow](enforced-release-workflow.md) add this experimental sequence:
+
+```text
+registered package and dependencies
+  -> prepare against the current revision
+  -> regenerate and persist server checks
+  -> record local scope review against that check digest
+  -> recheck and atomically commit charges, receipt and audit event
+  -> recheck current authority/evidence/revocation and deliver exact bytes
+```
+
+The implementation lives in [the pipeline](../src/model_release_assurance/temporal_assurance/pipeline.py)
+and [the store](../src/model_release_assurance/temporal_assurance/store.py).
+Missing/stale review, changed artifacts or dependencies, expired/invalid evidence,
+and competing commitments can block the path. Commit retries retain the original
+receipt and spending. Revocation prevents subsequent controlled delivery without
+recalling earlier copies or refunding charges. A delivery event records authorization
+to return bytes, not verified recipient receipt or atomic network delivery.
+
+The web workflow starts with registered public-ACS packages; it does not ingest
+new citizen records or train arbitrary submitted models. Operator/research views
+are trusted audit surfaces and are outside the designated recipient-private
+package transcript. The same local operator can acknowledge review and commit;
+there is no independent authenticated approver. Filesystem/database administrators
+and the retained original research broker remain outside the controlled web boundary.
+These facts preserve the MRAP-L3/L4 and production obligations in this specification.
+
+The [synthetic export POC](model-export-poc.md) separately exercises two-stage
+protected group forecasts. Its narrow construction and adjacency must not be
+presented as the mechanism used by every ACS model or by the educational training
+wizard. Experimental grouped/mask accounting kernels are likewise separate from
+the HTTP service; their measured speed and storage do not establish web latency,
+concurrency throughput or agency deployment capacity.
+
+#### 9.11.3 Evidence currently available and how to challenge it
+
+These are **separately retained September 21 research results**. The named
+research reports and manuscript sections in this table are not bundled with this
+government publication. Its executable verification is recorded in the
+[government update report](government-audit-update-2026-09-22.md). This is not a claim that the full
+workload was rerun for this documentation update. Preserve each registration,
+source binding, result and unsuccessful attempt when assessing its applicability.
+
+| Retained evidence | Observed result | Audit boundary |
+|---|---|---|
+| Generated HTTP traces and injected faults, pending-request corpus | 3,896 plus 5,974 HTTP actions, no observed decision/state/byte disagreement; 384 designated invalid targets blocked and 72 specified recovery cases passed | Sequential generated toy-fixture tests; same-project separately implemented oracle. Counts are not an external validation or real-world detection rate. The 36 deliberately induced HTTP 500 responses are retained; tested rollback and recovery do not establish availability or satisfactory error diagnosis. |
+| Concurrent HTTP study, verification receipt | Thirty overlapping request pairs matched a permitted transaction order; 190 HTTP requests, 167 HTTP 200 and 23 expected HTTP 409 | Tiny in-process clients/ASGI fixtures. No exhaustive interleaving, network-server, distributed-delivery or hostile-administrator claim. |
+| Full-corpus accounting | 840 policy/cap decisions: 626 admissions and 214 refusals | Fixed proposal order and footprints; cap choices are not a distribution of agency policies or measured tight privacy loss. |
+| Accounting representations | Three repetitions per representation over 17,153,975 keys; grouped median operation time 403.7 s versus record pairs 764.0 s | One host, structured rosters, accounting kernels only. Fragmentation can remove the advantage; grouped state is not installed in the HTTP gate. |
+
+For the current checkout, run the relevant
+[pipeline tests](../tests/test_temporal_pipeline.py),
+[adversarial pipeline tests](../tests/test_temporal_pipeline_adversarial.py),
+[store tests](../tests/test_temporal_assurance_store.py) and
+[web tests](../tests/test_temporal_assurance_web.py) in the console environment:
+
+```console
+python -m unittest discover -s tests -p "test_temporal*.py" -v
+python -m unittest discover -s tests -p "test_export_poc*.py" -v
+```
+
+Record actual current results separately from the frozen studies. At minimum,
+challenge skipped checks/review, cross-request digests, post-review package and
+footprint changes, stale revisions, expiry at commitment/delivery, duplicate and
+competing commits, injected write failures, restart recovery and revocation.
+Passing these operational tests does not execute a scientific attack battery,
+verify arbitrary private-training information flow, or issue MRAP authorization.
 
 ## 10. Current machine-contract inventory
 

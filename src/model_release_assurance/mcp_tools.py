@@ -12,6 +12,7 @@ from .audit import AuditStore
 from .integrity import canonical_json_bytes, sha256_bytes
 from .experimental_workflow import run_experimental_workflow
 from .empirical_workflow import EmpiricalWorkflowConfig, run_empirical_xgboost_mlp_workflow
+from .export_poc.tools import ExportToolService
 from .knowledge import KnowledgeIndex
 from .model_coverage import assess_request_model_coverage
 from .models import AssessmentRequest, AttackBatteryInput
@@ -38,6 +39,23 @@ class AssuranceToolService:
         self.repository_root = repository_root.resolve(strict=True)
         self.index = index or KnowledgeIndex.build(self.repository_root)
         self.service_registry = service_registry or default_analyzer_service_registry()
+        self.export_tools = ExportToolService(self.repository_root)
+
+    def list_export_constructions(self) -> dict[str, Any]:
+        """List the synthetic export POC's implemented mechanisms and limits."""
+        return self.export_tools.list_export_constructions()
+
+    def inspect_export_bundle(self, model_json: str) -> dict[str, Any]:
+        """Validate supplied model JSON bytes; this cannot attest or authorize."""
+        return self.export_tools.inspect_export_bundle(model_json)
+
+    def read_export_history(self, data_directory: str) -> dict[str, Any]:
+        """Inspect an existing repository-confined history without returning state."""
+        return self.export_tools.read_export_history(data_directory)
+
+    def plan_model_export(self, data_directory: str, route: str) -> dict[str, Any]:
+        """Plan one route from read-only history; never prepare or authorize."""
+        return self.export_tools.plan_export(data_directory, route)
 
     def list_analyzer_services(self) -> dict[str, Any]:
         """Discover analyzer boundaries without executing assessment work."""

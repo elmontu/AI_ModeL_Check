@@ -61,6 +61,7 @@ vision-experiments = [
 mra = "model_release_assurance.cli:main"
 mra-workflow = "model_release_assurance.workflow:main"
 mra-console = "model_release_assurance.console.__main__:main"
+mra-export = "model_release_assurance.export_poc.cli:main"
 
 [project.urls]
 Homepage = "https://github.com/elmontu/AI_ModeL_Check"
@@ -80,4 +81,4 @@ where = ["src"]
 version = {attr = "model_release_assurance.version.VERSION"}
 
 [tool.setuptools.package-data]
-model_release_assurance = ["py.typed", "console/static/*"]
+model_release_assurance = ["py.typed", "console/static/*", "export_poc/static/*", "temporal_assurance/static/*"]

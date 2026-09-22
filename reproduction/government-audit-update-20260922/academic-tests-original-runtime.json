@@ -1,0 +1,30 @@
+{
+  "runtime": ".privacy-venv\\Scripts\\python.exe",
+  "python": "3.12.14",
+  "recorded_study_versions": {
+    "numpy": "2.5.2",
+    "scipy": "1.18.1",
+    "sklearn": "1.9.0",
+    "torch": "2.13.0+cpu",
+    "xgboost": "3.4.1"
+  },
+  "current_versions": {
+    "numpy": "2.5.2",
+    "scipy": "1.18.1",
+    "sklearn": "1.9.0",
+    "torch": "2.13.0+cpu",
+    "xgboost": "3.4.1"
+  },
+  "all_recorded_dependency_versions_match": true,
+  "tests": {
+    "count": 55,
+    "failures": 0,
+    "errors": 0,
+    "skips": 0,
+    "elapsed_seconds": 6.021
+  },
+  "log": "output/government-audit-update-20260922/academic-tests-original-runtime.log",
+  "historical_source_or_artifact_changes": false,
+  "model_training_performed": false,
+  "diagnosis": "The older console runtime (XGBoost 2.1.4, sklearn 1.6.1) did not reproduce 8 saved XGBoost artifacts generated under XGBoost 3.4.1 and sklearn 1.9.0. All 55 tests pass in the existing study runtime with all recorded dependency versions matched. Cross-version pickle inference is not validated."
+}

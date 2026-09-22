@@ -2,105 +2,133 @@
 
 [![CI](https://github.com/elmontu/AI_ModeL_Check/actions/workflows/ci.yml/badge.svg)](https://github.com/elmontu/AI_ModeL_Check/actions/workflows/ci.yml)
 
-MRA is an **offline, non-authorizing reference implementation** of model-release
-assurance. It validates versioned contracts, evaluates release-bound privacy
-evidence, selects feasible configurations, signs records and replays MRAP/1.0
-lifecycle transcripts. It does not deploy or serve models.
+MRA is a **local government model-release audit framework** for trusted testers.
+Use its browser console to train examples on bundled public data, run adversarial
+checks, assess bound evidence and record an agency's review questions before
+releasing a model to another party or the public. It covers original, fine-tuned
+and combined-model review contexts. Its recommendations and review records do
+not authorize agency releases.
 
 Status: alpha **0.8.0**. The implementation is sector-neutral and model-family
 routing is advisory—not proof that every model, attack or live channel is covered.
 The Lean proofs concern a scoped abstract protocol, not the Python or Ed25519
 implementation.
 
-## Two tracks, one shared core
+## Start the government audit console
 
-| Track | Priority and purpose | Main entry point |
+Python 3.11 or newer is required. From a source checkout, create the console
+environment and start the API and separate worker. No activation is required.
+
+Windows PowerShell:
+
+```powershell
+python scripts/setup_pipeline.py --profile console
+& .\.venv-pipeline\Scripts\python.exe -m model_release_assurance.console local --data .local/console-data --port 8765
+```
+
+Linux/macOS:
+
+```bash
+python3 scripts/setup_pipeline.py --profile console
+./.venv-pipeline/bin/python -m model_release_assurance.console local --data .local/console-data --port 8765
+```
+
+Open [the local console](http://127.0.0.1:8765/). Keep the launcher running;
+Ctrl+C stops both services. The installer refuses to overwrite an existing
+environment: use that environment's Python or select a new `--venv PATH`.
+Installation needs package access or a prepared `--wheelhouse`; the bundled
+training examples then run offline.
+
+1. Use the training wizard with a supported model and public sample dataset,
+   or create a case for an existing candidate and bind its required files.
+2. Run preflight, training/adversarial jobs and assessment as appropriate.
+   Inspect failures, unsupported tools and uncertainty alongside completed tests.
+3. Open **Government audit review** for the selected case. Record rationale,
+   bound evidence and gaps against its twelve controls.
+4. Download the review and case evidence. Rebinding a case or changing cited
+   bytes makes affected review entries stale and requires a fresh review.
+
+Start with the [government audit guide](docs/government-audit-guide.md) for the
+full walkthrough, control inventory and required evidence. Education mode keeps
+institutional documents optional for trusted local exercises. It preserves
+scientific and evidence-integrity checks; a recorded checklist is not a
+scientific pass or agency approval.
+
+## Implemented workflows
+
+| Workflow | Implemented behavior | Boundary |
 |---|---|---|
-| **Academic** | **Current focus:** evidence-bound model governance for government bodies, with privacy as the worked technical assurance case | [Paper source](academic/paper/mra-paper.tex), [data companion](academic/paper/experimental-data.json) and [build instructions](reproduction/README.md#paper-draft) |
-| **Industrial** | Deferred implementation work: turn the reference protocol into an independently enforced deployment system | [Industrial track and acceptance evidence](docs/system-audit-specification.md#industrial-track) |
+| Public-data training and red teaming | Ten CPU training presets, four bundled datasets, classifier/regression tools and optional local language-model probes | Only supported model/data pairs and declared attacks run; failed attacks cannot establish a privacy ceiling |
+| Government case review | Twelve controls, evidence references and hashes, retained rationale/history, stale-evidence findings and JSON download | Records a trusted local operator's review; does not judge scientific adequacy or authenticate agency approvers |
+| Assessment core | Versioned contracts, scoped privacy evidence, optimization, signing and lifecycle replay | Produces non-authorizing recommendations |
+| Synthetic export lab | Bounded protected-data training, accounting, atomic commitment and exact-byte delivery | Fixed public synthetic fixtures; no arbitrary citizen-data uploads |
+| Temporal release service | Prepare, check, recorded local review, atomic charge/receipt commit and current delivery checks | Requires a separately initialized registry and verified run; does not import console models automatically |
 
-These are workstreams, not separate implementations or conformance levels. Both
-use the same versioned contracts, reference library and formal artifacts. No
-source trees or schemas are duplicated, and no deployment obligation is waived.
+Review covers recipient access, prior exports, preprocessing, parent models,
+fine-tuning, adapters, merges, ensembles and distillation. A case type does not
+imply an implemented trainer or privacy proof for every model family.
 
-## Academic track — start here
+## Optional export and controlled-delivery exercises
 
-The academic workspace groups the [manuscript and retained companions](academic/paper/),
-[paper assembly scripts](academic/scripts/) and [academic consistency tests](academic/tests/).
-The shared implementation, schemas, Lean proofs and source studies remain in
-`src/`, `schemas/`, `formal/` and `reproduction/`. Generated PDFs stay in
-ignored `output/pdf/`; build instructions remain in the reproduction index.
+The [synthetic export lab](docs/model-export-poc.md) runs with the same console
+environment in a second terminal:
 
-The [full paper draft](academic/paper/mra-paper.tex), *Model Governance for Government
-Bodies: An Evidence-Bound Release Assurance Protocol*, uses the IEEE Computer
-Society conference format for an S&P-oriented research argument. Its object is
-a government body's accountable decision to authorize model use, an update or
-renewal—not privacy testing alone. Privacy is the worked technical case:
-context-bound floor/ceiling evidence supports a scoped recommendation, but does
-not establish the adequacy of every legal, rights, fairness or public-service
-obligation.
+```powershell
+& .\.venv-pipeline\Scripts\python.exe -m model_release_assurance.export_poc serve --data .local/model-export-poc --port 8767
+```
 
-The government profile binds accountable authority, purpose and impact review,
-procurement and vendor limits, human oversight and redress, transparency records
-with justified exemptions, monitoring and retirement. Required evidence and
-approvals are checked when they become due in the lifecycle. A privacy RELEASE
-is not institutional authorization; RELEASE-WITH-RISK cannot waive mandatory
-rights or legal obligations. The profile is jurisdiction-neutral, not a claim
-of compliance with a particular government's rules. It is a normative paper
-profile, not an implemented government-policy checker.
+On Linux/macOS substitute `./.venv-pipeline/bin/python` for the executable.
+Open [the synthetic exercise](http://127.0.0.1:8767/synthetic). It separates
+identical-model reuse, retained-state extension, independent randomized response
+and a central-DP count baseline. `mra export` also supplies operator commands;
+read-only MCP tools expose construction discovery, bundle inspection, history
+verification and planning.
 
-Section 3 contains the full protocol and six main conditional guarantees.
-Six appendix algorithms, detailed proofs, seven gap arguments and the proof
-inventory retain the technical foundation. Primary finite-construction and
-ceiling-study tables support the main findings. Detailed workload, timing and
-supplementary tables are preserved in the appendices and companion rather than
-treated as interchangeable support for the central theorem. The
-[seven exact finite construction studies](academic/paper/gap-construction-results.json)
-are separate from the historical trained-model experiments. Neither those data
-nor the written arguments establish government field validation, agency approval,
-or legal/fairness correctness. No new model experiments or verified Python
-implementation are claimed. This is an
-**extended research draft**, not a submission-length manuscript. The
-[aggregate companion](academic/paper/experimental-data.json) contains 63 tables and
-4,754 rows linked to 109 hashed sources; it is research data, not an MRAP
-contract. [Build and evidence-access instructions](reproduction/README.md#paper-draft)
-explain what can be reproduced from this checkout. Venue-style formatting does
-not establish novelty, acceptance or submission readiness.
+The root page at port 8767 hosts the separate
+[enforced release workflow](docs/enforced-release-workflow.md). To use an existing
+verified temporal study and initialized operator registry, explicitly select
+their locations:
 
-The paper asks three linked questions: under which conditions a government body
-may authorize use, update or renewal; how privacy floor/ceiling evidence should
-represent uncertainty within that decision; and which protocol components the
-retained tree, image and language-model evidence validates while institutional
-validation remains missing. Observation-relative impossibility results explain
-scoped refusal, not impossibility under every stronger observation model.
+```powershell
+& .\.venv-pipeline\Scripts\python.exe -m model_release_assurance.export_poc serve --data .local/model-export-poc --repository . --temporal-run "PATH_TO_VERIFIED_RUN" --temporal-operator "PATH_TO_INITIALIZED_OPERATOR" --port 8767
+```
 
-Section 3 incorporates constructive admission rules and explicit refusal
-boundaries: impossibility annotations cannot substitute for clearance, waive
-required evidence or bypass mandatory gates. The draft supplies a
-claim-to-proof map; its unproved premises remain open
-research obligations. Develop and validate it in this order:
+Replace the placeholder paths with existing directories. A fresh checkout does
+not contain those study/model stores. Without them, temporal views are
+unavailable and the launcher explains the missing inputs; the synthetic lab
+still works. It does not silently create a registry or restore privacy budget.
+The [temporal service guide](docs/temporal-release-assurance.md) explains its
+channel/unit accounting and trusted-storage assumptions.
 
-1. Fix the [protocol claim and assumptions](docs/model-release-assurance-protocol.md#academic-track): accountable decision authority, stage-specific obligations, and the worked privacy case's games, declared channels, simultaneous coverage and exact verdict meanings.
-2. Connect the [mathematical arguments](docs/mathematical-foundations.md) and [four-verdict arguments](docs/gap-remediation.md#conditional-correctness-arguments) to the [actual Lean theorem boundary](docs/formal-verification.md). Unproved links remain labelled obligations.
-3. Challenge those claims using the [counterexample regressions](docs/gap-remediation.md) and the [primary-source literature review](docs/literature-review.md); demonstrate what fails when each material assumption is removed.
-4. Prospectively register and execute the [academic evaluation plan](reproduction/README.md#academic-plan), reporting current reference-pipeline correctness and scaling separately from historical measurements.
+## Research relationship and deployment boundary
 
-The candidate contribution connects public-body governance obligations, scoped
-technical evidence and lifecycle decision invariants. Its novelty and publication readiness
-are **not established** by organizing the repository. Abstract proofs, Python
-tests and empirical measurements must remain separate evidence categories.
+The government controls draw on the separately maintained 21 September 2026
+working draft, *Data Minimization and Dependency Accounting for Repeated Model
+Export*: compare an omission baseline, specify the complete recipient view, and
+account for training and scoring dependencies across releases. That revised
+manuscript and its new study archives are **not included in this government
+implementation update**. The [paper source](academic/paper/mra-paper.tex),
+[data companion](academic/paper/experimental-data.json) and
+[build instructions](reproduction/README.md#paper-draft) in this publication
+remain the previously published academic snapshot.
 
-“Inclusiveness” means coverage of the declared scenario universe, not proof of
-all possible attacks or models. Game theory stays supplemental; it cannot
-replace a privacy bound or a governance obligation. A concrete database or
-gateway is not required to state an ideal-model theorem, but its assumptions
-must remain visible and deployment correctness remains unproved.
+Research and government implementation use **one shared core**, with the same
+versioned contracts and formal artifacts. They are not conformance levels, and
+no deployment obligation is waived. The local services do not provide
+authenticated custody, independent approvers or enforcement against a storage
+administrator. See the [industrial track and acceptance evidence](docs/system-audit-specification.md#industrial-track)
+before extending the boundary to an agency deployment.
 
 ## Reference implementation quick start
 
 Read the [implementation and motivation guide](docs/implementation-and-motivation-guide.md) for the purpose of each component, a complete walkthrough, model and adversary coverage, evidence interpretation and remaining work.
 
-The [detailed local verification report](docs/framework-e2e-validation-2026-09-10.md) retains results for every supported training option and adversary, plus explicit coverage gaps.
+The [government integration report](docs/government-audit-update-2026-09-22.md)
+records the newer review and delivery checks. The
+[government-only publication verification](reproduction/government-publication-20260922/README.md)
+records checks against the exact selected source tree and its built wheel. The
+[September 10 training verification report](docs/framework-e2e-validation-2026-09-10.md)
+retains that source snapshot's option/adversary matrix and explicit coverage gaps.
 
 For trusted local testers, the [browser console](docs/local-console.md) adds a
 REST API, separate worker and persistent job queue. Run guided scenarios or the
@@ -172,11 +200,13 @@ enforcement, monitoring and revocation remain external obligations.
 
 ## Documentation
 
-Use these shared references. The academic reading order above is the default;
-industrial requirements remain in the integrated system specification.
+Start with the government operating guide, then use these shared references.
+Industrial requirements remain in the integrated system specification.
 
 | Question | Reference |
 |---|---|
+| How do I review a government model release? | [Government audit guide](docs/government-audit-guide.md) |
+| What was checked for this integration? | [Government audit verification report](docs/government-audit-update-2026-09-22.md) |
 | What is the lifecycle protocol? | [MRAP/1.0](docs/model-release-assurance-protocol.md) |
 | What does the implementation enforce, and what remains external? | [System architecture and audit specification](docs/system-audit-specification.md) |
 | What changed in 0.8.0, and which gaps remain? | [Remediation and migration guide](docs/gap-remediation.md) |
@@ -191,6 +221,13 @@ Focused guides: [XGBoost](docs/xgboost.md),
 [red-team tools](docs/sacro-ml-red-team.md), and [MCP/RAG](docs/rag-mcp.md).
 
 ## Experiments and historical evidence
+
+The [retained government integration checks](reproduction/government-audit-update-20260922/README.md)
+distinguish focused implementation tests, earlier broader runs and failed
+setup/replay attempts. Broader results include locally maintained research work;
+they are not a claim that every associated study is published in this update.
+Temporal service admission under a declared attribute-DP budget does not
+establish membership protection, whole-record privacy or general release clearance.
 
 The [reproduction index](reproduction/README.md) is the single study inventory:
 it distinguishes retained results, negative results, configured experiments and

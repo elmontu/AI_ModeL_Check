@@ -2,6 +2,8 @@
 
 const $ = id => document.getElementById(id);
 
+$('show-government-audit').onclick=showGovernmentControls;
+
 const names = {trained:'Trained model','fine-tuned':'Fine-tuned',adapter:'LoRA / adapter',merged:'Merged model',ensemble:'Ensemble / routed',distilled:'Distilled model',language:'Language red-team',reference:'Reference scenarios',training:'Training demo',check:'Input preflight',assess:'Case assessment',api:'Controlled API','named-party-weights':'Named-party files','public-weights':'Public model files'};
 
 let cases = [], jobs = [], selectedCase = null, selectedJob = null, lastCases = '', lastJobs = '', toastTimer;
@@ -14,7 +16,92 @@ function toast(text) {$('toast').textContent = text; $('toast').hidden = false; 
 
 async function api(path, payload) {let response; try {response = await fetch('/api/' + path, payload === undefined ? {} : {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});} catch(error){throw new Error('Cannot reach the local console. Start mra-console local, then retry. Your saved cases and runs are retained.');} const body = await response.json(); if(!response.ok) throw new Error(typeof body.detail === 'string' ? body.detail : 'Invalid request. Check the fields and try again.'); return body;}
 
-function pill(value) {return el('span', value.replaceAll('_',' '), 'pill ' + (['completed','failed','cancelled','running','queued','inconclusive','inputs_incomplete'].includes(value) ? value : 'muted'));}
+function pill(value) {return el('span', value.replaceAll('_',' '), 'pill ' + (['completed','failed','cancelled','running','queued','inconclusive','inputs_incomplete','needs_work'].includes(value) ? value : 'muted'));}
+
+const reviewNames={evidence_recorded:'Evidence recorded',gap:'Gap identified',not_applicable:'Not applicable',recorded:'Recorded',needs_work:'Needs work',not_started:'Not started'};
+
+async function showGovernmentControls(){
+  try{
+    const data=await api('government-audit');selectedCase=null;selectedJob=null;
+    $('detail-label').textContent='GOVERNMENT AUDIT';$('detail-title').textContent='Review the full release';
+    const box=$('detail-content');box.replaceChildren();
+    box.append(el('p','Open a release case to record your findings. These controls connect the revised paper to the agency review: test omission first, identify all dependencies and inspect the actual release path.','detail-summary'));
+    data.controls.forEach(control=>{
+      const detail=el('details'),title=el('summary',control.title);detail.append(title,el('p',control.motivation),el('p',control.review_question,'operator-note'));
+      const examples=el('ul');control.evidence_examples.forEach(item=>examples.append(el('li',item)));detail.append(examples);box.append(detail);
+    });
+    box.append(el('p','File checks and recorded rationale do not prove private training or grant release approval. Education mode remains available for local public-data exercises.','detail-warning'));
+    if(!$('detail-dialog').open)$('detail-dialog').showModal();
+  }catch(error){toast(error.message);}
+}
+
+async function showGovernmentAudit(caseId){
+  try{
+    const data=await api('cases/'+caseId+'/government-audit');selectedCase=caseId;selectedJob=null;
+    $('detail-label').textContent='GOVERNMENT AUDIT · '+data.mode.toUpperCase();$('detail-title').textContent='Evidence, rationale and gaps';
+    const box=$('detail-content');box.replaceChildren();
+    box.append(el('p',data.summary.recorded+' recorded · '+data.summary.needs_work+' need work · '+data.summary.not_started+' not started','detail-summary'));
+    box.append(el('p','Recorded means an entry is current, not that its evidence is scientifically adequate. Rebinding the case or changing cited evidence makes earlier reviews stale. No release authorization is issued.','detail-warning'));
+    const actions=el('div',undefined,'detail-actions'),back=el('button','Back to case','secondary'),download=el('button','Download review JSON','secondary'),refreshReview=el('button','Refresh evidence','secondary');
+    back.onclick=()=>showCase(caseId);refreshReview.onclick=()=>showGovernmentAudit(caseId);
+    download.onclick=()=>{const link=el('a');link.href='/api/cases/'+caseId+'/government-audit/download';link.download='government-audit-'+caseId+'.json';link.click();};
+    actions.append(back,refreshReview,download);box.append(actions);
+    data.controls.forEach(control=>{
+      const detail=el('details',undefined,'audit-control'),summary=el('summary'),row=el('div',undefined,'input-row');
+      row.append(el('strong',control.title),pill(control.state));summary.append(row);detail.append(summary,el('p',control.review_question));
+      detail.append(el('p',control.motivation,'operator-note'));
+      const suggestions=el('ul',undefined,'operator-note');control.evidence_examples.forEach(item=>suggestions.append(el('li',item)));detail.append(suggestions);
+      if(control.latest_review){
+        const latest=control.latest_review;
+        detail.append(el('p',(reviewNames[latest.status]||latest.status)+(latest.stale?' · stale':''),'detail-summary'),el('p',latest.rationale));
+        if(latest.evidence_slots.length)detail.append(el('p','Cited evidence: '+latest.evidence_slots.join(', '),'operator-note'));
+      }
+      control.issues.forEach(issue=>detail.append(el('p',String(issue).replaceAll('_',' '),'detail-warning')));
+      const form=el('form',undefined,'audit-form'),status=el('select'),rationale=el('textarea'),evidence=el('fieldset'),checks=[];
+      status.id='audit-status-'+control.id;rationale.id='audit-rationale-'+control.id;
+      const statusLabel=el('label','Finding');statusLabel.htmlFor=status.id;
+      ['gap','evidence_recorded','not_applicable'].forEach(value=>{const option=el('option',reviewNames[value]);option.value=value;status.append(option);});
+      if(control.latest_review)status.value=control.latest_review.status;
+      const rationaleLabel=el('label','Rationale (20–2,000 characters)');rationaleLabel.htmlFor=rationale.id;
+      rationale.required=true;rationale.minLength=20;rationale.maxLength=2000;rationale.rows=4;
+      rationale.placeholder='Explain what the evidence establishes, what is missing, or why this control does not apply.';
+      if(control.latest_review)rationale.value=control.latest_review.rationale;
+      evidence.append(el('legend','Already-bound case evidence'));
+      data.evidence_slots.forEach((item,index)=>{
+        const choice=el('input');choice.type='checkbox';choice.value=item.slot;choice.id='audit-evidence-'+control.id+'-'+index;choice.disabled=!item.bytes_valid;
+        const label=el('label',item.slot+(item.bytes_valid?'':' · unavailable or changed'));label.htmlFor=choice.id;
+        const holder=el('div',undefined,'audit-evidence');holder.append(choice,label);evidence.append(holder);checks.push(choice);
+      });
+      if(!data.evidence_slots.length)evidence.append(el('p','Bind evidence files in the case panel first. You can record a gap now.','operator-note'));
+      const save=el('button','Record finding','primary');save.type='submit';
+      form.append(statusLabel,status,rationaleLabel,rationale,evidence,save);
+      form.onsubmit=async event=>{
+        event.preventDefault();save.disabled=true;
+        try{
+          const evidenceSlots=checks.filter(c=>c.checked&&!c.disabled).map(c=>c.value);
+          if(status.value==='evidence_recorded'&&!evidenceSlots.length)throw new Error('Select at least one unchanged bound evidence file, or record a gap.');
+          if(rationale.value.trim().length<20)throw new Error('Explain the finding in at least 20 characters.');
+          await api('cases/'+caseId+'/government-audit',{control_id:control.id,status:status.value,rationale:rationale.value,evidence_slots:evidenceSlots,expected_context_sha256:data.context_sha256});
+          await showGovernmentAudit(caseId);toast('Review entry recorded. Earlier entries are retained.');
+        }catch(error){toast(error.message);save.disabled=false;}
+      };
+      detail.append(form);
+      if(control.history&&control.history.length){
+        const history=el('details',undefined,'audit-history');history.append(el('summary','Recorded history ('+control.history_count+')'));
+        control.history.forEach(entry=>{
+          history.append(el('p',(reviewNames[entry.status]||entry.status)+' · '+(typeof entry.created==='number'?time(entry.created):entry.created)),el('p',entry.rationale,'operator-note'));
+          if(entry.evidence_slots.length)history.append(el('p','Evidence: '+entry.evidence_slots.join(', '),'operator-note'));
+          Object.entries(entry.evidence_sha256||{}).forEach(([slot,hash])=>history.append(el('p',slot+' · SHA-256 '+hash,'operator-note')));
+        });
+        if(control.history_truncated)history.append(el('p','Showing the newest entries. Earlier entries remain in the local database.','operator-note'));
+        detail.append(history);
+      }
+      box.append(detail);
+    });
+    box.append(el('p','Case context SHA-256: '+data.context_sha256,'operator-note'));
+    if(!$('detail-dialog').open)$('detail-dialog').showModal();
+  }catch(error){toast(error.message);}
+}
 
 function outcome(job) {const r = job.result; if(r && r.tests)return (r.status==='incomplete'?'Incomplete coverage · ':'')+r.observed_violations+' observed violations';return r ? r.verdict || r.assessment_verdict || r.status || (r.scenarios ? '8 scenario results' : 'See report') : '—';}
 
@@ -37,6 +124,10 @@ async function showCase(id) {
     const box=$('detail-content'); box.replaceChildren();
 
     box.append(el('div',names[c.kind]+' · '+names[c.route],'detail-summary'));
+
+    const audit=el('button','Government audit review','secondary');
+    audit.onclick=()=>showGovernmentAudit(id);
+    box.append(audit,el('p','Review necessity, recipient access and repeated-export dependencies. Records and gaps remain separate from the scientific assessment.','operator-note'));
 
     c.inputs.forEach(input=>{const row=el('div',undefined,'input-row'); row.append(el('span',input.slot.replaceAll('-',' ')),pill(input.bound?'bound':input.required?'missing':'optional'));box.append(row);if(input.bound)box.append(el('p',input.path+' · SHA-256 '+input.sha256,'operator-note'));});
 

@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>Release Assurance · Controlled model release</title>
+  <link rel="stylesheet" href="/temporal-assets/style.css">
+  <script src="/temporal-assets/app.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+  <aside class="sidebar">
+    <a class="brand" href="/" aria-label="Release Assurance home"><span class="brand-mark" aria-hidden="true">ra</span><span>Release<br><strong>Assurance</strong></span></a>
+    <p class="sidebar-caption">DATA TO MODEL RELEASE</p>
+    <nav class="nav" aria-label="Workspace">
+      <button class="nav-item active" type="button" data-view="operator" aria-current="page"><span aria-hidden="true">⇧</span> Release workflow</button>
+      <button class="nav-item" type="button" data-view="replay"><span aria-hidden="true">◷</span> Evidence replay</button>
+      <button class="nav-item" type="button" data-view="schedule"><span aria-hidden="true">▤</span> Models &amp; evidence</button>
+    </nav>
+    <div class="sidebar-note"><span class="status-dot"></span><strong>Local research prototype</strong><p>Public ACS records.<br>One protected attribute.<br>A retained release history.</p></div>
+    <a class="legacy-link" href="/synthetic">Open synthetic demonstration <span aria-hidden="true">↗</span></a>
+  </aside>
+
+  <main id="main" class="main">
+    <div class="topbar"><span>Model governance workspace</span><span class="environment">LOCAL / PUBLIC DATA</span></div>
+    <div id="global-message" class="notice hidden" role="alert"></div>
+
+    <section id="view-replay" class="view hidden" aria-labelledby="replay-title">
+      <header class="page-header"><div><p class="eyebrow">ORDERED RELEASE EXPERIMENT</p><h1 id="replay-title">Every release has a history.</h1><p class="lead">Follow the models a recipient receives, the privacy budget they consume, and what the combined evidence reveals.</p></div><span id="study-status" class="badge neutral">Loading evidence</span></header>
+      <div id="study-metrics" class="metric-grid" aria-live="polite"></div>
+      <div class="section-heading"><div><p class="eyebrow">EXPLORE A RECIPIENT HISTORY</p><h2>Ten models, released in sequence</h2></div><span class="small muted">Dates are simulated. Earlier disclosures remain available.</span></div>
+      <section class="card timeline-controls" aria-label="Timeline controls">
+        <label class="field grow">Release history<select id="scenario-select" disabled><option>Loading timelines…</option></select></label>
+        <label class="field">Score view<select id="interface-select"><option value="full">Full precision · delivered</option><option value="round2">Two decimals · counterfactual</option><option value="label">Class label · counterfactual</option></select></label>
+        <label class="toggle"><input type="checkbox" id="raw-toggle"> Show raw-input control</label>
+      </section>
+      <p class="context-note" id="view-context">Full-precision linked scores are an additional disclosure. This is not a weights-only extraction test.</p>
+      <div class="chart-grid">
+        <section class="card chart-card"><div class="card-heading"><div><p class="eyebrow">CUMULATIVE EXPOSURE</p><h3>Privacy budget</h3></div><span id="budget-label" class="badge neutral">—</span></div><div id="budget-chart" class="chart" role="img" aria-label="Cumulative maximum privacy budget over releases"></div><p class="chart-note">Maximum ε spent by any protected record. A new model ID does not reset spending.</p></section>
+        <section class="card chart-card"><div class="card-heading"><div><p class="eyebrow">SENSITIVE-ATTRIBUTE INFERENCE</p><h3>What the recipient can infer</h3></div><span class="small muted">Held-out balanced accuracy</span></div><div id="attack-chart" class="chart" role="img" aria-label="Sensitive-attribute attack balanced accuracy over releases"></div><div id="attack-legend" class="legend"></div></section>
+      </div>
+      <section class="card step-card"><div class="card-heading"><h3>Inspect a release</h3><span id="step-position" class="small muted">Step — of —</span></div><label class="sr-only" for="step-range">Release step</label><input type="range" id="step-range" min="1" max="10" value="1" disabled><div id="step-detail" class="step-detail"></div></section>
+      <section class="card table-card"><div class="card-heading"><h3>Release ledger</h3><span class="small muted">Select a step to inspect it</span></div><div class="table-scroll"><table><thead><tr><th>Step</th><th>Model</th><th>Training set</th><th>Decision</th><th>Maximum ε</th><th>Member BA</th></tr></thead><tbody id="timeline-body"></tbody></table></div></section>
+      <div class="scope-grid"><section class="scope-card"><h3>What this demonstrates</h3><p>The local broker keeps privacy spending across model releases, binds delivered bytes to the decision, and blocks releases that would exceed the budget.</p></section><section class="scope-card"><h3>What the scope covers</h3><p>One disability bit per public benchmark record, with other inputs fixed. This is attribute DP, not full-record or longitudinal citizen privacy. A finite attack is not an optimal adversary.</p></section><section class="scope-card"><h3>Why reuse matters</h3><p>Reusing a cached randomized bit is post-processing. Independently renewing its noise spends additional budget. Fresh and cached histories here have different total budgets.</p></section></div>
+    </section>
+
+    <section id="view-operator" class="view" aria-labelledby="operator-title">
+      <header class="page-header"><div><p class="eyebrow">DATA TO RELEASE / LIVE LOCAL WORKFLOW</p><h1 id="operator-title">A controlled path to model release.</h1><p class="lead">Bind a model to its data and DP channel, run the release checks, record a local operator decision, and commit its privacy charges before delivery.</p></div><button class="button secondary" id="refresh-operator" type="button">Refresh workflow</button></header>
+      <div class="notice subtle">The registry contains existing trained models. This workflow checks their registered provenance before export; it does not run new training. A local operator review accepts the declared attribute-DP scope, not a broader privacy or legal guarantee.</div>
+      <div id="operator-message" class="notice hidden" role="alert"></div>
+      <section class="card pipeline-card" aria-labelledby="pipeline-title"><div class="card-heading"><div><p class="eyebrow">REQUIRED BEFORE DELIVERY</p><h2 id="pipeline-title">The release pipeline</h2></div><span id="pipeline-status" class="badge neutral">Select a model</span></div><ol id="pipeline-stages" class="pipeline-stages" aria-live="polite"></ol><p class="pipeline-boundary">These gates control this service’s release and download routes. They do not prevent a filesystem administrator from accessing files outside the service.</p></section>
+      <div id="operator-metrics" class="metric-grid three" aria-live="polite"></div>
+      <div class="workflow-grid">
+        <section class="card"><div class="card-heading"><div><p class="eyebrow">01–02 / PROVENANCE &amp; REQUEST</p><h2>Select a registered model</h2></div></div><form id="prepare-form"><label class="field">Model<select id="model-select" required disabled><option>Loading registered models…</option></select></label><div id="model-provenance" class="model-provenance" aria-live="polite"></div><label class="field">Release request ID<input id="request-id" name="request_id" required maxlength="80" pattern="[A-Za-z0-9_-]{1,80}" title="Use 1–80 letters, numbers, underscores or hyphens" autocomplete="off" placeholder="release-001"></label><p class="small muted">Prepare binds the model, dataset, DP channel, evidence and current ledger revision. It does not charge the budget or permit delivery.</p><button class="button primary" id="prepare-button" type="submit" data-mutation data-action="prepare" disabled>Prepare bound request <span aria-hidden="true">→</span></button></form><div id="operator-validity" class="validity"></div></section>
+        <section class="card"><div class="card-heading"><div><p class="eyebrow">03–06 / CHECK, REVIEW &amp; RELEASE</p><h2>Complete the required gates</h2></div><span id="request-status" class="badge neutral">No request selected</span></div><div id="request-review" class="empty-state"><span class="empty-icon" aria-hidden="true">↗</span><h3>Prepare a request to begin</h3><p>Automated checks and a recorded operator review must complete before commitment and download.</p></div><div id="request-actions" class="request-actions hidden"></div></section>
+      </div>
+      <section class="card"><div class="card-heading"><div><p class="eyebrow">PERSISTENT WORKFLOW RECORD</p><h3>Audit trail for the selected request</h3></div></div><div id="request-audit" class="audit-trail"><p class="small muted">Select a request to inspect its recorded checks, review and release events.</p></div></section>
+      <section class="card table-card"><div class="card-heading"><h3>Requests in this workspace</h3><span class="small muted">Committed privacy spending is retained</span></div><div class="table-scroll"><table><thead><tr><th>Request</th><th>Model</th><th>State</th><th>Revision</th><th>Action</th></tr></thead><tbody id="requests-body"></tbody></table></div><p id="requests-empty" class="empty-table">No requests yet. Preparing the first release will create one.</p></section>
+      <p class="context-note">Revocation blocks future downloads. It cannot erase copies already received or refund committed privacy spending.</p>
+    </section>
+
+    <section id="view-schedule" class="view hidden" aria-labelledby="schedule-title">
+      <header class="page-header"><div><p class="eyebrow">MODELS &amp; REPRODUCIBLE EVIDENCE</p><h1 id="schedule-title">The evidence behind the history.</h1><p class="lead">Two miniature SLMs, five tree families and three other model families, evaluated through a fixed release order.</p></div></header>
+      <div class="model-groups"><section class="card"><span class="group-count">02</span><h3>Small language models</h3><p>Small and medium causal models trained from scratch on structured records.</p></section><section class="card"><span class="group-count">05</span><h3>Tree-based families</h3><p>Decision tree, random forest, extra trees, histogram boosting and XGBoost.</p></section><section class="card"><span class="group-count">03</span><h3>Other estimators</h3><p>K-nearest neighbours, logistic regression and a multilayer perceptron.</p></section></div>
+      <section class="card"><div class="card-heading"><h2>Reports &amp; verification</h2><span class="badge neutral">Original records preserved</span></div><div id="evidence-links" class="evidence-links"><p class="muted">Loading evidence links…</p></div></section>
+      <section class="card scope-long"><h2>Read the results within their scope</h2><ul><li>The replay reuses 40 distinct artifacts from a 160-fit source bank. One hundred release attempts are not one hundred new model fits.</li><li>The first two releases combine different SLM architectures on training datasets with 50% overlap.</li><li>The linked-score attack receives actual per-record scores in addition to model access. The query-only attack does not.</li><li>Training set, model family and sequence position vary together in one prescribed order. This does not isolate a causal effect of overlap or architecture.</li><li>Rounded and label-only charts are restricted, counterfactual views. The actual recipient package contains full-precision scores.</li><li>The dates are simulated and the cohort is fixed. This is not a Singapore agency deployment or a lifelong privacy guarantee.</li></ul></section>
+      <details class="card"><summary>Additional registered limitations</summary><ul id="registered-limitations"></ul></details>
+    </section>
+    <footer>Release Assurance <span>Public-data research workspace · Durable history, explicit scope</span></footer>
+  </main>
+</body>
+</html>

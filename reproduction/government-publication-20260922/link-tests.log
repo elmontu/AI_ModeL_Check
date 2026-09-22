@@ -1,0 +1,10 @@
+test_missing_and_present_output_artifacts_are_counted_not_required (test_markdown_links.MarkdownLinkTests.test_missing_and_present_output_artifacts_are_counted_not_required) ... ok
+test_missing_published_document_schema_and_source_still_fail (test_markdown_links.MarkdownLinkTests.test_missing_published_document_schema_and_source_still_fail) ... ok
+test_normalized_traversal_cannot_disguise_missing_published_targets (test_markdown_links.MarkdownLinkTests.test_normalized_traversal_cannot_disguise_missing_published_targets) ... ok
+test_other_output_named_locations_do_not_bypass_publication_checks (test_markdown_links.MarkdownLinkTests.test_other_output_named_locations_do_not_bypass_publication_checks) ... ok
+test_valid_published_documents_schemas_sources_and_external_links (test_markdown_links.MarkdownLinkTests.test_valid_published_documents_schemas_sources_and_external_links) ... ok
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.039s
+
+OK

@@ -10,7 +10,7 @@ from fastapi.responses import FileResponse, JSONResponse, Response
 from pydantic import BaseModel, ConfigDict, Field
 from starlette.middleware.trustedhost import TrustedHostMiddleware
 
-from .. import workflow
+from .. import government_audit, workflow
 from .store import Store
 from .options import LanguageOptions, TrainingOptions
 
@@ -83,6 +83,15 @@ def create_app(root: Path) -> FastAPI:
         from ..public_models import capability_inventory
         return capability_inventory()
 
+    @app.get("/api/export-capabilities")
+    def export_capabilities():
+        from ..export_poc.tools import export_construction_catalog
+        return export_construction_catalog()
+
+    @app.get("/api/government-audit")
+    def government_audit_catalog():
+        return government_audit.catalog()
+
     @app.get("/api/language/models")
     def language_models():
         from ..language_red_team import models
@@ -129,6 +138,21 @@ def create_app(root: Path) -> FastAPI:
     @app.post("/api/cases/{case_id}/bindings")
     def case_binding(case_id: str, payload: CaseBinding):
         return store.edit_case(case_id, slot=payload.slot, path=payload.path)
+
+    @app.get("/api/cases/{case_id}/government-audit")
+    def government_audit_report(case_id: str):
+        return store.government_audit_report(case_id)
+
+    @app.get("/api/cases/{case_id}/government-audit/download")
+    def government_audit_download(case_id: str):
+        # The fresh report validates the identifier and current evidence bytes.
+        # No saved snapshot or browser-side report is used for this export.
+        report = store.government_audit_report(case_id)
+        return JSONResponse(report, headers={"Content-Disposition": f'attachment; filename="government-audit-{case_id}.json"'})
+
+    @app.post("/api/cases/{case_id}/government-audit", status_code=201)
+    def government_audit_record(case_id: str, payload: government_audit.ReviewInput):
+        return store.record_government_audit(case_id, payload.model_dump())
 
     @app.get("/api/jobs")
     def jobs():

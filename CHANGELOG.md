@@ -4,6 +4,15 @@ All user-visible changes to Model Release Assurance are recorded here. The proje
 
 ## [Unreleased]
 
+### Government audit alignment, 22 September 2026
+
+- Applied the revised academic paper's data-minimization and dependency-accounting findings to the government audit guide and integrated protocol specification: omission comparisons, full recipient history, training/scoring dependencies, cache versions and derivative-model review.
+- Added twelve case-bound review controls to the local console, with rationale, cited evidence hashes, retained history, stale-context and changed-evidence findings, and a current JSON download. Recorded evidence and justified non-applicability do not become scientific clearance or institutional approval; educational defaults are unchanged.
+- Made the temporal export launcher accept explicit repository, verified-run and operator-registry directories. Missing explicit inputs fail before initialization; missing historical defaults are explained without creating a replacement budget or registry.
+- Preserved the academic manuscript, registrations and historical results. See the [update and verification report](docs/government-audit-update-2026-09-22.md) for current test coverage and runtime boundaries.
+- Published the synthetic export lab and temporal release implementation with portable setup instructions, package assets and CI checks. The README now starts with the government console; the revised academic manuscript and new study archives remain a separate workstream.
+- Validated the government-only source export with 958 main tests (one Windows symlink skip), 43 existing academic baseline tests and five link-checker regressions. Built and checked the wheel separately. Historical `output/` links are explicitly reported as local-only generated artifacts; other missing publication links still fail.
+
 ### Local training, adversarial testing and review console
 
 - Added an easy-setup local pre-POC with separate API and worker processes, a public-data training wizard, durable jobs, review cases, evidence downloads, cancellation of queued jobs and explicit retry attempts.

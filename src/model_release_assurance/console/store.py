@@ -9,7 +9,7 @@ import uuid
 from contextlib import contextmanager
 from pathlib import Path
 
-from .. import workflow
+from .. import government_audit, workflow
 from .options import LanguageOptions, TrainingOptions
 
 
@@ -39,6 +39,14 @@ class Store:
                 CREATE UNIQUE INDEX IF NOT EXISTS active_case_job ON jobs(case_id)
                     WHERE state IN ('queued','running') AND case_id IS NOT NULL;
                 CREATE TABLE IF NOT EXISTS workers (id TEXT PRIMARY KEY, heartbeat REAL NOT NULL);
+                CREATE TABLE IF NOT EXISTS government_audit_reviews (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    case_id TEXT NOT NULL, control_id TEXT NOT NULL,
+                    status TEXT NOT NULL, rationale TEXT NOT NULL,
+                    context_sha256 TEXT NOT NULL, evidence_slots TEXT NOT NULL,
+                    evidence_bindings TEXT NOT NULL, created REAL NOT NULL);
+                CREATE INDEX IF NOT EXISTS government_audit_case_history
+                    ON government_audit_reviews(case_id, id);
             """)
 
             columns = {row[1] for row in db.execute("PRAGMA table_info(jobs)")}
@@ -101,6 +109,48 @@ class Store:
         if row is None:
             raise KeyError("case not found")
         return dict(row)
+
+    @staticmethod
+    def _government_audit_records(db, case_id: str) -> list[dict]:
+        records = []
+        for row in db.execute("SELECT * FROM government_audit_reviews WHERE case_id=? ORDER BY id", (case_id,)):
+            record = dict(row)
+            for field in ("evidence_slots", "evidence_bindings"):
+                record[field] = json.loads(record[field])
+            records.append(record)
+        return records
+
+    def government_audit_report(self, case_id: str) -> dict:
+        self.case(case_id)
+        root = self.case_path(case_id)
+        with self.connect() as db:
+            # The writer barrier also serializes project.json reads with console
+            # rebindings. This read path does not insert or update any records.
+            db.execute("BEGIN IMMEDIATE")
+            project = workflow.load_project(root)
+            return government_audit.report(root, case_id, project, self._government_audit_records(db, case_id))
+
+    def record_government_audit(self, case_id: str, payload: dict) -> dict:
+        review = government_audit.ReviewInput.model_validate(payload)
+        self.case(case_id)
+        root = self.case_path(case_id)
+        with self.connect() as db:
+            db.execute("BEGIN IMMEDIATE")
+            if db.execute("SELECT 1 FROM jobs WHERE case_id=? AND state IN ('queued','running')", (case_id,)).fetchone():
+                raise ValueError("wait for this case's queued or running job before recording a review")
+            project = workflow.load_project(root)
+            context = government_audit.context_sha256(project)
+            if review.expected_context_sha256 != context:
+                raise ValueError("case context changed; refresh the government audit before recording a review")
+            evidence = government_audit.checked_bindings(root, project, review.evidence_slots)
+            if government_audit.context_sha256(workflow.load_project(root)) != context:
+                raise ValueError("case context changed while checking evidence; refresh the government audit")
+            db.execute("""INSERT INTO government_audit_reviews
+                (case_id, control_id, status, rationale, context_sha256, evidence_slots, evidence_bindings, created)
+                VALUES (?,?,?,?,?,?,?,?)""",
+                (case_id, review.control_id, review.status, review.rationale, context,
+                 json.dumps(review.evidence_slots), json.dumps(evidence), time.time()))
+            return government_audit.report(root, case_id, project, self._government_audit_records(db, case_id))
 
     def list_cases(self) -> list[dict]:
         with self.connect() as db:

@@ -39,6 +39,20 @@ jobs:
       - name: Test console API and job queue
         shell: bash
         run: ${{ matrix.python-path }} -m unittest discover -s tests -p test_console.py -v
+      - name: Test DP export protocol, commands, HTTP boundary and diagnostic tools
+        shell: bash
+        run: ${{ matrix.python-path }} -m unittest discover -s tests -p 'test_export_poc*.py' -v
+      - name: Test temporal release accounting and operator commands
+        shell: bash
+        run: ${{ matrix.python-path }} -m unittest discover -s tests -p 'test_temporal_assurance*.py' -v
+      - name: Test government review records and portable launcher
+        shell: bash
+        run: ${{ matrix.python-path }} -m unittest discover -s tests -p 'test_government*.py' -v
+      - name: Test temporal review stages and adversarial requests
+        shell: bash
+        run: |
+          ${{ matrix.python-path }} -m unittest discover -s tests -p 'test_temporal_pipeline*.py' -v
+          ${{ matrix.python-path }} -m unittest discover -s tests -p test_temporal_website.py -v
       - name: Run the offline training workflow
         shell: bash
         run: ${{ matrix.python-path }} -m model_release_assurance.workflow demo --output output/pipeline-ci-demo
@@ -207,6 +221,7 @@ jobs:
           "${RUNNER_TEMP}/mra-wheel-smoke/bin/python" -m pip install --no-deps dist/*.whl
           cd "${RUNNER_TEMP}"
           "${RUNNER_TEMP}/mra-wheel-smoke/bin/mra" --version
+          "${RUNNER_TEMP}/mra-wheel-smoke/bin/mra-export" catalog
           "${RUNNER_TEMP}/mra-wheel-smoke/bin/mra" validate "${GITHUB_WORKSPACE}/examples/request.json"
           "${RUNNER_TEMP}/mra-wheel-smoke/bin/mra" schema --output "${RUNNER_TEMP}/assessment-request.json"
       - uses: actions/upload-artifact@v4

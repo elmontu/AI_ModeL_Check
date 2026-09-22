@@ -1,0 +1,1368 @@
+test_blind_floor_cannot_identify_opposite_true_risks (test_academic_gap_constructions.AcademicGapConstructionTests.test_blind_floor_cannot_identify_opposite_true_risks) ... ok
+test_channel_primitives_reject_inexact_or_nonstochastic_rows (test_academic_gap_constructions.AcademicGapConstructionTests.test_channel_primitives_reject_inexact_or_nonstochastic_rows) ... ok
+test_check_mode_is_read_only_and_detects_modified_bytes (test_academic_gap_constructions.AcademicGapConstructionTests.test_check_mode_is_read_only_and_detects_modified_bytes) ... ok
+test_float_endpoint_is_not_silently_treated_as_exact (test_academic_gap_constructions.AcademicGapConstructionTests.test_float_endpoint_is_not_silently_treated_as_exact) ... ok
+test_ideal_authentication_does_not_validate_false_ceiling (test_academic_gap_constructions.AcademicGapConstructionTests.test_ideal_authentication_does_not_validate_false_ceiling) ... ok
+test_joint_channel_control_distinguishes_identical_marginals (test_academic_gap_constructions.AcademicGapConstructionTests.test_joint_channel_control_distinguishes_identical_marginals) ... ok
+test_no_model_or_universal_verification_claim_is_emitted (test_academic_gap_constructions.AcademicGapConstructionTests.test_no_model_or_universal_verification_claim_is_emitted) ... ok
+test_partial_acceptance_and_missing_evidence_do_not_promote (test_academic_gap_constructions.AcademicGapConstructionTests.test_partial_acceptance_and_missing_evidence_do_not_promote) ... ok
+test_reducer_exhaustive_finite_product_has_no_disagreements (test_academic_gap_constructions.AcademicGapConstructionTests.test_reducer_exhaustive_finite_product_has_no_disagreements) ... ok
+test_retained_artifact_replays_exactly (test_academic_gap_constructions.AcademicGapConstructionTests.test_retained_artifact_replays_exactly) ... ok
+test_scope_partition_keeps_residual_and_rejects_all_omissions (test_academic_gap_constructions.AcademicGapConstructionTests.test_scope_partition_keeps_residual_and_rejects_all_omissions) ... ok
+test_selection_mass_and_repair_are_exact (test_academic_gap_constructions.AcademicGapConstructionTests.test_selection_mass_and_repair_are_exact) ... ok
+test_selection_requires_other_gates_and_never_accepts_a_mandatory_crossing (test_academic_gap_constructions.AcademicGapConstructionTests.test_selection_requires_other_gates_and_never_accepts_a_mandatory_crossing) ... ok
+test_serialized_service_grant_control_closes_the_split_revocation_race (test_academic_gap_constructions.AcademicGapConstructionTests.test_serialized_service_grant_control_closes_the_split_revocation_race) ... ok
+test_six_selection_controls_are_separate_from_reducer_case_counts (test_academic_gap_constructions.AcademicGapConstructionTests.test_six_selection_controls_are_separate_from_reducer_case_counts) ... ok
+test_small_tv_posterior_failure_and_expected_gain_sharpness (test_academic_gap_constructions.AcademicGapConstructionTests.test_small_tv_posterior_failure_and_expected_gain_sharpness) ... ok
+test_writer_rejects_existing_unrelated_json_without_modification (test_academic_gap_constructions.AcademicGapConstructionTests.test_writer_rejects_existing_unrelated_json_without_modification) ... ok
+test_writer_rejects_generator_historical_data_and_schema_targets (test_academic_gap_constructions.AcademicGapConstructionTests.test_writer_rejects_generator_historical_data_and_schema_targets) ... ok
+test_active_draft_separates_export_evidence_from_retained_finite_theory (test_academic_paper_artifact.AcademicPaperArtifactTests.test_active_draft_separates_export_evidence_from_retained_finite_theory) ... ok
+test_all_seven_gap_sections_have_written_constructions_or_proofs (test_academic_paper_artifact.AcademicPaperArtifactTests.test_all_seven_gap_sections_have_written_constructions_or_proofs) ... ok
+test_all_tex_citation_keys_resolve_unique_bibliography_entries (test_academic_paper_artifact.AcademicPaperArtifactTests.test_all_tex_citation_keys_resolve_unique_bibliography_entries) ... ok
+test_archived_manuscript_preserves_historical_implementation_boundaries (test_academic_paper_artifact.AcademicPaperArtifactTests.test_archived_manuscript_preserves_historical_implementation_boundaries) ... ok
+test_generated_gap_table_replays_separate_constructed_artifact (test_academic_paper_artifact.AcademicPaperArtifactTests.test_generated_gap_table_replays_separate_constructed_artifact) ... ok
+test_generated_table_bytes_replay_from_companion_without_figure_builder (test_academic_paper_artifact.AcademicPaperArtifactTests.test_generated_table_bytes_replay_from_companion_without_figure_builder) ... ok
+test_government_profile_is_bound_to_selection_commit_and_live_service (test_academic_paper_artifact.AcademicPaperArtifactTests.test_government_profile_is_bound_to_selection_commit_and_live_service) ... ok
+test_manuscript_retains_bibliography (test_academic_paper_artifact.AcademicPaperArtifactTests.test_manuscript_retains_bibliography) ... ok
+test_named_finite_channel_studies_retain_all_4200_replay_rows (test_academic_paper_artifact.AcademicPaperArtifactTests.test_named_finite_channel_studies_retain_all_4200_replay_rows) ... ok
+test_named_workload_timing_and_hook_tables_retain_registered_counts (test_academic_paper_artifact.AcademicPaperArtifactTests.test_named_workload_timing_and_hook_tables_retain_registered_counts) ... ok
+test_negative_results_and_non_authorizing_status_are_preserved (test_academic_paper_artifact.AcademicPaperArtifactTests.test_negative_results_and_non_authorizing_status_are_preserved) ... ok
+test_protocol_appendix_has_six_ordered_pseudocode_algorithms (test_academic_paper_artifact.AcademicPaperArtifactTests.test_protocol_appendix_has_six_ordered_pseudocode_algorithms) ... ok
+test_reachable_tex_inputs_and_cross_references_resolve (test_academic_paper_artifact.AcademicPaperArtifactTests.test_reachable_tex_inputs_and_cross_references_resolve) ... ok
+test_retained_protocol_guarantees_have_referenced_proof_sections (test_academic_paper_artifact.AcademicPaperArtifactTests.test_retained_protocol_guarantees_have_referenced_proof_sections) ... ok
+test_retained_protocol_has_seven_safeguards_before_transitions (test_academic_paper_artifact.AcademicPaperArtifactTests.test_retained_protocol_has_seven_safeguards_before_transitions) ... ok
+test_source_and_table_references_are_unique_and_relative (test_academic_paper_artifact.AcademicPaperArtifactTests.test_source_and_table_references_are_unique_and_relative) ... ok
+test_anytime_radius_and_empty_input (test_constructive_release_20260917.ConstructiveReleaseTests.test_anytime_radius_and_empty_input) ... ok
+test_auxiliary_already_reveals_secret (test_constructive_release_20260917.ConstructiveReleaseTests.test_auxiliary_already_reveals_secret) ... ok
+test_exact_box_against_independent_lp_enumeration (test_constructive_release_20260917.ConstructiveReleaseTests.test_exact_box_against_independent_lp_enumeration) ... ok
+test_invalid_sets_block (test_constructive_release_20260917.ConstructiveReleaseTests.test_invalid_sets_block) ... ok
+test_randomized_response_bound_not_equality (test_constructive_release_20260917.ConstructiveReleaseTests.test_randomized_response_bound_not_equality) ... ok
+test_threshold_equality_and_utility_boundary (test_constructive_release_20260917.ConstructiveReleaseTests.test_threshold_equality_and_utility_boundary) ... ok
+test_xor_and_erasure_composition (test_constructive_release_20260917.ConstructiveReleaseTests.test_xor_and_erasure_composition) ... ok
+Wrote 65102 bytes of exact finite constructed validation to gap-results.json.
+Wrote 65102 bytes of exact finite constructed validation to gap-results.json.
+Seven exact finite constructions replay byte-for-byte; this is not a model experiment or refinement proof.
+Finite construction artifact is missing or differs from exact replay.
+Design frozen; no confirmatory model fitted: C:\Users\gnari\AppData\Local\Temp\tmpzh46q7_e\run
+test_freeze_is_non_overwriting_and_changed_runner_binding_is_refused (test_independent_model_study.IndependentModelStudyTests.test_freeze_is_non_overwriting_and_changed_runner_binding_is_refused) ... ok
+test_frozen_allocation_counts_every_candidate_and_unique_utility_family (test_independent_model_study.IndependentModelStudyTests.test_frozen_allocation_counts_every_candidate_and_unique_utility_family) ... ok
+test_interval_contains_every_compatible_grid_channel_and_includes_prior (test_independent_model_study.IndependentModelStudyTests.test_interval_contains_every_compatible_grid_channel_and_includes_prior) ... ok
+test_oracle_agrees_with_joint_enumeration_and_negative_controls (test_independent_model_study.IndependentModelStudyTests.test_oracle_agrees_with_joint_enumeration_and_negative_controls) ... ok
+test_partial_results_never_claim_confirmatory_intervals (test_independent_model_study.IndependentModelStudyTests.test_partial_results_never_claim_confirmatory_intervals) ... ok
+test_randomized_response_controls_have_exact_blackwell_order (test_independent_model_study.IndependentModelStudyTests.test_randomized_response_controls_have_exact_blackwell_order) ... ok
+test_every_saved_model_reproduces_population_predictions_without_refitting (test_release_model_study_20260917.ReleaseModelArtifactTests.test_every_saved_model_reproduces_population_predictions_without_refitting) ... C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator LogisticRegression from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator LogisticRegression from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator GaussianNB from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator GaussianNB from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator KNeighborsClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator KNeighborsClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator SVC from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator SVC from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator DecisionTreeClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator DecisionTreeClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator DecisionTreeClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator RandomForestClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator DecisionTreeClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator RandomForestClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator ExtraTreeClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator ExtraTreesClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator ExtraTreeClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator ExtraTreesClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator LabelEncoder from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator _BinMapper from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator HistGradientBoostingClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator LabelEncoder from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator _BinMapper from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator HistGradientBoostingClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\xgboost\core.py:158: UserWarning: [16:00:19] WARNING: C:\buildkite-agent\builds\buildkite-windows-cpu-autoscaling-group-i-08cbc0333d8d4aae1-1\xgboost\xgboost-ci-windows\src\data\../common/error_msg.h:80: If you are loading a serialized model (like pickle in Python, RDS in R) or
+configuration generated by an older version of XGBoost, please export the model by calling
+`Booster.save_model` from that version first, then load it back in current version. See:
+
+    https://xgboost.readthedocs.io/en/stable/tutorials/saving_model.html
+
+for more details about differences between saving model and serializing.
+
+  warnings.warn(smsg, UserWarning)
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator LabelBinarizer from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator MLPClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator LabelBinarizer from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator MLPClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator LogisticRegression from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator LogisticRegression from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator GaussianNB from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator GaussianNB from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator KNeighborsClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator KNeighborsClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator SVC from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator SVC from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator DecisionTreeClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator DecisionTreeClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator DecisionTreeClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator RandomForestClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator DecisionTreeClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator RandomForestClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator ExtraTreeClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator ExtraTreesClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator ExtraTreeClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator ExtraTreesClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator LabelEncoder from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator _BinMapper from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator HistGradientBoostingClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator LabelEncoder from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator _BinMapper from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator HistGradientBoostingClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+
+  test_every_saved_model_reproduces_population_predictions_without_refitting (test_release_model_study_20260917.ReleaseModelArtifactTests.test_every_saved_model_reproduces_population_predictions_without_refitting) (task='linear', rep=1, family='xgboost', kind='base') ... FAIL
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator LabelBinarizer from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator MLPClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator LabelBinarizer from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator MLPClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator LogisticRegression from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator LogisticRegression from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator GaussianNB from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator GaussianNB from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator KNeighborsClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator KNeighborsClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator SVC from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator SVC from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator DecisionTreeClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator DecisionTreeClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator DecisionTreeClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator RandomForestClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator DecisionTreeClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator RandomForestClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator ExtraTreeClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator ExtraTreesClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator ExtraTreeClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator ExtraTreesClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator LabelEncoder from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator _BinMapper from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator HistGradientBoostingClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator LabelEncoder from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator _BinMapper from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator HistGradientBoostingClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+  test_every_saved_model_reproduces_population_predictions_without_refitting (test_release_model_study_20260917.ReleaseModelArtifactTests.test_every_saved_model_reproduces_population_predictions_without_refitting) (task='linear', rep=2, family='xgboost', kind='base') ... FAIL
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator LabelBinarizer from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator MLPClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator LabelBinarizer from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator MLPClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator LogisticRegression from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator LogisticRegression from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator GaussianNB from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator GaussianNB from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator KNeighborsClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator KNeighborsClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator SVC from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator SVC from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator DecisionTreeClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator DecisionTreeClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator DecisionTreeClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator RandomForestClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator DecisionTreeClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator RandomForestClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator ExtraTreeClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator ExtraTreesClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator ExtraTreeClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator ExtraTreesClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator LabelEncoder from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator _BinMapper from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator HistGradientBoostingClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator LabelEncoder from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator _BinMapper from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator HistGradientBoostingClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator LabelBinarizer from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator MLPClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator LabelBinarizer from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator MLPClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator LogisticRegression from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator LogisticRegression from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator GaussianNB from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator GaussianNB from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator KNeighborsClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator KNeighborsClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator SVC from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator SVC from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator DecisionTreeClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator DecisionTreeClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator DecisionTreeClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator RandomForestClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator DecisionTreeClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator RandomForestClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator ExtraTreeClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator ExtraTreesClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator ExtraTreeClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator ExtraTreesClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator LabelEncoder from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator _BinMapper from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator HistGradientBoostingClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator LabelEncoder from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator _BinMapper from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator HistGradientBoostingClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+  test_every_saved_model_reproduces_population_predictions_without_refitting (test_release_model_study_20260917.ReleaseModelArtifactTests.test_every_saved_model_reproduces_population_predictions_without_refitting) (task='linear', rep=4, family='xgboost', kind='base') ... FAIL
+  test_every_saved_model_reproduces_population_predictions_without_refitting (test_release_model_study_20260917.ReleaseModelArtifactTests.test_every_saved_model_reproduces_population_predictions_without_refitting) (task='linear', rep=4, family='xgboost', kind='retrained') ... FAIL
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator LabelBinarizer from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator MLPClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator LabelBinarizer from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator MLPClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator LogisticRegression from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator LogisticRegression from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator GaussianNB from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator GaussianNB from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator KNeighborsClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator KNeighborsClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator SVC from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator SVC from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator DecisionTreeClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator DecisionTreeClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator DecisionTreeClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator RandomForestClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator DecisionTreeClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator RandomForestClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator ExtraTreeClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator ExtraTreesClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator ExtraTreeClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator ExtraTreesClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator LabelEncoder from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator _BinMapper from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator HistGradientBoostingClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator LabelEncoder from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator _BinMapper from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator HistGradientBoostingClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+  test_every_saved_model_reproduces_population_predictions_without_refitting (test_release_model_study_20260917.ReleaseModelArtifactTests.test_every_saved_model_reproduces_population_predictions_without_refitting) (task='linear', rep=5, family='xgboost', kind='base') ... FAIL
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator LabelBinarizer from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator MLPClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator LabelBinarizer from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator MLPClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator LogisticRegression from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator LogisticRegression from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator GaussianNB from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator GaussianNB from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator KNeighborsClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator KNeighborsClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator SVC from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator SVC from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator DecisionTreeClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator DecisionTreeClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator DecisionTreeClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator RandomForestClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator DecisionTreeClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator RandomForestClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator ExtraTreeClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator ExtraTreesClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator ExtraTreeClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator ExtraTreesClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator LabelEncoder from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator _BinMapper from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator HistGradientBoostingClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator LabelEncoder from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator _BinMapper from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator HistGradientBoostingClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+  test_every_saved_model_reproduces_population_predictions_without_refitting (test_release_model_study_20260917.ReleaseModelArtifactTests.test_every_saved_model_reproduces_population_predictions_without_refitting) (task='parity3', rep=0, family='xgboost', kind='base') ... FAIL
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator LabelBinarizer from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator MLPClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator LabelBinarizer from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator MLPClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator LogisticRegression from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator LogisticRegression from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator GaussianNB from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator GaussianNB from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator KNeighborsClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator KNeighborsClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator SVC from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator SVC from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator DecisionTreeClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator DecisionTreeClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator DecisionTreeClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator RandomForestClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator DecisionTreeClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator RandomForestClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator ExtraTreeClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator ExtraTreesClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator ExtraTreeClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator ExtraTreesClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator LabelEncoder from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator _BinMapper from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator HistGradientBoostingClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator LabelEncoder from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator _BinMapper from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator HistGradientBoostingClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator LabelBinarizer from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator MLPClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator LabelBinarizer from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator MLPClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator LogisticRegression from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator LogisticRegression from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator GaussianNB from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator GaussianNB from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator KNeighborsClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator KNeighborsClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator SVC from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator SVC from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator DecisionTreeClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator DecisionTreeClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator DecisionTreeClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator RandomForestClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator DecisionTreeClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator RandomForestClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator ExtraTreeClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator ExtraTreesClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator ExtraTreeClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator ExtraTreesClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator LabelEncoder from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator _BinMapper from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator HistGradientBoostingClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator LabelEncoder from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator _BinMapper from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator HistGradientBoostingClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator LabelBinarizer from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator MLPClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator LabelBinarizer from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator MLPClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator LogisticRegression from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator LogisticRegression from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator GaussianNB from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator GaussianNB from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator KNeighborsClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator KNeighborsClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator SVC from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator SVC from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator DecisionTreeClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator DecisionTreeClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator DecisionTreeClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator RandomForestClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator DecisionTreeClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator RandomForestClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator ExtraTreeClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator ExtraTreesClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator ExtraTreeClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator ExtraTreesClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator LabelEncoder from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator _BinMapper from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator HistGradientBoostingClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator LabelEncoder from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator _BinMapper from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator HistGradientBoostingClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+  test_every_saved_model_reproduces_population_predictions_without_refitting (test_release_model_study_20260917.ReleaseModelArtifactTests.test_every_saved_model_reproduces_population_predictions_without_refitting) (task='parity3', rep=3, family='xgboost', kind='base') ... FAIL
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator LabelBinarizer from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator MLPClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator LabelBinarizer from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator MLPClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator LogisticRegression from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator LogisticRegression from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator GaussianNB from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator GaussianNB from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator KNeighborsClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator KNeighborsClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator SVC from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator SVC from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator DecisionTreeClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator DecisionTreeClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator DecisionTreeClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator RandomForestClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator DecisionTreeClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator RandomForestClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator ExtraTreeClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator ExtraTreesClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator ExtraTreeClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator ExtraTreesClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator LabelEncoder from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator _BinMapper from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator HistGradientBoostingClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator LabelEncoder from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator _BinMapper from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator HistGradientBoostingClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+  test_every_saved_model_reproduces_population_predictions_without_refitting (test_release_model_study_20260917.ReleaseModelArtifactTests.test_every_saved_model_reproduces_population_predictions_without_refitting) (task='parity3', rep=4, family='xgboost', kind='base') ... FAIL
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator LabelBinarizer from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator MLPClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator LabelBinarizer from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator MLPClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator LogisticRegression from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator LogisticRegression from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator GaussianNB from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator GaussianNB from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator KNeighborsClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator KNeighborsClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator SVC from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator SVC from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator DecisionTreeClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator DecisionTreeClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator DecisionTreeClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator RandomForestClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator DecisionTreeClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator RandomForestClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator ExtraTreeClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator ExtraTreesClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator ExtraTreeClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator ExtraTreesClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator LabelEncoder from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator _BinMapper from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator HistGradientBoostingClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator LabelEncoder from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator _BinMapper from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator HistGradientBoostingClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator LabelBinarizer from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator MLPClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator LabelBinarizer from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator MLPClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator DecisionTreeClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator RandomForestClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator DecisionTreeClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator RandomForestClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator DecisionTreeClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator RandomForestClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator DecisionTreeClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator RandomForestClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator DecisionTreeClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator RandomForestClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator DecisionTreeClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator RandomForestClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator DecisionTreeClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator RandomForestClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator DecisionTreeClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator RandomForestClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator DecisionTreeClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator RandomForestClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator DecisionTreeClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator RandomForestClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator DecisionTreeClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator RandomForestClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator DecisionTreeClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\sklearn\base.py:380: InconsistentVersionWarning: Trying to unpickle estimator RandomForestClassifier from version 1.9.0 when using version 1.6.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+test_frozen_sources_and_all_recorded_hashes_match (test_release_model_study_20260917.ReleaseModelArtifactTests.test_frozen_sources_and_all_recorded_hashes_match) ... ok
+test_full_schedule_and_pairing_are_preserved (test_release_model_study_20260917.ReleaseModelArtifactTests.test_full_schedule_and_pairing_are_preserved) ... ok
+test_saved_training_records_replay_the_registered_sampling (test_release_model_study_20260917.ReleaseModelArtifactTests.test_saved_training_records_replay_the_registered_sampling) ... ok
+test_neural_architectures_have_finite_population_outputs_without_training (test_release_model_study_20260917.ReleaseModelDesignTests.test_neural_architectures_have_finite_population_outputs_without_training) ... ok
+test_population_has_exactly_balanced_tasks_and_bounded_secret_law (test_release_model_study_20260917.ReleaseModelDesignTests.test_population_has_exactly_balanced_tasks_and_bounded_secret_law) ... ok
+test_registered_schedule_and_distinct_fit_initializations (test_release_model_study_20260917.ReleaseModelDesignTests.test_registered_schedule_and_distinct_fit_initializations) ... ok
+test_sampling_replays_and_retraining_retains_original_records (test_release_model_study_20260917.ReleaseModelDesignTests.test_sampling_replays_and_retraining_retains_original_records) ... ok
+
+======================================================================
+FAIL: test_every_saved_model_reproduces_population_predictions_without_refitting (test_release_model_study_20260917.ReleaseModelArtifactTests.test_every_saved_model_reproduces_population_predictions_without_refitting) (task='linear', rep=1, family='xgboost', kind='base')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\academic\tests\test_release_model_study_20260917.py", line 146, in test_every_saved_model_reproduces_population_predictions_without_refitting
+    np.testing.assert_array_equal(actual, r["predictions"])
+  File "C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\numpy\testing\_private\utils.py", line 1128, in assert_array_equal
+    assert_array_compare(operator.__eq__, actual, desired, err_msg=err_msg,
+  File "C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\numpy\testing\_private\utils.py", line 988, in assert_array_compare
+    raise AssertionError(msg)
+AssertionError: 
+Arrays are not equal
+
+Mismatched elements: 1 / 256 (0.391%)
+Mismatch at index:
+ [134]: 0 (ACTUAL), 1 (DESIRED)
+Max absolute difference among violations: 1
+Max relative difference among violations: 1.
+ ACTUAL: array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,...
+ DESIRED: array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,...
+
+======================================================================
+FAIL: test_every_saved_model_reproduces_population_predictions_without_refitting (test_release_model_study_20260917.ReleaseModelArtifactTests.test_every_saved_model_reproduces_population_predictions_without_refitting) (task='linear', rep=2, family='xgboost', kind='base')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\academic\tests\test_release_model_study_20260917.py", line 146, in test_every_saved_model_reproduces_population_predictions_without_refitting
+    np.testing.assert_array_equal(actual, r["predictions"])
+  File "C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\numpy\testing\_private\utils.py", line 1128, in assert_array_equal
+    assert_array_compare(operator.__eq__, actual, desired, err_msg=err_msg,
+  File "C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\numpy\testing\_private\utils.py", line 988, in assert_array_compare
+    raise AssertionError(msg)
+AssertionError: 
+Arrays are not equal
+
+Mismatched elements: 2 / 256 (0.781%)
+Mismatch at indices:
+ [120]: 0 (ACTUAL), 1 (DESIRED)
+ [144]: 0 (ACTUAL), 1 (DESIRED)
+Max absolute difference among violations: 1
+Max relative difference among violations: 1.
+ ACTUAL: array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,...
+ DESIRED: array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,...
+
+======================================================================
+FAIL: test_every_saved_model_reproduces_population_predictions_without_refitting (test_release_model_study_20260917.ReleaseModelArtifactTests.test_every_saved_model_reproduces_population_predictions_without_refitting) (task='linear', rep=4, family='xgboost', kind='base')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\academic\tests\test_release_model_study_20260917.py", line 146, in test_every_saved_model_reproduces_population_predictions_without_refitting
+    np.testing.assert_array_equal(actual, r["predictions"])
+  File "C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\numpy\testing\_private\utils.py", line 1128, in assert_array_equal
+    assert_array_compare(operator.__eq__, actual, desired, err_msg=err_msg,
+  File "C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\numpy\testing\_private\utils.py", line 988, in assert_array_compare
+    raise AssertionError(msg)
+AssertionError: 
+Arrays are not equal
+
+Mismatched elements: 1 / 256 (0.391%)
+Mismatch at index:
+ [124]: 0 (ACTUAL), 1 (DESIRED)
+Max absolute difference among violations: 1
+Max relative difference among violations: 1.
+ ACTUAL: array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,...
+ DESIRED: array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,...
+
+======================================================================
+FAIL: test_every_saved_model_reproduces_population_predictions_without_refitting (test_release_model_study_20260917.ReleaseModelArtifactTests.test_every_saved_model_reproduces_population_predictions_without_refitting) (task='linear', rep=4, family='xgboost', kind='retrained')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\academic\tests\test_release_model_study_20260917.py", line 146, in test_every_saved_model_reproduces_population_predictions_without_refitting
+    np.testing.assert_array_equal(actual, r["predictions"])
+  File "C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\numpy\testing\_private\utils.py", line 1128, in assert_array_equal
+    assert_array_compare(operator.__eq__, actual, desired, err_msg=err_msg,
+  File "C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\numpy\testing\_private\utils.py", line 988, in assert_array_compare
+    raise AssertionError(msg)
+AssertionError: 
+Arrays are not equal
+
+Mismatched elements: 1 / 256 (0.391%)
+Mismatch at index:
+ [117]: 1 (ACTUAL), 0 (DESIRED)
+Max absolute difference among violations: 1
+Max relative difference among violations: inf
+ ACTUAL: array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,...
+ DESIRED: array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,...
+
+======================================================================
+FAIL: test_every_saved_model_reproduces_population_predictions_without_refitting (test_release_model_study_20260917.ReleaseModelArtifactTests.test_every_saved_model_reproduces_population_predictions_without_refitting) (task='linear', rep=5, family='xgboost', kind='base')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\academic\tests\test_release_model_study_20260917.py", line 146, in test_every_saved_model_reproduces_population_predictions_without_refitting
+    np.testing.assert_array_equal(actual, r["predictions"])
+  File "C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\numpy\testing\_private\utils.py", line 1128, in assert_array_equal
+    assert_array_compare(operator.__eq__, actual, desired, err_msg=err_msg,
+  File "C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\numpy\testing\_private\utils.py", line 988, in assert_array_compare
+    raise AssertionError(msg)
+AssertionError: 
+Arrays are not equal
+
+Mismatched elements: 2 / 256 (0.781%)
+Mismatch at indices:
+ [138]: 1 (ACTUAL), 0 (DESIRED)
+ [140]: 1 (ACTUAL), 0 (DESIRED)
+Max absolute difference among violations: 1
+Max relative difference among violations: inf
+ ACTUAL: array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,...
+ DESIRED: array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,...
+
+======================================================================
+FAIL: test_every_saved_model_reproduces_population_predictions_without_refitting (test_release_model_study_20260917.ReleaseModelArtifactTests.test_every_saved_model_reproduces_population_predictions_without_refitting) (task='parity3', rep=0, family='xgboost', kind='base')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\academic\tests\test_release_model_study_20260917.py", line 146, in test_every_saved_model_reproduces_population_predictions_without_refitting
+    np.testing.assert_array_equal(actual, r["predictions"])
+  File "C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\numpy\testing\_private\utils.py", line 1128, in assert_array_equal
+    assert_array_compare(operator.__eq__, actual, desired, err_msg=err_msg,
+  File "C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\numpy\testing\_private\utils.py", line 988, in assert_array_compare
+    raise AssertionError(msg)
+AssertionError: 
+Arrays are not equal
+
+Mismatched elements: 14 / 256 (5.47%)
+First 5 mismatches are at indices:
+ [1]: 0 (ACTUAL), 1 (DESIRED)
+ [12]: 0 (ACTUAL), 1 (DESIRED)
+ [30]: 0 (ACTUAL), 1 (DESIRED)
+ [46]: 0 (ACTUAL), 1 (DESIRED)
+ [60]: 0 (ACTUAL), 1 (DESIRED)
+Max absolute difference among violations: 1
+Max relative difference among violations: 1.
+ ACTUAL: array([1, 0, 0, 0, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 0, 1, 1,
+       1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0,
+       0, 1, 0, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1,...
+ DESIRED: array([1, 1, 0, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1,
+       1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0,
+       0, 1, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 1, 1,...
+
+======================================================================
+FAIL: test_every_saved_model_reproduces_population_predictions_without_refitting (test_release_model_study_20260917.ReleaseModelArtifactTests.test_every_saved_model_reproduces_population_predictions_without_refitting) (task='parity3', rep=3, family='xgboost', kind='base')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\academic\tests\test_release_model_study_20260917.py", line 146, in test_every_saved_model_reproduces_population_predictions_without_refitting
+    np.testing.assert_array_equal(actual, r["predictions"])
+  File "C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\numpy\testing\_private\utils.py", line 1128, in assert_array_equal
+    assert_array_compare(operator.__eq__, actual, desired, err_msg=err_msg,
+  File "C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\numpy\testing\_private\utils.py", line 988, in assert_array_compare
+    raise AssertionError(msg)
+AssertionError: 
+Arrays are not equal
+
+Mismatched elements: 1 / 256 (0.391%)
+Mismatch at index:
+ [167]: 0 (ACTUAL), 1 (DESIRED)
+Max absolute difference among violations: 1
+Max relative difference among violations: 1.
+ ACTUAL: array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+       1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,...
+ DESIRED: array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+       1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,...
+
+======================================================================
+FAIL: test_every_saved_model_reproduces_population_predictions_without_refitting (test_release_model_study_20260917.ReleaseModelArtifactTests.test_every_saved_model_reproduces_population_predictions_without_refitting) (task='parity3', rep=4, family='xgboost', kind='base')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\academic\tests\test_release_model_study_20260917.py", line 146, in test_every_saved_model_reproduces_population_predictions_without_refitting
+    np.testing.assert_array_equal(actual, r["predictions"])
+  File "C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\numpy\testing\_private\utils.py", line 1128, in assert_array_equal
+    assert_array_compare(operator.__eq__, actual, desired, err_msg=err_msg,
+  File "C:\Users\gnari\OneDrive\Documents\ChatGPT\model_audit\AI_ModeL_Check\.local\pipeline-runtime\Lib\site-packages\numpy\testing\_private\utils.py", line 988, in assert_array_compare
+    raise AssertionError(msg)
+AssertionError: 
+Arrays are not equal
+
+Mismatched elements: 1 / 256 (0.391%)
+Mismatch at index:
+ [113]: 1 (ACTUAL), 0 (DESIRED)
+Max absolute difference among violations: 1
+Max relative difference among violations: inf
+ ACTUAL: array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+       1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,...
+ DESIRED: array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+       1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,...
+
+----------------------------------------------------------------------
+Ran 55 tests in 6.735s
+
+FAILED (failures=8)

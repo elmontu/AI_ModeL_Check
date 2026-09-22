@@ -3,6 +3,12 @@
 For the rationale, implemented capabilities and a complete learning walkthrough,
 start with the [implementation and motivation guide](implementation-and-motivation-guide.md).
 
+The [government audit guide](government-audit-guide.md) reflects the revised
+data-minimization and repeated-export paper. Open a release case and choose
+**Government audit review** to record evidence and gaps against twelve controls.
+The review is available in Education and Review modes. It does not change the
+scientific assessment or grant release approval.
+
 The pre-POC has two separately running services: a FastAPI HTTP service that
 
 serves the browser console, and a worker that executes allowlisted jobs. They

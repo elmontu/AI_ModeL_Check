@@ -1,0 +1,17 @@
+{
+  "format_version": "government-audit-browser-check/1",
+  "verified_at": "2026-09-22T08:38:21.890802+00:00",
+  "fixture": "separate synthetic case store",
+  "case_creation": true,
+  "twelve_control_catalog": true,
+  "bound_evidence_and_rationale_recording": true,
+  "changed_evidence_marked_needs_work": true,
+  "history_survived_service_restart": true,
+  "fresh_download_http_status": 200,
+  "attachment_header": "attachment; filename=\"government-audit-ccff4857fe3546de94dc0a5997b34336.json\"",
+  "download_reflected_changed_evidence": true,
+  "original_cited_hash_preserved": true,
+  "authorization_eligible": false,
+  "browser_download_event_observed": true,
+  "browser_saved_file_location_verified": false
+}

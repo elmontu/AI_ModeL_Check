@@ -2,9 +2,11 @@ PYTHON ?= python3
 COMPILE_CACHE ?= .mra-compile-cache
 DEMO_DATASET_PROFILE ?= openml-sick
 
-.PHONY: help demo demo-reference compile test schemas links formal check verify build clean
+.PHONY: help demo demo-reference export-poc test-export-poc compile test schemas links formal check verify build clean
 
 help:
+	@echo "export-poc      Start the loopback DP export lab on public synthetic data"
+	@echo "test-export-poc Check the fixed DP protocol, history, CLI, API and tools"
 	@echo "demo            Train XGBoost and run the training-to-assessment demo (experiment dependencies; OpenML by default)"
 	@echo "demo-reference  Run the secondary core-only fixture and workflow rehearsal"
 	@echo "compile  Compile Python sources and tests"
@@ -22,6 +24,12 @@ demo:
 
 demo-reference:
 	PYTHONPATH=src $(PYTHON) scripts/run_government_health_demo.py
+
+export-poc:
+	PYTHONPATH=src $(PYTHON) -m model_release_assurance.export_poc serve
+
+test-export-poc:
+	PYTHONPATH=src $(PYTHON) -m unittest discover -s tests -p 'test_export_poc*.py' -v
 
 compile:
 	PYTHONPYCACHEPREFIX=$(COMPILE_CACHE) $(PYTHON) -m compileall -q src tests scripts academic/scripts academic/tests

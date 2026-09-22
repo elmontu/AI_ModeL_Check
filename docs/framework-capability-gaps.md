@@ -1,6 +1,12 @@
 # Framework execution coverage
 
-Current detailed validation: [745-test suite, complete option matrix and adversary results](framework-e2e-validation-2026-09-10.md). The matrix exercised 22 supported training combinations, 18 invalid pairings and both installed language-model options; all behaved as expected.
+Historical training baseline: [745-test suite, complete option matrix and adversary results](framework-e2e-validation-2026-09-10.md). The matrix exercised 22 supported training combinations, 18 invalid pairings and both installed language-model options; all behaved as expected for that source snapshot. It does not validate later implementations.
+
+The [government audit guide](government-audit-guide.md) covers the September 22
+paper alignment, case checklist and links to the newer temporal export workflow.
+Case reviews record necessity and evidence; the temporal broker enforces its local
+release stages. Neither feature establishes arbitrary-model private training,
+whole-record protection or institutional authorization.
 
 This inventory describes the local educational pre-POC. Model catalog entries
 are broader than implemented trainers. Completing attacks does not approve release.

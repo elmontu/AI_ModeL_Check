@@ -1,0 +1,9 @@
+Processing c:\users\gnari\onedrive\documents\chatgpt\model_audit\ai_model_check\output\government-publish-snapshot-20260922
+  Preparing metadata (pyproject.toml): started
+  Preparing metadata (pyproject.toml): finished with status 'done'
+Building wheels for collected packages: model-release-assurance
+  Building wheel for model-release-assurance (pyproject.toml): started
+  Building wheel for model-release-assurance (pyproject.toml): finished with status 'done'
+  Created wheel for model-release-assurance: filename=model_release_assurance-0.8.0-py3-none-any.whl size=379846 sha256=5f656d85c69333dd335c7866d8bbbbb0176580a837f43a75b03a99dd812f4cd4
+  Stored in directory: C:\Users\gnari\AppData\Local\Temp\pip-ephem-wheel-cache-jqnn_rnf\wheels\7a\44\86\ce14b2491448f1366592d0e79dae01019764a6293d93ecdb5e
+Successfully built model-release-assurance

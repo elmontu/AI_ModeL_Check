@@ -25,6 +25,26 @@ def create_server(repository_root: Path):
     )
 
     @server.tool()
+    def list_export_constructions() -> dict[str, Any]:
+        """Describe the synthetic two-stage export mechanisms; never construct or authorize."""
+        return service.list_export_constructions()
+
+    @server.tool()
+    def inspect_export_bundle(model_json: str) -> dict[str, Any]:
+        """Check exact supplied UTF-8 JSON against an allowlist; never attest privacy."""
+        return service.inspect_export_bundle(model_json)
+
+    @server.tool()
+    def read_export_history(data_directory: str) -> dict[str, Any]:
+        """Verify existing repository-confined history read-only; never expose retained state."""
+        return service.read_export_history(data_directory)
+
+    @server.tool()
+    def plan_model_export(data_directory: str, route: str) -> dict[str, Any]:
+        """Plan supported DP accounting from a read-only snapshot; never execute or authorize."""
+        return service.plan_model_export(data_directory, route)
+
+    @server.tool()
     def list_analyzer_services() -> dict[str, Any]:
         """List replaceable analyzer services and their MCP-ready tool contracts."""
         return service.list_analyzer_services()

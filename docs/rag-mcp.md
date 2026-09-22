@@ -33,10 +33,73 @@ python -m model_release_assurance.mcp_server --repository-root .
 The server exposes `list_analyzer_services` and `list_red_team_tools` for read-only discovery of the
 replaceable analyzer boundaries and the typed red-team catalog. `validate_attack_battery` performs
 non-authorizing structural and digest-binding validation of an inert submission. The server also exposes
+`list_export_constructions`, `inspect_export_bundle`, `read_export_history`, `plan_model_export`,
 `search_assurance_docs`, `get_schema`, `validate_assessment_request`, `review_model_coverage`,
 `verify_audit_chain`, `run_experimental_model_audit`, `run_empirical_model_workflow`,
 `read_privacy_audit_report`, `plan_privacy_audit`, and `run_rag_guided_privacy_audit`. It has no tools for
 signing, authorizing, activating, revoking, committing portfolio state, or appending audit events.
+
+### Synthetic model-export diagnostics
+
+The export POC has a small shared tool service at
+`model_release_assurance.export_poc.tools.ExportToolService`. Its public catalog function,
+`export_construction_catalog()`, is shared by CLI, HTTP discovery and MCP so each interface states the
+same capabilities. These are diagnostic operations; no MCP operation prepares an export, commits a
+disclosure, downloads a model, or revokes download access.
+
+| Tool | Input | Result and boundary |
+| --- | --- | --- |
+| `list_export_constructions` | None | Versioned `mra-export-poc-constructions-v1` catalog, mechanism-source SHA-256, fixed fixture and protected unit, two-stage limit, and three alternative second-stage constructions. Does not sample a mechanism or train a model. |
+| `inspect_export_bundle` | `model_json`: exact UTF-8 JSON text | Strict export-field allowlist, declared metadata and SHA-256 of the supplied text's exact UTF-8 bytes. Duplicate keys, private fields, false metadata and oversized bundles are rejected. A valid schema does not authenticate the producer or attest privacy. |
+| `read_export_history` | `data_directory`: existing directory within the configured repository root; relative paths resolve there | Consistent read-only snapshot verification of an existing `export.sqlite3`, source binding, history ratios and public consistency summary. Missing stores are not initialized. Retained private state and uncommitted artifact bytes/hashes are not returned. |
+| `plan_model_export` | `data_directory`: same confined existing history; `route`: `first`, `reuse`, `retained-state`, `independent`, or `central-count` | Versioned `mra-export-poc-plan-v1` plan from a validated public-status snapshot: stage compatibility, current/proposed privacy bounds, accounting method and required private access. Never runs training, draws noise, stages a candidate, or grants export authority. |
+
+The four export tools use the same construction description and, for history operations, a shared
+confinement check covering the database, optional WAL and history marker. `plan_model_export` is
+implemented by `ExportToolService.plan_export(data_directory, route)` and the pure
+`export_poc.protocol.plan_export(status, route)` planner. `ready: true` only means the snapshot's
+stage permits that route. It does not establish current authority, retained-state availability, model
+utility or permission to release. A live producer must still check the current revision and construct
+and commit the actual artifact. Missing history is an error, not permission to reset privacy cost.
+An incompatible stage or unknown route yields a blocked plan with no proposed privacy bound.
+Planning does not return private state or staged model bytes.
+
+The retained-state plan uses a certificate for the complete joint history; its apparent increase
+from ratio 2 to ratio 4 must not be interpreted as an independent per-stage log(2) guarantee. The
+independent and central-count routes do use sequential composition. `reuse` proposes retrieving the
+identical latest committed artifact without new noise, new training or a privacy-budget refund;
+a revoked latest artifact blocks this route. Reusing protected data for new training is a broader
+post-processing principle, not an implemented general trainer.
+
+For a receipt comparison, pass the original decoded UTF-8 file text to `inspect_export_bundle`,
+preserving whitespace and its trailing newline. Passing a reserialized object changes the digest.
+The digest is neither a normalized-JSON hash nor evidence that those bytes came from the trusted
+constructor. The history reader copies existing database/WAL bytes into a private temporary snapshot
+for SQLite verification; it does not create or change database sidecars in the source directory. A
+changing history can be rejected as busy, and a verified snapshot may immediately become stale. It
+is never a substitute for the operator's atomic commitment check.
+
+All implemented constructions use one fixed synthetic public roster and public group membership.
+The first stage has a sufficient pure-DP history ratio of 2; one alternative second stage extends
+the bound to 4 (epsilon is the natural logarithm of the ratio, delta is zero). Retained-state and
+independent randomized-response channels have exact finite checks. The central-count baseline uses
+the standard sensitivity-one two-sided geometric mechanism and composition. These are three
+alternative extensions of one first release, not three additional exports under the same ratio-4
+bound. Opening another directory cannot reset actual citizen exposure.
+
+The fitted model is a group Bernoulli forecast. No arbitrary model upload, agency-data adapter,
+general DP-SGD trainer, or production privacy certificate is supplied. The catalog separates these
+implemented mechanisms from the manuscript's broader protected-data reuse, joint-extension and
+direct-private-training routes. Unchanged-model reuse retrieves existing bytes rather than adding
+another broker stage. The finite channel's 11/15 answer accuracy is not model accuracy, and
+synthetic results do not establish a retained-state utility advantage.
+
+The mechanism-source digest pins the producer used by a store. An implementation mismatch is an
+explicit migration/review condition; these tools do not rewrite an old binding or reset its history.
+Local hashes detect corruption and inconsistency but do not prevent a privileged owner from
+rewriting the database and hashes together. Source-path confinement likewise does not replace
+process isolation or private-state custody. The MCP SDK is optional: service and registration tests
+using an inert adapter do not establish SDK transport interoperability or an agency deployment.
 
 The current server registers tools only and runs over stdio. It does not register MCP resources or
 prompts, expose SSE or Streamable HTTP, or provide `trigger_failover` or

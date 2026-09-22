@@ -98,6 +98,7 @@ def build_parser() -> argparse.ArgumentParser:
     )
     parser.add_argument("--version", action="version", version=f"%(prog)s {VERSION}")
     subparsers = parser.add_subparsers(dest="command", required=True)
+    subparsers.add_parser("export", help="synthetic model-export POC; use mra export --help")
 
     validate = subparsers.add_parser("validate", help="validate a release assessment contract")
     validate.add_argument("request", type=Path)
@@ -336,7 +337,11 @@ def build_parser() -> argparse.ArgumentParser:
 
 
 def main(argv: list[str] | None = None) -> int:
-    args = build_parser().parse_args(argv)
+    tokens = list(sys.argv[1:] if argv is None else argv)
+    if tokens and tokens[0] == "export":
+        from .export_poc.cli import main as export_main
+        return export_main(tokens[1:])
+    args = build_parser().parse_args(tokens)
     try:
         if args.command == "validate":
             AssessmentRequest.model_validate(_read_json(args.request))

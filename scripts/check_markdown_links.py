@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Fail when a repository Markdown link points to a missing local target."""
+"""Check published Markdown targets; report local-only output/ artifacts separately."""
 
 from __future__ import annotations
 
@@ -24,9 +24,11 @@ def markdown_files() -> tuple[Path, ...]:
     )
 
 
-def missing_links() -> tuple[str, ...]:
+def _check_links(sources: tuple[Path, ...]) -> tuple[tuple[str, ...], int]:
     failures: list[str] = []
-    for source in markdown_files():
+    generated_count = 0
+    generated_root = ROOT.resolve() / "output"
+    for source in sources:
         for line_number, line in enumerate(source.read_text(encoding="utf-8").splitlines(), 1):
             for match in LINK_PATTERN.finditer(line):
                 target = match.group(1).strip()
@@ -35,19 +37,34 @@ def missing_links() -> tuple[str, ...]:
                 if not target or target.startswith(EXTERNAL_PREFIXES):
                     continue
                 local_path = unquote(target.split("#", 1)[0])
-                if not (source.parent / local_path).exists():
+                resolved_target = (source.parent / local_path).resolve()
+                # output/ is an ignored, local experiment workspace. Resolve
+                # first so output/../docs/missing.md still fails publication.
+                if resolved_target.is_relative_to(generated_root):
+                    generated_count += 1
+                    continue
+                if not resolved_target.exists():
                     failures.append(
                         f"{source.relative_to(ROOT)}:{line_number}: missing local target {target!r}"
                     )
-    return tuple(failures)
+    return tuple(failures), generated_count
+
+
+def missing_links() -> tuple[str, ...]:
+    """Return missing published targets, preserving the existing public API."""
+    return _check_links(markdown_files())[0]
 
 
 def main() -> int:
-    failures = missing_links()
+    sources = markdown_files()
+    failures, generated_count = _check_links(sources)
+    print(
+        f"checked local links in {len(sources)} Markdown files; "
+        f"{generated_count} local-only generated artifact links under output/ (not checked)"
+    )
     if failures:
         print("\n".join(failures))
         return 1
-    print(f"checked local links in {len(markdown_files())} Markdown files")
     return 0
 
 

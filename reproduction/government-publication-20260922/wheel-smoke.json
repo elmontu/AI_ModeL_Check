@@ -1,0 +1,21 @@
+{
+  "import_source": "installed wheel in isolated target directory",
+  "static_assets": [
+    "console/static/index.html",
+    "console/static/app.js",
+    "console/static/style.css",
+    "export_poc/static/index.html",
+    "export_poc/static/app.js",
+    "export_poc/static/style.css",
+    "temporal_assurance/static/index.html",
+    "temporal_assurance/static/app.js",
+    "temporal_assurance/static/style.css"
+  ],
+  "entry_points": {
+    "mra": "model_release_assurance.cli:main",
+    "mra-console": "model_release_assurance.console.__main__:main",
+    "mra-export": "model_release_assurance.export_poc.cli:main",
+    "mra-workflow": "model_release_assurance.workflow:main"
+  },
+  "passed": true
+}

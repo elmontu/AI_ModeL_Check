@@ -1,0 +1,60 @@
+{
+  "adjacency": "replacement of one fixed-roster citizen's two-bit profile; group membership is public and fixed",
+  "agency_deployed": false,
+  "can_authorize": false,
+  "external_data_supported": false,
+  "first_stage": {
+    "artifact_route": "first-rr",
+    "construction": "ratio-2 randomized response of the first bit, then fit public-group Bernoulli forecasts",
+    "request_route": "first"
+  },
+  "fixture": "fixed-public-service-use-v1",
+  "history": {
+    "complete_history_ratio": 4,
+    "delta": 0,
+    "epsilon_definition": "epsilon = natural logarithm of history_ratio",
+    "first_history_ratio": 2,
+    "initial_history_ratio": 1,
+    "maximum_committed_stages": 2,
+    "new_directory_resets_citizen_exposure": false,
+    "revocation_refunds_privacy": false,
+    "second_stage_branches_are_alternatives": true
+  },
+  "limitations": [
+    "No agency dataset adapter, general privacy accountant, or arbitrary model certification.",
+    "Mechanism randomness and retained state must remain private; Python tests do not establish production isolation or RNG correctness.",
+    "Hashes detect binding drift; a database owner can rewrite data and hashes together.",
+    "Recipients retain previously exported bytes; no model recall or privacy-budget refund.",
+    "Synthetic workload results do not establish retained-state utility superiority or publication novelty."
+  ],
+  "mechanism_source_sha256": "c4f6d9a583f21670bdfd91ec6779647ae4d3c4071bc062ba1e2bdfd0d4f13254",
+  "model_family": "group-bernoulli-forecast",
+  "protected_unit": "one fixed-roster citizen two-bit profile",
+  "protocol_coverage": {
+    "direct_private_training": "implemented only as the central-count sufficient-statistic baseline; no general trainer or DP-SGD adapter",
+    "joint_extension": "implemented only for the fixed two-bit, two-stage construction",
+    "protected_data_reuse": "identical committed-artifact reuse is planned without a new privacy charge; retrieval rechecks revocation and does not retrain or add a broker stage"
+  },
+  "schema": "mra-export-poc-constructions-v1",
+  "scope": "fixed-synthetic-fixture-only",
+  "second_stage_routes": [
+    {
+      "construction": "second-bit randomized response with truth probability 4/5 after a truthful first answer and 3/5 after a flipped answer",
+      "evidence": "exact finite binary joint-channel verification at history ratio 4; 11/15 is answer accuracy, not trained-model accuracy",
+      "required_private_access": "second bit and retained first-response flip; the flip plus first response reconstructs the first bit",
+      "route": "retained-state"
+    },
+    {
+      "construction": "independent ratio-2 randomized response of the second bit",
+      "evidence": "standard composition and exact finite binary joint-channel verification at history ratio 4",
+      "required_private_access": "second bit",
+      "route": "independent"
+    },
+    {
+      "construction": "independent two-sided geometric noise of ratio 2 on each fixed public group's second-bit count",
+      "evidence": "sensitivity-one count mechanism and sequential composition give a sufficient history ratio of 4; no sharp model-leakage claim",
+      "required_private_access": "second-bit group counts within the trusted coordinator",
+      "route": "central-count"
+    }
+  ]
+}

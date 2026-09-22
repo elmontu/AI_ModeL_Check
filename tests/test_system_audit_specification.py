@@ -24,19 +24,34 @@ class SystemAuditSpecificationTests(unittest.TestCase):
         for path in (ROOT / "README.md", ROOT / "CONTRIBUTING.md"):
             self.assertIn("system-audit-specification.md", path.read_text(encoding="utf-8"))
 
-    def test_track_navigation_prioritizes_academic_work(self) -> None:
+    def test_navigation_prioritizes_government_audit_and_keeps_research_boundary(self) -> None:
         readme = (ROOT / "README.md").read_text(encoding="utf-8")
         for target in (
-            "docs/model-release-assurance-protocol.md#academic-track",
-            "reproduction/README.md#academic-plan",
+            "docs/government-audit-guide.md",
+            "docs/enforced-release-workflow.md",
+            "academic/paper/mra-paper.tex",
+            "reproduction/README.md#paper-draft",
             "docs/system-audit-specification.md#industrial-track",
+            "docs/model-release-assurance-protocol.md",
         ):
             self.assertIn(target, readme)
+            self.assertTrue((ROOT / target.split("#", 1)[0]).is_file())
         self.assertLess(
-            readme.index("## Academic track"),
-            readme.index("## Reference implementation quick start"),
+            readme.index("docs/government-audit-guide.md"),
+            readme.index("academic/paper/mra-paper.tex"),
         )
         self.assertIn("one shared core", readme)
+        self.assertIn("no deployment obligation is waived", readme)
+        normalized = " ".join(readme.split())
+        for statement in (
+            "Data Minimization and Dependency Accounting for Repeated Model Export",
+            "separately maintained 21 September 2026 working draft",
+            "not included in this government implementation update",
+            "previously published academic snapshot",
+            "--temporal-run",
+            "--temporal-operator",
+        ):
+            self.assertIn(statement, normalized)
 
     def test_track_anchors_preserve_the_proof_and_deployment_boundaries(self) -> None:
         protocol = (ROOT / "docs" / "model-release-assurance-protocol.md").read_text(

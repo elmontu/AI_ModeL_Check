@@ -1,6 +1,9 @@
 # Model Release Assurance: implementation, motivation and operating guide
 
-This guide describes the implementation verified on **10 September 2026**. It
+This guide retains the implementation baseline verified on **10 September 2026**,
+with government-audit navigation updated on **22 September 2026** for the revised
+academic paper and the newer local export workflow. The September 10 results are
+historical evidence, not a fresh validation of later code. It
 is for agency project owners, researchers, testers and developers using the
 local educational pre-POC. It explains the purpose of each component, how to
 run the workflow, and how to interpret its evidence.
@@ -21,6 +24,34 @@ and [the browser exercise](#6-first-complete-browser-exercise). For review work,
 start with [status and verdict interpretation](#14-how-to-interpret-statuses-and-verdicts)
 and [the saved evidence](#16-saved-artifacts-and-how-to-use-them). Developers can
 use [the source map](#21-source-map-for-developers) to locate each implementation.
+
+## Current government audit: applying the revised paper
+
+Start with the [government audit guide](government-audit-guide.md) for the current
+agency review. The paper now centers on **data minimization and dependency
+accounting**. Compare a model that omits the protected input before adding a
+privacy mechanism. The reported small utility gains do not establish that an
+agency needs those inputs, and its fixed-roster attribute-DP guarantees do not
+cover membership or the whole record.
+
+The case console now supports twelve explicit review controls. Record a rationale
+and select already-bound evidence for each control; unresolved items stay visible.
+Records are tied to the case configuration, retained across restarts, and become
+stale after rebinding. Evidence is rehashed when it is recorded and inspected.
+These checks establish record/file consistency, not the truth of declarations.
+
+The separate [enforced release workflow](enforced-release-workflow.md) implements
+prepare, check, recorded local review, atomic commit and current delivery checks.
+Its temporal ledger includes training and linked-scoring channel dependencies.
+Identical cached values can be reused under their original contract; a fresh draw,
+changed protected attribute version or raw-input scoring cannot be relabelled as
+free reuse. A budget-admitted local download is distinct from a core privacy
+assessment and from an agency's authority to release.
+
+The existing education defaults remain suitable for trusted local exercises.
+Use public or synthetic data and the existing runtime; individual accounts,
+institutional signatures and deployment infrastructure are not prerequisites
+for the case checklist. Production acceptance remains separate.
 
 ## 1. Motivation: the problem this framework addresses
 
@@ -64,6 +95,8 @@ There are several implementation layers. Their coverage differs.
 | Registered assessment | Typed requests, policy/evidence bindings and a registered membership assessment for every training preset | Apply the assurance engine to properly scoped evidence |
 | Core assurance library | Contract validation, analyzers, bound decisions, optimization, signing, audit and protocol replay | Programmatic assurance workflows and research |
 | Experimental lifecycle reference | Local transactional state, simulated access/leases and lifecycle tests | Exercise sequencing and state-consistency rules |
+| Government audit review | Twelve case-bound review controls, retained rationale/history and evidence-integrity checks | Document necessity, scope, dependencies and unresolved agency review questions |
+| Experimental temporal export service | Registered channel/unit ledger, prepare/check/review/commit stages and exact-package delivery checks | Test cumulative attribute-DP accounting within a trusted local service |
 | Separate research runners | Larger vision/LLM training-hook and composition scripts, finite-channel and other studies | Explicit research profiles with additional dependencies and data |
 | Production agency deployment | Not implemented as an accredited, independently enforced service | A later deployment project |
 

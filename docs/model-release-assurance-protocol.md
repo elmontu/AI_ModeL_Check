@@ -26,10 +26,19 @@ version, change a transition, or weaken a normative requirement. The academic
 track is the current priority. The [industrial track](system-audit-specification.md#industrial-track)
 retains the concrete deployment obligations. Both use one shared reference core.
 
-The proposed central contribution is a conditional argument connecting
-**admissible per-threat risk intervals, reasoned governance recommendations,
-and lifecycle integrity**. This is a research target, not a claim that the
-whole argument is already machine checked or novel relative to all prior work.
+The separately maintained working manuscript, revised on 21 September
+2026, studies **data minimization and dependency accounting for repeated model
+export**. It compares omission and protected inputs, complete training/scoring
+dependencies, exact ledger representations and bounded local release enforcement.
+It claims no new privacy accountant, whole-record protection or deployed agency
+service. The conditional argument connecting admissible per-threat risk intervals,
+reasoned recommendations and lifecycle integrity remains supporting reference-core
+work; it is not the current manuscript's central empirical contribution.
+
+The revised manuscript and its new study archives are outside this government
+implementation publication. Previously published academic files remain at their
+earlier revision. The integration below records practical review requirements,
+not a claim that the revised experiments are bundled or independently validated here.
 
 Freeze the object of each claim before proving or measuring it: the protected
 unit and population, secret/action spaces and gain or advantage baseline,
@@ -50,7 +59,7 @@ uncertainty interval manufactured from absent measurements. The exact
 [four-verdict semantics and conditional arguments](gap-remediation.md#conditional-correctness-arguments)
 govern this reference recommendation layer; they are not production authorization.
 
-The academic claim has three distinct obligations:
+The supporting reference-core assurance argument has three distinct obligations:
 
 | Obligation | Evidence to establish it | Present boundary |
 |---|---|---|
@@ -68,6 +77,58 @@ assumptions of an abstract theorem; concrete refinement is not implied by them.
 No academic result may be promoted to a deployment claim without the industrial
 evidence appropriate to that claim. Optional strategic stress tests remain
 supplemental and cannot substitute for any of these obligations.
+
+### 1.2 Applying the repeated-export study to an agency audit
+
+This dated integration note records implications of the active manuscript and
+local implementation as of 22 September 2026. It does not change an MRAP gate,
+raise the repository's conformance level, or convert a research result into
+admissible agency evidence. The [integrated audit procedure](system-audit-specification.md#911-repeated-export-agency-audit-update-e)
+provides the corresponding evidence checklist and retained test references.
+
+| Audit question | Required distinction and evidence |
+|---|---|
+| Is the protected input needed? | Compare a physically omitted-input model with the proposed protected-input model on a declared task and utility requirement. Freeze selection and evaluation rules, retain unfavorable results, and separate test-record uncertainty from training/cache variation. A small significant AUC gain is not by itself operational necessity. |
+| What is protected? | Bind the unit, adjacency, attribute/value version, public side inputs, roster and recipient. The paper's fixed-roster attribute-DP results do not establish membership, household, whole-record or longitudinal person protection. |
+| What does the recipient retain? | Include all accessible weights, preprocessing, metadata, linked scores and earlier versions. Fine-tuning, adapters, ensembles and other derivatives require their actual dependencies and joint recipient view; a parent's assessment is not inherited automatically. A local wrapper cannot constrain weights already delivered. |
+| What newly uses protected information? | Register both training and scoring channel--unit pairs, including independently randomized caches and fresh scoring. Disjoint training rosters do not establish disjoint release footprints when scoring overlaps. |
+| Is this actually reuse? | Reuse must return the identical sanitized value from the same channel for the same attribute version. Renaming a model, cache or dataset cannot reset spending. Reusing a random flip on changed raw values is not covered by the fixed-value cache argument. |
+| Does the bound cover the full transcript? | Establish that the package, preprocessing, selection, refusals and publication decisions in the claimed recipient transcript depend only on charged protected values and fixed public inputs. A realized footprint alone does not prove this for adaptive selection. Raw-truth reports, full-cache fingerprints and operator review text are not automatically covered. |
+| What does a budget pass establish? | A sufficient mechanism bound under the declared premises. It does not compare epsilon with attack accuracy, prove an absolute inference ceiling, certify utility or satisfy all MRAP gates. Finite attacks retain their floor/screen interpretation. |
+| Can the checked package be substituted or delivered later? | Bind checks and review to the proposal, evidence and ledger revision; recheck them when charges and receipt commit atomically; check current authority, expiry and revocation again before delivering exact bytes. Preserve charges after revocation or failed transfer. |
+
+For the paper's fixed finite dependency set, the conditional accounting rule is
+
+```text
+spent(u) = sum(epsilon(c) for each distinct committed channel--unit pair (c, u))
+new_pairs = proposed_training_and_scoring_pairs - committed_pairs
+admit only if adding all new_pairs keeps every affected unit within its cap
+```
+
+Its privacy argument additionally assumes independent private draws for distinct
+pairs, correct mechanism parameters, stable unit identities and the common
+post-processing information-flow premise. The local registry checks declared
+consistency; hashes and transactions do not establish these assumptions for
+arbitrary producer code. An omission arm costs zero for the designated attribute
+only when all released components and selection behavior are independent of that
+attribute under the fixed public configuration; it can still permit inference
+through public correlations.
+
+The [enforced local workflow](enforced-release-workflow.md) implements prepare,
+check, recorded operator review, atomic commit and controlled package delivery
+for a trusted initialized registry. Its SQLite receipts and review acknowledgments
+are experimental service records, not the authoritative MRAP authorization and
+activation receipts defined below. The [two-stage synthetic export lab](model-export-poc.md)
+is another bounded mechanism exercise, with a different adjacency and history.
+Neither lab is an arbitrary agency-data training service, authenticated separation
+of duties, a production gateway or a proof of the complete HTTP transcript's DP.
+
+The active paper's package argument,
+operational boundary and
+bounded enforcement evidence
+must be read separately. The accounting kernels are experimental comparisons and
+are not integrated replacements for the local HTTP gate. Source-linked numerical
+results describe their own workloads; they are not agency acceptance thresholds.
 
 ## 2. Security and assurance objective
 
