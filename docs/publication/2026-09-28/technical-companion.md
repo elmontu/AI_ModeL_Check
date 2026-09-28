@@ -1,8 +1,10 @@
-# Technical companion to Model privacy and release assurance
+# Technical companion to Model releases and agency workflows
 
 Publication edition 28 September 2026. This is supporting technical material for a proposed validation pilot. Its protocol requirements describe the candidate design and do not establish an adopted agency policy or production authorisation.
 
 The guide presents the practical decisions. This companion retains the assumptions and calculations behind them. The complete model experiments are preserved in the separate experimental supplement and frozen evidence files.
+
+The [detailed assessment reference](assessment-reference.md) preserves material moved out of the nontechnical guide. The [findings-to-actions map](findings-to-actions.md) covers all 51 study sections and connects them to the fourteen reader findings.
 
 ## Evidence gate
 
@@ -58,9 +60,48 @@ Keep pure ε and Gaussian ρ accounts separate. A ρ cap needs an explicit conve
 Implementations may represent the same record as R = (A, I, Rc, P, T, Π, U, C, H, Pol, E, Trust, t_exp), corresponding respectively to artefact, interface, recipient, population, threat set, mechanism, utility requirement, controls, history, policy, evidence, trust profile and expiry time.
 
 
+## Agency audit, retained history and finite continuation
+
+The agency record links immutable dataset versions, protected computations and every covered disclosure. Its audit reconciles these dependencies with actual execution, protected-unit contributions and recipients’ pooled history. A graph or hash alone establishes neither truthful execution nor privacy. See the [release protocol snapshot](evidence/context/academic/paper/model-export-protocol.tex).
+
+### Preserve the complete earlier observation
+
+Let \(P_D(m)\) be the joint law of the retained history, including any shared private datasets, weights and other covered observations. A finite continuation \(Q_D(m,a)\) must satisfy
+
+\[
+Q_D(m,a)\ge0,\qquad
+\sum_a Q_D(m,a)=P_D(m),\qquad
+Q_D(m,a)\le e^E Q_{D'}(m,a)\quad(D\sim D').
+\]
+
+Given the actual old output \(m\), execution samples the new output from \(Q_D(m,a)/P_D(m)\) on positive support. This requires protected access; it is not free reuse. The old law must already satisfy the requested bound. Continuation cannot repair an invalid earlier disclosure. Mathematical feasibility for a known past law does not establish retrospective authorisation or executable protection for arbitrary trained models. See the [retained-history construction](evidence/context/academic/paper/committed-information.tex).
+
+### Fix the public plan before protected inputs
+
+The bounded executable sequence is:
+
+1. **Freeze the public problem and required gain.** Specify the neighboring relation, old law, model meanings, task objectives, selection rule and required improvement \(\Delta\). Use public or separately accounted information.
+2. **Screen against reuse.** For \(U(Q)=c_0+\sum_{D,m,a}c_{Dma}Q_D(m,a)\), compare
+
+   \[
+   U_{\mathrm{reuse}}=c_0+\sum_m\max_a\sum_D P_D(m)c_{Dma},\qquad
+   U_{\mathrm{full}}=c_0+\sum_{D,m}P_D(m)\max_a c_{Dma}.
+   \]
+
+   If \(U_{\mathrm{full}}-U_{\mathrm{reuse}}<\Delta\), no continuation in this declared family can achieve the gain, even without privacy restrictions. Otherwise, improvement remains possible; clearance is not established. The screen avoids an optimisation solve, but still enumerates the finite public problem.
+3. **Construct, check and freeze the actual channel menu.** Check each channel’s old marginal, privacy constraints and objective. Fixing only the objective is insufficient: privately choosing between valid solutions can disclose information. When screening rejects adaptation, construct and certify an old-output-only rule before reservation.
+4. **Reserve, then execute.** Reserve the complete history allowance before the old draw. Execute the old draw, any separately accounted task selector, then the conditional new draw. For selector \(T_D(s\mid m)\) with neighbor ratio at most \(\Xi\), and channels with ratios \(B_s\), the transcript law is \(T_D(s\mid m)Q_s(D,m,a)\). Its neighbor ratio is at most \(\Xi\max_s B_s\); reserve a sufficient charge of at least \(\log(\Xi\max_s B_s)\). The argument covers one prospectively frozen continuation on unchanged data; task coordinates already exist before the old draw.
+5. **Commit before delivery and recheck current conditions.** Preflight output capacity before sampling. Preserve immutable draws across retries; additional recipients receive committed copies. Check current source bindings, authority, capacity and revocation before delivery. Abandonment or revocation does not refund reservations.
+
+These [execution safeguards](evidence/context/academic/paper/finite-enforcement-proof.tex) assume trusted execution, randomness, complete export mediation and durable authority. Mathematical caching requires identical complete canonical inputs, verifier identity/options and byte equality after hashing; it never replaces current delivery checks.
+
+The [screening study](evidence/context/academic/paper/screened-release-proof.tex) was a retrospective diagnostic following negative results, not a replacement confirmatory evaluation. Separate prospective reuse workflows exercised the sequence above. They establish bounded accounting and delivery behavior, not private-learning gains or agency deployment. MRAP’s institutional responsibilities remain separate from this bounded execution sequence.
+
 ## Illustrative readmission release that remains on hold
 
 ### Worked example of a release that needs further evidence
+
+Register the complete history at intake. The standalone comparisons below are intermediate diagnostics, not permission to ignore earlier releases until after testing. Any protected model selection or evaluation needs its own valid accounting.
 
 This invented example shows how an apparently useful release can remain unapproved after redesign. Its membership calculation assumes a pure-DP mechanism with participation protection and a verified patient contribution bound; this is a hypothetical mechanism, not a claim about the current fixed-membership prototype. Identity calculations use a finite roster experiment with a uniform conditional prior. For the banded alternatives, the complete target-linked observation is one fixed band per model. The server returns the same stored band on repeat requests and permits no other queries or distinguishing outputs.
 
@@ -146,7 +187,7 @@ Overall recommendation. Keep the retuned five-band candidate on hold. It meets t
 
 ## MRAP lifecycle and proof boundaries
 
-## Appendix B The release approval workflow
+## Candidate release approval protocol
 
 An assessment report, an optimisation report, a mathematical certificate, a signature or an audit entry is not an authorisation. The MRAP/1.0 protocol separates scientific assessment, governance approval, atomic authorisation and technical activation, so that no report and no client-side workflow can silently become permission to serve a model.
 

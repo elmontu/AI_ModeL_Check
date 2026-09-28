@@ -111,9 +111,9 @@ All 104 evidence identifiers resolve to 94 deduplicated source snapshots. JSON p
 | E103 | [academic/critique-fixes-20260922/kernel/training-driven-control/results.json](source/academic/critique-fixes-20260922/kernel/training-driven-control/results.json) | `whole file` | 14697 |
 | E104 | [reproduction/government-audit-update-20260922/focused-results.json](source/reproduction/government-audit-update-20260922/focused-results.json) | `whole file` | 12038 |
 
-## P1–P5 contextual records
+## P1–P10 contextual records
 
-These small working-tree snapshots explain the cited studies and prototype boundaries. They do not publish the complete manuscript or all dependencies. Their historical internal links may refer to files outside this bounded snapshot. The P5 README is an explanatory snapshot, not a change to the repository-root README.
+P1 to P5 retain the original context snapshots. P6 to P10 add the manuscript and workflow sources checked for the agency-guide revision. This is a selected source record, not a complete manuscript compilation tree. Historical internal links may refer outside the snapshot.
 
 | Reference | Snapshot |
 |---|---|
@@ -122,3 +122,8 @@ These small working-tree snapshots explain the cited studies and prototype bound
 | P3 | [docs/central-audit.md](context/docs/central-audit.md) |
 | P4 | [academic/unlearning-general-trends-20260925/README.md](context/academic/unlearning-general-trends-20260925/README.md) |
 | P5 | [README.md](context/README.md) |
+| P6 | [academic/paper/mra-paper.tex](context/academic/paper/mra-paper.tex) |
+| P7 | [academic/paper/model-export-protocol.tex](context/academic/paper/model-export-protocol.tex) |
+| P8 | [academic/paper/committed-information.tex](context/academic/paper/committed-information.tex) |
+| P9 | [academic/paper/finite-enforcement-proof.tex](context/academic/paper/finite-enforcement-proof.tex) |
+| P10 | [academic/paper/screened-release-proof.tex](context/academic/paper/screened-release-proof.tex) |

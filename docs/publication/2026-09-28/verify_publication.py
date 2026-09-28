@@ -47,6 +47,10 @@ def main():
             for part in entry["json_pointer"][1:].split("/"):
                 key = unquote(part).replace("~1", "/").replace("~0", "~")
                 value = value[int(key)] if isinstance(value, list) else value[key]
+    assert {e["id"] for e in sources["context"]} == {f"P{i}" for i in range(1, 11)}, "Context index mismatch"
+    for entry in sources["context"]:
+        data = safe_path(entry["published_path"]).read_bytes()
+        assert hashlib.sha256(data).hexdigest() == entry["published_sha256"], entry["id"]
     for entry in sources["frozen_table_inputs"]:
         data = safe_path(entry["path"]).read_bytes()
         assert hashlib.sha256(data).hexdigest() == entry["sha256"]

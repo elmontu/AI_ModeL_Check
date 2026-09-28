@@ -1326,6 +1326,56 @@
       "original_bytes": 19053,
       "published_bytes": 19053,
       "local_prefix_normalization_count": 0
+    },
+    {
+      "id": "P6",
+      "original_path": "academic/paper/mra-paper.tex",
+      "published_path": "evidence/context/academic/paper/mra-paper.tex",
+      "original_sha256": "1fc86d9f5d140c25b61cb335e28771b03069ca0388d3b81fa30fdb510338aee6",
+      "published_sha256": "1fc86d9f5d140c25b61cb335e28771b03069ca0388d3b81fa30fdb510338aee6",
+      "original_bytes": 12452,
+      "published_bytes": 12452,
+      "local_prefix_normalization_count": 0
+    },
+    {
+      "id": "P7",
+      "original_path": "academic/paper/model-export-protocol.tex",
+      "published_path": "evidence/context/academic/paper/model-export-protocol.tex",
+      "original_sha256": "9411e11d7a7a854848b6d081ba37f1eca65835ae0f2e07ce4fa6e8a7cf5d133d",
+      "published_sha256": "9411e11d7a7a854848b6d081ba37f1eca65835ae0f2e07ce4fa6e8a7cf5d133d",
+      "original_bytes": 10416,
+      "published_bytes": 10416,
+      "local_prefix_normalization_count": 0
+    },
+    {
+      "id": "P8",
+      "original_path": "academic/paper/committed-information.tex",
+      "published_path": "evidence/context/academic/paper/committed-information.tex",
+      "original_sha256": "72d1c47edde002621cfd213e68c966b321f6413a843b97a80ec692ed41069652",
+      "published_sha256": "72d1c47edde002621cfd213e68c966b321f6413a843b97a80ec692ed41069652",
+      "original_bytes": 5444,
+      "published_bytes": 5444,
+      "local_prefix_normalization_count": 0
+    },
+    {
+      "id": "P9",
+      "original_path": "academic/paper/finite-enforcement-proof.tex",
+      "published_path": "evidence/context/academic/paper/finite-enforcement-proof.tex",
+      "original_sha256": "84a48ddd4d191121bc1d645f44d450e720913db3f9dffd6ed47762c8dbdc3fa7",
+      "published_sha256": "84a48ddd4d191121bc1d645f44d450e720913db3f9dffd6ed47762c8dbdc3fa7",
+      "original_bytes": 5117,
+      "published_bytes": 5117,
+      "local_prefix_normalization_count": 0
+    },
+    {
+      "id": "P10",
+      "original_path": "academic/paper/screened-release-proof.tex",
+      "published_path": "evidence/context/academic/paper/screened-release-proof.tex",
+      "original_sha256": "6c1adf9b9559ace2e916325c3664eee946ee673555f1ea307863158e3a035e14",
+      "published_sha256": "6c1adf9b9559ace2e916325c3664eee946ee673555f1ea307863158e3a035e14",
+      "original_bytes": 1689,
+      "published_bytes": 1689,
+      "local_prefix_normalization_count": 0
     }
   ]
 }
