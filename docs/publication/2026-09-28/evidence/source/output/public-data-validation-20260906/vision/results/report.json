@@ -1,0 +1,934 @@
+{
+  "authorization_eligible": false,
+  "cells": [
+    {
+      "architecture": "resnet50",
+      "authorization_eligible": false,
+      "cell_id": "resnet50-2700",
+      "checkpoint_bytes": 94421695,
+      "checkpoint_serialization_seconds": 0.24759679986163974,
+      "checkpoint_sha256": "dab2e36d1981b895ac13b446279ec2afea206e44ef792b11dfc2f9f3c1bc8018",
+      "checkpoint_weights_persisted": false,
+      "completed_at": "2026-09-06T16:41:56.179011+00:00",
+      "epochs": 1,
+      "evaluation_peak_gpu_bytes": {
+        "allocated": 512225792,
+        "reserved": 2174746624
+      },
+      "evaluation_seconds": 3.4318480999208987,
+      "initial_state_sha256": "4deff946f06a27b7b98cd6fb04ebc78825c7a85a584c299f1e4be502533fef84",
+      "membership_screen": {
+        "adversary_access": "Prediction probabilities and true label for each sampled image; one query per selected image draw; no weight/gradient/metadata access used by this attack",
+        "assurance_verdict": "not_emitted",
+        "attack": "Member if per-example true-label cross entropy is at most a threshold",
+        "audit_draws_per_state": 1024,
+        "audit_sampling": "Independent draws with replacement from the remaining fixed member and nonmember pools; image repeats allowed",
+        "audit_seconds": 2.0000237999483943,
+        "authorization_eligible": false,
+        "balanced_attack_success": 0.50244140625,
+        "calibration_audit_disjoint_by_image_identity": true,
+        "calibration_rows_per_state": 512,
+        "ceiling": 1.0,
+        "family_alpha": 0.05,
+        "floor": 0.4643599705448421,
+        "gap": 0.5356400294551579,
+        "member_remaining_pool_rows": 2188,
+        "member_successes": 306,
+        "metric": "equal_prior_membership_success",
+        "nonmember_remaining_pool_rows": 4888,
+        "nonmember_successes": 723,
+        "numerical_method": "scipy.stats.beta.ppf; not an outward-verified formal certificate",
+        "one_sided_endpoint_alpha": 0.004166666666666667,
+        "privacy_clearance_allowed": false,
+        "raw_scores_or_ids_retained": false,
+        "scope": "Finite sampled pools only, not training-process DP or a general-population result",
+        "scored_examples_including_calibration": 3072,
+        "scored_examples_per_second": 1535.9817218571427,
+        "simultaneous_family_cell_count": 6,
+        "threshold": 1.075516939163208,
+        "threshold_frozen_before_audit_scores_at": "2026-09-06T16:41:54.635390+00:00",
+        "tnr": 0.7060546875,
+        "tnr_lower": 0.6670583639171883,
+        "tpr": 0.298828125,
+        "tpr_lower": 0.26166157717249594
+      },
+      "mra_training_instrumentation": {
+        "aggregate_ledger_bytes": 173721,
+        "aggregate_ledger_sha256": "f5b1caae393efdf2745a58b7356cc8c4e60a3721b904b0189550183a0961c1bd",
+        "aggregate_only": true,
+        "allowlisted_modules": [
+          "conv1",
+          "avgpool",
+          "fc"
+        ],
+        "collector": "aggregate_training_hooks",
+        "context_bound": true,
+        "coverage": {
+          "handles_removed": true,
+          "observed_backward_events": 129,
+          "observed_forward_events": 129,
+          "per_module": {
+            "avgpool": {
+              "backward": 43,
+              "forward": 43
+            },
+            "conv1": {
+              "backward": 43,
+              "forward": 43
+            },
+            "fc": {
+              "backward": 43,
+              "forward": 43
+            }
+          },
+          "required_backward_events": 129,
+          "required_forward_events": 129
+        },
+        "coverage_status": "complete",
+        "event_cap": 301,
+        "event_chain_genesis_sha256": "74f2a9346d97b538aad7fff98e88697bbf5f0b8e6d1247fd838bc72d9bdd1302",
+        "event_chain_head_sha256": "2f39f7498c9744a9b320f986722749091295234461e4892d6e7a6632cdabfb07",
+        "event_count": 301,
+        "events_embedded_in_report": false,
+        "expected_steps": 43,
+        "handles_removed": true,
+        "independent_replay": {
+          "event_chain_genesis_sha256": "74f2a9346d97b538aad7fff98e88697bbf5f0b8e6d1247fd838bc72d9bdd1302",
+          "event_chain_head_sha256": "2f39f7498c9744a9b320f986722749091295234461e4892d6e7a6632cdabfb07",
+          "event_count": 301,
+          "independent_replay_passed": true
+        },
+        "max_events": 301,
+        "model_parameters": {
+          "count": 161,
+          "elements": 23528522,
+          "trainable_count": 161,
+          "trainable_elements": 23528522
+        },
+        "nonfinite_elements": 0,
+        "observed_backward_events": 129,
+        "observed_forward_events": 129,
+        "observed_steps": 43,
+        "overhead_interpretation": "Direct step-sealing elapsed time only; forward/backward hook cost is included in overall training time. No uninstrumented paired control or causal overhead percentage",
+        "raw_tensors_retained": false,
+        "raw_text_retained": false,
+        "raw_token_arrays_retained": false,
+        "schema_version": "1.0",
+        "serialized_ledger_replay": {
+          "context_sha256": "74f2a9346d97b538aad7fff98e88697bbf5f0b8e6d1247fd838bc72d9bdd1302",
+          "event_chain_genesis_sha256": "74f2a9346d97b538aad7fff98e88697bbf5f0b8e6d1247fd838bc72d9bdd1302",
+          "event_chain_head_sha256": "2f39f7498c9744a9b320f986722749091295234461e4892d6e7a6632cdabfb07",
+          "event_count": 301,
+          "independent_replay_passed": true,
+          "payload_sha256": "f5b1caae393efdf2745a58b7356cc8c4e60a3721b904b0189550183a0961c1bd"
+        },
+        "status": "pass",
+        "step_sealing_seconds": 3.1959027000702918
+      },
+      "optimizer_steps": 43,
+      "parameter_count": 23528522,
+      "privacy_assessment": "empirical_membership_screen_only_no_MRAP_assessment",
+      "source": {
+        "dataset_config_sha256": "3f2ef402e9e2a6fb3a2fb47a930de30384056682d85dae6c2134694dd6aa1412",
+        "hook_implementation_sha256": "595de99355974866524ca1e11c0cd4d2d14c80a0846657daea36d66ee26ff33c",
+        "plan_sha256": "7b041ba6c17b9c4baae7df85f29f9b60fed2c8a08162cc47f41b156763c7b032",
+        "runner_sha256": "70948235ea6a4e366f382ff96e127ca133c3b0e12b10175b90ef6cb0b46dac92",
+        "shared_dataset_helper_sha256": "85261cd39de3036211fff174b7b9bce5aaf87a69baac17cd42b03aff9eb03e81"
+      },
+      "started_at": "2026-09-06T16:41:42.345841+00:00",
+      "test_accuracy": 0.31981481481481483,
+      "test_cross_entropy": 2.421268035040961,
+      "test_examples_per_second": 1573.4962162586583,
+      "test_rows": 5400,
+      "train_accuracy": 0.23666666666666666,
+      "train_cross_entropy": 2.5896411980523,
+      "train_examples_per_second": 353.51853462322197,
+      "train_rows": 2700,
+      "train_seconds": 7.637506200000644,
+      "training_peak_gpu_bytes": {
+        "allocated": 1590728704,
+        "reserved": 2174746624
+      }
+    },
+    {
+      "architecture": "resnet50",
+      "authorization_eligible": false,
+      "cell_id": "resnet50-10800",
+      "checkpoint_bytes": 94421695,
+      "checkpoint_serialization_seconds": 0.279199100099504,
+      "checkpoint_sha256": "3b49f613f53e26623e96de883784ca0df14455aaf4b82db46d778c6d458a8525",
+      "checkpoint_weights_persisted": false,
+      "completed_at": "2026-09-06T16:42:31.284892+00:00",
+      "epochs": 1,
+      "evaluation_peak_gpu_bytes": {
+        "allocated": 513012224,
+        "reserved": 2199912448
+      },
+      "evaluation_seconds": 3.4973689999897033,
+      "initial_state_sha256": "4deff946f06a27b7b98cd6fb04ebc78825c7a85a584c299f1e4be502533fef84",
+      "membership_screen": {
+        "adversary_access": "Prediction probabilities and true label for each sampled image; one query per selected image draw; no weight/gradient/metadata access used by this attack",
+        "assurance_verdict": "not_emitted",
+        "attack": "Member if per-example true-label cross entropy is at most a threshold",
+        "audit_draws_per_state": 1024,
+        "audit_sampling": "Independent draws with replacement from the remaining fixed member and nonmember pools; image repeats allowed",
+        "audit_seconds": 2.0207533999346197,
+        "authorization_eligible": false,
+        "balanced_attack_success": 0.50146484375,
+        "calibration_audit_disjoint_by_image_identity": true,
+        "calibration_rows_per_state": 512,
+        "ceiling": 1.0,
+        "family_alpha": 0.05,
+        "floor": 0.46521471606625675,
+        "gap": 0.5347852839337432,
+        "member_remaining_pool_rows": 10288,
+        "member_successes": 260,
+        "metric": "equal_prior_membership_success",
+        "nonmember_remaining_pool_rows": 4888,
+        "nonmember_successes": 767,
+        "numerical_method": "scipy.stats.beta.ppf; not an outward-verified formal certificate",
+        "one_sided_endpoint_alpha": 0.004166666666666667,
+        "privacy_clearance_allowed": false,
+        "raw_scores_or_ids_retained": false,
+        "scope": "Finite sampled pools only, not training-process DP or a general-population result",
+        "scored_examples_including_calibration": 3072,
+        "scored_examples_per_second": 1520.225080457315,
+        "simultaneous_family_cell_count": 6,
+        "threshold": 0.6942403316497803,
+        "threshold_frozen_before_audit_scores_at": "2026-09-06T16:42:29.695288+00:00",
+        "tnr": 0.7490234375,
+        "tnr_lower": 0.7116197676640073,
+        "tpr": 0.25390625,
+        "tpr_lower": 0.21880966446850622
+      },
+      "mra_training_instrumentation": {
+        "aggregate_ledger_bytes": 683137,
+        "aggregate_ledger_sha256": "b6aa83d541bc5ebe2b8714cb57bf8a3a2e1ecded8949083458c6b92eadef5724",
+        "aggregate_only": true,
+        "allowlisted_modules": [
+          "conv1",
+          "avgpool",
+          "fc"
+        ],
+        "collector": "aggregate_training_hooks",
+        "context_bound": true,
+        "coverage": {
+          "handles_removed": true,
+          "observed_backward_events": 507,
+          "observed_forward_events": 507,
+          "per_module": {
+            "avgpool": {
+              "backward": 169,
+              "forward": 169
+            },
+            "conv1": {
+              "backward": 169,
+              "forward": 169
+            },
+            "fc": {
+              "backward": 169,
+              "forward": 169
+            }
+          },
+          "required_backward_events": 507,
+          "required_forward_events": 507
+        },
+        "coverage_status": "complete",
+        "event_cap": 1183,
+        "event_chain_genesis_sha256": "1725d0a2fa586b702be1ddf1196a56c298c6c9ca3bca2091a89f0f9231fee93d",
+        "event_chain_head_sha256": "2b3a0f517bf2057d8a9eca51d62be38a54be36febb25dbcd04be9e4205f0ed27",
+        "event_count": 1183,
+        "events_embedded_in_report": false,
+        "expected_steps": 169,
+        "handles_removed": true,
+        "independent_replay": {
+          "event_chain_genesis_sha256": "1725d0a2fa586b702be1ddf1196a56c298c6c9ca3bca2091a89f0f9231fee93d",
+          "event_chain_head_sha256": "2b3a0f517bf2057d8a9eca51d62be38a54be36febb25dbcd04be9e4205f0ed27",
+          "event_count": 1183,
+          "independent_replay_passed": true
+        },
+        "max_events": 1183,
+        "model_parameters": {
+          "count": 161,
+          "elements": 23528522,
+          "trainable_count": 161,
+          "trainable_elements": 23528522
+        },
+        "nonfinite_elements": 0,
+        "observed_backward_events": 507,
+        "observed_forward_events": 507,
+        "observed_steps": 169,
+        "overhead_interpretation": "Direct step-sealing elapsed time only; forward/backward hook cost is included in overall training time. No uninstrumented paired control or causal overhead percentage",
+        "raw_tensors_retained": false,
+        "raw_text_retained": false,
+        "raw_token_arrays_retained": false,
+        "schema_version": "1.0",
+        "serialized_ledger_replay": {
+          "context_sha256": "1725d0a2fa586b702be1ddf1196a56c298c6c9ca3bca2091a89f0f9231fee93d",
+          "event_chain_genesis_sha256": "1725d0a2fa586b702be1ddf1196a56c298c6c9ca3bca2091a89f0f9231fee93d",
+          "event_chain_head_sha256": "2b3a0f517bf2057d8a9eca51d62be38a54be36febb25dbcd04be9e4205f0ed27",
+          "event_count": 1183,
+          "independent_replay_passed": true,
+          "payload_sha256": "b6aa83d541bc5ebe2b8714cb57bf8a3a2e1ecded8949083458c6b92eadef5724"
+        },
+        "status": "pass",
+        "step_sealing_seconds": 13.555589699186385
+      },
+      "optimizer_steps": 169,
+      "parameter_count": 23528522,
+      "privacy_assessment": "empirical_membership_screen_only_no_MRAP_assessment",
+      "source": {
+        "dataset_config_sha256": "3f2ef402e9e2a6fb3a2fb47a930de30384056682d85dae6c2134694dd6aa1412",
+        "hook_implementation_sha256": "595de99355974866524ca1e11c0cd4d2d14c80a0846657daea36d66ee26ff33c",
+        "plan_sha256": "7b041ba6c17b9c4baae7df85f29f9b60fed2c8a08162cc47f41b156763c7b032",
+        "runner_sha256": "70948235ea6a4e366f382ff96e127ca133c3b0e12b10175b90ef6cb0b46dac92",
+        "shared_dataset_helper_sha256": "85261cd39de3036211fff174b7b9bce5aaf87a69baac17cd42b03aff9eb03e81"
+      },
+      "started_at": "2026-09-06T16:41:56.579488+00:00",
+      "test_accuracy": 0.3375925925925926,
+      "test_cross_entropy": 2.0297904049908673,
+      "test_examples_per_second": 1544.017803101674,
+      "test_rows": 5400,
+      "train_accuracy": 0.4436111111111111,
+      "train_cross_entropy": 1.7495669133574874,
+      "train_examples_per_second": 374.6017424175255,
+      "train_rows": 10800,
+      "train_seconds": 28.830618700012565,
+      "training_peak_gpu_bytes": {
+        "allocated": 1594923008,
+        "reserved": 2199912448
+      }
+    },
+    {
+      "architecture": "resnet50",
+      "authorization_eligible": false,
+      "cell_id": "resnet50-21600",
+      "checkpoint_bytes": 94421695,
+      "checkpoint_serialization_seconds": 0.30033389991149306,
+      "checkpoint_sha256": "6767beee87b6fbdc06892c92a19c3cd7a8838a6857a9dcc9266dababbf76b67a",
+      "checkpoint_weights_persisted": false,
+      "completed_at": "2026-09-06T16:43:36.977846+00:00",
+      "epochs": 1,
+      "evaluation_peak_gpu_bytes": {
+        "allocated": 513012224,
+        "reserved": 2199912448
+      },
+      "evaluation_seconds": 3.866053899982944,
+      "initial_state_sha256": "4deff946f06a27b7b98cd6fb04ebc78825c7a85a584c299f1e4be502533fef84",
+      "membership_screen": {
+        "adversary_access": "Prediction probabilities and true label for each sampled image; one query per selected image draw; no weight/gradient/metadata access used by this attack",
+        "assurance_verdict": "not_emitted",
+        "attack": "Member if per-example true-label cross entropy is at most a threshold",
+        "audit_draws_per_state": 1024,
+        "audit_sampling": "Independent draws with replacement from the remaining fixed member and nonmember pools; image repeats allowed",
+        "audit_seconds": 2.0928492001257837,
+        "authorization_eligible": false,
+        "balanced_attack_success": 0.49267578125,
+        "calibration_audit_disjoint_by_image_identity": true,
+        "calibration_rows_per_state": 512,
+        "ceiling": 1.0,
+        "family_alpha": 0.05,
+        "floor": 0.45410141523739656,
+        "gap": 0.5458985847626034,
+        "member_remaining_pool_rows": 21088,
+        "member_successes": 697,
+        "metric": "equal_prior_membership_success",
+        "nonmember_remaining_pool_rows": 4888,
+        "nonmember_successes": 312,
+        "numerical_method": "scipy.stats.beta.ppf; not an outward-verified formal certificate",
+        "one_sided_endpoint_alpha": 0.004166666666666667,
+        "privacy_clearance_allowed": false,
+        "raw_scores_or_ids_retained": false,
+        "scope": "Finite sampled pools only, not training-process DP or a general-population result",
+        "scored_examples_including_calibration": 3072,
+        "scored_examples_per_second": 1467.8554001001926,
+        "simultaneous_family_cell_count": 6,
+        "threshold": 1.3174362182617188,
+        "threshold_frozen_before_audit_scores_at": "2026-09-06T16:43:35.291332+00:00",
+        "tnr": 0.3046875,
+        "tnr_lower": 0.26728417355861406,
+        "tpr": 0.6806640625,
+        "tpr_lower": 0.640918656916179
+      },
+      "mra_training_instrumentation": {
+        "aggregate_ledger_bytes": 1367510,
+        "aggregate_ledger_sha256": "01c1d2b38d65c9b481dd271261271381cef7fa34648b0da22507edf8d735bc6e",
+        "aggregate_only": true,
+        "allowlisted_modules": [
+          "conv1",
+          "avgpool",
+          "fc"
+        ],
+        "collector": "aggregate_training_hooks",
+        "context_bound": true,
+        "coverage": {
+          "handles_removed": true,
+          "observed_backward_events": 1014,
+          "observed_forward_events": 1014,
+          "per_module": {
+            "avgpool": {
+              "backward": 338,
+              "forward": 338
+            },
+            "conv1": {
+              "backward": 338,
+              "forward": 338
+            },
+            "fc": {
+              "backward": 338,
+              "forward": 338
+            }
+          },
+          "required_backward_events": 1014,
+          "required_forward_events": 1014
+        },
+        "coverage_status": "complete",
+        "event_cap": 2366,
+        "event_chain_genesis_sha256": "c7f5594636fb258ded731bcaa415d99bc5945e28825d79e5f833d972196d2333",
+        "event_chain_head_sha256": "238c7264c8aef78e53f933d24ddb4db95074aa82d328a0856ae98d49dec57cdd",
+        "event_count": 2366,
+        "events_embedded_in_report": false,
+        "expected_steps": 338,
+        "handles_removed": true,
+        "independent_replay": {
+          "event_chain_genesis_sha256": "c7f5594636fb258ded731bcaa415d99bc5945e28825d79e5f833d972196d2333",
+          "event_chain_head_sha256": "238c7264c8aef78e53f933d24ddb4db95074aa82d328a0856ae98d49dec57cdd",
+          "event_count": 2366,
+          "independent_replay_passed": true
+        },
+        "max_events": 2366,
+        "model_parameters": {
+          "count": 161,
+          "elements": 23528522,
+          "trainable_count": 161,
+          "trainable_elements": 23528522
+        },
+        "nonfinite_elements": 0,
+        "observed_backward_events": 1014,
+        "observed_forward_events": 1014,
+        "observed_steps": 338,
+        "overhead_interpretation": "Direct step-sealing elapsed time only; forward/backward hook cost is included in overall training time. No uninstrumented paired control or causal overhead percentage",
+        "raw_tensors_retained": false,
+        "raw_text_retained": false,
+        "raw_token_arrays_retained": false,
+        "schema_version": "1.0",
+        "serialized_ledger_replay": {
+          "context_sha256": "c7f5594636fb258ded731bcaa415d99bc5945e28825d79e5f833d972196d2333",
+          "event_chain_genesis_sha256": "c7f5594636fb258ded731bcaa415d99bc5945e28825d79e5f833d972196d2333",
+          "event_chain_head_sha256": "238c7264c8aef78e53f933d24ddb4db95074aa82d328a0856ae98d49dec57cdd",
+          "event_count": 2366,
+          "independent_replay_passed": true,
+          "payload_sha256": "01c1d2b38d65c9b481dd271261271381cef7fa34648b0da22507edf8d735bc6e"
+        },
+        "status": "pass",
+        "step_sealing_seconds": 27.472367702051997
+      },
+      "optimizer_steps": 338,
+      "parameter_count": 23528522,
+      "privacy_assessment": "empirical_membership_screen_only_no_MRAP_assessment",
+      "source": {
+        "dataset_config_sha256": "3f2ef402e9e2a6fb3a2fb47a930de30384056682d85dae6c2134694dd6aa1412",
+        "hook_implementation_sha256": "595de99355974866524ca1e11c0cd4d2d14c80a0846657daea36d66ee26ff33c",
+        "plan_sha256": "7b041ba6c17b9c4baae7df85f29f9b60fed2c8a08162cc47f41b156763c7b032",
+        "runner_sha256": "70948235ea6a4e366f382ff96e127ca133c3b0e12b10175b90ef6cb0b46dac92",
+        "shared_dataset_helper_sha256": "85261cd39de3036211fff174b7b9bce5aaf87a69baac17cd42b03aff9eb03e81"
+      },
+      "started_at": "2026-09-06T16:42:31.692153+00:00",
+      "test_accuracy": 0.6207407407407407,
+      "test_cross_entropy": 1.1902846138565628,
+      "test_examples_per_second": 1396.7730765532842,
+      "test_rows": 5400,
+      "train_accuracy": 0.5305555555555556,
+      "train_cross_entropy": 1.4460960448229754,
+      "train_examples_per_second": 367.0373602398923,
+      "train_rows": 21600,
+      "train_seconds": 58.84959500003606,
+      "training_peak_gpu_bytes": {
+        "allocated": 1594923008,
+        "reserved": 2199912448
+      }
+    },
+    {
+      "architecture": "densenet121",
+      "authorization_eligible": false,
+      "cell_id": "densenet121-2700",
+      "checkpoint_bytes": 28424657,
+      "checkpoint_serialization_seconds": 0.13387240003794432,
+      "checkpoint_sha256": "453dabe0d2325c5d10ae38b94b9072c975d9c68517453737607c224612ee01f8",
+      "checkpoint_weights_persisted": false,
+      "completed_at": "2026-09-06T16:43:56.294863+00:00",
+      "epochs": 1,
+      "evaluation_peak_gpu_bytes": {
+        "allocated": 368044544,
+        "reserved": 2030043136
+      },
+      "evaluation_seconds": 3.901346600148827,
+      "initial_state_sha256": "7c473d383880e1c5876bad3b23bd4a8c8a51c98c79ecc1d47de4e43729ae503c",
+      "membership_screen": {
+        "adversary_access": "Prediction probabilities and true label for each sampled image; one query per selected image draw; no weight/gradient/metadata access used by this attack",
+        "assurance_verdict": "not_emitted",
+        "attack": "Member if per-example true-label cross entropy is at most a threshold",
+        "audit_draws_per_state": 1024,
+        "audit_sampling": "Independent draws with replacement from the remaining fixed member and nonmember pools; image repeats allowed",
+        "audit_seconds": 2.184809200000018,
+        "authorization_eligible": false,
+        "balanced_attack_success": 0.482421875,
+        "calibration_audit_disjoint_by_image_identity": true,
+        "calibration_rows_per_state": 512,
+        "ceiling": 1.0,
+        "family_alpha": 0.05,
+        "floor": 0.4462818349834374,
+        "gap": 0.5537181650165626,
+        "member_remaining_pool_rows": 2188,
+        "member_successes": 241,
+        "metric": "equal_prior_membership_success",
+        "nonmember_remaining_pool_rows": 4888,
+        "nonmember_successes": 747,
+        "numerical_method": "scipy.stats.beta.ppf; not an outward-verified formal certificate",
+        "one_sided_endpoint_alpha": 0.004166666666666667,
+        "privacy_clearance_allowed": false,
+        "raw_scores_or_ids_retained": false,
+        "scope": "Finite sampled pools only, not training-process DP or a general-population result",
+        "scored_examples_including_calibration": 3072,
+        "scored_examples_per_second": 1406.0724387282764,
+        "simultaneous_family_cell_count": 6,
+        "threshold": 0.3482931852340698,
+        "threshold_frozen_before_audit_scores_at": "2026-09-06T16:43:54.735243+00:00",
+        "tnr": 0.7294921875,
+        "tnr_lower": 0.6913112728890634,
+        "tpr": 0.2353515625,
+        "tpr_lower": 0.20125239707781142
+      },
+      "mra_training_instrumentation": {
+        "aggregate_ledger_bytes": 176421,
+        "aggregate_ledger_sha256": "169a40eb2074d13a5e26d6d3be387422af7b07aeeb3f592a972fa1e7f457f2c7",
+        "aggregate_only": true,
+        "allowlisted_modules": [
+          "features.conv0",
+          "features.denseblock4",
+          "classifier"
+        ],
+        "collector": "aggregate_training_hooks",
+        "context_bound": true,
+        "coverage": {
+          "handles_removed": true,
+          "observed_backward_events": 129,
+          "observed_forward_events": 129,
+          "per_module": {
+            "classifier": {
+              "backward": 43,
+              "forward": 43
+            },
+            "features.conv0": {
+              "backward": 43,
+              "forward": 43
+            },
+            "features.denseblock4": {
+              "backward": 43,
+              "forward": 43
+            }
+          },
+          "required_backward_events": 129,
+          "required_forward_events": 129
+        },
+        "coverage_status": "complete",
+        "event_cap": 301,
+        "event_chain_genesis_sha256": "449139efafdf08c0a9b7e81ad47dc1e581f3a180812ce1f722025ee171dfbf1e",
+        "event_chain_head_sha256": "775f086530a3d61622b77ea9843afa19265d59979a85510b7fd22e81528f6941",
+        "event_count": 301,
+        "events_embedded_in_report": false,
+        "expected_steps": 43,
+        "handles_removed": true,
+        "independent_replay": {
+          "event_chain_genesis_sha256": "449139efafdf08c0a9b7e81ad47dc1e581f3a180812ce1f722025ee171dfbf1e",
+          "event_chain_head_sha256": "775f086530a3d61622b77ea9843afa19265d59979a85510b7fd22e81528f6941",
+          "event_count": 301,
+          "independent_replay_passed": true
+        },
+        "max_events": 301,
+        "model_parameters": {
+          "count": 364,
+          "elements": 6964106,
+          "trainable_count": 364,
+          "trainable_elements": 6964106
+        },
+        "nonfinite_elements": 0,
+        "observed_backward_events": 129,
+        "observed_forward_events": 129,
+        "observed_steps": 43,
+        "overhead_interpretation": "Direct step-sealing elapsed time only; forward/backward hook cost is included in overall training time. No uninstrumented paired control or causal overhead percentage",
+        "raw_tensors_retained": false,
+        "raw_text_retained": false,
+        "raw_token_arrays_retained": false,
+        "schema_version": "1.0",
+        "serialized_ledger_replay": {
+          "context_sha256": "449139efafdf08c0a9b7e81ad47dc1e581f3a180812ce1f722025ee171dfbf1e",
+          "event_chain_genesis_sha256": "449139efafdf08c0a9b7e81ad47dc1e581f3a180812ce1f722025ee171dfbf1e",
+          "event_chain_head_sha256": "775f086530a3d61622b77ea9843afa19265d59979a85510b7fd22e81528f6941",
+          "event_count": 301,
+          "independent_replay_passed": true,
+          "payload_sha256": "169a40eb2074d13a5e26d6d3be387422af7b07aeeb3f592a972fa1e7f457f2c7"
+        },
+        "status": "pass",
+        "step_sealing_seconds": 7.784204500261694
+      },
+      "optimizer_steps": 43,
+      "parameter_count": 6964106,
+      "privacy_assessment": "empirical_membership_screen_only_no_MRAP_assessment",
+      "source": {
+        "dataset_config_sha256": "3f2ef402e9e2a6fb3a2fb47a930de30384056682d85dae6c2134694dd6aa1412",
+        "hook_implementation_sha256": "595de99355974866524ca1e11c0cd4d2d14c80a0846657daea36d66ee26ff33c",
+        "plan_sha256": "7b041ba6c17b9c4baae7df85f29f9b60fed2c8a08162cc47f41b156763c7b032",
+        "runner_sha256": "70948235ea6a4e366f382ff96e127ca133c3b0e12b10175b90ef6cb0b46dac92",
+        "shared_dataset_helper_sha256": "85261cd39de3036211fff174b7b9bce5aaf87a69baac17cd42b03aff9eb03e81"
+      },
+      "started_at": "2026-09-06T16:43:37.288734+00:00",
+      "test_accuracy": 0.552037037037037,
+      "test_cross_entropy": 1.457842658360799,
+      "test_examples_per_second": 1384.137466738793,
+      "test_rows": 5400,
+      "train_accuracy": 0.4759259259259259,
+      "train_cross_entropy": 1.489882907072703,
+      "train_examples_per_second": 212.39961581326514,
+      "train_rows": 2700,
+      "train_seconds": 12.711887399898842,
+      "training_peak_gpu_bytes": {
+        "allocated": 1700799488,
+        "reserved": 1923088384
+      }
+    },
+    {
+      "architecture": "densenet121",
+      "authorization_eligible": false,
+      "cell_id": "densenet121-10800",
+      "checkpoint_bytes": 28424657,
+      "checkpoint_serialization_seconds": 0.12380619999021292,
+      "checkpoint_sha256": "1786d9753ff4fafc77b5feb9e9832ee823ba9714492ea107eb88b075dd556dfe",
+      "checkpoint_weights_persisted": false,
+      "completed_at": "2026-09-06T16:44:51.775809+00:00",
+      "epochs": 1,
+      "evaluation_peak_gpu_bytes": {
+        "allocated": 368044544,
+        "reserved": 2025848832
+      },
+      "evaluation_seconds": 3.6420082999393344,
+      "initial_state_sha256": "7c473d383880e1c5876bad3b23bd4a8c8a51c98c79ecc1d47de4e43729ae503c",
+      "membership_screen": {
+        "adversary_access": "Prediction probabilities and true label for each sampled image; one query per selected image draw; no weight/gradient/metadata access used by this attack",
+        "assurance_verdict": "not_emitted",
+        "attack": "Member if per-example true-label cross entropy is at most a threshold",
+        "audit_draws_per_state": 1024,
+        "audit_sampling": "Independent draws with replacement from the remaining fixed member and nonmember pools; image repeats allowed",
+        "audit_seconds": 2.1078868999611586,
+        "authorization_eligible": false,
+        "balanced_attack_success": 0.47998046875,
+        "calibration_audit_disjoint_by_image_identity": true,
+        "calibration_rows_per_state": 512,
+        "ceiling": 1.0,
+        "family_alpha": 0.05,
+        "floor": 0.4433965095011472,
+        "gap": 0.5566034904988528,
+        "member_remaining_pool_rows": 10288,
+        "member_successes": 249,
+        "metric": "equal_prior_membership_success",
+        "nonmember_remaining_pool_rows": 4888,
+        "nonmember_successes": 734,
+        "numerical_method": "scipy.stats.beta.ppf; not an outward-verified formal certificate",
+        "one_sided_endpoint_alpha": 0.004166666666666667,
+        "privacy_clearance_allowed": false,
+        "raw_scores_or_ids_retained": false,
+        "scope": "Finite sampled pools only, not training-process DP or a general-population result",
+        "scored_examples_including_calibration": 3072,
+        "scored_examples_per_second": 1457.383695518297,
+        "simultaneous_family_cell_count": 6,
+        "threshold": 0.06922201067209244,
+        "threshold_frozen_before_audit_scores_at": "2026-09-06T16:44:50.267690+00:00",
+        "tnr": 0.716796875,
+        "tnr_lower": 0.6781589694093866,
+        "tpr": 0.2431640625,
+        "tpr_lower": 0.20863404959290777
+      },
+      "mra_training_instrumentation": {
+        "aggregate_ledger_bytes": 692392,
+        "aggregate_ledger_sha256": "f42c6b7fbe6827408d5b359afce8e0d3a46be3f196b948ae7dcec6c884cf3606",
+        "aggregate_only": true,
+        "allowlisted_modules": [
+          "features.conv0",
+          "features.denseblock4",
+          "classifier"
+        ],
+        "collector": "aggregate_training_hooks",
+        "context_bound": true,
+        "coverage": {
+          "handles_removed": true,
+          "observed_backward_events": 507,
+          "observed_forward_events": 507,
+          "per_module": {
+            "classifier": {
+              "backward": 169,
+              "forward": 169
+            },
+            "features.conv0": {
+              "backward": 169,
+              "forward": 169
+            },
+            "features.denseblock4": {
+              "backward": 169,
+              "forward": 169
+            }
+          },
+          "required_backward_events": 507,
+          "required_forward_events": 507
+        },
+        "coverage_status": "complete",
+        "event_cap": 1183,
+        "event_chain_genesis_sha256": "b5add4b615373b664c2acfb5889861e4927287cbf010c8f386fbb1a5c2a3d9b5",
+        "event_chain_head_sha256": "7e9b8a3875824cd899d915012238b4e8ee23a60132bf28281a6b2e21290cc45e",
+        "event_count": 1183,
+        "events_embedded_in_report": false,
+        "expected_steps": 169,
+        "handles_removed": true,
+        "independent_replay": {
+          "event_chain_genesis_sha256": "b5add4b615373b664c2acfb5889861e4927287cbf010c8f386fbb1a5c2a3d9b5",
+          "event_chain_head_sha256": "7e9b8a3875824cd899d915012238b4e8ee23a60132bf28281a6b2e21290cc45e",
+          "event_count": 1183,
+          "independent_replay_passed": true
+        },
+        "max_events": 1183,
+        "model_parameters": {
+          "count": 364,
+          "elements": 6964106,
+          "trainable_count": 364,
+          "trainable_elements": 6964106
+        },
+        "nonfinite_elements": 0,
+        "observed_backward_events": 507,
+        "observed_forward_events": 507,
+        "observed_steps": 169,
+        "overhead_interpretation": "Direct step-sealing elapsed time only; forward/backward hook cost is included in overall training time. No uninstrumented paired control or causal overhead percentage",
+        "raw_tensors_retained": false,
+        "raw_text_retained": false,
+        "raw_token_arrays_retained": false,
+        "schema_version": "1.0",
+        "serialized_ledger_replay": {
+          "context_sha256": "b5add4b615373b664c2acfb5889861e4927287cbf010c8f386fbb1a5c2a3d9b5",
+          "event_chain_genesis_sha256": "b5add4b615373b664c2acfb5889861e4927287cbf010c8f386fbb1a5c2a3d9b5",
+          "event_chain_head_sha256": "7e9b8a3875824cd899d915012238b4e8ee23a60132bf28281a6b2e21290cc45e",
+          "event_count": 1183,
+          "independent_replay_passed": true,
+          "payload_sha256": "f42c6b7fbe6827408d5b359afce8e0d3a46be3f196b948ae7dcec6c884cf3606"
+        },
+        "status": "pass",
+        "step_sealing_seconds": 30.855793501017615
+      },
+      "optimizer_steps": 169,
+      "parameter_count": 6964106,
+      "privacy_assessment": "empirical_membership_screen_only_no_MRAP_assessment",
+      "source": {
+        "dataset_config_sha256": "3f2ef402e9e2a6fb3a2fb47a930de30384056682d85dae6c2134694dd6aa1412",
+        "hook_implementation_sha256": "595de99355974866524ca1e11c0cd4d2d14c80a0846657daea36d66ee26ff33c",
+        "plan_sha256": "7b041ba6c17b9c4baae7df85f29f9b60fed2c8a08162cc47f41b156763c7b032",
+        "runner_sha256": "70948235ea6a4e366f382ff96e127ca133c3b0e12b10175b90ef6cb0b46dac92",
+        "shared_dataset_helper_sha256": "85261cd39de3036211fff174b7b9bce5aaf87a69baac17cd42b03aff9eb03e81"
+      },
+      "started_at": "2026-09-06T16:43:56.594526+00:00",
+      "test_accuracy": 0.6992592592592592,
+      "test_cross_entropy": 0.8609808558004873,
+      "test_examples_per_second": 1482.6984331941112,
+      "test_rows": 5400,
+      "train_accuracy": 0.6375925925925926,
+      "train_cross_entropy": 1.037496100531684,
+      "train_examples_per_second": 219.4054432249867,
+      "train_rows": 10800,
+      "train_seconds": 49.22393830004148,
+      "training_peak_gpu_bytes": {
+        "allocated": 1700799488,
+        "reserved": 1918894080
+      }
+    },
+    {
+      "architecture": "densenet121",
+      "authorization_eligible": false,
+      "cell_id": "densenet121-21600",
+      "checkpoint_bytes": 28424657,
+      "checkpoint_serialization_seconds": 0.12498680013231933,
+      "checkpoint_sha256": "d3c256de37e852f74d99faf96b373b9840a0b6cc181f3cd5cdee46cf02b464ef",
+      "checkpoint_weights_persisted": false,
+      "completed_at": "2026-09-06T16:46:36.612451+00:00",
+      "epochs": 1,
+      "evaluation_peak_gpu_bytes": {
+        "allocated": 368044544,
+        "reserved": 2023751680
+      },
+      "evaluation_seconds": 4.327202000189573,
+      "initial_state_sha256": "7c473d383880e1c5876bad3b23bd4a8c8a51c98c79ecc1d47de4e43729ae503c",
+      "membership_screen": {
+        "adversary_access": "Prediction probabilities and true label for each sampled image; one query per selected image draw; no weight/gradient/metadata access used by this attack",
+        "assurance_verdict": "not_emitted",
+        "attack": "Member if per-example true-label cross entropy is at most a threshold",
+        "audit_draws_per_state": 1024,
+        "audit_sampling": "Independent draws with replacement from the remaining fixed member and nonmember pools; image repeats allowed",
+        "audit_seconds": 2.2577594998292625,
+        "authorization_eligible": false,
+        "balanced_attack_success": 0.49951171875,
+        "calibration_audit_disjoint_by_image_identity": true,
+        "calibration_rows_per_state": 512,
+        "ceiling": 1.0,
+        "family_alpha": 0.05,
+        "floor": 0.459220579484923,
+        "gap": 0.540779420515077,
+        "member_remaining_pool_rows": 21088,
+        "member_successes": 641,
+        "metric": "equal_prior_membership_success",
+        "nonmember_remaining_pool_rows": 4888,
+        "nonmember_successes": 382,
+        "numerical_method": "scipy.stats.beta.ppf; not an outward-verified formal certificate",
+        "one_sided_endpoint_alpha": 0.004166666666666667,
+        "privacy_clearance_allowed": false,
+        "raw_scores_or_ids_retained": false,
+        "scope": "Finite sampled pools only, not training-process DP or a general-population result",
+        "scored_examples_including_calibration": 3072,
+        "scored_examples_per_second": 1360.6409363939395,
+        "simultaneous_family_cell_count": 6,
+        "threshold": 0.5568424463272095,
+        "threshold_frozen_before_audit_scores_at": "2026-09-06T16:46:35.009747+00:00",
+        "tnr": 0.373046875,
+        "tnr_lower": 0.3333893807589299,
+        "tpr": 0.6259765625,
+        "tpr_lower": 0.5850517782109161
+      },
+      "mra_training_instrumentation": {
+        "aggregate_ledger_bytes": 1386100,
+        "aggregate_ledger_sha256": "a3853d1427f6476cf917234bd66d40a96d82c22db29ed52e4a210c60ae94fb5b",
+        "aggregate_only": true,
+        "allowlisted_modules": [
+          "features.conv0",
+          "features.denseblock4",
+          "classifier"
+        ],
+        "collector": "aggregate_training_hooks",
+        "context_bound": true,
+        "coverage": {
+          "handles_removed": true,
+          "observed_backward_events": 1014,
+          "observed_forward_events": 1014,
+          "per_module": {
+            "classifier": {
+              "backward": 338,
+              "forward": 338
+            },
+            "features.conv0": {
+              "backward": 338,
+              "forward": 338
+            },
+            "features.denseblock4": {
+              "backward": 338,
+              "forward": 338
+            }
+          },
+          "required_backward_events": 1014,
+          "required_forward_events": 1014
+        },
+        "coverage_status": "complete",
+        "event_cap": 2366,
+        "event_chain_genesis_sha256": "32a168974592ca77e52a932ec84d7e830e3a1f585065ec0d1c1ae1f042b86a57",
+        "event_chain_head_sha256": "37140b3ea0cc2ca2451d3e0933a89c211d63e9af032e55b9c3de1a88deee88e4",
+        "event_count": 2366,
+        "events_embedded_in_report": false,
+        "expected_steps": 338,
+        "handles_removed": true,
+        "independent_replay": {
+          "event_chain_genesis_sha256": "32a168974592ca77e52a932ec84d7e830e3a1f585065ec0d1c1ae1f042b86a57",
+          "event_chain_head_sha256": "37140b3ea0cc2ca2451d3e0933a89c211d63e9af032e55b9c3de1a88deee88e4",
+          "event_count": 2366,
+          "independent_replay_passed": true
+        },
+        "max_events": 2366,
+        "model_parameters": {
+          "count": 364,
+          "elements": 6964106,
+          "trainable_count": 364,
+          "trainable_elements": 6964106
+        },
+        "nonfinite_elements": 0,
+        "observed_backward_events": 1014,
+        "observed_forward_events": 1014,
+        "observed_steps": 338,
+        "overhead_interpretation": "Direct step-sealing elapsed time only; forward/backward hook cost is included in overall training time. No uninstrumented paired control or causal overhead percentage",
+        "raw_tensors_retained": false,
+        "raw_text_retained": false,
+        "raw_token_arrays_retained": false,
+        "schema_version": "1.0",
+        "serialized_ledger_replay": {
+          "context_sha256": "32a168974592ca77e52a932ec84d7e830e3a1f585065ec0d1c1ae1f042b86a57",
+          "event_chain_genesis_sha256": "32a168974592ca77e52a932ec84d7e830e3a1f585065ec0d1c1ae1f042b86a57",
+          "event_chain_head_sha256": "37140b3ea0cc2ca2451d3e0933a89c211d63e9af032e55b9c3de1a88deee88e4",
+          "event_count": 2366,
+          "independent_replay_passed": true,
+          "payload_sha256": "a3853d1427f6476cf917234bd66d40a96d82c22db29ed52e4a210c60ae94fb5b"
+        },
+        "status": "pass",
+        "step_sealing_seconds": 61.45999019918963
+      },
+      "optimizer_steps": 338,
+      "parameter_count": 6964106,
+      "privacy_assessment": "empirical_membership_screen_only_no_MRAP_assessment",
+      "source": {
+        "dataset_config_sha256": "3f2ef402e9e2a6fb3a2fb47a930de30384056682d85dae6c2134694dd6aa1412",
+        "hook_implementation_sha256": "595de99355974866524ca1e11c0cd4d2d14c80a0846657daea36d66ee26ff33c",
+        "plan_sha256": "7b041ba6c17b9c4baae7df85f29f9b60fed2c8a08162cc47f41b156763c7b032",
+        "runner_sha256": "70948235ea6a4e366f382ff96e127ca133c3b0e12b10175b90ef6cb0b46dac92",
+        "shared_dataset_helper_sha256": "85261cd39de3036211fff174b7b9bce5aaf87a69baac17cd42b03aff9eb03e81"
+      },
+      "started_at": "2026-09-06T16:44:52.062738+00:00",
+      "test_accuracy": 0.7201851851851852,
+      "test_cross_entropy": 0.7946035205876386,
+      "test_examples_per_second": 1247.9195562775735,
+      "test_rows": 5400,
+      "train_accuracy": 0.6739351851851851,
+      "train_cross_entropy": 0.9160285230919167,
+      "train_examples_per_second": 221.1202331419582,
+      "train_rows": 21600,
+      "train_seconds": 97.68441220000386,
+      "training_peak_gpu_bytes": {
+        "allocated": 1700799488,
+        "reserved": 1916796928
+      }
+    }
+  ],
+  "completed_at": "2026-09-06T16:46:36.731209+00:00",
+  "completion_signal": true,
+  "experiment_id": "local-eurosat-scalability-20260906-v3",
+  "limitations": [
+    "One device, one seed, and one epoch per cell; no uncertainty intervals or training-speed variance estimate",
+    "Nested subsets share samples and fixed test set; cells are not independent statistical replications",
+    "Spatially correlated satellite patches; no spatial holdout or new-region claim",
+    "Fixed batch and resolution primarily test work scaling; GPU peak memory need not grow with dataset size",
+    "First-cell CUDA initialization and OS file-cache effects can affect walltime",
+    "Membership attack is one calibrated score-based screen, not LiRA/RMIA or exhaustive adversary coverage; ceiling remains the trivial worst case",
+    "CP bounds are numerical SciPy endpoints conditional on finite-pool IID sampling; no formally verified statistical certificate",
+    "No formal privacy ceiling, MRAP assurance verdict, governance review, or release authorization is emitted",
+    "Dataset and model license declarations retain the repository's manual-review requirements"
+  ],
+  "privacy_assessment": "empirical_membership_screen_only_no_MRAP_assessment",
+  "runtime": {
+    "cpu_threads": 8,
+    "cuda_runtime": "13.0",
+    "cudnn": 92000,
+    "gpu": "NVIDIA GeForce RTX 5080 Laptop GPU",
+    "gpu_total_bytes": 17094475776,
+    "local_experiment_not_frozen_ec2_replay": true,
+    "nvidia_smi": "NVIDIA GeForce RTX 5080 Laptop GPU, 16303 MiB, 610.88",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "python": "3.12.14 (main, Aug 25 2026, 14:01:42) [MSC v.1944 64 bit (AMD64)]",
+    "torch": "2.13.0+cu130",
+    "torchvision": "0.28.0+cu130"
+  },
+  "source": {
+    "dataset_config_sha256": "3f2ef402e9e2a6fb3a2fb47a930de30384056682d85dae6c2134694dd6aa1412",
+    "hook_implementation_sha256": "595de99355974866524ca1e11c0cd4d2d14c80a0846657daea36d66ee26ff33c",
+    "plan_sha256": "7b041ba6c17b9c4baae7df85f29f9b60fed2c8a08162cc47f41b156763c7b032",
+    "runner_sha256": "70948235ea6a4e366f382ff96e127ca133c3b0e12b10175b90ef6cb0b46dac92",
+    "shared_dataset_helper_sha256": "85261cd39de3036211fff174b7b9bce5aaf87a69baac17cd42b03aff9eb03e81"
+  }
+}

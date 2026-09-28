@@ -1,0 +1,1425 @@
+{
+  "acceptance": {
+    "criteria": {
+      "all_executable_wrapper_conformance_and_sampling_equivalence_checks_pass": true,
+      "all_five_negative_controls_pass": true,
+      "all_margin_eligible_correct_decision_lowers_meet_minimum": true,
+      "all_six_oracle_risks_covered": true,
+      "all_six_simultaneous_undercoverage_bounds_meet_maximum": true,
+      "all_six_simultaneous_wrong_direction_bounds_meet_maximum": true,
+      "all_source_engine_and_repeat_replays_complete": true,
+      "at_least_three_margin_eligible_families_resolve": true,
+      "exact_erasure_contraction_identity_holds": true,
+      "no_raw_scores_retained": true
+    },
+    "passed": true
+  },
+  "authority": {
+    "authorization_eligible": false,
+    "authorization_granted": false,
+    "benchmark_population_conditional": true,
+    "decision": "no_release_authorization",
+    "experimental_only": true,
+    "real_world_privacy_claimed": false
+  },
+  "checks": {
+    "all_oracles_covered": true,
+    "all_source_engine_and_repeat_replays_complete": true,
+    "full_source_and_engine_replays": {
+      "completed": 6,
+      "expected": 6,
+      "scope": "one primary replay per model/variant family"
+    },
+    "production_analyzer_replays": {
+      "completed": 1200,
+      "expected": 1200,
+      "scope": "200 repeats per model/variant family; analyzer-level"
+    },
+    "raw_scores_retained": false,
+    "registered_family_count": 6,
+    "registered_model_count": 3
+  },
+  "claim_scope": "simultaneous finite-sample intervals for each frozen, one-query closed hidden-record wrapper channel, conditional on the newly trained model's finite target audit pools",
+  "collector": {
+    "collector_input_sha256": "ec727c081e19860abedb0646aa8d1f5733753ab4ed837a17d40068328c17aa91",
+    "datasets": {
+      "20newsgroups": {
+        "processed_snapshot_sha256": "9682ec5735e90813106faca50ab8ed8a3be44c892d8250c553d1ffcb3723ab16"
+      },
+      "adult": {
+        "processed_snapshot_sha256": "2da111df0ef87812d28e76f4351ccf681387b5784c524b45da8aa741c5a3c2d9"
+      },
+      "mnist": {
+        "processed_snapshot_sha256": "00d76d498ef9ed63a0e2a6d1cbb54b935c9097c2c58207377acc96f49c090017"
+      }
+    },
+    "ephemeral_model_artifact_sha256s": {
+      "cnn": "54ea892dcfff5b933a97d9df379c8e5ed484a082d8f471b76c3fb073aa0cd6a1",
+      "compact_transformer_llm_proxy": "695bdde41d4cdc097b610ba0dc92ddd49bbbcd4c2adfef4fe1c02467c25826b0",
+      "xgboost": "f39009d6f58a44a0f0de080e03acac34db1a6dbd9548ef88e21d6e2f564750d7"
+    },
+    "epochs": 5,
+    "experiment_id": "public-data-four-model-membership-audit-v1",
+    "rag_plan_id": "rag-guided-public-privacy-audit-v1",
+    "rag_plan_sha256": "9369d00bab83b7ea67fe6ea1f38d979d85dfa25d39b4594adabffa53bc2d436f",
+    "raw_collector_storage": "temporary_directory_deleted_after_aggregate_compilation",
+    "raw_scores_retained": false,
+    "seed": 2026090302,
+    "software": {
+      "numpy": "2.5.2",
+      "python": "3.13.15",
+      "scipy": "1.18.1",
+      "sklearn": "1.6.1",
+      "torch": "2.13.0+cu130",
+      "xgboost": "2.1.4"
+    }
+  },
+  "config_sha256": "074a138ace5d676ad302faecbfaeef58c3430c9a2a2bbba036fb463b6b388f9f",
+  "decision": "no_release_authorization",
+  "decision_evaluation": {
+    "eligible_families": [
+      "cnn/raw_bins",
+      "cnn/erasure_0p9",
+      "xgboost/erasure_0p9",
+      "compact_transformer_llm_proxy/erasure_0p9"
+    ],
+    "margin_eligible_family_count": 4,
+    "margin_threshold": {
+      "denominator": 10,
+      "numerator": 1
+    },
+    "minimum_required_resolved_families": 3,
+    "resolved_families": [
+      "cnn/raw_bins",
+      "cnn/erasure_0p9",
+      "xgboost/erasure_0p9",
+      "compact_transformer_llm_proxy/erasure_0p9"
+    ],
+    "resolved_margin_family_count": 4,
+    "wrong_direction_definition": {
+      "hold": "never a wrong-direction decision",
+      "oracle_above_tolerance": "CLEAR",
+      "oracle_below_tolerance": "BLOCK",
+      "oracle_equal_tolerance": "none; any result is non-directional"
+    }
+  },
+  "elapsed_seconds": 560.8212432279979,
+  "erasure_comparisons": [
+    {
+      "collector_model": "cnn",
+      "erased_oracle_risk": {
+        "denominator": 800,
+        "numerator": 401
+      },
+      "erased_production_ceiling": {
+        "denominator": 20000000000000000000,
+        "numerator": 10576203809006835323
+      },
+      "exact_erasure_contraction_identity": true,
+      "expected_erased_oracle_risk": {
+        "denominator": 800,
+        "numerator": 401
+      },
+      "observed_production_ceiling_nonincreasing": true,
+      "oracle_risk_nonincreasing": true,
+      "production_ceiling_comparison_role": "descriptive_only_not_an_acceptance_criterion",
+      "raw_oracle_risk": {
+        "denominator": 80,
+        "numerator": 41
+      },
+      "raw_production_ceiling": {
+        "denominator": 4000000000000000000,
+        "numerator": 2182223689538315717
+      }
+    },
+    {
+      "collector_model": "xgboost",
+      "erased_oracle_risk": {
+        "denominator": 8000,
+        "numerator": 4047
+      },
+      "erased_production_ceiling": {
+        "denominator": 5000000000000000000,
+        "numerator": 2683504865421375639
+      },
+      "exact_erasure_contraction_identity": true,
+      "expected_erased_oracle_risk": {
+        "denominator": 8000,
+        "numerator": 4047
+      },
+      "observed_production_ceiling_nonincreasing": true,
+      "oracle_risk_nonincreasing": true,
+      "production_ceiling_comparison_role": "descriptive_only_not_an_acceptance_criterion",
+      "raw_oracle_risk": {
+        "denominator": 800,
+        "numerator": 447
+      },
+      "raw_production_ceiling": {
+        "denominator": 800000000000000000,
+        "numerator": 471699094811127069
+      }
+    },
+    {
+      "collector_model": "compact_transformer_llm_proxy",
+      "erased_oracle_risk": {
+        "denominator": 7000,
+        "numerator": 3579
+      },
+      "erased_production_ceiling": {
+        "denominator": 10000000000000000000,
+        "numerator": 5432340452895064349
+      },
+      "exact_erasure_contraction_identity": true,
+      "expected_erased_oracle_risk": {
+        "denominator": 7000,
+        "numerator": 3579
+      },
+      "observed_production_ceiling_nonincreasing": true,
+      "oracle_risk_nonincreasing": true,
+      "production_ceiling_comparison_role": "descriptive_only_not_an_acceptance_criterion",
+      "raw_oracle_risk": {
+        "denominator": 700,
+        "numerator": 429
+      },
+      "raw_production_ceiling": {
+        "denominator": 4000000000000000000,
+        "numerator": 2632352710688661717
+      }
+    }
+  ],
+  "excluded_claims": [
+    "privacy of an ordinary model prediction or interactive LLM interface",
+    "generalization beyond the frozen benchmark target pools",
+    "privacy of another training seed, model artifact, dataset snapshot, or wrapper",
+    "persistence or independent replay of the ephemeral trained model weights",
+    "operating-system or real serving-endpoint enforcement of the closed wrapper",
+    "release authorization"
+  ],
+  "experiment_id": "model-backed-finite-channel-public-data-v3",
+  "negative_controls": [
+    {
+      "control_id": "visible_candidate_or_model_must_be_ineligible",
+      "executed": true,
+      "mechanism": "mutate the governed interface to full artifact/model-weight visibility and require its changed interface binding to produce a non-clearing HOLD screen",
+      "passed": true
+    },
+    {
+      "control_id": "tampered_counts_must_fail_source_replay",
+      "executed": true,
+      "mechanism": "mutate semantic content, recompute its immediate file digest/reference, and require deeper source or binding replay rejection",
+      "observed_failure_type": "ValueError",
+      "passed": true
+    },
+    {
+      "control_id": "changed_prior_must_fail_binding",
+      "executed": true,
+      "mechanism": "mutate semantic content, recompute its immediate file digest/reference, and require deeper source or binding replay rejection",
+      "observed_failure_type": "ValueError",
+      "passed": true
+    },
+    {
+      "control_id": "missing_observation_symbol_must_fail_plan_replay",
+      "executed": true,
+      "mechanism": "mutate semantic content, recompute its immediate file digest/reference, and require deeper source or binding replay rejection",
+      "observed_failure_type": "ValueError",
+      "passed": true
+    },
+    {
+      "control_id": "tampered_or_missing_wrapper_execution_evidence_must_fail_source_replay",
+      "executed": true,
+      "mechanism": "independently tamper and remove the Engine-bound wrapper execution artifact and require source replay rejection in both cases",
+      "observed_failure_types": {
+        "missing": "FileNotFoundError",
+        "tampered": "IntegrityError"
+      },
+      "passed": true
+    }
+  ],
+  "repeated_validation": {
+    "full_source_and_engine_replay_scope": "one independent primary draw per model/variant family (6 total)",
+    "meta_simultaneous_bound_count": 18,
+    "production_analyzer_replay_scope": "200 independent repeats per model/variant family (1,200 total)",
+    "replicates_per_model_variant": 200,
+    "summaries": [
+      {
+        "absolute_margin_from_tolerance": {
+          "denominator": 80,
+          "numerator": 11
+        },
+        "absolute_margin_from_tolerance_decimal": 0.1375,
+        "clear_count": 200,
+        "clear_rate": 1.0,
+        "collector_model": "cnn",
+        "correct_direction_count": 200,
+        "correct_direction_rate": 1.0,
+        "decision_counts": {
+          "BLOCK": 0,
+          "CLEAR": 200,
+          "HOLD": 0
+        },
+        "every_production_analyzer_replay_completed": true,
+        "every_wrapper_sampling_equivalence_check_passed": true,
+        "expected_direction": "CLEAR",
+        "margin_eligible_for_resolution_claim": true,
+        "maximum_ceiling_excess_over_oracle": 0.04368404206734553,
+        "maximum_interval_width": 0.06257827220309167,
+        "mean_ceiling": 0.5471985272653036,
+        "mean_ceiling_excess_over_oracle": 0.0346985272653035,
+        "mean_interval_width": 0.060715765691122664,
+        "meta_multiplicity_method": "bonferroni_across_eighteen_one_sided_bounds:six_undercoverage_uppers_six_wrong_direction_uppers_six_correct_decision_lowers",
+        "meta_simultaneous_bound_count": 18,
+        "model_family": "cnn",
+        "p95_ceiling": 0.5506858868797178,
+        "p95_ceiling_excess_over_oracle": 0.03818588687971777,
+        "p95_interval_width": 0.06187725663242481,
+        "replicates": 200,
+        "retained_rows_path": "repeated-analyzer-replays.json",
+        "retained_rows_sha256": "b703f8cbf99259f26a3505785ec9348dab7b10beebcb3a5a02789db93e51797e",
+        "simultaneous_clopper_pearson_correct_direction_lower": 0.9709983401095067,
+        "simultaneous_clopper_pearson_undercoverage_upper": 0.02900165989049329,
+        "simultaneous_clopper_pearson_wrong_direction_upper": 0.02900165989049329,
+        "simultaneous_meta_confidence": 0.9972222222222223,
+        "trials_per_state": 5000,
+        "true_exact_oracle_risk": {
+          "denominator": 80,
+          "numerator": 41
+        },
+        "undercoverage_count": 0,
+        "undercoverage_rate": 0.0,
+        "variant_id": "raw_bins",
+        "wrong_direction_count": 0,
+        "wrong_direction_rate": 0.0
+      },
+      {
+        "absolute_margin_from_tolerance": {
+          "denominator": 800,
+          "numerator": 119
+        },
+        "absolute_margin_from_tolerance_decimal": 0.14875,
+        "clear_count": 200,
+        "clear_rate": 1.0,
+        "collector_model": "cnn",
+        "correct_direction_count": 200,
+        "correct_direction_rate": 1.0,
+        "decision_counts": {
+          "BLOCK": 0,
+          "CLEAR": 200,
+          "HOLD": 0
+        },
+        "every_production_analyzer_replay_completed": true,
+        "every_wrapper_sampling_equivalence_check_passed": true,
+        "expected_direction": "CLEAR",
+        "margin_eligible_for_resolution_claim": true,
+        "maximum_ceiling_excess_over_oracle": 0.03428212045148171,
+        "maximum_interval_width": 0.047664576970847014,
+        "mean_ceiling": 0.5299771909430185,
+        "mean_ceiling_excess_over_oracle": 0.028727190943018545,
+        "mean_interval_width": 0.04574944062799573,
+        "meta_multiplicity_method": "bonferroni_across_eighteen_one_sided_bounds:six_undercoverage_uppers_six_wrong_direction_uppers_six_correct_decision_lowers",
+        "meta_simultaneous_bound_count": 18,
+        "model_family": "cnn",
+        "p95_ceiling": 0.533091158651011,
+        "p95_ceiling_excess_over_oracle": 0.031841158651010996,
+        "p95_interval_width": 0.04698270022322316,
+        "replicates": 200,
+        "retained_rows_path": "repeated-analyzer-replays.json",
+        "retained_rows_sha256": "9f561aaf0cd5596949ce47ea75ed1f151a6b9e056d3455c04913a7ca8388dad9",
+        "simultaneous_clopper_pearson_correct_direction_lower": 0.9709983401095067,
+        "simultaneous_clopper_pearson_undercoverage_upper": 0.02900165989049329,
+        "simultaneous_clopper_pearson_wrong_direction_upper": 0.02900165989049329,
+        "simultaneous_meta_confidence": 0.9972222222222223,
+        "trials_per_state": 5000,
+        "true_exact_oracle_risk": {
+          "denominator": 800,
+          "numerator": 401
+        },
+        "undercoverage_count": 0,
+        "undercoverage_rate": 0.0,
+        "variant_id": "erasure_0p9",
+        "wrong_direction_count": 0,
+        "wrong_direction_rate": 0.0
+      },
+      {
+        "absolute_margin_from_tolerance": {
+          "denominator": 800,
+          "numerator": 73
+        },
+        "absolute_margin_from_tolerance_decimal": 0.09125,
+        "clear_count": 200,
+        "clear_rate": 1.0,
+        "collector_model": "xgboost",
+        "correct_direction_count": 200,
+        "correct_direction_rate": 1.0,
+        "decision_counts": {
+          "BLOCK": 0,
+          "CLEAR": 200,
+          "HOLD": 0
+        },
+        "every_production_analyzer_replay_completed": true,
+        "every_wrapper_sampling_equivalence_check_passed": true,
+        "expected_direction": "CLEAR",
+        "margin_eligible_for_resolution_claim": false,
+        "maximum_ceiling_excess_over_oracle": 0.04128430538414186,
+        "maximum_interval_width": 0.05948035609956516,
+        "mean_ceiling": 0.5907516305894354,
+        "mean_ceiling_excess_over_oracle": 0.03200163058943529,
+        "mean_interval_width": 0.05760429107364758,
+        "meta_multiplicity_method": "bonferroni_across_eighteen_one_sided_bounds:six_undercoverage_uppers_six_wrong_direction_uppers_six_correct_decision_lowers",
+        "meta_simultaneous_bound_count": 18,
+        "model_family": "xgboost",
+        "p95_ceiling": 0.5967090651504731,
+        "p95_ceiling_excess_over_oracle": 0.037959065150473065,
+        "p95_interval_width": 0.05863647972954715,
+        "replicates": 200,
+        "retained_rows_path": "repeated-analyzer-replays.json",
+        "retained_rows_sha256": "18fb83c25c8a3021f9add7a5d121c42992f537bc589bff57f3ab332488d2f248",
+        "simultaneous_clopper_pearson_correct_direction_lower": 0.9709983401095067,
+        "simultaneous_clopper_pearson_undercoverage_upper": 0.02900165989049329,
+        "simultaneous_clopper_pearson_wrong_direction_upper": 0.02900165989049329,
+        "simultaneous_meta_confidence": 0.9972222222222223,
+        "trials_per_state": 5000,
+        "true_exact_oracle_risk": {
+          "denominator": 800,
+          "numerator": 447
+        },
+        "undercoverage_count": 0,
+        "undercoverage_rate": 0.0,
+        "variant_id": "raw_bins",
+        "wrong_direction_count": 0,
+        "wrong_direction_rate": 0.0
+      },
+      {
+        "absolute_margin_from_tolerance": {
+          "denominator": 8000,
+          "numerator": 1153
+        },
+        "absolute_margin_from_tolerance_decimal": 0.144125,
+        "clear_count": 200,
+        "clear_rate": 1.0,
+        "collector_model": "xgboost",
+        "correct_direction_count": 200,
+        "correct_direction_rate": 1.0,
+        "decision_counts": {
+          "BLOCK": 0,
+          "CLEAR": 200,
+          "HOLD": 0
+        },
+        "every_production_analyzer_replay_completed": true,
+        "every_wrapper_sampling_equivalence_check_passed": true,
+        "expected_direction": "CLEAR",
+        "margin_eligible_for_resolution_claim": true,
+        "maximum_ceiling_excess_over_oracle": 0.03350480351567062,
+        "maximum_interval_width": 0.04852500440370471,
+        "mean_ceiling": 0.533754347107553,
+        "mean_ceiling_excess_over_oracle": 0.02787934710755289,
+        "mean_interval_width": 0.046317014446703025,
+        "meta_multiplicity_method": "bonferroni_across_eighteen_one_sided_bounds:six_undercoverage_uppers_six_wrong_direction_uppers_six_correct_decision_lowers",
+        "meta_simultaneous_bound_count": 18,
+        "model_family": "xgboost",
+        "p95_ceiling": 0.537569889079223,
+        "p95_ceiling_excess_over_oracle": 0.03169488907922296,
+        "p95_interval_width": 0.047586991784423785,
+        "replicates": 200,
+        "retained_rows_path": "repeated-analyzer-replays.json",
+        "retained_rows_sha256": "d444e1026ca3bf8abde13cc9bfdff578291dbaf5c6ad8fd69dfce946c550a6c8",
+        "simultaneous_clopper_pearson_correct_direction_lower": 0.9709983401095067,
+        "simultaneous_clopper_pearson_undercoverage_upper": 0.02900165989049329,
+        "simultaneous_clopper_pearson_wrong_direction_upper": 0.02900165989049329,
+        "simultaneous_meta_confidence": 0.9972222222222223,
+        "trials_per_state": 5000,
+        "true_exact_oracle_risk": {
+          "denominator": 8000,
+          "numerator": 4047
+        },
+        "undercoverage_count": 0,
+        "undercoverage_rate": 0.0,
+        "variant_id": "erasure_0p9",
+        "wrong_direction_count": 0,
+        "wrong_direction_rate": 0.0
+      },
+      {
+        "absolute_margin_from_tolerance": {
+          "denominator": 350,
+          "numerator": 13
+        },
+        "absolute_margin_from_tolerance_decimal": 0.037142857142857144,
+        "clear_count": 31,
+        "clear_rate": 0.155,
+        "collector_model": "compact_transformer_llm_proxy",
+        "correct_direction_count": 31,
+        "correct_direction_rate": 0.155,
+        "decision_counts": {
+          "BLOCK": 0,
+          "CLEAR": 31,
+          "HOLD": 169
+        },
+        "every_production_analyzer_replay_completed": true,
+        "every_wrapper_sampling_equivalence_check_passed": true,
+        "expected_direction": "CLEAR",
+        "margin_eligible_for_resolution_claim": false,
+        "maximum_ceiling_excess_over_oracle": 0.05423298808819069,
+        "maximum_interval_width": 0.08125169204263952,
+        "mean_ceiling": 0.6550144557835833,
+        "mean_ceiling_excess_over_oracle": 0.04215731292644034,
+        "mean_interval_width": 0.0788012639004044,
+        "meta_multiplicity_method": "bonferroni_across_eighteen_one_sided_bounds:six_undercoverage_uppers_six_wrong_direction_uppers_six_correct_decision_lowers",
+        "meta_simultaneous_bound_count": 18,
+        "model_family": "llm_proxy_compact_transformer",
+        "p95_ceiling": 0.6627123800171154,
+        "p95_ceiling_excess_over_oracle": 0.04985523715997245,
+        "p95_interval_width": 0.07974538476770676,
+        "replicates": 200,
+        "retained_rows_path": "repeated-analyzer-replays.json",
+        "retained_rows_sha256": "99892e87a4009c71f12f3d4bef8bdeb8b570925b0810f5b71d47ac69e67c92b4",
+        "simultaneous_clopper_pearson_correct_direction_lower": 0.09175257465554272,
+        "simultaneous_clopper_pearson_undercoverage_upper": 0.02900165989049329,
+        "simultaneous_clopper_pearson_wrong_direction_upper": 0.02900165989049329,
+        "simultaneous_meta_confidence": 0.9972222222222223,
+        "trials_per_state": 5000,
+        "true_exact_oracle_risk": {
+          "denominator": 700,
+          "numerator": 429
+        },
+        "undercoverage_count": 0,
+        "undercoverage_rate": 0.0,
+        "variant_id": "raw_bins",
+        "wrong_direction_count": 0,
+        "wrong_direction_rate": 0.0
+      },
+      {
+        "absolute_margin_from_tolerance": {
+          "denominator": 7000,
+          "numerator": 971
+        },
+        "absolute_margin_from_tolerance_decimal": 0.1387142857142857,
+        "clear_count": 200,
+        "clear_rate": 1.0,
+        "collector_model": "compact_transformer_llm_proxy",
+        "correct_direction_count": 200,
+        "correct_direction_rate": 1.0,
+        "decision_counts": {
+          "BLOCK": 0,
+          "CLEAR": 200,
+          "HOLD": 0
+        },
+        "every_production_analyzer_replay_completed": true,
+        "every_wrapper_sampling_equivalence_check_passed": true,
+        "expected_direction": "CLEAR",
+        "margin_eligible_for_resolution_claim": true,
+        "maximum_ceiling_excess_over_oracle": 0.036258159120145,
+        "maximum_interval_width": 0.05403160802379207,
+        "mean_ceiling": 0.5418771784910028,
+        "mean_ceiling_excess_over_oracle": 0.030591464205288483,
+        "mean_interval_width": 0.05169352932811862,
+        "meta_multiplicity_method": "bonferroni_across_eighteen_one_sided_bounds:six_undercoverage_uppers_six_wrong_direction_uppers_six_correct_decision_lowers",
+        "meta_simultaneous_bound_count": 18,
+        "model_family": "llm_proxy_compact_transformer",
+        "p95_ceiling": 0.5458208837498262,
+        "p95_ceiling_excess_over_oracle": 0.03453516946411182,
+        "p95_interval_width": 0.05319371168701325,
+        "replicates": 200,
+        "retained_rows_path": "repeated-analyzer-replays.json",
+        "retained_rows_sha256": "b6d9406e64b8ab2c69bc6223348e776b5480649b22b5c02c713427cff6e5e64e",
+        "simultaneous_clopper_pearson_correct_direction_lower": 0.9709983401095067,
+        "simultaneous_clopper_pearson_undercoverage_upper": 0.02900165989049329,
+        "simultaneous_clopper_pearson_wrong_direction_upper": 0.02900165989049329,
+        "simultaneous_meta_confidence": 0.9972222222222223,
+        "trials_per_state": 5000,
+        "true_exact_oracle_risk": {
+          "denominator": 7000,
+          "numerator": 3579
+        },
+        "undercoverage_count": 0,
+        "undercoverage_rate": 0.0,
+        "variant_id": "erasure_0p9",
+        "wrong_direction_count": 0,
+        "wrong_direction_rate": 0.0
+      }
+    ]
+  },
+  "results": [
+    {
+      "artifact_directory": "cnn--raw_bins",
+      "collector_model": "cnn",
+      "display_name": "CNN on public MNIST",
+      "engine_chain_completed": true,
+      "experimental_engine_verdict": "clear",
+      "finite_population_sha256": "a726c20c76897c970ae96139545f1e1b0f04cea1ef37434049d1947b1d519918",
+      "llm_proxy_only": false,
+      "model_family": "cnn",
+      "oracle_exact_bayes_risk": {
+        "denominator": 80,
+        "numerator": 41
+      },
+      "oracle_exact_bayes_risk_decimal": 0.5125,
+      "production_interval": {
+        "ceiling": 0.545555922384579,
+        "coverage_confidence": 0.95,
+        "covers_oracle": true,
+        "endpoint_validation": "source_replayed_and_directed_tail_validated",
+        "exact_ceiling": {
+          "denominator": 4000000000000000000,
+          "numerator": 2182223689538315717
+        },
+        "exact_floor": {
+          "denominator": 250000000000000000,
+          "numerator": 121467203679943617
+        },
+        "floor": 0.48586881471977444,
+        "width": 0.059687107664804465
+      },
+      "release_authorization": "none",
+      "sample_binding_sha256": "66bad9883457f63478ca62fccfd52c0cc3c518705a60b8c0442aa21485a90727",
+      "sample_seeds": {
+        "in": 609040102,
+        "out": 609040101
+      },
+      "sampled_counts": {
+        "in": [
+          0,
+          4325,
+          302,
+          277,
+          69,
+          27,
+          0,
+          0,
+          0,
+          0
+        ],
+        "out": [
+          0,
+          4288,
+          258,
+          235,
+          130,
+          89,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "sampling_seed_replayed": true,
+      "state_independent_erasure": {
+        "denominator": 1,
+        "numerator": 0
+      },
+      "trials_per_state": 5000,
+      "variant_id": "raw_bins",
+      "wrapper_execution_evidence": {
+        "engine_source_bound": true,
+        "path": "wrapper-execution-evidence.json",
+        "sha256": "38dbe0efbdadc5b0ef18d6df0ffb84b95aefbd982e8057381ddf2e4cd8b47e10"
+      },
+      "wrapper_sampling_equivalence": {
+        "all_passed": true,
+        "reference_schedule": {
+          "in": true,
+          "out": true
+        },
+        "seed_replay": {
+          "in": true,
+          "out": true
+        }
+      }
+    },
+    {
+      "artifact_directory": "cnn--erasure_0p9",
+      "collector_model": "cnn",
+      "display_name": "CNN on public MNIST",
+      "engine_chain_completed": true,
+      "experimental_engine_verdict": "clear",
+      "finite_population_sha256": "a726c20c76897c970ae96139545f1e1b0f04cea1ef37434049d1947b1d519918",
+      "llm_proxy_only": false,
+      "model_family": "cnn",
+      "oracle_exact_bayes_risk": {
+        "denominator": 800,
+        "numerator": 401
+      },
+      "oracle_exact_bayes_risk_decimal": 0.50125,
+      "production_interval": {
+        "ceiling": 0.5288101904503418,
+        "coverage_confidence": 0.95,
+        "covers_oracle": true,
+        "endpoint_validation": "source_replayed_and_directed_tail_validated",
+        "exact_ceiling": {
+          "denominator": 20000000000000000000,
+          "numerator": 10576203809006835323
+        },
+        "exact_floor": {
+          "denominator": 100000000000000000000,
+          "numerator": 48214953945168421387
+        },
+        "floor": 0.4821495394516842,
+        "width": 0.04666065099865755
+      },
+      "release_authorization": "none",
+      "sample_binding_sha256": "2a3d41f9977178c03528296952dc6af6b6ecec9f1dc7f9944ad09b7d471aac7d",
+      "sample_seeds": {
+        "in": 609040104,
+        "out": 609040103
+      },
+      "sampled_counts": {
+        "in": [
+          0,
+          424,
+          40,
+          31,
+          7,
+          3,
+          0,
+          0,
+          0,
+          4495
+        ],
+        "out": [
+          0,
+          414,
+          32,
+          29,
+          20,
+          8,
+          0,
+          0,
+          0,
+          4497
+        ]
+      },
+      "sampling_seed_replayed": true,
+      "state_independent_erasure": {
+        "denominator": 10,
+        "numerator": 9
+      },
+      "trials_per_state": 5000,
+      "variant_id": "erasure_0p9",
+      "wrapper_execution_evidence": {
+        "engine_source_bound": true,
+        "path": "wrapper-execution-evidence.json",
+        "sha256": "76143091d23d5d50c6baf31d90b7ffacdb1e1c64c181a45adfe4b5e47c20fa86"
+      },
+      "wrapper_sampling_equivalence": {
+        "all_passed": true,
+        "reference_schedule": {
+          "in": true,
+          "out": true
+        },
+        "seed_replay": {
+          "in": true,
+          "out": true
+        }
+      }
+    },
+    {
+      "artifact_directory": "xgboost--raw_bins",
+      "collector_model": "xgboost",
+      "display_name": "XGBoost on public Adult Census Income",
+      "engine_chain_completed": true,
+      "experimental_engine_verdict": "clear",
+      "finite_population_sha256": "b220a44757dc367f1427b6e834665a8d5dfe0a28405ee36f7686c6c1b9f354d2",
+      "llm_proxy_only": false,
+      "model_family": "xgboost",
+      "oracle_exact_bayes_risk": {
+        "denominator": 800,
+        "numerator": 447
+      },
+      "oracle_exact_bayes_risk_decimal": 0.55875,
+      "production_interval": {
+        "ceiling": 0.5896238685139089,
+        "coverage_confidence": 0.95,
+        "covers_oracle": true,
+        "endpoint_validation": "source_replayed_and_directed_tail_validated",
+        "exact_ceiling": {
+          "denominator": 800000000000000000,
+          "numerator": 471699094811127069
+        },
+        "exact_floor": {
+          "denominator": 10000000000000000000,
+          "numerator": 5310578923910290717
+        },
+        "floor": 0.531057892391029,
+        "width": 0.05856597612287977
+      },
+      "release_authorization": "none",
+      "sample_binding_sha256": "f2f3328c0cc176560750fde6759100c9822d93b80916072e1bdc15c4dcc1853e",
+      "sample_seeds": {
+        "in": 609040202,
+        "out": 609040201
+      },
+      "sampled_counts": {
+        "in": [
+          0,
+          4564,
+          237,
+          199,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "out": [
+          0,
+          3994,
+          377,
+          368,
+          247,
+          14,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "sampling_seed_replayed": true,
+      "state_independent_erasure": {
+        "denominator": 1,
+        "numerator": 0
+      },
+      "trials_per_state": 5000,
+      "variant_id": "raw_bins",
+      "wrapper_execution_evidence": {
+        "engine_source_bound": true,
+        "path": "wrapper-execution-evidence.json",
+        "sha256": "3f0acc1bb5089c1fe2facb9d34b5212dc54c18e86e1c2d740b1f48d59ae8735a"
+      },
+      "wrapper_sampling_equivalence": {
+        "all_passed": true,
+        "reference_schedule": {
+          "in": true,
+          "out": true
+        },
+        "seed_replay": {
+          "in": true,
+          "out": true
+        }
+      }
+    },
+    {
+      "artifact_directory": "xgboost--erasure_0p9",
+      "collector_model": "xgboost",
+      "display_name": "XGBoost on public Adult Census Income",
+      "engine_chain_completed": true,
+      "experimental_engine_verdict": "clear",
+      "finite_population_sha256": "b220a44757dc367f1427b6e834665a8d5dfe0a28405ee36f7686c6c1b9f354d2",
+      "llm_proxy_only": false,
+      "model_family": "xgboost",
+      "oracle_exact_bayes_risk": {
+        "denominator": 8000,
+        "numerator": 4047
+      },
+      "oracle_exact_bayes_risk_decimal": 0.505875,
+      "production_interval": {
+        "ceiling": 0.5367009730842752,
+        "coverage_confidence": 0.95,
+        "covers_oracle": true,
+        "endpoint_validation": "source_replayed_and_directed_tail_validated",
+        "exact_ceiling": {
+          "denominator": 5000000000000000000,
+          "numerator": 2683504865421375639
+        },
+        "exact_floor": {
+          "denominator": 100000000000000000000000,
+          "numerator": 49061973601715182185929
+        },
+        "floor": 0.4906197360171518,
+        "width": 0.046081237067123304
+      },
+      "release_authorization": "none",
+      "sample_binding_sha256": "c969bf7caa2df3a18b404e74e7f2f5e15806d4cf59e2cbc083740c229e1cf365",
+      "sample_seeds": {
+        "in": 609040204,
+        "out": 609040203
+      },
+      "sampled_counts": {
+        "in": [
+          0,
+          499,
+          24,
+          12,
+          0,
+          0,
+          0,
+          0,
+          0,
+          4465
+        ],
+        "out": [
+          0,
+          397,
+          32,
+          34,
+          20,
+          1,
+          0,
+          0,
+          0,
+          4516
+        ]
+      },
+      "sampling_seed_replayed": true,
+      "state_independent_erasure": {
+        "denominator": 10,
+        "numerator": 9
+      },
+      "trials_per_state": 5000,
+      "variant_id": "erasure_0p9",
+      "wrapper_execution_evidence": {
+        "engine_source_bound": true,
+        "path": "wrapper-execution-evidence.json",
+        "sha256": "256359b2c88c8160f434573d2068770e8066e316c883114f6b2b4f72e7629d2a"
+      },
+      "wrapper_sampling_equivalence": {
+        "all_passed": true,
+        "reference_schedule": {
+          "in": true,
+          "out": true
+        },
+        "seed_replay": {
+          "in": true,
+          "out": true
+        }
+      }
+    },
+    {
+      "artifact_directory": "compact_transformer_llm_proxy--raw_bins",
+      "collector_model": "compact_transformer_llm_proxy",
+      "display_name": "Compact Transformer text classifier on public 20 Newsgroups (LLM proxy only)",
+      "engine_chain_completed": true,
+      "experimental_engine_verdict": "inconclusive",
+      "finite_population_sha256": "79e7dd365fae9197db87839da8839f646e8729ddbf32843f18dee32f29133bb1",
+      "llm_proxy_only": true,
+      "model_family": "llm_proxy_compact_transformer",
+      "oracle_exact_bayes_risk": {
+        "denominator": 700,
+        "numerator": 429
+      },
+      "oracle_exact_bayes_risk_decimal": 0.6128571428571429,
+      "production_interval": {
+        "ceiling": 0.6580881776721655,
+        "coverage_confidence": 0.95,
+        "covers_oracle": true,
+        "endpoint_validation": "source_replayed_and_directed_tail_validated",
+        "exact_ceiling": {
+          "denominator": 4000000000000000000,
+          "numerator": 2632352710688661717
+        },
+        "exact_floor": {
+          "denominator": 200000000000000000,
+          "numerator": 115672197171929131
+        },
+        "floor": 0.5783609858596456,
+        "width": 0.07972719181251978
+      },
+      "release_authorization": "none",
+      "sample_binding_sha256": "e6fff0ac03c1afb7723b96a2137490365dd152f25d609751036d27271edaa61d",
+      "sample_seeds": {
+        "in": 609040302,
+        "out": 609040301
+      },
+      "sampled_counts": {
+        "in": [
+          0,
+          4296,
+          301,
+          320,
+          64,
+          19,
+          0,
+          0,
+          0,
+          0
+        ],
+        "out": [
+          0,
+          3146,
+          436,
+          604,
+          419,
+          395,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "sampling_seed_replayed": true,
+      "state_independent_erasure": {
+        "denominator": 1,
+        "numerator": 0
+      },
+      "trials_per_state": 5000,
+      "variant_id": "raw_bins",
+      "wrapper_execution_evidence": {
+        "engine_source_bound": true,
+        "path": "wrapper-execution-evidence.json",
+        "sha256": "8ac8fc05e89591113d2bac6655dd16959dcff1a01f74b9adcef71b0923eb06ff"
+      },
+      "wrapper_sampling_equivalence": {
+        "all_passed": true,
+        "reference_schedule": {
+          "in": true,
+          "out": true
+        },
+        "seed_replay": {
+          "in": true,
+          "out": true
+        }
+      }
+    },
+    {
+      "artifact_directory": "compact_transformer_llm_proxy--erasure_0p9",
+      "collector_model": "compact_transformer_llm_proxy",
+      "display_name": "Compact Transformer text classifier on public 20 Newsgroups (LLM proxy only)",
+      "engine_chain_completed": true,
+      "experimental_engine_verdict": "clear",
+      "finite_population_sha256": "79e7dd365fae9197db87839da8839f646e8729ddbf32843f18dee32f29133bb1",
+      "llm_proxy_only": true,
+      "model_family": "llm_proxy_compact_transformer",
+      "oracle_exact_bayes_risk": {
+        "denominator": 7000,
+        "numerator": 3579
+      },
+      "oracle_exact_bayes_risk_decimal": 0.5112857142857142,
+      "production_interval": {
+        "ceiling": 0.5432340452895065,
+        "coverage_confidence": 0.95,
+        "covers_oracle": true,
+        "endpoint_validation": "source_replayed_and_directed_tail_validated",
+        "exact_ceiling": {
+          "denominator": 10000000000000000000,
+          "numerator": 5432340452895064349
+        },
+        "exact_floor": {
+          "denominator": 20000000000000000000,
+          "numerator": 9829043453940948783
+        },
+        "floor": 0.4914521726970474,
+        "width": 0.051781872592459
+      },
+      "release_authorization": "none",
+      "sample_binding_sha256": "fd915a4c432d976e3030920dadbfdea37e60e9ef94741028cf6bdb0d80c5194a",
+      "sample_seeds": {
+        "in": 609040304,
+        "out": 609040303
+      },
+      "sampled_counts": {
+        "in": [
+          0,
+          454,
+          27,
+          32,
+          12,
+          2,
+          0,
+          0,
+          0,
+          4473
+        ],
+        "out": [
+          0,
+          315,
+          43,
+          61,
+          39,
+          32,
+          0,
+          0,
+          0,
+          4510
+        ]
+      },
+      "sampling_seed_replayed": true,
+      "state_independent_erasure": {
+        "denominator": 10,
+        "numerator": 9
+      },
+      "trials_per_state": 5000,
+      "variant_id": "erasure_0p9",
+      "wrapper_execution_evidence": {
+        "engine_source_bound": true,
+        "path": "wrapper-execution-evidence.json",
+        "sha256": "8a046560a06727a44fe526d953adf9846e9db3dc13c281b33122a56e25c06b47"
+      },
+      "wrapper_sampling_equivalence": {
+        "all_passed": true,
+        "reference_schedule": {
+          "in": true,
+          "out": true
+        },
+        "seed_replay": {
+          "in": true,
+          "out": true
+        }
+      }
+    }
+  ],
+  "schema_version": "1.0",
+  "wrapper_conformance": {
+    "acceptance_role": "supporting executable evidence; endpoint/OS enforcement remains excluded",
+    "all_conformant": true,
+    "results": [
+      {
+        "checks": [
+          {
+            "check_id": "exactly_one_categorical_symbol",
+            "passed": true
+          },
+          {
+            "check_id": "no_transcript_timing_or_metadata",
+            "passed": true
+          },
+          {
+            "check_id": "second_query_refused",
+            "passed": true
+          },
+          {
+            "check_id": "all_caller_fields_refused_with_constant_error",
+            "passed": true
+          },
+          {
+            "check_id": "complete_registered_alphabet_is_totalized",
+            "passed": true
+          },
+          {
+            "check_id": "exact_state_independent_erasure_schedule_replayed",
+            "passed": true
+          },
+          {
+            "check_id": "no_public_metadata_accessors",
+            "passed": true
+          }
+        ],
+        "collector_model": "cnn",
+        "conformant": true,
+        "erasure_probe": {
+          "expected_erasure_count": 0,
+          "observed_erasure_count": 0,
+          "probe_count": 100,
+          "transcripts_retained": false
+        },
+        "interface": {
+          "query_budget": 1,
+          "recipient_callable": "query()",
+          "recipient_input_fields": [],
+          "registered_observation_count": 10,
+          "return_type": "categorical_symbol_string",
+          "state_independent_erasure": {
+            "denominator": 1,
+            "numerator": 0
+          },
+          "transcript_metadata_fields": []
+        },
+        "limitations": [
+          "Python object reflection and memory inspection are not a security boundary.",
+          "Process, scheduler, transport, network, hardware, and operating-system side channels are not tested.",
+          "Authentication, rate limiting, deployment isolation, and real serving-endpoint enforcement are not proven.",
+          "Conformance is conditional on the supplied aggregate finite population and registered categorical interface."
+        ],
+        "schema_version": "1.0",
+        "variant_id": "raw_bins"
+      },
+      {
+        "checks": [
+          {
+            "check_id": "exactly_one_categorical_symbol",
+            "passed": true
+          },
+          {
+            "check_id": "no_transcript_timing_or_metadata",
+            "passed": true
+          },
+          {
+            "check_id": "second_query_refused",
+            "passed": true
+          },
+          {
+            "check_id": "all_caller_fields_refused_with_constant_error",
+            "passed": true
+          },
+          {
+            "check_id": "complete_registered_alphabet_is_totalized",
+            "passed": true
+          },
+          {
+            "check_id": "exact_state_independent_erasure_schedule_replayed",
+            "passed": true
+          },
+          {
+            "check_id": "no_public_metadata_accessors",
+            "passed": true
+          }
+        ],
+        "collector_model": "cnn",
+        "conformant": true,
+        "erasure_probe": {
+          "expected_erasure_count": 87,
+          "observed_erasure_count": 87,
+          "probe_count": 100,
+          "transcripts_retained": false
+        },
+        "interface": {
+          "query_budget": 1,
+          "recipient_callable": "query()",
+          "recipient_input_fields": [],
+          "registered_observation_count": 10,
+          "return_type": "categorical_symbol_string",
+          "state_independent_erasure": {
+            "denominator": 10,
+            "numerator": 9
+          },
+          "transcript_metadata_fields": []
+        },
+        "limitations": [
+          "Python object reflection and memory inspection are not a security boundary.",
+          "Process, scheduler, transport, network, hardware, and operating-system side channels are not tested.",
+          "Authentication, rate limiting, deployment isolation, and real serving-endpoint enforcement are not proven.",
+          "Conformance is conditional on the supplied aggregate finite population and registered categorical interface."
+        ],
+        "schema_version": "1.0",
+        "variant_id": "erasure_0p9"
+      },
+      {
+        "checks": [
+          {
+            "check_id": "exactly_one_categorical_symbol",
+            "passed": true
+          },
+          {
+            "check_id": "no_transcript_timing_or_metadata",
+            "passed": true
+          },
+          {
+            "check_id": "second_query_refused",
+            "passed": true
+          },
+          {
+            "check_id": "all_caller_fields_refused_with_constant_error",
+            "passed": true
+          },
+          {
+            "check_id": "complete_registered_alphabet_is_totalized",
+            "passed": true
+          },
+          {
+            "check_id": "exact_state_independent_erasure_schedule_replayed",
+            "passed": true
+          },
+          {
+            "check_id": "no_public_metadata_accessors",
+            "passed": true
+          }
+        ],
+        "collector_model": "xgboost",
+        "conformant": true,
+        "erasure_probe": {
+          "expected_erasure_count": 0,
+          "observed_erasure_count": 0,
+          "probe_count": 100,
+          "transcripts_retained": false
+        },
+        "interface": {
+          "query_budget": 1,
+          "recipient_callable": "query()",
+          "recipient_input_fields": [],
+          "registered_observation_count": 10,
+          "return_type": "categorical_symbol_string",
+          "state_independent_erasure": {
+            "denominator": 1,
+            "numerator": 0
+          },
+          "transcript_metadata_fields": []
+        },
+        "limitations": [
+          "Python object reflection and memory inspection are not a security boundary.",
+          "Process, scheduler, transport, network, hardware, and operating-system side channels are not tested.",
+          "Authentication, rate limiting, deployment isolation, and real serving-endpoint enforcement are not proven.",
+          "Conformance is conditional on the supplied aggregate finite population and registered categorical interface."
+        ],
+        "schema_version": "1.0",
+        "variant_id": "raw_bins"
+      },
+      {
+        "checks": [
+          {
+            "check_id": "exactly_one_categorical_symbol",
+            "passed": true
+          },
+          {
+            "check_id": "no_transcript_timing_or_metadata",
+            "passed": true
+          },
+          {
+            "check_id": "second_query_refused",
+            "passed": true
+          },
+          {
+            "check_id": "all_caller_fields_refused_with_constant_error",
+            "passed": true
+          },
+          {
+            "check_id": "complete_registered_alphabet_is_totalized",
+            "passed": true
+          },
+          {
+            "check_id": "exact_state_independent_erasure_schedule_replayed",
+            "passed": true
+          },
+          {
+            "check_id": "no_public_metadata_accessors",
+            "passed": true
+          }
+        ],
+        "collector_model": "xgboost",
+        "conformant": true,
+        "erasure_probe": {
+          "expected_erasure_count": 87,
+          "observed_erasure_count": 87,
+          "probe_count": 100,
+          "transcripts_retained": false
+        },
+        "interface": {
+          "query_budget": 1,
+          "recipient_callable": "query()",
+          "recipient_input_fields": [],
+          "registered_observation_count": 10,
+          "return_type": "categorical_symbol_string",
+          "state_independent_erasure": {
+            "denominator": 10,
+            "numerator": 9
+          },
+          "transcript_metadata_fields": []
+        },
+        "limitations": [
+          "Python object reflection and memory inspection are not a security boundary.",
+          "Process, scheduler, transport, network, hardware, and operating-system side channels are not tested.",
+          "Authentication, rate limiting, deployment isolation, and real serving-endpoint enforcement are not proven.",
+          "Conformance is conditional on the supplied aggregate finite population and registered categorical interface."
+        ],
+        "schema_version": "1.0",
+        "variant_id": "erasure_0p9"
+      },
+      {
+        "checks": [
+          {
+            "check_id": "exactly_one_categorical_symbol",
+            "passed": true
+          },
+          {
+            "check_id": "no_transcript_timing_or_metadata",
+            "passed": true
+          },
+          {
+            "check_id": "second_query_refused",
+            "passed": true
+          },
+          {
+            "check_id": "all_caller_fields_refused_with_constant_error",
+            "passed": true
+          },
+          {
+            "check_id": "complete_registered_alphabet_is_totalized",
+            "passed": true
+          },
+          {
+            "check_id": "exact_state_independent_erasure_schedule_replayed",
+            "passed": true
+          },
+          {
+            "check_id": "no_public_metadata_accessors",
+            "passed": true
+          }
+        ],
+        "collector_model": "compact_transformer_llm_proxy",
+        "conformant": true,
+        "erasure_probe": {
+          "expected_erasure_count": 0,
+          "observed_erasure_count": 0,
+          "probe_count": 100,
+          "transcripts_retained": false
+        },
+        "interface": {
+          "query_budget": 1,
+          "recipient_callable": "query()",
+          "recipient_input_fields": [],
+          "registered_observation_count": 10,
+          "return_type": "categorical_symbol_string",
+          "state_independent_erasure": {
+            "denominator": 1,
+            "numerator": 0
+          },
+          "transcript_metadata_fields": []
+        },
+        "limitations": [
+          "Python object reflection and memory inspection are not a security boundary.",
+          "Process, scheduler, transport, network, hardware, and operating-system side channels are not tested.",
+          "Authentication, rate limiting, deployment isolation, and real serving-endpoint enforcement are not proven.",
+          "Conformance is conditional on the supplied aggregate finite population and registered categorical interface."
+        ],
+        "schema_version": "1.0",
+        "variant_id": "raw_bins"
+      },
+      {
+        "checks": [
+          {
+            "check_id": "exactly_one_categorical_symbol",
+            "passed": true
+          },
+          {
+            "check_id": "no_transcript_timing_or_metadata",
+            "passed": true
+          },
+          {
+            "check_id": "second_query_refused",
+            "passed": true
+          },
+          {
+            "check_id": "all_caller_fields_refused_with_constant_error",
+            "passed": true
+          },
+          {
+            "check_id": "complete_registered_alphabet_is_totalized",
+            "passed": true
+          },
+          {
+            "check_id": "exact_state_independent_erasure_schedule_replayed",
+            "passed": true
+          },
+          {
+            "check_id": "no_public_metadata_accessors",
+            "passed": true
+          }
+        ],
+        "collector_model": "compact_transformer_llm_proxy",
+        "conformant": true,
+        "erasure_probe": {
+          "expected_erasure_count": 87,
+          "observed_erasure_count": 87,
+          "probe_count": 100,
+          "transcripts_retained": false
+        },
+        "interface": {
+          "query_budget": 1,
+          "recipient_callable": "query()",
+          "recipient_input_fields": [],
+          "registered_observation_count": 10,
+          "return_type": "categorical_symbol_string",
+          "state_independent_erasure": {
+            "denominator": 10,
+            "numerator": 9
+          },
+          "transcript_metadata_fields": []
+        },
+        "limitations": [
+          "Python object reflection and memory inspection are not a security boundary.",
+          "Process, scheduler, transport, network, hardware, and operating-system side channels are not tested.",
+          "Authentication, rate limiting, deployment isolation, and real serving-endpoint enforcement are not proven.",
+          "Conformance is conditional on the supplied aggregate finite population and registered categorical interface."
+        ],
+        "schema_version": "1.0",
+        "variant_id": "erasure_0p9"
+      }
+    ]
+  }
+}

@@ -1,0 +1,489 @@
+{
+  "schema": "acs-training-driven-small-control-v1",
+  "passed": true,
+  "protocol_sha256": "a0ebb29898dc8cfba9e75526b3c4af72f0028d11f049652cf6dfb5298afee66e",
+  "units": 128,
+  "trials": [
+    {
+      "cap": 1,
+      "mode": "record",
+      "decisions": [
+        {
+          "step": 1,
+          "admitted": true,
+          "training_channel": "train-a",
+          "training_roster": "A",
+          "refusing_units": 0,
+          "query_panel_refusing_units": 0,
+          "query_panel_spent_max": 1
+        },
+        {
+          "step": 2,
+          "admitted": false,
+          "training_channel": "train-b",
+          "training_roster": "B",
+          "refusing_units": 32,
+          "query_panel_refusing_units": 0,
+          "query_panel_spent_max": 1
+        },
+        {
+          "step": 3,
+          "admitted": true,
+          "training_channel": "train-c",
+          "training_roster": "C",
+          "refusing_units": 0,
+          "query_panel_refusing_units": 0,
+          "query_panel_spent_max": 1
+        },
+        {
+          "step": 4,
+          "admitted": false,
+          "training_channel": "train-d",
+          "training_roster": "A",
+          "refusing_units": 64,
+          "query_panel_refusing_units": 0,
+          "query_panel_spent_max": 1
+        },
+        {
+          "step": 5,
+          "admitted": true,
+          "training_channel": "train-a",
+          "training_roster": "A",
+          "refusing_units": 0,
+          "query_panel_refusing_units": 0,
+          "query_panel_spent_max": 1
+        },
+        {
+          "step": 6,
+          "admitted": false,
+          "training_channel": "train-c",
+          "training_roster": "B",
+          "refusing_units": 32,
+          "query_panel_refusing_units": 0,
+          "query_panel_spent_max": 1
+        },
+        {
+          "step": 7,
+          "admitted": false,
+          "training_channel": "train-b",
+          "training_roster": "C",
+          "refusing_units": 48,
+          "query_panel_refusing_units": 0,
+          "query_panel_spent_max": 1
+        },
+        {
+          "step": 8,
+          "admitted": false,
+          "training_channel": "train-d",
+          "training_roster": "D",
+          "refusing_units": 16,
+          "query_panel_refusing_units": 0,
+          "query_panel_spent_max": 1
+        }
+      ],
+      "complete_state_verified_each_step": true,
+      "final_spent_and_masks_sha256": "4ec8239ddebe3a287fd836aeef81b3884727cf2c9933b8b683165a7182ec2ff5"
+    },
+    {
+      "cap": 1,
+      "mode": "grouped",
+      "decisions": [
+        {
+          "step": 1,
+          "admitted": true,
+          "training_channel": "train-a",
+          "training_roster": "A",
+          "refusing_units": 0,
+          "query_panel_refusing_units": 0,
+          "query_panel_spent_max": 1
+        },
+        {
+          "step": 2,
+          "admitted": false,
+          "training_channel": "train-b",
+          "training_roster": "B",
+          "refusing_units": 32,
+          "query_panel_refusing_units": 0,
+          "query_panel_spent_max": 1
+        },
+        {
+          "step": 3,
+          "admitted": true,
+          "training_channel": "train-c",
+          "training_roster": "C",
+          "refusing_units": 0,
+          "query_panel_refusing_units": 0,
+          "query_panel_spent_max": 1
+        },
+        {
+          "step": 4,
+          "admitted": false,
+          "training_channel": "train-d",
+          "training_roster": "A",
+          "refusing_units": 64,
+          "query_panel_refusing_units": 0,
+          "query_panel_spent_max": 1
+        },
+        {
+          "step": 5,
+          "admitted": true,
+          "training_channel": "train-a",
+          "training_roster": "A",
+          "refusing_units": 0,
+          "query_panel_refusing_units": 0,
+          "query_panel_spent_max": 1
+        },
+        {
+          "step": 6,
+          "admitted": false,
+          "training_channel": "train-c",
+          "training_roster": "B",
+          "refusing_units": 32,
+          "query_panel_refusing_units": 0,
+          "query_panel_spent_max": 1
+        },
+        {
+          "step": 7,
+          "admitted": false,
+          "training_channel": "train-b",
+          "training_roster": "C",
+          "refusing_units": 48,
+          "query_panel_refusing_units": 0,
+          "query_panel_spent_max": 1
+        },
+        {
+          "step": 8,
+          "admitted": false,
+          "training_channel": "train-d",
+          "training_roster": "D",
+          "refusing_units": 16,
+          "query_panel_refusing_units": 0,
+          "query_panel_spent_max": 1
+        }
+      ],
+      "complete_state_verified_each_step": true,
+      "final_spent_and_masks_sha256": "4ec8239ddebe3a287fd836aeef81b3884727cf2c9933b8b683165a7182ec2ff5"
+    },
+    {
+      "cap": 1,
+      "mode": "mask64",
+      "decisions": [
+        {
+          "step": 1,
+          "admitted": true,
+          "training_channel": "train-a",
+          "training_roster": "A",
+          "refusing_units": 0,
+          "query_panel_refusing_units": 0,
+          "query_panel_spent_max": 1
+        },
+        {
+          "step": 2,
+          "admitted": false,
+          "training_channel": "train-b",
+          "training_roster": "B",
+          "refusing_units": 32,
+          "query_panel_refusing_units": 0,
+          "query_panel_spent_max": 1
+        },
+        {
+          "step": 3,
+          "admitted": true,
+          "training_channel": "train-c",
+          "training_roster": "C",
+          "refusing_units": 0,
+          "query_panel_refusing_units": 0,
+          "query_panel_spent_max": 1
+        },
+        {
+          "step": 4,
+          "admitted": false,
+          "training_channel": "train-d",
+          "training_roster": "A",
+          "refusing_units": 64,
+          "query_panel_refusing_units": 0,
+          "query_panel_spent_max": 1
+        },
+        {
+          "step": 5,
+          "admitted": true,
+          "training_channel": "train-a",
+          "training_roster": "A",
+          "refusing_units": 0,
+          "query_panel_refusing_units": 0,
+          "query_panel_spent_max": 1
+        },
+        {
+          "step": 6,
+          "admitted": false,
+          "training_channel": "train-c",
+          "training_roster": "B",
+          "refusing_units": 32,
+          "query_panel_refusing_units": 0,
+          "query_panel_spent_max": 1
+        },
+        {
+          "step": 7,
+          "admitted": false,
+          "training_channel": "train-b",
+          "training_roster": "C",
+          "refusing_units": 48,
+          "query_panel_refusing_units": 0,
+          "query_panel_spent_max": 1
+        },
+        {
+          "step": 8,
+          "admitted": false,
+          "training_channel": "train-d",
+          "training_roster": "D",
+          "refusing_units": 16,
+          "query_panel_refusing_units": 0,
+          "query_panel_spent_max": 1
+        }
+      ],
+      "complete_state_verified_each_step": true,
+      "final_spent_and_masks_sha256": "4ec8239ddebe3a287fd836aeef81b3884727cf2c9933b8b683165a7182ec2ff5"
+    },
+    {
+      "cap": 2,
+      "mode": "record",
+      "decisions": [
+        {
+          "step": 1,
+          "admitted": true,
+          "training_channel": "train-a",
+          "training_roster": "A",
+          "refusing_units": 0,
+          "query_panel_refusing_units": 0,
+          "query_panel_spent_max": 1
+        },
+        {
+          "step": 2,
+          "admitted": true,
+          "training_channel": "train-b",
+          "training_roster": "B",
+          "refusing_units": 0,
+          "query_panel_refusing_units": 0,
+          "query_panel_spent_max": 1
+        },
+        {
+          "step": 3,
+          "admitted": true,
+          "training_channel": "train-c",
+          "training_roster": "C",
+          "refusing_units": 0,
+          "query_panel_refusing_units": 0,
+          "query_panel_spent_max": 1
+        },
+        {
+          "step": 4,
+          "admitted": false,
+          "training_channel": "train-d",
+          "training_roster": "A",
+          "refusing_units": 32,
+          "query_panel_refusing_units": 0,
+          "query_panel_spent_max": 1
+        },
+        {
+          "step": 5,
+          "admitted": true,
+          "training_channel": "train-a",
+          "training_roster": "A",
+          "refusing_units": 0,
+          "query_panel_refusing_units": 0,
+          "query_panel_spent_max": 1
+        },
+        {
+          "step": 6,
+          "admitted": false,
+          "training_channel": "train-c",
+          "training_roster": "B",
+          "refusing_units": 32,
+          "query_panel_refusing_units": 0,
+          "query_panel_spent_max": 1
+        },
+        {
+          "step": 7,
+          "admitted": true,
+          "training_channel": "train-b",
+          "training_roster": "C",
+          "refusing_units": 0,
+          "query_panel_refusing_units": 0,
+          "query_panel_spent_max": 1
+        },
+        {
+          "step": 8,
+          "admitted": true,
+          "training_channel": "train-d",
+          "training_roster": "D",
+          "refusing_units": 0,
+          "query_panel_refusing_units": 0,
+          "query_panel_spent_max": 1
+        }
+      ],
+      "complete_state_verified_each_step": true,
+      "final_spent_and_masks_sha256": "5c7a303e35588222037edf7a9f7c9c6fcbe63e14b7d13287445c121b963d4a79"
+    },
+    {
+      "cap": 2,
+      "mode": "grouped",
+      "decisions": [
+        {
+          "step": 1,
+          "admitted": true,
+          "training_channel": "train-a",
+          "training_roster": "A",
+          "refusing_units": 0,
+          "query_panel_refusing_units": 0,
+          "query_panel_spent_max": 1
+        },
+        {
+          "step": 2,
+          "admitted": true,
+          "training_channel": "train-b",
+          "training_roster": "B",
+          "refusing_units": 0,
+          "query_panel_refusing_units": 0,
+          "query_panel_spent_max": 1
+        },
+        {
+          "step": 3,
+          "admitted": true,
+          "training_channel": "train-c",
+          "training_roster": "C",
+          "refusing_units": 0,
+          "query_panel_refusing_units": 0,
+          "query_panel_spent_max": 1
+        },
+        {
+          "step": 4,
+          "admitted": false,
+          "training_channel": "train-d",
+          "training_roster": "A",
+          "refusing_units": 32,
+          "query_panel_refusing_units": 0,
+          "query_panel_spent_max": 1
+        },
+        {
+          "step": 5,
+          "admitted": true,
+          "training_channel": "train-a",
+          "training_roster": "A",
+          "refusing_units": 0,
+          "query_panel_refusing_units": 0,
+          "query_panel_spent_max": 1
+        },
+        {
+          "step": 6,
+          "admitted": false,
+          "training_channel": "train-c",
+          "training_roster": "B",
+          "refusing_units": 32,
+          "query_panel_refusing_units": 0,
+          "query_panel_spent_max": 1
+        },
+        {
+          "step": 7,
+          "admitted": true,
+          "training_channel": "train-b",
+          "training_roster": "C",
+          "refusing_units": 0,
+          "query_panel_refusing_units": 0,
+          "query_panel_spent_max": 1
+        },
+        {
+          "step": 8,
+          "admitted": true,
+          "training_channel": "train-d",
+          "training_roster": "D",
+          "refusing_units": 0,
+          "query_panel_refusing_units": 0,
+          "query_panel_spent_max": 1
+        }
+      ],
+      "complete_state_verified_each_step": true,
+      "final_spent_and_masks_sha256": "5c7a303e35588222037edf7a9f7c9c6fcbe63e14b7d13287445c121b963d4a79"
+    },
+    {
+      "cap": 2,
+      "mode": "mask64",
+      "decisions": [
+        {
+          "step": 1,
+          "admitted": true,
+          "training_channel": "train-a",
+          "training_roster": "A",
+          "refusing_units": 0,
+          "query_panel_refusing_units": 0,
+          "query_panel_spent_max": 1
+        },
+        {
+          "step": 2,
+          "admitted": true,
+          "training_channel": "train-b",
+          "training_roster": "B",
+          "refusing_units": 0,
+          "query_panel_refusing_units": 0,
+          "query_panel_spent_max": 1
+        },
+        {
+          "step": 3,
+          "admitted": true,
+          "training_channel": "train-c",
+          "training_roster": "C",
+          "refusing_units": 0,
+          "query_panel_refusing_units": 0,
+          "query_panel_spent_max": 1
+        },
+        {
+          "step": 4,
+          "admitted": false,
+          "training_channel": "train-d",
+          "training_roster": "A",
+          "refusing_units": 32,
+          "query_panel_refusing_units": 0,
+          "query_panel_spent_max": 1
+        },
+        {
+          "step": 5,
+          "admitted": true,
+          "training_channel": "train-a",
+          "training_roster": "A",
+          "refusing_units": 0,
+          "query_panel_refusing_units": 0,
+          "query_panel_spent_max": 1
+        },
+        {
+          "step": 6,
+          "admitted": false,
+          "training_channel": "train-c",
+          "training_roster": "B",
+          "refusing_units": 32,
+          "query_panel_refusing_units": 0,
+          "query_panel_spent_max": 1
+        },
+        {
+          "step": 7,
+          "admitted": true,
+          "training_channel": "train-b",
+          "training_roster": "C",
+          "refusing_units": 0,
+          "query_panel_refusing_units": 0,
+          "query_panel_spent_max": 1
+        },
+        {
+          "step": 8,
+          "admitted": true,
+          "training_channel": "train-d",
+          "training_roster": "D",
+          "refusing_units": 0,
+          "query_panel_refusing_units": 0,
+          "query_panel_spent_max": 1
+        }
+      ],
+      "complete_state_verified_each_step": true,
+      "final_spent_and_masks_sha256": "5c7a303e35588222037edf7a9f7c9c6fcbe63e14b7d13287445c121b963d4a79"
+    }
+  ],
+  "scope": "New synthetic 128-record correctness control. Independent training channels can make training-only records refuse while a disjoint panel reuses one scoring channel. No trained model, real ACS release, timing, scalability or privacy-optimality claim."
+}

@@ -1,0 +1,80 @@
+{
+  "blocks": [
+    {
+      "type": "paragraph",
+      "style": "Heading 2",
+      "text": "A useful planning release that clears"
+    },
+    {
+      "type": "paragraph",
+      "style": "normal",
+      "text": "This is a deliberately simple synthetic example. Its results are calculated exactly from a stated mathematical model; they are not measurements from an agency or a project deployment. It shows how a release can pass every specified check with room to spare. The accompanying technical note and executable verifier supply the complete construction."
+    },
+    {
+      "type": "paragraph",
+      "style": "normal",
+      "text": "The purpose. A planning team needs a high-or-low forecast of next month's overall service demand to choose a staffing level. It does not need individual predictions. The candidate is a tiny model with one learned binary output: every permitted request returns the same stored forecast. The source contains at most one binary contribution per person. Eligibility is public, but actual participation and individual values are protected."
+    },
+    {
+      "type": "paragraph",
+      "style": "normal",
+      "text": "The design. An approved randomized count mechanism chooses the forecast once. Adding, removing or changing one person's contribution changes the probability of either output by at most a factor of 1.01. This protects participation as well as values in this example; it is a different guarantee from a mechanism that assumes participation is fixed. Individual records, counts, scores and person-level responses are never delivered."
+    },
+    {
+      "type": "paragraph",
+      "style": "normal",
+      "text": "The whole history. An earlier planning team already received this exact stored forecast. The new team receives the same bytes, with no new access to the source and no fresh random draw. Even if the teams pool everything, their combined observation is still one forecast. The registry retains the original computation and its charge; the second delivery refers to that same source."
+    },
+    {
+      "type": "paragraph",
+      "style": "normal",
+      "text": "The evidence. The synthetic demand pattern is strong enough that the forecast is useful despite the protection of each contribution. Its expected accuracy exceeds 89.99%, compared with a 75% requirement; before the original protected computation, the best forecast scored 50%. This is exact expected performance under the example's known demand law, not a measured confidence interval for a fitted model. The attribute calculation compares the same background information under either value of a person's secret. For identity, the stipulated recipient information leaves 100 equally likely candidates; assigning the same records to different candidates leaves the released count mechanism unchanged."
+    },
+    {
+      "type": "table",
+      "rows": [
+        [
+          "Check",
+          "Example's limit",
+          "Calculated result",
+          "Status"
+        ],
+        [
+          "Membership",
+          "Detection at most 1%, at false-positive rate at most 0.1%",
+          "Detection at most 0.101% for the complete history",
+          "Clear"
+        ],
+        [
+          "Identity",
+          "Correct identification at most 5%",
+          "1% in the specified 100-candidate game",
+          "Clear"
+        ],
+        [
+          "Attribute",
+          "Increase in binary inference success at most 2 percentage points",
+          "Increase at most 0.25 percentage points",
+          "Clear"
+        ],
+        [
+          "Usefulness",
+          "Expected planning accuracy at least 75%",
+          "Expected accuracy greater than 89.99%",
+          "Pass"
+        ]
+      ],
+      "widths": [
+        1.0,
+        2.0,
+        2.6,
+        0.9
+      ]
+    },
+    {
+      "type": "paragraph",
+      "style": "normal",
+      "text": "Decision. Approve this candidate for the next month’s staffing decision within the stipulated example. Every mandatory privacy check clears and the usefulness margin is substantial. The accountable authority binds the model, source, complete history and permitted interface; the gateway delivers only the stored forecast. A later retraining or independently randomized answer needs a new assessment. Different auxiliary information also requires reassessment of the identity and attribute games. The successful result comes from releasing information that serves the planning task while limiting what one person's contribution can change."
+    }
+  ]
+}

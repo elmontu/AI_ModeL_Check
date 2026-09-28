@@ -1,0 +1,4 @@
+# Preserve the exact bytes recorded in this publication manifest.
+* -text whitespace=cr-at-eol
+# Historical source whitespace is retained with its original provenance.
+evidence/source/** -whitespace

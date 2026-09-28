@@ -1,0 +1,939 @@
+{
+  "kind": "exact distribution calculations, not trained models",
+  "cap": 2,
+  "grid_step": 0.25,
+  "formula_checks": 27,
+  "max_enumeration_error": 2.220446049250313e-16,
+  "rows": [
+    {
+      "k": 3,
+      "workload": "single",
+      "tasks": [
+        [
+          0
+        ]
+      ],
+      "threshold": 0.55,
+      "candidate_count": 165,
+      "selected": [
+        0.25,
+        0.0,
+        0.0
+      ],
+      "selected_cost": 0.25,
+      "selected_accuracy": [
+        0.5621765008857981
+      ],
+      "baseline_min_accuracy": {
+        "omit": 0.5,
+        "equal": 0.6607563687658171,
+        "best_single": 0.8807970779778824
+      },
+      "fresh_coordinate_min_cost": 0.20067069546215133,
+      "direct_task_bit_cost": 0.20067069546215133,
+      "direct_task_bit_meets_cap": true
+    },
+    {
+      "k": 3,
+      "workload": "single",
+      "tasks": [
+        [
+          0
+        ]
+      ],
+      "threshold": 0.6,
+      "candidate_count": 165,
+      "selected": [
+        0.5,
+        0.0,
+        0.0
+      ],
+      "selected_cost": 0.5,
+      "selected_accuracy": [
+        0.6224593312018546
+      ],
+      "baseline_min_accuracy": {
+        "omit": 0.5,
+        "equal": 0.6607563687658171,
+        "best_single": 0.8807970779778824
+      },
+      "fresh_coordinate_min_cost": 0.40546510810816433,
+      "direct_task_bit_cost": 0.40546510810816433,
+      "direct_task_bit_meets_cap": true
+    },
+    {
+      "k": 3,
+      "workload": "pair",
+      "tasks": [
+        [
+          0,
+          1
+        ]
+      ],
+      "threshold": 0.55,
+      "candidate_count": 165,
+      "selected": [
+        0.5,
+        1.0,
+        0.0
+      ],
+      "selected_cost": 1.5,
+      "selected_accuracy": [
+        0.556590558014963
+      ],
+      "baseline_min_accuracy": {
+        "omit": 0.5,
+        "equal": 0.5516852201975428,
+        "best_single": 0.5
+      },
+      "fresh_coordinate_min_cost": 1.3098006009490342,
+      "direct_task_bit_cost": 0.20067069546215133,
+      "direct_task_bit_meets_cap": true
+    },
+    {
+      "k": 3,
+      "workload": "pair",
+      "tasks": [
+        [
+          0,
+          1
+        ]
+      ],
+      "threshold": 0.6,
+      "candidate_count": 165,
+      "selected": [
+        1.0,
+        1.0,
+        0.0
+      ],
+      "selected_cost": 2.0,
+      "selected_accuracy": [
+        0.6067761335170363
+      ],
+      "baseline_min_accuracy": {
+        "omit": 0.5,
+        "equal": 0.5516852201975428,
+        "best_single": 0.5
+      },
+      "fresh_coordinate_min_cost": 1.9248473002384134,
+      "direct_task_bit_cost": 0.40546510810816433,
+      "direct_task_bit_meets_cap": true
+    },
+    {
+      "k": 3,
+      "workload": "overlap",
+      "tasks": [
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          2
+        ]
+      ],
+      "threshold": 0.55,
+      "candidate_count": 165,
+      "selected": [
+        0.5,
+        1.0,
+        0.5
+      ],
+      "selected_cost": 2.0,
+      "selected_accuracy": [
+        0.556590558014963,
+        0.556590558014963
+      ],
+      "baseline_min_accuracy": {
+        "omit": 0.5,
+        "equal": 0.5516852201975428,
+        "best_single": 0.5
+      },
+      "fresh_coordinate_min_cost": 2.6196012018980683,
+      "direct_task_bit_cost": 0.40134139092430265,
+      "direct_task_bit_meets_cap": true
+    },
+    {
+      "k": 3,
+      "workload": "overlap",
+      "tasks": [
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          2
+        ]
+      ],
+      "threshold": 0.6,
+      "candidate_count": 165,
+      "selected": null,
+      "selected_cost": null,
+      "selected_accuracy": null,
+      "baseline_min_accuracy": {
+        "omit": 0.5,
+        "equal": 0.5516852201975428,
+        "best_single": 0.5
+      },
+      "fresh_coordinate_min_cost": 3.849694600476827,
+      "direct_task_bit_cost": 0.8109302162163287,
+      "direct_task_bit_meets_cap": true
+    },
+    {
+      "k": 3,
+      "workload": "all",
+      "tasks": [
+        [
+          0,
+          1,
+          2
+        ]
+      ],
+      "threshold": 0.55,
+      "candidate_count": 165,
+      "selected": null,
+      "selected_cost": null,
+      "selected_accuracy": null,
+      "baseline_min_accuracy": {
+        "omit": 0.5,
+        "equal": 0.5166174566356373,
+        "best_single": 0.5
+      },
+      "fresh_coordinate_min_cost": 3.0155955677153328,
+      "direct_task_bit_cost": 0.20067069546215133,
+      "direct_task_bit_meets_cap": true
+    },
+    {
+      "k": 3,
+      "workload": "all",
+      "tasks": [
+        [
+          0,
+          1,
+          2
+        ]
+      ],
+      "threshold": 0.6,
+      "candidate_count": 165,
+      "selected": null,
+      "selected_cost": null,
+      "selected_accuracy": null,
+      "baseline_min_accuracy": {
+        "omit": 0.5,
+        "equal": 0.5166174566356373,
+        "best_single": 0.5
+      },
+      "fresh_coordinate_min_cost": 4.018391839583861,
+      "direct_task_bit_cost": 0.40546510810816433,
+      "direct_task_bit_meets_cap": true
+    },
+    {
+      "k": 3,
+      "workload": "repeat_pair",
+      "tasks": [
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          1
+        ]
+      ],
+      "threshold": 0.55,
+      "candidate_count": 165,
+      "selected": [
+        0.5,
+        1.0,
+        0.0
+      ],
+      "selected_cost": 1.5,
+      "selected_accuracy": [
+        0.556590558014963,
+        0.556590558014963,
+        0.556590558014963
+      ],
+      "baseline_min_accuracy": {
+        "omit": 0.5,
+        "equal": 0.5516852201975428,
+        "best_single": 0.5
+      },
+      "fresh_coordinate_min_cost": 3.9294018028471025,
+      "direct_task_bit_cost": 0.20067069546215133,
+      "direct_task_bit_meets_cap": true
+    },
+    {
+      "k": 3,
+      "workload": "repeat_pair",
+      "tasks": [
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          1
+        ]
+      ],
+      "threshold": 0.6,
+      "candidate_count": 165,
+      "selected": [
+        1.0,
+        1.0,
+        0.0
+      ],
+      "selected_cost": 2.0,
+      "selected_accuracy": [
+        0.6067761335170363,
+        0.6067761335170363,
+        0.6067761335170363
+      ],
+      "baseline_min_accuracy": {
+        "omit": 0.5,
+        "equal": 0.5516852201975428,
+        "best_single": 0.5
+      },
+      "fresh_coordinate_min_cost": 5.77454190071524,
+      "direct_task_bit_cost": 0.40546510810816433,
+      "direct_task_bit_meets_cap": true
+    },
+    {
+      "k": 4,
+      "workload": "single",
+      "tasks": [
+        [
+          0
+        ]
+      ],
+      "threshold": 0.55,
+      "candidate_count": 495,
+      "selected": [
+        0.25,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "selected_cost": 0.25,
+      "selected_accuracy": [
+        0.5621765008857981
+      ],
+      "baseline_min_accuracy": {
+        "omit": 0.5,
+        "equal": 0.6224593312018546,
+        "best_single": 0.8807970779778824
+      },
+      "fresh_coordinate_min_cost": 0.20067069546215133,
+      "direct_task_bit_cost": 0.20067069546215133,
+      "direct_task_bit_meets_cap": true
+    },
+    {
+      "k": 4,
+      "workload": "single",
+      "tasks": [
+        [
+          0
+        ]
+      ],
+      "threshold": 0.6,
+      "candidate_count": 495,
+      "selected": [
+        0.5,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "selected_cost": 0.5,
+      "selected_accuracy": [
+        0.6224593312018546
+      ],
+      "baseline_min_accuracy": {
+        "omit": 0.5,
+        "equal": 0.6224593312018546,
+        "best_single": 0.8807970779778824
+      },
+      "fresh_coordinate_min_cost": 0.40546510810816433,
+      "direct_task_bit_cost": 0.40546510810816433,
+      "direct_task_bit_meets_cap": true
+    },
+    {
+      "k": 4,
+      "workload": "pair",
+      "tasks": [
+        [
+          0,
+          1
+        ]
+      ],
+      "threshold": 0.55,
+      "candidate_count": 495,
+      "selected": [
+        0.5,
+        1.0,
+        0.0,
+        0.0
+      ],
+      "selected_cost": 1.5,
+      "selected_accuracy": [
+        0.556590558014963
+      ],
+      "baseline_min_accuracy": {
+        "omit": 0.5,
+        "equal": 0.529992575596811,
+        "best_single": 0.5
+      },
+      "fresh_coordinate_min_cost": 1.3098006009490342,
+      "direct_task_bit_cost": 0.20067069546215133,
+      "direct_task_bit_meets_cap": true
+    },
+    {
+      "k": 4,
+      "workload": "pair",
+      "tasks": [
+        [
+          0,
+          1
+        ]
+      ],
+      "threshold": 0.6,
+      "candidate_count": 495,
+      "selected": [
+        1.0,
+        1.0,
+        0.0,
+        0.0
+      ],
+      "selected_cost": 2.0,
+      "selected_accuracy": [
+        0.6067761335170363
+      ],
+      "baseline_min_accuracy": {
+        "omit": 0.5,
+        "equal": 0.529992575596811,
+        "best_single": 0.5
+      },
+      "fresh_coordinate_min_cost": 1.9248473002384134,
+      "direct_task_bit_cost": 0.40546510810816433,
+      "direct_task_bit_meets_cap": true
+    },
+    {
+      "k": 4,
+      "workload": "overlap",
+      "tasks": [
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          2
+        ]
+      ],
+      "threshold": 0.55,
+      "candidate_count": 495,
+      "selected": [
+        0.5,
+        1.0,
+        0.5,
+        0.0
+      ],
+      "selected_cost": 2.0,
+      "selected_accuracy": [
+        0.556590558014963,
+        0.556590558014963
+      ],
+      "baseline_min_accuracy": {
+        "omit": 0.5,
+        "equal": 0.529992575596811,
+        "best_single": 0.5
+      },
+      "fresh_coordinate_min_cost": 2.6196012018980683,
+      "direct_task_bit_cost": 0.40134139092430265,
+      "direct_task_bit_meets_cap": true
+    },
+    {
+      "k": 4,
+      "workload": "overlap",
+      "tasks": [
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          2
+        ]
+      ],
+      "threshold": 0.6,
+      "candidate_count": 495,
+      "selected": null,
+      "selected_cost": null,
+      "selected_accuracy": null,
+      "baseline_min_accuracy": {
+        "omit": 0.5,
+        "equal": 0.529992575596811,
+        "best_single": 0.5
+      },
+      "fresh_coordinate_min_cost": 3.849694600476827,
+      "direct_task_bit_cost": 0.8109302162163287,
+      "direct_task_bit_meets_cap": true
+    },
+    {
+      "k": 4,
+      "workload": "all",
+      "tasks": [
+        [
+          0,
+          1,
+          2,
+          3
+        ]
+      ],
+      "threshold": 0.55,
+      "candidate_count": 495,
+      "selected": null,
+      "selected_cost": null,
+      "selected_accuracy": null,
+      "baseline_min_accuracy": {
+        "omit": 0.5,
+        "equal": 0.5017991091818609,
+        "best_single": 0.5
+      },
+      "fresh_coordinate_min_cost": 5.090005997012702,
+      "direct_task_bit_cost": 0.20067069546215133,
+      "direct_task_bit_meets_cap": true
+    },
+    {
+      "k": 4,
+      "workload": "all",
+      "tasks": [
+        [
+          0,
+          1,
+          2,
+          3
+        ]
+      ],
+      "threshold": 0.6,
+      "candidate_count": 495,
+      "selected": null,
+      "selected_cost": null,
+      "selected_accuracy": null,
+      "baseline_min_accuracy": {
+        "omit": 0.5,
+        "equal": 0.5017991091818609,
+        "best_single": 0.5
+      },
+      "fresh_coordinate_min_cost": 6.467686670047546,
+      "direct_task_bit_cost": 0.40546510810816433,
+      "direct_task_bit_meets_cap": true
+    },
+    {
+      "k": 4,
+      "workload": "repeat_pair",
+      "tasks": [
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          1
+        ]
+      ],
+      "threshold": 0.55,
+      "candidate_count": 495,
+      "selected": [
+        0.5,
+        1.0,
+        0.0,
+        0.0
+      ],
+      "selected_cost": 1.5,
+      "selected_accuracy": [
+        0.556590558014963,
+        0.556590558014963,
+        0.556590558014963
+      ],
+      "baseline_min_accuracy": {
+        "omit": 0.5,
+        "equal": 0.529992575596811,
+        "best_single": 0.5
+      },
+      "fresh_coordinate_min_cost": 3.9294018028471025,
+      "direct_task_bit_cost": 0.20067069546215133,
+      "direct_task_bit_meets_cap": true
+    },
+    {
+      "k": 4,
+      "workload": "repeat_pair",
+      "tasks": [
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          1
+        ]
+      ],
+      "threshold": 0.6,
+      "candidate_count": 495,
+      "selected": [
+        1.0,
+        1.0,
+        0.0,
+        0.0
+      ],
+      "selected_cost": 2.0,
+      "selected_accuracy": [
+        0.6067761335170363,
+        0.6067761335170363,
+        0.6067761335170363
+      ],
+      "baseline_min_accuracy": {
+        "omit": 0.5,
+        "equal": 0.529992575596811,
+        "best_single": 0.5
+      },
+      "fresh_coordinate_min_cost": 5.77454190071524,
+      "direct_task_bit_cost": 0.40546510810816433,
+      "direct_task_bit_meets_cap": true
+    },
+    {
+      "k": 5,
+      "workload": "single",
+      "tasks": [
+        [
+          0
+        ]
+      ],
+      "threshold": 0.55,
+      "candidate_count": 1287,
+      "selected": [
+        0.25,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "selected_cost": 0.25,
+      "selected_accuracy": [
+        0.5621765008857981
+      ],
+      "baseline_min_accuracy": {
+        "omit": 0.5,
+        "equal": 0.598687660112452,
+        "best_single": 0.8807970779778824
+      },
+      "fresh_coordinate_min_cost": 0.20067069546215133,
+      "direct_task_bit_cost": 0.20067069546215133,
+      "direct_task_bit_meets_cap": true
+    },
+    {
+      "k": 5,
+      "workload": "single",
+      "tasks": [
+        [
+          0
+        ]
+      ],
+      "threshold": 0.6,
+      "candidate_count": 1287,
+      "selected": [
+        0.5,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "selected_cost": 0.5,
+      "selected_accuracy": [
+        0.6224593312018546
+      ],
+      "baseline_min_accuracy": {
+        "omit": 0.5,
+        "equal": 0.598687660112452,
+        "best_single": 0.8807970779778824
+      },
+      "fresh_coordinate_min_cost": 0.40546510810816433,
+      "direct_task_bit_cost": 0.40546510810816433,
+      "direct_task_bit_meets_cap": true
+    },
+    {
+      "k": 5,
+      "workload": "pair",
+      "tasks": [
+        [
+          0,
+          1
+        ]
+      ],
+      "threshold": 0.55,
+      "candidate_count": 1287,
+      "selected": [
+        0.5,
+        1.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "selected_cost": 1.5,
+      "selected_accuracy": [
+        0.556590558014963
+      ],
+      "baseline_min_accuracy": {
+        "omit": 0.5,
+        "equal": 0.5194785085169417,
+        "best_single": 0.5
+      },
+      "fresh_coordinate_min_cost": 1.3098006009490342,
+      "direct_task_bit_cost": 0.20067069546215133,
+      "direct_task_bit_meets_cap": true
+    },
+    {
+      "k": 5,
+      "workload": "pair",
+      "tasks": [
+        [
+          0,
+          1
+        ]
+      ],
+      "threshold": 0.6,
+      "candidate_count": 1287,
+      "selected": [
+        1.0,
+        1.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "selected_cost": 2.0,
+      "selected_accuracy": [
+        0.6067761335170363
+      ],
+      "baseline_min_accuracy": {
+        "omit": 0.5,
+        "equal": 0.5194785085169417,
+        "best_single": 0.5
+      },
+      "fresh_coordinate_min_cost": 1.9248473002384134,
+      "direct_task_bit_cost": 0.40546510810816433,
+      "direct_task_bit_meets_cap": true
+    },
+    {
+      "k": 5,
+      "workload": "overlap",
+      "tasks": [
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          2
+        ]
+      ],
+      "threshold": 0.55,
+      "candidate_count": 1287,
+      "selected": [
+        0.5,
+        1.0,
+        0.5,
+        0.0,
+        0.0
+      ],
+      "selected_cost": 2.0,
+      "selected_accuracy": [
+        0.556590558014963,
+        0.556590558014963
+      ],
+      "baseline_min_accuracy": {
+        "omit": 0.5,
+        "equal": 0.5194785085169417,
+        "best_single": 0.5
+      },
+      "fresh_coordinate_min_cost": 2.6196012018980683,
+      "direct_task_bit_cost": 0.40134139092430265,
+      "direct_task_bit_meets_cap": true
+    },
+    {
+      "k": 5,
+      "workload": "overlap",
+      "tasks": [
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          2
+        ]
+      ],
+      "threshold": 0.6,
+      "candidate_count": 1287,
+      "selected": null,
+      "selected_cost": null,
+      "selected_accuracy": null,
+      "baseline_min_accuracy": {
+        "omit": 0.5,
+        "equal": 0.5194785085169417,
+        "best_single": 0.5
+      },
+      "fresh_coordinate_min_cost": 3.849694600476827,
+      "direct_task_bit_cost": 0.8109302162163287,
+      "direct_task_bit_meets_cap": true
+    },
+    {
+      "k": 5,
+      "workload": "all",
+      "tasks": [
+        [
+          0,
+          1,
+          2,
+          3,
+          4
+        ]
+      ],
+      "threshold": 0.55,
+      "candidate_count": 1287,
+      "selected": null,
+      "selected_cost": null,
+      "selected_accuracy": null,
+      "baseline_min_accuracy": {
+        "omit": 0.5,
+        "equal": 0.5001497732460686,
+        "best_single": 0.5
+      },
+      "fresh_coordinate_min_cost": 7.430051071594744,
+      "direct_task_bit_cost": 0.20067069546215133,
+      "direct_task_bit_meets_cap": true
+    },
+    {
+      "k": 5,
+      "workload": "all",
+      "tasks": [
+        [
+          0,
+          1,
+          2,
+          3,
+          4
+        ]
+      ],
+      "threshold": 0.6,
+      "candidate_count": 1287,
+      "selected": null,
+      "selected_cost": null,
+      "selected_accuracy": null,
+      "baseline_min_accuracy": {
+        "omit": 0.5,
+        "equal": 0.5001497732460686,
+        "best_single": 0.5
+      },
+      "fresh_coordinate_min_cost": 9.176412951284114,
+      "direct_task_bit_cost": 0.40546510810816433,
+      "direct_task_bit_meets_cap": true
+    },
+    {
+      "k": 5,
+      "workload": "repeat_pair",
+      "tasks": [
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          1
+        ]
+      ],
+      "threshold": 0.55,
+      "candidate_count": 1287,
+      "selected": [
+        0.5,
+        1.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "selected_cost": 1.5,
+      "selected_accuracy": [
+        0.556590558014963,
+        0.556590558014963,
+        0.556590558014963
+      ],
+      "baseline_min_accuracy": {
+        "omit": 0.5,
+        "equal": 0.5194785085169417,
+        "best_single": 0.5
+      },
+      "fresh_coordinate_min_cost": 3.9294018028471025,
+      "direct_task_bit_cost": 0.20067069546215133,
+      "direct_task_bit_meets_cap": true
+    },
+    {
+      "k": 5,
+      "workload": "repeat_pair",
+      "tasks": [
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          1
+        ]
+      ],
+      "threshold": 0.6,
+      "candidate_count": 1287,
+      "selected": [
+        1.0,
+        1.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "selected_cost": 2.0,
+      "selected_accuracy": [
+        0.6067761335170363,
+        0.6067761335170363,
+        0.6067761335170363
+      ],
+      "baseline_min_accuracy": {
+        "omit": 0.5,
+        "equal": 0.5194785085169417,
+        "best_single": 0.5
+      },
+      "fresh_coordinate_min_cost": 5.77454190071524,
+      "direct_task_bit_cost": 0.40546510810816433,
+      "direct_task_bit_meets_cap": true
+    }
+  ]
+}

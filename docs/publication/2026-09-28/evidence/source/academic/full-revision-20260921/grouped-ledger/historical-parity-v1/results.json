@@ -1,0 +1,1209 @@
+{
+  "status": "verified",
+  "completed_at": "2026-09-21T09:42:34.132032+00:00",
+  "scenarios": [
+    {
+      "scenario": "epsilon-1-seed-20260921-cached",
+      "source_sha256": "d3403bb0ea1127a02e9aa6407cd3d5cb6d216beb9ea781cb03e3a660b5f5b530",
+      "units": 150000,
+      "steps": [
+        {
+          "step": 1,
+          "admitted": true,
+          "expanded_state_digest": "464724f8d080773b299b84c9352d36b8f30747cb579167783401b05e437894a3",
+          "blocks": 4
+        },
+        {
+          "step": 2,
+          "admitted": true,
+          "expanded_state_digest": "6d981d24c66ff489fc60e32c4e602441d7c44e370f33e993dd666657141900b1",
+          "blocks": 7
+        },
+        {
+          "step": 3,
+          "admitted": true,
+          "expanded_state_digest": "55688c797dfb1019630e2ec5fdf7268cf3625d9c8f485e218e1a5856d59026e6",
+          "blocks": 7
+        },
+        {
+          "step": 4,
+          "admitted": true,
+          "expanded_state_digest": "2a9e6c755f19f74144197dd469212bdb0de636c8cf94b6513dd126e008a68c3f",
+          "blocks": 7
+        },
+        {
+          "step": 5,
+          "admitted": true,
+          "expanded_state_digest": "87341f44503cd98fc74a84ff2757e347b7c1afa314a3bcf539d04c5a4828a0b1",
+          "blocks": 7
+        },
+        {
+          "step": 6,
+          "admitted": true,
+          "expanded_state_digest": "29b8305179b3137e4caf9431b783efea1c3f9fdd4231c540b79d177f8b0d0411",
+          "blocks": 7
+        },
+        {
+          "step": 7,
+          "admitted": true,
+          "expanded_state_digest": "41b079fd9bb163b9481c6c01d5a6f1a49465f5f239f972e64fba08e949f4578f",
+          "blocks": 7
+        },
+        {
+          "step": 8,
+          "admitted": true,
+          "expanded_state_digest": "d4963c2c1ac28fd03e91715afcf90d6b13053fc8e6fcae25be5b4267a5a39e20",
+          "blocks": 7
+        },
+        {
+          "step": 9,
+          "admitted": true,
+          "expanded_state_digest": "23cbac7bdee1daa126227e335564809d70b44fab9f502ed2889ac87c2e97a68e",
+          "blocks": 7
+        },
+        {
+          "step": 10,
+          "admitted": true,
+          "expanded_state_digest": "a454cab840309157cc77a357d1b97fbbebae28823f918bb6ef6897048d93401e",
+          "blocks": 7
+        }
+      ],
+      "source_pairs": 150000,
+      "storage": {
+        "record": {
+          "database_bytes": 49336320,
+          "allocated_page_bytes": 49336320,
+          "freelist_bytes": 0,
+          "journal_mode": "delete",
+          "table_rows": {
+            "units": 150000,
+            "channels": 1,
+            "rosters": 4,
+            "memberships": 210000,
+            "requests": 10,
+            "charges": 150000,
+            "blocks": 0,
+            "roster_blocks": 0
+          },
+          "included": "All stable keys, memberships, provenance, channel costs, prepared requests, receipts and accounting state; transient journal peak excluded."
+        },
+        "grouped": {
+          "database_bytes": 43896832,
+          "allocated_page_bytes": 43896832,
+          "freelist_bytes": 0,
+          "journal_mode": "delete",
+          "table_rows": {
+            "units": 150000,
+            "channels": 1,
+            "rosters": 4,
+            "memberships": 210000,
+            "requests": 10,
+            "charges": 7,
+            "blocks": 7,
+            "roster_blocks": 12
+          },
+          "included": "All stable keys, memberships, provenance, channel costs, prepared requests, receipts and accounting state; transient journal peak excluded."
+        }
+      },
+      "archives": {
+        "record": {
+          "archive": "historical-parity-v1\\epsilon-1-seed-20260921-cached\\record.sqlite3.gz",
+          "sqlite_sha256": "3612576de4bc918792e96f77b5e756c767c52e8971ec8cc6a0655cc636845912",
+          "sqlite_bytes": 49336320,
+          "gzip_bytes": 10267527,
+          "gzip_sha256": "d125b502d39bee72eb25b678e1902706310d241589d33d7571c6bd099d4de21e"
+        },
+        "grouped": {
+          "archive": "historical-parity-v1\\epsilon-1-seed-20260921-cached\\grouped.sqlite3.gz",
+          "sqlite_sha256": "78b217f66a20721246f351ef4c4908bc095f080e377fcb7f16921759bcacc24c",
+          "sqlite_bytes": 43896832,
+          "gzip_bytes": 10396662,
+          "gzip_sha256": "8a3965864a839746ad34b6efbf19ea18641c372afbb54d653077c333aeb0aaf5"
+        }
+      }
+    },
+    {
+      "scenario": "epsilon-1-seed-20260921-fresh",
+      "source_sha256": "a7823d6af4bff8c9b80c7694280035a2d536634a2e1aeccf543ee5f1f09c2cd3",
+      "units": 150000,
+      "steps": [
+        {
+          "step": 1,
+          "admitted": true,
+          "expanded_state_digest": "463b3da7cb38acfcca24baa1e087d377decc6037f055cebc1e6d9327cfe67a67",
+          "blocks": 4
+        },
+        {
+          "step": 2,
+          "admitted": true,
+          "expanded_state_digest": "09b6b086c9ff028f692af881bef5ea576ef5d8e0d174c6f710f4461b1d2b0b91",
+          "blocks": 7
+        },
+        {
+          "step": 3,
+          "admitted": true,
+          "expanded_state_digest": "d6be16f129ed6410401ed1ec51d75766a5361d3bf90ee797456ff7518b0f88b4",
+          "blocks": 7
+        },
+        {
+          "step": 4,
+          "admitted": true,
+          "expanded_state_digest": "0193bb4fd4c5e61e52a65ccad2d835df67324578578c2b45b8143658ad68c642",
+          "blocks": 7
+        },
+        {
+          "step": 5,
+          "admitted": true,
+          "expanded_state_digest": "3264d31db59a3cd0d798362d2d13bab42fc1acd6622223f82b462a63f6cebade",
+          "blocks": 7
+        },
+        {
+          "step": 6,
+          "admitted": true,
+          "expanded_state_digest": "6577e47c3fd33fd4b7de8b14b2c597813bebd3e1c95e016993b4d405b6ee9ece",
+          "blocks": 7
+        },
+        {
+          "step": 7,
+          "admitted": true,
+          "expanded_state_digest": "bef92ad04019b30ee6b0a5fa1660d17e94c90a03b8c7ff13b54c49cdebadd63a",
+          "blocks": 7
+        },
+        {
+          "step": 8,
+          "admitted": true,
+          "expanded_state_digest": "63ab879a3ae92ec1c8615f559588f8c9cf0cccfd3722f475858958ed87322a24",
+          "blocks": 7
+        },
+        {
+          "step": 9,
+          "admitted": true,
+          "expanded_state_digest": "545040a14e4829d6712a3618b803292884193b2de6f20c7073f84624b6287030",
+          "blocks": 7
+        },
+        {
+          "step": 10,
+          "admitted": true,
+          "expanded_state_digest": "73ee542e5639ebec9079d35606cde99110b164355b8d12006517249bef314e12",
+          "blocks": 7
+        }
+      ],
+      "source_pairs": 340000,
+      "storage": {
+        "record": {
+          "database_bytes": 58466304,
+          "allocated_page_bytes": 58466304,
+          "freelist_bytes": 0,
+          "journal_mode": "delete",
+          "table_rows": {
+            "units": 150000,
+            "channels": 5,
+            "rosters": 4,
+            "memberships": 210000,
+            "requests": 10,
+            "charges": 340000,
+            "blocks": 0,
+            "roster_blocks": 0
+          },
+          "included": "All stable keys, memberships, provenance, channel costs, prepared requests, receipts and accounting state; transient journal peak excluded."
+        },
+        "grouped": {
+          "database_bytes": 43896832,
+          "allocated_page_bytes": 43896832,
+          "freelist_bytes": 0,
+          "journal_mode": "delete",
+          "table_rows": {
+            "units": 150000,
+            "channels": 5,
+            "rosters": 4,
+            "memberships": 210000,
+            "requests": 10,
+            "charges": 18,
+            "blocks": 7,
+            "roster_blocks": 12
+          },
+          "included": "All stable keys, memberships, provenance, channel costs, prepared requests, receipts and accounting state; transient journal peak excluded."
+        }
+      },
+      "archives": {
+        "record": {
+          "archive": "historical-parity-v1\\epsilon-1-seed-20260921-fresh\\record.sqlite3.gz",
+          "sqlite_sha256": "36d182d2835a63363bdfc51188bdd5b13b44200ed74809c79a16a413fb9d1e71",
+          "sqlite_bytes": 58466304,
+          "gzip_bytes": 11922622,
+          "gzip_sha256": "7a0927bf133b43783290b76fedff1de3930be4e8da1a8eca1be8339474c993cd"
+        },
+        "grouped": {
+          "archive": "historical-parity-v1\\epsilon-1-seed-20260921-fresh\\grouped.sqlite3.gz",
+          "sqlite_sha256": "00c524f04eb22e13795459f485243ab9e78e973978b04b97e4fc5a044ba3b702",
+          "sqlite_bytes": 43896832,
+          "gzip_bytes": 10396974,
+          "gzip_sha256": "4310a78f148ef335d15387b42cac349e6e5754666d07fff786e3b16b2016d0d6"
+        }
+      }
+    },
+    {
+      "scenario": "epsilon-1-seed-20260922-cached",
+      "source_sha256": "9087fe62bcf403b50e14c5df64d6d84c333f1f9217c42cc6043760893e38e18b",
+      "units": 150000,
+      "steps": [
+        {
+          "step": 1,
+          "admitted": true,
+          "expanded_state_digest": "f297adb126909789546c05bc546b61322abde098f03610d1e4629e94a17a21af",
+          "blocks": 4
+        },
+        {
+          "step": 2,
+          "admitted": true,
+          "expanded_state_digest": "da3d9f9cbdeb4dc550e84c9a16ef52b24ada09f382d0900101cda677774c6659",
+          "blocks": 7
+        },
+        {
+          "step": 3,
+          "admitted": true,
+          "expanded_state_digest": "3677acf2756300035912d5e6dfa969d29bfd043acda87c9d90ab4aee3fbffa8d",
+          "blocks": 7
+        },
+        {
+          "step": 4,
+          "admitted": true,
+          "expanded_state_digest": "6b330e7a8a2b0e67bdac7888652531a50e427aa1b2a277c740edf1d5cbd0b06a",
+          "blocks": 7
+        },
+        {
+          "step": 5,
+          "admitted": true,
+          "expanded_state_digest": "e6f604489bbbc6537f967647e0b643d60b038e077221ed2a06f96d746d86c348",
+          "blocks": 7
+        },
+        {
+          "step": 6,
+          "admitted": true,
+          "expanded_state_digest": "74132202b35a72fa64cf58b6fb96e8f4bdce35ffba958436dc7c3fdfada9e904",
+          "blocks": 7
+        },
+        {
+          "step": 7,
+          "admitted": true,
+          "expanded_state_digest": "12690332ec83950280661ae8302ea2be0c7b9f43431ec5f53a1ad8acfdbfe0fd",
+          "blocks": 7
+        },
+        {
+          "step": 8,
+          "admitted": true,
+          "expanded_state_digest": "875fe6f8a8cc334db94912f7f22e42e7ca6a4cd5f5420fba6e3ba7f330629909",
+          "blocks": 7
+        },
+        {
+          "step": 9,
+          "admitted": true,
+          "expanded_state_digest": "2c5f01a4bbaaf1d18fa48288648c61dcaecd8ee64c17eb4b5f3dc3fc8a983fc5",
+          "blocks": 7
+        },
+        {
+          "step": 10,
+          "admitted": true,
+          "expanded_state_digest": "a007e53173263a737726e3a5f5dce238f10b326bffb7e6025e7ce5c2a9354007",
+          "blocks": 7
+        }
+      ],
+      "source_pairs": 150000,
+      "storage": {
+        "record": {
+          "database_bytes": 49336320,
+          "allocated_page_bytes": 49336320,
+          "freelist_bytes": 0,
+          "journal_mode": "delete",
+          "table_rows": {
+            "units": 150000,
+            "channels": 1,
+            "rosters": 4,
+            "memberships": 210000,
+            "requests": 10,
+            "charges": 150000,
+            "blocks": 0,
+            "roster_blocks": 0
+          },
+          "included": "All stable keys, memberships, provenance, channel costs, prepared requests, receipts and accounting state; transient journal peak excluded."
+        },
+        "grouped": {
+          "database_bytes": 43896832,
+          "allocated_page_bytes": 43896832,
+          "freelist_bytes": 0,
+          "journal_mode": "delete",
+          "table_rows": {
+            "units": 150000,
+            "channels": 1,
+            "rosters": 4,
+            "memberships": 210000,
+            "requests": 10,
+            "charges": 7,
+            "blocks": 7,
+            "roster_blocks": 12
+          },
+          "included": "All stable keys, memberships, provenance, channel costs, prepared requests, receipts and accounting state; transient journal peak excluded."
+        }
+      },
+      "archives": {
+        "record": {
+          "archive": "historical-parity-v1\\epsilon-1-seed-20260922-cached\\record.sqlite3.gz",
+          "sqlite_sha256": "3608d37beb8b1b41375a2092f62ad46abc742e8851913ec6f873fae3c9009fa5",
+          "sqlite_bytes": 49336320,
+          "gzip_bytes": 10267556,
+          "gzip_sha256": "53a9927af3a47dbdc5fc5f7d42b7990bf2071c6441212dc2af2b2fb4bc442707"
+        },
+        "grouped": {
+          "archive": "historical-parity-v1\\epsilon-1-seed-20260922-cached\\grouped.sqlite3.gz",
+          "sqlite_sha256": "2cb0e17a831c315dde4c87298d025f99a10fbacc51ac22cff50f523621dcfb6d",
+          "sqlite_bytes": 43896832,
+          "gzip_bytes": 10396666,
+          "gzip_sha256": "5877f07385082e58a1e9958bb127c0f70fa189673a540a41bc94f6298ad8b790"
+        }
+      }
+    },
+    {
+      "scenario": "epsilon-1-seed-20260922-fresh",
+      "source_sha256": "9155a686fea37504817faa8a253bf4898b44293928245a25f7799d57136bdff3",
+      "units": 150000,
+      "steps": [
+        {
+          "step": 1,
+          "admitted": true,
+          "expanded_state_digest": "f55dc716cddd1c5e1618b889e8a41eef934b24e61805052f3cb2dae772eab442",
+          "blocks": 4
+        },
+        {
+          "step": 2,
+          "admitted": true,
+          "expanded_state_digest": "b0ef994d133c2baf1e8f73c4bad4c8eff390525b2e1e909d63d38b0414cf7b4a",
+          "blocks": 7
+        },
+        {
+          "step": 3,
+          "admitted": true,
+          "expanded_state_digest": "f331e8186bbfbea0bf0428e3f16653bf38beaa937dbaaa96a7cbf993feb5045e",
+          "blocks": 7
+        },
+        {
+          "step": 4,
+          "admitted": true,
+          "expanded_state_digest": "4617b82d8bb8169c245193e28681b7e5912d1e63db568f2dfdad2a75cc13059d",
+          "blocks": 7
+        },
+        {
+          "step": 5,
+          "admitted": true,
+          "expanded_state_digest": "3a2eb4e7d63e16af1126fb43b31e352246cf1787e4e0ab21ca1b5da512aa7be9",
+          "blocks": 7
+        },
+        {
+          "step": 6,
+          "admitted": true,
+          "expanded_state_digest": "259ea8eda83cdae978843c89520f9e244507cd9d449787b10d44f31d11b28a90",
+          "blocks": 7
+        },
+        {
+          "step": 7,
+          "admitted": true,
+          "expanded_state_digest": "67b290250e015c294e83d587d9adeaacd72925c4c6c411fa7727fc4e4e19b83a",
+          "blocks": 7
+        },
+        {
+          "step": 8,
+          "admitted": true,
+          "expanded_state_digest": "ef9edd3bcf2bf3def0c1f3eea6ff8e1831cfc5429f9510f41283d57a90974ad4",
+          "blocks": 7
+        },
+        {
+          "step": 9,
+          "admitted": true,
+          "expanded_state_digest": "c06ebc0fc2554df3deb73689a6d7b30e2576f49ef9b32fe08ec6b65cccb41e8f",
+          "blocks": 7
+        },
+        {
+          "step": 10,
+          "admitted": true,
+          "expanded_state_digest": "d22f940a9b176d108c96381b1079d1c02252f22dda2b276761c25291c7e4101e",
+          "blocks": 7
+        }
+      ],
+      "source_pairs": 340000,
+      "storage": {
+        "record": {
+          "database_bytes": 58466304,
+          "allocated_page_bytes": 58466304,
+          "freelist_bytes": 0,
+          "journal_mode": "delete",
+          "table_rows": {
+            "units": 150000,
+            "channels": 5,
+            "rosters": 4,
+            "memberships": 210000,
+            "requests": 10,
+            "charges": 340000,
+            "blocks": 0,
+            "roster_blocks": 0
+          },
+          "included": "All stable keys, memberships, provenance, channel costs, prepared requests, receipts and accounting state; transient journal peak excluded."
+        },
+        "grouped": {
+          "database_bytes": 43896832,
+          "allocated_page_bytes": 43896832,
+          "freelist_bytes": 0,
+          "journal_mode": "delete",
+          "table_rows": {
+            "units": 150000,
+            "channels": 5,
+            "rosters": 4,
+            "memberships": 210000,
+            "requests": 10,
+            "charges": 18,
+            "blocks": 7,
+            "roster_blocks": 12
+          },
+          "included": "All stable keys, memberships, provenance, channel costs, prepared requests, receipts and accounting state; transient journal peak excluded."
+        }
+      },
+      "archives": {
+        "record": {
+          "archive": "historical-parity-v1\\epsilon-1-seed-20260922-fresh\\record.sqlite3.gz",
+          "sqlite_sha256": "a899c8a6e4a2eb6eca0f9017fddb02f5866c07c0222cfbec46118e5ce5e2d761",
+          "sqlite_bytes": 58466304,
+          "gzip_bytes": 11922638,
+          "gzip_sha256": "8a06adaddbdc6d32c880f8b562e3627b8b22fedfacdf73861beac4a980a67f5d"
+        },
+        "grouped": {
+          "archive": "historical-parity-v1\\epsilon-1-seed-20260922-fresh\\grouped.sqlite3.gz",
+          "sqlite_sha256": "92d5983310fc84fcac3ba03eb6d75f32d2c2c8005f3e2a908d40da07d1f5571c",
+          "sqlite_bytes": 43896832,
+          "gzip_bytes": 10396976,
+          "gzip_sha256": "70354a088c8be1a306be752a1a7d6b319d47bcdbed2c6e945a0c1711b2161624"
+        }
+      }
+    },
+    {
+      "scenario": "epsilon-3-seed-20260921-cached",
+      "source_sha256": "c868317153668ae4ef6d2ccfcd2241846d82c27fab4198bb046e7a94a1a96959",
+      "units": 150000,
+      "steps": [
+        {
+          "step": 1,
+          "admitted": true,
+          "expanded_state_digest": "822e5862a953cb32f0409be39a8bc309c17877cd6506db1d62bc581e45146cf7",
+          "blocks": 4
+        },
+        {
+          "step": 2,
+          "admitted": true,
+          "expanded_state_digest": "6657d688cf5c7b7279f850f358f1c43e51def438085c5e31de2267c033ea5d99",
+          "blocks": 7
+        },
+        {
+          "step": 3,
+          "admitted": true,
+          "expanded_state_digest": "0d0b0a6b7d860ac7f89431798ebe2e3d24449bdee604452fafcf7f86651e2ccc",
+          "blocks": 7
+        },
+        {
+          "step": 4,
+          "admitted": true,
+          "expanded_state_digest": "8774928349c0ffe91864325a8597f40761fb429ea25bbda142e8d83c2f40617d",
+          "blocks": 7
+        },
+        {
+          "step": 5,
+          "admitted": true,
+          "expanded_state_digest": "bded0d55544609f1fa78ff94b07671432c3f1165f938e4ae07f67c3dbde12659",
+          "blocks": 7
+        },
+        {
+          "step": 6,
+          "admitted": true,
+          "expanded_state_digest": "266a37bd3c7489b848194dcbf617133c5079f767b1e177696d5e39b21e48397f",
+          "blocks": 7
+        },
+        {
+          "step": 7,
+          "admitted": true,
+          "expanded_state_digest": "fbede6eaa5303504bda4701e4b2f9674e470f32c81a16172068c0c5d730955f7",
+          "blocks": 7
+        },
+        {
+          "step": 8,
+          "admitted": true,
+          "expanded_state_digest": "a0a13c7ca79f6a49514a3049581bd1092fc368e994e332b4040d976fab17487b",
+          "blocks": 7
+        },
+        {
+          "step": 9,
+          "admitted": true,
+          "expanded_state_digest": "d041d8d46e36cc57386e979dd5c7db2cdd522183556761ea80fc7a31268e83bd",
+          "blocks": 7
+        },
+        {
+          "step": 10,
+          "admitted": true,
+          "expanded_state_digest": "14cba76de40b4dadab3471766dec65d51c09831a60def534fe711b8ee37b9c47",
+          "blocks": 7
+        }
+      ],
+      "source_pairs": 150000,
+      "storage": {
+        "record": {
+          "database_bytes": 49336320,
+          "allocated_page_bytes": 49336320,
+          "freelist_bytes": 0,
+          "journal_mode": "delete",
+          "table_rows": {
+            "units": 150000,
+            "channels": 1,
+            "rosters": 4,
+            "memberships": 210000,
+            "requests": 10,
+            "charges": 150000,
+            "blocks": 0,
+            "roster_blocks": 0
+          },
+          "included": "All stable keys, memberships, provenance, channel costs, prepared requests, receipts and accounting state; transient journal peak excluded."
+        },
+        "grouped": {
+          "database_bytes": 43896832,
+          "allocated_page_bytes": 43896832,
+          "freelist_bytes": 0,
+          "journal_mode": "delete",
+          "table_rows": {
+            "units": 150000,
+            "channels": 1,
+            "rosters": 4,
+            "memberships": 210000,
+            "requests": 10,
+            "charges": 7,
+            "blocks": 7,
+            "roster_blocks": 12
+          },
+          "included": "All stable keys, memberships, provenance, channel costs, prepared requests, receipts and accounting state; transient journal peak excluded."
+        }
+      },
+      "archives": {
+        "record": {
+          "archive": "historical-parity-v1\\epsilon-3-seed-20260921-cached\\record.sqlite3.gz",
+          "sqlite_sha256": "706e621a6cb962c998e4340957bc8ae3ebd8d7cf84a824cab994758ae31f7340",
+          "sqlite_bytes": 49336320,
+          "gzip_bytes": 10265703,
+          "gzip_sha256": "6de999a4cf6d57cf079fe964a88f16ec31bc7c540faccd28496d8bc49928554b"
+        },
+        "grouped": {
+          "archive": "historical-parity-v1\\epsilon-3-seed-20260921-cached\\grouped.sqlite3.gz",
+          "sqlite_sha256": "3db66775226c267b256325e13abdb8ec4a2f7185dda1d3fb2443ce9c6bc1bbc1",
+          "sqlite_bytes": 43896832,
+          "gzip_bytes": 10396669,
+          "gzip_sha256": "be1643185c6da96015e05961e5ad3bb7af6c6e7ac590ea40b1683e42a6754a89"
+        }
+      }
+    },
+    {
+      "scenario": "epsilon-3-seed-20260921-fresh",
+      "source_sha256": "e3105698afa364f9821682f489d0e81eed228e5228564001607bd996af6eb3e6",
+      "units": 150000,
+      "steps": [
+        {
+          "step": 1,
+          "admitted": true,
+          "expanded_state_digest": "664d41016ac03763661b47ca5b45c2862d146df112a7aae8d2dcd886742ca75f",
+          "blocks": 4
+        },
+        {
+          "step": 2,
+          "admitted": true,
+          "expanded_state_digest": "c6004da523c0b6def3d30a0ada6dbcf9a0be4deabdd83e4b8066d9de6719389a",
+          "blocks": 7
+        },
+        {
+          "step": 3,
+          "admitted": true,
+          "expanded_state_digest": "9c5c35c906f8d253c44e7de92846532e509f9b5276559d792e02b74e832aa496",
+          "blocks": 7
+        },
+        {
+          "step": 4,
+          "admitted": true,
+          "expanded_state_digest": "2a21b166a691f97af86c8b9b3d4976e74816686c6132f8a9adb72d1ac6d93642",
+          "blocks": 7
+        },
+        {
+          "step": 5,
+          "admitted": true,
+          "expanded_state_digest": "0f97be685890daf89006dada7d865c4c6b1c3bb9d85b84243b00c019019a3591",
+          "blocks": 7
+        },
+        {
+          "step": 6,
+          "admitted": true,
+          "expanded_state_digest": "7a76334620229fbb39d640c43435df9f706a7ad65212f4458817a60af3a8b2b7",
+          "blocks": 7
+        },
+        {
+          "step": 7,
+          "admitted": true,
+          "expanded_state_digest": "21752176c7e032ef15f72c6d486621175ec4c449f2e8c758676930413576fbe4",
+          "blocks": 7
+        },
+        {
+          "step": 8,
+          "admitted": true,
+          "expanded_state_digest": "719f1211a060f0ac3a92e3dd43e7e664699bc4ca78c2dba5e21df451080c53a0",
+          "blocks": 7
+        },
+        {
+          "step": 9,
+          "admitted": true,
+          "expanded_state_digest": "3fda809059d0d9ed5dd928074c13fa1491a42383098a1a4e7aaad5df512dc1a8",
+          "blocks": 7
+        },
+        {
+          "step": 10,
+          "admitted": true,
+          "expanded_state_digest": "316be91a9c2f9f013a1b08b8694b6683edb795da6b36ff730a0bbf03026cc65b",
+          "blocks": 7
+        }
+      ],
+      "source_pairs": 340000,
+      "storage": {
+        "record": {
+          "database_bytes": 58552320,
+          "allocated_page_bytes": 58552320,
+          "freelist_bytes": 0,
+          "journal_mode": "delete",
+          "table_rows": {
+            "units": 150000,
+            "channels": 5,
+            "rosters": 4,
+            "memberships": 210000,
+            "requests": 10,
+            "charges": 340000,
+            "blocks": 0,
+            "roster_blocks": 0
+          },
+          "included": "All stable keys, memberships, provenance, channel costs, prepared requests, receipts and accounting state; transient journal peak excluded."
+        },
+        "grouped": {
+          "database_bytes": 43896832,
+          "allocated_page_bytes": 43896832,
+          "freelist_bytes": 0,
+          "journal_mode": "delete",
+          "table_rows": {
+            "units": 150000,
+            "channels": 5,
+            "rosters": 4,
+            "memberships": 210000,
+            "requests": 10,
+            "charges": 18,
+            "blocks": 7,
+            "roster_blocks": 12
+          },
+          "included": "All stable keys, memberships, provenance, channel costs, prepared requests, receipts and accounting state; transient journal peak excluded."
+        }
+      },
+      "archives": {
+        "record": {
+          "archive": "historical-parity-v1\\epsilon-3-seed-20260921-fresh\\record.sqlite3.gz",
+          "sqlite_sha256": "52a89baa48d1dfd2f3384d8aca27a676ff96cde972c0f8aae6646536e07561da",
+          "sqlite_bytes": 58552320,
+          "gzip_bytes": 12182763,
+          "gzip_sha256": "5e730d4c8d6c824e6d85325d935ce777e1b038b30b10afc4d7665fd702b13680"
+        },
+        "grouped": {
+          "archive": "historical-parity-v1\\epsilon-3-seed-20260921-fresh\\grouped.sqlite3.gz",
+          "sqlite_sha256": "06e3d57485521f915c88070b3b6e4ad2c607c5a7bbeffa63dfe8e1788a8dfca1",
+          "sqlite_bytes": 43896832,
+          "gzip_bytes": 10396985,
+          "gzip_sha256": "9d194cc188100a9a5add75bbb7170e007185233bc3a177fc98b48e9c9513f5fd"
+        }
+      }
+    },
+    {
+      "scenario": "epsilon-3-seed-20260922-cached",
+      "source_sha256": "077a3b2f6904e031f0b23383fb2e20301f471dec826b9b3319bff8df3bbe1840",
+      "units": 150000,
+      "steps": [
+        {
+          "step": 1,
+          "admitted": true,
+          "expanded_state_digest": "7d1671e5076394259f541ed6c60eb72b53a570468c9dbbbc90c3ab9c4d04f065",
+          "blocks": 4
+        },
+        {
+          "step": 2,
+          "admitted": true,
+          "expanded_state_digest": "e446253292a62b92686dbde007ae6e2563344d1f3177e80e8cbd9168020d201c",
+          "blocks": 7
+        },
+        {
+          "step": 3,
+          "admitted": true,
+          "expanded_state_digest": "f44c5d7a1bd9bdcf0a511ef63a6cabd87dd04e44c4f2c070b7aec91ac13e0657",
+          "blocks": 7
+        },
+        {
+          "step": 4,
+          "admitted": true,
+          "expanded_state_digest": "7af9a28cc7be76fdf8aab4373da8ac04c3f3f94be376948bbb70589cc00fcc0e",
+          "blocks": 7
+        },
+        {
+          "step": 5,
+          "admitted": true,
+          "expanded_state_digest": "d40a3ed0c8a281769bbaa7226608aef75cf65035cd1dc169d6ae96eaf181c14c",
+          "blocks": 7
+        },
+        {
+          "step": 6,
+          "admitted": true,
+          "expanded_state_digest": "d5b70d16eb7792d22fd4309f11d24a36290455bcc8b96ee296083a32fa9153b0",
+          "blocks": 7
+        },
+        {
+          "step": 7,
+          "admitted": true,
+          "expanded_state_digest": "dd40e0333370aa62236b9b7c198fee8e1bafe201e441048d64f2b8809184a192",
+          "blocks": 7
+        },
+        {
+          "step": 8,
+          "admitted": true,
+          "expanded_state_digest": "b8b555abd354a7899978649e4710a847023c625c0dd515b8ac9e9b7276f4bb48",
+          "blocks": 7
+        },
+        {
+          "step": 9,
+          "admitted": true,
+          "expanded_state_digest": "8e37d10e089958eb06a79c20cd327c34c577ce7aad817e91e7a8e471935128e8",
+          "blocks": 7
+        },
+        {
+          "step": 10,
+          "admitted": true,
+          "expanded_state_digest": "faa27350373188ca62e1ad89bd4054d1ec6e80cf6627a70295550513255e2f93",
+          "blocks": 7
+        }
+      ],
+      "source_pairs": 150000,
+      "storage": {
+        "record": {
+          "database_bytes": 49336320,
+          "allocated_page_bytes": 49336320,
+          "freelist_bytes": 0,
+          "journal_mode": "delete",
+          "table_rows": {
+            "units": 150000,
+            "channels": 1,
+            "rosters": 4,
+            "memberships": 210000,
+            "requests": 10,
+            "charges": 150000,
+            "blocks": 0,
+            "roster_blocks": 0
+          },
+          "included": "All stable keys, memberships, provenance, channel costs, prepared requests, receipts and accounting state; transient journal peak excluded."
+        },
+        "grouped": {
+          "database_bytes": 43896832,
+          "allocated_page_bytes": 43896832,
+          "freelist_bytes": 0,
+          "journal_mode": "delete",
+          "table_rows": {
+            "units": 150000,
+            "channels": 1,
+            "rosters": 4,
+            "memberships": 210000,
+            "requests": 10,
+            "charges": 7,
+            "blocks": 7,
+            "roster_blocks": 12
+          },
+          "included": "All stable keys, memberships, provenance, channel costs, prepared requests, receipts and accounting state; transient journal peak excluded."
+        }
+      },
+      "archives": {
+        "record": {
+          "archive": "historical-parity-v1\\epsilon-3-seed-20260922-cached\\record.sqlite3.gz",
+          "sqlite_sha256": "a912aa948d9ac9b566e85b1c5c21e288441f45957eee34173b064d91284933f6",
+          "sqlite_bytes": 49336320,
+          "gzip_bytes": 10265715,
+          "gzip_sha256": "c3e7a25c89776a50bcc195e620a109aab953af41d507a489852cb3d85e75ee4a"
+        },
+        "grouped": {
+          "archive": "historical-parity-v1\\epsilon-3-seed-20260922-cached\\grouped.sqlite3.gz",
+          "sqlite_sha256": "f07a19a9338682191e3976983bd70ceaab7d278a7ac2dfd58e337493411f0dec",
+          "sqlite_bytes": 43896832,
+          "gzip_bytes": 10396637,
+          "gzip_sha256": "bc8998cebb3ee06bf2b4693d6d351b29b654f81282c8b3b486c9f6073ff0f31b"
+        }
+      }
+    },
+    {
+      "scenario": "epsilon-3-seed-20260922-fresh",
+      "source_sha256": "cc3f846a0d2ea2642a6d74ff8aa7a5ff7b40ded45b9c715f856b3488ddc12d69",
+      "units": 150000,
+      "steps": [
+        {
+          "step": 1,
+          "admitted": true,
+          "expanded_state_digest": "0997a2c6f017fac54dd71d9dead4e0aa05cf63b060c96b3e0e9c5de6649c9c54",
+          "blocks": 4
+        },
+        {
+          "step": 2,
+          "admitted": true,
+          "expanded_state_digest": "fb78083de416a977a6a24c95e43e4fe6e77eb5b00c759df0cb45096a5c1c205a",
+          "blocks": 7
+        },
+        {
+          "step": 3,
+          "admitted": true,
+          "expanded_state_digest": "dccf3a18635671be16f12650b59d8e6266974c0e39ac75cd4daf07fa98f1f510",
+          "blocks": 7
+        },
+        {
+          "step": 4,
+          "admitted": true,
+          "expanded_state_digest": "255c54ed57692952f79dc881e470977cc9d2ff54e2147bd89caeaff4e4891f3d",
+          "blocks": 7
+        },
+        {
+          "step": 5,
+          "admitted": true,
+          "expanded_state_digest": "e05967f0b98a64a3ec17f88f8942236d3ed4cc5116dd3bd9014bab062d42ca45",
+          "blocks": 7
+        },
+        {
+          "step": 6,
+          "admitted": true,
+          "expanded_state_digest": "16a9a8d708a8b6c25373a3d0a0f0e4de96ade2afccc399c441870f2bbdaae82c",
+          "blocks": 7
+        },
+        {
+          "step": 7,
+          "admitted": true,
+          "expanded_state_digest": "2174fd1515a7059daa9b32b9dbf2221733aa587c1468f02b4af9020d6aa61160",
+          "blocks": 7
+        },
+        {
+          "step": 8,
+          "admitted": true,
+          "expanded_state_digest": "9250fa4ccc2288c06e201994a91d1a2ddb5d2b306dbc5a007346d60dc7ed1e95",
+          "blocks": 7
+        },
+        {
+          "step": 9,
+          "admitted": true,
+          "expanded_state_digest": "d44b2ed259d690ffc401dece21b44433ee322fe38723bb0d0f5bbacb9f1d1dbe",
+          "blocks": 7
+        },
+        {
+          "step": 10,
+          "admitted": true,
+          "expanded_state_digest": "4ec6e83ad09f3876b7d50080b60c6cd3bc099fb420041dceb0a84e8cd990b001",
+          "blocks": 7
+        }
+      ],
+      "source_pairs": 340000,
+      "storage": {
+        "record": {
+          "database_bytes": 58552320,
+          "allocated_page_bytes": 58552320,
+          "freelist_bytes": 0,
+          "journal_mode": "delete",
+          "table_rows": {
+            "units": 150000,
+            "channels": 5,
+            "rosters": 4,
+            "memberships": 210000,
+            "requests": 10,
+            "charges": 340000,
+            "blocks": 0,
+            "roster_blocks": 0
+          },
+          "included": "All stable keys, memberships, provenance, channel costs, prepared requests, receipts and accounting state; transient journal peak excluded."
+        },
+        "grouped": {
+          "database_bytes": 43896832,
+          "allocated_page_bytes": 43896832,
+          "freelist_bytes": 0,
+          "journal_mode": "delete",
+          "table_rows": {
+            "units": 150000,
+            "channels": 5,
+            "rosters": 4,
+            "memberships": 210000,
+            "requests": 10,
+            "charges": 18,
+            "blocks": 7,
+            "roster_blocks": 12
+          },
+          "included": "All stable keys, memberships, provenance, channel costs, prepared requests, receipts and accounting state; transient journal peak excluded."
+        }
+      },
+      "archives": {
+        "record": {
+          "archive": "historical-parity-v1\\epsilon-3-seed-20260922-fresh\\record.sqlite3.gz",
+          "sqlite_sha256": "035f36fe4f39a8a56cd16853c882977c5ccfd9c71d3404c9dabf763e4f8ae883",
+          "sqlite_bytes": 58552320,
+          "gzip_bytes": 12182736,
+          "gzip_sha256": "1066df53fb457e8ff2dfc6277250ca57a32e04e3adcab88790628f2fd697b6bc"
+        },
+        "grouped": {
+          "archive": "historical-parity-v1\\epsilon-3-seed-20260922-fresh\\grouped.sqlite3.gz",
+          "sqlite_sha256": "3c3dec4cddd4fdf9b53bdc4c9b37b1a07040ea27fd63d510e3fad49f129d0f0a",
+          "sqlite_bytes": 43896832,
+          "gzip_bytes": 10396961,
+          "gzip_sha256": "4c4a387e66977285254f5c80517775c334e1dcd937551126b8f8914d1e018aff"
+        }
+      }
+    },
+    {
+      "scenario": "renewed-history-cap-8",
+      "source_sha256": "e05c7ebab237c47930d95ef60f70872a37e1701453a8615db3db8ad050d02e8e",
+      "units": 150000,
+      "steps": [
+        {
+          "step": 1,
+          "admitted": true,
+          "expanded_state_digest": "464724f8d080773b299b84c9352d36b8f30747cb579167783401b05e437894a3",
+          "blocks": 4
+        },
+        {
+          "step": 2,
+          "admitted": true,
+          "expanded_state_digest": "6d981d24c66ff489fc60e32c4e602441d7c44e370f33e993dd666657141900b1",
+          "blocks": 7
+        },
+        {
+          "step": 3,
+          "admitted": true,
+          "expanded_state_digest": "55688c797dfb1019630e2ec5fdf7268cf3625d9c8f485e218e1a5856d59026e6",
+          "blocks": 7
+        },
+        {
+          "step": 4,
+          "admitted": true,
+          "expanded_state_digest": "67c2c538ca55473043ceef15b037c30b2b523d4605d4fd8174af71e340f428fa",
+          "blocks": 7
+        },
+        {
+          "step": 5,
+          "admitted": true,
+          "expanded_state_digest": "7edd28a3dedc689be6d072d46edd823fcbaf811969c7ad7b161ee0179b5d6b09",
+          "blocks": 7
+        },
+        {
+          "step": 6,
+          "admitted": true,
+          "expanded_state_digest": "9109d1c6b5377659602bbee5e7482beb88d9999afafb5f79ce1264469df599e1",
+          "blocks": 7
+        },
+        {
+          "step": 7,
+          "admitted": true,
+          "expanded_state_digest": "83abf6eebee810858e523541fd7bb048980a9eaa213cc1e2c198244acd3fe7eb",
+          "blocks": 7
+        },
+        {
+          "step": 8,
+          "admitted": true,
+          "expanded_state_digest": "25fe2c53359f580d338896747f56bf37bfc98fc33756c7d7997a144b7798c585",
+          "blocks": 7
+        },
+        {
+          "step": 9,
+          "admitted": true,
+          "expanded_state_digest": "fb4e7c8aa91d24a7941623cba007d0d4671a8070be5c6fb9bd0317c0a51bedaf",
+          "blocks": 7
+        },
+        {
+          "step": 10,
+          "admitted": true,
+          "expanded_state_digest": "0b4bea828e41c40d334293626d15c12e685b5994a192e2c13f219043498f9837",
+          "blocks": 7
+        }
+      ],
+      "source_pairs": 550000,
+      "storage": {
+        "record": {
+          "database_bytes": 65736704,
+          "allocated_page_bytes": 65736704,
+          "freelist_bytes": 0,
+          "journal_mode": "delete",
+          "table_rows": {
+            "units": 150000,
+            "channels": 4,
+            "rosters": 4,
+            "memberships": 210000,
+            "requests": 10,
+            "charges": 550000,
+            "blocks": 0,
+            "roster_blocks": 0
+          },
+          "included": "All stable keys, memberships, provenance, channel costs, prepared requests, receipts and accounting state; transient journal peak excluded."
+        },
+        "grouped": {
+          "database_bytes": 43896832,
+          "allocated_page_bytes": 43896832,
+          "freelist_bytes": 0,
+          "journal_mode": "delete",
+          "table_rows": {
+            "units": 150000,
+            "channels": 4,
+            "rosters": 4,
+            "memberships": 210000,
+            "requests": 10,
+            "charges": 26,
+            "blocks": 7,
+            "roster_blocks": 12
+          },
+          "included": "All stable keys, memberships, provenance, channel costs, prepared requests, receipts and accounting state; transient journal peak excluded."
+        }
+      },
+      "archives": {
+        "record": {
+          "archive": "historical-parity-v1\\renewed-history-cap-8\\record.sqlite3.gz",
+          "sqlite_sha256": "c003d768fb5723c18c0612fe0b3fd03c01437b8620046422a272c5f5b4404daa",
+          "sqlite_bytes": 65736704,
+          "gzip_bytes": 12881144,
+          "gzip_sha256": "749c03bd993b8422cfc8b2f1b441dce1e2f1133b8e3568822a249069542b8765"
+        },
+        "grouped": {
+          "archive": "historical-parity-v1\\renewed-history-cap-8\\grouped.sqlite3.gz",
+          "sqlite_sha256": "337b45ae558d72d7562f0dfce8b8ac66ea43c3094570626069c2abde48f77329",
+          "sqlite_bytes": 43896832,
+          "gzip_bytes": 10396931,
+          "gzip_sha256": "1019f151f16b2a03dd4ab937cccb003a77ee5d896ba02877c0b29abdd6b6af3d"
+        }
+      }
+    },
+    {
+      "scenario": "renewed-history-cap-3",
+      "source_sha256": "cc2a658c9485b3a827d0662d7d6b1a365ddf121fb0413d8b0c85f3e827298255",
+      "units": 150000,
+      "steps": [
+        {
+          "step": 1,
+          "admitted": true,
+          "expanded_state_digest": "464724f8d080773b299b84c9352d36b8f30747cb579167783401b05e437894a3",
+          "blocks": 4
+        },
+        {
+          "step": 2,
+          "admitted": true,
+          "expanded_state_digest": "6d981d24c66ff489fc60e32c4e602441d7c44e370f33e993dd666657141900b1",
+          "blocks": 7
+        },
+        {
+          "step": 3,
+          "admitted": true,
+          "expanded_state_digest": "55688c797dfb1019630e2ec5fdf7268cf3625d9c8f485e218e1a5856d59026e6",
+          "blocks": 7
+        },
+        {
+          "step": 4,
+          "admitted": true,
+          "expanded_state_digest": "67c2c538ca55473043ceef15b037c30b2b523d4605d4fd8174af71e340f428fa",
+          "blocks": 7
+        },
+        {
+          "step": 5,
+          "admitted": true,
+          "expanded_state_digest": "7edd28a3dedc689be6d072d46edd823fcbaf811969c7ad7b161ee0179b5d6b09",
+          "blocks": 7
+        },
+        {
+          "step": 6,
+          "admitted": true,
+          "expanded_state_digest": "9109d1c6b5377659602bbee5e7482beb88d9999afafb5f79ce1264469df599e1",
+          "blocks": 7
+        },
+        {
+          "step": 7,
+          "admitted": false,
+          "expanded_state_digest": "9109d1c6b5377659602bbee5e7482beb88d9999afafb5f79ce1264469df599e1",
+          "blocks": 7
+        },
+        {
+          "step": 8,
+          "admitted": false,
+          "expanded_state_digest": "9109d1c6b5377659602bbee5e7482beb88d9999afafb5f79ce1264469df599e1",
+          "blocks": 7
+        },
+        {
+          "step": 9,
+          "admitted": false,
+          "expanded_state_digest": "9109d1c6b5377659602bbee5e7482beb88d9999afafb5f79ce1264469df599e1",
+          "blocks": 7
+        },
+        {
+          "step": 10,
+          "admitted": false,
+          "expanded_state_digest": "9109d1c6b5377659602bbee5e7482beb88d9999afafb5f79ce1264469df599e1",
+          "blocks": 7
+        }
+      ],
+      "source_pairs": 275000,
+      "storage": {
+        "record": {
+          "database_bytes": 54603776,
+          "allocated_page_bytes": 54603776,
+          "freelist_bytes": 0,
+          "journal_mode": "delete",
+          "table_rows": {
+            "units": 150000,
+            "channels": 4,
+            "rosters": 4,
+            "memberships": 210000,
+            "requests": 6,
+            "charges": 275000,
+            "blocks": 0,
+            "roster_blocks": 0
+          },
+          "included": "All stable keys, memberships, provenance, channel costs, prepared requests, receipts and accounting state; transient journal peak excluded."
+        },
+        "grouped": {
+          "database_bytes": 43888640,
+          "allocated_page_bytes": 43888640,
+          "freelist_bytes": 0,
+          "journal_mode": "delete",
+          "table_rows": {
+            "units": 150000,
+            "channels": 4,
+            "rosters": 4,
+            "memberships": 210000,
+            "requests": 6,
+            "charges": 13,
+            "blocks": 7,
+            "roster_blocks": 12
+          },
+          "included": "All stable keys, memberships, provenance, channel costs, prepared requests, receipts and accounting state; transient journal peak excluded."
+        }
+      },
+      "archives": {
+        "record": {
+          "archive": "historical-parity-v1\\renewed-history-cap-3\\record.sqlite3.gz",
+          "sqlite_sha256": "7cc20f43b6cc1b06484a0ece295d0de5b98f1dc821707b6e49c3b8aacabdf166",
+          "sqlite_bytes": 54603776,
+          "gzip_bytes": 11182647,
+          "gzip_sha256": "71ef2b93d787f228588f075e0ab627bd855ebfa11f7589fc290d2628afda6dd8"
+        },
+        "grouped": {
+          "archive": "historical-parity-v1\\renewed-history-cap-3\\grouped.sqlite3.gz",
+          "sqlite_sha256": "33dfb7daf43956f5bdf377d6d88fe028f22554787ca9fe2d43c90f6adc70dcda",
+          "sqlite_bytes": 43888640,
+          "gzip_bytes": 10394342,
+          "gzip_sha256": "aa0020806566917a6d5b80ea749982a0e017e2406e7a145de906617a1c1d14ff"
+        }
+      }
+    }
+  ],
+  "prefixes": 100,
+  "source_pairs": 2785000,
+  "scope": "New accounting-kernel executions only; no historical model reruns or new HTTP lifecycle validation; timing not analyzed."
+}

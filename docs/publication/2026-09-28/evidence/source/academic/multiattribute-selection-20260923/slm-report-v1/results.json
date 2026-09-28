@@ -1,0 +1,4615 @@
+{
+  "completed_utc": "2026-09-23T09:59:43.857150+00:00",
+  "contrasts": [
+    {
+      "control": "omission",
+      "difference": 0.019140306650504504,
+      "family": "slm_small",
+      "familywise_95": [
+        0.01599714260246341,
+        0.022283470698545596
+      ],
+      "k": 3,
+      "pointwise_95": [
+        0.017080849176120187,
+        0.02119976412488882
+      ],
+      "record_se": 0.0010507629173949677,
+      "repeat_gain_sd": 0.0008544739140095887,
+      "repeat_gains": [
+        0.019571503918228816,
+        0.019693263386770687,
+        0.018156152646513934
+      ]
+    },
+    {
+      "control": "equal_all",
+      "difference": 0.01383363982135848,
+      "family": "slm_small",
+      "familywise_95": [
+        0.010985564830978373,
+        0.016681714811738586
+      ],
+      "k": 3,
+      "pointwise_95": [
+        0.011967529991615138,
+        0.01569974965110182
+      ],
+      "record_se": 0.0009521143472344534,
+      "repeat_gain_sd": 0.0003146452366703847,
+      "repeat_gains": [
+        0.013753102152622376,
+        0.01418072600838971,
+        0.013567091303063217
+      ]
+    },
+    {
+      "control": "best_single",
+      "difference": 0.0,
+      "family": "slm_small",
+      "familywise_95": [
+        0.0,
+        0.0
+      ],
+      "k": 3,
+      "pointwise_95": [
+        0.0,
+        0.0
+      ],
+      "record_se": 0.0,
+      "repeat_gain_sd": 0.0,
+      "repeat_gains": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "control": "omission",
+      "difference": 0.019101447671390517,
+      "family": "slm_medium",
+      "familywise_95": [
+        0.015881775500334316,
+        0.022321119842446717
+      ],
+      "k": 3,
+      "pointwise_95": [
+        0.016991860702208504,
+        0.02121103464057253
+      ],
+      "record_se": 0.0010763396602295869,
+      "repeat_gain_sd": 0.0007493979944727879,
+      "repeat_gains": [
+        0.019262207854938485,
+        0.019757419721366132,
+        0.01828471543786714
+      ]
+    },
+    {
+      "control": "equal_all",
+      "difference": 0.013822572749423213,
+      "family": "slm_medium",
+      "familywise_95": [
+        0.010917265520086929,
+        0.016727879978759495
+      ],
+      "k": 3,
+      "pointwise_95": [
+        0.011918963329937648,
+        0.015726182168908778
+      ],
+      "record_se": 0.0009712471425500901,
+      "repeat_gain_sd": 0.0008182879340475101,
+      "repeat_gains": [
+        0.013303427527038503,
+        0.014765856792115839,
+        0.013398433929115439
+      ]
+    },
+    {
+      "control": "best_single",
+      "difference": 0.0,
+      "family": "slm_medium",
+      "familywise_95": [
+        0.0,
+        0.0
+      ],
+      "k": 3,
+      "pointwise_95": [
+        0.0,
+        0.0
+      ],
+      "record_se": 0.0,
+      "repeat_gain_sd": 0.0,
+      "repeat_gains": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "control": "omission",
+      "difference": 0.018030934822209844,
+      "family": "slm_small",
+      "familywise_95": [
+        0.014789369981881892,
+        0.021272499662537796
+      ],
+      "k": 4,
+      "pointwise_95": [
+        0.01590700338335434,
+        0.020154866261065347
+      ],
+      "record_se": 0.0010836584016894503,
+      "repeat_gain_sd": 0.0017076689616314007,
+      "repeat_gains": [
+        0.016490949344569406,
+        0.01986744846050259,
+        0.017734406661557567
+      ]
+    },
+    {
+      "control": "equal_all",
+      "difference": 0.01513163877702842,
+      "family": "slm_small",
+      "familywise_95": [
+        0.012090800521966137,
+        0.018172477032090704
+      ],
+      "k": 4,
+      "pointwise_95": [
+        0.013139226997985346,
+        0.017124050556071493
+      ],
+      "record_se": 0.0010165553014029945,
+      "repeat_gain_sd": 0.0017537978215688504,
+      "repeat_gains": [
+        0.013409999577893794,
+        0.01691591690297467,
+        0.015068999850216813
+      ]
+    },
+    {
+      "control": "best_single",
+      "difference": 0.0,
+      "family": "slm_small",
+      "familywise_95": [
+        0.0,
+        0.0
+      ],
+      "k": 4,
+      "pointwise_95": [
+        0.0,
+        0.0
+      ],
+      "record_se": 0.0,
+      "repeat_gain_sd": 0.0,
+      "repeat_gains": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "control": "omission",
+      "difference": 0.017780399124736508,
+      "family": "slm_medium",
+      "familywise_95": [
+        0.014492615768011419,
+        0.021068182481461598
+      ],
+      "k": 4,
+      "pointwise_95": [
+        0.01562618448475176,
+        0.019934613764721255
+      ],
+      "record_se": 0.0010991092984243469,
+      "repeat_gain_sd": 0.0018324079537987053,
+      "repeat_gains": [
+        0.016034471396174643,
+        0.019688506063246236,
+        0.017618219914788513
+      ]
+    },
+    {
+      "control": "equal_all",
+      "difference": 0.014647217180676549,
+      "family": "slm_medium",
+      "familywise_95": [
+        0.011558676448602388,
+        0.01773575791275071
+      ],
+      "k": 4,
+      "pointwise_95": [
+        0.012623549882886376,
+        0.01667088447846672
+      ],
+      "record_se": 0.001032502287670926,
+      "repeat_gain_sd": 0.001836966576885586,
+      "repeat_gains": [
+        0.013017302780851225,
+        0.016637751043987348,
+        0.014286597717191096
+      ]
+    },
+    {
+      "control": "best_single",
+      "difference": 0.0,
+      "family": "slm_medium",
+      "familywise_95": [
+        0.0,
+        0.0
+      ],
+      "k": 4,
+      "pointwise_95": [
+        0.0,
+        0.0
+      ],
+      "record_se": 0.0,
+      "repeat_gain_sd": 0.0,
+      "repeat_gains": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "control": "omission",
+      "difference": 0.024795111847243978,
+      "family": "slm_small",
+      "familywise_95": [
+        0.02079787079403996,
+        0.028792352900447998
+      ],
+      "k": 5,
+      "pointwise_95": [
+        0.02217604779646134,
+        0.027414175898026617
+      ],
+      "record_se": 0.001336281723256934,
+      "repeat_gain_sd": 0.0005747013320105014,
+      "repeat_gains": [
+        0.025457523709154772,
+        0.024498395261229433,
+        0.02442941657134745
+      ]
+    },
+    {
+      "control": "equal_all",
+      "difference": 0.020886929718677238,
+      "family": "slm_small",
+      "familywise_95": [
+        0.017077877087829995,
+        0.02469598234952448
+      ],
+      "k": 5,
+      "pointwise_95": [
+        0.01839117009842752,
+        0.023382689338926954
+      ],
+      "record_se": 0.001273370143500605,
+      "repeat_gain_sd": 0.0002226190240256574,
+      "repeat_gains": [
+        0.02065938525035016,
+        0.021104272537750046,
+        0.020897131367931365
+      ]
+    },
+    {
+      "control": "best_single",
+      "difference": 0.0,
+      "family": "slm_small",
+      "familywise_95": [
+        0.0,
+        0.0
+      ],
+      "k": 5,
+      "pointwise_95": [
+        0.0,
+        0.0
+      ],
+      "record_se": 0.0,
+      "repeat_gain_sd": 0.0,
+      "repeat_gains": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "control": "omission",
+      "difference": 0.024399176801941848,
+      "family": "slm_medium",
+      "familywise_95": [
+        0.020310536644365575,
+        0.02848781695951812
+      ],
+      "k": 5,
+      "pointwise_95": [
+        0.021720226418223843,
+        0.027078127185659853
+      ],
+      "record_se": 0.0013668365362064293,
+      "repeat_gain_sd": 0.0006756281179112195,
+      "repeat_gains": [
+        0.025046763089560664,
+        0.023698624645263067,
+        0.024452142671002042
+      ]
+    },
+    {
+      "control": "equal_all",
+      "difference": 0.020798381470827507,
+      "family": "slm_medium",
+      "familywise_95": [
+        0.016914082331632007,
+        0.024682680610023006
+      ],
+      "k": 5,
+      "pointwise_95": [
+        0.018253318988343883,
+        0.02334344395331113
+      ],
+      "record_se": 0.0012985251272772476,
+      "repeat_gain_sd": 0.00012800827527080714,
+      "repeat_gains": [
+        0.02076651757484882,
+        0.020689314868274966,
+        0.020939311969358942
+      ]
+    },
+    {
+      "control": "best_single",
+      "difference": 0.0,
+      "family": "slm_medium",
+      "familywise_95": [
+        0.0,
+        0.0
+      ],
+      "k": 5,
+      "pointwise_95": [
+        0.0,
+        0.0
+      ],
+      "record_se": 0.0,
+      "repeat_gain_sd": 0.0,
+      "repeat_gains": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    }
+  ],
+  "development_fits": 336,
+  "final_fits": 108,
+  "final_test_records": 20000,
+  "fit_warnings": [],
+  "records": [
+    {
+      "auc": 0.8086514534563826,
+      "bound_exact": "0",
+      "epoch_rows_seen": [
+        2206118,
+        2206118
+      ],
+      "epsilon_per_attribute": 0.0,
+      "family": "slm_small",
+      "input_scope": "Public covariates followed by accounted RR bits; adapter field_sizes is a token schema, not a claim that RR inputs are public.",
+      "k": 3,
+      "metadata": {
+        "bytes": 1421,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k3-r0-slm_small-none\\fit\\recipient\\metadata.json",
+        "sha256": "64a266314d0e5c5b3cc6523df11c07dcaa0b84742e7ca001059147b3b182297e"
+      },
+      "model": {
+        "bytes": 5464040,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k3-r0-slm_small-none\\fit\\recipient\\neural_model.pt",
+        "sha256": "7cac8769a50677a28066f16f5d3c7b921aca046eeb4c1f70664a1f640f85c7ae"
+      },
+      "parameter_count": 1349760,
+      "repeat": 0,
+      "score_rows": 20000,
+      "scores": {
+        "bytes": 160128,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k3-r0-slm_small-none\\scores.npy",
+        "sha256": "f10540d6f7ad938c9004b3713e78797d667a6fb5988aa692c53756f136d8ee38"
+      },
+      "seconds": 34.203945000015665,
+      "subset": [],
+      "training_rows": 2206118,
+      "warnings": [],
+      "width": 6
+    },
+    {
+      "auc": 0.8282229573746114,
+      "bound_exact": "2",
+      "epoch_rows_seen": [
+        2206118,
+        2206118
+      ],
+      "epsilon_per_attribute": 2.0,
+      "family": "slm_small",
+      "input_scope": "Public covariates followed by accounted RR bits; adapter field_sizes is a token schema, not a claim that RR inputs are public.",
+      "k": 3,
+      "metadata": {
+        "bytes": 1428,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k3-r0-slm_small-0\\fit\\recipient\\metadata.json",
+        "sha256": "f676762bde9745959c744825fa55674c8319621a07db418c6b3224b03da1a443"
+      },
+      "model": {
+        "bytes": 5467880,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k3-r0-slm_small-0\\fit\\recipient\\neural_model.pt",
+        "sha256": "3aa86c3f62855991195dc2155c42175445d64909a681e274a77d698412807097"
+      },
+      "parameter_count": 1350336,
+      "repeat": 0,
+      "score_rows": 20000,
+      "scores": {
+        "bytes": 160128,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k3-r0-slm_small-0\\scores.npy",
+        "sha256": "8af4e655f8f5ffce6acdffe47affa7290765f4d0620d92704b319cf3e0e8acfd"
+      },
+      "seconds": 36.19464609998977,
+      "subset": [
+        0
+      ],
+      "training_rows": 2206118,
+      "warnings": [],
+      "width": 7
+    },
+    {
+      "auc": 0.8112770658317228,
+      "bound_exact": "2",
+      "epoch_rows_seen": [
+        2206118,
+        2206118
+      ],
+      "epsilon_per_attribute": 2.0,
+      "family": "slm_small",
+      "input_scope": "Public covariates followed by accounted RR bits; adapter field_sizes is a token schema, not a claim that RR inputs are public.",
+      "k": 3,
+      "metadata": {
+        "bytes": 1428,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k3-r0-slm_small-1\\fit\\recipient\\metadata.json",
+        "sha256": "cc50948b52feb4c4129e0a4881a9b2db9e6ad608c2fdbd3283e846a2e3549f02"
+      },
+      "model": {
+        "bytes": 5467880,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k3-r0-slm_small-1\\fit\\recipient\\neural_model.pt",
+        "sha256": "349dcf47c0e626501d96621a17f46a4b2018812e5c8722177e34c0acd33716ed"
+      },
+      "parameter_count": 1350336,
+      "repeat": 0,
+      "score_rows": 20000,
+      "scores": {
+        "bytes": 160128,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k3-r0-slm_small-1\\scores.npy",
+        "sha256": "2b4338663341b061c607240b72e489d75431dc1771e64d59d3ab33e0bde2a011"
+      },
+      "seconds": 35.66120830003638,
+      "subset": [
+        1
+      ],
+      "training_rows": 2206118,
+      "warnings": [],
+      "width": 7
+    },
+    {
+      "auc": 0.8149051528256916,
+      "bound_exact": "2",
+      "epoch_rows_seen": [
+        2206118,
+        2206118
+      ],
+      "epsilon_per_attribute": 2.0,
+      "family": "slm_small",
+      "input_scope": "Public covariates followed by accounted RR bits; adapter field_sizes is a token schema, not a claim that RR inputs are public.",
+      "k": 3,
+      "metadata": {
+        "bytes": 1428,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k3-r0-slm_small-2\\fit\\recipient\\metadata.json",
+        "sha256": "36b55e7469ec5c9cc7281a7ba838700c3c449c72f9d17245a0e279c3468ea473"
+      },
+      "model": {
+        "bytes": 5467880,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k3-r0-slm_small-2\\fit\\recipient\\neural_model.pt",
+        "sha256": "b3ad45a621857b7f5199e83bfae9b035432a4698c8501da4eaa78799933b532b"
+      },
+      "parameter_count": 1350336,
+      "repeat": 0,
+      "score_rows": 20000,
+      "scores": {
+        "bytes": 160128,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k3-r0-slm_small-2\\scores.npy",
+        "sha256": "0ab895861e116beed86912d99a0b08852af8749549d4d09e87b24871b682b9e0"
+      },
+      "seconds": 36.2661554000224,
+      "subset": [
+        2
+      ],
+      "training_rows": 2206118,
+      "warnings": [],
+      "width": 7
+    },
+    {
+      "auc": 0.814469855221989,
+      "bound_exact": "1.999999999999999555910790150",
+      "epoch_rows_seen": [
+        2206118,
+        2206118
+      ],
+      "epsilon_per_attribute": 0.6666666666666665,
+      "family": "slm_small",
+      "input_scope": "Public covariates followed by accounted RR bits; adapter field_sizes is a token schema, not a claim that RR inputs are public.",
+      "k": 3,
+      "metadata": {
+        "bytes": 1442,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k3-r0-slm_small-0-1-2\\fit\\recipient\\metadata.json",
+        "sha256": "5ae69c9a8401aae64e92261a6b9cbd3d2505730e34fd4651bbe898e2ce0f0479"
+      },
+      "model": {
+        "bytes": 5475560,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k3-r0-slm_small-0-1-2\\fit\\recipient\\neural_model.pt",
+        "sha256": "80bd0fe783cf241bce1af3ed3c00bb23342b88fc842c7330374e2b04882d8156"
+      },
+      "parameter_count": 1351488,
+      "repeat": 0,
+      "score_rows": 20000,
+      "scores": {
+        "bytes": 160128,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k3-r0-slm_small-0-1-2\\scores.npy",
+        "sha256": "dc1435fa473fe09a0feaff2ebe002840969aaa026866461d5b86b1cfd403195a"
+      },
+      "seconds": 39.758281900023576,
+      "subset": [
+        0,
+        1,
+        2
+      ],
+      "training_rows": 2206118,
+      "warnings": [],
+      "width": 9
+    },
+    {
+      "auc": 0.8089815096591326,
+      "bound_exact": "0",
+      "epoch_rows_seen": [
+        2206118,
+        2206118
+      ],
+      "epsilon_per_attribute": 0.0,
+      "family": "slm_medium",
+      "input_scope": "Public covariates followed by accounted RR bits; adapter field_sizes is a token schema, not a claim that RR inputs are public.",
+      "k": 3,
+      "metadata": {
+        "bytes": 1424,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k3-r0-slm_medium-none\\fit\\recipient\\metadata.json",
+        "sha256": "045ccedb7a7a53f6e8a081e4ca53f57b20319ab5cf8c08c9849f9697a1233fd6"
+      },
+      "model": {
+        "bytes": 12803204,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k3-r0-slm_medium-none\\fit\\recipient\\neural_model.pt",
+        "sha256": "48dd142f7826f7a6f3adff1bd54e7af956184f51c3c164d52ddc26f31fe5d550"
+      },
+      "parameter_count": 3179264,
+      "repeat": 0,
+      "score_rows": 20000,
+      "scores": {
+        "bytes": 160128,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k3-r0-slm_medium-none\\scores.npy",
+        "sha256": "ec6cd3b0af2af7eed95cadd3f9f83803c4574189837a543034ebedbcf66efb67"
+      },
+      "seconds": 53.834408099995926,
+      "subset": [],
+      "training_rows": 2206118,
+      "warnings": [],
+      "width": 6
+    },
+    {
+      "auc": 0.8282437175140711,
+      "bound_exact": "2",
+      "epoch_rows_seen": [
+        2206118,
+        2206118
+      ],
+      "epsilon_per_attribute": 2.0,
+      "family": "slm_medium",
+      "input_scope": "Public covariates followed by accounted RR bits; adapter field_sizes is a token schema, not a claim that RR inputs are public.",
+      "k": 3,
+      "metadata": {
+        "bytes": 1431,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k3-r0-slm_medium-0\\fit\\recipient\\metadata.json",
+        "sha256": "65476165be24ad38455ddc133bcdc4b2814867c912738c0e3c04bbf8fd053934"
+      },
+      "model": {
+        "bytes": 12808324,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k3-r0-slm_medium-0\\fit\\recipient\\neural_model.pt",
+        "sha256": "3a35ffa45553f9803416b8c6996957203f021b7d43dd5e65938a1da8a8e3240b"
+      },
+      "parameter_count": 3180032,
+      "repeat": 0,
+      "score_rows": 20000,
+      "scores": {
+        "bytes": 160128,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k3-r0-slm_medium-0\\scores.npy",
+        "sha256": "1e45118c6a0055570b0677b3e0b43bab6ea52640714a3b675089c80c97a12a3f"
+      },
+      "seconds": 108.59336539998185,
+      "subset": [
+        0
+      ],
+      "training_rows": 2206118,
+      "warnings": [],
+      "width": 7
+    },
+    {
+      "auc": 0.810992141671914,
+      "bound_exact": "2",
+      "epoch_rows_seen": [
+        2206118,
+        2206118
+      ],
+      "epsilon_per_attribute": 2.0,
+      "family": "slm_medium",
+      "input_scope": "Public covariates followed by accounted RR bits; adapter field_sizes is a token schema, not a claim that RR inputs are public.",
+      "k": 3,
+      "metadata": {
+        "bytes": 1431,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k3-r0-slm_medium-1\\fit\\recipient\\metadata.json",
+        "sha256": "2fcdbed024c3322eb74c6efac57a65959e6c01bc6a623233c6fb0131ed3ada20"
+      },
+      "model": {
+        "bytes": 12808324,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k3-r0-slm_medium-1\\fit\\recipient\\neural_model.pt",
+        "sha256": "b15936c9c1bbbc54319a7896862b2eb0d292d35473b45230a9f17379f753145b"
+      },
+      "parameter_count": 3180032,
+      "repeat": 0,
+      "score_rows": 20000,
+      "scores": {
+        "bytes": 160128,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k3-r0-slm_medium-1\\scores.npy",
+        "sha256": "a47e9310971e0f5074dd2601d3b6dfaddc39dfc06c9eaa8e8c8dcbe60d9162af"
+      },
+      "seconds": 119.54681929998333,
+      "subset": [
+        1
+      ],
+      "training_rows": 2206118,
+      "warnings": [],
+      "width": 7
+    },
+    {
+      "auc": 0.8143961242110259,
+      "bound_exact": "2",
+      "epoch_rows_seen": [
+        2206118,
+        2206118
+      ],
+      "epsilon_per_attribute": 2.0,
+      "family": "slm_medium",
+      "input_scope": "Public covariates followed by accounted RR bits; adapter field_sizes is a token schema, not a claim that RR inputs are public.",
+      "k": 3,
+      "metadata": {
+        "bytes": 1431,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k3-r0-slm_medium-2\\fit\\recipient\\metadata.json",
+        "sha256": "61f147d2ad8ff489f15fccda6758f443304d4e25b0401afbdfc1054a8b57e3fa"
+      },
+      "model": {
+        "bytes": 12808324,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k3-r0-slm_medium-2\\fit\\recipient\\neural_model.pt",
+        "sha256": "e07bc2a8017ab2a17de464d4f3b26aeeabae2704700bb6fe46cf9ceb549070ab"
+      },
+      "parameter_count": 3180032,
+      "repeat": 0,
+      "score_rows": 20000,
+      "scores": {
+        "bytes": 160128,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k3-r0-slm_medium-2\\scores.npy",
+        "sha256": "cd67b9ba786069246d3d7c5491f63fcc59c1ba1da959a73ae7925b7b56dca578"
+      },
+      "seconds": 119.0845021000132,
+      "subset": [
+        2
+      ],
+      "training_rows": 2206118,
+      "warnings": [],
+      "width": 7
+    },
+    {
+      "auc": 0.8149402899870326,
+      "bound_exact": "1.999999999999999555910790150",
+      "epoch_rows_seen": [
+        2206118,
+        2206118
+      ],
+      "epsilon_per_attribute": 0.6666666666666665,
+      "family": "slm_medium",
+      "input_scope": "Public covariates followed by accounted RR bits; adapter field_sizes is a token schema, not a claim that RR inputs are public.",
+      "k": 3,
+      "metadata": {
+        "bytes": 1445,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k3-r0-slm_medium-0-1-2\\fit\\recipient\\metadata.json",
+        "sha256": "3a5ab6e4a30a792cd15f06ee45202976777f9cd1d5de7bcd829bec56dcdfb371"
+      },
+      "model": {
+        "bytes": 12818564,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k3-r0-slm_medium-0-1-2\\fit\\recipient\\neural_model.pt",
+        "sha256": "d8a12856917f2102346c4bdce894954d45bf7ae1e64ab04094ec744a7dc09ab8"
+      },
+      "parameter_count": 3181568,
+      "repeat": 0,
+      "score_rows": 20000,
+      "scores": {
+        "bytes": 160128,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k3-r0-slm_medium-0-1-2\\scores.npy",
+        "sha256": "4b5428fda78db604efe0516e36a390cc3f2b2f1a83b38086bbc50c414c414537"
+      },
+      "seconds": 137.31423730001552,
+      "subset": [
+        0,
+        1,
+        2
+      ],
+      "training_rows": 2206118,
+      "warnings": [],
+      "width": 9
+    },
+    {
+      "auc": 0.8094179878394407,
+      "bound_exact": "0",
+      "epoch_rows_seen": [
+        2206118,
+        2206118
+      ],
+      "epsilon_per_attribute": 0.0,
+      "family": "slm_small",
+      "input_scope": "Public covariates followed by accounted RR bits; adapter field_sizes is a token schema, not a claim that RR inputs are public.",
+      "k": 3,
+      "metadata": {
+        "bytes": 1421,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k3-r1-slm_small-none\\fit\\recipient\\metadata.json",
+        "sha256": "49523b8b3252a46fc71a95477e70ec473aa4f173722a03767e7988fb64b243f8"
+      },
+      "model": {
+        "bytes": 5464040,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k3-r1-slm_small-none\\fit\\recipient\\neural_model.pt",
+        "sha256": "c99ccf40a8431a23c57dcdd5448bddc0cb4e515e20adf758bdb2bc468c43aeca"
+      },
+      "parameter_count": 1349760,
+      "repeat": 1,
+      "score_rows": 20000,
+      "scores": {
+        "bytes": 160128,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k3-r1-slm_small-none\\scores.npy",
+        "sha256": "26e02f92c41a77677440abeb0b361ab41366c7c8177cb60b2a25c51e402c742e"
+      },
+      "seconds": 76.24995020002825,
+      "subset": [],
+      "training_rows": 2206118,
+      "warnings": [],
+      "width": 6
+    },
+    {
+      "auc": 0.8291112512262114,
+      "bound_exact": "2",
+      "epoch_rows_seen": [
+        2206118,
+        2206118
+      ],
+      "epsilon_per_attribute": 2.0,
+      "family": "slm_small",
+      "input_scope": "Public covariates followed by accounted RR bits; adapter field_sizes is a token schema, not a claim that RR inputs are public.",
+      "k": 3,
+      "metadata": {
+        "bytes": 1428,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k3-r1-slm_small-0\\fit\\recipient\\metadata.json",
+        "sha256": "9f7bf0f6e461df8bdec574d3b777fa2d6e5ac91097b92b61a81bdcdc6a10b5c1"
+      },
+      "model": {
+        "bytes": 5467880,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k3-r1-slm_small-0\\fit\\recipient\\neural_model.pt",
+        "sha256": "7635c7f644c25953743a198020ffeb0e6baba3f7c847a6d3b509b77176185645"
+      },
+      "parameter_count": 1350336,
+      "repeat": 1,
+      "score_rows": 20000,
+      "scores": {
+        "bytes": 160128,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k3-r1-slm_small-0\\scores.npy",
+        "sha256": "d17da5536b92c2846b576ad1ba92d692103276916592e469ac34275027e06133"
+      },
+      "seconds": 78.24903880001511,
+      "subset": [
+        0
+      ],
+      "training_rows": 2206118,
+      "warnings": [],
+      "width": 7
+    },
+    {
+      "auc": 0.8122136182532911,
+      "bound_exact": "2",
+      "epoch_rows_seen": [
+        2206118,
+        2206118
+      ],
+      "epsilon_per_attribute": 2.0,
+      "family": "slm_small",
+      "input_scope": "Public covariates followed by accounted RR bits; adapter field_sizes is a token schema, not a claim that RR inputs are public.",
+      "k": 3,
+      "metadata": {
+        "bytes": 1428,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k3-r1-slm_small-1\\fit\\recipient\\metadata.json",
+        "sha256": "016f8c10cfd08f3566b7647b69b7b7de9e3e3d8b18f84afe2de995e62a258840"
+      },
+      "model": {
+        "bytes": 5467880,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k3-r1-slm_small-1\\fit\\recipient\\neural_model.pt",
+        "sha256": "dfea717b8d6e06098d3ce193214352e3f2d03677237d4907bbcfe6b760580230"
+      },
+      "parameter_count": 1350336,
+      "repeat": 1,
+      "score_rows": 20000,
+      "scores": {
+        "bytes": 160128,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k3-r1-slm_small-1\\scores.npy",
+        "sha256": "eac826ec4cbd1f0eb9fd59ea827f3e83d790186053aaffe59105fb0a2e572526"
+      },
+      "seconds": 80.03754809999373,
+      "subset": [
+        1
+      ],
+      "training_rows": 2206118,
+      "warnings": [],
+      "width": 7
+    },
+    {
+      "auc": 0.8157860980881673,
+      "bound_exact": "2",
+      "epoch_rows_seen": [
+        2206118,
+        2206118
+      ],
+      "epsilon_per_attribute": 2.0,
+      "family": "slm_small",
+      "input_scope": "Public covariates followed by accounted RR bits; adapter field_sizes is a token schema, not a claim that RR inputs are public.",
+      "k": 3,
+      "metadata": {
+        "bytes": 1428,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k3-r1-slm_small-2\\fit\\recipient\\metadata.json",
+        "sha256": "d64069d4099cad1714c72c7fca5ab511a272f435993a20c9fc2183d27dc36273"
+      },
+      "model": {
+        "bytes": 5467880,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k3-r1-slm_small-2\\fit\\recipient\\neural_model.pt",
+        "sha256": "f6122bfbd0b53488f1f9e1e613979dd80836c2dcadcd99ce528cbe680fbb1128"
+      },
+      "parameter_count": 1350336,
+      "repeat": 1,
+      "score_rows": 20000,
+      "scores": {
+        "bytes": 160128,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k3-r1-slm_small-2\\scores.npy",
+        "sha256": "f0bf5e5b9700fe9f9c212bdce208ed6c847df9ee4d94cc0a50400021fbe017c8"
+      },
+      "seconds": 79.46410149999429,
+      "subset": [
+        2
+      ],
+      "training_rows": 2206118,
+      "warnings": [],
+      "width": 7
+    },
+    {
+      "auc": 0.8149305252178217,
+      "bound_exact": "1.999999999999999555910790150",
+      "epoch_rows_seen": [
+        2206118,
+        2206118
+      ],
+      "epsilon_per_attribute": 0.6666666666666665,
+      "family": "slm_small",
+      "input_scope": "Public covariates followed by accounted RR bits; adapter field_sizes is a token schema, not a claim that RR inputs are public.",
+      "k": 3,
+      "metadata": {
+        "bytes": 1442,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k3-r1-slm_small-0-1-2\\fit\\recipient\\metadata.json",
+        "sha256": "77df097b6a897b84a516c62fc84f529a67af862567cbac43b529b8a9b5689c7e"
+      },
+      "model": {
+        "bytes": 5475560,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k3-r1-slm_small-0-1-2\\fit\\recipient\\neural_model.pt",
+        "sha256": "c688f6867eb464635859af66c9158fa187534adb619c1b2d1c8311c417873af0"
+      },
+      "parameter_count": 1351488,
+      "repeat": 1,
+      "score_rows": 20000,
+      "scores": {
+        "bytes": 160128,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k3-r1-slm_small-0-1-2\\scores.npy",
+        "sha256": "7bbe87353fc440efc75bf72841cb3e6ef01c60778cdbb7ee2e7e3e3a1df2a49b"
+      },
+      "seconds": 87.50146719999611,
+      "subset": [
+        0,
+        1,
+        2
+      ],
+      "training_rows": 2206118,
+      "warnings": [],
+      "width": 9
+    },
+    {
+      "auc": 0.8095708525000695,
+      "bound_exact": "0",
+      "epoch_rows_seen": [
+        2206118,
+        2206118
+      ],
+      "epsilon_per_attribute": 0.0,
+      "family": "slm_medium",
+      "input_scope": "Public covariates followed by accounted RR bits; adapter field_sizes is a token schema, not a claim that RR inputs are public.",
+      "k": 3,
+      "metadata": {
+        "bytes": 1424,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k3-r1-slm_medium-none\\fit\\recipient\\metadata.json",
+        "sha256": "a5b8cdd425452ec841367fbca1ee646eb119346795c06d12a8595934c28617bf"
+      },
+      "model": {
+        "bytes": 12803204,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k3-r1-slm_medium-none\\fit\\recipient\\neural_model.pt",
+        "sha256": "c1926580ed13bb2d50e2a1e6423156b1b6784830cffcb243b4914815c79a5814"
+      },
+      "parameter_count": 3179264,
+      "repeat": 1,
+      "score_rows": 20000,
+      "scores": {
+        "bytes": 160128,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k3-r1-slm_medium-none\\scores.npy",
+        "sha256": "e292959a6f8d24d1c6764ead74d5b36b5c753cd4ef6bbb39770a64e5f985aafb"
+      },
+      "seconds": 121.76521119999234,
+      "subset": [],
+      "training_rows": 2206118,
+      "warnings": [],
+      "width": 6
+    },
+    {
+      "auc": 0.8293282722214357,
+      "bound_exact": "2",
+      "epoch_rows_seen": [
+        2206118,
+        2206118
+      ],
+      "epsilon_per_attribute": 2.0,
+      "family": "slm_medium",
+      "input_scope": "Public covariates followed by accounted RR bits; adapter field_sizes is a token schema, not a claim that RR inputs are public.",
+      "k": 3,
+      "metadata": {
+        "bytes": 1431,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k3-r1-slm_medium-0\\fit\\recipient\\metadata.json",
+        "sha256": "cb443e1a31bb9063c459680d0792f55ba43f7672fbd4e6deec6e089a2cca8608"
+      },
+      "model": {
+        "bytes": 12808324,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k3-r1-slm_medium-0\\fit\\recipient\\neural_model.pt",
+        "sha256": "5cad32d4af7e24ee0b0030a3026c3388b6ca8155ac9569e2af8191481f22f4c6"
+      },
+      "parameter_count": 3180032,
+      "repeat": 1,
+      "score_rows": 20000,
+      "scores": {
+        "bytes": 160128,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k3-r1-slm_medium-0\\scores.npy",
+        "sha256": "69afaf8e7eb836210dd549bcdd56207ff72067a1dafa9515e137ebe85a434413"
+      },
+      "seconds": 129.27985759999137,
+      "subset": [
+        0
+      ],
+      "training_rows": 2206118,
+      "warnings": [],
+      "width": 7
+    },
+    {
+      "auc": 0.8122372698049455,
+      "bound_exact": "2",
+      "epoch_rows_seen": [
+        2206118,
+        2206118
+      ],
+      "epsilon_per_attribute": 2.0,
+      "family": "slm_medium",
+      "input_scope": "Public covariates followed by accounted RR bits; adapter field_sizes is a token schema, not a claim that RR inputs are public.",
+      "k": 3,
+      "metadata": {
+        "bytes": 1431,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k3-r1-slm_medium-1\\fit\\recipient\\metadata.json",
+        "sha256": "056c7970fe71c4be4b9880f8b55105061c06cf5a9a4c403250ddfee84a391736"
+      },
+      "model": {
+        "bytes": 12808324,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k3-r1-slm_medium-1\\fit\\recipient\\neural_model.pt",
+        "sha256": "a1ea88ac6844db6e7e704de2c4a9d3324eb654f2677115e9054cdc9fb073eb84"
+      },
+      "parameter_count": 3180032,
+      "repeat": 1,
+      "score_rows": 20000,
+      "scores": {
+        "bytes": 160128,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k3-r1-slm_medium-1\\scores.npy",
+        "sha256": "444820d9b6a3368780d6e8fafd85cf25b40834820508cac2d1549d31aa34dbd9"
+      },
+      "seconds": 133.37561260000803,
+      "subset": [
+        1
+      ],
+      "training_rows": 2206118,
+      "warnings": [],
+      "width": 7
+    },
+    {
+      "auc": 0.8158779129314548,
+      "bound_exact": "2",
+      "epoch_rows_seen": [
+        2206118,
+        2206118
+      ],
+      "epsilon_per_attribute": 2.0,
+      "family": "slm_medium",
+      "input_scope": "Public covariates followed by accounted RR bits; adapter field_sizes is a token schema, not a claim that RR inputs are public.",
+      "k": 3,
+      "metadata": {
+        "bytes": 1431,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k3-r1-slm_medium-2\\fit\\recipient\\metadata.json",
+        "sha256": "6dc1596070c997e0d48d502ccfc8d18048f77f1f1ce4ade8cd54425e7c5bfae1"
+      },
+      "model": {
+        "bytes": 12808324,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k3-r1-slm_medium-2\\fit\\recipient\\neural_model.pt",
+        "sha256": "5dc1f08d88634b8a5a0ae158fc0925b5a8ddd8024c84d90235aa7dc087900738"
+      },
+      "parameter_count": 3180032,
+      "repeat": 1,
+      "score_rows": 20000,
+      "scores": {
+        "bytes": 160128,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k3-r1-slm_medium-2\\scores.npy",
+        "sha256": "43323557a5d6cf5b009f4b944aa2da0ed11b1f2039f4d7d9bb79f96dd51a6c9b"
+      },
+      "seconds": 122.09628649998922,
+      "subset": [
+        2
+      ],
+      "training_rows": 2206118,
+      "warnings": [],
+      "width": 7
+    },
+    {
+      "auc": 0.8145624154293198,
+      "bound_exact": "1.999999999999999555910790150",
+      "epoch_rows_seen": [
+        2206118,
+        2206118
+      ],
+      "epsilon_per_attribute": 0.6666666666666665,
+      "family": "slm_medium",
+      "input_scope": "Public covariates followed by accounted RR bits; adapter field_sizes is a token schema, not a claim that RR inputs are public.",
+      "k": 3,
+      "metadata": {
+        "bytes": 1445,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k3-r1-slm_medium-0-1-2\\fit\\recipient\\metadata.json",
+        "sha256": "f1de1ca278fb0240dda196bc921d6b42233e9fcffd0a19eacf2fa80f9581a563"
+      },
+      "model": {
+        "bytes": 12818564,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k3-r1-slm_medium-0-1-2\\fit\\recipient\\neural_model.pt",
+        "sha256": "b296fd4a6d295ae0238b685143755680fa848065fabe92399b5ece3f5255c838"
+      },
+      "parameter_count": 3181568,
+      "repeat": 1,
+      "score_rows": 20000,
+      "scores": {
+        "bytes": 160128,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k3-r1-slm_medium-0-1-2\\scores.npy",
+        "sha256": "8a9788db045ac5920abb82e2a60d2f6d5429af0d4a2d46975248bd1c83682cd1"
+      },
+      "seconds": 136.4025087999762,
+      "subset": [
+        0,
+        1,
+        2
+      ],
+      "training_rows": 2206118,
+      "warnings": [],
+      "width": 9
+    },
+    {
+      "auc": 0.8099015440131115,
+      "bound_exact": "0",
+      "epoch_rows_seen": [
+        2206118,
+        2206118
+      ],
+      "epsilon_per_attribute": 0.0,
+      "family": "slm_small",
+      "input_scope": "Public covariates followed by accounted RR bits; adapter field_sizes is a token schema, not a claim that RR inputs are public.",
+      "k": 3,
+      "metadata": {
+        "bytes": 1421,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k3-r2-slm_small-none\\fit\\recipient\\metadata.json",
+        "sha256": "f2b5e0ee1bcd41ba19adad68b2257e834e67c47ef94ca50b15d59f96ed7647e1"
+      },
+      "model": {
+        "bytes": 5464040,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k3-r2-slm_small-none\\fit\\recipient\\neural_model.pt",
+        "sha256": "2675293fc73a457eff82f79a6d7263120f2a44be2ee665f753e224c207143034"
+      },
+      "parameter_count": 1349760,
+      "repeat": 2,
+      "score_rows": 20000,
+      "scores": {
+        "bytes": 160128,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k3-r2-slm_small-none\\scores.npy",
+        "sha256": "cc5d4e499f1dac1c77a9588d1c6377cda55d3456524a75fb7b6a2bce342c7c42"
+      },
+      "seconds": 71.14203470002394,
+      "subset": [],
+      "training_rows": 2206118,
+      "warnings": [],
+      "width": 6
+    },
+    {
+      "auc": 0.8280576966596255,
+      "bound_exact": "2",
+      "epoch_rows_seen": [
+        2206118,
+        2206118
+      ],
+      "epsilon_per_attribute": 2.0,
+      "family": "slm_small",
+      "input_scope": "Public covariates followed by accounted RR bits; adapter field_sizes is a token schema, not a claim that RR inputs are public.",
+      "k": 3,
+      "metadata": {
+        "bytes": 1428,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k3-r2-slm_small-0\\fit\\recipient\\metadata.json",
+        "sha256": "4cd9c4acd1f83756c36580e16d6a3cbab764ad998836de886a18125edd91f902"
+      },
+      "model": {
+        "bytes": 5467880,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k3-r2-slm_small-0\\fit\\recipient\\neural_model.pt",
+        "sha256": "1c0edf8ef7857dabc3b8a1e34a147f5d6b97b4b649bd34528830bf1ca920d3cc"
+      },
+      "parameter_count": 1350336,
+      "repeat": 2,
+      "score_rows": 20000,
+      "scores": {
+        "bytes": 160128,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k3-r2-slm_small-0\\scores.npy",
+        "sha256": "b9695c5cf465c5819ce855f887d4bdc9a7fce80915308198229a271e4af8857e"
+      },
+      "seconds": 72.39987410005415,
+      "subset": [
+        0
+      ],
+      "training_rows": 2206118,
+      "warnings": [],
+      "width": 7
+    },
+    {
+      "auc": 0.8125355554906573,
+      "bound_exact": "2",
+      "epoch_rows_seen": [
+        2206118,
+        2206118
+      ],
+      "epsilon_per_attribute": 2.0,
+      "family": "slm_small",
+      "input_scope": "Public covariates followed by accounted RR bits; adapter field_sizes is a token schema, not a claim that RR inputs are public.",
+      "k": 3,
+      "metadata": {
+        "bytes": 1428,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k3-r2-slm_small-1\\fit\\recipient\\metadata.json",
+        "sha256": "ca0bba4f3be4f7f3881c5a49cd3e3263e9d9130665fb97009a0ae183b8cd5c46"
+      },
+      "model": {
+        "bytes": 5467880,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k3-r2-slm_small-1\\fit\\recipient\\neural_model.pt",
+        "sha256": "abb74f23ce1b765187ce78bb8ad675b5f1abecf2beab685b9d53b123e3b2e7cc"
+      },
+      "parameter_count": 1350336,
+      "repeat": 2,
+      "score_rows": 20000,
+      "scores": {
+        "bytes": 160128,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k3-r2-slm_small-1\\scores.npy",
+        "sha256": "5a8aadfa2e74c72fe62d5dc70669a9184499ea73564922e2ed3f8e5b7e948d68"
+      },
+      "seconds": 73.57857150002383,
+      "subset": [
+        1
+      ],
+      "training_rows": 2206118,
+      "warnings": [],
+      "width": 7
+    },
+    {
+      "auc": 0.815707899895388,
+      "bound_exact": "2",
+      "epoch_rows_seen": [
+        2206118,
+        2206118
+      ],
+      "epsilon_per_attribute": 2.0,
+      "family": "slm_small",
+      "input_scope": "Public covariates followed by accounted RR bits; adapter field_sizes is a token schema, not a claim that RR inputs are public.",
+      "k": 3,
+      "metadata": {
+        "bytes": 1428,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k3-r2-slm_small-2\\fit\\recipient\\metadata.json",
+        "sha256": "d12dd8cc9bf1fe9b07de9670ccad4c68d65b93a1685457ef21b4dbcbe1d6f3a6"
+      },
+      "model": {
+        "bytes": 5467880,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k3-r2-slm_small-2\\fit\\recipient\\neural_model.pt",
+        "sha256": "6ee933682e8b1bee1eaae8860f261c62b3335d8a43d4c5bcfb859cc58301f2cf"
+      },
+      "parameter_count": 1350336,
+      "repeat": 2,
+      "score_rows": 20000,
+      "scores": {
+        "bytes": 160128,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k3-r2-slm_small-2\\scores.npy",
+        "sha256": "ae23a5134f832279956676e3c5150938af89ddd467a25325e5714026e8edf037"
+      },
+      "seconds": 78.23565330001293,
+      "subset": [
+        2
+      ],
+      "training_rows": 2206118,
+      "warnings": [],
+      "width": 7
+    },
+    {
+      "auc": 0.8144906053565623,
+      "bound_exact": "1.999999999999999555910790150",
+      "epoch_rows_seen": [
+        2206118,
+        2206118
+      ],
+      "epsilon_per_attribute": 0.6666666666666665,
+      "family": "slm_small",
+      "input_scope": "Public covariates followed by accounted RR bits; adapter field_sizes is a token schema, not a claim that RR inputs are public.",
+      "k": 3,
+      "metadata": {
+        "bytes": 1442,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k3-r2-slm_small-0-1-2\\fit\\recipient\\metadata.json",
+        "sha256": "9604be964dc693a446146352c968912ff3649b98d45260f88fbfe96c5e5d6db5"
+      },
+      "model": {
+        "bytes": 5475560,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k3-r2-slm_small-0-1-2\\fit\\recipient\\neural_model.pt",
+        "sha256": "6a2685426700bc0e77bcd28e7d767e5bde2fff7b59027e53f6174c21de57866d"
+      },
+      "parameter_count": 1351488,
+      "repeat": 2,
+      "score_rows": 20000,
+      "scores": {
+        "bytes": 160128,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k3-r2-slm_small-0-1-2\\scores.npy",
+        "sha256": "b224a15725b8c9e9e4894b6236438839aad662e5af1b424f7b62fe6eddecbd92"
+      },
+      "seconds": 88.89086889999453,
+      "subset": [
+        0,
+        1,
+        2
+      ],
+      "training_rows": 2206118,
+      "warnings": [],
+      "width": 9
+    },
+    {
+      "auc": 0.8098749810394894,
+      "bound_exact": "0",
+      "epoch_rows_seen": [
+        2206118,
+        2206118
+      ],
+      "epsilon_per_attribute": 0.0,
+      "family": "slm_medium",
+      "input_scope": "Public covariates followed by accounted RR bits; adapter field_sizes is a token schema, not a claim that RR inputs are public.",
+      "k": 3,
+      "metadata": {
+        "bytes": 1424,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k3-r2-slm_medium-none\\fit\\recipient\\metadata.json",
+        "sha256": "b706c889174ce8d18fe0cf6bbef09289c28bbbce87e082898be09f060b4c65a8"
+      },
+      "model": {
+        "bytes": 12803204,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k3-r2-slm_medium-none\\fit\\recipient\\neural_model.pt",
+        "sha256": "32b18147ff2e7a603b801d0ad30556daf77942252d9d69e5f2b3f37cdff7bf01"
+      },
+      "parameter_count": 3179264,
+      "repeat": 2,
+      "score_rows": 20000,
+      "scores": {
+        "bytes": 160128,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k3-r2-slm_medium-none\\scores.npy",
+        "sha256": "85ae1e82fa0c52bdbe6f8475dc66af80cdc842fd120d3b014a499a9ac93b368a"
+      },
+      "seconds": 124.55777680000756,
+      "subset": [],
+      "training_rows": 2206118,
+      "warnings": [],
+      "width": 6
+    },
+    {
+      "auc": 0.8281596964773565,
+      "bound_exact": "2",
+      "epoch_rows_seen": [
+        2206118,
+        2206118
+      ],
+      "epsilon_per_attribute": 2.0,
+      "family": "slm_medium",
+      "input_scope": "Public covariates followed by accounted RR bits; adapter field_sizes is a token schema, not a claim that RR inputs are public.",
+      "k": 3,
+      "metadata": {
+        "bytes": 1431,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k3-r2-slm_medium-0\\fit\\recipient\\metadata.json",
+        "sha256": "989aebabf411b24ec09c1b24820cf1454721c7e3c6ca8299de230205d3e5c71c"
+      },
+      "model": {
+        "bytes": 12808324,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k3-r2-slm_medium-0\\fit\\recipient\\neural_model.pt",
+        "sha256": "3e29fe7c815b640fc3d34d6f10f77418b44759f4a6d88f6212e761c4bc6c6e3d"
+      },
+      "parameter_count": 3180032,
+      "repeat": 2,
+      "score_rows": 20000,
+      "scores": {
+        "bytes": 160128,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k3-r2-slm_medium-0\\scores.npy",
+        "sha256": "e9fbfebecdc66da53c8dd38a974f5cd75af3b16a370019906ffaf7f48cfe29c4"
+      },
+      "seconds": 132.01021979999496,
+      "subset": [
+        0
+      ],
+      "training_rows": 2206118,
+      "warnings": [],
+      "width": 7
+    },
+    {
+      "auc": 0.8121393069589118,
+      "bound_exact": "2",
+      "epoch_rows_seen": [
+        2206118,
+        2206118
+      ],
+      "epsilon_per_attribute": 2.0,
+      "family": "slm_medium",
+      "input_scope": "Public covariates followed by accounted RR bits; adapter field_sizes is a token schema, not a claim that RR inputs are public.",
+      "k": 3,
+      "metadata": {
+        "bytes": 1431,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k3-r2-slm_medium-1\\fit\\recipient\\metadata.json",
+        "sha256": "fd87c2c9fc47807a38a9196ae1805b3229008dd0f3d95f12b17140eba40b02eb"
+      },
+      "model": {
+        "bytes": 12808324,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k3-r2-slm_medium-1\\fit\\recipient\\neural_model.pt",
+        "sha256": "0fdefc51b61079d034977c621be97ddf0b53eb5681cda06e460b5414721ca7cb"
+      },
+      "parameter_count": 3180032,
+      "repeat": 2,
+      "score_rows": 20000,
+      "scores": {
+        "bytes": 160128,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k3-r2-slm_medium-1\\scores.npy",
+        "sha256": "6bd802305e8c2d0a439fd2cf4ca4bb9aaaf205755cb83bea45e1fae6df131b5a"
+      },
+      "seconds": 133.4934038000065,
+      "subset": [
+        1
+      ],
+      "training_rows": 2206118,
+      "warnings": [],
+      "width": 7
+    },
+    {
+      "auc": 0.815765863205248,
+      "bound_exact": "2",
+      "epoch_rows_seen": [
+        2206118,
+        2206118
+      ],
+      "epsilon_per_attribute": 2.0,
+      "family": "slm_medium",
+      "input_scope": "Public covariates followed by accounted RR bits; adapter field_sizes is a token schema, not a claim that RR inputs are public.",
+      "k": 3,
+      "metadata": {
+        "bytes": 1431,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k3-r2-slm_medium-2\\fit\\recipient\\metadata.json",
+        "sha256": "1b52f2e0d64522bce9d6ae78340158890c7b049e3c65a9bdbc9dfcedd677baa5"
+      },
+      "model": {
+        "bytes": 12808324,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k3-r2-slm_medium-2\\fit\\recipient\\neural_model.pt",
+        "sha256": "fae8567534faf8f418f7cf8c8218e0beb570dd8eeca69bcaa9f79c1b3ab7fece"
+      },
+      "parameter_count": 3180032,
+      "repeat": 2,
+      "score_rows": 20000,
+      "scores": {
+        "bytes": 160128,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k3-r2-slm_medium-2\\scores.npy",
+        "sha256": "253dd7d037d42e7178a8201f84408c66ec60bd9210d71d66c2343fd809bb3497"
+      },
+      "seconds": 135.55541159998393,
+      "subset": [
+        2
+      ],
+      "training_rows": 2206118,
+      "warnings": [],
+      "width": 7
+    },
+    {
+      "auc": 0.8147612625482411,
+      "bound_exact": "1.999999999999999555910790150",
+      "epoch_rows_seen": [
+        2206118,
+        2206118
+      ],
+      "epsilon_per_attribute": 0.6666666666666665,
+      "family": "slm_medium",
+      "input_scope": "Public covariates followed by accounted RR bits; adapter field_sizes is a token schema, not a claim that RR inputs are public.",
+      "k": 3,
+      "metadata": {
+        "bytes": 1445,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k3-r2-slm_medium-0-1-2\\fit\\recipient\\metadata.json",
+        "sha256": "ec17b8bb8d3e74843cd83541d9b20ac9fa15da5f0f9b24f051a16cb850e2ebe9"
+      },
+      "model": {
+        "bytes": 12818564,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k3-r2-slm_medium-0-1-2\\fit\\recipient\\neural_model.pt",
+        "sha256": "2a0e28c9a2af8c2694fb831ca305bdb87330bd246ff3dbee47e2f27aca3a08a4"
+      },
+      "parameter_count": 3181568,
+      "repeat": 2,
+      "score_rows": 20000,
+      "scores": {
+        "bytes": 160128,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k3-r2-slm_medium-0-1-2\\scores.npy",
+        "sha256": "f406da30c75d2481b1f0abdbd928de2a636cf9fa54d0e4e03b3d89232a13dbc6"
+      },
+      "seconds": 151.3489996000426,
+      "subset": [
+        0,
+        1,
+        2
+      ],
+      "training_rows": 2206118,
+      "warnings": [],
+      "width": 9
+    },
+    {
+      "auc": 0.8071748772818131,
+      "bound_exact": "0",
+      "epoch_rows_seen": [
+        2206118,
+        2206118
+      ],
+      "epsilon_per_attribute": 0.0,
+      "family": "slm_small",
+      "input_scope": "Public covariates followed by accounted RR bits; adapter field_sizes is a token schema, not a claim that RR inputs are public.",
+      "k": 4,
+      "metadata": {
+        "bytes": 1414,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k4-r0-slm_small-none\\fit\\recipient\\metadata.json",
+        "sha256": "c632f1bd839c07cd4201222533c6d3c694b859df13d8977c177351c441700ed5"
+      },
+      "model": {
+        "bytes": 5460200,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k4-r0-slm_small-none\\fit\\recipient\\neural_model.pt",
+        "sha256": "fa5ddd7ea25517dc0efbf0945f21f524557b2fc2a8d1e38d550e61c76383c1dc"
+      },
+      "parameter_count": 1349184,
+      "repeat": 0,
+      "score_rows": 20000,
+      "scores": {
+        "bytes": 160128,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k4-r0-slm_small-none\\scores.npy",
+        "sha256": "265eb4857a22f1b467a18644957a543f057007902a63556146f0e86c787ecf39"
+      },
+      "seconds": 77.8568055999931,
+      "subset": [],
+      "training_rows": 2206118,
+      "warnings": [],
+      "width": 5
+    },
+    {
+      "auc": 0.8236658266263825,
+      "bound_exact": "2",
+      "epoch_rows_seen": [
+        2206118,
+        2206118
+      ],
+      "epsilon_per_attribute": 2.0,
+      "family": "slm_small",
+      "input_scope": "Public covariates followed by accounted RR bits; adapter field_sizes is a token schema, not a claim that RR inputs are public.",
+      "k": 4,
+      "metadata": {
+        "bytes": 1421,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k4-r0-slm_small-0\\fit\\recipient\\metadata.json",
+        "sha256": "90d894a03ff44e3d8a1e5f4bd16871c7da7976348952dcd29415ffeb8093781e"
+      },
+      "model": {
+        "bytes": 5464040,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k4-r0-slm_small-0\\fit\\recipient\\neural_model.pt",
+        "sha256": "556d709de665cdb7f809f5662044acda1ab09da5047465b06c3f1f15eee1ecc3"
+      },
+      "parameter_count": 1349760,
+      "repeat": 0,
+      "score_rows": 20000,
+      "scores": {
+        "bytes": 160128,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k4-r0-slm_small-0\\scores.npy",
+        "sha256": "5e7cef1f23e786363101ca49cf733de091cdaf7d76e3e615cdfd617d82cdbde4"
+      },
+      "seconds": 71.11841239995556,
+      "subset": [
+        0
+      ],
+      "training_rows": 2206118,
+      "warnings": [],
+      "width": 6
+    },
+    {
+      "auc": 0.8097097003147308,
+      "bound_exact": "2",
+      "epoch_rows_seen": [
+        2206118,
+        2206118
+      ],
+      "epsilon_per_attribute": 2.0,
+      "family": "slm_small",
+      "input_scope": "Public covariates followed by accounted RR bits; adapter field_sizes is a token schema, not a claim that RR inputs are public.",
+      "k": 4,
+      "metadata": {
+        "bytes": 1421,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k4-r0-slm_small-1\\fit\\recipient\\metadata.json",
+        "sha256": "2400408c1af55185d9c30e29ffe08a013b24fbb84579e3103a9e2dbfed413f84"
+      },
+      "model": {
+        "bytes": 5464040,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k4-r0-slm_small-1\\fit\\recipient\\neural_model.pt",
+        "sha256": "de57f17c4f537490d5d3a31805b99c3c5944e848021a0b7aaa113658b956ae91"
+      },
+      "parameter_count": 1349760,
+      "repeat": 0,
+      "score_rows": 20000,
+      "scores": {
+        "bytes": 160128,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k4-r0-slm_small-1\\scores.npy",
+        "sha256": "98119b004293b17fecea484ff1b222478631812212a2063b8519bf694b771a59"
+      },
+      "seconds": 72.03063459997065,
+      "subset": [
+        1
+      ],
+      "training_rows": 2206118,
+      "warnings": [],
+      "width": 6
+    },
+    {
+      "auc": 0.813325071097975,
+      "bound_exact": "2",
+      "epoch_rows_seen": [
+        2206118,
+        2206118
+      ],
+      "epsilon_per_attribute": 2.0,
+      "family": "slm_small",
+      "input_scope": "Public covariates followed by accounted RR bits; adapter field_sizes is a token schema, not a claim that RR inputs are public.",
+      "k": 4,
+      "metadata": {
+        "bytes": 1421,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k4-r0-slm_small-2\\fit\\recipient\\metadata.json",
+        "sha256": "157b54fe75d7988b8c59c2b0ab15e7f43d6b8a112c48f87ad96d656f0f359a0a"
+      },
+      "model": {
+        "bytes": 5464040,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k4-r0-slm_small-2\\fit\\recipient\\neural_model.pt",
+        "sha256": "ebe794093102ce7f34c36415558914c15fb9df4a665306f8b616fa11a8fe717a"
+      },
+      "parameter_count": 1349760,
+      "repeat": 0,
+      "score_rows": 20000,
+      "scores": {
+        "bytes": 160128,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k4-r0-slm_small-2\\scores.npy",
+        "sha256": "9a7d0758d26e2559476775c702da9b3957e8722022665ffe4767509a0ec9b5b4"
+      },
+      "seconds": 72.24459810002008,
+      "subset": [
+        2
+      ],
+      "training_rows": 2206118,
+      "warnings": [],
+      "width": 6
+    },
+    {
+      "auc": 0.8074852188557413,
+      "bound_exact": "2",
+      "epoch_rows_seen": [
+        2206118,
+        2206118
+      ],
+      "epsilon_per_attribute": 2.0,
+      "family": "slm_small",
+      "input_scope": "Public covariates followed by accounted RR bits; adapter field_sizes is a token schema, not a claim that RR inputs are public.",
+      "k": 4,
+      "metadata": {
+        "bytes": 1421,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k4-r0-slm_small-3\\fit\\recipient\\metadata.json",
+        "sha256": "81c5fca8e0111f9adad4d8deb21901fad3b8c0111a99c19344a8db45bc2012ac"
+      },
+      "model": {
+        "bytes": 5464040,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k4-r0-slm_small-3\\fit\\recipient\\neural_model.pt",
+        "sha256": "605892ef67899857be9870cb26a771cd96e730604b35f8185f7f14cfa7e18f6e"
+      },
+      "parameter_count": 1349760,
+      "repeat": 0,
+      "score_rows": 20000,
+      "scores": {
+        "bytes": 160128,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k4-r0-slm_small-3\\scores.npy",
+        "sha256": "b71780da7eefbc708d2c3fe2affb8e6fe340b4e7af028e9436289f5f95ef7a66"
+      },
+      "seconds": 72.01514229999157,
+      "subset": [
+        3
+      ],
+      "training_rows": 2206118,
+      "warnings": [],
+      "width": 6
+    },
+    {
+      "auc": 0.8102558270484888,
+      "bound_exact": "1.999999999999999777955395075",
+      "epoch_rows_seen": [
+        2206118,
+        2206118
+      ],
+      "epsilon_per_attribute": 0.49999999999999994,
+      "family": "slm_small",
+      "input_scope": "Public covariates followed by accounted RR bits; adapter field_sizes is a token schema, not a claim that RR inputs are public.",
+      "k": 4,
+      "metadata": {
+        "bytes": 1442,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k4-r0-slm_small-0-1-2-3\\fit\\recipient\\metadata.json",
+        "sha256": "ffdd667170b25f260614bc98ac35977352534bade703fd845fe4582f92d7fbf9"
+      },
+      "model": {
+        "bytes": 5475560,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k4-r0-slm_small-0-1-2-3\\fit\\recipient\\neural_model.pt",
+        "sha256": "6161f7f48f7d53f05d74b7d3efb217e79d1c615bc5f32509f9a0c86ac18fc720"
+      },
+      "parameter_count": 1351488,
+      "repeat": 0,
+      "score_rows": 20000,
+      "scores": {
+        "bytes": 160128,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k4-r0-slm_small-0-1-2-3\\scores.npy",
+        "sha256": "9b652f6a38d8ddd23688913d010054053386c8d09f8af97565c9d93545f8507a"
+      },
+      "seconds": 81.93221970001468,
+      "subset": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "training_rows": 2206118,
+      "warnings": [],
+      "width": 9
+    },
+    {
+      "auc": 0.8072230207955867,
+      "bound_exact": "0",
+      "epoch_rows_seen": [
+        2206118,
+        2206118
+      ],
+      "epsilon_per_attribute": 0.0,
+      "family": "slm_medium",
+      "input_scope": "Public covariates followed by accounted RR bits; adapter field_sizes is a token schema, not a claim that RR inputs are public.",
+      "k": 4,
+      "metadata": {
+        "bytes": 1417,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k4-r0-slm_medium-none\\fit\\recipient\\metadata.json",
+        "sha256": "531c55264fe00f6ad28118d399c972c201e7fa24157a2b5a59c65f8aafff6c8b"
+      },
+      "model": {
+        "bytes": 12798084,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k4-r0-slm_medium-none\\fit\\recipient\\neural_model.pt",
+        "sha256": "90ab863fc423daa8e7432913993445bc26c16aea5f45dcb38d3390dc201afe2c"
+      },
+      "parameter_count": 3178496,
+      "repeat": 0,
+      "score_rows": 20000,
+      "scores": {
+        "bytes": 160128,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k4-r0-slm_medium-none\\scores.npy",
+        "sha256": "eadcdee71ca3866412de92d2b419dd61703cf86379e8c8f77580231d308e2930"
+      },
+      "seconds": 107.32934039999964,
+      "subset": [],
+      "training_rows": 2206118,
+      "warnings": [],
+      "width": 5
+    },
+    {
+      "auc": 0.8232574921917614,
+      "bound_exact": "2",
+      "epoch_rows_seen": [
+        2206118,
+        2206118
+      ],
+      "epsilon_per_attribute": 2.0,
+      "family": "slm_medium",
+      "input_scope": "Public covariates followed by accounted RR bits; adapter field_sizes is a token schema, not a claim that RR inputs are public.",
+      "k": 4,
+      "metadata": {
+        "bytes": 1424,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k4-r0-slm_medium-0\\fit\\recipient\\metadata.json",
+        "sha256": "9f130e4f5511b9c11f6394f3aa00c97ca9492d5c38d4c856bb31cb99dc6b3b88"
+      },
+      "model": {
+        "bytes": 12803204,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k4-r0-slm_medium-0\\fit\\recipient\\neural_model.pt",
+        "sha256": "9f57bd2712c6ba21f14ec7fac56ba17da5c58ba3428d6585ffa105a6df40284f"
+      },
+      "parameter_count": 3179264,
+      "repeat": 0,
+      "score_rows": 20000,
+      "scores": {
+        "bytes": 160128,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k4-r0-slm_medium-0\\scores.npy",
+        "sha256": "9813cd853009bd3d8bf7979fee43b4e922653c8694e58f287be0479b2980d2cf"
+      },
+      "seconds": 124.00874449999537,
+      "subset": [
+        0
+      ],
+      "training_rows": 2206118,
+      "warnings": [],
+      "width": 6
+    },
+    {
+      "auc": 0.8099725887120528,
+      "bound_exact": "2",
+      "epoch_rows_seen": [
+        2206118,
+        2206118
+      ],
+      "epsilon_per_attribute": 2.0,
+      "family": "slm_medium",
+      "input_scope": "Public covariates followed by accounted RR bits; adapter field_sizes is a token schema, not a claim that RR inputs are public.",
+      "k": 4,
+      "metadata": {
+        "bytes": 1424,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k4-r0-slm_medium-1\\fit\\recipient\\metadata.json",
+        "sha256": "8fa2e26c139f5c73240f0701d1959822c566bafea85a3c8af189733f3853c8f3"
+      },
+      "model": {
+        "bytes": 12803204,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k4-r0-slm_medium-1\\fit\\recipient\\neural_model.pt",
+        "sha256": "ae583ee47072d8663a76198e0541613415e7deb245c10033fcd317f3ed96e077"
+      },
+      "parameter_count": 3179264,
+      "repeat": 0,
+      "score_rows": 20000,
+      "scores": {
+        "bytes": 160128,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k4-r0-slm_medium-1\\scores.npy",
+        "sha256": "e62ee4c6c25c2dbc906761679a939a45e71042a8df12f24f985d9c8b8d9d78ae"
+      },
+      "seconds": 124.96619749994716,
+      "subset": [
+        1
+      ],
+      "training_rows": 2206118,
+      "warnings": [],
+      "width": 6
+    },
+    {
+      "auc": 0.8132449819816497,
+      "bound_exact": "2",
+      "epoch_rows_seen": [
+        2206118,
+        2206118
+      ],
+      "epsilon_per_attribute": 2.0,
+      "family": "slm_medium",
+      "input_scope": "Public covariates followed by accounted RR bits; adapter field_sizes is a token schema, not a claim that RR inputs are public.",
+      "k": 4,
+      "metadata": {
+        "bytes": 1424,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k4-r0-slm_medium-2\\fit\\recipient\\metadata.json",
+        "sha256": "2f066b3d0ddae0122db7aa8c86044771f180dd1077ffed95a949d4d3c0222c6c"
+      },
+      "model": {
+        "bytes": 12803204,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k4-r0-slm_medium-2\\fit\\recipient\\neural_model.pt",
+        "sha256": "96e5e82098b1306e25b09a85d21ebd6fc335dead4e8dbf8f7f2b1a33d3f7516a"
+      },
+      "parameter_count": 3179264,
+      "repeat": 0,
+      "score_rows": 20000,
+      "scores": {
+        "bytes": 160128,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k4-r0-slm_medium-2\\scores.npy",
+        "sha256": "1ff2119d84a7ca19a1978309f6160332bba505bfa54256911be2c851a2845a07"
+      },
+      "seconds": 125.8048751000315,
+      "subset": [
+        2
+      ],
+      "training_rows": 2206118,
+      "warnings": [],
+      "width": 6
+    },
+    {
+      "auc": 0.8073862054966267,
+      "bound_exact": "2",
+      "epoch_rows_seen": [
+        2206118,
+        2206118
+      ],
+      "epsilon_per_attribute": 2.0,
+      "family": "slm_medium",
+      "input_scope": "Public covariates followed by accounted RR bits; adapter field_sizes is a token schema, not a claim that RR inputs are public.",
+      "k": 4,
+      "metadata": {
+        "bytes": 1424,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k4-r0-slm_medium-3\\fit\\recipient\\metadata.json",
+        "sha256": "094b05cfb60b13319d166f4d07f0c27fa74d29e953e3b268789b14fc1869616b"
+      },
+      "model": {
+        "bytes": 12803204,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k4-r0-slm_medium-3\\fit\\recipient\\neural_model.pt",
+        "sha256": "39fcbaca6e5137e7b21695d22e9b55d8faa5c926f46b5e2a90a1210285306b1c"
+      },
+      "parameter_count": 3179264,
+      "repeat": 0,
+      "score_rows": 20000,
+      "scores": {
+        "bytes": 160128,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k4-r0-slm_medium-3\\scores.npy",
+        "sha256": "c04d6ec28d405a56e5f16b29a75d06956260d8567dc2c05f928fafda3aad51b2"
+      },
+      "seconds": 127.06215790001443,
+      "subset": [
+        3
+      ],
+      "training_rows": 2206118,
+      "warnings": [],
+      "width": 6
+    },
+    {
+      "auc": 0.8102401894109101,
+      "bound_exact": "1.999999999999999777955395075",
+      "epoch_rows_seen": [
+        2206118,
+        2206118
+      ],
+      "epsilon_per_attribute": 0.49999999999999994,
+      "family": "slm_medium",
+      "input_scope": "Public covariates followed by accounted RR bits; adapter field_sizes is a token schema, not a claim that RR inputs are public.",
+      "k": 4,
+      "metadata": {
+        "bytes": 1445,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k4-r0-slm_medium-0-1-2-3\\fit\\recipient\\metadata.json",
+        "sha256": "6c70ba5b595adea06d8e8aa7904dd8106ba47990f82f2caae8ba474e24e84c3c"
+      },
+      "model": {
+        "bytes": 12818564,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k4-r0-slm_medium-0-1-2-3\\fit\\recipient\\neural_model.pt",
+        "sha256": "b99ca39c1339135a4c30ed01fa668a6ccd5a7dd65f49bc922ec1fb8de7921437"
+      },
+      "parameter_count": 3181568,
+      "repeat": 0,
+      "score_rows": 20000,
+      "scores": {
+        "bytes": 160128,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k4-r0-slm_medium-0-1-2-3\\scores.npy",
+        "sha256": "1f1d5292ed6ea2735cd89e3a0ea3525d117cd8ef2a158c9cf886b5dd10734132"
+      },
+      "seconds": 150.75167389999842,
+      "subset": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "training_rows": 2206118,
+      "warnings": [],
+      "width": 9
+    },
+    {
+      "auc": 0.8079147136252818,
+      "bound_exact": "0",
+      "epoch_rows_seen": [
+        2206118,
+        2206118
+      ],
+      "epsilon_per_attribute": 0.0,
+      "family": "slm_small",
+      "input_scope": "Public covariates followed by accounted RR bits; adapter field_sizes is a token schema, not a claim that RR inputs are public.",
+      "k": 4,
+      "metadata": {
+        "bytes": 1414,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k4-r1-slm_small-none\\fit\\recipient\\metadata.json",
+        "sha256": "d243cad2c080f1835bb33bcb993933b094c5256fb2b1b1e0f5db7efb9879db86"
+      },
+      "model": {
+        "bytes": 5460200,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k4-r1-slm_small-none\\fit\\recipient\\neural_model.pt",
+        "sha256": "45a35b6199ddd92d39b68fc30ddaa9eb086072c2bd25c5348a81412da79af589"
+      },
+      "parameter_count": 1349184,
+      "repeat": 1,
+      "score_rows": 20000,
+      "scores": {
+        "bytes": 160128,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k4-r1-slm_small-none\\scores.npy",
+        "sha256": "4d680a363a76c8aa37ae5f5b27746a5282b23954a1fc9a2e4705b91178bf7e8e"
+      },
+      "seconds": 74.07201980001992,
+      "subset": [],
+      "training_rows": 2206118,
+      "warnings": [],
+      "width": 5
+    },
+    {
+      "auc": 0.8277821620857844,
+      "bound_exact": "2",
+      "epoch_rows_seen": [
+        2206118,
+        2206118
+      ],
+      "epsilon_per_attribute": 2.0,
+      "family": "slm_small",
+      "input_scope": "Public covariates followed by accounted RR bits; adapter field_sizes is a token schema, not a claim that RR inputs are public.",
+      "k": 4,
+      "metadata": {
+        "bytes": 1421,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k4-r1-slm_small-0\\fit\\recipient\\metadata.json",
+        "sha256": "394e11fb4c530f70ca477de3b42aee4da93bf0af80ef9fcb7d626923f9ba181c"
+      },
+      "model": {
+        "bytes": 5464040,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k4-r1-slm_small-0\\fit\\recipient\\neural_model.pt",
+        "sha256": "60b45b34e1eb0a74ae1d754e1b0e2853c2de48f00337e86a56a873a36ab9e56e"
+      },
+      "parameter_count": 1349760,
+      "repeat": 1,
+      "score_rows": 20000,
+      "scores": {
+        "bytes": 160128,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k4-r1-slm_small-0\\scores.npy",
+        "sha256": "e91bfd87b5ca2b5f44b08fd053c1008ebf81c587acaa4d419f4725c89d12254f"
+      },
+      "seconds": 81.22729820001405,
+      "subset": [
+        0
+      ],
+      "training_rows": 2206118,
+      "warnings": [],
+      "width": 6
+    },
+    {
+      "auc": 0.809928572213955,
+      "bound_exact": "2",
+      "epoch_rows_seen": [
+        2206118,
+        2206118
+      ],
+      "epsilon_per_attribute": 2.0,
+      "family": "slm_small",
+      "input_scope": "Public covariates followed by accounted RR bits; adapter field_sizes is a token schema, not a claim that RR inputs are public.",
+      "k": 4,
+      "metadata": {
+        "bytes": 1421,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k4-r1-slm_small-1\\fit\\recipient\\metadata.json",
+        "sha256": "400785b6b403e8786a64c9b8bec5181a62d7f561cc515edaf8344eeb2772043b"
+      },
+      "model": {
+        "bytes": 5464040,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k4-r1-slm_small-1\\fit\\recipient\\neural_model.pt",
+        "sha256": "8df55511c61d58a069bdd50ebb4bc5fed882d6f4c04a1a571b459269bc3485b9"
+      },
+      "parameter_count": 1349760,
+      "repeat": 1,
+      "score_rows": 20000,
+      "scores": {
+        "bytes": 160128,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k4-r1-slm_small-1\\scores.npy",
+        "sha256": "3654d29f518f4968920e9c85c72c59b4d28d25b1da836b6c5920fdc024630b59"
+      },
+      "seconds": 83.18455289996928,
+      "subset": [
+        1
+      ],
+      "training_rows": 2206118,
+      "warnings": [],
+      "width": 6
+    },
+    {
+      "auc": 0.8142659956549378,
+      "bound_exact": "2",
+      "epoch_rows_seen": [
+        2206118,
+        2206118
+      ],
+      "epsilon_per_attribute": 2.0,
+      "family": "slm_small",
+      "input_scope": "Public covariates followed by accounted RR bits; adapter field_sizes is a token schema, not a claim that RR inputs are public.",
+      "k": 4,
+      "metadata": {
+        "bytes": 1421,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k4-r1-slm_small-2\\fit\\recipient\\metadata.json",
+        "sha256": "c3f5fc7eaeca01b29d4887c68aaf894bbc3bbc7d044e49432256fb238c9cb6f4"
+      },
+      "model": {
+        "bytes": 5464040,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k4-r1-slm_small-2\\fit\\recipient\\neural_model.pt",
+        "sha256": "a5f6f57f073fd7b34537281a7b05372a40b369ca7d554445b7c1db1c561e8be9"
+      },
+      "parameter_count": 1349760,
+      "repeat": 1,
+      "score_rows": 20000,
+      "scores": {
+        "bytes": 160128,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k4-r1-slm_small-2\\scores.npy",
+        "sha256": "fbc7a9d01bcdf4e8eb73e494c2c78b161bc0046c33aafd27f4d30842c7d0f594"
+      },
+      "seconds": 43.95550879999064,
+      "subset": [
+        2
+      ],
+      "training_rows": 2206118,
+      "warnings": [],
+      "width": 6
+    },
+    {
+      "auc": 0.8080986884804408,
+      "bound_exact": "2",
+      "epoch_rows_seen": [
+        2206118,
+        2206118
+      ],
+      "epsilon_per_attribute": 2.0,
+      "family": "slm_small",
+      "input_scope": "Public covariates followed by accounted RR bits; adapter field_sizes is a token schema, not a claim that RR inputs are public.",
+      "k": 4,
+      "metadata": {
+        "bytes": 1421,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k4-r1-slm_small-3\\fit\\recipient\\metadata.json",
+        "sha256": "efc727028fc9103dbffd9e72e373f294b968f5bcd23d8fcb20866937b5fa2db1"
+      },
+      "model": {
+        "bytes": 5464040,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k4-r1-slm_small-3\\fit\\recipient\\neural_model.pt",
+        "sha256": "3a58fc995401557cba7adc8dec495c135e407b46d3611acffc00de55995660e6"
+      },
+      "parameter_count": 1349760,
+      "repeat": 1,
+      "score_rows": 20000,
+      "scores": {
+        "bytes": 160128,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k4-r1-slm_small-3\\scores.npy",
+        "sha256": "90575fa1d7687411dc71b751101ccc7786d512d46482e4decff9ab79ab7d4d94"
+      },
+      "seconds": 34.604579200036824,
+      "subset": [
+        3
+      ],
+      "training_rows": 2206118,
+      "warnings": [],
+      "width": 6
+    },
+    {
+      "auc": 0.8108662451828097,
+      "bound_exact": "1.999999999999999777955395075",
+      "epoch_rows_seen": [
+        2206118,
+        2206118
+      ],
+      "epsilon_per_attribute": 0.49999999999999994,
+      "family": "slm_small",
+      "input_scope": "Public covariates followed by accounted RR bits; adapter field_sizes is a token schema, not a claim that RR inputs are public.",
+      "k": 4,
+      "metadata": {
+        "bytes": 1442,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k4-r1-slm_small-0-1-2-3\\fit\\recipient\\metadata.json",
+        "sha256": "5df1fa84be9b5ed3e686cbe3185aae3b9ad781d1974ac410c5c9f8b30d51585e"
+      },
+      "model": {
+        "bytes": 5475560,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k4-r1-slm_small-0-1-2-3\\fit\\recipient\\neural_model.pt",
+        "sha256": "ceb876eee2598adba478340d02e71a9339b2a55e0543254f021d4ddb893bcb86"
+      },
+      "parameter_count": 1351488,
+      "repeat": 1,
+      "score_rows": 20000,
+      "scores": {
+        "bytes": 160128,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k4-r1-slm_small-0-1-2-3\\scores.npy",
+        "sha256": "306c1d8b0d9aa58faaf3cdf04f49328727ae1ffea2cb2874e6b891a3d49642a4"
+      },
+      "seconds": 40.429196800047066,
+      "subset": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "training_rows": 2206118,
+      "warnings": [],
+      "width": 9
+    },
+    {
+      "auc": 0.808159057965501,
+      "bound_exact": "0",
+      "epoch_rows_seen": [
+        2206118,
+        2206118
+      ],
+      "epsilon_per_attribute": 0.0,
+      "family": "slm_medium",
+      "input_scope": "Public covariates followed by accounted RR bits; adapter field_sizes is a token schema, not a claim that RR inputs are public.",
+      "k": 4,
+      "metadata": {
+        "bytes": 1417,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k4-r1-slm_medium-none\\fit\\recipient\\metadata.json",
+        "sha256": "a74507a3a4d3e330ff8ad03c0d38e369b08f8396ba84426a3374ef412e728b00"
+      },
+      "model": {
+        "bytes": 12798084,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k4-r1-slm_medium-none\\fit\\recipient\\neural_model.pt",
+        "sha256": "0ca10ddc4dd1a767ddde5693c8a76dcc14651dd75dd5054b1379e89f9d01c068"
+      },
+      "parameter_count": 3178496,
+      "repeat": 1,
+      "score_rows": 20000,
+      "scores": {
+        "bytes": 160128,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k4-r1-slm_medium-none\\scores.npy",
+        "sha256": "f9ad2d04bc5c30ca4c8d186bec8f7f7bb1d760819434e9a14ddc5b2559951b5d"
+      },
+      "seconds": 51.102753399987705,
+      "subset": [],
+      "training_rows": 2206118,
+      "warnings": [],
+      "width": 5
+    },
+    {
+      "auc": 0.8278475640287473,
+      "bound_exact": "2",
+      "epoch_rows_seen": [
+        2206118,
+        2206118
+      ],
+      "epsilon_per_attribute": 2.0,
+      "family": "slm_medium",
+      "input_scope": "Public covariates followed by accounted RR bits; adapter field_sizes is a token schema, not a claim that RR inputs are public.",
+      "k": 4,
+      "metadata": {
+        "bytes": 1424,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k4-r1-slm_medium-0\\fit\\recipient\\metadata.json",
+        "sha256": "c5af7305e5e3132015cfe18f5a09b6d372c32f0a585a86c903858c66da7fd3dd"
+      },
+      "model": {
+        "bytes": 12803204,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k4-r1-slm_medium-0\\fit\\recipient\\neural_model.pt",
+        "sha256": "215147ecd86bb0b45f7dcc4e9f2e5b44b90cc5893bbe02c0490671154193d03d"
+      },
+      "parameter_count": 3179264,
+      "repeat": 1,
+      "score_rows": 20000,
+      "scores": {
+        "bytes": 160128,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k4-r1-slm_medium-0\\scores.npy",
+        "sha256": "7ca98a97faa098abbbd625c99c65792daacd819ab68bf2a6156a3adf7b7d59f4"
+      },
+      "seconds": 54.30428610002855,
+      "subset": [
+        0
+      ],
+      "training_rows": 2206118,
+      "warnings": [],
+      "width": 6
+    },
+    {
+      "auc": 0.8099181521246792,
+      "bound_exact": "2",
+      "epoch_rows_seen": [
+        2206118,
+        2206118
+      ],
+      "epsilon_per_attribute": 2.0,
+      "family": "slm_medium",
+      "input_scope": "Public covariates followed by accounted RR bits; adapter field_sizes is a token schema, not a claim that RR inputs are public.",
+      "k": 4,
+      "metadata": {
+        "bytes": 1424,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k4-r1-slm_medium-1\\fit\\recipient\\metadata.json",
+        "sha256": "537b80a993b39ce549c1036b06969fd6eb4e59cd38e63f6988a19f989831ecd9"
+      },
+      "model": {
+        "bytes": 12803204,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k4-r1-slm_medium-1\\fit\\recipient\\neural_model.pt",
+        "sha256": "e3cb84ce785bacd1f7685ce85c67dc8334ee681281cd6a007a21c66f3e81b278"
+      },
+      "parameter_count": 3179264,
+      "repeat": 1,
+      "score_rows": 20000,
+      "scores": {
+        "bytes": 160128,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k4-r1-slm_medium-1\\scores.npy",
+        "sha256": "4086c44b6aadb32b39fa56b4f20a7c60f89e810b6e11b1107a376d857f7ade8b"
+      },
+      "seconds": 54.764018499990925,
+      "subset": [
+        1
+      ],
+      "training_rows": 2206118,
+      "warnings": [],
+      "width": 6
+    },
+    {
+      "auc": 0.8138656151050735,
+      "bound_exact": "2",
+      "epoch_rows_seen": [
+        2206118,
+        2206118
+      ],
+      "epsilon_per_attribute": 2.0,
+      "family": "slm_medium",
+      "input_scope": "Public covariates followed by accounted RR bits; adapter field_sizes is a token schema, not a claim that RR inputs are public.",
+      "k": 4,
+      "metadata": {
+        "bytes": 1424,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k4-r1-slm_medium-2\\fit\\recipient\\metadata.json",
+        "sha256": "0fd679fd915a37eb07e0b32f388cb4e5f4d0ad987e81808389f917969dfaf92e"
+      },
+      "model": {
+        "bytes": 12803204,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k4-r1-slm_medium-2\\fit\\recipient\\neural_model.pt",
+        "sha256": "e4feb781ebab3fc30adb4b2ed8da72b219cbffeeed7e89a76598333b11eb2c67"
+      },
+      "parameter_count": 3179264,
+      "repeat": 1,
+      "score_rows": 20000,
+      "scores": {
+        "bytes": 160128,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k4-r1-slm_medium-2\\scores.npy",
+        "sha256": "d27234f58b2adba0fc32ca2285cc57044deefbf92a5809c8ba13af33d81c7c27"
+      },
+      "seconds": 54.93102880002698,
+      "subset": [
+        2
+      ],
+      "training_rows": 2206118,
+      "warnings": [],
+      "width": 6
+    },
+    {
+      "auc": 0.8085487032721652,
+      "bound_exact": "2",
+      "epoch_rows_seen": [
+        2206118,
+        2206118
+      ],
+      "epsilon_per_attribute": 2.0,
+      "family": "slm_medium",
+      "input_scope": "Public covariates followed by accounted RR bits; adapter field_sizes is a token schema, not a claim that RR inputs are public.",
+      "k": 4,
+      "metadata": {
+        "bytes": 1424,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k4-r1-slm_medium-3\\fit\\recipient\\metadata.json",
+        "sha256": "222656982c4c753ff376cee27fe2342545ec945285a288f926a64af505d83e9f"
+      },
+      "model": {
+        "bytes": 12803204,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k4-r1-slm_medium-3\\fit\\recipient\\neural_model.pt",
+        "sha256": "30c984390ed7eaef6f87a5ddec180ef581a2e67806cc167709c19173e38b38b8"
+      },
+      "parameter_count": 3179264,
+      "repeat": 1,
+      "score_rows": 20000,
+      "scores": {
+        "bytes": 160128,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k4-r1-slm_medium-3\\scores.npy",
+        "sha256": "c6ec98595fea99eff57ab2af0813cf0567d8e8055224430573034df47f5fb238"
+      },
+      "seconds": 55.61208039999474,
+      "subset": [
+        3
+      ],
+      "training_rows": 2206118,
+      "warnings": [],
+      "width": 6
+    },
+    {
+      "auc": 0.8112098129847599,
+      "bound_exact": "1.999999999999999777955395075",
+      "epoch_rows_seen": [
+        2206118,
+        2206118
+      ],
+      "epsilon_per_attribute": 0.49999999999999994,
+      "family": "slm_medium",
+      "input_scope": "Public covariates followed by accounted RR bits; adapter field_sizes is a token schema, not a claim that RR inputs are public.",
+      "k": 4,
+      "metadata": {
+        "bytes": 1445,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k4-r1-slm_medium-0-1-2-3\\fit\\recipient\\metadata.json",
+        "sha256": "a76ec8db0eefa9adeee38d63231d517cdc0e2cff1e47a5a6a8ba50618c454ea1"
+      },
+      "model": {
+        "bytes": 12818564,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k4-r1-slm_medium-0-1-2-3\\fit\\recipient\\neural_model.pt",
+        "sha256": "42a8d2fc72e524be0a82b24b55a25a8f0b411aeec06f2ff1a4404fb3881746cb"
+      },
+      "parameter_count": 3181568,
+      "repeat": 1,
+      "score_rows": 20000,
+      "scores": {
+        "bytes": 160128,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k4-r1-slm_medium-0-1-2-3\\scores.npy",
+        "sha256": "6ecfbdfaa7567c0a1947ca3bd1035a9259e18cc1bb2d889e630884c00b7e6d66"
+      },
+      "seconds": 66.42786749999505,
+      "subset": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "training_rows": 2206118,
+      "warnings": [],
+      "width": 9
+    },
+    {
+      "auc": 0.8082486667313182,
+      "bound_exact": "0",
+      "epoch_rows_seen": [
+        2206118,
+        2206118
+      ],
+      "epsilon_per_attribute": 0.0,
+      "family": "slm_small",
+      "input_scope": "Public covariates followed by accounted RR bits; adapter field_sizes is a token schema, not a claim that RR inputs are public.",
+      "k": 4,
+      "metadata": {
+        "bytes": 1414,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k4-r2-slm_small-none\\fit\\recipient\\metadata.json",
+        "sha256": "acf0933933ff7e8d11cf91d820bdedbe7d2e6ccec529d9d33929391be4a7841c"
+      },
+      "model": {
+        "bytes": 5460200,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k4-r2-slm_small-none\\fit\\recipient\\neural_model.pt",
+        "sha256": "5e72ca84a1c57c9a82db4c8474d605c835671da91fe321f7b697a7e87c14d53a"
+      },
+      "parameter_count": 1349184,
+      "repeat": 2,
+      "score_rows": 20000,
+      "scores": {
+        "bytes": 160128,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k4-r2-slm_small-none\\scores.npy",
+        "sha256": "f015ef810bc237dabfe19d124d2d5a9ed196a70e531964750b6badf6a1f377ff"
+      },
+      "seconds": 33.76163040002575,
+      "subset": [],
+      "training_rows": 2206118,
+      "warnings": [],
+      "width": 5
+    },
+    {
+      "auc": 0.8259830733928758,
+      "bound_exact": "2",
+      "epoch_rows_seen": [
+        2206118,
+        2206118
+      ],
+      "epsilon_per_attribute": 2.0,
+      "family": "slm_small",
+      "input_scope": "Public covariates followed by accounted RR bits; adapter field_sizes is a token schema, not a claim that RR inputs are public.",
+      "k": 4,
+      "metadata": {
+        "bytes": 1421,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k4-r2-slm_small-0\\fit\\recipient\\metadata.json",
+        "sha256": "3fa80dfa1f3f8071b6bbc5da7526419a85a01dbe1835e642911db386519db53c"
+      },
+      "model": {
+        "bytes": 5464040,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k4-r2-slm_small-0\\fit\\recipient\\neural_model.pt",
+        "sha256": "f89296935bf5f82943e3a3098e4f5fac2c38fca36d36a2cd199c6427eeb3de26"
+      },
+      "parameter_count": 1349760,
+      "repeat": 2,
+      "score_rows": 20000,
+      "scores": {
+        "bytes": 160128,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k4-r2-slm_small-0\\scores.npy",
+        "sha256": "d88d81b1e52ef198c1da210d245ff9d35063e7c853ccce341be329603eb04503"
+      },
+      "seconds": 35.02509170002304,
+      "subset": [
+        0
+      ],
+      "training_rows": 2206118,
+      "warnings": [],
+      "width": 6
+    },
+    {
+      "auc": 0.8102710594881646,
+      "bound_exact": "2",
+      "epoch_rows_seen": [
+        2206118,
+        2206118
+      ],
+      "epsilon_per_attribute": 2.0,
+      "family": "slm_small",
+      "input_scope": "Public covariates followed by accounted RR bits; adapter field_sizes is a token schema, not a claim that RR inputs are public.",
+      "k": 4,
+      "metadata": {
+        "bytes": 1421,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k4-r2-slm_small-1\\fit\\recipient\\metadata.json",
+        "sha256": "ce6ebbd76746731c99b26d70b1298a052c0463c2f4f0965456ca8ea72d3c00a7"
+      },
+      "model": {
+        "bytes": 5464040,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k4-r2-slm_small-1\\fit\\recipient\\neural_model.pt",
+        "sha256": "56844a1572342816c10dee462617eab5384bed937d39be1fa4d9187510dc05c5"
+      },
+      "parameter_count": 1349760,
+      "repeat": 2,
+      "score_rows": 20000,
+      "scores": {
+        "bytes": 160128,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k4-r2-slm_small-1\\scores.npy",
+        "sha256": "1547e7855c138569867465a37e0f9bbcae6abf8d1764904fc57bd2a18c9e70ec"
+      },
+      "seconds": 35.0112458000076,
+      "subset": [
+        1
+      ],
+      "training_rows": 2206118,
+      "warnings": [],
+      "width": 6
+    },
+    {
+      "auc": 0.8130464300068796,
+      "bound_exact": "2",
+      "epoch_rows_seen": [
+        2206118,
+        2206118
+      ],
+      "epsilon_per_attribute": 2.0,
+      "family": "slm_small",
+      "input_scope": "Public covariates followed by accounted RR bits; adapter field_sizes is a token schema, not a claim that RR inputs are public.",
+      "k": 4,
+      "metadata": {
+        "bytes": 1421,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k4-r2-slm_small-2\\fit\\recipient\\metadata.json",
+        "sha256": "62b95274b385dd00fd7f8359f15fae42c405d16a578368887ba9e87ff2dc3ab3"
+      },
+      "model": {
+        "bytes": 5464040,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k4-r2-slm_small-2\\fit\\recipient\\neural_model.pt",
+        "sha256": "ad51ae2e1ab0d48a9136935f6a81cc27a251c85a7f7fbafc743b00c0f05f9e16"
+      },
+      "parameter_count": 1349760,
+      "repeat": 2,
+      "score_rows": 20000,
+      "scores": {
+        "bytes": 160128,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k4-r2-slm_small-2\\scores.npy",
+        "sha256": "9c43c73c967ec84e75d73e36ac9e9e554e68325e3850d656c860b849fa0edbd0"
+      },
+      "seconds": 34.84971070004394,
+      "subset": [
+        2
+      ],
+      "training_rows": 2206118,
+      "warnings": [],
+      "width": 6
+    },
+    {
+      "auc": 0.8081048264783003,
+      "bound_exact": "2",
+      "epoch_rows_seen": [
+        2206118,
+        2206118
+      ],
+      "epsilon_per_attribute": 2.0,
+      "family": "slm_small",
+      "input_scope": "Public covariates followed by accounted RR bits; adapter field_sizes is a token schema, not a claim that RR inputs are public.",
+      "k": 4,
+      "metadata": {
+        "bytes": 1421,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k4-r2-slm_small-3\\fit\\recipient\\metadata.json",
+        "sha256": "4ba76322091c5538d60e0c3e13242678611c260886cba6dbd0a4c33b00e0c4f3"
+      },
+      "model": {
+        "bytes": 5464040,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k4-r2-slm_small-3\\fit\\recipient\\neural_model.pt",
+        "sha256": "113e11cb6391504ef9ac584663590db8e807b18b313d09d7ff76c10513929377"
+      },
+      "parameter_count": 1349760,
+      "repeat": 2,
+      "score_rows": 20000,
+      "scores": {
+        "bytes": 160128,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k4-r2-slm_small-3\\scores.npy",
+        "sha256": "13a9658c70ae956b1df77f79989d2e151721984814ab7254d9d4035dcd80facb"
+      },
+      "seconds": 34.6219948999933,
+      "subset": [
+        3
+      ],
+      "training_rows": 2206118,
+      "warnings": [],
+      "width": 6
+    },
+    {
+      "auc": 0.810914073542659,
+      "bound_exact": "1.999999999999999777955395075",
+      "epoch_rows_seen": [
+        2206118,
+        2206118
+      ],
+      "epsilon_per_attribute": 0.49999999999999994,
+      "family": "slm_small",
+      "input_scope": "Public covariates followed by accounted RR bits; adapter field_sizes is a token schema, not a claim that RR inputs are public.",
+      "k": 4,
+      "metadata": {
+        "bytes": 1442,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k4-r2-slm_small-0-1-2-3\\fit\\recipient\\metadata.json",
+        "sha256": "9516fb8d0a6bed968d33e4ae65a682e3adbc889175f58c98fac20b85be261abd"
+      },
+      "model": {
+        "bytes": 5475560,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k4-r2-slm_small-0-1-2-3\\fit\\recipient\\neural_model.pt",
+        "sha256": "5a3fe24fb16eb795e066d5e63aca2eb5dbabd202b8f43ff699cea188b4e2c121"
+      },
+      "parameter_count": 1351488,
+      "repeat": 2,
+      "score_rows": 20000,
+      "scores": {
+        "bytes": 160128,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k4-r2-slm_small-0-1-2-3\\scores.npy",
+        "sha256": "8974ec898aecf6c38d927fb0317ac4dd893e3562ec24b02f6b6e5cca365c8396"
+      },
+      "seconds": 39.05845459998818,
+      "subset": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "training_rows": 2206118,
+      "warnings": [],
+      "width": 9
+    },
+    {
+      "auc": 0.8081547208472091,
+      "bound_exact": "0",
+      "epoch_rows_seen": [
+        2206118,
+        2206118
+      ],
+      "epsilon_per_attribute": 0.0,
+      "family": "slm_medium",
+      "input_scope": "Public covariates followed by accounted RR bits; adapter field_sizes is a token schema, not a claim that RR inputs are public.",
+      "k": 4,
+      "metadata": {
+        "bytes": 1417,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k4-r2-slm_medium-none\\fit\\recipient\\metadata.json",
+        "sha256": "cb6973911d94361979b4ec97baca0bb0c681a789bfcb79d70955a3a5e612d5ea"
+      },
+      "model": {
+        "bytes": 12798084,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k4-r2-slm_medium-none\\fit\\recipient\\neural_model.pt",
+        "sha256": "7abaf9fa50fa07c4280c17f269dc2541ef667f359571d8d2d858e2e27cb0dd17"
+      },
+      "parameter_count": 3178496,
+      "repeat": 2,
+      "score_rows": 20000,
+      "scores": {
+        "bytes": 160128,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k4-r2-slm_medium-none\\scores.npy",
+        "sha256": "76895acd41376ac679b23f6f553961534b093354bec642fa7b3cb285ec263fb7"
+      },
+      "seconds": 51.56033030000981,
+      "subset": [],
+      "training_rows": 2206118,
+      "warnings": [],
+      "width": 5
+    },
+    {
+      "auc": 0.8257729407619976,
+      "bound_exact": "2",
+      "epoch_rows_seen": [
+        2206118,
+        2206118
+      ],
+      "epsilon_per_attribute": 2.0,
+      "family": "slm_medium",
+      "input_scope": "Public covariates followed by accounted RR bits; adapter field_sizes is a token schema, not a claim that RR inputs are public.",
+      "k": 4,
+      "metadata": {
+        "bytes": 1424,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k4-r2-slm_medium-0\\fit\\recipient\\metadata.json",
+        "sha256": "c94892ac183bfbf3abe03a8d964e5f1f0350215d835378ac6af20ff68cfe0e3a"
+      },
+      "model": {
+        "bytes": 12803204,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k4-r2-slm_medium-0\\fit\\recipient\\neural_model.pt",
+        "sha256": "ed8a0337625282690e49169b62edae7a1688dc54204c37e7226e0233bc385119"
+      },
+      "parameter_count": 3179264,
+      "repeat": 2,
+      "score_rows": 20000,
+      "scores": {
+        "bytes": 160128,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k4-r2-slm_medium-0\\scores.npy",
+        "sha256": "be090324177079051ef7f35e6fb238260a0463d461cae477995db6a0417e3e5d"
+      },
+      "seconds": 55.20029459998477,
+      "subset": [
+        0
+      ],
+      "training_rows": 2206118,
+      "warnings": [],
+      "width": 6
+    },
+    {
+      "auc": 0.8103982966320581,
+      "bound_exact": "2",
+      "epoch_rows_seen": [
+        2206118,
+        2206118
+      ],
+      "epsilon_per_attribute": 2.0,
+      "family": "slm_medium",
+      "input_scope": "Public covariates followed by accounted RR bits; adapter field_sizes is a token schema, not a claim that RR inputs are public.",
+      "k": 4,
+      "metadata": {
+        "bytes": 1424,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k4-r2-slm_medium-1\\fit\\recipient\\metadata.json",
+        "sha256": "21d569f26be674896ed598615e077829ab0992fab4581cfecf9ba6009d077a8c"
+      },
+      "model": {
+        "bytes": 12803204,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k4-r2-slm_medium-1\\fit\\recipient\\neural_model.pt",
+        "sha256": "1c877ec001988be9afb3cf0ce99f047f67365c55c41fc27c4847ddb91646cedd"
+      },
+      "parameter_count": 3179264,
+      "repeat": 2,
+      "score_rows": 20000,
+      "scores": {
+        "bytes": 160128,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k4-r2-slm_medium-1\\scores.npy",
+        "sha256": "e5c9e3603c2d11696b8cecd32d41a41cc7ca729dd49bdb1c9be6822cf31f8580"
+      },
+      "seconds": 55.57843320001848,
+      "subset": [
+        1
+      ],
+      "training_rows": 2206118,
+      "warnings": [],
+      "width": 6
+    },
+    {
+      "auc": 0.8136048077241406,
+      "bound_exact": "2",
+      "epoch_rows_seen": [
+        2206118,
+        2206118
+      ],
+      "epsilon_per_attribute": 2.0,
+      "family": "slm_medium",
+      "input_scope": "Public covariates followed by accounted RR bits; adapter field_sizes is a token schema, not a claim that RR inputs are public.",
+      "k": 4,
+      "metadata": {
+        "bytes": 1424,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k4-r2-slm_medium-2\\fit\\recipient\\metadata.json",
+        "sha256": "f9e7fa918e360368a5e09ddb6fe034da642aede64045c5dba732292876b7ac1c"
+      },
+      "model": {
+        "bytes": 12803204,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k4-r2-slm_medium-2\\fit\\recipient\\neural_model.pt",
+        "sha256": "b8796baf875896b0c36c92a869ac65142295c5e253d2875771cfc3006fb1aab3"
+      },
+      "parameter_count": 3179264,
+      "repeat": 2,
+      "score_rows": 20000,
+      "scores": {
+        "bytes": 160128,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k4-r2-slm_medium-2\\scores.npy",
+        "sha256": "2baf8f6ed41362a5e07fa9a90e0fa3e3b3e24a6b03c92c8cf387c26557b69f0f"
+      },
+      "seconds": 54.62635199999204,
+      "subset": [
+        2
+      ],
+      "training_rows": 2206118,
+      "warnings": [],
+      "width": 6
+    },
+    {
+      "auc": 0.808551104444922,
+      "bound_exact": "2",
+      "epoch_rows_seen": [
+        2206118,
+        2206118
+      ],
+      "epsilon_per_attribute": 2.0,
+      "family": "slm_medium",
+      "input_scope": "Public covariates followed by accounted RR bits; adapter field_sizes is a token schema, not a claim that RR inputs are public.",
+      "k": 4,
+      "metadata": {
+        "bytes": 1424,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k4-r2-slm_medium-3\\fit\\recipient\\metadata.json",
+        "sha256": "6b396cd7d8f5f82baff39118e908cd5a3f1c8cf47fda60f1f3517d66baeb3e38"
+      },
+      "model": {
+        "bytes": 12803204,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k4-r2-slm_medium-3\\fit\\recipient\\neural_model.pt",
+        "sha256": "f91c844ac5e7ee58e93fd070e62acac03a5ff19a26ce0f9a1380ee1f7bb3848e"
+      },
+      "parameter_count": 3179264,
+      "repeat": 2,
+      "score_rows": 20000,
+      "scores": {
+        "bytes": 160128,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k4-r2-slm_medium-3\\scores.npy",
+        "sha256": "d20199341a0b767dcd068d9e90b11311583b4fa78946ac8ec58c8c97a7def387"
+      },
+      "seconds": 54.980490699992515,
+      "subset": [
+        3
+      ],
+      "training_rows": 2206118,
+      "warnings": [],
+      "width": 6
+    },
+    {
+      "auc": 0.8114863430448065,
+      "bound_exact": "1.999999999999999777955395075",
+      "epoch_rows_seen": [
+        2206118,
+        2206118
+      ],
+      "epsilon_per_attribute": 0.49999999999999994,
+      "family": "slm_medium",
+      "input_scope": "Public covariates followed by accounted RR bits; adapter field_sizes is a token schema, not a claim that RR inputs are public.",
+      "k": 4,
+      "metadata": {
+        "bytes": 1445,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k4-r2-slm_medium-0-1-2-3\\fit\\recipient\\metadata.json",
+        "sha256": "9845c09bed1ee4fd6fe7ecf16854551f356c709ce59ba3a2ceb10909d57294d4"
+      },
+      "model": {
+        "bytes": 12818564,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k4-r2-slm_medium-0-1-2-3\\fit\\recipient\\neural_model.pt",
+        "sha256": "ccf3313e91a6c1ebedae5adae8d3b7d4bc7df8c8cdec2099e9add83455f6b2a6"
+      },
+      "parameter_count": 3181568,
+      "repeat": 2,
+      "score_rows": 20000,
+      "scores": {
+        "bytes": 160128,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k4-r2-slm_medium-0-1-2-3\\scores.npy",
+        "sha256": "216d439802f1987aca365e06ba3594cb7e7d9d94c1d3205f382cb4300e215c57"
+      },
+      "seconds": 65.82486909994623,
+      "subset": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "training_rows": 2206118,
+      "warnings": [],
+      "width": 9
+    },
+    {
+      "auc": 0.763199124084194,
+      "bound_exact": "0",
+      "epoch_rows_seen": [
+        2206118,
+        2206118
+      ],
+      "epsilon_per_attribute": 0.0,
+      "family": "slm_small",
+      "input_scope": "Public covariates followed by accounted RR bits; adapter field_sizes is a token schema, not a claim that RR inputs are public.",
+      "k": 5,
+      "metadata": {
+        "bytes": 1406,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k5-r0-slm_small-none\\fit\\recipient\\metadata.json",
+        "sha256": "1c1597d3c0b012404c0dc1478c66cbe4d583af3d208ab329f9dd5a9e7f0989a1"
+      },
+      "model": {
+        "bytes": 5428712,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k5-r0-slm_small-none\\fit\\recipient\\neural_model.pt",
+        "sha256": "d2710c3f5e7b0396216d02af8efbabb92015e25f1c9669d145b7249d0acb1f1c"
+      },
+      "parameter_count": 1345152,
+      "repeat": 0,
+      "score_rows": 20000,
+      "scores": {
+        "bytes": 160128,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k5-r0-slm_small-none\\scores.npy",
+        "sha256": "ef41809feeb58ec146351eae05498cfce371c42580ba79e00f90ab07c3e387c1"
+      },
+      "seconds": 74.02513359999284,
+      "subset": [],
+      "training_rows": 2206118,
+      "warnings": [],
+      "width": 4
+    },
+    {
+      "auc": 0.7886566477933488,
+      "bound_exact": "2",
+      "epoch_rows_seen": [
+        2206118,
+        2206118
+      ],
+      "epsilon_per_attribute": 2.0,
+      "family": "slm_small",
+      "input_scope": "Public covariates followed by accounted RR bits; adapter field_sizes is a token schema, not a claim that RR inputs are public.",
+      "k": 5,
+      "metadata": {
+        "bytes": 1413,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k5-r0-slm_small-0\\fit\\recipient\\metadata.json",
+        "sha256": "0adb1c0e5428a438dc0da35585ae9d8a11147055856435270bbfd547fcc9a989"
+      },
+      "model": {
+        "bytes": 5432552,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k5-r0-slm_small-0\\fit\\recipient\\neural_model.pt",
+        "sha256": "f39f528f1fd55a885de83175eeaf5659a7a7394b6c36bfb4b16d8f5dc600ff39"
+      },
+      "parameter_count": 1345728,
+      "repeat": 0,
+      "score_rows": 20000,
+      "scores": {
+        "bytes": 160128,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k5-r0-slm_small-0\\scores.npy",
+        "sha256": "c0e715cb2fd00d9c08d2996afb5ec7770d6b6fd9522b46813256c50da868f630"
+      },
+      "seconds": 74.1005721000256,
+      "subset": [
+        0
+      ],
+      "training_rows": 2206118,
+      "warnings": [],
+      "width": 5
+    },
+    {
+      "auc": 0.767138047893972,
+      "bound_exact": "2",
+      "epoch_rows_seen": [
+        2206118,
+        2206118
+      ],
+      "epsilon_per_attribute": 2.0,
+      "family": "slm_small",
+      "input_scope": "Public covariates followed by accounted RR bits; adapter field_sizes is a token schema, not a claim that RR inputs are public.",
+      "k": 5,
+      "metadata": {
+        "bytes": 1413,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k5-r0-slm_small-1\\fit\\recipient\\metadata.json",
+        "sha256": "ba8530dc22a5c0f79156e0a22b14bf7ebf5b01951c93633c1689da440e55a98b"
+      },
+      "model": {
+        "bytes": 5432552,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k5-r0-slm_small-1\\fit\\recipient\\neural_model.pt",
+        "sha256": "f372b46d979591f04ab0a69096c01c2460080ee66b2d3abf05cf9878f24e0859"
+      },
+      "parameter_count": 1345728,
+      "repeat": 0,
+      "score_rows": 20000,
+      "scores": {
+        "bytes": 160128,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k5-r0-slm_small-1\\scores.npy",
+        "sha256": "9b751290c0956ea5a8f7269e09bdd5b0452f2b750c7c4590a98497e5b181da56"
+      },
+      "seconds": 74.17337750003207,
+      "subset": [
+        1
+      ],
+      "training_rows": 2206118,
+      "warnings": [],
+      "width": 5
+    },
+    {
+      "auc": 0.7768991853311075,
+      "bound_exact": "2",
+      "epoch_rows_seen": [
+        2206118,
+        2206118
+      ],
+      "epsilon_per_attribute": 2.0,
+      "family": "slm_small",
+      "input_scope": "Public covariates followed by accounted RR bits; adapter field_sizes is a token schema, not a claim that RR inputs are public.",
+      "k": 5,
+      "metadata": {
+        "bytes": 1413,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k5-r0-slm_small-2\\fit\\recipient\\metadata.json",
+        "sha256": "aeca33daf1f95f625c382824cba688690e5569524560ad3a4c216b2c6a26d4dd"
+      },
+      "model": {
+        "bytes": 5432552,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k5-r0-slm_small-2\\fit\\recipient\\neural_model.pt",
+        "sha256": "88943ae309a18e74d12d5f1ad2e78857ade708c96d0fff95bd08e79ec126a682"
+      },
+      "parameter_count": 1345728,
+      "repeat": 0,
+      "score_rows": 20000,
+      "scores": {
+        "bytes": 160128,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k5-r0-slm_small-2\\scores.npy",
+        "sha256": "01694d90e98d209a805135a445e5fd08510fb3cccdf34a73bedf93ad9c9921bf"
+      },
+      "seconds": 74.4870302999625,
+      "subset": [
+        2
+      ],
+      "training_rows": 2206118,
+      "warnings": [],
+      "width": 5
+    },
+    {
+      "auc": 0.7633257459275685,
+      "bound_exact": "2",
+      "epoch_rows_seen": [
+        2206118,
+        2206118
+      ],
+      "epsilon_per_attribute": 2.0,
+      "family": "slm_small",
+      "input_scope": "Public covariates followed by accounted RR bits; adapter field_sizes is a token schema, not a claim that RR inputs are public.",
+      "k": 5,
+      "metadata": {
+        "bytes": 1413,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k5-r0-slm_small-3\\fit\\recipient\\metadata.json",
+        "sha256": "1a8862507e8eeb181bc1dcaaf1a76cbacd08b6872ffdaa3c0eb593192e961e6f"
+      },
+      "model": {
+        "bytes": 5432552,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k5-r0-slm_small-3\\fit\\recipient\\neural_model.pt",
+        "sha256": "31a898c14e25985c04f9c2124e560528cc1ed4685e21a8be32ff5599a426e969"
+      },
+      "parameter_count": 1345728,
+      "repeat": 0,
+      "score_rows": 20000,
+      "scores": {
+        "bytes": 160128,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k5-r0-slm_small-3\\scores.npy",
+        "sha256": "19fe1b367398c205de4792ed97099c74d8496bb2764c473ae2a9a5d17eea5047"
+      },
+      "seconds": 74.44550440000603,
+      "subset": [
+        3
+      ],
+      "training_rows": 2206118,
+      "warnings": [],
+      "width": 5
+    },
+    {
+      "auc": 0.7770215200806225,
+      "bound_exact": "2",
+      "epoch_rows_seen": [
+        2206118,
+        2206118
+      ],
+      "epsilon_per_attribute": 2.0,
+      "family": "slm_small",
+      "input_scope": "Public covariates followed by accounted RR bits; adapter field_sizes is a token schema, not a claim that RR inputs are public.",
+      "k": 5,
+      "metadata": {
+        "bytes": 1413,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k5-r0-slm_small-4\\fit\\recipient\\metadata.json",
+        "sha256": "4192285f9308e1f3ca51b651b815f5f4572f878bf3d34cb2a671ee8ace49fe2b"
+      },
+      "model": {
+        "bytes": 5432552,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k5-r0-slm_small-4\\fit\\recipient\\neural_model.pt",
+        "sha256": "f656bc8839038fec7f0bc588af567780aefe975b02a8310bfa4c98682ac98f4c"
+      },
+      "parameter_count": 1345728,
+      "repeat": 0,
+      "score_rows": 20000,
+      "scores": {
+        "bytes": 160128,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k5-r0-slm_small-4\\scores.npy",
+        "sha256": "e203531c62f4becf68b76b92ab2bcfbacc8f309f556fe15040509a8d3b898438"
+      },
+      "seconds": 75.16643690003548,
+      "subset": [
+        4
+      ],
+      "training_rows": 2206118,
+      "warnings": [],
+      "width": 5
+    },
+    {
+      "auc": 0.7679972625429986,
+      "bound_exact": "1.999999999999999833466546306",
+      "epoch_rows_seen": [
+        2206118,
+        2206118
+      ],
+      "epsilon_per_attribute": 0.39999999999999997,
+      "family": "slm_small",
+      "input_scope": "Public covariates followed by accounted RR bits; adapter field_sizes is a token schema, not a claim that RR inputs are public.",
+      "k": 5,
+      "metadata": {
+        "bytes": 1441,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k5-r0-slm_small-0-1-2-3-4\\fit\\recipient\\metadata.json",
+        "sha256": "1b799e5a9c428c2f5c0bbda9cdf044182b636d3588f9c1c6afba22bf068b605b"
+      },
+      "model": {
+        "bytes": 5447912,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k5-r0-slm_small-0-1-2-3-4\\fit\\recipient\\neural_model.pt",
+        "sha256": "5fbc1d9aa747305bcec45986e6f51483df10533246a4728bf5b47ed487ebdb4a"
+      },
+      "parameter_count": 1348032,
+      "repeat": 0,
+      "score_rows": 20000,
+      "scores": {
+        "bytes": 160128,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k5-r0-slm_small-0-1-2-3-4\\scores.npy",
+        "sha256": "e516dd6cd36889b0dae723c2365eeca7c99d784e231adc51d6709fd4cb46041b"
+      },
+      "seconds": 79.99407459999202,
+      "subset": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "training_rows": 2206118,
+      "warnings": [],
+      "width": 9
+    },
+    {
+      "auc": 0.7635971885028366,
+      "bound_exact": "0",
+      "epoch_rows_seen": [
+        2206118,
+        2206118
+      ],
+      "epsilon_per_attribute": 0.0,
+      "family": "slm_medium",
+      "input_scope": "Public covariates followed by accounted RR bits; adapter field_sizes is a token schema, not a claim that RR inputs are public.",
+      "k": 5,
+      "metadata": {
+        "bytes": 1409,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k5-r0-slm_medium-none\\fit\\recipient\\metadata.json",
+        "sha256": "a3c20c6ffb483f95e715e86919b771a97bfe019cf7f5fd47148f67cf785f5001"
+      },
+      "model": {
+        "bytes": 12756100,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k5-r0-slm_medium-none\\fit\\recipient\\neural_model.pt",
+        "sha256": "1dc5e83a065bf5708578051d63784c52ce54fb19ed1aafe2ce1c45bbc261c92d"
+      },
+      "parameter_count": 3173120,
+      "repeat": 0,
+      "score_rows": 20000,
+      "scores": {
+        "bytes": 160128,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k5-r0-slm_medium-none\\scores.npy",
+        "sha256": "25b4981a5068ddaf8881bea45db8e268909c33e118ef80ad6309a8483e373254"
+      },
+      "seconds": 102.3351986000198,
+      "subset": [],
+      "training_rows": 2206118,
+      "warnings": [],
+      "width": 4
+    },
+    {
+      "auc": 0.7886439515923973,
+      "bound_exact": "2",
+      "epoch_rows_seen": [
+        2206118,
+        2206118
+      ],
+      "epsilon_per_attribute": 2.0,
+      "family": "slm_medium",
+      "input_scope": "Public covariates followed by accounted RR bits; adapter field_sizes is a token schema, not a claim that RR inputs are public.",
+      "k": 5,
+      "metadata": {
+        "bytes": 1416,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k5-r0-slm_medium-0\\fit\\recipient\\metadata.json",
+        "sha256": "d45d4900130bd6271fd375842f76bd4133b70b15567670799d73c0cf819befb1"
+      },
+      "model": {
+        "bytes": 12761220,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k5-r0-slm_medium-0\\fit\\recipient\\neural_model.pt",
+        "sha256": "5e48ddd94ca7b5451915f0fdc6cc3d3109dff742a6cdf6da8140dadd127a08b6"
+      },
+      "parameter_count": 3173888,
+      "repeat": 0,
+      "score_rows": 20000,
+      "scores": {
+        "bytes": 160128,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k5-r0-slm_medium-0\\scores.npy",
+        "sha256": "e7d76c471e29951c31e468566b8d1d44b802d2d5301cde7287c0967c65a380eb"
+      },
+      "seconds": 108.69465729995864,
+      "subset": [
+        0
+      ],
+      "training_rows": 2206118,
+      "warnings": [],
+      "width": 5
+    },
+    {
+      "auc": 0.7663597427619624,
+      "bound_exact": "2",
+      "epoch_rows_seen": [
+        2206118,
+        2206118
+      ],
+      "epsilon_per_attribute": 2.0,
+      "family": "slm_medium",
+      "input_scope": "Public covariates followed by accounted RR bits; adapter field_sizes is a token schema, not a claim that RR inputs are public.",
+      "k": 5,
+      "metadata": {
+        "bytes": 1416,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k5-r0-slm_medium-1\\fit\\recipient\\metadata.json",
+        "sha256": "1fb9cadf065c4ce56ed3ee8b4b705347ffa461f3872eed2dad42c8ce19b60db9"
+      },
+      "model": {
+        "bytes": 12761220,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k5-r0-slm_medium-1\\fit\\recipient\\neural_model.pt",
+        "sha256": "b430f924a24355e8c15a24b1a83914eba44ea890818afa7dca154204d3d21200"
+      },
+      "parameter_count": 3173888,
+      "repeat": 0,
+      "score_rows": 20000,
+      "scores": {
+        "bytes": 160128,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k5-r0-slm_medium-1\\scores.npy",
+        "sha256": "64137b8b38d7d3f066a82ad7edddb2c532a46b994417520af37437b71903e3e4"
+      },
+      "seconds": 109.82871129998239,
+      "subset": [
+        1
+      ],
+      "training_rows": 2206118,
+      "warnings": [],
+      "width": 5
+    },
+    {
+      "auc": 0.7766076329340013,
+      "bound_exact": "2",
+      "epoch_rows_seen": [
+        2206118,
+        2206118
+      ],
+      "epsilon_per_attribute": 2.0,
+      "family": "slm_medium",
+      "input_scope": "Public covariates followed by accounted RR bits; adapter field_sizes is a token schema, not a claim that RR inputs are public.",
+      "k": 5,
+      "metadata": {
+        "bytes": 1416,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k5-r0-slm_medium-2\\fit\\recipient\\metadata.json",
+        "sha256": "719544c3dc4d6109b0270f3616334dd2cca8b8026327b0d0b5273f7f114cf5c2"
+      },
+      "model": {
+        "bytes": 12761220,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k5-r0-slm_medium-2\\fit\\recipient\\neural_model.pt",
+        "sha256": "3f399791f85bad76612ffbaece5065c577b76b628dd410d6b6b927b41b7d8fc5"
+      },
+      "parameter_count": 3173888,
+      "repeat": 0,
+      "score_rows": 20000,
+      "scores": {
+        "bytes": 160128,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k5-r0-slm_medium-2\\scores.npy",
+        "sha256": "bdcae5200abf9dfe5f84078088686fc7e1809fb5340869c70a7fa03b48b786c7"
+      },
+      "seconds": 112.50798500003293,
+      "subset": [
+        2
+      ],
+      "training_rows": 2206118,
+      "warnings": [],
+      "width": 5
+    },
+    {
+      "auc": 0.7631803849318045,
+      "bound_exact": "2",
+      "epoch_rows_seen": [
+        2206118,
+        2206118
+      ],
+      "epsilon_per_attribute": 2.0,
+      "family": "slm_medium",
+      "input_scope": "Public covariates followed by accounted RR bits; adapter field_sizes is a token schema, not a claim that RR inputs are public.",
+      "k": 5,
+      "metadata": {
+        "bytes": 1416,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k5-r0-slm_medium-3\\fit\\recipient\\metadata.json",
+        "sha256": "85b5093ce4b4889fcf40e82a340d1fa4e95e1fea35984285ea16bd257a9e7cd8"
+      },
+      "model": {
+        "bytes": 12761220,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k5-r0-slm_medium-3\\fit\\recipient\\neural_model.pt",
+        "sha256": "ccf878ac3a8f3bca4d9a8d3d7b2a0b9e344f6fe1d19d60eb14e6302773d7d26c"
+      },
+      "parameter_count": 3173888,
+      "repeat": 0,
+      "score_rows": 20000,
+      "scores": {
+        "bytes": 160128,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k5-r0-slm_medium-3\\scores.npy",
+        "sha256": "1f25a802a740bc65788b28f3fa5b8b2a7ddd8cc22d53af019bd5c9bbb3ff7269"
+      },
+      "seconds": 114.99432289996184,
+      "subset": [
+        3
+      ],
+      "training_rows": 2206118,
+      "warnings": [],
+      "width": 5
+    },
+    {
+      "auc": 0.7771042304772074,
+      "bound_exact": "2",
+      "epoch_rows_seen": [
+        2206118,
+        2206118
+      ],
+      "epsilon_per_attribute": 2.0,
+      "family": "slm_medium",
+      "input_scope": "Public covariates followed by accounted RR bits; adapter field_sizes is a token schema, not a claim that RR inputs are public.",
+      "k": 5,
+      "metadata": {
+        "bytes": 1416,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k5-r0-slm_medium-4\\fit\\recipient\\metadata.json",
+        "sha256": "68e40da5c988891361066ba237e861418830310baaa3e710c4ac9c8ad2c738d3"
+      },
+      "model": {
+        "bytes": 12761220,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k5-r0-slm_medium-4\\fit\\recipient\\neural_model.pt",
+        "sha256": "3a6bd058786c688b93df9e026c876294428f9b98b25617023c7ee304dbb62165"
+      },
+      "parameter_count": 3173888,
+      "repeat": 0,
+      "score_rows": 20000,
+      "scores": {
+        "bytes": 160128,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k5-r0-slm_medium-4\\scores.npy",
+        "sha256": "160490d2ab87f562183cd3ef77776b4cbf1a71a5856da1fd4547d16bed7e35df"
+      },
+      "seconds": 116.51316460000817,
+      "subset": [
+        4
+      ],
+      "training_rows": 2206118,
+      "warnings": [],
+      "width": 5
+    },
+    {
+      "auc": 0.7678774340175485,
+      "bound_exact": "1.999999999999999833466546306",
+      "epoch_rows_seen": [
+        2206118,
+        2206118
+      ],
+      "epsilon_per_attribute": 0.39999999999999997,
+      "family": "slm_medium",
+      "input_scope": "Public covariates followed by accounted RR bits; adapter field_sizes is a token schema, not a claim that RR inputs are public.",
+      "k": 5,
+      "metadata": {
+        "bytes": 1444,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k5-r0-slm_medium-0-1-2-3-4\\fit\\recipient\\metadata.json",
+        "sha256": "fe05dbbcc5e49c61ab797551ea1662bd31336fc59e22fdd13e12b9e4fa54e807"
+      },
+      "model": {
+        "bytes": 12781700,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k5-r0-slm_medium-0-1-2-3-4\\fit\\recipient\\neural_model.pt",
+        "sha256": "d61d53064fb5cf94a1f8c8f5488de29e21d882b7befaac8cae3a5bde4e656a4c"
+      },
+      "parameter_count": 3176960,
+      "repeat": 0,
+      "score_rows": 20000,
+      "scores": {
+        "bytes": 160128,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k5-r0-slm_medium-0-1-2-3-4\\scores.npy",
+        "sha256": "815cdf94749ec148777e918d566668f955d2c0f71afaae26e0550f7cd496e5c1"
+      },
+      "seconds": 148.59580519999145,
+      "subset": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "training_rows": 2206118,
+      "warnings": [],
+      "width": 9
+    },
+    {
+      "auc": 0.763838061147445,
+      "bound_exact": "0",
+      "epoch_rows_seen": [
+        2206118,
+        2206118
+      ],
+      "epsilon_per_attribute": 0.0,
+      "family": "slm_small",
+      "input_scope": "Public covariates followed by accounted RR bits; adapter field_sizes is a token schema, not a claim that RR inputs are public.",
+      "k": 5,
+      "metadata": {
+        "bytes": 1406,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k5-r1-slm_small-none\\fit\\recipient\\metadata.json",
+        "sha256": "2fbce4c7fa28052d63574280408fd4115f6978832b44ade18979a63bdd49d969"
+      },
+      "model": {
+        "bytes": 5428712,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k5-r1-slm_small-none\\fit\\recipient\\neural_model.pt",
+        "sha256": "6181991e8dbbfd38cc3afaf79511362de5c2f4c159e75bb599ff8087fa194564"
+      },
+      "parameter_count": 1345152,
+      "repeat": 1,
+      "score_rows": 20000,
+      "scores": {
+        "bytes": 160128,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k5-r1-slm_small-none\\scores.npy",
+        "sha256": "05d770fdea814ee2bae1c8bb7a61251ebd46c2761aec4f503109169d21111bce"
+      },
+      "seconds": 71.48672340001212,
+      "subset": [],
+      "training_rows": 2206118,
+      "warnings": [],
+      "width": 4
+    },
+    {
+      "auc": 0.7883364564086744,
+      "bound_exact": "2",
+      "epoch_rows_seen": [
+        2206118,
+        2206118
+      ],
+      "epsilon_per_attribute": 2.0,
+      "family": "slm_small",
+      "input_scope": "Public covariates followed by accounted RR bits; adapter field_sizes is a token schema, not a claim that RR inputs are public.",
+      "k": 5,
+      "metadata": {
+        "bytes": 1413,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k5-r1-slm_small-0\\fit\\recipient\\metadata.json",
+        "sha256": "8d9eed75b6a2146dc492c8c24daa7dfb26fef2b9589f6d30f8097fb71c81b060"
+      },
+      "model": {
+        "bytes": 5432552,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k5-r1-slm_small-0\\fit\\recipient\\neural_model.pt",
+        "sha256": "ec53a1c54950941c4e12090448c0a935ee1d758ee7a28da0b6c5315de50b9103"
+      },
+      "parameter_count": 1345728,
+      "repeat": 1,
+      "score_rows": 20000,
+      "scores": {
+        "bytes": 160128,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k5-r1-slm_small-0\\scores.npy",
+        "sha256": "22f445a4ce9454fe01b0b91c506d5b9eada886f973524896d50a8d7d5c5bb130"
+      },
+      "seconds": 74.83992830000352,
+      "subset": [
+        0
+      ],
+      "training_rows": 2206118,
+      "warnings": [],
+      "width": 5
+    },
+    {
+      "auc": 0.7678281049247263,
+      "bound_exact": "2",
+      "epoch_rows_seen": [
+        2206118,
+        2206118
+      ],
+      "epsilon_per_attribute": 2.0,
+      "family": "slm_small",
+      "input_scope": "Public covariates followed by accounted RR bits; adapter field_sizes is a token schema, not a claim that RR inputs are public.",
+      "k": 5,
+      "metadata": {
+        "bytes": 1413,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k5-r1-slm_small-1\\fit\\recipient\\metadata.json",
+        "sha256": "a826926d18acd33b12b5fb9f799170038b7326998adfdfb13aa6f52cb6011cb3"
+      },
+      "model": {
+        "bytes": 5432552,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k5-r1-slm_small-1\\fit\\recipient\\neural_model.pt",
+        "sha256": "c9b7edf33209380dc3622d57a1607bae67c61ae82d7b41147aa252ebcb46487b"
+      },
+      "parameter_count": 1345728,
+      "repeat": 1,
+      "score_rows": 20000,
+      "scores": {
+        "bytes": 160128,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k5-r1-slm_small-1\\scores.npy",
+        "sha256": "58d337bbfb1e84dd9fa06c54ef193073570f4aa85936db8be8c0fb480f0d817a"
+      },
+      "seconds": 67.89353950001532,
+      "subset": [
+        1
+      ],
+      "training_rows": 2206118,
+      "warnings": [],
+      "width": 5
+    },
+    {
+      "auc": 0.7770427104302011,
+      "bound_exact": "2",
+      "epoch_rows_seen": [
+        2206118,
+        2206118
+      ],
+      "epsilon_per_attribute": 2.0,
+      "family": "slm_small",
+      "input_scope": "Public covariates followed by accounted RR bits; adapter field_sizes is a token schema, not a claim that RR inputs are public.",
+      "k": 5,
+      "metadata": {
+        "bytes": 1413,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k5-r1-slm_small-2\\fit\\recipient\\metadata.json",
+        "sha256": "0f1ab8d4869ba5cd36dd93bd3fb0ac0c58f0d482666b03f58c13b6ef96b72d73"
+      },
+      "model": {
+        "bytes": 5432552,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k5-r1-slm_small-2\\fit\\recipient\\neural_model.pt",
+        "sha256": "0199c1d12ccb350aca39d4f0f36ce9cafaff6037bf320b5ce27b35dea55249c6"
+      },
+      "parameter_count": 1345728,
+      "repeat": 1,
+      "score_rows": 20000,
+      "scores": {
+        "bytes": 160128,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k5-r1-slm_small-2\\scores.npy",
+        "sha256": "092acbd60ea6118ec15aa5ccddb9bdc6ac9d62f9ba77a38c2a1cfc23a319d0fa"
+      },
+      "seconds": 70.26375400001416,
+      "subset": [
+        2
+      ],
+      "training_rows": 2206118,
+      "warnings": [],
+      "width": 5
+    },
+    {
+      "auc": 0.7646401478946331,
+      "bound_exact": "2",
+      "epoch_rows_seen": [
+        2206118,
+        2206118
+      ],
+      "epsilon_per_attribute": 2.0,
+      "family": "slm_small",
+      "input_scope": "Public covariates followed by accounted RR bits; adapter field_sizes is a token schema, not a claim that RR inputs are public.",
+      "k": 5,
+      "metadata": {
+        "bytes": 1413,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k5-r1-slm_small-3\\fit\\recipient\\metadata.json",
+        "sha256": "2a5e21dc03e63a9cc1b866781120fbe89d66ba47bead40905ddb13ea5fdc691a"
+      },
+      "model": {
+        "bytes": 5432552,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k5-r1-slm_small-3\\fit\\recipient\\neural_model.pt",
+        "sha256": "2c01ae321b838b39e888c6ea2d02988d02746ef13cea89d5872e72e3700c9a63"
+      },
+      "parameter_count": 1345728,
+      "repeat": 1,
+      "score_rows": 20000,
+      "scores": {
+        "bytes": 160128,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k5-r1-slm_small-3\\scores.npy",
+        "sha256": "98cfdb86229c792b00d93556304fa64c35e38343948a0eb233278e204e5b0b1e"
+      },
+      "seconds": 71.03482529998291,
+      "subset": [
+        3
+      ],
+      "training_rows": 2206118,
+      "warnings": [],
+      "width": 5
+    },
+    {
+      "auc": 0.7785435634618303,
+      "bound_exact": "2",
+      "epoch_rows_seen": [
+        2206118,
+        2206118
+      ],
+      "epsilon_per_attribute": 2.0,
+      "family": "slm_small",
+      "input_scope": "Public covariates followed by accounted RR bits; adapter field_sizes is a token schema, not a claim that RR inputs are public.",
+      "k": 5,
+      "metadata": {
+        "bytes": 1413,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k5-r1-slm_small-4\\fit\\recipient\\metadata.json",
+        "sha256": "ac42647becb35df92b9ce5d51742fd730f127cb8882c3d9438c0aaf523d3d8fe"
+      },
+      "model": {
+        "bytes": 5432552,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k5-r1-slm_small-4\\fit\\recipient\\neural_model.pt",
+        "sha256": "172ee097f1dbcddc7279708ad07449a7d55a91b3d476659875f32e88aaa3aa48"
+      },
+      "parameter_count": 1345728,
+      "repeat": 1,
+      "score_rows": 20000,
+      "scores": {
+        "bytes": 160128,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k5-r1-slm_small-4\\scores.npy",
+        "sha256": "6abddddfeac929154907d4fd97efcb8172cfde54d182197d3f3cf733596958c6"
+      },
+      "seconds": 73.08703519997653,
+      "subset": [
+        4
+      ],
+      "training_rows": 2206118,
+      "warnings": [],
+      "width": 5
+    },
+    {
+      "auc": 0.7672321838709244,
+      "bound_exact": "1.999999999999999833466546306",
+      "epoch_rows_seen": [
+        2206118,
+        2206118
+      ],
+      "epsilon_per_attribute": 0.39999999999999997,
+      "family": "slm_small",
+      "input_scope": "Public covariates followed by accounted RR bits; adapter field_sizes is a token schema, not a claim that RR inputs are public.",
+      "k": 5,
+      "metadata": {
+        "bytes": 1441,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k5-r1-slm_small-0-1-2-3-4\\fit\\recipient\\metadata.json",
+        "sha256": "b15a145c53333ab9bc8bcb4404d7dec16b23d37935f5fa06ba7493b566c11abd"
+      },
+      "model": {
+        "bytes": 5447912,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k5-r1-slm_small-0-1-2-3-4\\fit\\recipient\\neural_model.pt",
+        "sha256": "479943e605c8c4f41bffb5ee0b50ce5cbf93bc39cf052ef379799115d84e1160"
+      },
+      "parameter_count": 1348032,
+      "repeat": 1,
+      "score_rows": 20000,
+      "scores": {
+        "bytes": 160128,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k5-r1-slm_small-0-1-2-3-4\\scores.npy",
+        "sha256": "91d35792d59c2d522c1f42798e5fb33dcdc739628bc96aa9229ccccfdcd34e82"
+      },
+      "seconds": 86.7454590999987,
+      "subset": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "training_rows": 2206118,
+      "warnings": [],
+      "width": 9
+    },
+    {
+      "auc": 0.7645414897089888,
+      "bound_exact": "0",
+      "epoch_rows_seen": [
+        2206118,
+        2206118
+      ],
+      "epsilon_per_attribute": 0.0,
+      "family": "slm_medium",
+      "input_scope": "Public covariates followed by accounted RR bits; adapter field_sizes is a token schema, not a claim that RR inputs are public.",
+      "k": 5,
+      "metadata": {
+        "bytes": 1409,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k5-r1-slm_medium-none\\fit\\recipient\\metadata.json",
+        "sha256": "c36aabfafd6a005486ef5bdbb816cd5f46f56a7b680421b1fd49f693bb728246"
+      },
+      "model": {
+        "bytes": 12756100,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k5-r1-slm_medium-none\\fit\\recipient\\neural_model.pt",
+        "sha256": "f789ec1b5b484c0116314c6e2e7fa99298fa6c60b408d042c40323157d162e2d"
+      },
+      "parameter_count": 3173120,
+      "repeat": 1,
+      "score_rows": 20000,
+      "scores": {
+        "bytes": 160128,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k5-r1-slm_medium-none\\scores.npy",
+        "sha256": "df5009ba99a6f46665284f946092d41082f76ebdc66e50067b6f6b5e55511e7d"
+      },
+      "seconds": 108.31125979998615,
+      "subset": [],
+      "training_rows": 2206118,
+      "warnings": [],
+      "width": 4
+    },
+    {
+      "auc": 0.7882401143542519,
+      "bound_exact": "2",
+      "epoch_rows_seen": [
+        2206118,
+        2206118
+      ],
+      "epsilon_per_attribute": 2.0,
+      "family": "slm_medium",
+      "input_scope": "Public covariates followed by accounted RR bits; adapter field_sizes is a token schema, not a claim that RR inputs are public.",
+      "k": 5,
+      "metadata": {
+        "bytes": 1416,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k5-r1-slm_medium-0\\fit\\recipient\\metadata.json",
+        "sha256": "dded6be83d014dee25e9e5e6476b45387d5045a2527ac9ca8a99eeb6019affc0"
+      },
+      "model": {
+        "bytes": 12761220,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k5-r1-slm_medium-0\\fit\\recipient\\neural_model.pt",
+        "sha256": "4d2f392ba1081cc651ccc6b5e48370c2e5e20a99eb211edd7c5587b5028d49e1"
+      },
+      "parameter_count": 3173888,
+      "repeat": 1,
+      "score_rows": 20000,
+      "scores": {
+        "bytes": 160128,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k5-r1-slm_medium-0\\scores.npy",
+        "sha256": "eeac66f73b2bc808e8d116aa6c6acd8245e6e9eafb4eb90f9204ef9be37717c9"
+      },
+      "seconds": 118.52895410003839,
+      "subset": [
+        0
+      ],
+      "training_rows": 2206118,
+      "warnings": [],
+      "width": 5
+    },
+    {
+      "auc": 0.7676723988763352,
+      "bound_exact": "2",
+      "epoch_rows_seen": [
+        2206118,
+        2206118
+      ],
+      "epsilon_per_attribute": 2.0,
+      "family": "slm_medium",
+      "input_scope": "Public covariates followed by accounted RR bits; adapter field_sizes is a token schema, not a claim that RR inputs are public.",
+      "k": 5,
+      "metadata": {
+        "bytes": 1416,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k5-r1-slm_medium-1\\fit\\recipient\\metadata.json",
+        "sha256": "24b2932673d416a23c5f71d971c0c190f29521542b679309b9dc4a0c673df998"
+      },
+      "model": {
+        "bytes": 12761220,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k5-r1-slm_medium-1\\fit\\recipient\\neural_model.pt",
+        "sha256": "c1e87e3fe56c292c0685c9bf691c13dd9d183352c19ad41fc4ffa25fbab1defa"
+      },
+      "parameter_count": 3173888,
+      "repeat": 1,
+      "score_rows": 20000,
+      "scores": {
+        "bytes": 160128,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k5-r1-slm_medium-1\\scores.npy",
+        "sha256": "a727b4dec686b37745895232fd88ec893053b424805a7f1afaeeec56792803bf"
+      },
+      "seconds": 119.92653170000995,
+      "subset": [
+        1
+      ],
+      "training_rows": 2206118,
+      "warnings": [],
+      "width": 5
+    },
+    {
+      "auc": 0.7768394661636691,
+      "bound_exact": "2",
+      "epoch_rows_seen": [
+        2206118,
+        2206118
+      ],
+      "epsilon_per_attribute": 2.0,
+      "family": "slm_medium",
+      "input_scope": "Public covariates followed by accounted RR bits; adapter field_sizes is a token schema, not a claim that RR inputs are public.",
+      "k": 5,
+      "metadata": {
+        "bytes": 1416,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k5-r1-slm_medium-2\\fit\\recipient\\metadata.json",
+        "sha256": "d1a27798bb44b6d5dd3bd41e1245e8ee006163b5e0c89d91a8cb3cf8cf23ff17"
+      },
+      "model": {
+        "bytes": 12761220,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k5-r1-slm_medium-2\\fit\\recipient\\neural_model.pt",
+        "sha256": "1d345b7fc577715bf3b51273a356afaeab6db16424fecb5256cfcf4fc93c56e6"
+      },
+      "parameter_count": 3173888,
+      "repeat": 1,
+      "score_rows": 20000,
+      "scores": {
+        "bytes": 160128,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k5-r1-slm_medium-2\\scores.npy",
+        "sha256": "38e3e8fccad66f5b56f9ebef8ee22a1282d86c32df11008939495044ae80a80f"
+      },
+      "seconds": 120.73672879999503,
+      "subset": [
+        2
+      ],
+      "training_rows": 2206118,
+      "warnings": [],
+      "width": 5
+    },
+    {
+      "auc": 0.7645100493532047,
+      "bound_exact": "2",
+      "epoch_rows_seen": [
+        2206118,
+        2206118
+      ],
+      "epsilon_per_attribute": 2.0,
+      "family": "slm_medium",
+      "input_scope": "Public covariates followed by accounted RR bits; adapter field_sizes is a token schema, not a claim that RR inputs are public.",
+      "k": 5,
+      "metadata": {
+        "bytes": 1416,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k5-r1-slm_medium-3\\fit\\recipient\\metadata.json",
+        "sha256": "d4289e26bb3a02b31460ec5d47071b4d789ab01416e706efce62b6cee4b7894d"
+      },
+      "model": {
+        "bytes": 12761220,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k5-r1-slm_medium-3\\fit\\recipient\\neural_model.pt",
+        "sha256": "4acebd1385d291e85d44f003f467160d1206d406150df93370899ba067eb8403"
+      },
+      "parameter_count": 3173888,
+      "repeat": 1,
+      "score_rows": 20000,
+      "scores": {
+        "bytes": 160128,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k5-r1-slm_medium-3\\scores.npy",
+        "sha256": "b3719fbfcbc41c95d33dadb4f426195199cbeb31dd13742d5b50fdd622055a82"
+      },
+      "seconds": 123.30296679999446,
+      "subset": [
+        3
+      ],
+      "training_rows": 2206118,
+      "warnings": [],
+      "width": 5
+    },
+    {
+      "auc": 0.7784254507744126,
+      "bound_exact": "2",
+      "epoch_rows_seen": [
+        2206118,
+        2206118
+      ],
+      "epsilon_per_attribute": 2.0,
+      "family": "slm_medium",
+      "input_scope": "Public covariates followed by accounted RR bits; adapter field_sizes is a token schema, not a claim that RR inputs are public.",
+      "k": 5,
+      "metadata": {
+        "bytes": 1416,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k5-r1-slm_medium-4\\fit\\recipient\\metadata.json",
+        "sha256": "42a8dcf1f1f013ea99690ac08c65db52fd9b736c1aaa764ea51fcd0b48371224"
+      },
+      "model": {
+        "bytes": 12761220,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k5-r1-slm_medium-4\\fit\\recipient\\neural_model.pt",
+        "sha256": "8272515d14c75f51e31c23b78cae82ffb2ffcfe9c9f3cf5cdb9355ef03633d90"
+      },
+      "parameter_count": 3173888,
+      "repeat": 1,
+      "score_rows": 20000,
+      "scores": {
+        "bytes": 160128,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k5-r1-slm_medium-4\\scores.npy",
+        "sha256": "0349d441736cffda0a290469ce1613dcdbfd809ea06bb8ef0109015dfb556941"
+      },
+      "seconds": 122.71983790001832,
+      "subset": [
+        4
+      ],
+      "training_rows": 2206118,
+      "warnings": [],
+      "width": 5
+    },
+    {
+      "auc": 0.7675507994859769,
+      "bound_exact": "1.999999999999999833466546306",
+      "epoch_rows_seen": [
+        2206118,
+        2206118
+      ],
+      "epsilon_per_attribute": 0.39999999999999997,
+      "family": "slm_medium",
+      "input_scope": "Public covariates followed by accounted RR bits; adapter field_sizes is a token schema, not a claim that RR inputs are public.",
+      "k": 5,
+      "metadata": {
+        "bytes": 1444,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k5-r1-slm_medium-0-1-2-3-4\\fit\\recipient\\metadata.json",
+        "sha256": "eea51bb431502e925db4add33f768fe08688a139870f3876d03afd60f63d3c0b"
+      },
+      "model": {
+        "bytes": 12781700,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k5-r1-slm_medium-0-1-2-3-4\\fit\\recipient\\neural_model.pt",
+        "sha256": "f23bd1a449d35590a72b33014fbb19f127ba208a0f1f3231f20446cc67b27ab5"
+      },
+      "parameter_count": 3176960,
+      "repeat": 1,
+      "score_rows": 20000,
+      "scores": {
+        "bytes": 160128,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k5-r1-slm_medium-0-1-2-3-4\\scores.npy",
+        "sha256": "fe5147776ad12cd3e7a3589b8685feaa7a4693a0e65598ce73f3e9e0ecdb4fea"
+      },
+      "seconds": 135.48631479998585,
+      "subset": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "training_rows": 2206118,
+      "warnings": [],
+      "width": 9
+    },
+    {
+      "auc": 0.7641160219062594,
+      "bound_exact": "0",
+      "epoch_rows_seen": [
+        2206118,
+        2206118
+      ],
+      "epsilon_per_attribute": 0.0,
+      "family": "slm_small",
+      "input_scope": "Public covariates followed by accounted RR bits; adapter field_sizes is a token schema, not a claim that RR inputs are public.",
+      "k": 5,
+      "metadata": {
+        "bytes": 1406,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k5-r2-slm_small-none\\fit\\recipient\\metadata.json",
+        "sha256": "dbd5c45f9a8605ef33bfadcdb659134bcf910f2a3225b8365e058bf8a20c5c92"
+      },
+      "model": {
+        "bytes": 5428712,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k5-r2-slm_small-none\\fit\\recipient\\neural_model.pt",
+        "sha256": "307289edf656d79b30a51faf2188766e2c28715e4e3acb6966330ef63ac327b6"
+      },
+      "parameter_count": 1345152,
+      "repeat": 2,
+      "score_rows": 20000,
+      "scores": {
+        "bytes": 160128,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k5-r2-slm_small-none\\scores.npy",
+        "sha256": "bbea78eca8b627ff701482ab97eaa70a4dd9d0c0db2b0715f1fb1d4a2f2e53c8"
+      },
+      "seconds": 67.59952950000297,
+      "subset": [],
+      "training_rows": 2206118,
+      "warnings": [],
+      "width": 4
+    },
+    {
+      "auc": 0.7885454384776068,
+      "bound_exact": "2",
+      "epoch_rows_seen": [
+        2206118,
+        2206118
+      ],
+      "epsilon_per_attribute": 2.0,
+      "family": "slm_small",
+      "input_scope": "Public covariates followed by accounted RR bits; adapter field_sizes is a token schema, not a claim that RR inputs are public.",
+      "k": 5,
+      "metadata": {
+        "bytes": 1413,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k5-r2-slm_small-0\\fit\\recipient\\metadata.json",
+        "sha256": "ca93b8b412dd6387c619b18d11dcf551efc1953022b820525ffe7cc95cc7b2f5"
+      },
+      "model": {
+        "bytes": 5432552,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k5-r2-slm_small-0\\fit\\recipient\\neural_model.pt",
+        "sha256": "9ea30eafbc2a50a64f3fcf1fc023485092ee6aaa74694c2e387a78bbe3ef0984"
+      },
+      "parameter_count": 1345728,
+      "repeat": 2,
+      "score_rows": 20000,
+      "scores": {
+        "bytes": 160128,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k5-r2-slm_small-0\\scores.npy",
+        "sha256": "9ead75c70811b15f51af92774b87b9b8b466c2199418782e03a33adbe1f0c251"
+      },
+      "seconds": 70.57161779998569,
+      "subset": [
+        0
+      ],
+      "training_rows": 2206118,
+      "warnings": [],
+      "width": 5
+    },
+    {
+      "auc": 0.7664496716841473,
+      "bound_exact": "2",
+      "epoch_rows_seen": [
+        2206118,
+        2206118
+      ],
+      "epsilon_per_attribute": 2.0,
+      "family": "slm_small",
+      "input_scope": "Public covariates followed by accounted RR bits; adapter field_sizes is a token schema, not a claim that RR inputs are public.",
+      "k": 5,
+      "metadata": {
+        "bytes": 1413,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k5-r2-slm_small-1\\fit\\recipient\\metadata.json",
+        "sha256": "8142562e71ae7d57feb271bb386858befeba1dfc9c3de76fe7df72a0c7c645fa"
+      },
+      "model": {
+        "bytes": 5432552,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k5-r2-slm_small-1\\fit\\recipient\\neural_model.pt",
+        "sha256": "929eb4c78f64b6ac78f744018ccc16f23c253c594766e3b1f32722509628a0ec"
+      },
+      "parameter_count": 1345728,
+      "repeat": 2,
+      "score_rows": 20000,
+      "scores": {
+        "bytes": 160128,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k5-r2-slm_small-1\\scores.npy",
+        "sha256": "2fc84e1f27e5c6cc80aef176fd4ccc59a2e39db60c2989f33eed0cf66a599885"
+      },
+      "seconds": 70.43745189998299,
+      "subset": [
+        1
+      ],
+      "training_rows": 2206118,
+      "warnings": [],
+      "width": 5
+    },
+    {
+      "auc": 0.777361291028151,
+      "bound_exact": "2",
+      "epoch_rows_seen": [
+        2206118,
+        2206118
+      ],
+      "epsilon_per_attribute": 2.0,
+      "family": "slm_small",
+      "input_scope": "Public covariates followed by accounted RR bits; adapter field_sizes is a token schema, not a claim that RR inputs are public.",
+      "k": 5,
+      "metadata": {
+        "bytes": 1413,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k5-r2-slm_small-2\\fit\\recipient\\metadata.json",
+        "sha256": "d7192ce0401031deefa9e386693d92c4558a3d46ef8dafcf64284c8964deb763"
+      },
+      "model": {
+        "bytes": 5432552,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k5-r2-slm_small-2\\fit\\recipient\\neural_model.pt",
+        "sha256": "c36e258988e6d3161c3a67e6ce224d1fc5a00f6ee46c1d06dc482fe8fab2b07c"
+      },
+      "parameter_count": 1345728,
+      "repeat": 2,
+      "score_rows": 20000,
+      "scores": {
+        "bytes": 160128,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k5-r2-slm_small-2\\scores.npy",
+        "sha256": "66247656d553dea921cb1554f754f00a12f3649e908f08c67396aef36b24d86d"
+      },
+      "seconds": 71.73458710004343,
+      "subset": [
+        2
+      ],
+      "training_rows": 2206118,
+      "warnings": [],
+      "width": 5
+    },
+    {
+      "auc": 0.764435342865809,
+      "bound_exact": "2",
+      "epoch_rows_seen": [
+        2206118,
+        2206118
+      ],
+      "epsilon_per_attribute": 2.0,
+      "family": "slm_small",
+      "input_scope": "Public covariates followed by accounted RR bits; adapter field_sizes is a token schema, not a claim that RR inputs are public.",
+      "k": 5,
+      "metadata": {
+        "bytes": 1413,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k5-r2-slm_small-3\\fit\\recipient\\metadata.json",
+        "sha256": "d81a1b34e7e9932078ffbfc15bcafbbc14f2589ea914853bfb85e0b0da91656a"
+      },
+      "model": {
+        "bytes": 5432552,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k5-r2-slm_small-3\\fit\\recipient\\neural_model.pt",
+        "sha256": "1c1eddb883052a552e628f0e8610edfa7e74e2ce77f95531dae637798fe6f495"
+      },
+      "parameter_count": 1345728,
+      "repeat": 2,
+      "score_rows": 20000,
+      "scores": {
+        "bytes": 160128,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k5-r2-slm_small-3\\scores.npy",
+        "sha256": "83288868aaa810eb783da1d2e2a3ed9509f511aa31d40d5ceef86a70d98870b9"
+      },
+      "seconds": 72.34581500000786,
+      "subset": [
+        3
+      ],
+      "training_rows": 2206118,
+      "warnings": [],
+      "width": 5
+    },
+    {
+      "auc": 0.7782804299447893,
+      "bound_exact": "2",
+      "epoch_rows_seen": [
+        2206118,
+        2206118
+      ],
+      "epsilon_per_attribute": 2.0,
+      "family": "slm_small",
+      "input_scope": "Public covariates followed by accounted RR bits; adapter field_sizes is a token schema, not a claim that RR inputs are public.",
+      "k": 5,
+      "metadata": {
+        "bytes": 1413,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k5-r2-slm_small-4\\fit\\recipient\\metadata.json",
+        "sha256": "9cf97361f1bd610c3061e43d84822cab11f4910d75d286edeed0122b5d84c059"
+      },
+      "model": {
+        "bytes": 5432552,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k5-r2-slm_small-4\\fit\\recipient\\neural_model.pt",
+        "sha256": "ffaef4382629b9e5199caeefde26549b8780e17b089c6061323ec254a4facf8c"
+      },
+      "parameter_count": 1345728,
+      "repeat": 2,
+      "score_rows": 20000,
+      "scores": {
+        "bytes": 160128,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k5-r2-slm_small-4\\scores.npy",
+        "sha256": "8c013d1f31e820b76cb760a9e0ef21ea5fe5897362e666987ba89dba65545ffa"
+      },
+      "seconds": 73.32424720004201,
+      "subset": [
+        4
+      ],
+      "training_rows": 2206118,
+      "warnings": [],
+      "width": 5
+    },
+    {
+      "auc": 0.7676483071096755,
+      "bound_exact": "1.999999999999999833466546306",
+      "epoch_rows_seen": [
+        2206118,
+        2206118
+      ],
+      "epsilon_per_attribute": 0.39999999999999997,
+      "family": "slm_small",
+      "input_scope": "Public covariates followed by accounted RR bits; adapter field_sizes is a token schema, not a claim that RR inputs are public.",
+      "k": 5,
+      "metadata": {
+        "bytes": 1441,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k5-r2-slm_small-0-1-2-3-4\\fit\\recipient\\metadata.json",
+        "sha256": "f88eab8c942db07981f599afdc2f97e658f9a36f63f4a38f9e88f6c938ed18c3"
+      },
+      "model": {
+        "bytes": 5447912,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k5-r2-slm_small-0-1-2-3-4\\fit\\recipient\\neural_model.pt",
+        "sha256": "4fb361470fadb32c293eaecc88f506936fdaab9087c1ee1ca8f1456e8b24411a"
+      },
+      "parameter_count": 1348032,
+      "repeat": 2,
+      "score_rows": 20000,
+      "scores": {
+        "bytes": 160128,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k5-r2-slm_small-0-1-2-3-4\\scores.npy",
+        "sha256": "d6f9e2ddead4eef81faf7177291b339b90a14b55a2897a22c5900b63b1e4062b"
+      },
+      "seconds": 89.00119750003796,
+      "subset": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "training_rows": 2206118,
+      "warnings": [],
+      "width": 9
+    },
+    {
+      "auc": 0.764123275448962,
+      "bound_exact": "0",
+      "epoch_rows_seen": [
+        2206118,
+        2206118
+      ],
+      "epsilon_per_attribute": 0.0,
+      "family": "slm_medium",
+      "input_scope": "Public covariates followed by accounted RR bits; adapter field_sizes is a token schema, not a claim that RR inputs are public.",
+      "k": 5,
+      "metadata": {
+        "bytes": 1409,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k5-r2-slm_medium-none\\fit\\recipient\\metadata.json",
+        "sha256": "adcfb3951f52ee681224655b5c6f01f38e7dda5bd4d3feb7991755a990464f2a"
+      },
+      "model": {
+        "bytes": 12756100,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k5-r2-slm_medium-none\\fit\\recipient\\neural_model.pt",
+        "sha256": "7600d967f742aee4c42991a3d7a05996dfd5bb49aa592b897a3aa563dbe2777a"
+      },
+      "parameter_count": 3173120,
+      "repeat": 2,
+      "score_rows": 20000,
+      "scores": {
+        "bytes": 160128,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k5-r2-slm_medium-none\\scores.npy",
+        "sha256": "e8c3ac4a40940987130c934d16891d8ebbdc575e784e5847026100be9577e500"
+      },
+      "seconds": 110.850296300021,
+      "subset": [],
+      "training_rows": 2206118,
+      "warnings": [],
+      "width": 4
+    },
+    {
+      "auc": 0.788575418119964,
+      "bound_exact": "2",
+      "epoch_rows_seen": [
+        2206118,
+        2206118
+      ],
+      "epsilon_per_attribute": 2.0,
+      "family": "slm_medium",
+      "input_scope": "Public covariates followed by accounted RR bits; adapter field_sizes is a token schema, not a claim that RR inputs are public.",
+      "k": 5,
+      "metadata": {
+        "bytes": 1416,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k5-r2-slm_medium-0\\fit\\recipient\\metadata.json",
+        "sha256": "ae5529427de457d785c72d51d610d1da391352e1e88f530112f442e87a822b92"
+      },
+      "model": {
+        "bytes": 12761220,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k5-r2-slm_medium-0\\fit\\recipient\\neural_model.pt",
+        "sha256": "ff75fb74faccfc8f5d55face08334526045b84f09602432e4031946b46c2cf6e"
+      },
+      "parameter_count": 3173888,
+      "repeat": 2,
+      "score_rows": 20000,
+      "scores": {
+        "bytes": 160128,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k5-r2-slm_medium-0\\scores.npy",
+        "sha256": "dc99d7bbd41317848db906e192743969d0d8b9ecd874d354d2fc855ca659ee60"
+      },
+      "seconds": 116.42023399996106,
+      "subset": [
+        0
+      ],
+      "training_rows": 2206118,
+      "warnings": [],
+      "width": 5
+    },
+    {
+      "auc": 0.7666194446029385,
+      "bound_exact": "2",
+      "epoch_rows_seen": [
+        2206118,
+        2206118
+      ],
+      "epsilon_per_attribute": 2.0,
+      "family": "slm_medium",
+      "input_scope": "Public covariates followed by accounted RR bits; adapter field_sizes is a token schema, not a claim that RR inputs are public.",
+      "k": 5,
+      "metadata": {
+        "bytes": 1416,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k5-r2-slm_medium-1\\fit\\recipient\\metadata.json",
+        "sha256": "b30fc728d3b4932b58b9aaeea15d7125dd9beb29f6a83552f1e5a93e1dbea309"
+      },
+      "model": {
+        "bytes": 12761220,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k5-r2-slm_medium-1\\fit\\recipient\\neural_model.pt",
+        "sha256": "4c1688574ffa9bab8aafb583d33fb286af789ce8663944e0433887eb2715a2fa"
+      },
+      "parameter_count": 3173888,
+      "repeat": 2,
+      "score_rows": 20000,
+      "scores": {
+        "bytes": 160128,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k5-r2-slm_medium-1\\scores.npy",
+        "sha256": "d293124b821ca10ab0d9a86c28834b09856d592d49507d1d76c45121d6af5620"
+      },
+      "seconds": 119.56729069998255,
+      "subset": [
+        1
+      ],
+      "training_rows": 2206118,
+      "warnings": [],
+      "width": 5
+    },
+    {
+      "auc": 0.7773315064810805,
+      "bound_exact": "2",
+      "epoch_rows_seen": [
+        2206118,
+        2206118
+      ],
+      "epsilon_per_attribute": 2.0,
+      "family": "slm_medium",
+      "input_scope": "Public covariates followed by accounted RR bits; adapter field_sizes is a token schema, not a claim that RR inputs are public.",
+      "k": 5,
+      "metadata": {
+        "bytes": 1416,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k5-r2-slm_medium-2\\fit\\recipient\\metadata.json",
+        "sha256": "b5e13bbd4365baf2556e0c4c1179d41b37100087a4ddc155b7d397c7029108b4"
+      },
+      "model": {
+        "bytes": 12761220,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k5-r2-slm_medium-2\\fit\\recipient\\neural_model.pt",
+        "sha256": "cfb25ffd60deb11d65b5c4ebc1d621ab3ceebb2d0b82b0361a0f3a2efff33ae8"
+      },
+      "parameter_count": 3173888,
+      "repeat": 2,
+      "score_rows": 20000,
+      "scores": {
+        "bytes": 160128,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k5-r2-slm_medium-2\\scores.npy",
+        "sha256": "bfdc61cb2d486fd1dc1921a24294b91c8250f39f733dc070e51ba5f14c9faf2f"
+      },
+      "seconds": 119.96743319998495,
+      "subset": [
+        2
+      ],
+      "training_rows": 2206118,
+      "warnings": [],
+      "width": 5
+    },
+    {
+      "auc": 0.7642639791700665,
+      "bound_exact": "2",
+      "epoch_rows_seen": [
+        2206118,
+        2206118
+      ],
+      "epsilon_per_attribute": 2.0,
+      "family": "slm_medium",
+      "input_scope": "Public covariates followed by accounted RR bits; adapter field_sizes is a token schema, not a claim that RR inputs are public.",
+      "k": 5,
+      "metadata": {
+        "bytes": 1416,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k5-r2-slm_medium-3\\fit\\recipient\\metadata.json",
+        "sha256": "e66e91ca93c08f3e8b17ef823671fc56fd4f139a6887d943a51620435528af1b"
+      },
+      "model": {
+        "bytes": 12761220,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k5-r2-slm_medium-3\\fit\\recipient\\neural_model.pt",
+        "sha256": "df7aa4f3ded4eaba63d27d2a6eaf382e06bf846b92db73bfdf95b0101b24fd33"
+      },
+      "parameter_count": 3173888,
+      "repeat": 2,
+      "score_rows": 20000,
+      "scores": {
+        "bytes": 160128,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k5-r2-slm_medium-3\\scores.npy",
+        "sha256": "bc2723a163752c0739268fb500343c39e6d8371d56e7bd5b8011d1fab73a6217"
+      },
+      "seconds": 113.9841591999866,
+      "subset": [
+        3
+      ],
+      "training_rows": 2206118,
+      "warnings": [],
+      "width": 5
+    },
+    {
+      "auc": 0.7780471960310135,
+      "bound_exact": "2",
+      "epoch_rows_seen": [
+        2206118,
+        2206118
+      ],
+      "epsilon_per_attribute": 2.0,
+      "family": "slm_medium",
+      "input_scope": "Public covariates followed by accounted RR bits; adapter field_sizes is a token schema, not a claim that RR inputs are public.",
+      "k": 5,
+      "metadata": {
+        "bytes": 1416,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k5-r2-slm_medium-4\\fit\\recipient\\metadata.json",
+        "sha256": "5327729455c6fae903521e89982a0d37c0a52ed22b61e5acb23ff83e58ad7291"
+      },
+      "model": {
+        "bytes": 12761220,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k5-r2-slm_medium-4\\fit\\recipient\\neural_model.pt",
+        "sha256": "a234432b57e5db9d766fe6a67f4fd1315fa8991f9c757dd8e32a695a972e0007"
+      },
+      "parameter_count": 3173888,
+      "repeat": 2,
+      "score_rows": 20000,
+      "scores": {
+        "bytes": 160128,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k5-r2-slm_medium-4\\scores.npy",
+        "sha256": "ca61cb65061fa5ddd9f1a90e29397d85444f1c904bc9c8cecb43f0adb7923706"
+      },
+      "seconds": 107.93423059995985,
+      "subset": [
+        4
+      ],
+      "training_rows": 2206118,
+      "warnings": [],
+      "width": 5
+    },
+    {
+      "auc": 0.7676361061506051,
+      "bound_exact": "1.999999999999999833466546306",
+      "epoch_rows_seen": [
+        2206118,
+        2206118
+      ],
+      "epsilon_per_attribute": 0.39999999999999997,
+      "family": "slm_medium",
+      "input_scope": "Public covariates followed by accounted RR bits; adapter field_sizes is a token schema, not a claim that RR inputs are public.",
+      "k": 5,
+      "metadata": {
+        "bytes": 1444,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k5-r2-slm_medium-0-1-2-3-4\\fit\\recipient\\metadata.json",
+        "sha256": "c9247b8084ab4827cd1841316e387918e5f96c98b5d6f14a000ffb1e418e33e0"
+      },
+      "model": {
+        "bytes": 12781700,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k5-r2-slm_medium-0-1-2-3-4\\fit\\recipient\\neural_model.pt",
+        "sha256": "af18152f1ad1f3c8f0079fe8f7143714500964ee954483c3c59cd6b543214c54"
+      },
+      "parameter_count": 3176960,
+      "repeat": 2,
+      "score_rows": 20000,
+      "scores": {
+        "bytes": 160128,
+        "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\final\\k5-r2-slm_medium-0-1-2-3-4\\scores.npy",
+        "sha256": "3feb0a321aa156a6326a976bd04cb9a39746dc55c295d2391dd07aaa8ace0ea7"
+      },
+      "seconds": 139.2646848000004,
+      "subset": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "training_rows": 2206118,
+      "warnings": [],
+      "width": 9
+    }
+  ],
+  "registration": {
+    "bytes": 14257,
+    "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\registration.json",
+    "sha256": "338d142835d7bf16a98a788dcab3e816ee761ca207da041986a79afd913333b9"
+  },
+  "scope": "Conditional record attribute DP per alternative final release; public development excluded; full archive not epsilon=2",
+  "selection": {
+    "bytes": 552234,
+    "path": "<LOCAL_DRIVE_D>/model_audit_data\\experiments\\acs-subset-slm-20260923-v1\\selection-lock.json",
+    "sha256": "8a992c77a4bb5c18c7bdb64b564908bf4ff3252f9d4f163520391d556233d6ef"
+  },
+  "summary": [
+    {
+      "best_single_subsets": [
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ]
+      ],
+      "family": "slm_small",
+      "k": 3,
+      "mean_auc": {
+        "best_single": 0.8284639684201495,
+        "equal_all": 0.814630328598791,
+        "omission": 0.8093236617696449,
+        "selected": 0.8284639684201495
+      },
+      "selected_subsets": [
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ]
+      ]
+    },
+    {
+      "best_single_subsets": [
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ]
+      ],
+      "family": "slm_medium",
+      "k": 3,
+      "mean_auc": {
+        "best_single": 0.8285772287376211,
+        "equal_all": 0.8147546559881979,
+        "omission": 0.8094757810662306,
+        "selected": 0.8285772287376211
+      },
+      "selected_subsets": [
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ]
+      ]
+    },
+    {
+      "best_single_subsets": [
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ]
+      ],
+      "family": "slm_small",
+      "k": 4,
+      "mean_auc": {
+        "best_single": 0.8258103540350142,
+        "equal_all": 0.8106787152579858,
+        "omission": 0.8077794192128044,
+        "selected": 0.8258103540350142
+      },
+      "selected_subsets": [
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ]
+      ]
+    },
+    {
+      "best_single_subsets": [
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ]
+      ],
+      "family": "slm_medium",
+      "k": 4,
+      "mean_auc": {
+        "best_single": 0.8256259989941688,
+        "equal_all": 0.8109787818134923,
+        "omission": 0.8078455998694323,
+        "selected": 0.8256259989941688
+      },
+      "selected_subsets": [
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ]
+      ]
+    },
+    {
+      "best_single_subsets": [
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ]
+      ],
+      "family": "slm_small",
+      "k": 5,
+      "mean_auc": {
+        "best_single": 0.7885128475598767,
+        "equal_all": 0.7676259178411994,
+        "omission": 0.7637177357126328,
+        "selected": 0.7885128475598767
+      },
+      "selected_subsets": [
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ]
+      ]
+    },
+    {
+      "best_single_subsets": [
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ]
+      ],
+      "family": "slm_medium",
+      "k": 5,
+      "mean_auc": {
+        "best_single": 0.788486494688871,
+        "equal_all": 0.7676881132180435,
+        "omission": 0.7640873178869292,
+        "selected": 0.788486494688871
+      },
+      "selected_subsets": [
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ]
+      ]
+    }
+  ],
+  "training_records_per_fit": 2206118,
+  "uncertainty": "Shared-record fixed-model working intervals; no training/population coverage. 18 prespecified contrasts.",
+  "verification": {
+    "auc_matches_sklearn": true,
+    "candidate_charge_at_most_2": true,
+    "selections_locked_before_test": true
+  }
+}

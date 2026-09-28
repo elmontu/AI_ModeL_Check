@@ -1,0 +1,2285 @@
+{
+  "completed_at": "2026-09-21T09:24:09.294176+00:00",
+  "status": "complete",
+  "spec_sha256": "ef9f861ae76145eec02d9915f96bea05c5c20005c5735ace8c3a5bec5b589a7d",
+  "statistics_checks": {
+    "ties_match_explicit_pair_kernel": true,
+    "identical_predictions_zero_difference_variance": true,
+    "paired_difference_antisymmetry": true,
+    "physical_input_and_token_omission": true
+  },
+  "historical_sources_unchanged": true,
+  "fit_count": 20,
+  "elapsed_seconds": 78.29425219999393,
+  "models": [
+    {
+      "family": "slm_small",
+      "dataset": "D1",
+      "training_seed": 20260921,
+      "model_seed": 20260921,
+      "training_records": 50000,
+      "utility_records": 10000,
+      "metrics": {
+        "roc_auc": 0.871711644331451,
+        "accuracy": 0.7896,
+        "log_loss": 0.4484130452178597
+      },
+      "fit": {
+        "schema_version": 1,
+        "model_name": "slm_small",
+        "seed": 20260921,
+        "training_records": 50000,
+        "income_class_counts": [
+          25056,
+          24944
+        ],
+        "threads": 6,
+        "input_field_sizes": [
+          14,
+          3,
+          25,
+          6,
+          7,
+          10,
+          25,
+          20,
+          10,
+          100
+        ],
+        "target": "binary_income_Y",
+        "sensitive_input": "DIS omitted; exactly ten public covariates",
+        "training_api_inputs": "X_without_DIS and y only; no separate evaluation input is accepted",
+        "scope_note": "Caller is responsible for disjoint evaluation rows; this function receives training arrays only.",
+        "source_sha256": "c4bc3ae87dbfd05bcb5f9a0ed7a6b849e91f9ddd742f52a62d72201b038c66ea",
+        "versions": {
+          "python": "3.12.14",
+          "numpy": "2.5.2",
+          "sklearn": "1.6.1",
+          "torch": "2.13.0+cu130"
+        },
+        "privacy_guarantee": "DIS input omitted: 0-DP for fixed-roster DIS replacement conditional on fixed X,Y, partitions, code and randomness law; no other privacy asserted",
+        "configuration_overrides": {},
+        "model_kind": "scratch_causal_record_language_model",
+        "config": {
+          "d_model": 192,
+          "num_layers": 3,
+          "num_heads": 6,
+          "dim_feedforward": 768,
+          "dropout": 0.1,
+          "batch_size": 512,
+          "predict_batch_size": 1024,
+          "lr": 0.0003,
+          "weight_decay": 0.01,
+          "amp": true
+        },
+        "epochs": 8,
+        "parameter_count": 1380672,
+        "training_objective": "autoregressive next-token cross-entropy over every next token, including covariates, Y, and EOS; DIS token removed",
+        "income_prediction": "softmax restricted to Y=0 and Y=1 logits after [BOS, X_1,...,X_10]",
+        "sensitive_prediction": "not available; DIS field omitted",
+        "device": "cuda",
+        "amp_dtype": "bfloat16",
+        "device_name": "NVIDIA GeForce RTX 5080 Laptop GPU",
+        "epoch_next_token_losses": [
+          2.0925049249649046,
+          1.2558019718933104,
+          1.204987438659668,
+          1.1881855661773681,
+          1.1791859536743163,
+          1.1739709822463988,
+          1.171146994895935,
+          1.16800823802948
+        ],
+        "epoch_seconds": [
+          1.2054561000550166,
+          0.7292507000383921,
+          0.7489717000280507,
+          0.7902526000398211,
+          0.787210899987258,
+          0.7905724000302143,
+          0.7356404999736696,
+          0.7294383000116795
+        ],
+        "determinism": "seeded training and minibatch shuffle; bitwise determinism across hardware/runtimes is not asserted",
+        "warnings": [],
+        "fit_and_persist_seconds": 7.714233800012153,
+        "artifacts": {
+          "language_model.pt": {
+            "bytes": 5708200,
+            "sha256": "48d819b40a2322ef15f40c7773ee8c6a8bdc9f6193da67afd2191c7b139e30ff"
+          },
+          "preprocessing.json": {
+            "bytes": 579,
+            "sha256": "37e9181db828a6055b9431a7226ee18e92ed5518c722e0941c33565ebbf8436a"
+          }
+        }
+      },
+      "predictions_sha256": "a7379bb8a9fab2442850b75b7544ad7fe4013d173144a0e1bc5a8b8bdb41266e",
+      "raw_auc": 0.871711884357412,
+      "epsilon_1_auc": 0.8705896429757845,
+      "epsilon_3_auc": 0.8713231423110723
+    },
+    {
+      "family": "slm_small",
+      "dataset": "D1",
+      "training_seed": 20260922,
+      "model_seed": 20260922,
+      "training_records": 50000,
+      "utility_records": 10000,
+      "metrics": {
+        "roc_auc": 0.8713114210433002,
+        "accuracy": 0.7882,
+        "log_loss": 0.44997915398143895
+      },
+      "fit": {
+        "schema_version": 1,
+        "model_name": "slm_small",
+        "seed": 20260922,
+        "training_records": 50000,
+        "income_class_counts": [
+          25056,
+          24944
+        ],
+        "threads": 6,
+        "input_field_sizes": [
+          14,
+          3,
+          25,
+          6,
+          7,
+          10,
+          25,
+          20,
+          10,
+          100
+        ],
+        "target": "binary_income_Y",
+        "sensitive_input": "DIS omitted; exactly ten public covariates",
+        "training_api_inputs": "X_without_DIS and y only; no separate evaluation input is accepted",
+        "scope_note": "Caller is responsible for disjoint evaluation rows; this function receives training arrays only.",
+        "source_sha256": "c4bc3ae87dbfd05bcb5f9a0ed7a6b849e91f9ddd742f52a62d72201b038c66ea",
+        "versions": {
+          "python": "3.12.14",
+          "numpy": "2.5.2",
+          "sklearn": "1.6.1",
+          "torch": "2.13.0+cu130"
+        },
+        "privacy_guarantee": "DIS input omitted: 0-DP for fixed-roster DIS replacement conditional on fixed X,Y, partitions, code and randomness law; no other privacy asserted",
+        "configuration_overrides": {},
+        "model_kind": "scratch_causal_record_language_model",
+        "config": {
+          "d_model": 192,
+          "num_layers": 3,
+          "num_heads": 6,
+          "dim_feedforward": 768,
+          "dropout": 0.1,
+          "batch_size": 512,
+          "predict_batch_size": 1024,
+          "lr": 0.0003,
+          "weight_decay": 0.01,
+          "amp": true
+        },
+        "epochs": 8,
+        "parameter_count": 1380672,
+        "training_objective": "autoregressive next-token cross-entropy over every next token, including covariates, Y, and EOS; DIS token removed",
+        "income_prediction": "softmax restricted to Y=0 and Y=1 logits after [BOS, X_1,...,X_10]",
+        "sensitive_prediction": "not available; DIS field omitted",
+        "device": "cuda",
+        "amp_dtype": "bfloat16",
+        "device_name": "NVIDIA GeForce RTX 5080 Laptop GPU",
+        "epoch_next_token_losses": [
+          2.0740682573318483,
+          1.2556164060592652,
+          1.2047966452789307,
+          1.187533850364685,
+          1.17901706741333,
+          1.1735734930801391,
+          1.1704175875854492,
+          1.1674921059799195
+        ],
+        "epoch_seconds": [
+          0.7409034000011161,
+          0.7408416999969631,
+          0.7218560999608599,
+          0.7335021999897435,
+          0.7226321999914944,
+          0.7273174999863841,
+          0.7801189000019804,
+          0.7278413000167347
+        ],
+        "determinism": "seeded training and minibatch shuffle; bitwise determinism across hardware/runtimes is not asserted",
+        "warnings": [],
+        "fit_and_persist_seconds": 5.949227900011465,
+        "artifacts": {
+          "language_model.pt": {
+            "bytes": 5708200,
+            "sha256": "0e423959826741ea78f685c052c62dd0303dd4c6f4446b068d6587c85516733b"
+          },
+          "preprocessing.json": {
+            "bytes": 579,
+            "sha256": "37e9181db828a6055b9431a7226ee18e92ed5518c722e0941c33565ebbf8436a"
+          }
+        }
+      },
+      "predictions_sha256": "8414fb08a2380e75d5e11962bebbfc41c428ecb205ffba57c12dea4bb78fa984",
+      "raw_auc": 0.8711458431343935,
+      "epsilon_1_auc": 0.8702667680536327,
+      "epsilon_3_auc": 0.8707278779272766
+    },
+    {
+      "family": "slm_medium",
+      "dataset": "D2_50",
+      "training_seed": 20260921,
+      "model_seed": 20262939,
+      "training_records": 50000,
+      "utility_records": 10000,
+      "metrics": {
+        "roc_auc": 0.873753225148832,
+        "accuracy": 0.7856,
+        "log_loss": 0.44916702961471927
+      },
+      "fit": {
+        "schema_version": 1,
+        "model_name": "slm_medium",
+        "seed": 20262939,
+        "training_records": 50000,
+        "income_class_counts": [
+          24976,
+          25024
+        ],
+        "threads": 6,
+        "input_field_sizes": [
+          14,
+          3,
+          25,
+          6,
+          7,
+          10,
+          25,
+          20,
+          10,
+          100
+        ],
+        "target": "binary_income_Y",
+        "sensitive_input": "DIS omitted; exactly ten public covariates",
+        "training_api_inputs": "X_without_DIS and y only; no separate evaluation input is accepted",
+        "scope_note": "Caller is responsible for disjoint evaluation rows; this function receives training arrays only.",
+        "source_sha256": "c4bc3ae87dbfd05bcb5f9a0ed7a6b849e91f9ddd742f52a62d72201b038c66ea",
+        "versions": {
+          "python": "3.12.14",
+          "numpy": "2.5.2",
+          "sklearn": "1.6.1",
+          "torch": "2.13.0+cu130"
+        },
+        "privacy_guarantee": "DIS input omitted: 0-DP for fixed-roster DIS replacement conditional on fixed X,Y, partitions, code and randomness law; no other privacy asserted",
+        "configuration_overrides": {},
+        "model_kind": "scratch_causal_record_language_model",
+        "config": {
+          "d_model": 256,
+          "num_layers": 4,
+          "num_heads": 8,
+          "dim_feedforward": 1024,
+          "dropout": 0.1,
+          "batch_size": 512,
+          "predict_batch_size": 1024,
+          "lr": 0.0003,
+          "weight_decay": 0.01,
+          "amp": true
+        },
+        "epochs": 8,
+        "parameter_count": 3220480,
+        "training_objective": "autoregressive next-token cross-entropy over every next token, including covariates, Y, and EOS; DIS token removed",
+        "income_prediction": "softmax restricted to Y=0 and Y=1 logits after [BOS, X_1,...,X_10]",
+        "sensitive_prediction": "not available; DIS field omitted",
+        "device": "cuda",
+        "amp_dtype": "bfloat16",
+        "device_name": "NVIDIA GeForce RTX 5080 Laptop GPU",
+        "epoch_next_token_losses": [
+          1.7616021814346314,
+          1.2194469263839722,
+          1.1897951823806763,
+          1.1790205276489258,
+          1.17307003364563,
+          1.1691421112823486,
+          1.1670220335006714,
+          1.1647104278564453
+        ],
+        "epoch_seconds": [
+          1.0481943000340834,
+          0.9971095999935642,
+          0.9567368000280112,
+          0.9960794000071473,
+          0.9916147000039928,
+          0.9377392999595031,
+          0.9055235999985598,
+          0.9277297999942675
+        ],
+        "determinism": "seeded training and minibatch shuffle; bitwise determinism across hardware/runtimes is not asserted",
+        "warnings": [],
+        "fit_and_persist_seconds": 7.812569500005338,
+        "artifacts": {
+          "language_model.pt": {
+            "bytes": 13128772,
+            "sha256": "a47077e77dfd134e9be9fd66500a5485f86679221f5aab702db1ca2ceec371bb"
+          },
+          "preprocessing.json": {
+            "bytes": 579,
+            "sha256": "37e9181db828a6055b9431a7226ee18e92ed5518c722e0941c33565ebbf8436a"
+          }
+        }
+      },
+      "predictions_sha256": "95fd68368f3d279d906bd7e9c69125706e7e2d481fb748e5aca4aa4e0e2caf78",
+      "raw_auc": 0.8731522001419674,
+      "epsilon_1_auc": 0.8724113200083722,
+      "epsilon_3_auc": 0.8729650999052058
+    },
+    {
+      "family": "slm_medium",
+      "dataset": "D2_50",
+      "training_seed": 20260922,
+      "model_seed": 20262940,
+      "training_records": 50000,
+      "utility_records": 10000,
+      "metrics": {
+        "roc_auc": 0.872579578207179,
+        "accuracy": 0.7911,
+        "log_loss": 0.44600171220518625
+      },
+      "fit": {
+        "schema_version": 1,
+        "model_name": "slm_medium",
+        "seed": 20262940,
+        "training_records": 50000,
+        "income_class_counts": [
+          24976,
+          25024
+        ],
+        "threads": 6,
+        "input_field_sizes": [
+          14,
+          3,
+          25,
+          6,
+          7,
+          10,
+          25,
+          20,
+          10,
+          100
+        ],
+        "target": "binary_income_Y",
+        "sensitive_input": "DIS omitted; exactly ten public covariates",
+        "training_api_inputs": "X_without_DIS and y only; no separate evaluation input is accepted",
+        "scope_note": "Caller is responsible for disjoint evaluation rows; this function receives training arrays only.",
+        "source_sha256": "c4bc3ae87dbfd05bcb5f9a0ed7a6b849e91f9ddd742f52a62d72201b038c66ea",
+        "versions": {
+          "python": "3.12.14",
+          "numpy": "2.5.2",
+          "sklearn": "1.6.1",
+          "torch": "2.13.0+cu130"
+        },
+        "privacy_guarantee": "DIS input omitted: 0-DP for fixed-roster DIS replacement conditional on fixed X,Y, partitions, code and randomness law; no other privacy asserted",
+        "configuration_overrides": {},
+        "model_kind": "scratch_causal_record_language_model",
+        "config": {
+          "d_model": 256,
+          "num_layers": 4,
+          "num_heads": 8,
+          "dim_feedforward": 1024,
+          "dropout": 0.1,
+          "batch_size": 512,
+          "predict_batch_size": 1024,
+          "lr": 0.0003,
+          "weight_decay": 0.01,
+          "amp": true
+        },
+        "epochs": 8,
+        "parameter_count": 3220480,
+        "training_objective": "autoregressive next-token cross-entropy over every next token, including covariates, Y, and EOS; DIS token removed",
+        "income_prediction": "softmax restricted to Y=0 and Y=1 logits after [BOS, X_1,...,X_10]",
+        "sensitive_prediction": "not available; DIS field omitted",
+        "device": "cuda",
+        "amp_dtype": "bfloat16",
+        "device_name": "NVIDIA GeForce RTX 5080 Laptop GPU",
+        "epoch_next_token_losses": [
+          1.7753792459869384,
+          1.2186366054153441,
+          1.1903347063446046,
+          1.1792980674743652,
+          1.173541958694458,
+          1.169885498123169,
+          1.1669452742767334,
+          1.1653083826828003
+        ],
+        "epoch_seconds": [
+          0.9832924000220373,
+          1.0975762999732979,
+          1.0175005000201054,
+          0.9635910000069998,
+          1.054633499996271,
+          0.9573637999710627,
+          0.9278695000102744,
+          0.9250243999995291
+        ],
+        "determinism": "seeded training and minibatch shuffle; bitwise determinism across hardware/runtimes is not asserted",
+        "warnings": [],
+        "fit_and_persist_seconds": 7.978064100025222,
+        "artifacts": {
+          "language_model.pt": {
+            "bytes": 13128772,
+            "sha256": "4eeed62abf25a8ee4e9d4bead6eed1d85a59c1cd7504791ea764b83a6bfed161"
+          },
+          "preprocessing.json": {
+            "bytes": 579,
+            "sha256": "37e9181db828a6055b9431a7226ee18e92ed5518c722e0941c33565ebbf8436a"
+          }
+        }
+      },
+      "predictions_sha256": "6d0d254bf903d4759c05af1d50ea6ce334ddb2dd433706547fab7148b2495bc7",
+      "raw_auc": 0.8726127217919889,
+      "epsilon_1_auc": 0.8717300263196468,
+      "epsilon_3_auc": 0.8722207193930096
+    },
+    {
+      "family": "decision_tree",
+      "dataset": "D2_0",
+      "training_seed": 20260921,
+      "model_seed": 20261930,
+      "training_records": 50000,
+      "utility_records": 10000,
+      "metrics": {
+        "roc_auc": 0.7287611428052058,
+        "accuracy": 0.7224,
+        "log_loss": 8.042832809433696
+      },
+      "fit": {
+        "schema_version": 1,
+        "model_name": "decision_tree",
+        "seed": 20261930,
+        "training_records": 50000,
+        "income_class_counts": [
+          25089,
+          24911
+        ],
+        "threads": 6,
+        "input_field_sizes": [
+          14,
+          3,
+          25,
+          6,
+          7,
+          10,
+          25,
+          20,
+          10,
+          100
+        ],
+        "target": "binary_income_Y",
+        "sensitive_input": "DIS omitted; exactly ten public covariates",
+        "training_api_inputs": "X_without_DIS and y only; no separate evaluation input is accepted",
+        "scope_note": "Caller is responsible for disjoint evaluation rows; this function receives training arrays only.",
+        "source_sha256": "c4bc3ae87dbfd05bcb5f9a0ed7a6b849e91f9ddd742f52a62d72201b038c66ea",
+        "versions": {
+          "python": "3.12.14",
+          "numpy": "2.5.2",
+          "sklearn": "1.6.1",
+          "torch": "2.13.0+cu130"
+        },
+        "privacy_guarantee": "DIS input omitted: 0-DP for fixed-roster DIS replacement conditional on fixed X,Y, partitions, code and randomness law; no other privacy asserted",
+        "configuration_overrides": {},
+        "estimator_parameters": {
+          "random_state": 20261930
+        },
+        "preprocessing": "raw_category_codes_as_ordered_numeric",
+        "model_kind": "classical_income_classifier",
+        "device": "cpu",
+        "warnings": [],
+        "fit_and_persist_seconds": 0.1195220000226982,
+        "artifacts": {
+          "estimator.joblib": {
+            "bytes": 270038,
+            "sha256": "a660aee50787372ef4c02f63f906e0d610b815ca3691161c8397dea8f51c4187"
+          },
+          "preprocessing.json": {
+            "bytes": 357,
+            "sha256": "959d6c335cb06dcce1fdf267505a4561e4172a906dbb43e8d9fa8e90e00bd58d"
+          }
+        }
+      },
+      "predictions_sha256": "a757a04fb872e80a07a2357f3ad88c6fd2db19bf5e9d512f53597a28a0ff7bdb",
+      "raw_auc": 0.7285044950461841,
+      "epsilon_1_auc": 0.7267550858300833,
+      "epsilon_3_auc": 0.7252161193754717
+    },
+    {
+      "family": "decision_tree",
+      "dataset": "D2_0",
+      "training_seed": 20260922,
+      "model_seed": 20261931,
+      "training_records": 50000,
+      "utility_records": 10000,
+      "metrics": {
+        "roc_auc": 0.7236152662271951,
+        "accuracy": 0.7186,
+        "log_loss": 8.19416495496677
+      },
+      "fit": {
+        "schema_version": 1,
+        "model_name": "decision_tree",
+        "seed": 20261931,
+        "training_records": 50000,
+        "income_class_counts": [
+          25089,
+          24911
+        ],
+        "threads": 6,
+        "input_field_sizes": [
+          14,
+          3,
+          25,
+          6,
+          7,
+          10,
+          25,
+          20,
+          10,
+          100
+        ],
+        "target": "binary_income_Y",
+        "sensitive_input": "DIS omitted; exactly ten public covariates",
+        "training_api_inputs": "X_without_DIS and y only; no separate evaluation input is accepted",
+        "scope_note": "Caller is responsible for disjoint evaluation rows; this function receives training arrays only.",
+        "source_sha256": "c4bc3ae87dbfd05bcb5f9a0ed7a6b849e91f9ddd742f52a62d72201b038c66ea",
+        "versions": {
+          "python": "3.12.14",
+          "numpy": "2.5.2",
+          "sklearn": "1.6.1",
+          "torch": "2.13.0+cu130"
+        },
+        "privacy_guarantee": "DIS input omitted: 0-DP for fixed-roster DIS replacement conditional on fixed X,Y, partitions, code and randomness law; no other privacy asserted",
+        "configuration_overrides": {},
+        "estimator_parameters": {
+          "random_state": 20261931
+        },
+        "preprocessing": "raw_category_codes_as_ordered_numeric",
+        "model_kind": "classical_income_classifier",
+        "device": "cpu",
+        "warnings": [],
+        "fit_and_persist_seconds": 0.13278390001505613,
+        "artifacts": {
+          "estimator.joblib": {
+            "bytes": 270240,
+            "sha256": "397ce19aac9a729f7fffee15bfea4541cdb06283cdae897c9d934baf9dfec33a"
+          },
+          "preprocessing.json": {
+            "bytes": 357,
+            "sha256": "959d6c335cb06dcce1fdf267505a4561e4172a906dbb43e8d9fa8e90e00bd58d"
+          }
+        }
+      },
+      "predictions_sha256": "e03472467f65859e0efd49eb490af1cf227e0b9e1c232b9897154dcc4516aa18",
+      "raw_auc": 0.7263990473209583,
+      "epsilon_1_auc": 0.7219650677417269,
+      "epsilon_3_auc": 0.7247972340688368
+    },
+    {
+      "family": "random_forest",
+      "dataset": "D2_100",
+      "training_seed": 20260921,
+      "model_seed": 20263948,
+      "training_records": 50000,
+      "utility_records": 10000,
+      "metrics": {
+        "roc_auc": 0.8593630087030213,
+        "accuracy": 0.7785,
+        "log_loss": 0.4714524086650289
+      },
+      "fit": {
+        "schema_version": 1,
+        "model_name": "random_forest",
+        "seed": 20263948,
+        "training_records": 50000,
+        "income_class_counts": [
+          25056,
+          24944
+        ],
+        "threads": 6,
+        "input_field_sizes": [
+          14,
+          3,
+          25,
+          6,
+          7,
+          10,
+          25,
+          20,
+          10,
+          100
+        ],
+        "target": "binary_income_Y",
+        "sensitive_input": "DIS omitted; exactly ten public covariates",
+        "training_api_inputs": "X_without_DIS and y only; no separate evaluation input is accepted",
+        "scope_note": "Caller is responsible for disjoint evaluation rows; this function receives training arrays only.",
+        "source_sha256": "c4bc3ae87dbfd05bcb5f9a0ed7a6b849e91f9ddd742f52a62d72201b038c66ea",
+        "versions": {
+          "python": "3.12.14",
+          "numpy": "2.5.2",
+          "sklearn": "1.6.1",
+          "torch": "2.13.0+cu130"
+        },
+        "privacy_guarantee": "DIS input omitted: 0-DP for fixed-roster DIS replacement conditional on fixed X,Y, partitions, code and randomness law; no other privacy asserted",
+        "configuration_overrides": {},
+        "estimator_parameters": {
+          "n_estimators": 100,
+          "max_depth": 18,
+          "n_jobs": 6,
+          "random_state": 20263948
+        },
+        "preprocessing": "raw_category_codes_as_ordered_numeric",
+        "model_kind": "classical_income_classifier",
+        "device": "cpu",
+        "warnings": [],
+        "fit_and_persist_seconds": 1.2957658999948762,
+        "artifacts": {
+          "estimator.joblib": {
+            "bytes": 17862153,
+            "sha256": "ec304b156fb179b0257067a3d915397884e196f0f78e57e2e76d8109d3e72e1e"
+          },
+          "preprocessing.json": {
+            "bytes": 357,
+            "sha256": "959d6c335cb06dcce1fdf267505a4561e4172a906dbb43e8d9fa8e90e00bd58d"
+          }
+        }
+      },
+      "predictions_sha256": "d537af3bd41f89786396301d18c392f44e6bbcf359529c50edc6b3bc48cab17b",
+      "raw_auc": 0.8587507824846335,
+      "epsilon_1_auc": 0.8578792482194875,
+      "epsilon_3_auc": 0.8589552646014194
+    },
+    {
+      "family": "random_forest",
+      "dataset": "D2_100",
+      "training_seed": 20260922,
+      "model_seed": 20263949,
+      "training_records": 50000,
+      "utility_records": 10000,
+      "metrics": {
+        "roc_auc": 0.8585811041322229,
+        "accuracy": 0.7776,
+        "log_loss": 0.47555119167585724
+      },
+      "fit": {
+        "schema_version": 1,
+        "model_name": "random_forest",
+        "seed": 20263949,
+        "training_records": 50000,
+        "income_class_counts": [
+          25056,
+          24944
+        ],
+        "threads": 6,
+        "input_field_sizes": [
+          14,
+          3,
+          25,
+          6,
+          7,
+          10,
+          25,
+          20,
+          10,
+          100
+        ],
+        "target": "binary_income_Y",
+        "sensitive_input": "DIS omitted; exactly ten public covariates",
+        "training_api_inputs": "X_without_DIS and y only; no separate evaluation input is accepted",
+        "scope_note": "Caller is responsible for disjoint evaluation rows; this function receives training arrays only.",
+        "source_sha256": "c4bc3ae87dbfd05bcb5f9a0ed7a6b849e91f9ddd742f52a62d72201b038c66ea",
+        "versions": {
+          "python": "3.12.14",
+          "numpy": "2.5.2",
+          "sklearn": "1.6.1",
+          "torch": "2.13.0+cu130"
+        },
+        "privacy_guarantee": "DIS input omitted: 0-DP for fixed-roster DIS replacement conditional on fixed X,Y, partitions, code and randomness law; no other privacy asserted",
+        "configuration_overrides": {},
+        "estimator_parameters": {
+          "n_estimators": 100,
+          "max_depth": 18,
+          "n_jobs": 6,
+          "random_state": 20263949
+        },
+        "preprocessing": "raw_category_codes_as_ordered_numeric",
+        "model_kind": "classical_income_classifier",
+        "device": "cpu",
+        "warnings": [],
+        "fit_and_persist_seconds": 1.2480472000315785,
+        "artifacts": {
+          "estimator.joblib": {
+            "bytes": 17922372,
+            "sha256": "c05d06b3e1e1a36a16748f2417706624c47d49d6decc10b56fdc1f074b8114ab"
+          },
+          "preprocessing.json": {
+            "bytes": 357,
+            "sha256": "959d6c335cb06dcce1fdf267505a4561e4172a906dbb43e8d9fa8e90e00bd58d"
+          }
+        }
+      },
+      "predictions_sha256": "6ce7b42b74ce47e5b4fd9a18a5384f76d4595dc6ab004a25b3e40e1b5deadfb1",
+      "raw_auc": 0.858744581813969,
+      "epsilon_1_auc": 0.8569721701099191,
+      "epsilon_3_auc": 0.8587099580690648
+    },
+    {
+      "family": "extra_trees",
+      "dataset": "D1",
+      "training_seed": 20260921,
+      "model_seed": 20260921,
+      "training_records": 50000,
+      "utility_records": 10000,
+      "metrics": {
+        "roc_auc": 0.8592262339094596,
+        "accuracy": 0.7751,
+        "log_loss": 0.46662260462743343
+      },
+      "fit": {
+        "schema_version": 1,
+        "model_name": "extra_trees",
+        "seed": 20260921,
+        "training_records": 50000,
+        "income_class_counts": [
+          25056,
+          24944
+        ],
+        "threads": 6,
+        "input_field_sizes": [
+          14,
+          3,
+          25,
+          6,
+          7,
+          10,
+          25,
+          20,
+          10,
+          100
+        ],
+        "target": "binary_income_Y",
+        "sensitive_input": "DIS omitted; exactly ten public covariates",
+        "training_api_inputs": "X_without_DIS and y only; no separate evaluation input is accepted",
+        "scope_note": "Caller is responsible for disjoint evaluation rows; this function receives training arrays only.",
+        "source_sha256": "c4bc3ae87dbfd05bcb5f9a0ed7a6b849e91f9ddd742f52a62d72201b038c66ea",
+        "versions": {
+          "python": "3.12.14",
+          "numpy": "2.5.2",
+          "sklearn": "1.6.1",
+          "torch": "2.13.0+cu130"
+        },
+        "privacy_guarantee": "DIS input omitted: 0-DP for fixed-roster DIS replacement conditional on fixed X,Y, partitions, code and randomness law; no other privacy asserted",
+        "configuration_overrides": {},
+        "estimator_parameters": {
+          "n_estimators": 100,
+          "max_depth": 18,
+          "n_jobs": 6,
+          "random_state": 20260921
+        },
+        "preprocessing": "raw_category_codes_as_ordered_numeric",
+        "model_kind": "classical_income_classifier",
+        "device": "cpu",
+        "warnings": [],
+        "fit_and_persist_seconds": 1.1575521000195295,
+        "artifacts": {
+          "estimator.joblib": {
+            "bytes": 21656520,
+            "sha256": "ebff514b624b22123a4f04ead404325884f004ee06ef6e5d6e62790be2af7e88"
+          },
+          "preprocessing.json": {
+            "bytes": 357,
+            "sha256": "959d6c335cb06dcce1fdf267505a4561e4172a906dbb43e8d9fa8e90e00bd58d"
+          }
+        }
+      },
+      "predictions_sha256": "5b4bccf4f369e58493892985f49710bf4f3cafd8e99ea1be57eba2072acf3659",
+      "raw_auc": 0.8603920200008834,
+      "epsilon_1_auc": 0.8573069663214773,
+      "epsilon_3_auc": 0.8586978367580237
+    },
+    {
+      "family": "extra_trees",
+      "dataset": "D1",
+      "training_seed": 20260922,
+      "model_seed": 20260922,
+      "training_records": 50000,
+      "utility_records": 10000,
+      "metrics": {
+        "roc_auc": 0.8595446883534922,
+        "accuracy": 0.7744,
+        "log_loss": 0.46634604515677075
+      },
+      "fit": {
+        "schema_version": 1,
+        "model_name": "extra_trees",
+        "seed": 20260922,
+        "training_records": 50000,
+        "income_class_counts": [
+          25056,
+          24944
+        ],
+        "threads": 6,
+        "input_field_sizes": [
+          14,
+          3,
+          25,
+          6,
+          7,
+          10,
+          25,
+          20,
+          10,
+          100
+        ],
+        "target": "binary_income_Y",
+        "sensitive_input": "DIS omitted; exactly ten public covariates",
+        "training_api_inputs": "X_without_DIS and y only; no separate evaluation input is accepted",
+        "scope_note": "Caller is responsible for disjoint evaluation rows; this function receives training arrays only.",
+        "source_sha256": "c4bc3ae87dbfd05bcb5f9a0ed7a6b849e91f9ddd742f52a62d72201b038c66ea",
+        "versions": {
+          "python": "3.12.14",
+          "numpy": "2.5.2",
+          "sklearn": "1.6.1",
+          "torch": "2.13.0+cu130"
+        },
+        "privacy_guarantee": "DIS input omitted: 0-DP for fixed-roster DIS replacement conditional on fixed X,Y, partitions, code and randomness law; no other privacy asserted",
+        "configuration_overrides": {},
+        "estimator_parameters": {
+          "n_estimators": 100,
+          "max_depth": 18,
+          "n_jobs": 6,
+          "random_state": 20260922
+        },
+        "preprocessing": "raw_category_codes_as_ordered_numeric",
+        "model_kind": "classical_income_classifier",
+        "device": "cpu",
+        "warnings": [],
+        "fit_and_persist_seconds": 1.1538073000265285,
+        "artifacts": {
+          "estimator.joblib": {
+            "bytes": 21304646,
+            "sha256": "2205c6a105c4770723e5bf10388a0a28ddb5a2907ad9abe175378c857416cac6"
+          },
+          "preprocessing.json": {
+            "bytes": 357,
+            "sha256": "959d6c335cb06dcce1fdf267505a4561e4172a906dbb43e8d9fa8e90e00bd58d"
+          }
+        }
+      },
+      "predictions_sha256": "1026b489fb7a9a770de7b778aa7df387bc5db8a3435659a5c11c81a0e367a39c",
+      "raw_auc": 0.8598649629943974,
+      "epsilon_1_auc": 0.8573500509815142,
+      "epsilon_3_auc": 0.8590587957993537
+    },
+    {
+      "family": "hist_gradient_boosting",
+      "dataset": "D2_50",
+      "training_seed": 20260921,
+      "model_seed": 20262939,
+      "training_records": 50000,
+      "utility_records": 10000,
+      "metrics": {
+        "roc_auc": 0.8715308847804979,
+        "accuracy": 0.7873,
+        "log_loss": 0.4476132513947682
+      },
+      "fit": {
+        "schema_version": 1,
+        "model_name": "hist_gradient_boosting",
+        "seed": 20262939,
+        "training_records": 50000,
+        "income_class_counts": [
+          24976,
+          25024
+        ],
+        "threads": 6,
+        "input_field_sizes": [
+          14,
+          3,
+          25,
+          6,
+          7,
+          10,
+          25,
+          20,
+          10,
+          100
+        ],
+        "target": "binary_income_Y",
+        "sensitive_input": "DIS omitted; exactly ten public covariates",
+        "training_api_inputs": "X_without_DIS and y only; no separate evaluation input is accepted",
+        "scope_note": "Caller is responsible for disjoint evaluation rows; this function receives training arrays only.",
+        "source_sha256": "c4bc3ae87dbfd05bcb5f9a0ed7a6b849e91f9ddd742f52a62d72201b038c66ea",
+        "versions": {
+          "python": "3.12.14",
+          "numpy": "2.5.2",
+          "sklearn": "1.6.1",
+          "torch": "2.13.0+cu130"
+        },
+        "privacy_guarantee": "DIS input omitted: 0-DP for fixed-roster DIS replacement conditional on fixed X,Y, partitions, code and randomness law; no other privacy asserted",
+        "configuration_overrides": {},
+        "estimator_parameters": {
+          "max_iter": 120,
+          "max_leaf_nodes": 31,
+          "categorical_features": [
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true
+          ],
+          "early_stopping": false,
+          "random_state": 20262939
+        },
+        "preprocessing": "native_categorical_fixed_integer_codes",
+        "model_kind": "classical_income_classifier",
+        "device": "cpu",
+        "warnings": [],
+        "fit_and_persist_seconds": 0.30753559997538105,
+        "artifacts": {
+          "estimator.joblib": {
+            "bytes": 204550,
+            "sha256": "4a8cba64346e213712074de9f8f34b12657a36599b855debadb0481568839517"
+          },
+          "preprocessing.json": {
+            "bytes": 358,
+            "sha256": "a86581bb498d56e73fc6da122ecc7e4a34075b0b474fad64295026706a3c3a6f"
+          }
+        }
+      },
+      "predictions_sha256": "b3bee136f4786340d1649347e63238f16df5758c7f56e18be2e35d63e7b843a4",
+      "raw_auc": 0.8728440468121031,
+      "epsilon_1_auc": 0.8707655019966959,
+      "epsilon_3_auc": 0.8724039192079015
+    },
+    {
+      "family": "hist_gradient_boosting",
+      "dataset": "D2_50",
+      "training_seed": 20260922,
+      "model_seed": 20262940,
+      "training_records": 50000,
+      "utility_records": 10000,
+      "metrics": {
+        "roc_auc": 0.8715308847804979,
+        "accuracy": 0.7873,
+        "log_loss": 0.4476132513947682
+      },
+      "fit": {
+        "schema_version": 1,
+        "model_name": "hist_gradient_boosting",
+        "seed": 20262940,
+        "training_records": 50000,
+        "income_class_counts": [
+          24976,
+          25024
+        ],
+        "threads": 6,
+        "input_field_sizes": [
+          14,
+          3,
+          25,
+          6,
+          7,
+          10,
+          25,
+          20,
+          10,
+          100
+        ],
+        "target": "binary_income_Y",
+        "sensitive_input": "DIS omitted; exactly ten public covariates",
+        "training_api_inputs": "X_without_DIS and y only; no separate evaluation input is accepted",
+        "scope_note": "Caller is responsible for disjoint evaluation rows; this function receives training arrays only.",
+        "source_sha256": "c4bc3ae87dbfd05bcb5f9a0ed7a6b849e91f9ddd742f52a62d72201b038c66ea",
+        "versions": {
+          "python": "3.12.14",
+          "numpy": "2.5.2",
+          "sklearn": "1.6.1",
+          "torch": "2.13.0+cu130"
+        },
+        "privacy_guarantee": "DIS input omitted: 0-DP for fixed-roster DIS replacement conditional on fixed X,Y, partitions, code and randomness law; no other privacy asserted",
+        "configuration_overrides": {},
+        "estimator_parameters": {
+          "max_iter": 120,
+          "max_leaf_nodes": 31,
+          "categorical_features": [
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true
+          ],
+          "early_stopping": false,
+          "random_state": 20262940
+        },
+        "preprocessing": "native_categorical_fixed_integer_codes",
+        "model_kind": "classical_income_classifier",
+        "device": "cpu",
+        "warnings": [],
+        "fit_and_persist_seconds": 0.3289598999544978,
+        "artifacts": {
+          "estimator.joblib": {
+            "bytes": 204553,
+            "sha256": "0c14f78ff9192476f8cedd915eca0123b32d712f2ceaf6a02166ce1e95b1ddc6"
+          },
+          "preprocessing.json": {
+            "bytes": 358,
+            "sha256": "a86581bb498d56e73fc6da122ecc7e4a34075b0b474fad64295026706a3c3a6f"
+          }
+        }
+      },
+      "predictions_sha256": "b3bee136f4786340d1649347e63238f16df5758c7f56e18be2e35d63e7b843a4",
+      "raw_auc": 0.8728440468121031,
+      "epsilon_1_auc": 0.8717026633600692,
+      "epsilon_3_auc": 0.8722268800593471
+    },
+    {
+      "family": "xgboost",
+      "dataset": "D2_0",
+      "training_seed": 20260921,
+      "model_seed": 20261930,
+      "training_records": 50000,
+      "utility_records": 10000,
+      "metrics": {
+        "roc_auc": 0.870981245331495,
+        "accuracy": 0.7865,
+        "log_loss": 0.4482965796186094
+      },
+      "fit": {
+        "schema_version": 1,
+        "model_name": "xgboost",
+        "seed": 20261930,
+        "training_records": 50000,
+        "income_class_counts": [
+          25089,
+          24911
+        ],
+        "threads": 6,
+        "input_field_sizes": [
+          14,
+          3,
+          25,
+          6,
+          7,
+          10,
+          25,
+          20,
+          10,
+          100
+        ],
+        "target": "binary_income_Y",
+        "sensitive_input": "DIS omitted; exactly ten public covariates",
+        "training_api_inputs": "X_without_DIS and y only; no separate evaluation input is accepted",
+        "scope_note": "Caller is responsible for disjoint evaluation rows; this function receives training arrays only.",
+        "source_sha256": "c4bc3ae87dbfd05bcb5f9a0ed7a6b849e91f9ddd742f52a62d72201b038c66ea",
+        "versions": {
+          "python": "3.12.14",
+          "numpy": "2.5.2",
+          "sklearn": "1.6.1",
+          "torch": "2.13.0+cu130",
+          "xgboost": "2.1.4"
+        },
+        "privacy_guarantee": "DIS input omitted: 0-DP for fixed-roster DIS replacement conditional on fixed X,Y, partitions, code and randomness law; no other privacy asserted",
+        "configuration_overrides": {},
+        "estimator_parameters": {
+          "n_estimators": 120,
+          "max_depth": 6,
+          "learning_rate": 0.1,
+          "tree_method": "hist",
+          "n_jobs": 6,
+          "random_state": 20261930,
+          "eval_metric": "logloss",
+          "objective": "binary:logistic"
+        },
+        "preprocessing": "raw_category_codes_as_ordered_numeric",
+        "model_kind": "classical_income_classifier",
+        "device": "cpu",
+        "warnings": [],
+        "fit_and_persist_seconds": 0.16275479999603704,
+        "artifacts": {
+          "estimator.joblib": {
+            "bytes": 176937,
+            "sha256": "a7b948b003aafc26b6571251961ee9ac1f9b272856c84b49d2724594e9e211fe"
+          },
+          "preprocessing.json": {
+            "bytes": 357,
+            "sha256": "959d6c335cb06dcce1fdf267505a4561e4172a906dbb43e8d9fa8e90e00bd58d"
+          }
+        }
+      },
+      "predictions_sha256": "b896a8617c5bcdb80e66b6152ad690e241e5c8677fc80d5b2f2b8f564533faec",
+      "raw_auc": 0.8712815378111296,
+      "epsilon_1_auc": 0.8701343337295362,
+      "epsilon_3_auc": 0.8711867875629429
+    },
+    {
+      "family": "xgboost",
+      "dataset": "D2_0",
+      "training_seed": 20260922,
+      "model_seed": 20261931,
+      "training_records": 50000,
+      "utility_records": 10000,
+      "metrics": {
+        "roc_auc": 0.870981245331495,
+        "accuracy": 0.7865,
+        "log_loss": 0.4482965796186094
+      },
+      "fit": {
+        "schema_version": 1,
+        "model_name": "xgboost",
+        "seed": 20261931,
+        "training_records": 50000,
+        "income_class_counts": [
+          25089,
+          24911
+        ],
+        "threads": 6,
+        "input_field_sizes": [
+          14,
+          3,
+          25,
+          6,
+          7,
+          10,
+          25,
+          20,
+          10,
+          100
+        ],
+        "target": "binary_income_Y",
+        "sensitive_input": "DIS omitted; exactly ten public covariates",
+        "training_api_inputs": "X_without_DIS and y only; no separate evaluation input is accepted",
+        "scope_note": "Caller is responsible for disjoint evaluation rows; this function receives training arrays only.",
+        "source_sha256": "c4bc3ae87dbfd05bcb5f9a0ed7a6b849e91f9ddd742f52a62d72201b038c66ea",
+        "versions": {
+          "python": "3.12.14",
+          "numpy": "2.5.2",
+          "sklearn": "1.6.1",
+          "torch": "2.13.0+cu130",
+          "xgboost": "2.1.4"
+        },
+        "privacy_guarantee": "DIS input omitted: 0-DP for fixed-roster DIS replacement conditional on fixed X,Y, partitions, code and randomness law; no other privacy asserted",
+        "configuration_overrides": {},
+        "estimator_parameters": {
+          "n_estimators": 120,
+          "max_depth": 6,
+          "learning_rate": 0.1,
+          "tree_method": "hist",
+          "n_jobs": 6,
+          "random_state": 20261931,
+          "eval_metric": "logloss",
+          "objective": "binary:logistic"
+        },
+        "preprocessing": "raw_category_codes_as_ordered_numeric",
+        "model_kind": "classical_income_classifier",
+        "device": "cpu",
+        "warnings": [],
+        "fit_and_persist_seconds": 0.13951040001120418,
+        "artifacts": {
+          "estimator.joblib": {
+            "bytes": 176938,
+            "sha256": "f5c34b82a36168b30c4313f14ea6760252af4e48024369f33f579cfed3faa8a3"
+          },
+          "preprocessing.json": {
+            "bytes": 357,
+            "sha256": "959d6c335cb06dcce1fdf267505a4561e4172a906dbb43e8d9fa8e90e00bd58d"
+          }
+        }
+      },
+      "predictions_sha256": "b896a8617c5bcdb80e66b6152ad690e241e5c8677fc80d5b2f2b8f564533faec",
+      "raw_auc": 0.8712815378111296,
+      "epsilon_1_auc": 0.8705250159857291,
+      "epsilon_3_auc": 0.8708174076108072
+    },
+    {
+      "family": "knn",
+      "dataset": "D2_100",
+      "training_seed": 20260921,
+      "model_seed": 20263948,
+      "training_records": 50000,
+      "utility_records": 10000,
+      "metrics": {
+        "roc_auc": 0.8055342665862739,
+        "accuracy": 0.7444,
+        "log_loss": 2.779879608506194
+      },
+      "fit": {
+        "schema_version": 1,
+        "model_name": "knn",
+        "seed": 20263948,
+        "training_records": 50000,
+        "income_class_counts": [
+          25056,
+          24944
+        ],
+        "threads": 6,
+        "input_field_sizes": [
+          14,
+          3,
+          25,
+          6,
+          7,
+          10,
+          25,
+          20,
+          10,
+          100
+        ],
+        "target": "binary_income_Y",
+        "sensitive_input": "DIS omitted; exactly ten public covariates",
+        "training_api_inputs": "X_without_DIS and y only; no separate evaluation input is accepted",
+        "scope_note": "Caller is responsible for disjoint evaluation rows; this function receives training arrays only.",
+        "source_sha256": "c4bc3ae87dbfd05bcb5f9a0ed7a6b849e91f9ddd742f52a62d72201b038c66ea",
+        "versions": {
+          "python": "3.12.14",
+          "numpy": "2.5.2",
+          "sklearn": "1.6.1",
+          "torch": "2.13.0+cu130"
+        },
+        "privacy_guarantee": "DIS input omitted: 0-DP for fixed-roster DIS replacement conditional on fixed X,Y, partitions, code and randomness law; no other privacy asserted",
+        "configuration_overrides": {},
+        "estimator_parameters": {
+          "n_neighbors": 5,
+          "weights": "distance",
+          "algorithm": "kd_tree",
+          "n_jobs": 6
+        },
+        "preprocessing": "fixed_range_scaled_category_codes_euclidean",
+        "model_kind": "classical_income_classifier",
+        "device": "cpu",
+        "warnings": [],
+        "fit_and_persist_seconds": 0.18241269997088239,
+        "artifacts": {
+          "estimator.joblib": {
+            "bytes": 1065973,
+            "sha256": "b20848e70a1c65b5d367e53269411edd81012f0358692c2b42828811bb33e2b6"
+          },
+          "preprocessing.json": {
+            "bytes": 363,
+            "sha256": "f7de70835631f8c262c4bf11f8da0d3f9dbbe447c5ed493a817b8177c475a801"
+          }
+        }
+      },
+      "predictions_sha256": "0e4d8d23cced9eec55a6002a30c47b3baebc750648de9965e45de9c08f0b2833",
+      "raw_auc": 0.8052751385589867,
+      "epsilon_1_auc": 0.8006327564389364,
+      "epsilon_3_auc": 0.8036569835393397
+    },
+    {
+      "family": "knn",
+      "dataset": "D2_100",
+      "training_seed": 20260922,
+      "model_seed": 20263949,
+      "training_records": 50000,
+      "utility_records": 10000,
+      "metrics": {
+        "roc_auc": 0.8055342665862739,
+        "accuracy": 0.7444,
+        "log_loss": 2.779879608506194
+      },
+      "fit": {
+        "schema_version": 1,
+        "model_name": "knn",
+        "seed": 20263949,
+        "training_records": 50000,
+        "income_class_counts": [
+          25056,
+          24944
+        ],
+        "threads": 6,
+        "input_field_sizes": [
+          14,
+          3,
+          25,
+          6,
+          7,
+          10,
+          25,
+          20,
+          10,
+          100
+        ],
+        "target": "binary_income_Y",
+        "sensitive_input": "DIS omitted; exactly ten public covariates",
+        "training_api_inputs": "X_without_DIS and y only; no separate evaluation input is accepted",
+        "scope_note": "Caller is responsible for disjoint evaluation rows; this function receives training arrays only.",
+        "source_sha256": "c4bc3ae87dbfd05bcb5f9a0ed7a6b849e91f9ddd742f52a62d72201b038c66ea",
+        "versions": {
+          "python": "3.12.14",
+          "numpy": "2.5.2",
+          "sklearn": "1.6.1",
+          "torch": "2.13.0+cu130"
+        },
+        "privacy_guarantee": "DIS input omitted: 0-DP for fixed-roster DIS replacement conditional on fixed X,Y, partitions, code and randomness law; no other privacy asserted",
+        "configuration_overrides": {},
+        "estimator_parameters": {
+          "n_neighbors": 5,
+          "weights": "distance",
+          "algorithm": "kd_tree",
+          "n_jobs": 6
+        },
+        "preprocessing": "fixed_range_scaled_category_codes_euclidean",
+        "model_kind": "classical_income_classifier",
+        "device": "cpu",
+        "warnings": [],
+        "fit_and_persist_seconds": 0.1826868000207469,
+        "artifacts": {
+          "estimator.joblib": {
+            "bytes": 1065973,
+            "sha256": "b20848e70a1c65b5d367e53269411edd81012f0358692c2b42828811bb33e2b6"
+          },
+          "preprocessing.json": {
+            "bytes": 363,
+            "sha256": "f7de70835631f8c262c4bf11f8da0d3f9dbbe447c5ed493a817b8177c475a801"
+          }
+        }
+      },
+      "predictions_sha256": "0e4d8d23cced9eec55a6002a30c47b3baebc750648de9965e45de9c08f0b2833",
+      "raw_auc": 0.8052751385589867,
+      "epsilon_1_auc": 0.7977364831780205,
+      "epsilon_3_auc": 0.8060921069222846
+    },
+    {
+      "family": "logistic_regression",
+      "dataset": "D1",
+      "training_seed": 20260921,
+      "model_seed": 20260921,
+      "training_records": 50000,
+      "utility_records": 10000,
+      "metrics": {
+        "roc_auc": 0.8668764613580606,
+        "accuracy": 0.7889,
+        "log_loss": 0.4558040201685607
+      },
+      "fit": {
+        "schema_version": 1,
+        "model_name": "logistic_regression",
+        "seed": 20260921,
+        "training_records": 50000,
+        "income_class_counts": [
+          25056,
+          24944
+        ],
+        "threads": 6,
+        "input_field_sizes": [
+          14,
+          3,
+          25,
+          6,
+          7,
+          10,
+          25,
+          20,
+          10,
+          100
+        ],
+        "target": "binary_income_Y",
+        "sensitive_input": "DIS omitted; exactly ten public covariates",
+        "training_api_inputs": "X_without_DIS and y only; no separate evaluation input is accepted",
+        "scope_note": "Caller is responsible for disjoint evaluation rows; this function receives training arrays only.",
+        "source_sha256": "c4bc3ae87dbfd05bcb5f9a0ed7a6b849e91f9ddd742f52a62d72201b038c66ea",
+        "versions": {
+          "python": "3.12.14",
+          "numpy": "2.5.2",
+          "sklearn": "1.6.1",
+          "torch": "2.13.0+cu130"
+        },
+        "privacy_guarantee": "DIS input omitted: 0-DP for fixed-roster DIS replacement conditional on fixed X,Y, partitions, code and randomness law; no other privacy asserted",
+        "configuration_overrides": {},
+        "estimator_parameters": {
+          "max_iter": 300,
+          "C": 1.0,
+          "random_state": 20260921
+        },
+        "preprocessing": "fixed_vocabulary_one_hot",
+        "model_kind": "classical_income_classifier",
+        "device": "cpu",
+        "warnings": [
+          {
+            "category": "OptimizeWarning",
+            "message": "Unknown solver options: iprint"
+          }
+        ],
+        "fit_and_persist_seconds": 0.16923130000941455,
+        "artifacts": {
+          "estimator.joblib": {
+            "bytes": 3057,
+            "sha256": "43cb651d159e04aa802d6d01684e2c687e264adfb2a0db8c909defcb0be544a5"
+          },
+          "preprocessing.json": {
+            "bytes": 344,
+            "sha256": "8d57506582d9f7abb85f677b0787cdd213ccfc34fabc40cc077e4338bffd4519"
+          }
+        }
+      },
+      "predictions_sha256": "0de0c960343e054f1088ccb6c4ca22136a0b7a4c317379535efe900fcae131c3",
+      "raw_auc": 0.8676198417620851,
+      "epsilon_1_auc": 0.8667354861101777,
+      "epsilon_3_auc": 0.8675463938179555
+    },
+    {
+      "family": "logistic_regression",
+      "dataset": "D1",
+      "training_seed": 20260922,
+      "model_seed": 20260922,
+      "training_records": 50000,
+      "utility_records": 10000,
+      "metrics": {
+        "roc_auc": 0.8668764613580606,
+        "accuracy": 0.7889,
+        "log_loss": 0.4558040201685607
+      },
+      "fit": {
+        "schema_version": 1,
+        "model_name": "logistic_regression",
+        "seed": 20260922,
+        "training_records": 50000,
+        "income_class_counts": [
+          25056,
+          24944
+        ],
+        "threads": 6,
+        "input_field_sizes": [
+          14,
+          3,
+          25,
+          6,
+          7,
+          10,
+          25,
+          20,
+          10,
+          100
+        ],
+        "target": "binary_income_Y",
+        "sensitive_input": "DIS omitted; exactly ten public covariates",
+        "training_api_inputs": "X_without_DIS and y only; no separate evaluation input is accepted",
+        "scope_note": "Caller is responsible for disjoint evaluation rows; this function receives training arrays only.",
+        "source_sha256": "c4bc3ae87dbfd05bcb5f9a0ed7a6b849e91f9ddd742f52a62d72201b038c66ea",
+        "versions": {
+          "python": "3.12.14",
+          "numpy": "2.5.2",
+          "sklearn": "1.6.1",
+          "torch": "2.13.0+cu130"
+        },
+        "privacy_guarantee": "DIS input omitted: 0-DP for fixed-roster DIS replacement conditional on fixed X,Y, partitions, code and randomness law; no other privacy asserted",
+        "configuration_overrides": {},
+        "estimator_parameters": {
+          "max_iter": 300,
+          "C": 1.0,
+          "random_state": 20260922
+        },
+        "preprocessing": "fixed_vocabulary_one_hot",
+        "model_kind": "classical_income_classifier",
+        "device": "cpu",
+        "warnings": [
+          {
+            "category": "OptimizeWarning",
+            "message": "Unknown solver options: iprint"
+          }
+        ],
+        "fit_and_persist_seconds": 0.16582290001679212,
+        "artifacts": {
+          "estimator.joblib": {
+            "bytes": 3057,
+            "sha256": "1c79013c20a6d04c12d2ba4c8ec8ed49930879f59511d857e2d3a4cd7ad07bf4"
+          },
+          "preprocessing.json": {
+            "bytes": 344,
+            "sha256": "8d57506582d9f7abb85f677b0787cdd213ccfc34fabc40cc077e4338bffd4519"
+          }
+        }
+      },
+      "predictions_sha256": "0de0c960343e054f1088ccb6c4ca22136a0b7a4c317379535efe900fcae131c3",
+      "raw_auc": 0.8676198417620851,
+      "epsilon_1_auc": 0.8669905937026148,
+      "epsilon_3_auc": 0.8672627831426247
+    },
+    {
+      "family": "mlp",
+      "dataset": "D2_50",
+      "training_seed": 20260921,
+      "model_seed": 20262939,
+      "training_records": 50000,
+      "utility_records": 10000,
+      "metrics": {
+        "roc_auc": 0.7961716539260886,
+        "accuracy": 0.7414,
+        "log_loss": 1.1496426306164746
+      },
+      "fit": {
+        "schema_version": 1,
+        "model_name": "mlp",
+        "seed": 20262939,
+        "training_records": 50000,
+        "income_class_counts": [
+          24976,
+          25024
+        ],
+        "threads": 6,
+        "input_field_sizes": [
+          14,
+          3,
+          25,
+          6,
+          7,
+          10,
+          25,
+          20,
+          10,
+          100
+        ],
+        "target": "binary_income_Y",
+        "sensitive_input": "DIS omitted; exactly ten public covariates",
+        "training_api_inputs": "X_without_DIS and y only; no separate evaluation input is accepted",
+        "scope_note": "Caller is responsible for disjoint evaluation rows; this function receives training arrays only.",
+        "source_sha256": "c4bc3ae87dbfd05bcb5f9a0ed7a6b849e91f9ddd742f52a62d72201b038c66ea",
+        "versions": {
+          "python": "3.12.14",
+          "numpy": "2.5.2",
+          "sklearn": "1.6.1",
+          "torch": "2.13.0+cu130"
+        },
+        "privacy_guarantee": "DIS input omitted: 0-DP for fixed-roster DIS replacement conditional on fixed X,Y, partitions, code and randomness law; no other privacy asserted",
+        "configuration_overrides": {},
+        "estimator_parameters": {
+          "hidden_layer_sizes": [
+            128,
+            64
+          ],
+          "max_iter": 100,
+          "batch_size": 512,
+          "early_stopping": false,
+          "random_state": 20262939
+        },
+        "preprocessing": "fixed_vocabulary_one_hot",
+        "model_kind": "classical_income_classifier",
+        "device": "cpu",
+        "warnings": [
+          {
+            "category": "ConvergenceWarning",
+            "message": "Stochastic Optimizer: Maximum iterations (100) reached and the optimization hasn't converged yet."
+          }
+        ],
+        "fit_and_persist_seconds": 18.477750200021546,
+        "artifacts": {
+          "estimator.joblib": {
+            "bytes": 554603,
+            "sha256": "02e77ca32e247df0ba3da4ae229c619a33826979631b530540044f108c103266"
+          },
+          "preprocessing.json": {
+            "bytes": 344,
+            "sha256": "8d57506582d9f7abb85f677b0787cdd213ccfc34fabc40cc077e4338bffd4519"
+          }
+        }
+      },
+      "predictions_sha256": "575d80df7a68e95630145f340538d2b3ad13eff547898069b144bac7d43cc2a8",
+      "raw_auc": 0.7920142642628227,
+      "epsilon_1_auc": 0.795290138581389,
+      "epsilon_3_auc": 0.7918593675091898
+    },
+    {
+      "family": "mlp",
+      "dataset": "D2_50",
+      "training_seed": 20260922,
+      "model_seed": 20262940,
+      "training_records": 50000,
+      "utility_records": 10000,
+      "metrics": {
+        "roc_auc": 0.8026776176111208,
+        "accuracy": 0.7446,
+        "log_loss": 1.0709097422729261
+      },
+      "fit": {
+        "schema_version": 1,
+        "model_name": "mlp",
+        "seed": 20262940,
+        "training_records": 50000,
+        "income_class_counts": [
+          24976,
+          25024
+        ],
+        "threads": 6,
+        "input_field_sizes": [
+          14,
+          3,
+          25,
+          6,
+          7,
+          10,
+          25,
+          20,
+          10,
+          100
+        ],
+        "target": "binary_income_Y",
+        "sensitive_input": "DIS omitted; exactly ten public covariates",
+        "training_api_inputs": "X_without_DIS and y only; no separate evaluation input is accepted",
+        "scope_note": "Caller is responsible for disjoint evaluation rows; this function receives training arrays only.",
+        "source_sha256": "c4bc3ae87dbfd05bcb5f9a0ed7a6b849e91f9ddd742f52a62d72201b038c66ea",
+        "versions": {
+          "python": "3.12.14",
+          "numpy": "2.5.2",
+          "sklearn": "1.6.1",
+          "torch": "2.13.0+cu130"
+        },
+        "privacy_guarantee": "DIS input omitted: 0-DP for fixed-roster DIS replacement conditional on fixed X,Y, partitions, code and randomness law; no other privacy asserted",
+        "configuration_overrides": {},
+        "estimator_parameters": {
+          "hidden_layer_sizes": [
+            128,
+            64
+          ],
+          "max_iter": 100,
+          "batch_size": 512,
+          "early_stopping": false,
+          "random_state": 20262940
+        },
+        "preprocessing": "fixed_vocabulary_one_hot",
+        "model_kind": "classical_income_classifier",
+        "device": "cpu",
+        "warnings": [
+          {
+            "category": "ConvergenceWarning",
+            "message": "Stochastic Optimizer: Maximum iterations (100) reached and the optimization hasn't converged yet."
+          }
+        ],
+        "fit_and_persist_seconds": 17.197484500007704,
+        "artifacts": {
+          "estimator.joblib": {
+            "bytes": 554530,
+            "sha256": "9ed45ab76031803f6c012e8d31114179dd611df9df88ed602a79772c77902e5e"
+          },
+          "preprocessing.json": {
+            "bytes": 344,
+            "sha256": "8d57506582d9f7abb85f677b0787cdd213ccfc34fabc40cc077e4338bffd4519"
+          }
+        }
+      },
+      "predictions_sha256": "b24a0d6c79450ca83bf657ad0b123e7578ca2fb73665070981fb25ad73b33c10",
+      "raw_auc": 0.810200571293791,
+      "epsilon_1_auc": 0.8081218664610764,
+      "epsilon_3_auc": 0.8080202754729952
+    }
+  ],
+  "comparisons": [
+    {
+      "family": "slm_small",
+      "dataset": "D1",
+      "auc_by_seed": {
+        "omitted": [
+          0.871711644331451,
+          0.8713114210433002
+        ],
+        "raw": [
+          0.871711884357412,
+          0.8711458431343935
+        ],
+        "epsilon_1": [
+          0.8705896429757845,
+          0.8702667680536327
+        ],
+        "epsilon_3": [
+          0.8713231423110723,
+          0.8707278779272766
+        ]
+      },
+      "differences": {
+        "raw": {
+          "mean_auc_difference_omitted_minus_comparator": 8.266894147270869e-05,
+          "conditional_standard_error": 0.0005261861136079457,
+          "pointwise_95_interval": [
+            -0.0009486368903639664,
+            0.0011139747733093838
+          ],
+          "bonferroni_30_comparisons_95_familywise_interval": [
+            -0.0015716498270401604,
+            0.0017369877099855779
+          ]
+        },
+        "epsilon_1": {
+          "mean_auc_difference_omitted_minus_comparator": 0.001083327172666998,
+          "conditional_standard_error": 0.00044631832185715304,
+          "pointwise_95_interval": [
+            0.00020855933618662192,
+            0.001958095009147374
+          ],
+          "bonferroni_30_comparisons_95_familywise_interval": [
+            -0.000319888833009641,
+            0.0024865431783436366
+          ]
+        },
+        "epsilon_3": {
+          "mean_auc_difference_omitted_minus_comparator": 0.00048602256820097934,
+          "conditional_standard_error": 0.00048483761001480734,
+          "pointwise_95_interval": [
+            -0.00046424168577851926,
+            0.001436286822180478
+          ],
+          "bonferroni_30_comparisons_95_familywise_interval": [
+            -0.001038297320115258,
+            0.0020103424565172164
+          ]
+        }
+      }
+    },
+    {
+      "family": "slm_medium",
+      "dataset": "D2_50",
+      "auc_by_seed": {
+        "omitted": [
+          0.873753225148832,
+          0.872579578207179
+        ],
+        "raw": [
+          0.8731522001419674,
+          0.8726127217919889
+        ],
+        "epsilon_1": [
+          0.8724113200083722,
+          0.8717300263196468
+        ],
+        "epsilon_3": [
+          0.8729650999052058,
+          0.8722207193930096
+        ]
+      },
+      "differences": {
+        "raw": {
+          "mean_auc_difference_omitted_minus_comparator": 0.00028394071102730663,
+          "conditional_standard_error": 0.0004990650482082569,
+          "pointwise_95_interval": [
+            -0.0006942088094036227,
+            0.0012620902314582358
+          ],
+          "bonferroni_30_comparisons_95_familywise_interval": [
+            -0.0012851099625046296,
+            0.0018529913845592428
+          ]
+        },
+        "epsilon_1": {
+          "mean_auc_difference_omitted_minus_comparator": 0.001095728513996075,
+          "conditional_standard_error": 0.0004294656835755659,
+          "pointwise_95_interval": [
+            0.0002539912415920907,
+            0.001937465786400059
+          ],
+          "bonferroni_30_comparisons_95_familywise_interval": [
+            -0.0002545031291381484,
+            0.002445960157130298
+          ]
+        },
+        "epsilon_3": {
+          "mean_auc_difference_omitted_minus_comparator": 0.0005734920288978486,
+          "conditional_standard_error": 0.0004623490315259323,
+          "pointwise_95_interval": [
+            -0.0003326954211799527,
+            0.00147967947897565
+          ],
+          "bonferroni_30_comparisons_95_familywise_interval": [
+            -0.0008801242119651598,
+            0.002027108269760857
+          ]
+        }
+      }
+    },
+    {
+      "family": "decision_tree",
+      "dataset": "D2_0",
+      "auc_by_seed": {
+        "omitted": [
+          0.7287611428052058,
+          0.7236152662271951
+        ],
+        "raw": [
+          0.7285044950461841,
+          0.7263990473209583
+        ],
+        "epsilon_1": [
+          0.7267550858300833,
+          0.7219650677417269
+        ],
+        "epsilon_3": [
+          0.7252161193754717,
+          0.7247972340688368
+        ]
+      },
+      "differences": {
+        "raw": {
+          "mean_auc_difference_omitted_minus_comparator": -0.0012635666673707843,
+          "conditional_standard_error": 0.0025759005740386373,
+          "pointwise_95_interval": [
+            -0.0063122390202425644,
+            0.003785105685500996
+          ],
+          "bonferroni_30_comparisons_95_familywise_interval": [
+            -0.00936214729359817,
+            0.006835013958856601
+          ]
+        },
+        "epsilon_1": {
+          "mean_auc_difference_omitted_minus_comparator": 0.001828127730295287,
+          "conditional_standard_error": 0.002404395804130764,
+          "pointwise_95_interval": [
+            -0.002884401450380232,
+            0.006540656910970806
+          ],
+          "bonferroni_30_comparisons_95_familywise_interval": [
+            -0.005731245280203426,
+            0.009387500740794
+          ]
+        },
+        "epsilon_3": {
+          "mean_auc_difference_omitted_minus_comparator": 0.001181527794046192,
+          "conditional_standard_error": 0.0023011911095375706,
+          "pointwise_95_interval": [
+            -0.0033287239021912132,
+            0.005691779490283598
+          ],
+          "bonferroni_30_comparisons_95_familywise_interval": [
+            -0.0060533716911185375,
+            0.008416427279210922
+          ]
+        }
+      }
+    },
+    {
+      "family": "random_forest",
+      "dataset": "D2_100",
+      "auc_by_seed": {
+        "omitted": [
+          0.8593630087030213,
+          0.8585811041322229
+        ],
+        "raw": [
+          0.8587507824846335,
+          0.858744581813969
+        ],
+        "epsilon_1": [
+          0.8578792482194875,
+          0.8569721701099191
+        ],
+        "epsilon_3": [
+          0.8589552646014194,
+          0.8587099580690648
+        ]
+      },
+      "differences": {
+        "raw": {
+          "mean_auc_difference_omitted_minus_comparator": 0.00022437426832086336,
+          "conditional_standard_error": 0.0008705457354449274,
+          "pointwise_95_interval": [
+            -0.0014818640200461282,
+            0.001930612556687855
+          ],
+          "bonferroni_30_comparisons_95_familywise_interval": [
+            -0.002512604362910037,
+            0.0029613528995517634
+          ]
+        },
+        "epsilon_1": {
+          "mean_auc_difference_omitted_minus_comparator": 0.0015463472529188766,
+          "conditional_standard_error": 0.000705376068352362,
+          "pointwise_95_interval": [
+            0.0001638355633917835,
+            0.0029288589424459697
+          ],
+          "bonferroni_30_comparisons_95_familywise_interval": [
+            -0.0006713412009512365,
+            0.00376403570678899
+          ]
+        },
+        "epsilon_3": {
+          "mean_auc_difference_omitted_minus_comparator": 0.00013944508238010966,
+          "conditional_standard_error": 0.0008025172125013934,
+          "pointwise_95_interval": [
+            -0.0014334597510960987,
+            0.001712349915856318
+          ],
+          "bonferroni_30_comparisons_95_familywise_interval": [
+            -0.0023836532137578937,
+            0.0026625433785181125
+          ]
+        }
+      }
+    },
+    {
+      "family": "extra_trees",
+      "dataset": "D1",
+      "auc_by_seed": {
+        "omitted": [
+          0.8592262339094596,
+          0.8595446883534922
+        ],
+        "raw": [
+          0.8603920200008834,
+          0.8598649629943974
+        ],
+        "epsilon_1": [
+          0.8573069663214773,
+          0.8573500509815142
+        ],
+        "epsilon_3": [
+          0.8586978367580237,
+          0.8590587957993537
+        ]
+      },
+      "differences": {
+        "raw": {
+          "mean_auc_difference_omitted_minus_comparator": -0.0007430303661644041,
+          "conditional_standard_error": 0.0008407783060151136,
+          "pointwise_95_interval": [
+            -0.002390925564936623,
+            0.0009048648326078147
+          ],
+          "bonferroni_30_comparisons_95_familywise_interval": [
+            -0.00338642078607125,
+            0.0019003600537424415
+          ]
+        },
+        "epsilon_1": {
+          "mean_auc_difference_omitted_minus_comparator": 0.0020569524799802347,
+          "conditional_standard_error": 0.0006489072492236615,
+          "pointwise_95_interval": [
+            0.0007851176421949013,
+            0.003328787317765568
+          ],
+          "bonferroni_30_comparisons_95_familywise_interval": [
+            1.6800880284825043e-05,
+            0.004097104079675644
+          ]
+        },
+        "epsilon_3": {
+          "mean_auc_difference_omitted_minus_comparator": 0.0005071448527872773,
+          "conditional_standard_error": 0.0007572890935120668,
+          "pointwise_95_interval": [
+            -0.0009771144963813586,
+            0.0019914042019559134
+          ],
+          "bonferroni_30_comparisons_95_familywise_interval": [
+            -0.0018737571288270686,
+            0.002888046834401623
+          ]
+        }
+      }
+    },
+    {
+      "family": "hist_gradient_boosting",
+      "dataset": "D2_50",
+      "auc_by_seed": {
+        "omitted": [
+          0.8715308847804979,
+          0.8715308847804979
+        ],
+        "raw": [
+          0.8728440468121031,
+          0.8728440468121031
+        ],
+        "epsilon_1": [
+          0.8707655019966959,
+          0.8717026633600692
+        ],
+        "epsilon_3": [
+          0.8724039192079015,
+          0.8722268800593471
+        ]
+      },
+      "differences": {
+        "raw": {
+          "mean_auc_difference_omitted_minus_comparator": -0.0013131620316053356,
+          "conditional_standard_error": 0.0005735714212508009,
+          "pointwise_95_interval": [
+            -0.0024373413598183574,
+            -0.0001889827033923141
+          ],
+          "bonferroni_30_comparisons_95_familywise_interval": [
+            -0.003116459273244045,
+            0.0004901352100333736
+          ]
+        },
+        "epsilon_1": {
+          "mean_auc_difference_omitted_minus_comparator": 0.0002968021021153657,
+          "conditional_standard_error": 0.000399035566468175,
+          "pointwise_95_interval": [
+            -0.00048529323671279615,
+            0.0010788974409435275
+          ],
+          "bonferroni_30_comparisons_95_familywise_interval": [
+            -0.0009577578527000172,
+            0.0015513620569307487
+          ]
+        },
+        "epsilon_3": {
+          "mean_auc_difference_omitted_minus_comparator": -0.000784514853126511,
+          "conditional_standard_error": 0.00047725296034102047,
+          "pointwise_95_interval": [
+            -0.0017199134669100339,
+            0.00015088376065701186
+          ],
+          "bonferroni_30_comparisons_95_familywise_interval": [
+            -0.0022849887523840374,
+            0.0007159590461310155
+          ]
+        }
+      }
+    },
+    {
+      "family": "xgboost",
+      "dataset": "D2_0",
+      "auc_by_seed": {
+        "omitted": [
+          0.870981245331495,
+          0.870981245331495
+        ],
+        "raw": [
+          0.8712815378111296,
+          0.8712815378111296
+        ],
+        "epsilon_1": [
+          0.8701343337295362,
+          0.8705250159857291
+        ],
+        "epsilon_3": [
+          0.8711867875629429,
+          0.8708174076108072
+        ]
+      },
+      "differences": {
+        "raw": {
+          "mean_auc_difference_omitted_minus_comparator": -0.0003002924796345999,
+          "conditional_standard_error": 0.0004487501711470213,
+          "pointwise_95_interval": [
+            -0.001179826653138947,
+            0.0005792416938697471
+          ],
+          "bonferroni_30_comparisons_95_familywise_interval": [
+            -0.0017111541715397077,
+            0.0011105692122705076
+          ]
+        },
+        "epsilon_1": {
+          "mean_auc_difference_omitted_minus_comparator": 0.0006515704738624527,
+          "conditional_standard_error": 0.0003054150616320319,
+          "pointwise_95_interval": [
+            5.296795272758932e-05,
+            0.0012501729949973162
+          ],
+          "bonferroni_30_comparisons_95_familywise_interval": [
+            -0.00030864845928264156,
+            0.001611789407007547
+          ]
+        },
+        "epsilon_3": {
+          "mean_auc_difference_omitted_minus_comparator": -2.0852255379944286e-05,
+          "conditional_standard_error": 0.0003644858304020973,
+          "pointwise_95_interval": [
+            -0.0007352313558432293,
+            0.0006935268450833406
+          ],
+          "bonferroni_30_comparisons_95_familywise_interval": [
+            -0.0011667885210801395,
+            0.001125084010320251
+          ]
+        }
+      }
+    },
+    {
+      "family": "knn",
+      "dataset": "D2_100",
+      "auc_by_seed": {
+        "omitted": [
+          0.8055342665862739,
+          0.8055342665862739
+        ],
+        "raw": [
+          0.8052751385589867,
+          0.8052751385589867
+        ],
+        "epsilon_1": [
+          0.8006327564389364,
+          0.7977364831780205
+        ],
+        "epsilon_3": [
+          0.8036569835393397,
+          0.8060921069222846
+        ]
+      },
+      "differences": {
+        "raw": {
+          "mean_auc_difference_omitted_minus_comparator": 0.000259128027287433,
+          "conditional_standard_error": 0.0019634323545094567,
+          "pointwise_95_interval": [
+            -0.0035891286736317815,
+            0.004107384728206647
+          ],
+          "bonferroni_30_comparisons_95_familywise_interval": [
+            -0.005913864590283915,
+            0.0064321206448587805
+          ]
+        },
+        "epsilon_1": {
+          "mean_auc_difference_omitted_minus_comparator": 0.0063496467777954734,
+          "conditional_standard_error": 0.002116675820509491,
+          "pointwise_95_interval": [
+            0.002201038402650104,
+            0.010498255152940842
+          ],
+          "bonferroni_30_comparisons_95_familywise_interval": [
+            -0.0003051402760021211,
+            0.013004433831593068
+          ]
+        },
+        "epsilon_3": {
+          "mean_auc_difference_omitted_minus_comparator": 0.0006597213554618022,
+          "conditional_standard_error": 0.0019048833786497888,
+          "pointwise_95_interval": [
+            -0.0030737814614407583,
+            0.004393224172364363
+          ],
+          "bonferroni_30_comparisons_95_familywise_interval": [
+            -0.005329194436178667,
+            0.00664863714710227
+          ]
+        }
+      }
+    },
+    {
+      "family": "logistic_regression",
+      "dataset": "D1",
+      "auc_by_seed": {
+        "omitted": [
+          0.8668764613580606,
+          0.8668764613580606
+        ],
+        "raw": [
+          0.8676198417620851,
+          0.8676198417620851
+        ],
+        "epsilon_1": [
+          0.8667354861101777,
+          0.8669905937026148
+        ],
+        "epsilon_3": [
+          0.8675463938179555,
+          0.8672627831426247
+        ]
+      },
+      "differences": {
+        "raw": {
+          "mean_auc_difference_omitted_minus_comparator": -0.000743380404024499,
+          "conditional_standard_error": 0.00033624027764811285,
+          "pointwise_95_interval": [
+            -0.0014023992383665484,
+            -8.436156968244968e-05
+          ],
+          "bonferroni_30_comparisons_95_familywise_interval": [
+            -0.0018005132086687976,
+            0.00031375240061979953
+          ]
+        },
+        "epsilon_1": {
+          "mean_auc_difference_omitted_minus_comparator": 1.3421451664212025e-05,
+          "conditional_standard_error": 9.99785276221275e-05,
+          "pointwise_95_interval": [
+            -0.00018253286170250084,
+            0.0002093757650309249
+          ],
+          "bonferroni_30_comparisons_95_familywise_interval": [
+            -0.0003009090683099477,
+            0.0003277519716383717
+          ]
+        },
+        "epsilon_3": {
+          "mean_auc_difference_omitted_minus_comparator": -0.0005281271222295404,
+          "conditional_standard_error": 0.0002623069856261892,
+          "pointwise_95_interval": [
+            -0.0010422393669501369,
+            -1.401487750894389e-05
+          ],
+          "bonferroni_30_comparisons_95_familywise_interval": [
+            -0.00135281511419879,
+            0.00029656086973970915
+          ]
+        }
+      }
+    },
+    {
+      "family": "mlp",
+      "dataset": "D2_50",
+      "auc_by_seed": {
+        "omitted": [
+          0.7961716539260886,
+          0.8026776176111208
+        ],
+        "raw": [
+          0.7920142642628227,
+          0.810200571293791
+        ],
+        "epsilon_1": [
+          0.795290138581389,
+          0.8081218664610764
+        ],
+        "epsilon_3": [
+          0.7918593675091898,
+          0.8080202754729952
+        ]
+      },
+      "differences": {
+        "raw": {
+          "mean_auc_difference_omitted_minus_comparator": -0.0016827820097021697,
+          "conditional_standard_error": 0.002555311971446025,
+          "pointwise_95_interval": [
+            -0.006691101443000422,
+            0.0033255374235960826
+          ],
+          "bonferroni_30_comparisons_95_familywise_interval": [
+            -0.009716632475240083,
+            0.006351068455835743
+          ]
+        },
+        "epsilon_1": {
+          "mean_auc_difference_omitted_minus_comparator": -0.002281366752627968,
+          "conditional_standard_error": 0.002487073709371192,
+          "pointwise_95_interval": [
+            -0.007155941649891941,
+            0.0025932081446360055
+          ],
+          "bonferroni_30_comparisons_95_familywise_interval": [
+            -0.010100677467378753,
+            0.0055379439621228155
+          ]
+        },
+        "epsilon_3": {
+          "mean_auc_difference_omitted_minus_comparator": -0.0005151857224877444,
+          "conditional_standard_error": 0.002494371592909599,
+          "pointwise_95_interval": [
+            -0.005404064208650364,
+            0.004373692763674874
+          ],
+          "bonferroni_30_comparisons_95_familywise_interval": [
+            -0.008357440839220607,
+            0.007327069394245118
+          ]
+        }
+      }
+    }
+  ],
+  "failures": []
+}

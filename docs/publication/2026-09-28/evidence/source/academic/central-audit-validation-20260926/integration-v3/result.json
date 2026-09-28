@@ -1,0 +1,141 @@
+{
+  "audit": {
+    "nodes": 6,
+    "reservations": 5,
+    "scope": "registered local state only; not authenticity or external inventory",
+    "status": "consistent"
+  },
+  "deliveries": 10,
+  "full_demo_seconds": 0.3489751999732107,
+  "numpy": "2.5.2",
+  "over_cap_blocked_before_draw": true,
+  "people": 600,
+  "person_account": [
+    "1/5"
+  ],
+  "plan": {
+    "clip_norm": 0.5,
+    "dimension": 6,
+    "fixture_seed": 2026092641,
+    "limitations": "Public synthetic data/task fixture; floating Gaussian sampling is not a finite-machine DP certificate; one local authority, no external egress enforcement.",
+    "noise": "Fresh SystemRandom Gaussian draws after reservation; no noise seeds stored or disclosed.",
+    "persons": 600,
+    "producer": "Trusted task-specific Gaussian person-moment query, sensitivity 2C.",
+    "releases": 5,
+    "response_dimension": 5,
+    "ridge": 0.02,
+    "rows_per_person": 3,
+    "schema": "central-person-model-history-demo-v2",
+    "scope": "Replace all values of one fixed registered person's three rows; membership public.",
+    "stage_rho": "1/25",
+    "total_rho": "1/5"
+  },
+  "platform": "Windows-11-10.0.26200-SP0",
+  "prior_copy_retained_and_no_refund": true,
+  "protected_rows": 1800,
+  "python": "3.12.14 (main, Aug 25 2026, 14:01:42) [MSC v.1944 64 bit (AMD64)]",
+  "reopen_account_preserved": true,
+  "revocation_blocks_new_delivery": true,
+  "scope": "Bounded trusted-producer integration, not production privacy validation.",
+  "setup_seconds": 0.021046700072474778,
+  "stages": [
+    {
+      "committed_hash": "3fa3fa3a4c4c2fdfaa995442ebdc36422aba470149b50a7f71b4e2ea90289857",
+      "model_hash": "c57af96a412e404f5a3ba1af0d74afdf3e20e67d903f4146d89fae8fd8e34243",
+      "reservation": {
+        "artifact_hash": null,
+        "node_digest": "c069dc28f1141af8c1af109651e05a084977ab8a99d06ec7c4f1f0b3b6d656eb",
+        "node_id": "source-0",
+        "pending_sources": [
+          "source-0"
+        ],
+        "release_id": "release-0",
+        "revision": 1,
+        "source_closure_digest": "6ac664c285eb19a1a971b67982230ddd55b89065ce4e3606e60f9c6b30e3e15b",
+        "state": "PREPARED"
+      },
+      "spent_per_person": "1/25",
+      "stage": 1,
+      "two_recipients_identical": true
+    },
+    {
+      "committed_hash": "196a944b6fc38756a0825fa7490389adefe799e9b77d65e02c842a30473a508f",
+      "model_hash": "afab7c06428d24b6a58bdfba5fabeda99bd9fe9fcf075d28c22eff43b1e39a56",
+      "reservation": {
+        "artifact_hash": null,
+        "node_digest": "9c12d06c110c7a87bb4940de5d0b4262cba51519c8261b13cb3c6cce0bec3984",
+        "node_id": "source-1",
+        "pending_sources": [
+          "source-1"
+        ],
+        "release_id": "release-1",
+        "revision": 2,
+        "source_closure_digest": "2f2e7efff5a5b5cf99f55be0f097052a1e47f39d70b641493709dba140872e11",
+        "state": "PREPARED"
+      },
+      "spent_per_person": "2/25",
+      "stage": 2,
+      "two_recipients_identical": true
+    },
+    {
+      "committed_hash": "eb5edd8d790de1771d3bf552eee8d4a57fc389e9f197ace7a8894c9159dde4cd",
+      "model_hash": "7a276aef245c08e0fcf7b59474691fe769972f15fd96b6c264e3e98af9b807ab",
+      "reservation": {
+        "artifact_hash": null,
+        "node_digest": "caad3c9770801deed44262994548f9a6293add34315ae1a218ed79fff67148dd",
+        "node_id": "source-2",
+        "pending_sources": [
+          "source-2"
+        ],
+        "release_id": "release-2",
+        "revision": 3,
+        "source_closure_digest": "3844eebee076c79fc406d9168acb4dfe2baa6b7af73a5f8171366eb92355f85a",
+        "state": "PREPARED"
+      },
+      "spent_per_person": "3/25",
+      "stage": 3,
+      "two_recipients_identical": true
+    },
+    {
+      "committed_hash": "b36ce40e2edaf8bddf7d77067b93b257fca309de12dd5d4be5cee4f687b0185c",
+      "model_hash": "312318418689b83e3c23b6a5f3975f6bf0589cc8ea6b5f781b1181cb079a617c",
+      "reservation": {
+        "artifact_hash": null,
+        "node_digest": "4663f457450d0a988bf1ef06c53f1365084f3e24fde55336d0fa3d2cad3cf50f",
+        "node_id": "source-3",
+        "pending_sources": [
+          "source-3"
+        ],
+        "release_id": "release-3",
+        "revision": 4,
+        "source_closure_digest": "d2efed7481e050c672ef48a93496adc8ba55ab3908c5f99db3cb1fdc6ece00ca",
+        "state": "PREPARED"
+      },
+      "spent_per_person": "4/25",
+      "stage": 4,
+      "two_recipients_identical": true
+    },
+    {
+      "committed_hash": "2da4e29be49cd357f07f123b029634252a6b734d4f1e72aa37dd0dcfe4be082f",
+      "model_hash": "d8f84e04330372c41d06f4dd46735450b111dd248599e75a5a423b4caf70a04f",
+      "reservation": {
+        "artifact_hash": null,
+        "node_digest": "4ddb768f468707abbdb718a633d7c83b3be4dfe46c9dafcf7d3c91c1431cb672",
+        "node_id": "source-4",
+        "pending_sources": [
+          "source-4"
+        ],
+        "release_id": "release-4",
+        "revision": 5,
+        "source_closure_digest": "34a4bd08ade27a1a8edbe8067c75e7eaeab5aa7e7ef33211484ec5ad68a6aa80",
+        "state": "PREPARED"
+      },
+      "spent_per_person": "1/5",
+      "stage": 5,
+      "two_recipients_identical": true
+    }
+  ],
+  "status": "PASS",
+  "timing_scope": "One smoke execution including registration, computation, delivery and fault checks; not a comparative benchmark.",
+  "unique_model_executions": 5
+}

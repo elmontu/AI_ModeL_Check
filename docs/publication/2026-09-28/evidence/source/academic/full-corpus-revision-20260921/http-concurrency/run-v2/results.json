@@ -1,0 +1,866 @@
+{
+  "attempted": 30,
+  "attempts": [
+    {
+      "matching_orders": [
+        [
+          1,
+          0
+        ]
+      ],
+      "name": "01-distinct_commit-2026092401",
+      "overlap_ns": 14768800,
+      "responses": [
+        [
+          409,
+          "pipeline_stale"
+        ],
+        [
+          200,
+          null
+        ]
+      ],
+      "status": "pass",
+      "trace_sha256": "0d072b7b7baa6efa6916358f21244688b0733b2666481d82ed7c019e94b5fa5a"
+    },
+    {
+      "matching_orders": [
+        [
+          1,
+          0
+        ]
+      ],
+      "name": "02-distinct_commit-2026092402",
+      "overlap_ns": 17388700,
+      "responses": [
+        [
+          409,
+          "pipeline_stale"
+        ],
+        [
+          200,
+          null
+        ]
+      ],
+      "status": "pass",
+      "trace_sha256": "d76740a1466d0e9a50106f9c454224b7bfe48ce60165f88c04682295bb28c3da"
+    },
+    {
+      "matching_orders": [
+        [
+          1,
+          0
+        ]
+      ],
+      "name": "03-distinct_commit-2026092403",
+      "overlap_ns": 16294900,
+      "responses": [
+        [
+          409,
+          "pipeline_stale"
+        ],
+        [
+          200,
+          null
+        ]
+      ],
+      "status": "pass",
+      "trace_sha256": "9e3ecc73a5f32bb7471206bdfee35e1a8c7195904afb44e3646707f131be9b8d"
+    },
+    {
+      "matching_orders": [
+        [
+          0,
+          1
+        ]
+      ],
+      "name": "04-distinct_commit-2026092404",
+      "overlap_ns": 16017800,
+      "responses": [
+        [
+          200,
+          null
+        ],
+        [
+          409,
+          "pipeline_stale"
+        ]
+      ],
+      "status": "pass",
+      "trace_sha256": "96265baf56f7a5d323f28eea3ceae22744e297ab501f58e0a65c54d765703723"
+    },
+    {
+      "matching_orders": [
+        [
+          1,
+          0
+        ]
+      ],
+      "name": "05-distinct_commit-2026092405",
+      "overlap_ns": 15423400,
+      "responses": [
+        [
+          409,
+          "pipeline_stale"
+        ],
+        [
+          200,
+          null
+        ]
+      ],
+      "status": "pass",
+      "trace_sha256": "c635b7740b3a9cacfbe8c5fa119a219f0540e3eb4601a21b3b72dff9dd7b021e"
+    },
+    {
+      "matching_orders": [
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          0
+        ]
+      ],
+      "name": "06-same_commit-2026092401",
+      "overlap_ns": 15953500,
+      "responses": [
+        [
+          200,
+          null
+        ],
+        [
+          200,
+          null
+        ]
+      ],
+      "status": "pass",
+      "trace_sha256": "9324b89b0cba21c7c95bacc95ad447869571450864a42eb7086a0e69b0bb6c83"
+    },
+    {
+      "matching_orders": [
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          0
+        ]
+      ],
+      "name": "07-same_commit-2026092402",
+      "overlap_ns": 15896800,
+      "responses": [
+        [
+          200,
+          null
+        ],
+        [
+          200,
+          null
+        ]
+      ],
+      "status": "pass",
+      "trace_sha256": "533072db87141dacd88e24bdab78748a75647956f75c2a25065a61f35f3395d8"
+    },
+    {
+      "matching_orders": [
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          0
+        ]
+      ],
+      "name": "08-same_commit-2026092403",
+      "overlap_ns": 15426100,
+      "responses": [
+        [
+          200,
+          null
+        ],
+        [
+          200,
+          null
+        ]
+      ],
+      "status": "pass",
+      "trace_sha256": "895f2429ad41b03b90d142254fcb043f6bf22df623967009d69aff9ca4924c50"
+    },
+    {
+      "matching_orders": [
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          0
+        ]
+      ],
+      "name": "09-same_commit-2026092404",
+      "overlap_ns": 18811700,
+      "responses": [
+        [
+          200,
+          null
+        ],
+        [
+          200,
+          null
+        ]
+      ],
+      "status": "pass",
+      "trace_sha256": "9018c7efe2c7846ce4c0f5ae605dbe5f897871ac001b2ce87fd4248e7ba44507"
+    },
+    {
+      "matching_orders": [
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          0
+        ]
+      ],
+      "name": "10-same_commit-2026092405",
+      "overlap_ns": 18139800,
+      "responses": [
+        [
+          200,
+          null
+        ],
+        [
+          200,
+          null
+        ]
+      ],
+      "status": "pass",
+      "trace_sha256": "482706fa1d6192b4ab9c377fb518b5b77a0c19630760df8e9d850b0e90fa5b3e"
+    },
+    {
+      "matching_orders": [
+        [
+          0,
+          1
+        ]
+      ],
+      "name": "11-prepare_vs_commit-2026092401",
+      "overlap_ns": 16309000,
+      "responses": [
+        [
+          200,
+          null
+        ],
+        [
+          200,
+          null
+        ]
+      ],
+      "status": "pass",
+      "trace_sha256": "98535d4b2011465178169d6b21a876e42d2fb574ef56b82a47ac9b4024fe9bcb"
+    },
+    {
+      "matching_orders": [
+        [
+          1,
+          0
+        ]
+      ],
+      "name": "12-prepare_vs_commit-2026092402",
+      "overlap_ns": 15620600,
+      "responses": [
+        [
+          409,
+          "revision_conflict"
+        ],
+        [
+          200,
+          null
+        ]
+      ],
+      "status": "pass",
+      "trace_sha256": "86473894035798eec6fa90167b55e927fb847419c0b62ee783fdaa025f9de16e"
+    },
+    {
+      "matching_orders": [
+        [
+          1,
+          0
+        ]
+      ],
+      "name": "13-prepare_vs_commit-2026092403",
+      "overlap_ns": 19015100,
+      "responses": [
+        [
+          409,
+          "revision_conflict"
+        ],
+        [
+          200,
+          null
+        ]
+      ],
+      "status": "pass",
+      "trace_sha256": "e50a955743ff9791d67c9498ce514ae2111b63fb6489a5b2c3b582077983288f"
+    },
+    {
+      "matching_orders": [
+        [
+          1,
+          0
+        ]
+      ],
+      "name": "14-prepare_vs_commit-2026092404",
+      "overlap_ns": 20643700,
+      "responses": [
+        [
+          409,
+          "revision_conflict"
+        ],
+        [
+          200,
+          null
+        ]
+      ],
+      "status": "pass",
+      "trace_sha256": "79fbdb524a161b05b8a012193c540d5873693b15e930e88d493cdf2edddcca05"
+    },
+    {
+      "matching_orders": [
+        [
+          0,
+          1
+        ]
+      ],
+      "name": "15-prepare_vs_commit-2026092405",
+      "overlap_ns": 33320300,
+      "responses": [
+        [
+          200,
+          null
+        ],
+        [
+          200,
+          null
+        ]
+      ],
+      "status": "pass",
+      "trace_sha256": "1346607ad98f2f5759f1ef5c5dda25717ae4b5ddd9bb98be3465142d2b22d3c1"
+    },
+    {
+      "matching_orders": [
+        [
+          1,
+          0
+        ]
+      ],
+      "name": "16-checks_vs_commit-2026092401",
+      "overlap_ns": 18759400,
+      "responses": [
+        [
+          409,
+          "pipeline_stale"
+        ],
+        [
+          200,
+          null
+        ]
+      ],
+      "status": "pass",
+      "trace_sha256": "0faac7365b64f6f1acabf294d905553787bc136767317c9006a2c25979ce5466"
+    },
+    {
+      "matching_orders": [
+        [
+          1,
+          0
+        ]
+      ],
+      "name": "17-checks_vs_commit-2026092402",
+      "overlap_ns": 19065300,
+      "responses": [
+        [
+          409,
+          "pipeline_stale"
+        ],
+        [
+          200,
+          null
+        ]
+      ],
+      "status": "pass",
+      "trace_sha256": "e5189e0464514c9aa9b2c6fc460323e8370e89654cd8504f4af2e69862234203"
+    },
+    {
+      "matching_orders": [
+        [
+          1,
+          0
+        ]
+      ],
+      "name": "18-checks_vs_commit-2026092403",
+      "overlap_ns": 18971300,
+      "responses": [
+        [
+          409,
+          "pipeline_stale"
+        ],
+        [
+          200,
+          null
+        ]
+      ],
+      "status": "pass",
+      "trace_sha256": "a27a7de2767039c37de25de27a80c78d921fc3f67b63570aa3e6054cc68915f6"
+    },
+    {
+      "matching_orders": [
+        [
+          0,
+          1
+        ]
+      ],
+      "name": "19-checks_vs_commit-2026092404",
+      "overlap_ns": 19932300,
+      "responses": [
+        [
+          200,
+          null
+        ],
+        [
+          200,
+          null
+        ]
+      ],
+      "status": "pass",
+      "trace_sha256": "f7cccabe5df0a42e8ed9bc35fc92cab277214bdb95d7f27f145163557126c43d"
+    },
+    {
+      "matching_orders": [
+        [
+          1,
+          0
+        ]
+      ],
+      "name": "20-checks_vs_commit-2026092405",
+      "overlap_ns": 17549100,
+      "responses": [
+        [
+          409,
+          "pipeline_stale"
+        ],
+        [
+          200,
+          null
+        ]
+      ],
+      "status": "pass",
+      "trace_sha256": "e798b7a39737d8837d36118988c6a88c7931d3a6eec2931b48fdeb263606fea8"
+    },
+    {
+      "matching_orders": [
+        [
+          1,
+          0
+        ]
+      ],
+      "name": "21-review_vs_commit-2026092401",
+      "overlap_ns": 18445700,
+      "responses": [
+        [
+          409,
+          "pipeline_stale"
+        ],
+        [
+          200,
+          null
+        ]
+      ],
+      "status": "pass",
+      "trace_sha256": "705a8ab4edfcf037e53803e22912c7a33ef56b6fd66287f312dcf6b58e7e0629"
+    },
+    {
+      "matching_orders": [
+        [
+          1,
+          0
+        ]
+      ],
+      "name": "22-review_vs_commit-2026092402",
+      "overlap_ns": 17667800,
+      "responses": [
+        [
+          409,
+          "pipeline_stale"
+        ],
+        [
+          200,
+          null
+        ]
+      ],
+      "status": "pass",
+      "trace_sha256": "b5b5906ffa084388583aee156a9443393b8f8b55af4b6b56d7fe4f65c8de6449"
+    },
+    {
+      "matching_orders": [
+        [
+          0,
+          1
+        ]
+      ],
+      "name": "23-review_vs_commit-2026092403",
+      "overlap_ns": 18532900,
+      "responses": [
+        [
+          200,
+          null
+        ],
+        [
+          200,
+          null
+        ]
+      ],
+      "status": "pass",
+      "trace_sha256": "bb6d80dffdb7786bc69dec44172a273f6485186fb8cebb28f8e3c4dbce118679"
+    },
+    {
+      "matching_orders": [
+        [
+          1,
+          0
+        ]
+      ],
+      "name": "24-review_vs_commit-2026092404",
+      "overlap_ns": 17376800,
+      "responses": [
+        [
+          409,
+          "pipeline_stale"
+        ],
+        [
+          200,
+          null
+        ]
+      ],
+      "status": "pass",
+      "trace_sha256": "3e35866b968f691dade80800486a6cac745af682713cf20618e9531a15e219bc"
+    },
+    {
+      "matching_orders": [
+        [
+          1,
+          0
+        ]
+      ],
+      "name": "25-review_vs_commit-2026092405",
+      "overlap_ns": 15673100,
+      "responses": [
+        [
+          409,
+          "pipeline_stale"
+        ],
+        [
+          200,
+          null
+        ]
+      ],
+      "status": "pass",
+      "trace_sha256": "340a87c1e9405979f26626a66e3ffec7b5dd944b6db08fa65b20d9730224cb00"
+    },
+    {
+      "matching_orders": [
+        [
+          1,
+          0
+        ]
+      ],
+      "name": "26-revoke_vs_download-2026092401",
+      "overlap_ns": 11194400,
+      "responses": [
+        [
+          200,
+          null
+        ],
+        [
+          200,
+          null
+        ]
+      ],
+      "status": "pass",
+      "trace_sha256": "b2a1a950247671a4ecc10bf233f8bc89e0a135d7e330dd263d7e4adcddac9c97"
+    },
+    {
+      "matching_orders": [
+        [
+          0,
+          1
+        ]
+      ],
+      "name": "27-revoke_vs_download-2026092402",
+      "overlap_ns": 14162700,
+      "responses": [
+        [
+          200,
+          null
+        ],
+        [
+          409,
+          "release_revoked"
+        ]
+      ],
+      "status": "pass",
+      "trace_sha256": "75c5eb0059b92c2657d4e596a8b1ece4323f957cd9f9ee9d74bcf9c4ce45bc6c"
+    },
+    {
+      "matching_orders": [
+        [
+          0,
+          1
+        ]
+      ],
+      "name": "28-revoke_vs_download-2026092403",
+      "overlap_ns": 14781900,
+      "responses": [
+        [
+          200,
+          null
+        ],
+        [
+          409,
+          "release_revoked"
+        ]
+      ],
+      "status": "pass",
+      "trace_sha256": "4b53a7a32375fafa9a8988c12f7dbd99093d39bf0b2ab908cf757e19e0d25cc8"
+    },
+    {
+      "matching_orders": [
+        [
+          1,
+          0
+        ]
+      ],
+      "name": "29-revoke_vs_download-2026092404",
+      "overlap_ns": 11562200,
+      "responses": [
+        [
+          200,
+          null
+        ],
+        [
+          200,
+          null
+        ]
+      ],
+      "status": "pass",
+      "trace_sha256": "6d5e87990822ecb72802a18ce9fde037abb8e9f5a216bec710da5fdaed71f517"
+    },
+    {
+      "matching_orders": [
+        [
+          1,
+          0
+        ]
+      ],
+      "name": "30-revoke_vs_download-2026092405",
+      "overlap_ns": 12054800,
+      "responses": [
+        [
+          200,
+          null
+        ],
+        [
+          200,
+          null
+        ]
+      ],
+      "status": "pass",
+      "trace_sha256": "7a0da33f70aaccff299dc657ba458908a9effc9953fd5de63a9515c35c5c7ffc"
+    }
+  ],
+  "failed": 0,
+  "file_sha256": {
+    "01-distinct_commit-2026092401/legacy/.export-history": "9e27b16c284bc6d330115cadfd111eab39a0d99622fa04880c3ea9c5a3aea3a4",
+    "01-distinct_commit-2026092401/legacy/export.sqlite3": "48119429ef2a58889d7633224510671a3124b5cf873acaba0bc5fb94008803d8",
+    "01-distinct_commit-2026092401/operator/assurance.sqlite3": "27d29d464a7960f9f6a72b3c6f2a52e294fb5e6582ffb3d0511966e8d6439c89",
+    "01-distinct_commit-2026092401/operator/workflow.json": "92aeb9d2b6fc0f553be47d1aacfdfebb5535e5dd0af38594036f2c476d9e6aa7",
+    "01-distinct_commit-2026092401/trace.json": "0d072b7b7baa6efa6916358f21244688b0733b2666481d82ed7c019e94b5fa5a",
+    "02-distinct_commit-2026092402/legacy/.export-history": "11e39f626de3c636c46f2f21b4c965d45b6db10887fc543908adcf34c20e3563",
+    "02-distinct_commit-2026092402/legacy/export.sqlite3": "7bff3b88d70610e14c5ac3967b0305e875b71912ce3c8a18870a19ca23522167",
+    "02-distinct_commit-2026092402/operator/assurance.sqlite3": "fb7aaab8d2a5a23021af8ba7fc160287cd58b1b5074b482b43956ecec91afe0b",
+    "02-distinct_commit-2026092402/operator/workflow.json": "d6326b43455bacfe517a37ceaebd723e0eac9d6ac9ced5da70af66158e81d666",
+    "02-distinct_commit-2026092402/trace.json": "d76740a1466d0e9a50106f9c454224b7bfe48ce60165f88c04682295bb28c3da",
+    "03-distinct_commit-2026092403/legacy/.export-history": "fb40bb62d2eb4dbbdd885da8cb9553e8f23656372f7684643861c887da625ad3",
+    "03-distinct_commit-2026092403/legacy/export.sqlite3": "00bdefb75079f6b0b66665c7e09d858c7189fd4249d9282e52b0c256306b1914",
+    "03-distinct_commit-2026092403/operator/assurance.sqlite3": "b6ea9f2dd52c3244cad2f25f7058ade67cd9e38177493303a2541cf266f28b02",
+    "03-distinct_commit-2026092403/operator/workflow.json": "07fd6c1710832d569d8e954a907f9d4bd5677559d9afff8f24289dd7e2c1628d",
+    "03-distinct_commit-2026092403/trace.json": "9e3ecc73a5f32bb7471206bdfee35e1a8c7195904afb44e3646707f131be9b8d",
+    "04-distinct_commit-2026092404/legacy/.export-history": "674765fae976cd24f9d590e1603cd353b36eaffe89d48932c216830a9c2fd80c",
+    "04-distinct_commit-2026092404/legacy/export.sqlite3": "ba67b0c82a5dffcaeb39a535bc99eea9d662e44cd6fc43be24dcd3577c11bf70",
+    "04-distinct_commit-2026092404/operator/assurance.sqlite3": "d83ceda4abc7b3600d7692c7ac5831bac025f516992cd32260489c558431c07b",
+    "04-distinct_commit-2026092404/operator/workflow.json": "e30bb2c25401da7e86d8f56463f9ebee3b11ef4a9aecd2f9392a8fb419ebf3de",
+    "04-distinct_commit-2026092404/trace.json": "96265baf56f7a5d323f28eea3ceae22744e297ab501f58e0a65c54d765703723",
+    "05-distinct_commit-2026092405/legacy/.export-history": "763dccbc3cc36e71a10024fd00c356b68c7085682f516ca2ea5c0c029b5b5c45",
+    "05-distinct_commit-2026092405/legacy/export.sqlite3": "eb0f5d9812a5030f31ef706327d90aae035fabe0a9cf8a51523cdfd3ceb52a54",
+    "05-distinct_commit-2026092405/operator/assurance.sqlite3": "edc5a0d89fb921ed1a6188590349ba81638313fe6213c57cf38357d0d345e75e",
+    "05-distinct_commit-2026092405/operator/workflow.json": "236fb4fdb2b9f8e84184b28548702025e39053f3efcd3bde7754fbf704a07c17",
+    "05-distinct_commit-2026092405/trace.json": "c635b7740b3a9cacfbe8c5fa119a219f0540e3eb4601a21b3b72dff9dd7b021e",
+    "06-same_commit-2026092401/legacy/.export-history": "670799c3bdd22f5818fbd22b04b4491ab47b8d0cc69376d0e35013be735cc8de",
+    "06-same_commit-2026092401/legacy/export.sqlite3": "1c161c0229fa19bfbf005bfe5dea35b6d8ad35c48bf5bc74d8ae0df92170d5df",
+    "06-same_commit-2026092401/operator/assurance.sqlite3": "eb0eb821f425b9fae566df9fe93c8d6a46f9bf0a472cc534c597e581eb35b758",
+    "06-same_commit-2026092401/operator/workflow.json": "ff6804a9a57be39d02589cbf36653caa9f5faa52a995e6b19362543a43800498",
+    "06-same_commit-2026092401/trace.json": "9324b89b0cba21c7c95bacc95ad447869571450864a42eb7086a0e69b0bb6c83",
+    "07-same_commit-2026092402/legacy/.export-history": "ece15bca47e8e0c20e8da923ce1aeafb5249a3c465e17e3d349597409ea7521f",
+    "07-same_commit-2026092402/legacy/export.sqlite3": "e0ff18ec7c59aab7ce77e9410d80e82b0a5df446498e365db075dadf09d68f5b",
+    "07-same_commit-2026092402/operator/assurance.sqlite3": "60f85becb83ae3e06cad6301f23d8149979e9003f4cf713c552acaeebc2c3b5c",
+    "07-same_commit-2026092402/operator/workflow.json": "055e89873bb606a0781833d2ad51b58f52586754e6bfd5f7f3ff7e8ca2dec763",
+    "07-same_commit-2026092402/trace.json": "533072db87141dacd88e24bdab78748a75647956f75c2a25065a61f35f3395d8",
+    "08-same_commit-2026092403/legacy/.export-history": "f0696fd7493a1c775edca34e55445ec93e09b8624d43c1ef910fb1258936b695",
+    "08-same_commit-2026092403/legacy/export.sqlite3": "878d8fe78d799408f9c9b0469554be774282bfc5b7561eece5c493f0648f6ce5",
+    "08-same_commit-2026092403/operator/assurance.sqlite3": "3a979e4ffbae893420680d975775645dde28eab156c28306aa3db25237cc7adf",
+    "08-same_commit-2026092403/operator/workflow.json": "7d0f4a46ab4bb8c21500c7306d6a5d3fe3d73a309603555f3b7ae7fbd02b3c5a",
+    "08-same_commit-2026092403/trace.json": "895f2429ad41b03b90d142254fcb043f6bf22df623967009d69aff9ca4924c50",
+    "09-same_commit-2026092404/legacy/.export-history": "9ac475153b5b6874361f9b8d66de7d37fe4316e8d0cc338afe52e31eb9d84de4",
+    "09-same_commit-2026092404/legacy/export.sqlite3": "ae3d9d95c8988603578bb7c62df128f37a16e1dca5ebc7241f47bd2168e84327",
+    "09-same_commit-2026092404/operator/assurance.sqlite3": "4e76b2a3ad998d491f31195709493b9cca66511bc5e5a95dae889bbad9616226",
+    "09-same_commit-2026092404/operator/workflow.json": "ca922b28c61844ff5167dd8d77ac7cf57d7f3a656d6f565baf3290e17a73d946",
+    "09-same_commit-2026092404/trace.json": "9018c7efe2c7846ce4c0f5ae605dbe5f897871ac001b2ce87fd4248e7ba44507",
+    "10-same_commit-2026092405/legacy/.export-history": "e23196b8f1a104df7ba65ca4aad2277776ecb69b6850270b9fa85afd057f48fb",
+    "10-same_commit-2026092405/legacy/export.sqlite3": "19afbc8d56a3e22339ddef885e7a0c59e3966bccdd0dc8ba2bd9a06dec56ca79",
+    "10-same_commit-2026092405/operator/assurance.sqlite3": "d4b99fa985df2b73ee6dd7cac48b0e6956a2981761a7b282b7e01df2bae3581e",
+    "10-same_commit-2026092405/operator/workflow.json": "206a4255c8bbb9a0c7a871271e7506ac6f6d99f660ec37a4a4a95be378e9c9c2",
+    "10-same_commit-2026092405/trace.json": "482706fa1d6192b4ab9c377fb518b5b77a0c19630760df8e9d850b0e90fa5b3e",
+    "11-prepare_vs_commit-2026092401/legacy/.export-history": "77d4737c1caa9679f02aeb077fbd47c2070d4a38c7268a842a440e504be06bae",
+    "11-prepare_vs_commit-2026092401/legacy/export.sqlite3": "66c63e40886ce5caeff93d4191ab17f2e98d45c18facf94f9b009938f93712de",
+    "11-prepare_vs_commit-2026092401/operator/assurance.sqlite3": "1e71c6acb636ad55d7b82a05704248c1f606adaf6e7fa06171b377a54f5bf17e",
+    "11-prepare_vs_commit-2026092401/operator/workflow.json": "4dfd6d705865777bbddd87d35b55a658260268f759e44d640730c3adf2fd2467",
+    "11-prepare_vs_commit-2026092401/trace.json": "98535d4b2011465178169d6b21a876e42d2fb574ef56b82a47ac9b4024fe9bcb",
+    "12-prepare_vs_commit-2026092402/legacy/.export-history": "79d76e6002339510625620dee08314e860b6eb4f26ea2446bc6aa5af499baeae",
+    "12-prepare_vs_commit-2026092402/legacy/export.sqlite3": "e08ef257d713eb4aea22bec9ad727ced356e95a0d41942b02ca0ea19bac3d007",
+    "12-prepare_vs_commit-2026092402/operator/assurance.sqlite3": "73fef1b86a018db0e92bdbc2c7d1b57db28af14acb590619a1ae094eb8f8d824",
+    "12-prepare_vs_commit-2026092402/operator/workflow.json": "130c0a121b6fe2e72a3e799cf0b7830ac46e8c078d5716a82f69e801e6843e69",
+    "12-prepare_vs_commit-2026092402/trace.json": "86473894035798eec6fa90167b55e927fb847419c0b62ee783fdaa025f9de16e",
+    "13-prepare_vs_commit-2026092403/legacy/.export-history": "1342a9f59ab60a3b56012056f1aef78fb66fcea83e740371889eaf666ef7090b",
+    "13-prepare_vs_commit-2026092403/legacy/export.sqlite3": "10692b52afaa76d2de0d44847a4e531b1d63720038474b28671a44bba79de192",
+    "13-prepare_vs_commit-2026092403/operator/assurance.sqlite3": "63d50e9ac01f536f84fab0ad90abb1c6b14a9d26a359f7cffc2d2a8ba7f68a99",
+    "13-prepare_vs_commit-2026092403/operator/workflow.json": "ae4f29360f65d9ffb6055150633ad614ce0d399cf4af859ff0f41f3cbe6da9c1",
+    "13-prepare_vs_commit-2026092403/trace.json": "e50a955743ff9791d67c9498ce514ae2111b63fb6489a5b2c3b582077983288f",
+    "14-prepare_vs_commit-2026092404/legacy/.export-history": "954978b4b0e2f711a0916589ceabca4db08795e3c8a98a5b427cc51967d186fe",
+    "14-prepare_vs_commit-2026092404/legacy/export.sqlite3": "f3d3b7d900801833238481f2292631fa1d9ce2aedbb3b2e965010009a4bc2681",
+    "14-prepare_vs_commit-2026092404/operator/assurance.sqlite3": "8e141c07b44a4a55076991c8cea1e943b7df0cdbf47d563b406aae27ed921077",
+    "14-prepare_vs_commit-2026092404/operator/workflow.json": "1e81b74bbf2ddca55107720c4e142a5723eb11e075a66d73e06745b0be22e089",
+    "14-prepare_vs_commit-2026092404/trace.json": "79fbdb524a161b05b8a012193c540d5873693b15e930e88d493cdf2edddcca05",
+    "15-prepare_vs_commit-2026092405/legacy/.export-history": "549197dea7ae877bb3e8f8618ba0025274a0ad384c4ca29b7d230e981e59a511",
+    "15-prepare_vs_commit-2026092405/legacy/export.sqlite3": "b76df6bb81114170973f86970c9984b62252a363bc5ef5aeb2216088884d1bed",
+    "15-prepare_vs_commit-2026092405/operator/assurance.sqlite3": "d4a7d0c2be4b166b544d232f9bcc997c76b54d93eb17a2416f0726276b18cf90",
+    "15-prepare_vs_commit-2026092405/operator/workflow.json": "68f54626ce3f070bdddea19847c47521cf0b423677f25c1782440e14a1b1af00",
+    "15-prepare_vs_commit-2026092405/trace.json": "1346607ad98f2f5759f1ef5c5dda25717ae4b5ddd9bb98be3465142d2b22d3c1",
+    "16-checks_vs_commit-2026092401/legacy/.export-history": "bd03499c9656f727b1ad27bb5741ee0b0d474dc1d8b8eaebbc0164ef9bfb30ad",
+    "16-checks_vs_commit-2026092401/legacy/export.sqlite3": "be7a6f0871e7ba96a843aae04ae15b14c2cb4b34aa9e725eafe07c24537b749f",
+    "16-checks_vs_commit-2026092401/operator/assurance.sqlite3": "22bb55d9619a1390112718d05471400dd9192000a32e461f463d48044277e7bf",
+    "16-checks_vs_commit-2026092401/operator/workflow.json": "44daa29b8d432e539013c423ef1170eee5be34d1f8e351f377b5986ffb3184b1",
+    "16-checks_vs_commit-2026092401/trace.json": "0faac7365b64f6f1acabf294d905553787bc136767317c9006a2c25979ce5466",
+    "17-checks_vs_commit-2026092402/legacy/.export-history": "f2bee66f06a522be34cf84d219750a155d4e3cbecc717cce29db7607a9885630",
+    "17-checks_vs_commit-2026092402/legacy/export.sqlite3": "302cc895a5b96ba8878e14b7de368cf33f8398de1d09ec0490c021823d5d24c7",
+    "17-checks_vs_commit-2026092402/operator/assurance.sqlite3": "e68af460bb28f48260d87f7965b293939fab2a7a18563394685b7e8dabe8c3a5",
+    "17-checks_vs_commit-2026092402/operator/workflow.json": "12f3eeecfea24cab877d6cb75aae9d31cf4969f30e2076519ebe3dd15d8212a1",
+    "17-checks_vs_commit-2026092402/trace.json": "e5189e0464514c9aa9b2c6fc460323e8370e89654cd8504f4af2e69862234203",
+    "18-checks_vs_commit-2026092403/legacy/.export-history": "cb08492ae819ce7529d5f60cddfd9e417cd17cd0dc9453e00f31bceb1e0d3379",
+    "18-checks_vs_commit-2026092403/legacy/export.sqlite3": "ca16f4400e5044626898de0324b63678ec98857c04fbe884e7110834b783c99c",
+    "18-checks_vs_commit-2026092403/operator/assurance.sqlite3": "89bd2d506958c22cb8864581e3febcbd71a020eba7bce3ecc317e215d3e61b3c",
+    "18-checks_vs_commit-2026092403/operator/workflow.json": "d2c035146a19bab4cc78ba5766ceb25b4e985434290bd50f912a5017c6e282ff",
+    "18-checks_vs_commit-2026092403/trace.json": "a27a7de2767039c37de25de27a80c78d921fc3f67b63570aa3e6054cc68915f6",
+    "19-checks_vs_commit-2026092404/legacy/.export-history": "d459e1f25a3f9d57be9bbe95affaf892fd45495e875a64de5125242d8790618c",
+    "19-checks_vs_commit-2026092404/legacy/export.sqlite3": "f0f81daa9fc64a369ee199837a9a0e46448532cd1059dc55612f750bab379ac4",
+    "19-checks_vs_commit-2026092404/operator/assurance.sqlite3": "176cb03527db5978b5cc6c81d882cdac05648dc78cd04764717d403d0b578f2d",
+    "19-checks_vs_commit-2026092404/operator/workflow.json": "2c922b538e81223199585ab8828c1c851f50b2fd14fd15f460ca9e44a1a86a12",
+    "19-checks_vs_commit-2026092404/trace.json": "f7cccabe5df0a42e8ed9bc35fc92cab277214bdb95d7f27f145163557126c43d",
+    "20-checks_vs_commit-2026092405/legacy/.export-history": "e54da95b44cae034d4dd4184d4c298fd81764528164ef1b46b8a0501cb1f20ed",
+    "20-checks_vs_commit-2026092405/legacy/export.sqlite3": "5f19eb3294c323f8395d8443879b7994988d800bbe1f51103b963ff4941f7490",
+    "20-checks_vs_commit-2026092405/operator/assurance.sqlite3": "0f4c38c30a881b6910b3138deedac6d4b59b8749e7f520ed59d227cf9b11381b",
+    "20-checks_vs_commit-2026092405/operator/workflow.json": "a2592cb65397eb18689764579fb93d161a3a015e17fae57f27f217a317966062",
+    "20-checks_vs_commit-2026092405/trace.json": "e798b7a39737d8837d36118988c6a88c7931d3a6eec2931b48fdeb263606fea8",
+    "21-review_vs_commit-2026092401/legacy/.export-history": "c2bc880faa1818ba069a480b08ab5a9945fb3db8188fb45e7b75eeb8805c7f69",
+    "21-review_vs_commit-2026092401/legacy/export.sqlite3": "5ccb44a379492ef23af9987204851613b64a49fd3635921b7389db5278fdca14",
+    "21-review_vs_commit-2026092401/operator/assurance.sqlite3": "76b4e31f0572a3fb64fc756607abfdf79517ab7e6cad8aaae72dd5fde719530d",
+    "21-review_vs_commit-2026092401/operator/workflow.json": "de55736f4543b287497d62464bf2dccee0e0e8ebf4fc9777ff7950921cb33aac",
+    "21-review_vs_commit-2026092401/trace.json": "705a8ab4edfcf037e53803e22912c7a33ef56b6fd66287f312dcf6b58e7e0629",
+    "22-review_vs_commit-2026092402/legacy/.export-history": "c6681358842da750a6ff7e628c2f3cd19b9d758719afec1991356e261408933b",
+    "22-review_vs_commit-2026092402/legacy/export.sqlite3": "2f11cbd1cf0f177004ee402c66e12efce35e0e7350bab5e593c4205818290c87",
+    "22-review_vs_commit-2026092402/operator/assurance.sqlite3": "97232988cf3c1dd3660fdfd5c4ee69571d92c278d022f97e89dd53d060bb19cc",
+    "22-review_vs_commit-2026092402/operator/workflow.json": "4dbe45dc807aa65accd2ef3c963fba8b601664ee50388f69396878ee4fb89f62",
+    "22-review_vs_commit-2026092402/trace.json": "b5b5906ffa084388583aee156a9443393b8f8b55af4b6b56d7fe4f65c8de6449",
+    "23-review_vs_commit-2026092403/legacy/.export-history": "392de45a0bea2ea434b3b1e4771caa0c2bbf9eac0ae7688664a347d832f42ef2",
+    "23-review_vs_commit-2026092403/legacy/export.sqlite3": "4034fc0da6b7f7e32f8839d823b144bead14245305fc1a3c1f2bac630eed0fce",
+    "23-review_vs_commit-2026092403/operator/assurance.sqlite3": "b1c06a5e0ef3aaea2537a391dbed12ab9685f4ee9fc46aaf04f5dc9c1a03dbfd",
+    "23-review_vs_commit-2026092403/operator/workflow.json": "d05c657e1102d676a6146f7f52b5eec070b9209627c4dc91db73482b83a2b484",
+    "23-review_vs_commit-2026092403/trace.json": "bb6d80dffdb7786bc69dec44172a273f6485186fb8cebb28f8e3c4dbce118679",
+    "24-review_vs_commit-2026092404/legacy/.export-history": "a397ff93216915827061afb2e5d7bfec964403c9c6d14d18bdc90b0d5d0f6d69",
+    "24-review_vs_commit-2026092404/legacy/export.sqlite3": "afe1d20fb3480e6ac233db426a99bba1e0494a4da7ffe9480af43dbdfe89c864",
+    "24-review_vs_commit-2026092404/operator/assurance.sqlite3": "c21babe0d2cf66035acef6b13898a8eb47fe1a5f3edcab7a76e56ab178bcbf9f",
+    "24-review_vs_commit-2026092404/operator/workflow.json": "dc8b87680b7f4d0370c7d4f79a4c59d64cb347841432e10346181708869dafcb",
+    "24-review_vs_commit-2026092404/trace.json": "3e35866b968f691dade80800486a6cac745af682713cf20618e9531a15e219bc",
+    "25-review_vs_commit-2026092405/legacy/.export-history": "7af1c154776fa9683440a8c8addd459421d7b4c88f7cff5efc17aa00ae9d438a",
+    "25-review_vs_commit-2026092405/legacy/export.sqlite3": "40cd83ff281798215ffce8f111c57857c9020a884858e5174fdb846ae13c6e3c",
+    "25-review_vs_commit-2026092405/operator/assurance.sqlite3": "e0e951b1437a7b509f5bf77f44d3d440c478ad35b1018768de8b16d9041145af",
+    "25-review_vs_commit-2026092405/operator/workflow.json": "5728bea99d20230dd935a233333b968b5a8bf2ee036cf7ed3d4cf360836dac09",
+    "25-review_vs_commit-2026092405/trace.json": "340a87c1e9405979f26626a66e3ffec7b5dd944b6db08fa65b20d9730224cb00",
+    "26-revoke_vs_download-2026092401/legacy/.export-history": "63ba5ddcd373b39918473c0a78ce464e8def6f6bdad5619bb9f649a07aabbbf9",
+    "26-revoke_vs_download-2026092401/legacy/export.sqlite3": "e3688e829f733f7ab3510b75195d0d3886b00d610c7b70d6fa9b1dc31bdd9144",
+    "26-revoke_vs_download-2026092401/operator/assurance.sqlite3": "69968f3d13402ba4bc676174b989b5aa0f9f21cae88478dd2bcdb8cb638dd171",
+    "26-revoke_vs_download-2026092401/operator/workflow.json": "5fb3501e70a8f1358c7d85396c775e7717e891c1e396cb6f383276f98396d0e1",
+    "26-revoke_vs_download-2026092401/trace.json": "b2a1a950247671a4ecc10bf233f8bc89e0a135d7e330dd263d7e4adcddac9c97",
+    "27-revoke_vs_download-2026092402/legacy/.export-history": "bcdba8a13ce00834f8632f67e7a3e939d2f33716d815283ab90e40a6599efb90",
+    "27-revoke_vs_download-2026092402/legacy/export.sqlite3": "e50338694cdf8a6370c2a52aebdb1cde898952bd250b5b78c22cd358754a4f75",
+    "27-revoke_vs_download-2026092402/operator/assurance.sqlite3": "884fb4d7e9b7b0dfbaa54b90f928ff9642983c9f0af0c4bdd98e2a4bdb00dc43",
+    "27-revoke_vs_download-2026092402/operator/workflow.json": "2f4b3e0c1e55fbcd1f457f76e3e88c9f45443e8d6e36507ccb7273ec25f22868",
+    "27-revoke_vs_download-2026092402/trace.json": "75c5eb0059b92c2657d4e596a8b1ece4323f957cd9f9ee9d74bcf9c4ce45bc6c",
+    "28-revoke_vs_download-2026092403/legacy/.export-history": "5b6b7840f24c452d2afd3c4c23244673675fbe0e55423e08aadbdb357b264cef",
+    "28-revoke_vs_download-2026092403/legacy/export.sqlite3": "77da594c285c074df23c5815b8aed670e5d0f2249ffaa91fb4a7cccd675c395d",
+    "28-revoke_vs_download-2026092403/operator/assurance.sqlite3": "8ba02e3ffe8da905dd924cfb5b822777457b075f5ee5738ad846c846ba716d13",
+    "28-revoke_vs_download-2026092403/operator/workflow.json": "08bd13f1a3c569a35ac1559dfff903bec417e7595150f7c9a2861db17cb1fc95",
+    "28-revoke_vs_download-2026092403/trace.json": "4b53a7a32375fafa9a8988c12f7dbd99093d39bf0b2ab908cf757e19e0d25cc8",
+    "29-revoke_vs_download-2026092404/legacy/.export-history": "a313d94b0fbbf93b252ea11cfd47cddb8e1e15dc7338a34199b6cfe67bf4fcf6",
+    "29-revoke_vs_download-2026092404/legacy/export.sqlite3": "aaac1c96b8aa6094dbb0c9623642544a6b75f5d6ca2b4999000d62b972976445",
+    "29-revoke_vs_download-2026092404/operator/assurance.sqlite3": "094e2f2014d242be80f5fcd51a6c4785fceb7ed3ca229850c6eb1de01c32234d",
+    "29-revoke_vs_download-2026092404/operator/workflow.json": "71177a0c2ed1857158bc269e63f43b35a8ad5b85e41160e015e24a0a209d5bbf",
+    "29-revoke_vs_download-2026092404/trace.json": "6d5e87990822ecb72802a18ce9fde037abb8e9f5a216bec710da5fdaed71f517",
+    "30-revoke_vs_download-2026092405/legacy/.export-history": "d8cc5808209367cd0084fbd3334858ec982c2f0d6610fa18d2a9069c76e126aa",
+    "30-revoke_vs_download-2026092405/legacy/export.sqlite3": "3b94aca5f68e17f0ec2b44998db2538ac4bd4a8d01f06d43238df55ef0d70b16",
+    "30-revoke_vs_download-2026092405/operator/assurance.sqlite3": "133dc00a147cab9f7ac3b52b7f607df9119c1812a776881da511ba8002393c91",
+    "30-revoke_vs_download-2026092405/operator/workflow.json": "feeb818b2b3dbf8475d778c9d40ca7dd75173a3b1eed4b3e50c2d1a05350ad08",
+    "30-revoke_vs_download-2026092405/trace.json": "7a0da33f70aaccff299dc657ba458908a9effc9953fd5de63a9515c35c5c7ffc"
+  },
+  "finished_at": "2026-09-21T13:37:10.717951+00:00",
+  "not_run": 0,
+  "passed": 30,
+  "planned": 30,
+  "prespec_sha256": "36efcd280b94dcbe3bf1f5a86b55543be2507c24c20fc5467ceabeb7c62ce613",
+  "schema": "http-concurrency-results-v1",
+  "source_sha256": {
+    "academic/full-corpus-revision-20260921/http-concurrency/oracle.py": "0930384b40e34193b05d62093d5e147ca675a004f006c0c2310b9a59adf49f4c",
+    "academic/full-corpus-revision-20260921/http-concurrency/protocol.md": "adaddf5f972d59cc94b1d573cc1f2f5955374200dba14cc370b708588e129fb4",
+    "academic/full-corpus-revision-20260921/http-concurrency/run_concurrency.py": "cb88fc8a8e648837a449189595457950da31719edffae66d18664f812b1e5bef",
+    "academic/full-corpus-revision-20260921/http-concurrency/test_oracle.py": "aac3387f7ff226c343a0bac26210e06c5af4846ba2fd0896408d2fcad56ecbb7",
+    "src/model_release_assurance/export_poc/__init__.py": "8a770678e405b53b7ff0799643e57c4b4529f822f6becf44c5d3224683dd8cdf",
+    "src/model_release_assurance/export_poc/__main__.py": "2da3138d6b272c8e0110206cf2b6e6b1a2be416f03327424ab2c4fbf9713e09b",
+    "src/model_release_assurance/export_poc/api.py": "d1a7bbd04c576ffc66e8fbfff1f929af5d94f97f57bb267cc27253b002cc76ec",
+    "src/model_release_assurance/export_poc/cli.py": "f1c4b8b29cfecd4bdd889fe85cef2caf80d8153c87a6112c8f01b5ab89c506e1",
+    "src/model_release_assurance/export_poc/mechanism.py": "c4f6d9a583f21670bdfd91ec6779647ae4d3c4071bc062ba1e2bdfd0d4f13254",
+    "src/model_release_assurance/export_poc/protocol.py": "df96fd55c4e5998baa1f1c4bf75429a8f013ed86b593ff4970a172e4d7bb1d75",
+    "src/model_release_assurance/export_poc/store.py": "8ea8801e7d32c30df517f048110e6d03d0aac28aa1046628ca161e8f324bad57",
+    "src/model_release_assurance/export_poc/tools.py": "fe3eba58ec53d026d2e4d657b79058bb510f410e6d50ecfd685c46dbc96351e2",
+    "src/model_release_assurance/temporal_assurance/__init__.py": "80167135e01b3145843fdd41426440de55b57f5d9824e5299964a64067ed4e06",
+    "src/model_release_assurance/temporal_assurance/__main__.py": "4abea20c813b8bfc3449404020988370710ca22a40ade743c548fd5fbe584bee",
+    "src/model_release_assurance/temporal_assurance/pipeline.py": "ac8e7c86b4f135db00d25fd49857f061c734ad66166615fddd767496ad5052ff",
+    "src/model_release_assurance/temporal_assurance/store.py": "71f82a62cf080293c1845c5cd08a66737b1749daf30b648bd3727f486c5ef60b",
+    "src/model_release_assurance/temporal_assurance/web.py": "0db924d21162494ac8db254ce52c2c247bbe4301a82047a0dac24cec6d27627c"
+  },
+  "source_unchanged": true,
+  "started_at": "2026-09-21T13:37:01.304651+00:00",
+  "status": "pass"
+}

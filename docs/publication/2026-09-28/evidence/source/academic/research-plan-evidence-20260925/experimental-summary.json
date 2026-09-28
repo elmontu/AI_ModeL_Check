@@ -1,0 +1,831 @@
+{
+  "schema": "research-plan-experimental-extraction-v1",
+  "date": "2026-09-25",
+  "scope": "Read-only extraction and consistency checks of saved results. No training, noise draws, tests, mutation of historical evidence, or new population validation. None of these studies evaluates unlearning.",
+  "provenance": [
+    {
+      "id": "central_results",
+      "path": "<LOCAL_DRIVE_D>/model_audit_data/experiments/private-export-systems-20260925/central-scale-v1/results.json",
+      "sha256": "4c31c72aebc00203378517e5ed2facfd8de07bcc08b1258b708065c061ce0f76",
+      "bytes": 304063
+    },
+    {
+      "id": "local_results",
+      "path": "<LOCAL_DRIVE_D>/model_audit_data/experiments/private-export-systems-20260925/broker-scale-v1/results.json",
+      "sha256": "b9e3db8cc7dddd86e1ec7eb47675600df6acbde5d752b5f8f79aa6f23909189c",
+      "bytes": 460469
+    },
+    {
+      "id": "million_results",
+      "path": "<LOCAL_DRIVE_D>/model_audit_data/experiments/private-export-systems-20260925/broker-million-v1/results.json",
+      "sha256": "900f3f9092d32adf5214e5e994b5e6dd1976dfcafb7b165c51a3fde1d731329d",
+      "bytes": 11940
+    },
+    {
+      "id": "matched_audit",
+      "path": "<REPOSITORY>/academic/information-acquisition-next-20260925/matched-audit-v1/audit.json",
+      "sha256": "62ddf09ae91630584e0c96bf8e946c0b61b72b0cb255a99fc45511c7d4d12d26",
+      "bytes": 156721
+    },
+    {
+      "id": "model_history_results",
+      "path": "<REPOSITORY>/academic/information-acquisition-next-20260925/model-history-exact-v5/results.json",
+      "sha256": "6694b6078f31cfee946467d763b588a1e7549402d10780c51f344c81029a8b21",
+      "bytes": 229143
+    },
+    {
+      "id": "breadth_audit",
+      "path": "<REPOSITORY>/academic/information-acquisition-next-20260925/breadth-completed/snapshot-20260925T030116701714Z-87cfc4/report.json",
+      "sha256": "c6574639d8be2975262a1e09c8da95e5ac03cdfae4948328f97f7ba9939745a5",
+      "bytes": 493795
+    },
+    {
+      "id": "central_prior_independent_audit",
+      "path": "<REPOSITORY>/academic/private-export-systems-20260925/central-audit.md",
+      "sha256": "0e6da52894340680023717db29749686f8bc42829db46bf3c286e38c63acfb1c",
+      "bytes": 3855
+    },
+    {
+      "id": "central_frozen_source",
+      "path": "<LOCAL_DRIVE_D>/model_audit_data/experiments/private-export-systems-20260925/central-scale-v1/central_source.py",
+      "sha256": "bc4cc70d8b868c20400d9ab62d26ecf5b698d0ebf266c4449642e489a3883ba4",
+      "bytes": 17531
+    },
+    {
+      "id": "central_frozen_plan",
+      "path": "<LOCAL_DRIVE_D>/model_audit_data/experiments/private-export-systems-20260925/central-scale-v1/plan.json",
+      "sha256": "36f3c6037b9d0fe75e555025bba55117a99e0e789afff2cf43e73e85c6ed16a3",
+      "bytes": 3945
+    },
+    {
+      "id": "central_reference_generator",
+      "path": "<LOCAL_DRIVE_D>/model_audit_data/experiments/private-export-systems-20260925/central-scale-v1/reference_generator_source.py",
+      "sha256": "8d49e9805d152cea31aee0631c77d2499a8765bead673759091e154bff2600e6",
+      "bytes": 23578
+    },
+    {
+      "id": "model_history_theory",
+      "path": "<REPOSITORY>/academic/information-acquisition-next-20260925/model-history-theory.md",
+      "sha256": "d24784bf5641f1672a6d89edfdc404cacf4f3447e10cf1ead140f64c327153d4",
+      "bytes": 17935
+    },
+    {
+      "id": "matched_hmda_results",
+      "path": "<LOCAL_DRIVE_D>/model_audit_data/experiments/multicorpus-export-20260925/matched-acquisition-v1/run-hmda/results.json",
+      "sha256": "e3c28aadbbdb96e663c521388999294ccb8e9a4026c85ee5089aad2ce180eb90",
+      "bytes": 215120
+    },
+    {
+      "id": "matched_tlc_results",
+      "path": "<LOCAL_DRIVE_D>/model_audit_data/experiments/multicorpus-export-20260925/matched-acquisition-v1/run-tlc/results.json",
+      "sha256": "dcbef7e653a083d70536e743e8032558c3616c89b6280bdfffb49e3cd84996f4",
+      "bytes": 213124
+    },
+    {
+      "id": "matched_bts_results",
+      "path": "<LOCAL_DRIVE_D>/model_audit_data/experiments/multicorpus-export-20260925/matched-acquisition-v1/run-bts/results.json",
+      "sha256": "8fa3004677b7d3a0adc6f373c39b6fced4af339c1a52a189d868304fa0b29285",
+      "bytes": 220627
+    }
+  ],
+  "synthetic_scale": {
+    "cells": 45,
+    "groups": 9,
+    "noise_replicates_per_group": 5,
+    "local_histories": 90,
+    "local_model_packages": 180,
+    "central_continuations": 45,
+    "metric": "held-out mean Brier loss; lower is better",
+    "repeat_unit": "OS mechanism draw conditional on fixed public synthetic training and evaluation cohorts",
+    "summaries": [
+      {
+        "central_brier": 0.19008370000000002,
+        "central_minus_coupled_mean": -0.0019107000000000152,
+        "central_minus_coupled_raw": [
+          -0.0008441166666666722,
+          -0.0025149166666666445,
+          -0.0011389333333333695,
+          -0.0033689166666666936,
+          -0.001686616666666696
+        ],
+        "central_minus_coupled_sd": 0.0010337928663690557,
+        "coupled_brier": 0.1919944,
+        "independent_joint_brier": 0.19587848000000002,
+        "n": 1000,
+        "public_shifted_brier": 0.22594251979166668,
+        "public_stationary_brier": 0.1901351375,
+        "r": 3,
+        "replicates": 5
+      },
+      {
+        "central_brier": 0.21029513714285714,
+        "central_minus_coupled_mean": -0.00529886162051979,
+        "central_minus_coupled_raw": [
+          -0.008365522846950912,
+          -0.00419667006964497,
+          -0.005431924154917639,
+          -0.002891463393918825,
+          -0.005608727637166605
+        ],
+        "central_minus_coupled_sd": 0.002032764503102259,
+        "coupled_brier": 0.2155939987633769,
+        "independent_joint_brier": 0.21957686571428572,
+        "n": 1000,
+        "public_shifted_brier": 0.24694195223214285,
+        "public_stationary_brier": 0.21012655401785713,
+        "r": 7,
+        "replicates": 5
+      },
+      {
+        "central_brier": 0.2165681173333333,
+        "central_minus_coupled_mean": -0.006594186779557249,
+        "central_minus_coupled_raw": [
+          -0.003402724290058806,
+          -0.007303784917336714,
+          -0.011347520644921144,
+          -0.004091188227796222,
+          -0.006825715817673356
+        ],
+        "central_minus_coupled_sd": 0.003146496171149733,
+        "coupled_brier": 0.2231623041128906,
+        "independent_joint_brier": 0.235022358453748,
+        "n": 1000,
+        "public_shifted_brier": 0.256019101875,
+        "public_stationary_brier": 0.21616293770833334,
+        "r": 15,
+        "replicates": 5
+      },
+      {
+        "central_brier": 0.19009590266666668,
+        "central_minus_coupled_mean": -0.0001646864999999942,
+        "central_minus_coupled_raw": [
+          -0.0005899699999999952,
+          -8.193583333332422e-05,
+          -5.8769166666639006e-05,
+          -5.54550000000098e-05,
+          -3.730250000000268e-05
+        ],
+        "central_minus_coupled_sd": 0.00023827002211499599,
+        "coupled_brier": 0.19026058916666666,
+        "independent_joint_brier": 0.19034593066666666,
+        "n": 10000,
+        "public_shifted_brier": 0.22594251979166668,
+        "public_stationary_brier": 0.1901351375,
+        "r": 3,
+        "replicates": 5
+      },
+      {
+        "central_brier": 0.21013657342857145,
+        "central_minus_coupled_mean": -0.00031988667130966044,
+        "central_minus_coupled_raw": [
+          -0.0004045296704603407,
+          -0.00025489828775265844,
+          -0.00014143974520128277,
+          -0.0003465200594530149,
+          -0.0004520455936810053
+        ],
+        "central_minus_coupled_sd": 0.00012390172604372042,
+        "coupled_brier": 0.21045646009988112,
+        "independent_joint_brier": 0.21114858748571427,
+        "n": 10000,
+        "public_shifted_brier": 0.24694195223214285,
+        "public_stationary_brier": 0.21012655401785713,
+        "r": 7,
+        "replicates": 5
+      },
+      {
+        "central_brier": 0.21616415240000003,
+        "central_minus_coupled_mean": -0.00048139111600686846,
+        "central_minus_coupled_raw": [
+          -0.00020536060635503728,
+          -0.00105466997936432,
+          -0.0006763183195802047,
+          -0.00023643867780717698,
+          -0.00023416799692760337
+        ],
+        "central_minus_coupled_sd": 0.0003754860449175296,
+        "coupled_brier": 0.2166455435160069,
+        "independent_joint_brier": 0.21803051199421014,
+        "n": 10000,
+        "public_shifted_brier": 0.256019101875,
+        "public_stationary_brier": 0.21616293770833334,
+        "r": 15,
+        "replicates": 5
+      },
+      {
+        "central_brier": 0.19006335474,
+        "central_minus_coupled_mean": -1.9289301666675084e-05,
+        "central_minus_coupled_raw": [
+          -2.0366916666653134e-05,
+          -1.0157883333333784e-05,
+          -3.177034166668147e-05,
+          -3.316259166669111e-05,
+          -9.88775000015929e-07
+        ],
+        "central_minus_coupled_sd": 1.3853680612476835e-05,
+        "coupled_brier": 0.19008264404166667,
+        "independent_joint_brier": 0.19008735562666668,
+        "n": 100000,
+        "public_shifted_brier": 0.22594251979166668,
+        "public_stationary_brier": 0.1901351375,
+        "r": 3,
+        "replicates": 5
+      },
+      {
+        "central_brier": 0.21009974216285715,
+        "central_minus_coupled_mean": -3.5411856833694745e-05,
+        "central_minus_coupled_raw": [
+          -5.807276607780465e-05,
+          -3.59387152029933e-05,
+          -4.389335828094976e-05,
+          -9.056577679661393e-06,
+          -3.009786692706462e-05
+        ],
+        "central_minus_coupled_sd": 1.8087077447211216e-05,
+        "coupled_brier": 0.21013515401969082,
+        "independent_joint_brier": 0.21022316784377143,
+        "n": 100000,
+        "public_shifted_brier": 0.24694195223214285,
+        "public_stationary_brier": 0.21012655401785713,
+        "r": 7,
+        "replicates": 5
+      },
+      {
+        "central_brier": 0.21613031307466665,
+        "central_minus_coupled_mean": -4.7734636868201894e-05,
+        "central_minus_coupled_raw": [
+          -3.182368707299599e-05,
+          -7.004130755969284e-05,
+          -2.5902233199981417e-05,
+          -8.548773989244807e-05,
+          -2.5418216615891165e-05
+        ],
+        "central_minus_coupled_sd": 2.8065633484269517e-05,
+        "coupled_brier": 0.21617804771153487,
+        "independent_joint_brier": 0.21635364673389965,
+        "n": 100000,
+        "public_shifted_brier": 0.256019101875,
+        "public_stationary_brier": 0.21616293770833334,
+        "r": 15,
+        "replicates": 5
+      }
+    ],
+    "central_lower_than_coupled_cells": 45,
+    "coupled_lower_than_independent_joint_group_means": 9,
+    "privacy_contract": "replace all binary coordinates of one fixed public-roster record; membership excluded; old odds 3 and total odds 9 per local history",
+    "central_certificates_by_r": {
+      "3": {
+        "adjacency": "replace-all-binary-values-of-one-fixed-roster-record; membership excluded",
+        "count_vector_l1_sensitivity": 3,
+        "delta": "0",
+        "k": 3,
+        "new_vector_odds": "64/27",
+        "old_prefix_odds": "3",
+        "per_coordinate_odds": "4/3",
+        "proof": "Each coordinate count changes by at most one, so its likelihood ratio is at most (k+1)/k. Product across r coordinates is at most 3; independent composition with the old odds 3 prefix is at most9.",
+        "r": 3,
+        "sampling": "difference of independent nonnegative geometric variables; OS-backed rational rejection draws",
+        "schema": "central-count-geometric-certificate-v1",
+        "total_prefix_and_new_odds": "64/9"
+      },
+      "7": {
+        "adjacency": "replace-all-binary-values-of-one-fixed-roster-record; membership excluded",
+        "count_vector_l1_sensitivity": 7,
+        "delta": "0",
+        "k": 6,
+        "new_vector_odds": "823543/279936",
+        "old_prefix_odds": "3",
+        "per_coordinate_odds": "7/6",
+        "proof": "Each coordinate count changes by at most one, so its likelihood ratio is at most (k+1)/k. Product across r coordinates is at most 3; independent composition with the old odds 3 prefix is at most9.",
+        "r": 7,
+        "sampling": "difference of independent nonnegative geometric variables; OS-backed rational rejection draws",
+        "schema": "central-count-geometric-certificate-v1",
+        "total_prefix_and_new_odds": "823543/93312"
+      },
+      "15": {
+        "adjacency": "replace-all-binary-values-of-one-fixed-roster-record; membership excluded",
+        "count_vector_l1_sensitivity": 15,
+        "delta": "0",
+        "k": 14,
+        "new_vector_odds": "437893890380859375/155568095557812224",
+        "old_prefix_odds": "3",
+        "per_coordinate_odds": "15/14",
+        "proof": "Each coordinate count changes by at most one, so its likelihood ratio is at most (k+1)/k. Product across r coordinates is at most 3; independent composition with the old odds 3 prefix is at most9.",
+        "r": 15,
+        "sampling": "difference of independent nonnegative geometric variables; OS-backed rational rejection draws",
+        "schema": "central-count-geometric-certificate-v1",
+        "total_prefix_and_new_odds": "1313681671142578125/155568095557812224"
+      }
+    },
+    "reference_plus_central_accounting": {
+      "additional_central_count_epsilon": 44.65491072675634,
+      "assumption": "All cells conservatively treated as overlapping records; public synthetic study",
+      "combined_basic_epsilon": 242.4051226870161,
+      "conservative_sum_if_recounting_old_prefix_per_central_history": 291.84267567708105,
+      "note": "Scalar epsilon displays use floating logarithms of exact rational per-cell certificates; no prior charge is removed.",
+      "reference_local_histories_basic_epsilon": 197.75021196025975
+    },
+    "accounting_exclusions": [
+      "separate million benchmark",
+      "smoke experiments",
+      "other historical studies"
+    ],
+    "timing_limitation": "central count aggregation/noise timing is offline; not comparable as a full-workflow speedup over broker transactions",
+    "model_scope": "marginal probability models, not general classifiers or pretrained SLMs; public evaluation only"
+  },
+  "million_record_broker": {
+    "cells": 1,
+    "n": 1000000,
+    "r": 7,
+    "replicate": 0,
+    "peak_process_bytes": 621490176,
+    "peak_scope": "Lifetime worker peak including Python, public generation, two strategies and fitting.",
+    "arms": {
+      "coupled": {
+        "heldout_brier_mean": 0.2101058645636718,
+        "population_brier_mean": 0.21000505838436148,
+        "probability_mse_mean": 5.058384361473994e-06,
+        "channel_accuracy": "141/224",
+        "model_bytes": 590,
+        "broker_timings": {
+          "end_to_end_cpu_seconds": 12.234375,
+          "end_to_end_wall_seconds": 12.3917427000124,
+          "extension_cpu_seconds": 3.59375,
+          "extension_wall_seconds": 3.6527526999125257,
+          "new_export_cpu_seconds": 1.46875,
+          "new_export_wall_seconds": 1.4740590999135748,
+          "old_export_cpu_seconds": 1.25,
+          "old_export_wall_seconds": 1.2652593000093475,
+          "redelivery_cpu_seconds": 2.796875,
+          "redelivery_wall_seconds": 2.819917400018312,
+          "start_cpu_seconds": 3.125,
+          "start_wall_seconds": 3.1794800999341533
+        },
+        "extension_records_per_second": 273766.13807552523,
+        "old_and_new_redelivery_byte_identical": true,
+        "separate_process_replay_equal": true
+      },
+      "independent_joint": {
+        "heldout_brier_mean": 0.21010885023851428,
+        "population_brier_mean": 0.2100130062985143,
+        "probability_mse_mean": 1.300629851428506e-05,
+        "channel_accuracy": "18/31",
+        "model_bytes": 582,
+        "broker_timings": {
+          "end_to_end_cpu_seconds": 12.171875,
+          "end_to_end_wall_seconds": 12.272890700027347,
+          "extension_cpu_seconds": 3.625,
+          "extension_wall_seconds": 3.6159540000371635,
+          "new_export_cpu_seconds": 1.421875,
+          "new_export_wall_seconds": 1.4452017999719828,
+          "old_export_cpu_seconds": 1.203125,
+          "old_export_wall_seconds": 1.2310256999917328,
+          "redelivery_cpu_seconds": 2.796875,
+          "redelivery_wall_seconds": 2.8031152000185102,
+          "start_cpu_seconds": 3.125,
+          "start_wall_seconds": 3.177271099993959
+        },
+        "extension_records_per_second": 276552.1906500255,
+        "old_and_new_redelivery_byte_identical": true,
+        "separate_process_replay_equal": true
+      }
+    },
+    "controls": {
+      "constant_half": 0.25,
+      "public_shifted": 0.24694195223214285,
+      "public_stationary": 0.21012655401785715
+    },
+    "coupled_minus_independent_joint_brier": -2.985674842470587e-06,
+    "paired_history_odds": "81",
+    "limitation": "one noise draw on one public synthetic cohort; no central million-row comparator; not an independently replicated scaling claim"
+  },
+  "matched_multicorpus": {
+    "status": "ALL_THREE_CORPORA_AUDITED",
+    "total_fits": 3798,
+    "records_per_fit": 8000,
+    "retained_export_events_per_history": 6,
+    "tasks_per_corpus": 3,
+    "public_auxiliary_records": 25000,
+    "public_only_training_records": 8000,
+    "independent_channel_replicates_per_policy_corpus": 5,
+    "selection_counts": {
+      "public_only": 90
+    },
+    "metric": "minimum of three balanced-Brier task utilities; higher is better; constant 0.75",
+    "corpora": [
+      {
+        "corpus": "hmda",
+        "later_year": 2024,
+        "source_rows_scanned": 12229298,
+        "holdout_records": 50000,
+        "holdout_positive_counts": [
+          28636,
+          9856,
+          9797
+        ],
+        "target_fits": 1266,
+        "independent_channel_replicates": 5,
+        "metadata_corrected_packages": 10,
+        "reuse": {
+          "assumption": "Small-sample t approximation over independent mechanism draws, conditional on fixed source rows, fit schedules and later evaluation cohort; not population or simultaneous inference.",
+          "mean": 0.7703437861712328,
+          "n_independent_channel_replicates": 5,
+          "replicate_values": [
+            0.7734465394534515,
+            0.769922139534164,
+            0.7673027334471673,
+            0.7774392197658441,
+            0.7636082986555373
+          ],
+          "sample_sd": 0.005356417540134586,
+          "t95_interval_conditional_on_fixed_cohort": [
+            0.7636929153523005,
+            0.776994656990165
+          ]
+        },
+        "fresh": {
+          "assumption": "Small-sample t approximation over independent mechanism draws, conditional on fixed source rows, fit schedules and later evaluation cohort; not population or simultaneous inference.",
+          "mean": 0.7575034057303348,
+          "n_independent_channel_replicates": 5,
+          "replicate_values": [
+            0.7579473875737575,
+            0.752927101001083,
+            0.7649195637252443,
+            0.752893190788875,
+            0.7588297855627149
+          ],
+          "sample_sd": 0.00497876615046152,
+          "t95_interval_conditional_on_fixed_cohort": [
+            0.7513214510458311,
+            0.7636853604148385
+          ]
+        },
+        "fresh_minus_reuse": {
+          "assumption": "Small-sample t approximation over independent mechanism draws, conditional on fixed source rows, fit schedules and later evaluation cohort; not population or simultaneous inference.",
+          "mean": -0.012840380440897924,
+          "n_independent_channel_replicates": 5,
+          "replicate_values": [
+            -0.015499151879694084,
+            -0.01699503853308104,
+            -0.002383169721922984,
+            -0.024546028976969114,
+            -0.004778513092822401
+          ],
+          "sample_sd": 0.00916105095275287,
+          "t95_interval_conditional_on_fixed_cohort": [
+            -0.024215327594641456,
+            -0.0014654332871543926
+          ]
+        },
+        "public_only_mean": 0.8238848180087504,
+        "new_all_policy_account_epsilon": 10.000000000000014,
+        "complete_historical_subaccount": {
+          "max_per_unit_epsilon_exact_decimal": "29.99999999999999333866185224906075745820999145507812500",
+          "max_per_unit_epsilon_reported": 30.00000000000005,
+          "object_count": 80,
+          "units_counted": 50000
+        }
+      },
+      {
+        "corpus": "tlc",
+        "later_year": 2026,
+        "source_rows_scanned": 147693231,
+        "holdout_records": 50000,
+        "holdout_positive_counts": [
+          8838,
+          6223,
+          6058
+        ],
+        "target_fits": 1266,
+        "independent_channel_replicates": 5,
+        "metadata_corrected_packages": 10,
+        "reuse": {
+          "assumption": "Small-sample t approximation over independent mechanism draws, conditional on fixed source rows, fit schedules and later evaluation cohort; not population or simultaneous inference.",
+          "mean": 0.7506192654259575,
+          "n_independent_channel_replicates": 5,
+          "replicate_values": [
+            0.750549864289443,
+            0.7505270041879707,
+            0.7495596660829981,
+            0.7502230644587095,
+            0.7522367281106657
+          ],
+          "sample_sd": 0.0009885899256334818,
+          "t95_interval_conditional_on_fixed_cohort": [
+            0.7493917689063114,
+            0.7518467619456035
+          ]
+        },
+        "fresh": {
+          "assumption": "Small-sample t approximation over independent mechanism draws, conditional on fixed source rows, fit schedules and later evaluation cohort; not population or simultaneous inference.",
+          "mean": 0.7507157144359956,
+          "n_independent_channel_replicates": 5,
+          "replicate_values": [
+            0.7506209612262315,
+            0.75086530049489,
+            0.7512159846595644,
+            0.7502529908542674,
+            0.7506233349450244
+          ],
+          "sample_sd": 0.0003550603962022418,
+          "t95_interval_conditional_on_fixed_cohort": [
+            0.7502748487248433,
+            0.7511565801471479
+          ]
+        },
+        "fresh_minus_reuse": {
+          "assumption": "Small-sample t approximation over independent mechanism draws, conditional on fixed source rows, fit schedules and later evaluation cohort; not population or simultaneous inference.",
+          "mean": 9.644901003815764e-05,
+          "n_independent_channel_replicates": 5,
+          "replicate_values": [
+            7.109693678841733e-05,
+            0.0003382963069192835,
+            0.0016563185765663402,
+            2.9926395557988705e-05,
+            -0.0016133931656412415
+          ],
+          "sample_sd": 0.0011640781149880929,
+          "t95_interval_conditional_on_fixed_cohort": [
+            -0.0013489448764394587,
+            0.0015418428965157738
+          ]
+        },
+        "public_only_mean": 0.7656184372482593,
+        "new_all_policy_account_epsilon": 10.000000000000014,
+        "complete_historical_subaccount": {
+          "max_per_unit_epsilon_exact_decimal": "29.99999999999999333866185224906075745820999145507812500",
+          "max_per_unit_epsilon_reported": 30.00000000000005,
+          "object_count": 80,
+          "units_counted": 50000
+        }
+      },
+      {
+        "corpus": "bts",
+        "later_year": 2025,
+        "source_rows_scanned": 7001619,
+        "holdout_records": 50000,
+        "holdout_positive_counts": [
+          11389,
+          11829,
+          743
+        ],
+        "target_fits": 1266,
+        "independent_channel_replicates": 5,
+        "metadata_corrected_packages": 10,
+        "reuse": {
+          "assumption": "Small-sample t approximation over independent mechanism draws, conditional on fixed source rows, fit schedules and later evaluation cohort; not population or simultaneous inference.",
+          "mean": 0.7471427366956019,
+          "n_independent_channel_replicates": 5,
+          "replicate_values": [
+            0.7460320640052818,
+            0.7415495091254061,
+            0.7495515023985365,
+            0.75,
+            0.7485806079487858
+          ],
+          "sample_sd": 0.0034839405857465602,
+          "t95_interval_conditional_on_fixed_cohort": [
+            0.7428168530983995,
+            0.7514686202928044
+          ]
+        },
+        "fresh": {
+          "assumption": "Small-sample t approximation over independent mechanism draws, conditional on fixed source rows, fit schedules and later evaluation cohort; not population or simultaneous inference.",
+          "mean": 0.7433871548374634,
+          "n_independent_channel_replicates": 5,
+          "replicate_values": [
+            0.7424074032081445,
+            0.7417557010443037,
+            0.7498894592944224,
+            0.7425167097452868,
+            0.7403665008951599
+          ],
+          "sample_sd": 0.0037344190606774953,
+          "t95_interval_conditional_on_fixed_cohort": [
+            0.7387502611356143,
+            0.7480240485393126
+          ]
+        },
+        "fresh_minus_reuse": {
+          "assumption": "Small-sample t approximation over independent mechanism draws, conditional on fixed source rows, fit schedules and later evaluation cohort; not population or simultaneous inference.",
+          "mean": -0.0037555818581385793,
+          "n_independent_channel_replicates": 5,
+          "replicate_values": [
+            -0.0036246607971373024,
+            0.00020619191889759136,
+            0.0003379568958858936,
+            -0.007483290254713171,
+            -0.008214107053625908
+          ],
+          "sample_sd": 0.004069524177468829,
+          "t95_interval_conditional_on_fixed_cohort": [
+            -0.008808563519121411,
+            0.0012973998028442514
+          ]
+        },
+        "public_only_mean": 0.751138716310166,
+        "new_all_policy_account_epsilon": 10.000000000000014,
+        "complete_historical_subaccount": {
+          "max_per_unit_epsilon_exact_decimal": "29.99999999999999333866185224906075745820999145507812500",
+          "max_per_unit_epsilon_reported": 30.00000000000005,
+          "object_count": 80,
+          "units_counted": 50000
+        }
+      }
+    ],
+    "repeat_and_interval_scope": "five independent channel draws conditional on fixed training/evaluation cohorts; paired approximate 95% t intervals with 4 df, not simultaneous or population intervals",
+    "privacy_contract": "designated categorical protected field replaced at one fixed roster row; B covariates, labels and membership fixed/public; per-policy epsilon at most 1; six fresh caches each at most 1/6 vs one reused cache at most 1",
+    "selection_scope": "procedure specified beforehand, policy artifacts frozen before their own later labels; labels accessed sequentially across policies, no cross-policy adaptation in procedure",
+    "metadata_boundary": "30 corrected packages retain identical weights/recipes and prediction replay; historical fresh packages carried stale preprocessing epsilon metadata; actual cache generation, inverse moments and ledger used fresh epsilon 1/6",
+    "inference_limit": "public-only selection in all 90 task choices prevents claiming observed protected-acquisition benefit over allowed public auxiliary controls; no population impossibility conclusion"
+  },
+  "retained_model_weights": {
+    "status": "exact finite channel enumeration with rational LP certificates",
+    "total_lp_cells": 13,
+    "adjacency": "replace both protected bits of exactly one fixed-roster record",
+    "public_labels": "two declared task labels per row fixed at +1",
+    "old_training": "row-wise RR(p=3/4), then exact ERM sign for first-coordinate task",
+    "new_training": "randomized learner over the two sign predictors for coordinate two",
+    "utility": "expected orientation accuracy under declared uniform orientations and gamma=3/5",
+    "old_model_odds": "11/5",
+    "old_full_cache_odds": "3",
+    "primary_exact_cells": [
+      {
+        "n": 3,
+        "mode": "full_cache",
+        "total_odds_bound": "3",
+        "orientation_accuracy": "1/2",
+        "orientation_accuracy_float": 0.5,
+        "expected_population_error": "1/2",
+        "expected_population_error_float": 0.5,
+        "exact_transcript_odds": "3",
+        "number_of_datasets": 64,
+        "number_of_variables": 1024,
+        "number_of_ordered_neighbor_pairs": 576,
+        "number_of_dp_inequalities": 9216,
+        "orientation_accuracy_upper": "1/2",
+        "exact_primal_dual_gap": "0",
+        "orientation_accuracy_by_parameter_pair": [
+          "1/2",
+          "1/2",
+          "1/2",
+          "1/2"
+        ],
+        "rational_primal_and_dual_verified": true
+      },
+      {
+        "n": 3,
+        "mode": "old_weights",
+        "total_odds_bound": "3",
+        "orientation_accuracy": "147933/200000",
+        "orientation_accuracy_float": 0.739665,
+        "expected_population_error": "356201/1000000",
+        "expected_population_error_float": 0.356201,
+        "exact_transcript_odds": "3",
+        "number_of_datasets": 64,
+        "number_of_variables": 256,
+        "number_of_ordered_neighbor_pairs": 576,
+        "number_of_dp_inequalities": 2304,
+        "orientation_accuracy_upper": "147933/200000",
+        "exact_primal_dual_gap": "0",
+        "orientation_accuracy_by_parameter_pair": [
+          "147933/200000",
+          "147933/200000",
+          "147933/200000",
+          "147933/200000"
+        ],
+        "rational_primal_and_dual_verified": true
+      },
+      {
+        "n": 3,
+        "mode": "no_old_export",
+        "total_odds_bound": "3",
+        "orientation_accuracy": "391/500",
+        "orientation_accuracy_float": 0.782,
+        "expected_population_error": "827/2500",
+        "expected_population_error_float": 0.3308,
+        "exact_transcript_odds": "3",
+        "number_of_datasets": 64,
+        "number_of_variables": 128,
+        "number_of_ordered_neighbor_pairs": 576,
+        "number_of_dp_inequalities": 1152,
+        "orientation_accuracy_upper": "391/500",
+        "exact_primal_dual_gap": "0",
+        "orientation_accuracy_by_parameter_pair": [
+          "391/500",
+          "391/500",
+          "391/500",
+          "391/500"
+        ],
+        "rational_primal_and_dual_verified": true
+      }
+    ],
+    "secondary_cell_certificate_gaps": [
+      {
+        "n": 3,
+        "mode": "full_cache",
+        "total_odds_bound": "9",
+        "exact_primal_dual_gap": "32/268495618471875"
+      },
+      {
+        "n": 3,
+        "mode": "old_weights",
+        "total_odds_bound": "9",
+        "exact_primal_dual_gap": "64/1606092757396875"
+      },
+      {
+        "n": 3,
+        "mode": "no_old_export",
+        "total_odds_bound": "9",
+        "exact_primal_dual_gap": "449711882621893/378841077066764253942000000"
+      },
+      {
+        "n": 3,
+        "mode": "no_old_export",
+        "total_odds_bound": "15/11",
+        "exact_primal_dual_gap": "1/5740413046875000"
+      }
+    ],
+    "scope": "Finite declared two-sign-predictor learning tasks, known population family, three records and 64 possible datasets; not arbitrary trained weights, scalable general-model solver, or a refund for an exposed cache",
+    "not_claimed": [
+      "novelty of finite-channel linear programming",
+      "general model-class optimality",
+      "unconditional privacy amplification for arbitrary model training",
+      "unknown-population empirical certification",
+      "a refund for previously exposed cache"
+    ]
+  },
+  "exploratory_breadth": {
+    "fits": 216,
+    "bundles": 72,
+    "family_count": 8,
+    "stages": [
+      {
+        "corpus": "hmda",
+        "verified_bundles": 24,
+        "verified_fits": 72,
+        "results_sha256": "014f3ce02ddb9ebcb525738a8bd9fd2fc82ece5b95bd2aae30de1d5d635ab2b2",
+        "families_shared_above_constant_on_all_tasks": 7,
+        "family_count": 8,
+        "shared_minimum_utilities": {
+          "decision_tree": 0.7525625717111026,
+          "extra_trees": 0.7743669897552881,
+          "knn": 0.7459523637289035,
+          "mlp": 0.7784958642311866,
+          "random_forest": 0.7754630667439952,
+          "slm_medium": 0.7780448513992192,
+          "slm_small": 0.7703467680287566,
+          "xgboost": 0.7780956700444221
+        },
+        "incremental_privacy_charge": 0.0
+      },
+      {
+        "corpus": "tlc",
+        "verified_bundles": 24,
+        "verified_fits": 72,
+        "results_sha256": "0ad9aa07fd4f686ae9f1c9b5dfc537068515b32a026843164efc2793e0e8850c",
+        "families_shared_above_constant_on_all_tasks": 4,
+        "family_count": 8,
+        "shared_minimum_utilities": {
+          "decision_tree": 0.7052534765823644,
+          "extra_trees": 0.7532465557371681,
+          "knn": 0.6791908099934216,
+          "mlp": 0.7504756481232978,
+          "random_forest": 0.7532416533991447,
+          "slm_medium": 0.7478739608901928,
+          "slm_small": 0.7451139173875286,
+          "xgboost": 0.7509846687316895
+        },
+        "incremental_privacy_charge": 0.0
+      },
+      {
+        "corpus": "bts",
+        "verified_bundles": 24,
+        "verified_fits": 72,
+        "results_sha256": "05386a887b1ac1b8898f656477adf87219520304a2463272c7a1d364fca6413f",
+        "families_shared_above_constant_on_all_tasks": 0,
+        "family_count": 8,
+        "shared_minimum_utilities": {
+          "decision_tree": 0.6292206848190361,
+          "extra_trees": 0.7382773932780392,
+          "knn": 0.5571206847331207,
+          "mlp": 0.6528967314926615,
+          "random_forest": 0.737187772205876,
+          "slm_medium": 0.6097661507397212,
+          "slm_small": 0.6060228746611849,
+          "xgboost": 0.7201178297400475
+        },
+        "incremental_privacy_charge": 0.0
+      }
+    ],
+    "scope": "Exploratory reused finite cohorts, conditional feature privacy, frozen exported model artifacts; no pretrained-SLM, field deployment, membership or future-population guarantee.",
+    "repeat_unit": "one cache, cohort and seed per family/arm; reused previously examined finite cohorts",
+    "slm_boundary": "two scratch-trained record transformers, approximately 1.4M and 3.2M parameters; not pretrained language models; eight epochs do not establish convergence"
+  },
+  "historical_boundaries": [
+    "Failed rational-dual reconstruction runs v1-v3 remain preserved; primary v5 odds 3 cells have zero exact primal-dual gaps; secondary cells have explicit nonzero certificate gaps.",
+    "Original breadth v1 floating replay mismatch remains preserved; v2 fixed prediction ordering and retained exact equality.",
+    "Original matched fresh-package metadata remains preserved alongside correction receipts and unchanged fitted artifacts.",
+    "No experiment here measures removal of old information, deletion compliance, counterfactual retraining equivalence, model unlearning, unknown-recipient knowledge, or deployment effectiveness."
+  ]
+}
