@@ -102,7 +102,7 @@ The manuscript specifies those invariants and service-continuity and
 post-retirement redress duties; the CLI does not enforce governmental duties.
 
 The [new regression checks](../tests/test_review_revision_regressions.py) cover
-the concrete counterexamples. The [manuscript revision appendix](../academic/paper/revision-boundaries.tex)
+the concrete counterexamples. The [historical manuscript revision appendix](https://github.com/elmontu/AI_Model_Academic/blob/63e761f3a9d15e548193c0d490ae995fd50c151d/paper/revision-boundaries.tex)
 provides the closest-work comparison, conditional Canadian profile walkthrough,
 claim-to-evidence matrix and prospective studies. No independent model training,
 government participant study or new Lean refinement is claimed.

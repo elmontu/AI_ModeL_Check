@@ -29,7 +29,9 @@ from .store import AssuranceError, AssuranceStore
 from .pipeline import Pipeline, ensure_schema, has_schema
 
 
-DEFAULT_ROOT = Path("D:/model_audit_data/experiments/acs-temporal-assurance-20260921")
+# Optional local input location. The service only reads an existing verified run
+# and operator registry; selecting this path never initializes either one.
+DEFAULT_ROOT = Path(".local/temporal-assurance")
 EVIDENCE_RELATIVE = Path("reproduction/acs-temporal-assurance-20260921")
 LIMITATIONS = [
     "Trusted local research operator; the authority label is not an authenticated agency role.",

@@ -19,11 +19,13 @@ The launcher now accepts explicit research and operator directories. With the
 Python from the repository root:
 
 ```console
-python -m model_release_assurance.export_poc serve --data .local/model-export-poc --repository . --temporal-run PATH_TO_VERIFIED_RUN --temporal-operator PATH_TO_INITIALIZED_OPERATOR --port 8767
+python -m model_release_assurance.export_poc serve --data .local/model-export-poc --repository PATH_TO_RETAINED_RESEARCH_WORKSPACE --temporal-run PATH_TO_VERIFIED_RUN --temporal-operator PATH_TO_INITIALIZED_OPERATOR --port 8767
 ```
 
-Replace the two `PATH_TO_...` values with existing directories and quote paths
-containing spaces. Open `http://127.0.0.1:8767/` for the governed release workflow.
+Replace the three `PATH_TO_...` values with existing directories and quote paths
+containing spaces. The research workspace must contain the retained ACS temporal
+verification receipts; neither public repository includes that full workspace.
+Open `http://127.0.0.1:8767/` for the governed release workflow.
 The options have separate purposes:
 
 | Option | Existing content selected |
@@ -45,8 +47,10 @@ for a genuinely new, separate research exercise. That procedure requires the
 separately retained ACS importer, source artifacts and matching research runtime;
 they are not included in this government publication.
 
-Omitting these options retains the historical workspace defaults for backward
-compatibility. If those data are absent, the launcher prints the missing
+Omitting these options checks the local optional paths
+`.local/temporal-assurance/run-v1` and
+`.local/temporal-assurance/operator-workflow-v1`. Historical workstation
+locations must be selected explicitly. If those data are absent, the launcher prints the missing
 location and the option needed to select existing data. The corresponding
 dashboard area remains unavailable. The service never silently initializes a
 temporal study or operator ledger. A fresh checkout can still use the public

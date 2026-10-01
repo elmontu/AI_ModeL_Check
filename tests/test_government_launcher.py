@@ -3,6 +3,7 @@ from __future__ import annotations
 
 from contextlib import closing
 import importlib.util
+from pathlib import Path
 import sqlite3
 import unittest
 from unittest.mock import patch
@@ -13,6 +14,21 @@ from test_temporal_assurance_web import HAS_API, TemporalWebFixture
 @unittest.skipUnless(HAS_API and importlib.util.find_spec("uvicorn") is not None,
                      "console server dependencies unavailable")
 class GovernmentLauncherTests(TemporalWebFixture, unittest.TestCase):
+    def test_unconfigured_temporal_service_never_creates_a_registry(self):
+        from fastapi.testclient import TestClient
+        from model_release_assurance.export_poc.api import create_app
+        from model_release_assurance.temporal_assurance import web
+
+        self.assertEqual(web.DEFAULT_ROOT, Path(".local/temporal-assurance"))
+        self.assertFalse(web.DEFAULT_ROOT.is_absolute())
+        absent = Path(self.temp.name) / "absent-temporal-default"
+        with patch.object(web, "DEFAULT_ROOT", absent):
+            with TestClient(create_app(Path(self.temp.name) / "synthetic-default",
+                                       repository=self.repo)) as client:
+                self.assertEqual(client.get("/api/temporal/study").json()["status"], "unavailable")
+                self.assertEqual(client.get("/api/temporal/operator").json()["status"], "unavailable")
+        self.assertFalse(absent.exists())
+
     def test_custom_roots_serve_the_existing_study_and_operator_without_spending(self):
         from fastapi.testclient import TestClient
         from model_release_assurance.export_poc.cli import main

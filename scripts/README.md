@@ -33,18 +33,12 @@ package source. Neither setup nor case preflight is a release approval.
 
 ## Academic paper assembly
 
-These tools live in [academic/scripts/](../academic/scripts/); run the commands
-from the repository root using that path.
-
-| Script | Purpose | Boundary |
-|---|---|---|
-| [build_academic_paper_data.py](../academic/scripts/build_academic_paper_data.py) | Extract the explicitly allowlisted aggregate evidence into `academic/paper/experimental-data.json`; `--check` revalidates retained bytes. | Requires the original local source files, including ignored outputs. It performs no experiments and does not create an MRAP contract. |
-| [build_academic_paper.py](../academic/scripts/build_academic_paper.py) | Generate manuscript tables and a vector scaling figure from the retained companion; `--check` compares generated artifacts. | Optional ReportLab/font dependency for the figure only; no MRA core or schema changes. |
-| [check_academic_gap_constructions.py](../academic/scripts/check_academic_gap_constructions.py) | Reproduce seven exact finite countermodels and repair controls in `academic/paper/gap-construction-results.json`; `--check` compares bytes. | Standard library only, seed-free and offline; no model training, core imports, cryptographic implementation or universal-refinement claim. |
-
-The committed paper companion, tables and figure are deliberate aggregate-only
-exceptions to the usual `output/` convention. See the
-[paper build and evidence-access instructions](../reproduction/README.md#paper-draft).
+The paper builders, finite-construction checks and current manuscript are in
+the [separate academic repository](https://github.com/elmontu/AI_Model_Academic).
+They are research tools, not part of the government console installation or
+its supported release process. Historical versions remain in Git history.
+The [dated advisory archive](../docs/publication/2026-09-28/README.md) is a
+bounded reporting snapshot and does not rerun training.
 
 ## OpenML reproduction study
 

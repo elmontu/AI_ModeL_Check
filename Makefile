@@ -10,7 +10,7 @@ help:
 	@echo "demo            Train XGBoost and run the training-to-assessment demo (experiment dependencies; OpenML by default)"
 	@echo "demo-reference  Run the secondary core-only fixture and workflow rehearsal"
 	@echo "compile  Compile Python sources and tests"
-	@echo "test     Run the complete Python test suite"
+	@echo "test     Run the government implementation Python test suite"
 	@echo "schemas  Replay current JSON Schemas and their byte manifest"
 	@echo "links    Check local links in repository Markdown files"
 	@echo "formal   Verify the Lean build and theorem boundary"
@@ -32,11 +32,10 @@ test-export-poc:
 	PYTHONPATH=src $(PYTHON) -m unittest discover -s tests -p 'test_export_poc*.py' -v
 
 compile:
-	PYTHONPYCACHEPREFIX=$(COMPILE_CACHE) $(PYTHON) -m compileall -q src tests scripts academic/scripts academic/tests
+	PYTHONPYCACHEPREFIX=$(COMPILE_CACHE) $(PYTHON) -m compileall -q src tests scripts
 
 test:
 	PYTHONPATH=src $(PYTHON) -m unittest discover -s tests -v
-	PYTHONPATH=src $(PYTHON) -m unittest discover -s academic/tests -v
 
 schemas:
 	PYTHONPATH=src $(PYTHON) scripts/generate_schema_manifest.py --check

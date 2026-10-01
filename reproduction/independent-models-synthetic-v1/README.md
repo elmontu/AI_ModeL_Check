@@ -12,9 +12,9 @@ preregistration. The original registration retains its prospective status text;
 the local completion manifest, `output/independent-models-synthetic-v1-20260909/COMPLETE.json`,
 records completion separately. No historical experiment or registration was rewritten.
 
-The [paper section](../../academic/paper/independent-model-study.tex) reports
+The [historical paper section](https://github.com/elmontu/AI_Model_Academic/blob/63e761f3a9d15e548193c0d490ae995fd50c151d/paper/independent-model-study.tex) reports
 the assumptions and adverse results. The
-[machine-readable companion](../../academic/paper/independent-model-study-data.json)
+[historical machine-readable companion](https://github.com/elmontu/AI_Model_Academic/blob/63e761f3a9d15e548193c0d490ae995fd50c151d/paper/independent-model-study-data.json)
 includes the registration, all model-level candidate/selection records, group
 aggregates, primary confidence intervals and source digests. Original model
 artifacts, training draws and evaluation draws remain in the named local
@@ -45,7 +45,9 @@ With an existing compatible Python and NumPy environment and the retained local
 source directory, check the published table and companion from the repository
 root without fitting models. This command requires the original ignored
 `output/independent-models-synthetic-v1-20260909` directory; a fresh clone alone
-does not contain the inputs needed for this replay:
+does not contain the inputs needed for this replay. The commands below apply to
+the historical combined checkout; the government-only repository no longer
+contains `academic/scripts`:
 
 ```powershell
 python academic/scripts/build_independent_study_companion.py output/independent-models-synthetic-v1-20260909 --check

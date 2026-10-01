@@ -14,6 +14,18 @@ routing is advisory—not proof that every model, attack or live channel is cove
 The Lean proofs concern a scoped abstract protocol, not the Python or Ed25519
 implementation.
 
+The dated [agency advisory bundle](docs/publication/2026-09-28/README.md)
+collects experimental results available through 28 September 2026, with a
+source index, limitations and a portable publication verifier. It does not
+cover studies completed after that date or provide the original training data,
+model weights and complete traces. The [1 October technical advisory](docs/advisory/technical-report-2026-10-01.md)
+interprets that archive alongside later research and adverse findings. Its
+[later displayed-table digest](docs/advisory/displayed-tables-2026-10-01.md)
+and [fine-grained gap plan](docs/government-academic-separation-plan-2026-10-01.md)
+show the newer curated evidence and work still needed. The
+[local verification receipt](docs/advisory/local-verification-2026-10-01.md)
+records the exact test and package-smoke results.
+
 ## Start the government audit console
 
 Python 3.11 or newer is required. From a source checkout, create the console
@@ -90,11 +102,13 @@ verified temporal study and initialized operator registry, explicitly select
 their locations:
 
 ```powershell
-& .\.venv-pipeline\Scripts\python.exe -m model_release_assurance.export_poc serve --data .local/model-export-poc --repository . --temporal-run "PATH_TO_VERIFIED_RUN" --temporal-operator "PATH_TO_INITIALIZED_OPERATOR" --port 8767
+& .\.venv-pipeline\Scripts\python.exe -m model_release_assurance.export_poc serve --data .local/model-export-poc --repository "PATH_TO_RETAINED_RESEARCH_WORKSPACE" --temporal-run "PATH_TO_VERIFIED_RUN" --temporal-operator "PATH_TO_INITIALIZED_OPERATOR" --port 8767
 ```
 
-Replace the placeholder paths with existing directories. A fresh checkout does
-not contain those study/model stores. Without them, temporal views are
+Replace the placeholder paths with existing directories. The repository path
+must contain the retained ACS temporal verification receipts; this government
+checkout and the curated academic checkout do not contain that full research
+workspace. Without those study/model stores, temporal views are
 unavailable and the launcher explains the missing inputs; the synthetic lab
 still works. It does not silently create a registry or restore privacy budget.
 The [temporal service guide](docs/temporal-release-assurance.md) explains its
@@ -102,21 +116,21 @@ channel/unit accounting and trusted-storage assumptions.
 
 ## Research relationship and deployment boundary
 
-The government controls draw on the separately maintained 21 September 2026
-working draft, *Data Minimization and Dependency Accounting for Repeated Model
-Export*: compare an omission baseline, specify the complete recipient view, and
-account for training and scoring dependencies across releases. That revised
-manuscript and its new study archives are **not included in this government
-implementation update**. The [paper source](academic/paper/mra-paper.tex),
-[data companion](academic/paper/experimental-data.json) and
-[build instructions](reproduction/README.md#paper-draft) in this publication
-remain the previously published academic snapshot.
+The research manuscript and curated experiment reports are in a local checkout
+of the [separate academic repository](https://github.com/elmontu/AI_Model_Academic)
+at commit `826b5e5fbda2cd50e6bb856a90be1b18619afc11`. Its public GitHub
+publication is pending; full raw study archives remain local. The dated
+advisory bundle above is the self-contained reporting snapshot currently in
+this repository. Its saved results do not validate every current implementation
+path or establish a privacy guarantee for an arbitrary agency model.
+Older dated receipts retain commands from the former combined checkout; use
+the setup and test commands above for this government-only tree.
 
-Research and government implementation use **one shared core**, with the same
-versioned contracts and formal artifacts. They are not conformance levels, and
-no deployment obligation is waived. The local services do not provide
-authenticated custody, independent approvers or enforcement against a storage
-administrator. See the [industrial track and acceptance evidence](docs/system-audit-specification.md#industrial-track)
+The government and research work use related versioned contracts and formal
+artifacts. The local services do not provide authenticated custody, independent
+approvers or enforcement against a storage administrator. No deployment
+obligation is waived. See the
+[industrial track and acceptance evidence](docs/system-audit-specification.md#industrial-track)
 before extending the boundary to an agency deployment.
 
 ## Reference implementation quick start
@@ -229,15 +243,17 @@ they are not a claim that every associated study is published in this update.
 Temporal service admission under a declared attribute-DP budget does not
 establish membership protection, whole-record privacy or general release clearance.
 
-The [reproduction index](reproduction/README.md) is the single study inventory:
-it distinguishes retained results, negative results, configured experiments and
-templates. [Scripts](scripts/README.md) is the executable tool catalog.
+The [government reproduction index](reproduction/README.md) distinguishes
+retained results, negative results, configured experiments and templates. The
+[technical advisory](docs/advisory/technical-report-2026-10-01.md) links the
+frozen and later academic result inventories. [Scripts](scripts/README.md) is
+the executable tool catalog.
 
 Historical registrations and results retain their original source/runtime
 bindings. They do not validate the revised implementation. Changed source hashes
 must fail old registrations; new scalability claims require prospective
 registration and fresh execution. Negative results and manifest-bound artifacts
-are preserved, including the [generated ceiling report](academic/paper/ceiling-experiment-results.md).
+are preserved, including the [ceiling experiment summary](reproduction/ceiling-experiment-summary.json).
 
 ## Development and support
 

@@ -707,8 +707,10 @@ To rerun, use a new output directory and the console environment's Python:
 python scripts/validate_framework_e2e.py --output output/my-validation
 python scripts/validate_framework_e2e.py --output output/my-language-validation --language-model YOUR_INSTALLED_MODEL
 python -m unittest discover -s tests -v
-python -m unittest discover -s academic/tests -v
 ```
+
+Historical paper checks now belong to the separate academic repository; this
+government checkout does not include an `academic/tests` tree.
 
 The matrix uses an isolated store and preserves the interactive console's
 cases. It records source hashes before and after and fails if the implementation

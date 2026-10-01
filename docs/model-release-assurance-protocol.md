@@ -19,26 +19,30 @@ The finite `protocol-solve` command in this repository solves an evidence-gate s
 
 <a id="academic-track"></a>
 
-### 1.1 Academic track: claim boundary and research priority
+### 1.1 Research relationship and claim boundary
 
 This subsection sets the research workstream; it does not introduce a new MRAP
-version, change a transition, or weaken a normative requirement. The academic
-track is the current priority. The [industrial track](system-audit-specification.md#industrial-track)
-retains the concrete deployment obligations. Both use one shared reference core.
+version, change a transition, or weaken a normative requirement. The
+[industrial track](system-audit-specification.md#industrial-track) retains the
+concrete deployment obligations. The government implementation and separate
+research work use related versioned contracts and formal artifacts.
 
-The separately maintained working manuscript, revised on 21 September
-2026, studies **data minimization and dependency accounting for repeated model
-export**. It compares omission and protected inputs, complete training/scoring
+The 22 September integration drew on the then-current manuscript about
+**data minimization and dependency accounting for repeated model export**.
+It compares omission and protected inputs, complete training/scoring
 dependencies, exact ledger representations and bounded local release enforcement.
 It claims no new privacy accountant, whole-record protection or deployed agency
 service. The conditional argument connecting admissible per-threat risk intervals,
 reasoned recommendations and lifecycle integrity remains supporting reference-core
-work; it is not the current manuscript's central empirical contribution.
+work; it was not that manuscript's central empirical contribution.
 
-The revised manuscript and its new study archives are outside this government
-implementation publication. Previously published academic files remain at their
-earlier revision. The integration below records practical review requirements,
-not a claim that the revised experiments are bundled or independently validated here.
+The research manuscripts and later study archives are outside this government
+implementation checkout. Earlier academic files remain in Git history and
+the dated [advisory archive](publication/2026-09-28/README.md) retains its
+published snapshots. The [later technical advisory](advisory/technical-report-2026-10-01.md)
+indexes subsequent evidence and its limits. The integration below records
+practical review requirements, not a claim that the revised experiments are
+bundled or independently validated here.
 
 Freeze the object of each claim before proving or measuring it: the protected
 unit and population, secret/action spaces and gain or advantage baseline,
@@ -67,11 +71,13 @@ The supporting reference-core assurance argument has three distinct obligations:
 | Relative scope completeness | An explicit partition of the declared scenario universe with reasoned exclusions and export-channel witnesses | Finite declared coverage can be checked; truth and completeness of the real-world universe are not proved |
 | Lifecycle integrity and executable correspondence | Invariants for the chosen transition model, a non-vacuous valid trace, and counterexamples to stronger claims | Lean covers the documented abstract/ideal semantics; Python regression agreement is not parser or implementation refinement |
 
-The [mathematical appendix](mathematical-foundations.md),
-[formal theorem inventory](formal-verification.md), and
-[academic proof/evaluation plan](../reproduction/README.md#academic-plan) are the
-single supporting references. The plan separates established artifacts from
-unproved bridges and proposed experiments, including reference-pipeline scaling.
+The [mathematical appendix](mathematical-foundations.md) and
+[formal theorem inventory](formal-verification.md) describe the local arguments
+and machine-checked scope. The [frozen advisory archive](publication/2026-09-28/README.md)
+and [later technical advisory](advisory/technical-report-2026-10-01.md)
+distinguish established results from remaining gaps. Current research plans and
+manuscript sources belong to the separate academic checkout, whose public
+migration is pending.
 Cryptographic primitives and ideal registry/gateway services may be explicit
 assumptions of an abstract theorem; concrete refinement is not implied by them.
 No academic result may be promoted to a deployment claim without the industrial
@@ -80,7 +86,7 @@ supplemental and cannot substitute for any of these obligations.
 
 ### 1.2 Applying the repeated-export study to an agency audit
 
-This dated integration note records implications of the active manuscript and
+This dated integration note records implications of the then-active manuscript and
 local implementation as of 22 September 2026. It does not change an MRAP gate,
 raise the repository's conformance level, or convert a research result into
 admissible agency evidence. The [integrated audit procedure](system-audit-specification.md#911-repeated-export-agency-audit-update-e)

@@ -189,14 +189,30 @@ class ExportCLITests(unittest.TestCase):
                 self.assertIn(missing, error["detail"])
                 self.assertEqual(self.snapshot(self.root), before)
 
+    def test_repository_without_retained_study_receipts_fails_before_store_open(self):
+        repository = self.root / "empty-research-workspace"
+        repository.mkdir()
+        before = self.snapshot(self.root)
+        with patch("model_release_assurance.export_poc.cli.ExportStore") as store:
+            error = self.invoke("serve", "--repository", str(repository), expected=2)
+        self.assertIn("verification-v1.json", error["detail"])
+        self.assertIn("--repository", error["detail"])
+        self.assertEqual(self.snapshot(self.root), before)
+        store.assert_not_called()
+
     @unittest.skipUnless(HAS_API, "HTTP service dependencies unavailable")
     def test_explicit_service_paths_are_forwarded_without_initialization(self):
         repository, study, operator = (self.root / name for name in ("repo", "run", "operator"))
-        for root, files in ((repository, ()), (study, ("registration.json", "results.json", "completion.json")),
+        for root, files in ((repository, (
+                "reproduction/acs-temporal-assurance-20260921/verification-v1.json",
+                "reproduction/acs-temporal-assurance-20260921/report-v2/verification.json")),
+                            (study, ("registration.json", "results.json", "completion.json")),
                             (operator, ("workflow.json", "assurance.sqlite3"))):
             root.mkdir()
             for name in files:
-                (root / name).write_text("fixture", encoding="utf-8")
+                file = root / name
+                file.parent.mkdir(parents=True, exist_ok=True)
+                file.write_text("fixture", encoding="utf-8")
         before = self.snapshot(self.root)
         sentinel = object()
         with patch("model_release_assurance.export_poc.api.create_app", return_value=sentinel) as create, patch("uvicorn.run") as run:

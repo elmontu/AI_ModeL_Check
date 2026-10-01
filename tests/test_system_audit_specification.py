@@ -24,13 +24,12 @@ class SystemAuditSpecificationTests(unittest.TestCase):
         for path in (ROOT / "README.md", ROOT / "CONTRIBUTING.md"):
             self.assertIn("system-audit-specification.md", path.read_text(encoding="utf-8"))
 
-    def test_navigation_prioritizes_government_audit_and_keeps_research_boundary(self) -> None:
+    def test_navigation_prioritizes_government_audit_and_separate_research(self) -> None:
         readme = (ROOT / "README.md").read_text(encoding="utf-8")
         for target in (
             "docs/government-audit-guide.md",
             "docs/enforced-release-workflow.md",
-            "academic/paper/mra-paper.tex",
-            "reproduction/README.md#paper-draft",
+            "docs/publication/2026-09-28/README.md",
             "docs/system-audit-specification.md#industrial-track",
             "docs/model-release-assurance-protocol.md",
         ):
@@ -38,16 +37,14 @@ class SystemAuditSpecificationTests(unittest.TestCase):
             self.assertTrue((ROOT / target.split("#", 1)[0]).is_file())
         self.assertLess(
             readme.index("docs/government-audit-guide.md"),
-            readme.index("academic/paper/mra-paper.tex"),
+            readme.index("https://github.com/elmontu/AI_Model_Academic"),
         )
-        self.assertIn("one shared core", readme)
-        self.assertIn("no deployment obligation is waived", readme)
+        self.assertIn("No deployment obligation is waived", readme.replace("\n", " "))
         normalized = " ".join(readme.split())
         for statement in (
-            "Data Minimization and Dependency Accounting for Repeated Model Export",
-            "separately maintained 21 September 2026 working draft",
-            "not included in this government implementation update",
-            "previously published academic snapshot",
+            "separate academic repository",
+            "public GitHub publication is pending",
+            "does not cover studies completed after that date",
             "--temporal-run",
             "--temporal-operator",
         ):
@@ -63,16 +60,17 @@ class SystemAuditSpecificationTests(unittest.TestCase):
         self.assertIn("Deferral changes priority", self.text)
         self.assertIn("every applicable lifecycle requirement and gate remains mandatory", self.text)
 
-    def test_academic_plan_is_not_a_completed_experiment(self) -> None:
-        reproduction = (ROOT / "reproduction" / "README.md").read_text(encoding="utf-8")
-        self.assertIn('<a id="academic-plan"></a>', reproduction)
-        plan = reproduction.split('<a id="academic-plan"></a>', 1)[1].split(
-            "## Asset matrix", 1
-        )[0]
-        self.assertIn("proposed, not executed", plan)
-        self.assertIn("not a registration", plan)
-        for question in ("RQ1:", "RQ2:", "RQ3:"):
-            self.assertIn(question, plan)
+    def test_dated_advisory_archive_states_its_reproduction_limits(self) -> None:
+        bundle = ROOT / "docs" / "publication" / "2026-09-28"
+        overview = (bundle / "README.md").read_text(encoding="utf-8")
+        self.assertIn("28 September 2026", overview)
+        self.assertIn("104 original evidence references", overview)
+        self.assertIn("94 distinct source snapshots", overview)
+        self.assertIn("Repeating the original training experiments", overview)
+        self.assertIn("outside this reporting snapshot", overview)
+        for target in ("publication-manifest.json", "verify_publication.py",
+                       "evidence/source-manifest.json"):
+            self.assertTrue((bundle / target).is_file())
 
     def test_current_protocol_vocabulary_is_complete(self) -> None:
         for state in ReleaseProtocolState:

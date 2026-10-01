@@ -10,6 +10,10 @@ from urllib.parse import unquote
 
 ROOT = Path(__file__).resolve().parents[1]
 SKIP_DIRECTORIES = {".git", ".venv", ".venv-pipeline", ".local", ".privacy-venv", "build", "dist", "output"}
+FROZEN_SNAPSHOT_DIRS = (
+    Path("docs/publication/2026-09-28/evidence/source"),
+    Path("docs/publication/2026-09-28/evidence/context"),
+)
 LINK_PATTERN = re.compile(r"!?\[[^\]]*\]\(([^)]+)\)")
 EXTERNAL_PREFIXES = ("#", "http://", "https://", "mailto:")
 
@@ -20,6 +24,10 @@ def markdown_files() -> tuple[Path, ...]:
             source
             for source in ROOT.rglob("*.md")
             if not SKIP_DIRECTORIES.intersection(source.relative_to(ROOT).parts)
+            and not any(
+                source.relative_to(ROOT).is_relative_to(snapshot)
+                for snapshot in FROZEN_SNAPSHOT_DIRS
+            )
         )
     )
 
@@ -58,9 +66,16 @@ def missing_links() -> tuple[str, ...]:
 def main() -> int:
     sources = markdown_files()
     failures, generated_count = _check_links(sources)
+    frozen_count = sum(
+        1
+        for snapshot in FROZEN_SNAPSHOT_DIRS
+        if (ROOT / snapshot).exists()
+        for _ in (ROOT / snapshot).rglob("*.md")
+    )
     print(
         f"checked local links in {len(sources)} Markdown files; "
-        f"{generated_count} local-only generated artifact links under output/ (not checked)"
+        f"{generated_count} local-only generated artifact links under output/ (not checked); "
+        f"{frozen_count} preserved source/context snapshots (checked by archive verifier)"
     )
     if failures:
         print("\n".join(failures))

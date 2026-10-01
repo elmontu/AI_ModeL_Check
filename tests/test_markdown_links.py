@@ -104,6 +104,24 @@ class MarkdownLinkTests(unittest.TestCase):
         self.assertEqual(result, 1)
         self.assertIn("0 local-only generated artifact links", output)
 
+    def test_frozen_source_snapshots_are_separate_from_active_document_links(self):
+        self.write(
+            "docs/publication/2026-09-28/evidence/source/old.md",
+            "[historical local path](D:/old-local-result.json)",
+        )
+        self.write(
+            "docs/publication/2026-09-28/evidence/context/old.md",
+            "[historical missing](missing-old.md)",
+        )
+        self.write("docs/publication/2026-09-28/evidence/source-index.md", "[missing](missing-current.md)")
+        self.write("docs/current.md", "[valid](publication/2026-09-28/evidence/source-index.md)")
+        self.assertEqual(len(CHECKER.missing_links()), 1)
+        result, output = self.run_checker()
+        self.assertEqual(result, 1)
+        self.assertIn("missing-current.md", output)
+        self.assertNotIn("missing-old.md", output)
+        self.assertIn("2 preserved source/context snapshots", output)
+
 
 if __name__ == "__main__":
     unittest.main()

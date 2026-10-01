@@ -598,14 +598,19 @@ class CeilingExperimentSummaryTests(unittest.TestCase):
                 json_path.read_bytes(),
                 (ROOT / "reproduction/ceiling-experiment-summary.json").read_bytes(),
             )
-            self.assertEqual(
-                markdown_path.read_bytes(),
-                (ROOT / "academic/paper/ceiling-experiment-results.md").read_bytes(),
+            repeated = base / "repeated"
+            summary_tool.generate_artifacts(
+                known,
+                current,
+                repeated / "reproduction/ceiling-experiment-summary.json",
+                repeated / "paper/ceiling-experiment-results.md",
+                repeated / "paper/figures/ceiling-validation.svg",
+                predecessor,
             )
-            self.assertEqual(
-                svg_path.read_bytes(),
-                (ROOT / "academic/paper/figures/ceiling-validation.svg").read_bytes(),
-            )
+            self.assertEqual(markdown_path.read_bytes(),
+                             (repeated / "paper/ceiling-experiment-results.md").read_bytes())
+            self.assertEqual(svg_path.read_bytes(),
+                             (repeated / "paper/figures/ceiling-validation.svg").read_bytes())
 
         retained = (
             (

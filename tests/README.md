@@ -10,10 +10,11 @@ Run tests from the repository root. Several tests import utilities directly
 from the top-level `scripts/` directory, so an arbitrary working directory is
 not a supported invocation context.
 
-Paper consistency and finite-construction checks live in
-[academic/tests/](../academic/tests/). They use retained artifacts and exact
-constructions without rerunning historical model studies or building the PDF.
-Both test directories are included by `make test` and the CI `make check` target.
+Paper consistency and finite-construction checks are retained in the
+[separate academic repository](https://github.com/elmontu/AI_Model_Academic/tree/main/tests).
+They use retained artifacts and exact constructions without rerunning historical
+model studies or building the PDF. This government repository's `make test`
+and CI checks run its own `tests/` directory.
 
 ## Test categories
 
@@ -69,7 +70,6 @@ Run the Python suite:
 
 ```bash
 PYTHONPATH=src python -m unittest discover -s tests -v
-python -m unittest discover -s academic/tests -v
 ```
 
 Run compile checks, Python tests, current-schema replay, and local Markdown-link checks:

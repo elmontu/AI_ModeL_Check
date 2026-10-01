@@ -10,310 +10,34 @@ Generated datasets, caches, trained models, raw measurements, and audit stores
 remain outside the published evidence set, normally under ignored `output/`
 paths. The [ceiling publication summary](ceiling-experiment-summary.json) and
 [2026-09-02 training-hook execution audit](../docs/real-data-training-hook-audit-2026-09-02.md)
-and the paper's aggregate companion are explicit aggregate-only publication exceptions. Retained failures are
-evidence, not obsolete files to erase after a corrective run or code fix.
+are explicit aggregate-only publication exceptions in this repository.
+Retained failures are evidence, not obsolete files to erase after a corrective
+run or code fix.
 
 <a id="paper-draft"></a>
 
-## Research paper draft and evidence companion
+## Academic paper and companion
 
-The canonical manuscript is [academic/paper/mra-paper.tex](../academic/paper/mra-paper.tex), with
-[verified primary references](../academic/paper/references.bib),
-[generated tables](../academic/paper/experimental-tables.tex), a
-[vector scaling figure](../academic/paper/figures/academic-scaling.pdf), and the
-[complete bounded aggregate inventory](../academic/paper/experimental-data.json).
-There is no second Markdown manuscript. The title is *Model Governance for
-Government Bodies: An Evidence-Bound Release Assurance Protocol*. The paper
-studies an accountable public body's authorization of model use, update and
-renewal. Privacy is its worked technical assurance case, not a mathematical
-replacement for all model-governance duties. The three questions concern
-institutional authorization conditions, privacy floor/ceiling uncertainty, and
-which components the available model evidence supports while institutional
-validation remains unperformed.
-
-The normative, jurisdiction-neutral government profile records accountable authority,
-purpose and impact review, procurement/vendor limits, human oversight and
-redress, transparency with justified exemptions, monitoring and retirement.
-Mandatory obligations must be evidenced by their due lifecycle stage. Privacy
-RELEASE does not confer institutional authorization, and accepted residual
-privacy risk cannot waive mandatory legal or rights obligations. Governmental
-and research sources inform the design; citing them does not establish legal
-compliance, agency approval or the effectiveness of an institution's practice.
-It does not add an implemented government-policy checker to the current core.
-
-The draft uses unmodified IEEEtran
-1.8b `conference,compsoc` formatting and is oriented toward IEEE S&P. The
-[S&P 2027 call](https://sp2027.ieee-security.org/cfpapers.html) permits up to
-13 main-text pages and five additional reference/appendix pages. Human
-authorship, source/claim validation, ethics review and venue-specific AI-use
-disclosures still need to be finalized before submission. The full protocol,
-pseudocode, proofs and retained aggregate tables now exceed that appendix
-allowance: this is explicitly an **extended research draft**, not a
-submission-length paper. No layout compression or evidence removal is used
-to disguise the difference.
-
-[Section 3](../academic/paper/protocol-section.tex) integrates seven safeguards into
-admission and transition rules. The [protocol appendix](../academic/paper/protocol-appendix.tex)
-contains six pseudocode procedures, proofs of the six main guarantees and
-seven gap arguments, including general observation-relative and fixed-budget
-threshold limits. A no-go result justifies only its scoped refusal; it does
-not authorize release or claim that no stronger observation model can work.
-Implementation and evaluation methods are presented together. The main results
-test technical protocol obligations and distinguish privacy-ceiling validity from decision
-resolution, retaining the primary finite-construction and ceiling-study tables.
-Detailed model workloads, CLI timings, software provenance, proof inventory and
-complete supplementary aggregate tables remain in the appendices. Moving those
-details does not change their source vintages or make them evidence for a
-stronger theorem. Historical positive, adverse and unsupported results are
-preserved, not rerun or relabelled as current production evidence.
-There is no government field study in this evidence set. A workload or finite
-privacy result is not a measurement of procurement quality, public legitimacy,
-fairness, redress effectiveness or compliance.
-
-The separate [September 9 independent synthetic model study](independent-models-synthetic-v1/README.md)
-completed 168 fresh model fits under a locally frozen registration. Its own
-companion retains every selection and rejected candidate, including severe
-loss of useful selections near the threshold. The
-[local lifecycle reference](../docs/lifecycle-reference-verification.md) adds
-37 passing regression checks of transactional mechanics, with no integrated
-serving or production authorization claim. These are new evidence layers;
-they do not replace the historical experiments or Lean receipts.
-
-From the repository root, compile the retained TeX, bibliography and figure
-with Tectonic (or an IEEEtran-capable LaTeX installation):
-
-```bash
-tectonic --untrusted --outdir output/pdf academic/paper/mra-paper.tex
-```
-
-Create `output/pdf` first if absent. Tectonic may fetch standard TeX packages;
-`--only-cached` permits offline compilation after that first build. The output
-is `output/pdf/mra-paper.pdf`. The retained tables and figure are sufficient
-for typesetting; no model training, dataset download or MRA installation is
-needed. An isolated compiler was used locally; it is not a core dependency.
-
-The new [gap-construction artifact](../academic/paper/gap-construction-results.json)
-is separate from historical empirical data. Reproduce it offline with
-`python academic/scripts/check_academic_gap_constructions.py --check` using only the
-standard library. It checks complete finite decoder classes, multiplicity,
-scope residuals, joint XOR leakage, TV/metric boundaries, 93,312 reducer-grid
-cases plus ten named boundaries, and ideal-authentication semantics. Counts
-have different units; they are not a pooled model privacy success rate.
-Six strict-selection controls and five grant/revocation interleavings are
-reported separately from those reducer counts and semantic worlds.
-These checks validate finite constructions, not Python refinement or deployed
-measurement truth. The [gap table](../academic/paper/gap-tables.tex) is generated from
-this separate artifact by the same manuscript table builder.
-
-To regenerate the data-derived tables and figure, use Python with the optional
-`reportlab` package and run `python academic/scripts/build_academic_paper.py`. Add
-`--check` to compare generated bytes. The figure uses Windows Times when
-available and a Times-Roman fallback elsewhere, so byte-identical figure
-regeneration requires the same fonts and renderer. These are document tools,
-not new MRA runtime dependencies.
-
-The companion contains 109 hashed source records, 63 tables and 4,754 rows,
-including all 4,200 retained aggregate finite-channel replay rows. It preserves
-the failed v2 criterion, unsealed legacy outputs and rejected launcher-memory
-measurements with explicit status labels. Values have source-field pointers;
-curated historical hook values retain their original rounding. Configured-only
-and incomplete studies are explicitly excluded from completed-result claims.
-This is not a claim that every historical raw artifact is retained or public.
-
-`python academic/scripts/build_academic_paper_data.py --check` additionally reconstructs
-the companion from its allowlisted original sources. Some are local ignored
-`output/` files: a clean clone can inspect the retained companion and rebuild
-the tables, but cannot independently repeat every source-hash check without
-those originals. Hashes are not authenticated measurement certificates. Raw
-dialogue, images, per-example losses, rosters, weights and keys are excluded;
-any future release of underlying materials needs its own rights, privacy and
-anonymization review. No corrected end-to-end scalability experiment or new
-machine-checked theorem was created by writing this draft.
-
-The academic directory separates manuscript work, assembly tools and consistency
-tests from the shared runtime. Historical source paths in the companion remain
-relative to the repository root. The relocation updates generator locations and
-their byte hashes; retained observations, source hashes and claim boundaries are
-unchanged. Run `python -m unittest discover -s academic/tests -v` from the
-repository root for the academic checks; `make test` includes both test directories.
-The compiled PDF and compiler output belong in ignored `output/pdf/`, separately
-from the committed paper sources and retained aggregate artifacts.
+The manuscript, paper-building scripts, and research tests belong to the
+[separate academic repository](https://github.com/elmontu/AI_Model_Academic).
+This government repository retains the dated [agency advisory archive](../docs/publication/2026-09-28/README.md)
+and its [technical interpretation](../docs/advisory/technical-report-2026-10-01.md).
+The 28 September archive verifies published tables and source references; it
+does not include all original model weights, data or later study results.
+Older paper drafts and assembly instructions remain in Git history. Their
+historical hashes and measurements were not restamped by this separation.
 
 <a id="academic-plan"></a>
 
-## Academic-first evaluation plan — proposed, not executed
+## Academic evaluation plans
 
-This is the academic track's prospective research plan, not a registration or
-completion report. It adds no measured results to the historical inventory below.
-The priority is a defensible claim, its explicit assumptions, a reproducible
-check, and an adversarial attempt to falsify it. Production engineering is a
-separate industrial track; deferring it does not remove its proof obligations.
-
-### Research questions and publication exit criteria
-
-| Research question | Existing proof/evidence and its boundary | Proposed evaluation and publication exit criterion |
-|---|---|---|
-| RQ1: Under which conditions may a government body authorize model use, update or renewal? | The normative profile binds accountable authority, stage-due evidence and review to an ordered lifecycle. [Lean results](../docs/formal-verification.md) concern abstract semantics and [regressions](../docs/gap-remediation.md) specific software paths; neither proves the truth or legal adequacy of institutional decisions. | Freeze the applicable authority, purpose, obligations, review roles and renewal/invalidation rules. Independently examine representative governance cases and evidence gaps under an approved study design. Treat institutional validation, legal review and implementation refinement as separate requirements, not consequences of the privacy theorem. |
-| RQ2: How should privacy floor/ceiling evidence represent uncertainty within that governance decision? | The technical case separates demonstrated attack capability from a valid upper bound, and coverage from decision resolution. The failed v2 criterion and near-boundary v3 holds remain evidence; all v3 oracle risks are below tolerance, so model-backed unsafe-side power is not established. | Preregister the privacy game, full joint export, selection/error allocation, margins and safe/unsafe controls. Report widths, holds and failures together. Privacy RELEASE remains a scoped recommendation; accepted residual privacy risk cannot substitute for any mandatory institutional obligation. |
-| RQ3: Which components do existing tree, image and language-model results validate, and what institutional validation is missing? | Historical workloads show bounded execution and scoped attack floors; ceilings of one do not clear privacy. Finite-channel studies and signed offline fixtures have different evidence boundaries. No government field study or agency approval is established. | Evaluate faithful collection and complete reference paths on their technical merits, and separately register any study of review, oversight, procurement, redress or public-sector use. A future corrected full-chain scalability study needs complete traces and independent repetitions. Existing component results cannot be relabelled as public-sector validation. |
-
-Before using novelty or superiority language, compare the proposed claim and
-assumptions with the [primary-source literature](../docs/literature-review.md).
-Select baselines by the property they actually enforce. A faster system that
-omits validation is not a like-for-like competitor. Where no comparable
-implementation exists, publish the conceptual comparison and state that a
-performance superiority claim was not tested.
-
-### Correctness and stated-model completeness study
-
-The study must distinguish kernel-checked theorems, handwritten conditional
-arguments, executable finite checks, and observed software behavior. Rebuilding
-Lean and passing Python tests are separate tasks; vocabulary correspondence is
-not a refinement proof. Preserve the [mathematical premises](../docs/mathematical-foundations.md),
-including statistical coverage events and the admissibility of transferred
-decision rules. Publish both non-vacuous accepting controls and refusing cases.
-
-The first proof deliverable is the four-verdict partition and precedence rule:
-missing/invalid evidence and blocking floors cannot be overridden; signed risk
-acceptance is outside the ordinary below-threshold clearance theorem. Any
-false-RELEASE probability claim must cover every selectable candidate–threat
-and release/time claim under the actual selection and stopping procedure, not
-only the candidate retained after looking at outcomes. State the inclusion of
-false-release events in registered failure events as an assumption or prove it;
-the finite union-bound theorem does not discharge that premise. Standard
-Blackwell and union-bound results are foundations, not claimed new contributions.
-
-The preregistered counterexample families should include missing or reordered
-stages; changed upstream evidence with stale downstream signatures; wrong
-policy/game/population; absent battery/control evidence; hash/signature failure;
-source substitution; expired or revoked acceptance; exact threshold equality and
-one-unit rational perturbations; contradictory bounds; and an optional-but-in-scope
-threat whose floor exceeds tolerance. Test all four governance dispositions with
-genuine engine-produced evidence, not only mocked interval objects. Use separate
-test keys and synthetic institutional actors; successful authentication in that
-test environment does not validate a real authority.
-
-Mathematical negative controls must also challenge the scientific premises:
-weak attacks cannot supply ceilings; maxima across attacks and repeated looks need
-valid family/lifetime allocation; average risk does not bound a worst allowed
-subgroup; and marginal channel bounds do not bound a joint export (for example,
-the two-share XOR construction). Reproduce exact finite constructions where
-possible. A finite mutation score measures only the registered case family.
-Add a prospectively frozen generative transition/input campaign with disclosed
-search budget and seed schedule; zero found violations is not exhaustiveness.
-
-For completeness, define the approved universe before collecting outcomes.
-Threat names such as membership and attribute inference may overlap. If using
-membership-profile atoms to form a partition, retain the all-false residual atom
-and explain the predicates' semantic adequacy separately. Every in-scope scenario
-must have decision evidence in the same game; every exclusion needs a reason.
-An unknown/unmapped residual cannot silently become clearance. Include the joint
-and adaptive observations allowed by the interface, not merely a list of
-individually checked weights, outputs, metadata and logs. Independent review can
-challenge the scope but cannot prove that no real-world channel was omitted.
-For a threat-class ceiling, bound the supremum over the registered allowed
-adversaries and joint observations; an average over sampled attacks or a finite-pool
-membership score is not automatically that class-wide upper bound.
-
-### Fresh tree/image/LLM protocol-scaling study
-
-The following is a proposed design floor to be finalized in a new registration,
-not permission to repin any retained study. Use real fitted tree ensembles, real
-image architectures and pretrained generative LLMs with a declared fine-tuning
-target; do not present controlled channel names or text-classifier proxies as
-real-model scalability. Pretraining membership must remain unknown unless an
-independently justified membership frame exists.
-
-1. **Freeze two complementary cohorts.** A model-backed cohort starts with
-   registered training inputs, runs actual training and fresh evidence collection,
-   and proceeds through every admissible downstream stage to its genuine final
-   outcome. A refusal is a valid outcome, not a reason to invent a ceiling or
-   waive a required obligation. Separate controlled accepting traces exercise
-   the complete reference signing, audit and lifecycle paths. Label these
-   synthetic controls; they cannot fill missing real-model completion cells.
-   Map the actual MRAP states, CLI artifacts and stop conditions before claiming
-   that a chain is end-to-end. An `ASSESSED` prefix is not an `ACTIVE` trace.
-2. **Vary scale explicitly.** Propose at least two capacity settings per model
-   family, three workload sizes and three independent training/run seeds per
-   setting. Freeze exact models/revisions, tree counts/depths, parameter counts,
-   rows, image resolution, sequence length, tokens, optimizer steps and effective
-   batch size. Use nested workloads only as a disclosed paired design, not
-   independent population replications. If the resource envelope cannot support
-   this design, register a smaller study and narrow the resulting claim before
-   observing outcomes. Do not extrapolate a toy-only run to industrial scale.
-3. **Measure both model and protocol workload.** Separate training volume/model
-   capacity from evidence-record count, audit-log length, declared scenario count,
-   candidate count, joint observation alphabet and portfolio size. Register
-   which dimensions vary and which remain fixed.
-   Fixed-size privacy scoring cannot demonstrate scaling in audit sample size;
-   duplicating fixture records cannot demonstrate additional threat coverage.
-   Maintain admissible fresh identities/context when constructing protocol-load
-   controls, and identify them as synthetic load rather than independent evidence.
-4. **Control runtime conditions.** Freeze source/dirty-tree inventory, exact
-   dependencies, dataset/model hashes, split/deduplication rules, seeds, precision,
-   CPU threads, GPU type/memory, batch/accumulation and time/memory limits. Record
-   background contention, OS/storage and warm/cold cache state. Serialize competing
-   GPU jobs, synchronize device timing, separate warm-up from measured work, and
-   randomize or block the cell order prospectively. Predeclare OOM/time-limit
-   handling; do not silently switch device, precision, model or batch after failure.
-5. **Time the whole reference chain.** Record acquisition/cache preparation,
-   registration, training, evidence collection, contract parsing, source hashing,
-   analysis, assurance disposition, signatures, audit append, lifecycle replay and
-   final gate separately, plus end-to-end wall time, throughput, peak host/device
-   memory, disk bytes and completion/failure state. Distinguish core-library work
-   from CLI/process startup and define every timer's inclusion boundaries. Mark
-   unreachable stages as not executed; do not impute their cost as zero or pool
-   refused prefixes with completed chains. No timing stands for an unimplemented
-   live registry or serving gateway.
-6. **Keep scientific outcomes and costs distinct.** Report within-model utility
-   before/after, attack metric, finite-pool/population scope, confidence bounds,
-   floor/ceiling/gap, final verdict and utility loss. Tokenizer-specific perplexities
-   are not cross-model equivalents, and tree/image/LLM risk metrics must not be
-   averaged together. State the prior/baseline before calling success probability
-   an advantage. For empirical inference, preregister calibration/selection
-   separation, sampling units, dependence treatment and allocation across attacks,
-   classes, subgroups, cells and repeated looks. A worst-case ceiling of one is
-   honest when no stronger bound applies; it is not a measured risk estimate.
-7. **Include failure and overhead controls.** Pair each relevant positive chain
-   with missing-evidence, tampered-source/signature, stale-context and scope-gap
-   controls, plus scientifically valid above-threshold and boundary cases where
-   constructible. Do not call an artificially altered empirical result a real
-   attack. Measure instrumentation/checking overhead using matched workloads;
-   disabled-validation variants are experimental ablations, never usable gates.
-   Retain adverse utility outcomes, timeouts, OOMs, refusals and abandoned cells.
-
-Publication requires a prospective plan and source/runtime bindings before the
-first outcome, a complete inventory of attempted cells, independent replay of
-counts/certificates/digests, and completion manifests for every claimed completed
-run. Freeze separate soundness and decision-resolution criteria for controlled
-safe, unsafe and near-boundary cases, with multiplicity-adjusted uncertainty and
-declared margins; throughput cannot compensate for a soundness failure. Claim
-model-backed blocking power only if scientifically valid above-threshold
-model-backed cases were actually evaluated. Report per-cell values and paired
-uncertainty over independent run seeds;
-do not treat repeated queries from one trained model as independent training
-replications or use a few repetitions for unsupported tail-latency claims.
-Aggregate publication and privately retained replay material must have explicit
-access/retention rules. Changed code needs a new run identity and registration;
-old failures and registrations remain immutable. If any publication exit criterion
-is unmet, report the narrower result or the incomplete study, not a completed claim.
-
-### Industrial boundary: deferred, not discharged
-
-The industrial track would need authenticated authority/role enrollment, protected
-keys, independently trustworthy measurement and execution receipts, an authoritative
-current inventory, linearizable durable registry operations, rollback-resistant
-audit anchoring, actual artifact/interface measurement, complete serving mediation,
-monitoring and enforceable revocation. It also needs operational availability,
-incident recovery, retention/access controls and domain-specific legal, fairness
-and stakeholder decisions. Those are not proved by a local transcript or benchmark.
-
-Academic evaluation may use declared test doubles for these external services to
-study conditional semantics, provided every substitution is explicit. It must not
-claim production security, deployed end-to-end enforcement, verified Ed25519 or
-Python refinement without the corresponding additional proof and implementation
-evidence. Academic priority determines work order, not a weaker interpretation of
-release safety. All proposed runs remain non-authorizing.
+Current study protocols, manuscript sources and research-only execution tools
+are maintained in the [academic repository](https://github.com/elmontu/AI_Model_Academic).
+A plan or configuration is not a completed experiment. The government
+implementation uses its own [case and release workflow](../docs/government-audit-guide.md),
+and the [advisory report](../docs/advisory/technical-report-2026-10-01.md)
+records the limits of completed research evidence. Prior plan text remains in
+Git history for provenance.
 
 ## Asset matrix
 
@@ -362,7 +86,7 @@ tiers. A current compatibility range is not a historical environment lock.
 
 ## Ceiling result interpretation
 
-The [generated tables and figure](../academic/paper/ceiling-experiment-results.md) are
+The [retained ceiling summary](ceiling-experiment-summary.json) are
 derived from the retained source reports by
 `scripts/summarize_ceiling_experiments.py`. Keep those publication artifacts and
 their source reports byte-identical; do not edit a measured value in prose to

@@ -1,26 +1,31 @@
 # Contributing
 
-## Track selection and current priority
+## Repository scope and contributions
 
-Academic work is the current priority: tighten the stated claim, discharge or
-expose its proof obligations, preserve counterexamples, and run prospectively
-registered evaluations. Follow the [academic plan](reproduction/README.md#academic-plan).
-Industrial work on authoritative identity, worker isolation, registry/gateway
-services and operational deployment is deferred; its acceptance requirements
-remain in the [industrial track](docs/system-audit-specification.md#industrial-track).
+This repository maintains the government audit implementation, its contracts,
+tests, operating guides and dated advisory archive. Start with the
+[government audit guide](docs/government-audit-guide.md) and the
+[implementation boundary](docs/system-audit-specification.md#industrial-track).
+The current research manuscript, its study protocols and paper-building tools
+are maintained in a separate academic checkout; its public repository is still
+pending publication. The [reproduction index](reproduction/README.md) describes
+the historical assets retained here.
 
-Label a contribution `academic`, `industrial`, or `shared-core` in its description.
-Use the existing library, contracts and canonical documents rather than copying
-them into track-specific trees. A shared-core change must document its effect on
-both tracks and on existing proof/evidence bindings. Research priority does not
-waive a known fail-open defect or permit unsafe deployment claims.
+Label a contribution `government-implementation`, `advisory`, or `shared-core`
+in its description. Use the existing library, contracts and canonical documents.
+A shared-core change must explain its effect on research source bindings and
+existing proof and evidence claims. Fix known fail-open defects without treating
+research results as deployment approval. Authoritative identity, worker
+isolation, registry and gateway services still need the acceptance evidence in
+the [industrial track](docs/system-audit-specification.md#industrial-track).
 
-For an academic claim, identify its premises, proof status, counterexamples,
-supporting source or experiment, and remaining gap. Distinguish kernel-checked
-theorems, handwritten arguments, finite regression checks, and observations.
-New empirical claims require a frozen prospective plan and fresh result paths;
-do not restamp historical studies. Navigation tests only protect documentation
-structure; they are not evidence of scientific correctness or novelty.
+For a new or revised advisory claim, identify its premises, proof status,
+counterexamples, supporting source or experiment, and remaining gap.
+Distinguish kernel-checked theorems, handwritten arguments, finite regression
+checks and observations. New empirical claims require a frozen prospective
+plan and fresh result paths in the academic workstream; do not restamp historical
+studies. Navigation tests protect documentation structure, not scientific
+correctness or novelty.
 
 ## Development setup
 

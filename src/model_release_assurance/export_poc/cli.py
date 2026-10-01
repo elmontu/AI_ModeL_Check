@@ -65,7 +65,10 @@ def service_paths(args) -> dict[str, Path]:
     """
     options = {}
     required = {
-        "repository": (),
+        "repository": (
+            "reproduction/acs-temporal-assurance-20260921/verification-v1.json",
+            "reproduction/acs-temporal-assurance-20260921/report-v2/verification.json",
+        ),
         "temporal_run": ("registration.json", "results.json", "completion.json"),
         "temporal_operator": ("workflow.json", "assurance.sqlite3"),
     }
@@ -79,15 +82,17 @@ def service_paths(args) -> dict[str, Path]:
             raise ValueError(f"{flag} needs an existing directory: {path}. No registry was initialized.")
         missing = [name for name in files if not (path / name).is_file()]
         if missing:
+            description = ("retained research workspace" if name == "repository"
+                           else "verified run or initialized operator directory")
             raise ValueError(f"{flag} is missing {', '.join(missing)}: {path}. "
-                             "Select an existing verified run or initialized operator directory; "
+                             f"Select an existing {description}; "
                              "no registry was initialized.")
         options[name] = path
     return options
 
 
 def warn_missing_temporal_defaults(options: dict[str, Path]) -> None:
-    """Keep the historical launcher usable while making unavailable data clear."""
+    """Keep the synthetic launcher usable while making unavailable data clear."""
     from ..temporal_assurance.web import DEFAULT_ROOT
     defaults = (
         ("temporal_run", "evidence replay", DEFAULT_ROOT / "run-v1",
@@ -98,7 +103,7 @@ def warn_missing_temporal_defaults(options: dict[str, Path]) -> None:
     for name, label, path, files in defaults:
         if name not in options and not all((path / name).is_file() for name in files):
             flag = "--" + name.replace("_", "-")
-            print(f"Temporal {label} is unavailable at the historical default {path}. "
+            print(f"Temporal {label} is unavailable at the local default {path}. "
                   f"Use {flag} EXISTING_DIRECTORY to select retained data. "
                   "The separate /synthetic lab can still run; no temporal registry is initialized.",
                   file=sys.stderr)
