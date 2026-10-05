@@ -272,6 +272,17 @@ def label_only_membership(target, config):
     return result
 
 
+def tabular_suite_tools():
+    """Registrations shared by execution and read-only discovery."""
+    tools=[(tool.name,tool.run) for tool in default_red_team_tool_registry().tools]
+    tools += [("membership_score_attacks",membership_scores),("model_extraction",extraction),
+              ("attribute_inference",attribute_inference),("numeric_robustness",robustness),
+              ("label_only_membership",label_only_membership),("adaptive_adversarial_search",adversarial_search),
+              ("tree_leaf_exposure",leaf_exposure),("label_poisoning",label_poisoning),
+              ("trigger_backdoor",trigger_backdoor)]
+    return tuple(tools)
+
+
 def run_tabular_suite(target: RedTeamTarget, config: RedTeamConfig) -> dict:
     import numpy as np
     # This educational implementation is bounded and accepts numeric classifier views only.
@@ -284,13 +295,7 @@ def run_tabular_suite(target: RedTeamTarget, config: RedTeamConfig) -> dict:
     if np.asarray(target.train_x).shape[1] != np.asarray(target.test_x).shape[1]:
         raise ValueError("training and evaluation feature counts must match")
     reports=[]
-    tools=[(tool.name,tool.run) for tool in default_red_team_tool_registry().tools]
-    tools += [("membership_score_attacks",membership_scores),("model_extraction",extraction),
-              ("attribute_inference",attribute_inference),("numeric_robustness",robustness),
-              ("label_only_membership",label_only_membership),("adaptive_adversarial_search",adversarial_search),
-              ("tree_leaf_exposure",leaf_exposure),("label_poisoning",label_poisoning),
-              ("trigger_backdoor",trigger_backdoor)]
-    for name,run in tools:
+    for name,run in tabular_suite_tools():
         try:
             if name == "structural_disclosure" and target.model_kind == "ensemble":
                 detail = {"unsupported":True,"reason":"composite parameter accounting requires component-aware structural analysis"}

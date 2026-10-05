@@ -19,6 +19,7 @@ from .models import AssessmentRequest, AttackBatteryInput
 from .privacy_orchestration import build_privacy_audit_plan
 from .services import AnalyzerServiceRegistry, default_analyzer_service_registry
 from .red_team import default_red_team_tool_registry
+from .red_team_catalog import red_team_discovery_catalog
 
 
 class AssuranceToolService:
@@ -74,8 +75,9 @@ class AssuranceToolService:
             "contract_version": "2.0",
             "catalog": catalog.model_dump(mode="json", exclude_none=False),
             "catalog_sha256": sha256_bytes(canonical_json_bytes(catalog)),
+            "discovery": red_team_discovery_catalog(),
             "execution_boundary": (
-                "Exploratory in-process tools run only inside the bounded empirical workflow. "
+                "Discovery includes exploratory console suites and a separate source-checkout experiment. "
                 "Decision-bearing submissions require AttackBatteryInput/1.0 from a separately "
                 "isolated worker."
             ),

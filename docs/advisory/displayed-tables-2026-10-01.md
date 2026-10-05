@@ -4,8 +4,9 @@
 appendix to the [technical advisory](technical-report-2026-10-01.md). It
 reproduces the pipe-delimited Markdown tables in the curated canonical
 29 September–1 October research reports and the later O4 gate amendment.
-The 28 September [frozen supplement](../publication/2026-09-28/README.md)
-separately preserves its 51 sections, 238 tables and 5,543 displayed rows.
+The 28 September [retired supplement](../government-academic-separation-plan-2026-10-01.md#retired-28-september-archive)
+previously contained 51 sections, 238 tables and 5,543 displayed rows;
+its files were removed from this checkout at the user's request.
 
 **Compiled scope:** 25 dated families, 26 source documents,
 88 Markdown tables and 737 displayed data rows. A row is

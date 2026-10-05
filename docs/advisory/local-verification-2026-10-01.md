@@ -1,6 +1,6 @@
 # Local verification receipt for the government–academic split
 
-**Date:** 1 October 2026. **Scope:** the local `codex/government-separation`
+**Date:** 1 October 2026. **Scope:** the local government
 worktree based on source commit `25f1acf`, and the separate local
 `AI_Model_Academic` checkout. These checks do not establish a GitHub release,
 an agency deployment, a privacy guarantee for arbitrary models, or complete
@@ -41,3 +41,6 @@ bytes, model-level measurements), and a historical clipping-by-world/task CSV
 user-path patterns; the verifier scans its support files as well as selected
 evidence. The government scan's path hits were test fixtures and public URLs.
 This is a current-tree screen, not a claim about every historical Git object.
+
+Publication note (5 October 2026): the workstation branch label was removed
+from this copy. The original receipt is retained locally and in Git history.

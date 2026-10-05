@@ -88,6 +88,11 @@ def create_app(root: Path) -> FastAPI:
         from ..export_poc.tools import export_construction_catalog
         return export_construction_catalog()
 
+    @app.get("/api/red-team-tools")
+    def red_team_tools():
+        from ..red_team_catalog import red_team_discovery_catalog
+        return red_team_discovery_catalog()
+
     @app.get("/api/government-audit")
     def government_audit_catalog():
         return government_audit.catalog()

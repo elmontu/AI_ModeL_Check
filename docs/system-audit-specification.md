@@ -8,7 +8,9 @@
 <a id="industrial-track"></a>
 ## Industrial track: deployment obligations, deferred
 
-The academic track is the current priority: the [protocol](model-release-assurance-protocol.md),
+The [agency private-cloud production plan](production-private-cloud-plan.md)
+now defines the government deployment workstream and proposed sequencing.
+Implementation remains outstanding. The [protocol](model-release-assurance-protocol.md),
 [mathematical foundations](mathematical-foundations.md), [formal results and their
 limits](formal-verification.md), and [reproduction inventory](../reproduction/README.md) define
 the reference-core claims and evidence. The separately maintained working manuscript

@@ -32,8 +32,82 @@ jobs:
       - name: Verify theorem inventory and toolchain boundary
         run: python scripts/verify_formal_protocol.py
 
+  required-profile:
+    name: Required government profile (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            python-path: .local/pipeline-release/bin/python
+            build-profile: linux
+          - os: windows-latest
+            python-path: .local/pipeline-release/Scripts/python.exe
+            build-profile: windows
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Bootstrap required release test environment
+        run: python scripts/setup_pipeline.py --profile console --venv .local/pipeline-release
+      - name: Install hash-pinned build verifier parser
+        shell: bash
+        run: >-
+          ${{ matrix.python-path }} -m pip install --require-hashes --only-binary=:all: --no-deps -r deploy/build/verification-runtime.requirements.txt
+      - name: Verify public wheel bundle and current dependency advisories
+        shell: bash
+        run: ${{ matrix.python-path }} -B scripts/verify_build_supply_chain.py --manifest deploy/build/${{ matrix.build-profile }}-cp312.json --download --scan-pypi --output .local/release-supply-chain
+      - name: Retain public dependency inventory and advisory evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-supply-chain-${{ matrix.os }}-${{ github.run_attempt }}
+          path: .local/release-supply-chain/*.json
+          include-hidden-files: true
+          if-no-files-found: error
+      - name: Run required government profile without skips
+        shell: bash
+        run: ${{ matrix.python-path }} -B scripts/run_required_tests.py --profile government --output .local/release-required
+      - name: Require complete government test evidence
+        if: always()
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          import stat
+
+          evidence = Path(".local/release-required")
+          for name in ("tests.log", "result.json"):
+              path = evidence / name
+              try:
+                  info = path.lstat()
+              except FileNotFoundError:
+                  raise SystemExit(f"Required test evidence is missing: {path}")
+              if (not stat.S_ISREG(info.st_mode) or info.st_size == 0
+                      or getattr(info, "st_file_attributes", 0) & 0x400):
+                  raise SystemExit(f"Required test evidence must be a nonempty regular file: {path}")
+          result = json.loads((evidence / "result.json").read_text(encoding="utf-8"))
+          if (not isinstance(result, dict) or result.get("profile") != "government"
+                  or result.get("status") not in {"passed", "failed"}):
+              raise SystemExit("Required test evidence has an invalid profile or status")
+          PY
+      - name: Retain required release test evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-government-required-${{ matrix.os }}-${{ github.run_attempt }}
+          path: |
+            .local/release-required/tests.log
+            .local/release-required/result.json
+          include-hidden-files: true
+          if-no-files-found: error
+
   release:
-    needs: formal
+    needs: [formal, required-profile]
     runs-on: ubuntu-latest
     timeout-minutes: 30
     permissions:
@@ -67,8 +141,12 @@ jobs:
         run: |
           python -m pip install --disable-pip-version-check -r requirements.lock
           python -m pip install --disable-pip-version-check -r requirements-experiments.txt
+          python -m pip install --disable-pip-version-check -r requirements-console.txt
           python -m pip install --no-deps -e .
           python -m pip install --disable-pip-version-check build twine
+      - name: Install hash-pinned build verifier parser
+        run: >-
+          python -m pip install --require-hashes --only-binary=:all: --no-deps -r deploy/build/verification-runtime.requirements.txt
       - name: Run release verification
         run: make PYTHON=python check
       - name: Build and validate artifacts

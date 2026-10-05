@@ -8,3 +8,7 @@
 /examples/** -text
 /reproduction/** -text
 /academic/** -text
+# Runtime locks, test evidence and versioned documents also bind exact bytes.
+/deploy/** -text
+/tests/** -text
+/docs/** -text

@@ -1,0 +1,8 @@
+{
+  "schema": "mra-local-build-policy/v1",
+  "environment": "public_fixture",
+  "advisory_max_age_seconds": 86400,
+  "license_review": "pending",
+  "required_test_profile": "government",
+  "require_zero_skips": true
+}

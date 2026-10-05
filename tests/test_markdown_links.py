@@ -104,10 +104,10 @@ class MarkdownLinkTests(unittest.TestCase):
         self.assertEqual(result, 1)
         self.assertIn("0 local-only generated artifact links", output)
 
-    def test_frozen_source_snapshots_are_separate_from_active_document_links(self):
+    def test_all_documentation_subdirectories_are_checked(self):
         self.write(
             "docs/publication/2026-09-28/evidence/source/old.md",
-            "[historical local path](D:/old-local-result.json)",
+            "[missing source](missing-source.json)",
         )
         self.write(
             "docs/publication/2026-09-28/evidence/context/old.md",
@@ -115,12 +115,12 @@ class MarkdownLinkTests(unittest.TestCase):
         )
         self.write("docs/publication/2026-09-28/evidence/source-index.md", "[missing](missing-current.md)")
         self.write("docs/current.md", "[valid](publication/2026-09-28/evidence/source-index.md)")
-        self.assertEqual(len(CHECKER.missing_links()), 1)
+        self.assertEqual(len(CHECKER.missing_links()), 3)
         result, output = self.run_checker()
         self.assertEqual(result, 1)
-        self.assertIn("missing-current.md", output)
-        self.assertNotIn("missing-old.md", output)
-        self.assertIn("2 preserved source/context snapshots", output)
+        for target in ("missing-source.json", "missing-old.md", "missing-current.md"):
+            self.assertIn(target, output)
+        self.assertIn("4 Markdown files", output)
 
 
 if __name__ == "__main__":

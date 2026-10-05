@@ -37,9 +37,9 @@ reasoned recommendations and lifecycle integrity remains supporting reference-co
 work; it was not that manuscript's central empirical contribution.
 
 The research manuscripts and later study archives are outside this government
-implementation checkout. Earlier academic files remain in Git history and
-the dated [advisory archive](publication/2026-09-28/README.md) retains its
-published snapshots. The [later technical advisory](advisory/technical-report-2026-10-01.md)
+implementation checkout. Earlier academic files and the
+[retired advisory archive](government-academic-separation-plan-2026-10-01.md#retired-28-september-archive)
+remain in Git history. The [later technical advisory](advisory/technical-report-2026-10-01.md)
 indexes subsequent evidence and its limits. The integration below records
 practical review requirements, not a claim that the revised experiments are
 bundled or independently validated here.
@@ -73,9 +73,10 @@ The supporting reference-core assurance argument has three distinct obligations:
 
 The [mathematical appendix](mathematical-foundations.md) and
 [formal theorem inventory](formal-verification.md) describe the local arguments
-and machine-checked scope. The [frozen advisory archive](publication/2026-09-28/README.md)
-and [later technical advisory](advisory/technical-report-2026-10-01.md)
-distinguish established results from remaining gaps. Current research plans and
+and machine-checked scope. The
+[later technical advisory](advisory/technical-report-2026-10-01.md)
+distinguishes recorded results from remaining gaps and identifies evidence
+available only from the retired archive's Git history. Current research plans and
 manuscript sources belong to the separate academic checkout, whose public
 migration is pending.
 Cryptographic primitives and ideal registry/gateway services may be explicit

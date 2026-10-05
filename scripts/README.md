@@ -37,8 +37,9 @@ The paper builders, finite-construction checks and current manuscript are in
 the [separate academic repository](https://github.com/elmontu/AI_Model_Academic).
 They are research tools, not part of the government console installation or
 its supported release process. Historical versions remain in Git history.
-The [dated advisory archive](../docs/publication/2026-09-28/README.md) is a
-bounded reporting snapshot and does not rerun training.
+The [dated advisory archive was retired](../docs/government-academic-separation-plan-2026-10-01.md#retired-28-september-archive)
+from this checkout. Its reporting snapshots and verifier remain in Git history;
+they are not required by the current government checks.
 
 ## OpenML reproduction study
 
@@ -92,10 +93,30 @@ trained models, complete run outputs, or final study seal.
 
 ## Validation and maintenance
 
+Run [PRD-11 cross-sector benchmarks](../docs/production-prd11-adapter-benchmarks.md)
+with `python scripts/benchmark_research_adapters.py --data-root D:/model_audit_data
+--output .local/research-adapters-v1`. The command reads fixed public prepared
+research samples, runs bundled classification/regression fixtures and reports
+missing profiles. It never downloads data or writes into the research root.
+Replay a saved case with `python scripts/replay_native_adapter.py --run
+.local/research-adapters-v1/cases/acs`. Neither command authorizes a release.
+
+The [PRD-10 job rehearsal](../docs/production-prd10-durable-jobs.md) runs with
+`python scripts/rehearse_fixture_jobs.py --output .local/fixture-jobs-v1`. It uses
+only the exact public counts fixture, real ephemeral credentials and a fixed
+child worker. Fresh output is required; failed evidence is retained. Its durable
+job history does not restore identity/storage authority or establish cloud isolation.
+
 | Script | Purpose | Status |
 |---|---|---|
+| `verify_build_baseline.py` | Capture current nonignored government source plus tracked deletions and verify two offline wheel builds with pinned local tools, source/member hashes and RECORD checks. See [PRD-03](../docs/production-prd03-source-build-baseline.md). Outputs use a fresh ignored `.local/` directory. | Maintenance check; unsigned local evidence, not production attestation or publication. |
+| `run_required_tests.py` | Execute the required government CI profile, including red-team/discovery, all temporal suites and PRD-05 through PRD-18 infrastructure, identity, storage, key-trust, build-control, durable-job, native/external-adapter, authenticated-evidence and registration tests; fail on missing/empty suites, import errors, skips, tolerated failures or blueprint/runtime-lock drift. Write a log and JSON result to a new ignored `.local/` path. See [PRD-04](../docs/production-prd04-required-ci.md). | Maintenance/CI gate; public/synthetic tests, not agency authorization. |
+| `validate_infrastructure_plan.py` | Validate strict provider-neutral design JSON and print its hash and blockers. See [PRD-05](../docs/production-prd05-infrastructure-scaffold.md). | Read-only preparation; always non-deployable, no agency authorization. |
+| `rehearse_local_deployment.py` | Exercise isolated local dev/staging stores, loopback API/worker readiness, queued fictional preflight, restart persistence and owned-process shutdown in a new ignored `.local/` path. | Public fixture only; no cloud provisioning or private-data/model-delivery authority. |
 | `check_markdown_links.py` | Verify that every repository Markdown link to a local file or directory resolves. | Maintenance check run by `make check`; external URLs and fragment identifiers are outside its scope. |
 | `validate_framework_e2e.py` | Execute every console model/dataset combination through API, queue, trainer, attacks, evidence downloads, case checks and reassessment; test intake variants, mode switches, tampering, cancellation and retry. | Offline public-data integration matrix with retained Markdown/JSON results. Add repeated `--language-model` arguments for installed local Ollama models. Unsupported attacks remain explicit; execution success is not model safety or release authorization. |
+| `verify_build_supply_chain.py` | Verify exact wheel locks and dependency closure, generate SBOM/license evidence, and require complete current PyPI advisory observations. See [PRD-09](../docs/production-prd09-build-controls.md). | Public-package metadata requests only; fresh ignored local output; no installation or production approval. |
+| `verify_build_provenance.py` | Bind actual repeat-build/test/artifact evidence in an ephemeral-key signed fixture and evaluate fail-closed local admission. | No private-key file or production trust; pending licensing remains an explicit blocker. |
 | `generate_schema_manifest.py` | Replay every registered current JSON Schema and generate or verify the exact-byte schema inventory. | Maintenance check run by `make schemas`; release signing/attestation is an external protected-key operation. |
 | `validate_llm_audit_profile.py` | Validate the LLM watermark/canary preregistration template and optionally enforce collection readiness. | Maintenance check and protocol linter; it does not execute an audit or emit scientific evidence. |
 | `evaluate_knowledge_retrieval.py` | Measure deterministic retrieval hit rate and reciprocal rank over the repository knowledge index. | Maintenance evaluation for the RAG corpus. |
@@ -104,10 +125,62 @@ trained models, complete run outputs, or final study seal.
 | `summarize_ceiling_experiments.py` | Validate the accepted controlled and model-backed result families and regenerate the allowlisted publication summary, paper table, and figure without exposing per-example material. | Replay/summary utility; derived output remains limited by the validated source reports and cannot create a new empirical claim. |
 | `verify_formal_protocol.py` | Verify the Lean toolchain boundary, theorem inventory, proof build, and axiom audit. | Maintenance check; requires Lake/Lean for the complete proof replay. |
 
+## Authenticated local replay evidence
+
+`python scripts/rehearse_execution_evidence.py --output .local/evidence-v1`
+authenticates fresh public numeric replay operations with exact job, policy,
+runtime and artifact bindings, current signer trust and durable one-use challenges.
+Use `--benchmark .local/verification/prd11-adapters-20261001/research-benchmark`
+to replay all eight retained public profiles without changing their files.
+[PRD-12](../docs/production-prd12-authenticated-evidence.md) explains the local
+scope: production image/isolation admission is refused, and original training
+is not attested. New output must remain under this D: government checkout.
+
+## Prospective public model registration
+
+`python scripts/rehearse_model_registration.py --output .local/model-registration-v1`
+registers the pinned Wine fixture before fitting its fixed native recipe. Add
+`--all-profiles --data-root D:/model_audit_data` to exercise all eight pinned
+public profiles, with up to 4,096 selected rows per profile. The research root is
+read-only; each run requires a fresh ignored output directory in this government
+checkout. The command offers no arbitrary model import or private-data intake.
+
+[PRD-13](../docs/production-prd13-model-registration.md) binds source/sample
+lineage, the frozen plan and descriptive utility rule, signed replay evidence,
+and local registration/disclosure history. External disclosure history stays
+unknown, and population, protected-unit and non-DP limitations remain explicit.
+A recorded review cannot clear or authorize a candidate. Production qualification
+remains in progress.
+
+## Scoped SACRO-ML comparison
+
+`python scripts/rehearse_sacro_adapter.py --python <isolated-env-python> --output
+.local/sacro-v1` runs the pinned SACRO-ML 2.0.1 probability-membership comparison
+in its separately prepared dependency environment. It reads the retained PRD-13
+case roster by default; `--benchmark` selects another eligible roster location.
+The parent re-observes pinned public source bytes through `--data-root` (default
+`D:/model_audit_data`) and reconstructs the native data/plan binding. The recorded
+SACRO interpreter is `.local/verification/prd14-sacro-20261001/sacro-env/Scripts/python.exe`.
+New output stays in a fresh ignored government `.local/` directory. It does not
+install dependencies, fetch datasets or load a SACRO pickle/`Target.load` model.
+
+[PRD-14](../docs/production-prd14-sacro-adapter.md) freezes three attack repetitions,
+positive/null probability controls and exact native comparison groups. Independent
+calculations replay retained scores and counts. All eight profiles receive a
+disposition: seven classifier profiles are applicable and Diabetes regression is
+unsupported. A subprocess deadline is not a hostile-code sandbox or platform
+attestation. No result provides clearance or agency authorization.
+[PRD-15](../docs/production-prd15-registry-transactions.md) now adds the local
+registry/migration/outbox rehearsal; [PRD-16](../docs/production-prd16-witness-recovery.md) adds witness recovery; [PRD-17](../docs/production-prd17-policy-review.md) adds bound policy review; PRD-18 is next.
+
 ## Dependency guide
 
 - Core validation and maintenance utilities generally use the package runtime
   from `requirements.lock`.
+- The PRD-14 SACRO comparison uses its separate fully pinned external runtime;
+  provide that environment's interpreter with `--python`. Its preparation and
+  license/advisory evidence are separate from the core runtime and an agency
+  deployment approval.
 - OpenML, XGBoost, stochastic, and empirical workflows require
   `requirements-experiments.txt` or the `experiments` extra.
 - The primary `run_training_release_demo.py` uses that experiment tier.
@@ -143,3 +216,86 @@ trained models, complete run outputs, or final study seal.
 See [`reproduction/README.md`](../reproduction/README.md) for the retained-input
 maturity matrix and [`tests/README.md`](../tests/README.md) for test coverage and
 dependency tiers.
+
+## Registry transactions
+
+`python scripts/rehearse_registry_transactions.py --output .local/registry-v1`
+rehearses signed fictional count commits, shared engineering charges, explicit
+SQLite schema migration, broker fencing and lost-ack outbox recovery. It accepts
+no data/model/policy input and preserves existing outputs. The local receiver
+deduplicates events; it is not an independent witness. See
+[PRD-15](../docs/production-prd15-registry-transactions.md) for limits and production
+gates. [PRD-16](../docs/production-prd16-witness-recovery.md) adds witness recovery; [PRD-17](../docs/production-prd17-policy-review.md) adds bound policy review; PRD-18 is next.
+
+## Witness and intent recovery
+
+`python scripts/rehearse_witness_recovery.py --output .local/witness-v1` runs a
+signed fictional registry/witness workflow, retains exact checkpoint files,
+recovers a committed outcome after witness outage and rejects old registry/witness
+copies and a replacement ledger. It accepts no external dataset/model/policy input.
+See [PRD-16](../docs/production-prd16-witness-recovery.md) for custody assumptions,
+full-history limits and production acceptance. Next is PRD-18, the sole controlled-delivery route.
+
+## Bound policy review rehearsal
+
+`python scripts/rehearse_policy_review.py --output .local/policy-review-v1`
+requires current signed policy approval before a fresh public Wine fit and
+authenticated replay, then records distinct independent acknowledgments with
+exact policy/candidate/recipient bindings. Scoped delegation, current revocation,
+retained outcome history and weakening/reuse denials remain non-authorizing.
+See [PRD-17](../docs/production-prd17-policy-review.md) for limits and production
+acceptance. PRD-18 controlled delivery is next.
+
+## Controlled delivery rehearsal
+
+`python scripts/rehearse_controlled_delivery.py --profile local_public_fixture --output .local/controlled-delivery-v1`
+runs fresh reviewed public Wine training and signed replay, then exact bounded
+candidate chunks through current human-recipient grants and durable admissions.
+The default production profile is refused before output creation. Lifecycle,
+interrupted-write, bypass and checkpoint-restore checks remain non-authorizing.
+See [PRD-18](../docs/production-prd18-controlled-delivery.md) for scope and pending
+agency acceptance.
+
+## One public profile end to end
+
+Run scripts/rehearse_public_profile.py with explicit --profile local_public_fixture,
+--python pointing to the pinned SACRO interpreter and --output a new .local child.
+It requires fresh native and external results before bound independent review and
+exact fixture delivery. A signed historical receipt replays under external pins
+without restoring permissions. Default production refuses before output.
+See [PRD-19](../docs/production-prd19-end-to-end-profile.md) for commands and limits.
+
+### Redacted monitoring and incident rehearsal
+
+rehearse_monitoring.py requires explicit local_public_fixture profile and a new
+ignored .local output. It injects original-worker, key, public-object and witness
+faults, persists redacted alerts and exercises local receiver/incident recovery.
+Production execution is refused; it sends no external alerts.
+See [PRD-20](../docs/production-prd20-monitoring-incidents.md) for commands and runbooks.
+
+### Capacity and recovery rehearsal
+
+rehearse_capacity_recovery.py requires explicit local_public_fixture profile
+and a new ignored .local output. It measures fixed tiled public Wine I/O and
+real public-count jobs at concurrency1/2/4, verifies witnessed historical
+backup/restore and tests delivery-context restart denials. Measurements do not
+qualify agency scale or cloud failover.
+See [PRD-21](../docs/production-prd21-capacity-recovery.md) for commands and limits.
+Next is PRD-22, independent security and evidence assessment.
+
+## Independent assessment handoff
+
+rehearse_independent_assessment.py requires explicit local_public_fixture profile
+and a new ignored.local destination. Eleven fresh public-native probe families,
+externally pinned local packet integrity and signed current finding-review checks
+remain non-authorizing. Production blockers cannot be closed by fixture review.
+See [PRD-22](../docs/production-prd22-independent-assessment.md) for scope and commands.
+Next is PRD-23, the restricted pilot plan; agency assessment remains pending.
+
+## Restricted pilot planning
+
+rehearse_restricted_pilot.py requires explicit local_public_fixture and a new
+ignored.local destination. It binds fresh public assessment evidence to one
+immutable named plan, seven signed people and scoped local suspension/withdrawal.
+All agency admission, query and pilot-delivery gates remain closed. See
+[PRD-23](../docs/production-prd23-restricted-pilot.md). Next is PRD-24 handover.

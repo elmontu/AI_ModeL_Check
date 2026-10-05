@@ -6,8 +6,11 @@ MRA's bounded empirical workflow includes an independent implementation inspired
 architectural patterns include a target abstraction, an extensible attack registry, repeated
 post-training attacks, dummy baselines, structural disclosure indicators and standardized reports.
 
-MRA does not import SACRO-ML or treat its risk summaries as authorization criteria. The exploratory
-implementation emits no record-level membership probabilities and has no decision authority. A
+The earlier exploratory implementation described below does not import SACRO-ML or treat its risk
+summaries as authorization criteria. It emits no record-level membership probabilities and has no
+decision authority. A separate [PRD-14 adapter](production-prd14-sacro-adapter.md) now imports the
+pinned external implementation in its own public-fixture runtime; that comparison also has no
+clearance or authorization role. A
 separate reference contract path can accept results only from a policy-approved, content-addressed
 attack battery; the trusted core may translate a valid adverse result into a blocking floor, but no
 red-team result can clear or authorize a release.
@@ -51,6 +54,39 @@ core.
 `RedTeamToolRegistry.run` emits `ExploratoryRedTeamReport/2.0`, including the typed catalog and
 configuration digests, timestamps, runtime identity, and `assessment_eligible: false`. It is not an
 `AttackBatteryWorkerOutput` and therefore cannot be inserted into an assessment unchanged.
+
+## Unified discovery and operational export screening
+
+The wider native inventory is available from console `GET /api/red-team-tools`
+and the additive `discovery` field of MCP `list_red_team_tools()`. It identifies
+classifier, regression and language suites, the source-checkout multi-shadow
+experiment and the new public export pilot, including dependencies, exact source
+hashes and explicit scope limits. The original two-tool catalog and its digest
+are preserved; discovery is not a policy-approved `AttackCatalog`.
+
+The [red-team export screen](red-team-export-review.md) is a separate trusted-local
+operational blocker. It validates a frozen policy and measured report against
+an exact artifact, with mandatory controls and thresholds, before the temporal
+web service can proceed. It is not `AttackBatteryWorkerOutput`, a calibrated
+blocking floor, a privacy ceiling, a worker attestation or release authority.
+That operational export pilot does not import the external SACRO-ML implementation.
+
+## Separate external SACRO-ML adapter
+
+[PRD-14](production-prd14-sacro-adapter.md) uses actual SACRO-ML 2.0.1 for one
+frozen probability-membership method in a separate pinned dependency environment.
+It takes inert probabilities from exact retained native candidates, uses public
+concentrated/uniform positive and flat-uniform null controls, and independently
+replays raw AUC and counts from retained attack-test scores. Paired native loss
+AUC uses those same evaluation groups; different attacks need not agree.
+
+All eight public profiles receive a disposition: seven classifiers are applicable
+and the continuous Diabetes/Ridge profile is unsupported. The adapter does not
+call `Target.load`, unpickle external models or admit private data. Its local
+comparison reports are not `AttackBatteryWorkerOutput`; they cannot become a
+policy-approved blocking floor or privacy ceiling. All assessment, clearance and
+authorization eligibility remains false. Production isolation and independent
+scientific, licensing and agency review remain pending.
 
 ## Policy-bound assessment integration
 
@@ -97,7 +133,10 @@ verify a protected workload signature or attestation over the exact worker outpu
 policy, catalog, configuration, run/control identities, and raw-result hashes. The reference core
 deliberately cannot satisfy a policy that requires external isolation attestation.
 
-## Deliberate differences from SACRO-ML
+## Earlier independent implementation's differences from SACRO-ML
+
+The following describes the native exploratory/reference paths above, not the
+separate PRD-14 external adapter.
 
 - no direct dependency or copied serialization format;
 - no record-level report output;

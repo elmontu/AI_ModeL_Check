@@ -58,10 +58,11 @@ def create_app(root: Path, *, repository: Path | None = None,
                 return JSONResponse({"detail": "Cross-origin mutations are refused."}, status_code=403)
             if request.headers.get("content-type", "").split(";")[0].lower() != "application/json":
                 return JSONResponse({"detail": "JSON is required."}, status_code=415)
+            limit = 2 * 1024 * 1024 if request.url.path == "/api/temporal/red-team" else 4096
             body = bytearray()
             async for chunk in request.stream():
                 body.extend(chunk)
-                if len(body) > 4096:
+                if len(body) > limit:
                     return JSONResponse({"detail": "Request is too large."}, status_code=413)
             request._body = bytes(body)
         response = await call_next(request)

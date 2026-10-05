@@ -62,7 +62,8 @@ creates or supplies an ACS temporal registry.
 ```mermaid
 flowchart TD
     A[Registered data, channels, model and evidence] --> B[Prepare a bound request]
-    B --> C[Run automated checks]
+    B --> R[Attach report for the trusted red-team policy]
+    R --> C[Run automated checks]
     C --> D{All checks pass?}
     D -- No --> E[Block; show the failed prerequisite]
     D -- Yes --> F[Record operator review of this check result]
@@ -79,7 +80,7 @@ flowchart TD
 | --- | --- | --- |
 | Registered provenance | Training roster, protected attribute version, registered training and scoring channels, fixed scope and exact package | Preparing an in-scope proposal |
 | Prepared | Request ID bound to model, authority, artifact, evidence, affected units and current ledger revision | Running checks; no download |
-| Checked | Current provenance, integrity, expiry, authority, charge plan and budget checks, persisted against the request | Reviewing that specific result |
+| Checked | Required red-team policy/report, controls and thresholds; current provenance, integrity, expiry, authority, charge plan and budget checks | Reviewing that specific persisted result |
 | Reviewed | Explicit local operator acknowledgment and a recorded rationale bound to the check digest | Attempting commitment |
 | Committed | Review and current prerequisites rechecked within the same transaction as receipt and charges | Requesting controlled delivery |
 | Delivery authorized | Committed package, review, current authority, evidence and revocation checks pass | Returning the exact committed bytes |
@@ -98,11 +99,21 @@ same-origin JSON and the service remains bound to the local machine.
 | --- | --- |
 | `GET /operator` | Read current registered provenance, stage results, permitted actions and audit events |
 | `POST /prepare` | Bind `request_id`, `model_id` and `expected_revision` |
+| `POST /red-team` | Attach `report` for `request_id`; a changed report invalidates earlier checks and review |
 | `POST /checks` | Run and persist the server's checks for `request_id` |
 | `POST /review` | Supply `request_id`, the returned `check_digest`, a rationale and `accept_scope: true` |
 | `POST /commit` | Attempt atomic commitment for `request_id`; all prerequisites remain mandatory |
 | `GET /downloads/{request_id}` | Reauthorize and return the exact committed package |
 | `POST /revoke` | Stop future delivery for `request_id`; preserve its recorded spending |
+
+Required red-team screening defaults to enabled. Configure a trusted per-model
+policy and its evaluation dataset/split identity before starting the service;
+see the [red-team export guide](red-team-export-review.md). The browser accepts
+report JSON, never a replacement policy. The initial required profile covers
+`model_only` registrations with `full_artifact` delivery; other routes remain
+unsupported. Historical teaching inventories can explicitly select
+`legacy_unassessed`, which is displayed as unassessed and supplies no red-team
+result. Missing policy in the default mode blocks progression.
 
 The browser is one client of this interface. Automated clients must follow
 the same ordering. The review endpoint records the trusted local operator's
@@ -114,7 +125,11 @@ Before commitment, another release can change the ledger revision. The old
 proposal must then be replaced by a new request and reviewed against the new
 accounting state. A check digest from another request or a superseded result
 cannot authorize it. Changes to bound package, provenance or evidence also
-invalidate the result.
+invalidate the result. Replacing a report before commitment clears its old
+checks and review. After commitment, the report cannot be replaced. Policy expiry,
+report age, controls, tool status, resource declarations and metric thresholds
+are checked again at delivery; a stale or failing result denies download while
+retaining committed privacy charges.
 
 Authority, evidence expiry, invalidation and revocation are checked again at
 commitment and delivery. Passing yesterday's check is not continuing authority
@@ -169,6 +184,7 @@ The added gates are a new implementation layer. The separately retained
 historical temporal replay did not exercise its recorded-review stage, and
 must not be presented as if it did. Included pipeline tests use separate
 fixtures and receipts. See the [government verification record](../reproduction/government-audit-update-20260922/README.md)
-for current checks. Historical source files, study registrations and
+for historical checks. The [red-team export guide](red-team-export-review.md)
+describes the added screening layer. Historical source files, study registrations and
 experimental results remain outside this publication and are not rewritten
 to match the current implementation.

@@ -1,0 +1,132 @@
+{
+  "schema": "agency-private-cloud-blueprint/v1",
+  "status": "design_only",
+  "deployment": {
+    "provider": null,
+    "runtime": null,
+    "primary_region": null,
+    "recovery_region": null,
+    "decision_status": "provider_and_regions_deferred_by_user",
+    "cloud_deployable": false,
+    "runtime_status": "unselected"
+  },
+  "scope": {
+    "data": "public_or_synthetic_only",
+    "agency_approvals": "pending",
+    "private_data_admission": false,
+    "model_delivery": false
+  },
+  "environments": {
+    "dev": {
+      "state": "planned_disabled",
+      "cloud_enabled": false,
+      "resources": {
+        "account": "logical:dev:account",
+        "network": "logical:dev:network",
+        "identity": "logical:dev:identity",
+        "artifact": "logical:dev:artifact",
+        "evidence": "logical:dev:evidence",
+        "data": "logical:dev:data",
+        "key": "logical:dev:key",
+        "registry": "logical:dev:registry",
+        "witness": "logical:dev:witness",
+        "audit": "logical:dev:audit",
+        "backup": "logical:dev:backup"
+      },
+      "administrative_domains": {
+        "application_admin": "logical:dev:application-admin",
+        "witness_admin": "logical:dev:witness-admin"
+      }
+    },
+    "staging": {
+      "state": "planned_disabled",
+      "cloud_enabled": false,
+      "resources": {
+        "account": "logical:staging:account",
+        "network": "logical:staging:network",
+        "identity": "logical:staging:identity",
+        "artifact": "logical:staging:artifact",
+        "evidence": "logical:staging:evidence",
+        "data": "logical:staging:data",
+        "key": "logical:staging:key",
+        "registry": "logical:staging:registry",
+        "witness": "logical:staging:witness",
+        "audit": "logical:staging:audit",
+        "backup": "logical:staging:backup"
+      },
+      "administrative_domains": {
+        "application_admin": "logical:staging:application-admin",
+        "witness_admin": "logical:staging:witness-admin"
+      }
+    },
+    "prod": {
+      "state": "planned_disabled",
+      "cloud_enabled": false,
+      "resources": {
+        "account": "logical:prod:account",
+        "network": "logical:prod:network",
+        "identity": "logical:prod:identity",
+        "artifact": "logical:prod:artifact",
+        "evidence": "logical:prod:evidence",
+        "data": "logical:prod:data",
+        "key": "logical:prod:key",
+        "registry": "logical:prod:registry",
+        "witness": "logical:prod:witness",
+        "audit": "logical:prod:audit",
+        "backup": "logical:prod:backup"
+      },
+      "administrative_domains": {
+        "application_admin": "logical:prod:application-admin",
+        "witness_admin": "logical:prod:witness-admin"
+      }
+    }
+  },
+  "controls": {
+    "network": {
+      "private_ingress": true,
+      "private_dns": true,
+      "tls_required": true,
+      "egress": "default_deny",
+      "lateral": "default_deny",
+      "metadata": "default_deny",
+      "public_object_urls": false
+    },
+    "custody": {
+      "separate_environments": true,
+      "independent_witness_administration": true,
+      "api_bulk_data_grant": false,
+      "workers_use_scoped_job_grants": true,
+      "immutable_artifact_and_evidence_versions": true,
+      "backup_restore_requires_quarantine": true,
+      "gateway_is_only_recipient_delivery_path": true,
+      "worker_release_key_grant": false,
+      "worker_registry_write_grant": false,
+      "recipient_direct_store_grant": false
+    }
+  },
+  "endpoint_roles": {
+    "private_ingress": "unresolved",
+    "agency_identity": "unresolved",
+    "quarantine_objects": "unresolved",
+    "artifact_store": "unresolved",
+    "evidence_store": "unresolved",
+    "scoped_data_access": "unresolved",
+    "job_queue": "unresolved",
+    "key_service": "unresolved",
+    "registry": "unresolved",
+    "independent_witness": "unresolved",
+    "audit_sink": "unresolved",
+    "backup_restore": "unresolved"
+  },
+  "local_rehearsal": {
+    "allowed_environments": [
+      "dev",
+      "staging"
+    ],
+    "bind_address": "127.0.0.1",
+    "transport": "plain_http_local_only",
+    "data": "public_fixture_only",
+    "private_data_admission": false,
+    "model_delivery": false
+  }
+}

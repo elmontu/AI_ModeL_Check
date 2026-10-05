@@ -47,7 +47,7 @@ class TemporalPipelineAdversarialTests(unittest.TestCase):
                 record_ids=["unit-A", "unit-B"], artifact_bytes=self.package,
                 evidence_digest=self.evidence, expires_at=self.until)
         inventory = {"status": "registered_not_released", "db": str(self.db),
-            "scope_digest": "a" * 64, "budget_epsilon": 2,
+            "scope_digest": "a" * 64, "budget_epsilon": 2, "red_team_mode": "legacy_unassessed",
             "authority_id": "operator", "expires_at": self.until,
             "models": [{"step": number, "model_id": model, "family": "toy", "dataset": "toy"}
                        for number, model in enumerate(("model-a", "model-b"), start=1)]}

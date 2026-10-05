@@ -17,6 +17,16 @@ Releases are maintainer-controlled and start from a reviewed commit on `main`. A
 
 The committed schema manifest is an unsigned, deterministic source inventory; it is not a release attestation. Before production publication, a protected release identity must sign or externally attest the exact manifest bytes and publish the signature plus signer/public-key or certificate reference. No signing private key belongs in this repository.
 
+## Required government CI profile
+
+[PRD-04](production-prd04-required-ci.md) adds the same required government test
+profile to CI and the tag-triggered workflow on Ubuntu and Windows. Missing or
+skipped required coverage fails the profile. Distribution/release jobs depend
+on those gates; each run retains its exact selected tests, results and source
+identities. Local validation is not proof that hosted jobs ran or branch
+protection is configured. Authentication and all release gates above remain
+required before publication.
+
 ## Post-release checks
 
 - Install the wheel in a clean environment and run `mra --help`.

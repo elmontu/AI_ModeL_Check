@@ -24,8 +24,10 @@ jobs:
         include:
           - os: ubuntu-latest
             python-path: .local/pipeline-ci/bin/python
+            build-profile: linux
           - os: windows-latest
             python-path: .local/pipeline-ci/Scripts/python.exe
+            build-profile: windows
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -33,26 +35,69 @@ jobs:
           python-version: "3.12"
       - name: Bootstrap a fresh training environment
         run: python scripts/setup_pipeline.py --profile console --venv .local/pipeline-ci
-      - name: Test case setup and failure boundaries
+      - name: Install hash-pinned build verifier parser
         shell: bash
-        run: ${{ matrix.python-path }} -m unittest discover -s tests -p test_pipeline_workflow.py -v
-      - name: Test console API and job queue
+        run: >-
+          ${{ matrix.python-path }} -m pip install --require-hashes --only-binary=:all: --no-deps -r deploy/build/verification-runtime.requirements.txt
+      - name: Verify public wheel bundle and current dependency advisories
         shell: bash
-        run: ${{ matrix.python-path }} -m unittest discover -s tests -p test_console.py -v
-      - name: Test DP export protocol, commands, HTTP boundary and diagnostic tools
+        run: ${{ matrix.python-path }} -B scripts/verify_build_supply_chain.py --manifest deploy/build/${{ matrix.build-profile }}-cp312.json --download --scan-pypi --output .local/ci-supply-chain
+      - name: Retain public dependency inventory and advisory evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ci-supply-chain-${{ matrix.os }}-${{ github.run_attempt }}
+          path: .local/ci-supply-chain/*.json
+          include-hidden-files: true
+          if-no-files-found: error
+      - name: Run required government profile without skips
         shell: bash
-        run: ${{ matrix.python-path }} -m unittest discover -s tests -p 'test_export_poc*.py' -v
-      - name: Test temporal release accounting and operator commands
-        shell: bash
-        run: ${{ matrix.python-path }} -m unittest discover -s tests -p 'test_temporal_assurance*.py' -v
-      - name: Test government review records and portable launcher
-        shell: bash
-        run: ${{ matrix.python-path }} -m unittest discover -s tests -p 'test_government*.py' -v
-      - name: Test temporal review stages and adversarial requests
+        run: ${{ matrix.python-path }} -B scripts/run_required_tests.py --profile government --output .local/ci-required
+      - name: Require complete government test evidence
+        if: always()
         shell: bash
         run: |
-          ${{ matrix.python-path }} -m unittest discover -s tests -p 'test_temporal_pipeline*.py' -v
-          ${{ matrix.python-path }} -m unittest discover -s tests -p test_temporal_website.py -v
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          import stat
+
+          evidence = Path(".local/ci-required")
+          for name in ("tests.log", "result.json"):
+              path = evidence / name
+              try:
+                  info = path.lstat()
+              except FileNotFoundError:
+                  raise SystemExit(f"Required test evidence is missing: {path}")
+              if (not stat.S_ISREG(info.st_mode) or info.st_size == 0
+                      or getattr(info, "st_file_attributes", 0) & 0x400):
+                  raise SystemExit(f"Required test evidence must be a nonempty regular file: {path}")
+          result = json.loads((evidence / "result.json").read_text(encoding="utf-8"))
+          if (not isinstance(result, dict) or result.get("profile") != "government"
+                  or result.get("status") not in {"passed", "failed"}):
+              raise SystemExit("Required test evidence has an invalid profile or status")
+          PY
+      - name: Retain required government test evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ci-government-required-${{ matrix.os }}-${{ github.run_attempt }}
+          path: |
+            .local/ci-required/tests.log
+            .local/ci-required/result.json
+          include-hidden-files: true
+          if-no-files-found: error
+      - name: Rehearse local public-fixture deployment
+        shell: bash
+        run: ${{ matrix.python-path }} -B scripts/rehearse_local_deployment.py --output .local/ci-deployment-rehearsal
+      - name: Retain local deployment rehearsal result
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ci-local-deployment-rehearsal-${{ matrix.os }}-${{ github.run_attempt }}
+          path: .local/ci-deployment-rehearsal/result.json
+          include-hidden-files: true
+          if-no-files-found: error
       - name: Run the offline training workflow
         shell: bash
         run: ${{ matrix.python-path }} -m model_release_assurance.workflow demo --output output/pipeline-ci-demo
@@ -111,6 +156,9 @@ jobs:
         run: python -m pip install --disable-pip-version-check -r requirements-experiments.txt
       - name: Install package without resolving dependencies
         run: python -m pip install --no-deps -e .
+      - name: Install hash-pinned build verifier parser
+        run: >-
+          python -m pip install --require-hashes --only-binary=:all: --no-deps -r deploy/build/verification-runtime.requirements.txt
       - name: Compile, test, and replay schemas
         run: make PYTHON=python check
 
@@ -197,7 +245,7 @@ jobs:
 
   package:
     name: Build distribution
-    needs: [formal, test, training-hook-runtime, training-release-demo, demo-reference]
+    needs: [pipeline-bootstrap, formal, test, training-hook-runtime, training-release-demo, demo-reference]
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:

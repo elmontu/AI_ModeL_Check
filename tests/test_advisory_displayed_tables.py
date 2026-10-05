@@ -49,7 +49,14 @@ class AdvisoryDisplayedTableTests(unittest.TestCase):
             (root / "CANONICAL-RESULTS.json").write_text(
                 json.dumps(index), encoding="utf-8"
             )
-            self.assertIn("1 Markdown tables and 1 displayed data rows", compile_digest(root))
+            digest = compile_digest(root)
+            self.assertIn("1 Markdown tables and 1 displayed data rows", digest)
+            self.assertIn(
+                "../government-academic-separation-plan-2026-10-01.md#retired-28-september-archive",
+                digest,
+            )
+            self.assertIn("previously contained 51 sections", digest)
+            self.assertNotIn("../publication/2026-09-28/", digest)
             report.write_text(report.read_text(encoding="utf-8") + "changed\n", encoding="utf-8")
             with self.assertRaisesRegex(ValueError, "Published SHA mismatch"):
                 compile_digest(root)

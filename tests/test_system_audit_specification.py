@@ -29,7 +29,7 @@ class SystemAuditSpecificationTests(unittest.TestCase):
         for target in (
             "docs/government-audit-guide.md",
             "docs/enforced-release-workflow.md",
-            "docs/publication/2026-09-28/README.md",
+            "docs/government-academic-separation-plan-2026-10-01.md#retired-28-september-archive",
             "docs/system-audit-specification.md#industrial-track",
             "docs/model-release-assurance-protocol.md",
         ):
@@ -44,7 +44,6 @@ class SystemAuditSpecificationTests(unittest.TestCase):
         for statement in (
             "separate academic repository",
             "public GitHub publication is pending",
-            "does not cover studies completed after that date",
             "--temporal-run",
             "--temporal-operator",
         ):
@@ -60,17 +59,12 @@ class SystemAuditSpecificationTests(unittest.TestCase):
         self.assertIn("Deferral changes priority", self.text)
         self.assertIn("every applicable lifecycle requirement and gate remains mandatory", self.text)
 
-    def test_dated_advisory_archive_states_its_reproduction_limits(self) -> None:
-        bundle = ROOT / "docs" / "publication" / "2026-09-28"
-        overview = (bundle / "README.md").read_text(encoding="utf-8")
-        self.assertIn("28 September 2026", overview)
-        self.assertIn("104 original evidence references", overview)
-        self.assertIn("94 distinct source snapshots", overview)
-        self.assertIn("Repeating the original training experiments", overview)
-        self.assertIn("outside this reporting snapshot", overview)
-        for target in ("publication-manifest.json", "verify_publication.py",
-                       "evidence/source-manifest.json"):
-            self.assertTrue((bundle / target).is_file())
+    def test_retired_advisory_archive_has_a_current_navigation_destination(self) -> None:
+        plan = (ROOT / "docs" / "government-academic-separation-plan-2026-10-01.md").read_text(
+            encoding="utf-8"
+        )
+        self.assertIn("## Retired 28 September archive", plan)
+        self.assertFalse((ROOT / "docs" / "publication" / "2026-09-28").exists())
 
     def test_current_protocol_vocabulary_is_complete(self) -> None:
         for state in ReleaseProtocolState:

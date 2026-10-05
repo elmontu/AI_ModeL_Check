@@ -20,10 +20,12 @@ run or code fix.
 
 The manuscript, paper-building scripts, and research tests belong to the
 [separate academic repository](https://github.com/elmontu/AI_Model_Academic).
-This government repository retains the dated [agency advisory archive](../docs/publication/2026-09-28/README.md)
-and its [technical interpretation](../docs/advisory/technical-report-2026-10-01.md).
-The 28 September archive verifies published tables and source references; it
-does not include all original model weights, data or later study results.
+This government repository retains the later
+[technical interpretation](../docs/advisory/technical-report-2026-10-01.md).
+The [28 September advisory archive was retired](../docs/government-academic-separation-plan-2026-10-01.md#retired-28-september-archive)
+from this checkout at the user's request. Its tables, source references and
+verifier remain in Git history; that reporting snapshot did not include all
+original model weights, data or later study results.
 Older paper drafts and assembly instructions remain in Git history. Their
 historical hashes and measurements were not restamped by this separation.
 

@@ -57,6 +57,25 @@ inert agent-action requests and multi-turn pressure. These do not measure actual
 training-record extraction or run real tools. Host Ollama is supported by the
 native launcher; container loopback does not reach the host's Ollama service.
 
+## Operational export screening
+
+The [public export pilot and required temporal gate](red-team-export-review.md)
+add a separate local operational contract. One offline GaussianNB fixture saves
+preprocessing and parameters as inert JSON, reloads those exact bytes, and runs
+a frozen membership-loss screen with known-leak and null controls. The temporal
+service evaluates trusted per-model policy/report bindings, mandatory tool
+completion, controls, thresholds and age at checks, review, commitment and
+controlled delivery. Its required profile supports model-only full-artifact
+packages. No console model is automatically admitted to the privacy registry.
+
+`GET /api/red-team-tools` and MCP `list_red_team_tools().discovery` inventory
+11 classifier groups, three regression groups, nine language probes, the public
+export pilot and the separate multi-shadow experiment. The old two-tool typed
+catalog and its digest remain a separate assessment contract. Discovery neither
+executes a tool nor certifies dependency availability. External SACRO-ML, ART,
+garak and PyRIT adapters remain unintegrated; an entry under external adapters
+is a declared gap, not an installed capability.
+
 ## Remaining research and deployment work
 
 - Live retrieval-index and real agent adapters, adaptive language attacks,

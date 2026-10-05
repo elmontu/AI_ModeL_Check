@@ -7,11 +7,14 @@ Privileged direct core/CLI/database access remains outside this web boundary.
 """
 from __future__ import annotations
 
+from datetime import datetime, timezone
 import hashlib
 import json
 import sqlite3
 
 from .store import AssuranceError
+from ..export_red_team import (evaluate_export_red_team, parse_policy_json,
+                               parse_report_json, report_sha256)
 
 
 def canonical(value):
@@ -30,6 +33,7 @@ def ensure_schema(db):
     # executescript would implicitly commit an existing transaction. Individual
     # statements preserve the core commit + pipeline audit atomicity.
     for statement in (
+        "CREATE TABLE IF NOT EXISTS tp_red_team(request_id TEXT PRIMARY KEY,report_json TEXT NOT NULL,report_digest TEXT NOT NULL,attached_at INTEGER NOT NULL)",
         "CREATE TABLE IF NOT EXISTS tp_checks(request_id TEXT PRIMARY KEY,binding_json TEXT NOT NULL,check_digest TEXT NOT NULL,checked_at INTEGER NOT NULL)",
         "CREATE TABLE IF NOT EXISTS tp_reviews(request_id TEXT PRIMARY KEY,check_digest TEXT NOT NULL,review_json TEXT NOT NULL,review_digest TEXT NOT NULL,reviewed_at INTEGER NOT NULL)",
         "CREATE TABLE IF NOT EXISTS tp_commits(request_id TEXT PRIMARY KEY,check_digest TEXT NOT NULL,review_digest TEXT NOT NULL,receipt_digest TEXT NOT NULL,committed_at INTEGER NOT NULL)",
@@ -76,6 +80,65 @@ class Pipeline:
     @staticmethod
     def bound_row(row):
         return {k: digest(row[k]) if isinstance(row[k], bytes) else row[k] for k in row.keys()}
+
+    def red_team(self, model=None, *, enforce=False):
+        """Re-evaluate local screening without asserting privacy or release approval."""
+        base = {"mode": "required", "required": True, "satisfied": False,
+                "policy_sha256": None, "report_sha256": None,
+                "can_clear": False, "authorization_eligible": False}
+        if model is None:
+            request = self.db.execute("SELECT manifest FROM requests WHERE id=?", (self.request_id,)).fetchone()
+            model_id = json.loads(request["manifest"])["model_id"] if request else None
+            model = self.db.execute("SELECT * FROM models WHERE id=?", (model_id,)).fetchone()
+        entry = next((item for item in self.inventory["models"] if model and item["model_id"] == model["id"]), {})
+        if entry.get("red_team_policy") is None:
+            if self.inventory.get("red_team_mode") == "legacy_unassessed":
+                result = {**base, "mode": "legacy_unassessed", "required": False,
+                          "reasons": ["Legacy demonstration: red-team screening has not been assessed."]}
+            else:
+                result = {**base, "reasons": ["A trusted red-team policy is missing for this model."]}
+        else:
+            try:
+                policy = parse_policy_json(canonical(entry["red_team_policy"]))
+                report_row = None
+                if self.db.execute("SELECT 1 FROM sqlite_master WHERE type='table' AND name='tp_red_team'").fetchone():
+                    report_row = self.row("tp_red_team")
+                report = parse_report_json(report_row["report_json"]) if report_row else None
+                result = {**base, **evaluate_export_red_team(policy, report,
+                    artifact_sha256=model["artifact_digest"], now=datetime.fromtimestamp(self.now(), timezone.utc))}
+                # Evaluation time changes without changing the reviewed evidence.
+                result.pop("evaluated_at", None)
+                result["tools"] = [item.model_dump(mode="json") for item in report.tools] if report else []
+                reasons = list(result["reasons"])
+                if model["scoring"] != "model_only" or policy.recipient_interface != "full_artifact":
+                    reasons.append("This red-team profile supports only delivery of the full model-only artifact.")
+                if (not entry.get("red_team_dataset_sha256")
+                        or entry["red_team_dataset_sha256"] != policy.dataset_sha256):
+                    reasons.append("The evaluation dataset and split identity is not pinned to this model's inventory.")
+                if report_row and report_sha256(report) != report_row["report_digest"]:
+                    reasons.append("The attached red-team report digest does not match its stored content.")
+                result.update(reasons=reasons, satisfied=result["satisfied"] and not reasons)
+            except (ValueError, TypeError, KeyError, AttributeError):
+                result = {**base, "reasons": ["The red-team policy or attached report is invalid."]}
+        if enforce and result["required"] and not result["satisfied"]:
+            fail("pipeline_red_team_required", "Red-team screening is incomplete: " + "; ".join(result["reasons"]))
+        return result
+
+    def attach_red_team(self, report):
+        if self.request()["receipt"]:
+            fail("pipeline_stage_closed", "A committed release's red-team report cannot be replaced.")
+        report_json = canonical(report.model_dump(mode="json"))
+        report_digest = report_sha256(report)
+        old = self.row("tp_red_team")
+        if old and old["report_digest"] == report_digest and old["report_json"] == report_json:
+            return
+        self.db.execute("INSERT OR REPLACE INTO tp_red_team VALUES(?,?,?,?)",
+                        (self.request_id, report_json, report_digest, self.now()))
+        self.db.execute("DELETE FROM tp_reviews WHERE request_id=?", (self.request_id,))
+        self.db.execute("DELETE FROM tp_checks WHERE request_id=?", (self.request_id,))
+        summary = self.red_team()
+        self.event("red_team_attached", "Red-team report attached; previous checks and local review were invalidated.",
+                   report_digest=report_digest, red_team=summary)
 
     def snapshot(self, *, include_ledger):
         request = self.request()
@@ -136,7 +199,8 @@ class Pipeline:
         result = {"static": {"manifest_digest": digest(request["manifest"]),
             "charge_records_digest": digest(request["charge_records"]), "inventory_digest": self.inventory_digest,
             "registry_digest": digest(canonical(registry)), "scope_digest": self.store.scope_digest,
-            "model_id": model["id"], "authority_id": authority["id"], "artifact_digest": model["artifact_digest"]}}
+            "model_id": model["id"], "authority_id": authority["id"], "artifact_digest": model["artifact_digest"],
+            "red_team": self.red_team(model, enforce=True)}}
         if include_ledger:
             revision = self.store._revision(self.db)
             if revision != manifest.get("expected_revision"):
@@ -151,6 +215,7 @@ class Pipeline:
                                 "new_unit_charges": len(needed)}
         # Recheck authority/evidence time after all registry and ledger work.
         self.store._live(self.db, model["id"], authority["id"], None, check_integrity=False)
+        self.red_team(model, enforce=True)
         return result
 
     def prepared(self):
@@ -336,6 +401,7 @@ class Pipeline:
                 status = "blocked" if identity != "download" or not complete else "complete"
             stages.append({"id": identity, "label": label, "status": status, "detail": detail if status == "blocked" else label})
         return {"state": state, "reason": reason, "detail": detail, "stages": stages,
+            "red_team": self.red_team(), "can_attach_red_team": core_state == "prepared",
             "check_digest": check["check_digest"] if check else None, "checked_at": check["checked_at"] if check else None,
             "reviewed_at": review["reviewed_at"] if review else None,
             "review_rationale": json.loads(review["review_json"]).get("rationale") if review else None,

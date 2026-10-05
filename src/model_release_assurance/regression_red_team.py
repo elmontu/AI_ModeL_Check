@@ -1,13 +1,15 @@
 """Bounded regression attack screens with controls; never clearing evidence."""
 from pathlib import Path
 
-import numpy as np
-
 from .integrity import sha256_file
 from .tabular_red_team import threshold_probe
 
 
+REGRESSION_TOOL_IDS = ("regression_loss_membership", "regression_extraction", "regression_perturbation")
+
+
 def _predict(model, features):
+    import numpy as np
     prediction = np.asarray(model.predict(features), dtype=float)
     if prediction.shape != (len(features),) or not np.isfinite(prediction).all():
         raise ValueError("regressor must return one finite scalar per record")
@@ -15,6 +17,7 @@ def _predict(model, features):
 
 
 def run_suite(model, train_x, train_y, test_x, test_y, seed=3407):
+    import numpy as np
     from sklearn.tree import DecisionTreeRegressor
 
     train_x, test_x = np.asarray(train_x, dtype=float), np.asarray(test_x, dtype=float)
@@ -85,8 +88,7 @@ def run_suite(model, train_x, train_y, test_x, test_y, seed=3407):
                 'scope': 'random and greedy untargeted numeric perturbations; no claim of semantic validity'}
 
     reports = []
-    for name, operation in [('regression_loss_membership', membership), ('regression_extraction', extraction),
-                            ('regression_perturbation', perturbation)]:
+    for name, operation in zip(REGRESSION_TOOL_IDS, (membership, extraction, perturbation), strict=True):
         try:
             result = operation()
             status = 'completed' if all(result.get('controls', {}).values()) else 'failed'

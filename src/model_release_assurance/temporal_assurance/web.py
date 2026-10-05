@@ -1,7 +1,7 @@
 """Trusted-loopback web adapter for verified research and an existing ledger.
 
 Mount behind the application's same-origin JSON and trusted-host middleware.
-There is no upload, initialization, budget reset, arbitrary-file endpoint or
+There is no model upload, initialization, budget reset, arbitrary-file endpoint or
 remote authentication here. Research results and operator state are separate:
 a missing research corpus does not authorize, initialize or disable a ledger.
 The local repository receipts, inventory and administrator remain trusted.
@@ -27,6 +27,7 @@ from pydantic import BaseModel, ConfigDict, Field
 
 from .store import AssuranceError, AssuranceStore
 from .pipeline import Pipeline, ensure_schema, has_schema
+from ..export_red_team import ExportRedTeamReport
 
 
 # Optional local input location. The service only reads an existing verified run
@@ -86,6 +87,10 @@ class PrepareBody(BaseModel):
 class RequestBody(BaseModel):
     model_config = ConfigDict(extra="forbid", strict=True)
     request_id: str = Field(pattern=r"^[A-Za-z0-9_-]{1,80}$")
+
+
+class RedTeamBody(RequestBody):
+    report: ExportRedTeamReport
 
 
 class ReviewBody(RequestBody):
@@ -243,7 +248,7 @@ class ExistingStore(AssuranceStore):
                                  or manifest.get("authority_id") != inventory["authority_id"]):
                     raise BackendError("request_scope_mismatch", "Request is outside the website's initialized model and authority scope.", 403)
             pipeline = Pipeline(db, self, inventory, self.operator.inventory_hash, self.request_id)
-            if self.operation in {"prepare", "checks", "review", "commit", "revoke"}:
+            if self.operation in {"prepare", "checks", "review", "red-team", "commit", "revoke"}:
                 ensure_schema(db)
             if self.operation == "commit":
                 pipeline.before_commit()
@@ -268,6 +273,8 @@ class ExistingStore(AssuranceStore):
                 final_request = db.execute("SELECT manifest FROM requests WHERE id=?", (self.request_id,)).fetchone()
                 final_manifest = json.loads(final_request["manifest"])
                 self._live(db, final_manifest["model_id"], final_manifest["authority_id"], None, check_integrity=False)
+                if self.operation != "prepare":
+                    pipeline.red_team(enforce=True)
             db.commit()
 
 
@@ -465,12 +472,14 @@ class Operator:
                           authority_id=inventory["authority_id"])
         elif name == "commit":
             store.commit(payload.request_id)
-        elif name in {"checks", "review"}:
+        elif name in {"checks", "review", "red-team"}:
             error = None
             with store._transaction() as db:
                 pipeline = Pipeline(db, store, inventory, self.inventory_hash, payload.request_id)
                 if name == "checks":
                     error = pipeline.run_checks()
+                elif name == "red-team":
+                    pipeline.attach_red_team(payload.report)
                 else:
                     pipeline.review(payload.check_digest, payload.rationale, payload.accept_scope)
             if error:
@@ -524,6 +533,29 @@ def create_router(repo_root: Path, run_root: Path | None = None, operator_root: 
     @router.post("/checks")
     def checks(payload: RequestBody):
         return operator.action("checks", payload)
+
+    @router.post("/red-team")
+    async def red_team(request: Request):
+        def unique(pairs):
+            value = {}
+            for key, item in pairs:
+                if key in value:
+                    raise ValueError("Duplicate JSON key")
+                value[key] = item
+            return value
+        def finite(value):
+            raise ValueError("Non-finite JSON number")
+        content = await request.body()
+        if len(content) > 2 * 1024 * 1024:
+            raise BackendError("invalid_request", "Red-team report is too large.", 413)
+        try:
+            value = json.loads(content, object_pairs_hook=unique, parse_constant=finite)
+            # JSON mode permits only the contract's ISO timestamps; Python mode
+            # would reject those strings under strict validation.
+            payload = RedTeamBody.model_validate_json(json.dumps(value, allow_nan=False))
+        except (ValueError, TypeError, RecursionError):
+            raise BackendError("invalid_request", "Red-team report does not match the allowed schema.", 422)
+        return operator.action("red-team", payload)
 
     @router.post("/review")
     def review(payload: ReviewBody):

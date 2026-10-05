@@ -18,7 +18,7 @@ function metric(label, value, note, tone = "") {const node = el("div", null, `me
 function ba(row, view = "attack", iface = state.interface, group = "eval_member") {const attack = view === "query_only" ? row[view] : row[view]?.[iface]; return attack?.groups?.[group]?.metrics?.balanced_accuracy;}
 function scenarioName(id) {const fixed = /^epsilon-([\d.]+)-seed-(\d+)-(cached|fresh)$/.exec(id || ""); if (fixed) return `${fixed[3] === "cached" ? "Cached input" : "Independent score noise"} · ε ${fixed[1]} · seed ${fixed[2]}`; const renewed = /^renewed-history-cap-(\d+)$/.exec(id || ""); return renewed ? `Renewed caches · cumulative cap ε ${renewed[1]}` : id;}
 
-async function api(path, payload) {const options = {headers: {Accept: "application/json"}, cache: "no-store"}; if (payload !== undefined) {options.method = "POST"; options.headers["Content-Type"] = "application/json"; options.body = JSON.stringify(payload);} const response = await fetch(`${API}${path}`, options); let data; try {data = await response.json();} catch {throw new Error(`The local service returned an unreadable response (${response.status}).`);} if (!response.ok) {const error = new Error(data.detail || data.message || "The release service rejected this action."); error.code = data.code || `HTTP ${response.status}`; throw error;} return data;}
+async function api(path, payload, rawPayload) {const options = {headers: {Accept: "application/json"}, cache: "no-store"}; if (payload !== undefined) {options.method = "POST"; options.headers["Content-Type"] = "application/json"; options.body = rawPayload ?? JSON.stringify(payload);} const response = await fetch(`${API}${path}`, options); let data; try {data = await response.json();} catch {throw new Error(`The local service returned an unreadable response (${response.status}).`);} if (!response.ok) {const error = new Error(data.detail || data.message || "The release service rejected this action."); error.code = data.code || `HTTP ${response.status}`; throw error;} return data;}
 function errorText(error) {const prefix = error.code ? `${error.code.replaceAll("_", " ")}: ` : ""; const retry = error.code === "revision_conflict" ? " Refresh the ledger and prepare a new request before committing." : ""; return prefix + error.message + retry;}
 
 function svgEl(tag, attrs = {}, text) {const node = document.createElementNS("http://www.w3.org/2000/svg", tag); for (const [key, value] of Object.entries(attrs)) node.setAttribute(key, String(value)); if (text !== undefined) node.textContent = text; return node;}
@@ -68,6 +68,7 @@ function canAct(action){
   if(state.busy || !workflowReady())return false;
   if(action==="prepare")return state.operator.models?.find((model)=>model.model_id===$("model-select").value)?.validity?.valid===true;
   const request=state.request, flag=action==="checks"?"check":action;
+  if(action==="red-team")return request?.pipeline?.can_attach_red_team===true;
   if(!request || request[`can_${flag}`]!==true)return false;
   if(action==="revoke")return true;
   if(request.validity?.valid!==true)return false;
@@ -119,6 +120,41 @@ function digestBlock(label,value){
   if(String(text).length>48){const details=el("details"),summary=el("summary",`${String(text).slice(0,18)}…${String(text).slice(-12)} · show full`);details.append(summary,el("code",text));node.append(details);}else node.append(el("span",text));return node;
 }
 
+function renderRedTeam(review,request){
+  const screening=request.pipeline?.red_team;
+  if(!screening)return;
+  const box=el("section",null,"check-receipt");
+  box.append(el("h3","Red-team screening"));
+  box.append(badge(screening.mode==="legacy_unassessed"?"Legacy demonstration · unassessed":screening.satisfied?"Required screening passed":"Screening incomplete",screening.satisfied?"success":"warning"));
+  box.append(el("p","This records the declared tests and controls for these exact model bytes. Passing these tests does not establish a privacy guarantee or agency approval.","small muted"));
+  if(screening.reasons?.length){const reasons=el("ul");for(const reason of screening.reasons)reasons.append(el("li",String(reason).replaceAll("_"," ")));box.append(reasons);}
+  for(const tool of screening.tools || []){
+    const name=tool.tool_id==="native.membership_loss"?"Membership inference by prediction loss":tool.tool_id;
+    const item=el("details");item.append(el("summary",`${name} · ${tool.status.replaceAll("_"," ")}`));
+    for(const [metric,value] of Object.entries(tool.metrics || {}))item.append(el("p",`${metric.replaceAll("_"," ")}: ${E(value)}`,"small"));
+    item.append(el("p",`Positive control AUC: ${E(tool.positive_control_auc)} · null control AUC: ${E(tool.null_control_auc)}`,"small"));
+    item.append(el("p",`Audit records: ${N(tool.member_records)} members, ${N(tool.nonmember_records)} nonmembers`,"small muted"));
+    box.append(item);
+  }
+  if(screening.policy_sha256)box.append(digestBlock("Test plan identity",screening.policy_sha256));
+  if(screening.report_sha256)box.append(digestBlock("Attached report identity",screening.report_sha256));
+  if(screening.required && request.pipeline?.can_attach_red_team){
+    const form=el("form"),label=el("label","Attach a red-team report","field"),input=el("input");
+    input.type="file";input.accept=".json,application/json";input.required=true;input.disabled=state.busy;label.append(input);
+    const submit=el("button","Attach report","button secondary");submit.type="submit";submit.dataset.mutation="";submit.dataset.action="red-team";submit.disabled=!canAct("red-team");
+    form.append(label,el("p","Choose the report JSON produced for the registered test plan. A changed report requires fresh checks and review.","small muted"),submit);
+    form.addEventListener("submit",async event=>{
+      event.preventDefault();if(!canAct("red-team")||!form.reportValidity())return;
+      const file=input.files?.[0];if(!file)return;
+      if(file.size>2*1024*1024-200){message("operator-message","Choose a red-team report smaller than 2 MB.");return;}
+      try{const content=await file.text();JSON.parse(content);const payload={request_id:request.request_id};await mutate("red-team",payload,`{"request_id":${JSON.stringify(request.request_id)},"report":${content}}`);}
+      catch{message("operator-message","The selected report could not be read as JSON.");}
+    });
+    box.append(form);
+  }
+  review.append(box);
+}
+
 function renderRequest(){
   renderPipeline();renderAudit();
   const request=state.request,review=$("request-review"),actions=$("request-actions");clear(actions);
@@ -133,6 +169,7 @@ function renderRequest(){
   review.append(el("h3",request.request_id),el("p",request.model_id,"small muted"));
   const grid=el("div",null,"review-grid");grid.append(detail("Bound ledger revision",N(request.expected_revision)),detail("Score input",request.scoring || "—"),detail("Covered records",N(request.covered_units)),detail("New privacy charges",N(preview.new_unit_charges ?? request.new_unit_charges)),detail("Maximum ε after release",E(preview.maximum_spent_epsilon_after)),detail("Minimum remaining ε",E(preview.minimum_remaining_epsilon_after)));review.append(grid);
   const bindings=el("details",null,"binding-details");bindings.append(el("summary","Inspect artifact, evidence and charge bindings"),digestBlock("Bound model artifact",request.artifact_digest),digestBlock("Bound evidence",request.evidence_digests));for(const footprint of request.cache_footprints || [])bindings.append(el("p",`${footprint.cache_id} · ε ${E(footprint.epsilon_micros/1e6)} · ${N(footprint.units)} records`,"review-digest"));review.append(bindings);
+  renderRedTeam(review,request);
   if(pipeline.check_digest){const checks=el("div",null,"check-receipt");checks.append(el("strong","Automated check receipt"),digestBlock("Bound check digest",pipeline.check_digest));if(pipeline.checked_at)checks.append(el("span",new Date(pipeline.checked_at*1000).toLocaleString(),"small muted"));review.append(checks);}
   const stale=request.state==="prepared"&&Number(request.expected_revision)!==Number(state.operator?.summary?.revision);
   if(!valid&&phase!=="revoked")review.append(el("p",`Current authorization is unavailable: ${(request.validity?.reasons || ["status unverified"]).map(value=>String(value).replaceAll("_"," ")).join("; ")}. Checks, commitment and delivery are blocked until validity is restored.`,"notice"));
@@ -169,10 +206,10 @@ function renderRequest(){
   if(phase==="revoked")actions.append(el("span","No further delivery authorized","small muted"));
 }
 
-async function mutate(action,payload){
+async function mutate(action,payload,rawPayload){
   if(!canAct(action))return;setBusy(true);message("operator-message","");
   try{
-    const result=await api(`/${action}`,payload);if(result.request)state.request=result.request;
+    const result=await api(`/${action}`,payload,rawPayload);if(result.request)state.request=result.request;
     const refreshed=await loadOperator();if(!refreshed){message("operator-message","The action completed, but the current workflow could not be refreshed. Actions remain unavailable until a successful refresh.");return;}
     if(action==="prepare")$("request-id").value=nextRequestId();
     const messages={prepare:"Request bound to the model and current ledger. Run its automated checks next.",checks:"Automated checks recorded. Inspect their result, then record a local operator review if eligible.",review:"Local operator review recorded against this check digest. Commitment still requires your explicit action.",commit:"Budget committed and release authorized. Download the package explicitly through the controlled route.",revoke:"Future delivery revoked. Prior copies, audit history and committed privacy charges are unchanged."};

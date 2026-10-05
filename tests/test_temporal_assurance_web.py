@@ -56,6 +56,7 @@ class TemporalWebFixture:
             record_ids=["private-unit-A"], artifact_bytes=self.package, evidence_digest=self.evidence, expires_at=self.until)
         self.inventory = {"status": "registered_not_released", "db": str(self.db), "scope_digest": "a" * 64,
             "budget_epsilon": 1, "authority_id": "local-authority", "expires_at": self.until,
+            "red_team_mode": "legacy_unassessed",
             "models": [{"step": 1, "model_id": "step-01-model-D1", "family": "slm_small", "dataset": "D1"}]}
         write_json(self.operator / "workflow.json", self.inventory)
         self.make_study()
