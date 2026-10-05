@@ -13,8 +13,11 @@ are proposed responsibilities, not recorded approvals.
 
 Work stays in the government repository on D:, based on `0b99589` plus reviewed local changes.
 The original research and separate academic repositories are outside this work.
-GitHub publication remains pending authentication. Retired advisory files stay
-in Git history; production evidence custody will be a new governed service.
+The government implementation is published on GitHub; hosted CI and protected
+release settings remain pending. See the
+[publication checkpoint](government-academic-separation-plan-2026-10-01.md#government-publication-checkpoint).
+Retired advisory files stay in Git history; production evidence custody will
+be a new governed service.
 
 ## 1. Outcome and first production scope
 
@@ -397,7 +400,7 @@ Other tasks remain **planned**.
 Dependencies are task IDs, not completion claims. PRD-04 may prepare and locally
 validate CI against the captured PRD-03 source while its publication gate remains
 pending; remote required-check/branch-protection verification cannot be claimed
-until authentication and the relevant release decisions are resolved.
+until hosted checks and the relevant release decisions are verified.
 Proposed owners need appointments in PRD-01. Parallel work requires satisfied
 dependencies and adequate staffing.
 

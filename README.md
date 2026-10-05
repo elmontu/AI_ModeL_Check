@@ -147,10 +147,12 @@ progress; the exact agency, programme, data and accountable owners remain pendin
 is drafted for review; provider and region remain open at the user's request.
 [PRD-03 source/build baseline](docs/production-prd03-source-build-baseline.md)
 captures the current working tree and verifies repeat local wheel builds;
-publication, licensing/ownership and protected release settings remain pending.
+the government implementation is now published; licensing/ownership and
+protected release settings remain pending.
 [PRD-04 required CI profile](docs/production-prd04-required-ci.md) adds explicit
 red-team/temporal coverage, refuses required-test skips and gates packaging on
-Windows/Ubuntu checks; remote execution remains pending authentication.
+Windows/Ubuntu checks; hosted execution remains pending. See the
+[publication checkpoint](docs/government-academic-separation-plan-2026-10-01.md#government-publication-checkpoint).
 [PRD-05 infrastructure preparation](docs/production-prd05-infrastructure-scaffold.md)
 adds a validated provider-neutral blueprint and a local API/worker lifecycle
 rehearsal with public fixtures. Cloud deployment and isolation remain unverified;

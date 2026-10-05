@@ -7,9 +7,10 @@ GitHub remote, visibility and published contents are verified. The local
 `AI_Model_Academic` checkout has a README and local evidence inventory, but
 its observed `main` has no configured remote; do not describe it as published.
 
-**Local-first checkpoint:** both repository changes are still local. The user
-asked to complete local preparation before publishing; P0-14 and P0-15 remain
-pending. In this plan, `done` means the stated *local* task is evidenced,
+**Publication checkpoint:** the government branch is now public after local
+preparation and review. P0-15 is in progress because hosted checks remain pending;
+P0-14 is pending for the separate academic repository. See the dated
+[publication checkpoint](#government-publication-checkpoint). In this plan, `done` means the stated *local* task is evidenced,
 `in_progress` means a reviewable partial result exists, and `pending` means the
 task has not met its acceptance criterion. `retired` identifies a former
 requirement explicitly superseded by the user. Do not infer a pushed commit
@@ -22,6 +23,37 @@ results*, including negative, failed and incomplete work. The report must state
 which artifacts are only retained locally and which are independently portable.
 No task below permits an agency model release merely because a test or checklist
 passes.
+
+## Government publication checkpoint
+
+**5 October 2026:** the government implementation is published at
+[commit bfad927](https://github.com/elmontu/AI_ModeL_Check/commit/bfad927f8782227c56a8e9e10023eb7a84161ddf)
+through the existing SSH key. The public remote SHA was verified. The commit
+contains 938 files, including 250 additions, 35 modifications and the 123
+previously authorized archive deletions. The original research and separate
+academic repositories were not changed by this publication.
+
+A fresh local checkout matched all 938 file bytes. The PRD-23 required-profile
+receipt records **1,846 tests passed, zero failures/errors/skips**; all 442
+hashed test inputs still match that validated implementation. Publication
+checks passed 35 documentation/runner tests and verified 37 schemas and links
+in 71 Markdown files. The fresh-checkout build-baseline suite passed 15 tests;
+one symlink test was skipped because this Windows environment does not permit
+test symlink creation. Local receipts and preserved original publication
+copies remain in ignored storage.
+
+The published content contains no workstation-tool mentions. Exact original
+historical receipts remain retained locally and in Git history. Git attributes
+preserve the recorded bytes of deployment locks, test sources and documents
+across platform checkouts.
+
+Hosted CI has **no run recorded for this branch** at this checkpoint. The
+workflow triggers on pushes to the default branch, pull requests and manual
+dispatch. P0-15 stays in progress until hosted checks and publication review
+are evidenced. P0-14 remains pending for the separate academic repository.
+Earlier authentication notes retain the state observed by each dated check.
+This checkpoint records the later successful publication. Agency acceptance,
+licensing/ownership and protected release settings remain pending.
 
 ## Retired 28 September archive
 
@@ -54,7 +86,8 @@ archive still exists or is verified by the current test run. Any remaining
 task that needs the retired evidence must explicitly retrieve that version
 from history. Current navigation checks validate the remaining documents.
 The original research workspace and separate academic repository are unchanged;
-GitHub publication is still pending authentication.
+The government branch is now published; hosted CI and protected release
+verification remain pending.
 
 ## How to execute this plan across short context windows
 
@@ -109,12 +142,12 @@ is the minimum reviewable output, not a claim that it has already been produced.
 | P0-12 | done | P0-10, P0-11 | Build and install the government wheel outside both repositories. Run console/export discovery and a synthetic action from that wheel. | Final-source isolated temp install imported the wheel package, found both console/export HTML assets, completed prepare/commit/exact-byte download/history verification, and refused a repository lacking retained research receipts; wheel SHA-256 `336495ab7bc1f7a51818e89b9c13fdb803bb95cad7c0b9dddcb907be5b4a545b`. |
 | P0-13 | done | P0-03, P0-11 | Replace the machine-specific temporal default with a local optional input path and refuse missing run/operator inputs without creating a registry. | `DEFAULT_ROOT` is `.local/temporal-assurance`; focused launcher tests pass. A separately supplied research workspace must carry the retained ACS verification receipts. |
 | P0-14 | pending | P0-02, P0-08, P0-09 | Publish the academic repository only after local review and the user's local-first sequence is complete. | Public commit URL, remote SHA, visibility check and CI status; no claim of completion if blocked. |
-| P0-15 | pending | P0-10, P0-11, P0-12, P0-13 | Publish the scoped government implementation/docs only after local review and the user's local-first sequence is complete. | Government commit URL, exact file list, clean-clone checks and CI status; academic drafts excluded. |
+| P0-15 | in_progress | P0-10, P0-11, P0-12, P0-13 | Publish the scoped government implementation/docs after local review and the user's local-first sequence. | Public commit and exact diff recorded in the publication checkpoint; all 938 fresh-checkout bytes match. Hosted CI and publication review remain pending; academic drafts excluded. |
 
 **P0 local exit gate:** both trees have explicit purposes, the academic curation
 and advisory have source checks, and a clean government checkout runs its own
-tests and wheel. P0-14/P0-15 are later publication gates; they stay pending
-until the local review is finished. After archive retirement, current checks
+tests and wheel. P0-14 remains pending for academic publication. P0-15 is in
+progress after the government branch publication; hosted checks remain pending. After archive retirement, current checks
 cover the remaining government tree; any historical archive replay must use
 its preserved Git version and original verifier in a separate checkout.
 
