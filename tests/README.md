@@ -137,3 +137,13 @@ owned process cleanup and frozen driver/artifact misuse. Ordinary tests use
 readable pinned public corpus records without importing optional garak.
 Actual pinned upstream and local model execution is verified separately.
 These tests establish neither semantic safety nor production isolation.
+
+### PRD-26 PyRIT component
+
+`test_production_pyrit_*.py` covers frozen objectives and role bindings, bounded
+conversation history and turn stopping, literal scores, positive/null controls,
+incomplete outcomes, exact runtime/package origins and asset tampering, D: cache
+bindings, owned Windows process deadlines and persisted-stage replay. Optional
+upstream imports run in the separate pinned rehearsal runtime. The required
+government profile includes these suites without dependency skips or live model
+calls. Actual source and installed-wheel campaigns are recorded separately.

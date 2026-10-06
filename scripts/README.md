@@ -320,7 +320,7 @@ ignored `.local` output. Required positive/null controls and independent fitted
 score replay must pass; missing dependencies have an explicit disposition.
 See [PRD-25](../docs/production-prd25-art-adapter.md) for commands, the trusted
 loss-oracle interface and remaining scientific/agency acceptance. No live target
-or private data is admitted. PRD-26 adds the garak fixture below; PyRIT remains next.
+or private data is admitted. PRD-26 adds the separate garak and PyRIT fixtures below.
 
 ### garak prompt-injection fixture
 
@@ -331,4 +331,14 @@ output. Twelve target attempts, scripted controls and six endpoint calibrations
 retain exact responses and independent lexical/attempt/process replay. No tool
 is executed and incomplete outcomes cannot clear coverage. See
 [PRD-26](../docs/production-prd26-garak-adapter.md) for model/runtime bindings,
-component omissions and pending acceptance. PyRIT is the next scoped milestone.
+component omissions and pending acceptance. The PyRIT fixture below is a separate runtime.
+
+### PyRIT multi-turn fixture
+
+`rehearse_pyrit_adapter.py` freezes a real upstream multi-turn plan before target
+calls, then retains conversation memory, scores, role identities, controls and
+process bindings for independent replay. It uses a fixed scripted attacker and
+the existing local Ollama model on two public synthetic objectives. It requires
+a new explicit pinned component runtime and fresh ignored output on D:.
+See [PRD-26 PyRIT](../docs/production-prd26-pyrit-adapter.md) for setup, storage
+hook, incomplete outcomes and pending acceptance. Results never authorize release.

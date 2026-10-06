@@ -278,7 +278,8 @@ with explicit regression non-applicability and independent metrics. This is not
 production acceptance or coverage of every SACRO method. PRD-25 adds a separate
 [ART retained-loss comparison](production-prd25-art-adapter.md) over eight public
 classification/regression profiles; it does not qualify live target queries. The scoped garak component
-adapter adds a local synthetic prompt-injection fixture. PyRIT and broader garak
+adapter adds a local synthetic prompt-injection fixture. The scoped PyRIT
+adapter adds bounded upstream multi-turn orchestration with a scripted attacker. Broader garak
 profiles remain **unimplemented**. The order is an engineering recommendation,
 not an instruction to install every tool. Retain native fixtures as regression
 references; independently validate attack-specific end-to-end positive and null
@@ -402,7 +403,7 @@ review/suspension/withdrawal. Actual agency pilot admission remains blocked.
 
 **PRD-25 is in progress**: [pinned ART retained-loss membership comparison](production-prd25-art-adapter.md) preserves all eight profile group rosters, including conflicting labels and continuous regression, with actual learner-path controls and independent fitted-score replay. Scientific acceptance, live interfaces and other attack families remain pending. PRD-26 adds the separate garak fixture below.
 
-**PRD-26 is in progress**: [the garak component fixture](production-prd26-garak-adapter.md) calls a real pinned upstream probe and detector with four fixed templates, three synthetic wrappers, controls and independent transcript/score replay against one local Ollama model. Agency endpoint approval, full scanner coverage, semantic/human review and verified isolation remain pending. The next local task within PRD-26 is **PyRIT multi-turn orchestration**.
+**PRD-26 is in progress**: [the garak component fixture](production-prd26-garak-adapter.md) calls a real pinned upstream probe and detector with four fixed templates, three synthetic wrappers, controls and independent transcript/score replay against one local Ollama model. Agency endpoint approval, full scanner coverage, semantic/human review and verified isolation remain pending. The separate [PyRIT component](production-prd26-pyrit-adapter.md) now adds real upstream multi-turn orchestration, a scripted attacker, in-memory conversation storage and literal scoring for two fixed public synthetic objectives. Adaptive attacker and live interface qualification remain pending.
 Other tasks remain **planned**.
 Dependencies are task IDs, not completion claims. PRD-04 may prepare and locally
 validate CI against the captured PRD-03 source while its publication gate remains
@@ -438,7 +439,7 @@ dependencies and adequate staffing.
 | PRD-23 | M5 | Sponsor/release authority | PRD-22 | **In progress:** [restricted local pilot plan](production-prd23-restricted-pilot.md), exact public evidence, seven signed current people, named support/suspension and guarded review; actual agency admission and evidenced pilot acceptance remain blocked by PRD-22 findings |
 | PRD-24 | M5 | Service owner | PRD-23 | **In progress:** [local exit-review and handover preparation](production-prd24-operational-handover.md), exact signed pilot binding, support/maintenance, pending capacity/cost and terminal local retirement; actual agency pilot exit and operational acceptance remain pending |
 | PRD-25 | Expansion | ML/scientific lead | PRD-14, PRD-23 | **In progress:** [pinned ART retained-loss membership comparison](production-prd25-art-adapter.md) over eight public profiles, including regression; live interfaces, additional families and independent scientific/security/license acceptance remain pending |
-| PRD-26 | Expansion | LLM security/data steward | PRD-10, PRD-12, PRD-23 | **In progress:** [scoped local garak component](production-prd26-garak-adapter.md); PyRIT, live interfaces, independent scoring, worker isolation and approved agency egress remain pending |
+| PRD-26 | Expansion | LLM security/data steward | PRD-10, PRD-12, PRD-23 | **In progress:** [garak](production-prd26-garak-adapter.md) and [PyRIT](production-prd26-pyrit-adapter.md) component fixtures; adaptive attackers, live interfaces, independent scoring, worker isolation and approved agency egress remain pending |
 | PRD-27 | Expansion | Architecture/agency owner | PRD-23 | Separate acceptance for new recipient APIs, derivatives, vision, agencies or classifications; no blanket inherited approval |
 
 This expands P1-05/P1-06/P1-08–P1-13 and P2-01/P2-04–P2-07 in the

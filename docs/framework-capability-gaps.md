@@ -80,7 +80,11 @@ with the console or widen the old assessment contract. The separate
 [garak component adapter](production-prd26-garak-adapter.md) adds four fixed
 prompt-injection templates on one local model with literal scoring and synthetic
 document wrappers. Full scanner, live RAG/agent and semantic scoring remain gaps.
-PyRIT remains unimplemented; discovery does not certify an installed adapter.
+The separate [PyRIT component](production-prd26-pyrit-adapter.md) executes real
+upstream multi-turn orchestration with a fixed scripted attacker, in-memory
+conversation storage and case-sensitive literal scoring on two public synthetic
+objectives. Adaptive attacker qualification, live interfaces and semantic/human
+review remain gaps; discovery does not certify an installed adapter.
 
 ## Remaining research and deployment work
 

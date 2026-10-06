@@ -86,14 +86,15 @@ not automatically admitted to a temporal or production registry.
 | SACRO-ML | Separate pinned 2.0.1 adapter for seven public classifier profiles | Separate runtime; Diabetes regression unsupported; not a console integration |
 | ART | Separate pinned 1.20.1 retained-loss membership comparison across eight public profiles | Includes continuous regression; trusted loss oracle; no live target-query or console integration |
 | garak | Separate pinned 0.17.0 prompt-injection component on one local Ollama model | Four templates, three synthetic wrappers; literal scoring; no live retrieval, tools or console integration |
+| PyRIT | Separate pinned 1.1.0 multi-turn component with scripted attacker and local Ollama target | Two public synthetic objectives, three-turn limit and literal scorer; adaptive attacker and live RAG/tools remain pending |
 
-PyRIT remains planned. Discovery lists available and
-unsupported tools; it does not establish that every dependency is installed.
+Discovery lists available and unsupported tools; it does not establish that every dependency is installed.
 See [tool coverage](docs/framework-capability-gaps.md),
 [export screening](docs/red-team-export-review.md),
 [scoped SACRO-ML](docs/production-prd14-sacro-adapter.md),
 [ART retained-loss comparison](docs/production-prd25-art-adapter.md) and
-[scoped garak](docs/production-prd26-garak-adapter.md).
+[scoped garak](docs/production-prd26-garak-adapter.md) and
+[PyRIT multi-turn orchestration](docs/production-prd26-pyrit-adapter.md).
 
 Run the public export-screening example from the console environment:
 
@@ -159,13 +160,16 @@ Public benchmarks include bundled datasets and prepared ACS, aviation, lending
 and taxi samples. Catalog registration does not mean every dataset is available
 or tested. Private agency data is not admitted by these rehearsals.
 
-**Current: [PRD-26, scoped garak prompt-injection adapter](docs/production-prd26-garak-adapter.md).**
-A separate component runtime executes four upstream attack templates across
-direct, synthetic document and inert agent-document wrappers on one locally
-bound model. Retained controls, literal-score replay and source/runtime bindings
-are mandatory. This local fixture grants no agency acceptance or release authority.
+**Current: [PRD-26, scoped PyRIT multi-turn adapter](docs/production-prd26-pyrit-adapter.md).**
+The real upstream attack loop, in-memory conversation store and literal scorer
+execute two synthetic objectives with a scripted attacker and one local model.
+Separate role identities, bounded turns, positive/null controls and independent
+conversation replay are mandatory. The earlier [garak component](docs/production-prd26-garak-adapter.md)
+remains a separate prompt-injection fixture. These local adapters grant no
+agency acceptance or release authority.
 
-**Next within PRD-26: PyRIT**, bounded multi-turn orchestration with distinct target, attacker and scorer identities.
+Remaining PRD-26 acceptance includes adaptive attackers, semantic/human review,
+approved agency endpoints, live interfaces and verified worker isolation.
 
 Production acceptance still requires agency appointments and release criteria,
 real identity/key services, isolated workers and networks, independent custody,
@@ -214,14 +218,17 @@ See [required CI](docs/production-prd04-required-ci.md),
 [build controls](docs/production-prd09-build-controls.md) and
 [test coverage](tests/README.md) for the full prerequisites.
 
-The PRD-26 implementation validation passed **2,207 required tests across 121
-modules with zero failures, errors or skips**. Checks also verified 37 schemas
-and links in 74 Markdown files. Source and installed-wheel garak campaigns each
-completed 12 probes with all controls and independent replay passing. Each
-retained 8 literal marker matches; human/semantic review remains pending. The
-[PRD-26 record](docs/production-prd26-garak-adapter.md) documents the component
-scope, the repaired positive-test fixture clock and remaining agency acceptance.
-Earlier [ART validation](docs/production-prd25-art-adapter.md) remains source-bound.
+The PyRIT milestone passed **2,345 required tests across 127 modules with zero
+failures, errors or skips**, with all 502 recorded source hashes still matching.
+Checks verified 37 schemas and links in 75 Markdown files. Source and
+installed-wheel PyRIT runs each completed six upstream campaigns, four real-model
+turns and all controls and independent conversation/score replay. Each retained
+two literal public-marker emissions; human/semantic review remains pending.
+Actual upstream transport and truncation fixtures retained incomplete evidence
+and undetermined scores. The [PyRIT record](docs/production-prd26-pyrit-adapter.md)
+documents the partial runtime, D: storage hook and remaining agency acceptance.
+Earlier [garak](docs/production-prd26-garak-adapter.md) and
+[ART](docs/production-prd25-art-adapter.md) validation remain source-bound.
 Hosted CI remains outside this phase at the user's request; the
 [publication checkpoint](docs/government-academic-separation-plan-2026-10-01.md#government-publication-checkpoint)
 retains earlier publication evidence.

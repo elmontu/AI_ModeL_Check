@@ -51,9 +51,11 @@ PATTERNS = (
     "test_production_handover_*.py",
     "test_production_art_*.py",
     "test_production_garak_*.py",
+    "test_production_pyrit_*.py",
 )
 REQUIRED_SOURCE_INPUTS = (
     "deploy/agency-private-cloud/blueprint.json", "requirements.lock",
+    "deploy/pyrit/windows-cp312.json", "deploy/pyrit/windows-cp312.requirements.txt",
     "deploy/garak/windows-cp312.json", "deploy/garak/windows-cp312.requirements.txt",
     "deploy/art/windows-cp312.json", "deploy/art/windows-cp312.requirements.txt",
     "deploy/sacro/windows-cp312.json", "deploy/sacro/windows-cp312.requirements.txt",
