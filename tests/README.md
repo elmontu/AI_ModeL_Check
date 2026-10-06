@@ -106,3 +106,13 @@ PYTHONPATH=src python -m unittest discover -s tests -p 'test_release_protocol.py
   adequacy of every possible adversarial protocol behavior.
 - Formal tests distinguish inspection of retained Lean artifacts from an
   actual proof build; only the Lean tier performs the latter.
+
+## Operational handover preparation
+
+test_production_handover_*.py covers strict exit/handover declarations, current
+signed independent review against the exact live PRD-23 plan, scope/tamper/expiry
+misuse, terminal local retirement and malformed CLI receipt rejection. A real
+fresh-assessment rehearsal checks the integrated public lifecycle. The required
+government profile includes these modules; fixture success grants no agency
+pilot exit, operational acceptance or delivery permission. See
+[PRD-24](../docs/production-prd24-operational-handover.md).

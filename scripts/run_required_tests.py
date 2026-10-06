@@ -48,6 +48,7 @@ PATTERNS = (
     "test_production_capacity_*.py",
     "test_production_assessment_*.py",
     "test_production_pilot_*.py",
+    "test_production_handover_*.py",
 )
 REQUIRED_SOURCE_INPUTS = (
     "deploy/agency-private-cloud/blueprint.json", "requirements.lock",

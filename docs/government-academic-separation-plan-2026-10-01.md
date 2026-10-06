@@ -413,3 +413,25 @@ scoped suspension/resume and terminal withdrawal. Eleven production blockers
 remain open; historical packets/records cannot restore admission. Earlier work
 and evidence remain preserved on D:. Agency pilot acceptance and GitHub
 authentication are pending. Next is PRD-24, exit review and operational handover.
+
+## PRD-24 local continuation — 6 October 2026
+
+[PRD-24](production-prd24-operational-handover.md) adds exit-review and operational
+handover preparation for the exact acknowledged public Wine128 plan. Current
+signed operator/owner/independent reviewers retain the original packet, scope,
+roster and planning-window checks. Suspension and expiry remove local readiness;
+terminal local retirement and historical records cannot restore authority.
+Capacity/cost, actual pilot exit, service ownership and every-route agency
+retirement remain pending. All eleven frozen production findings stay open.
+
+Government publication and the main-branch merge succeeded via SSH; main is the
+only retained branch. Hosted CI failures are intentionally outside this phase at
+the user's request. Earlier source, advisory files and local evidence are
+preserved. No original research or separate academic repository is modified.
+Next is PRD-25, selected ART adapters and broader tabular/regression profiles.
+
+PRD-24 local validation passed **1,909 required tests across 109 modules**,
+with zero failures, errors or skips and 451 hashed source inputs verified.
+The 37 schemas, links in 72 Markdown files, source rehearsal and isolated
+installed-wheel rehearsal passed. Exact dated receipts remain in the new ignored
+PRD-24 verification directory; older evidence was not restamped.

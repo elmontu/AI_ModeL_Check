@@ -140,7 +140,7 @@ over large private datasets. Provider and region remain open. The framework
 supports broader government sectors; a major public-health agency is one
 possible pilot.
 
-PRD-01 through PRD-23 have reviewable local work. Each retains its own acceptance
+PRD-01 through PRD-24 have reviewable local work. Each retains its own acceptance
 gates and remains in progress for production qualification.
 
 | Workstream | Local progress | Detailed records |
@@ -155,8 +155,11 @@ Public benchmarks include bundled datasets and prepared ACS, aviation, lending
 and taxi samples. Catalog registration does not mean every dataset is available
 or tested. Private agency data is not admitted by these rehearsals.
 
-**Next: PRD-24, pilot exit review and operational handover.** The current
-restricted-pilot service controls a local plan; no agency pilot has started.
+**Current: [PRD-24, exit review and operational handover preparation](docs/production-prd24-operational-handover.md).** Local signed review binds the
+exact pilot plan and records support, maintenance, pending capacity/cost and
+terminal retirement. No agency pilot has started or passed exit review.
+
+**Next: PRD-25**, selected ART adapters and broader tabular/regression profiles.
 
 Production acceptance still requires agency appointments and release criteria,
 real identity/key services, isolated workers and networks, independent custody,
@@ -205,11 +208,12 @@ See [required CI](docs/production-prd04-required-ci.md),
 [build controls](docs/production-prd09-build-controls.md) and
 [test coverage](tests/README.md) for the full prerequisites.
 
-The latest recorded implementation validation passed **1,846 required tests
-with zero failures, errors or skips**. Publication checks also verified 37
-schemas and links in 71 Markdown files. These are local observations; hosted
-CI remains pending. Exact commit, checkout and additional-test details are in the
-[publication checkpoint](docs/government-academic-separation-plan-2026-10-01.md#government-publication-checkpoint).
+The PRD-24 implementation validation passed **1,909 required tests
+with zero failures, errors or skips**. Current checks also verified 37 schemas
+and links in 72 Markdown files. Source and installed-wheel handover rehearsals
+passed. The [PRD-24 record](docs/production-prd24-operational-handover.md) describes
+validation and pending agency acceptance. Hosted CI failures remain outside this
+phase at the user's request; the [publication checkpoint](docs/government-academic-separation-plan-2026-10-01.md#government-publication-checkpoint) retains earlier publication evidence.
 
 ## Documentation and research
 

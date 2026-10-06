@@ -395,7 +395,7 @@ and agency acceptance remain pending.
 **PRD-23 is in progress**: [restricted local pilot plan](production-prd23-restricted-pilot.md)
 binds exact public evidence, seven current signed people and scoped local plan
 review/suspension/withdrawal. Actual agency pilot admission remains blocked.
-The next planned task is **PRD-24**, pilot exit and operational handover.
+**PRD-24 is in progress**: [exit review and operational handover preparation](production-prd24-operational-handover.md) binds the exact current plan and records pending agency capacity/cost, support, maintenance and terminal local retirement. The next planned task is **PRD-25**, selected ART adapters.
 Other tasks remain **planned**.
 Dependencies are task IDs, not completion claims. PRD-04 may prepare and locally
 validate CI against the captured PRD-03 source while its publication gate remains
@@ -429,7 +429,7 @@ dependencies and adequate staffing.
 | PRD-21 | M4 | SRE/database owner | PRD-16, PRD-19 | **In progress:** [bounded public capacity measurements and historical recovery](production-prd21-capacity-recovery.md); retained fictional charges/receipts and denied unreviewed fixture delivery; approved agency-scale workloads, provider failover and independent restore acceptance pending |
 | PRD-22 | M4 | Independent security/assessor | PRD-19, PRD-20, PRD-21 | **In progress:** [local assessment handoff](production-prd22-independent-assessment.md), fresh bounded adversarial probes, signed exact packets and current local finding review; appointed deployment penetration/scientific/control assessment and explicit agency acceptance remain pending |
 | PRD-23 | M5 | Sponsor/release authority | PRD-22 | **In progress:** [restricted local pilot plan](production-prd23-restricted-pilot.md), exact public evidence, seven signed current people, named support/suspension and guarded review; actual agency admission and evidenced pilot acceptance remain blocked by PRD-22 findings |
-| PRD-24 | M5 | Service owner | PRD-23 | Pilot exit review, capacity/cost evidence, operational handover, maintenance cadence and retirement plan |
+| PRD-24 | M5 | Service owner | PRD-23 | **In progress:** [local exit-review and handover preparation](production-prd24-operational-handover.md), exact signed pilot binding, support/maintenance, pending capacity/cost and terminal local retirement; actual agency pilot exit and operational acceptance remain pending |
 | PRD-25 | Expansion | ML/scientific lead | PRD-14, PRD-23 | Selected ART adapters and further tabular/regression families, each independently accepted |
 | PRD-26 | Expansion | LLM security/data steward | PRD-10, PRD-12, PRD-23 | garak then PyRIT profiles for selected LLM/RAG/agent interfaces; sandbox controls, evaluated scorers and approved egress |
 | PRD-27 | Expansion | Architecture/agency owner | PRD-23 | Separate acceptance for new recipient APIs, derivatives, vision, agencies or classifications; no blanket inherited approval |

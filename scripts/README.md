@@ -299,3 +299,13 @@ ignored.local destination. It binds fresh public assessment evidence to one
 immutable named plan, seven signed people and scoped local suspension/withdrawal.
 All agency admission, query and pilot-delivery gates remain closed. See
 [PRD-23](../docs/production-prd23-restricted-pilot.md). Next is PRD-24 handover.
+
+## Pilot exit review and operational handover preparation
+
+rehearse_pilot_handover.py requires explicit local_public_fixture and a new
+ignored.local destination. It creates fresh pinned public assessment evidence,
+requires a current seven-person acknowledged plan and exercises independent
+handover preparation, original roster expiry and terminal local retirement.
+Capacity/cost and agency exit remain pending. Production defaults refuse before
+output. See [PRD-24](../docs/production-prd24-operational-handover.md) for commands,
+operational declarations and the acceptance boundary. PRD-25 ART adapters are next.
