@@ -9,13 +9,47 @@ import time
 from pathlib import Path
 
 
-def main():
+RESEARCH_DATA_ENV = "MRA_DEMO_RESEARCH_DATA_ROOT"
+
+
+def validate_research_data_root(path: Path) -> Path:
+    if not path.is_absolute():
+        raise ValueError("research-data-root must be an absolute path")
+    try:
+        for entry in reversed((path, *path.parents)):
+            attributes = getattr(entry.lstat(), "st_file_attributes", 0)
+            if entry.is_symlink() or attributes & 0x400:
+                raise ValueError("research-data-root must not contain symlinks or reparse points")
+    except FileNotFoundError as exc:
+        raise ValueError("research-data-root must be an existing directory") from exc
+    if not path.is_dir():
+        raise ValueError("research-data-root must be an existing directory")
+    return path.resolve(strict=True)
+
+
+def main(argv: list[str] | None = None):
     parser = argparse.ArgumentParser(description="Local MRA API and separate worker; trusted testers only")
     parser.add_argument("mode", choices=("local", "serve", "worker"), nargs="?", default="local")
     parser.add_argument("--data", type=Path, default=Path(".local/console-data"))
     parser.add_argument("--port", type=int, default=8765)
     parser.add_argument("--host", choices=("127.0.0.1", "0.0.0.0"), default="127.0.0.1")
-    args = parser.parse_args()
+    parser.add_argument("--research-data-root", type=Path,
+                        help="absolute local directory of public research datasets; no uploads or downloads")
+    args = parser.parse_args(argv)
+    configured_root = args.research_data_root
+    if configured_root is None and os.environ.get(RESEARCH_DATA_ENV):
+        configured_root = Path(os.environ[RESEARCH_DATA_ENV])
+    research_data_root = None
+    if configured_root is not None:
+        try:
+            research_data_root = validate_research_data_root(configured_root)
+        except (OSError, ValueError) as exc:
+            parser.error(str(exc))
+    environment = dict(os.environ)
+    if research_data_root is not None:
+        environment[RESEARCH_DATA_ENV] = str(research_data_root)
+        if args.mode in {"worker", "serve"}:
+            os.environ[RESEARCH_DATA_ENV] = str(research_data_root)
     root = args.data.resolve()
     if args.mode == "worker":
         from .worker import run
@@ -43,7 +77,7 @@ def main():
             logs.append(log)
             children.append(subprocess.Popen(
                 [sys.executable, "-m", "model_release_assurance.console", mode,
-                 "--data", str(root), "--port", str(args.port)], creationflags=flags,
+                 "--data", str(root), "--port", str(args.port)], creationflags=flags, env=environment,
                 stdin=subprocess.DEVNULL, stdout=log, stderr=subprocess.STDOUT))
         print(f"Console: http://127.0.0.1:{args.port}\nData: {root}\nTrusted local pre-POC. Ctrl+C stops API and worker.", flush=True)
         while all(child.poll() is None for child in children):

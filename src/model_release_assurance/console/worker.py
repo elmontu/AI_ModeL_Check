@@ -89,7 +89,9 @@ def execute(store: Store, job: dict) -> dict:
         root = store.root / "jobs" / job["id"]
         root.mkdir(parents=True, exist_ok=True)
         output = root / "artifacts"
-        store.progress(job, "Training selected model and running compatible red-team tools")
+        store.progress(job, "Verifying retained research sample, training model and running compatible red-team tools"
+                       if options["dataset"].startswith("research-") else
+                       "Training selected model and running compatible red-team tools")
         with (root / "worker.log").open("w", encoding="utf-8") as log:
             subprocess.run([sys.executable, "-m", "model_release_assurance.public_models", "--preset", options["preset"],
                             "--dataset", options["dataset"], "--output", str(output)], stdout=log, stderr=subprocess.STDOUT,

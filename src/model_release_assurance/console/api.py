@@ -200,6 +200,14 @@ def create_app(root: Path) -> FastAPI:
             return store.enqueue(payload.kind, payload.case_id, payload.language.model_dump())
         if payload.language is not None:
             raise ValueError("language options require a language job")
+        if payload.training is not None and payload.training.dataset.startswith("research-"):
+            from .research_data import configured_research_root
+            try:
+                configured = configured_research_root()
+            except (OSError, ValueError):
+                raise ValueError("Research dataset configuration is unavailable; restart with a valid --research-data-root") from None
+            if configured is None:
+                raise ValueError("Research datasets require an explicit --research-data-root; no bundled fallback is used")
         return store.enqueue(payload.kind, payload.case_id, payload.training.model_dump() if payload.training else None)
 
     @app.get("/")

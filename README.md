@@ -42,6 +42,20 @@ The environment and evidence stay in `.local/demo-venv` and `.local/demo-data`
 inside your checkout. First installation needs package access; the bundled
 public-data examples then run offline.
 
+To also use the existing public research samples on D:, start with:
+
+```powershell
+python scripts/start_demo.py --research-data-root D:/model_audit_data
+```
+
+The training wizard then offers ACS census, BTS aviation, HMDA lending and NYC
+TLC mobility profiles. Each uses at most **4,096 rows** from its retained 27,000-row
+prepared matrix, with public covariates and utility labels only. Withheld fields
+and record keys are excluded. These historical samples are separate from the
+larger raw collection and do not become fresh audit evidence. Source validation
+failures are retained; no source is downloaded or replaced with bundled data.
+See [the D-drive walkthrough](docs/local-demo.md#use-existing-public-research-data-on-d).
+
 ```mermaid
 flowchart TD
     A[Clone the GitHub repository] --> B[Run scripts/start_demo.py]
@@ -57,7 +71,7 @@ flowchart TD
 
 Start with **Wine classification** and **Logistic regression** for a small CPU
 example. The demo records findings and gaps; it does not grant model clearance
-or release approval. Use bundled public data only. The
+or release approval. Use the bundled or configured public research data only. The
 [step-by-step demo guide](docs/local-demo.md) explains the walkthrough and launcher
 options. Public-use licensing remains pending; see
 [support and licensing](#support-and-licensing) before reuse or redistribution.
@@ -116,7 +130,7 @@ documents. Scientific and evidence-integrity checks still apply. See the
 
 | Workflow | Current capability | Scope |
 | --- | --- | --- |
-| Training and case review | Ten CPU training presets, four bundled datasets, lineage records, adversarial jobs and a twelve-control review | Supported model/data pairs; local operator review |
+| Training and case review | Ten CPU training presets, four bundled datasets, four optional existing public research profiles, lineage records, adversarial jobs and a twelve-control review | Supported model/data pairs; local operator review; historical research samples are not fresh audits |
 | Assessment | Versioned contracts, scoped evidence, optimization, signed records and lifecycle replay | Non-authorizing recommendations |
 | Export screening | Reloaded public model packages, a frozen membership screen, positive/null controls and reviewer receipts | Declared attacks and exact candidate bytes |
 | Synthetic export lab | Public synthetic training, accounting exercises, atomic commitment and exact-byte delivery | Fixed fixtures |

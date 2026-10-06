@@ -36,7 +36,7 @@ def _build_population_scope(
             "custom_unit_definition": None,
             "universe_definition": (
                 "Exactly the rows in the dataset snapshot named by population_snapshot_sha256; "
-                "no inference is made about a current healthcare population."
+                "no inference is made about a current agency population."
             ),
             "inclusion_criteria": ["present in the hash-bound input snapshot"],
             "exclusion_criteria": [],
@@ -54,7 +54,7 @@ def _build_population_scope(
             },
             "subgroup_dimensions": [],
             "data_steward": "Public-data demo operator",
-            "notes": "Integration-demo scope only; not an approved health-data population.",
+            "notes": "Integration-demo scope only; not an approved agency-data population.",
         }
     )
 
@@ -80,8 +80,8 @@ def _build_threat(scope_id: str) -> ThreatContract:
             "tolerance": MEMBERSHIP_TOLERANCE,
             "tolerance_basis": "absolute",
             "harm_rationale": (
-                "Training membership can reveal association with a sensitive medical dataset; "
-                "the public teaching run demonstrates the mechanism, not actual patient harm."
+                "Training membership can reveal association with a sensitive dataset; "
+                "the public teaching run demonstrates the mechanism, not actual personal harm."
             ),
             "population_scope_id": scope_id,
             "candidate_set": None,
@@ -205,6 +205,15 @@ def prepare(output, metadata, members, nonmembers):
     frozen_names=['public-dataset.npz','training-config.json','data-manifest.json','training-runtime.json',
                   'population-scope.json','threat.json','registration.json','family-plan.json','selection-policy.json','policy.json',
                   'source-snapshots/registered_training.py','source-snapshots/public_models.py','source-snapshots/tiny_cnn.py']
+    if metadata.get('research'):
+        package=Path(__file__).parent
+        research_sources=('console/research_data.py','production_registration/profiles.py','production_adapters/datasets.py')
+        frozen_names.append('research-source.json')
+        for name in research_sources:
+            retained=sources/name
+            retained.parent.mkdir(parents=True,exist_ok=True)
+            retained.write_bytes((package/name).read_bytes())
+            frozen_names.append('source-snapshots/'+name)
     frozen={name:digest(output/name) for name in frozen_names}
     save(output/'evidence-freeze.json',{'format_version':'public-evidence-freeze/1','frozen_at':_iso(now()),'files':frozen})
     frozen['evidence-freeze.json']=digest(output/'evidence-freeze.json')

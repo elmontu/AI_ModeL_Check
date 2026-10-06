@@ -14,6 +14,7 @@ ROOT = Path(__file__).resolve().parents[1]
 MARKER = "mra-demo-install.json"
 INPUTS = ("requirements.lock", "requirements-experiments.txt", "requirements-console.txt",
           "pyproject.toml", "scripts/setup_pipeline.py")
+RESEARCH_DATA_ENV = "MRA_DEMO_RESEARCH_DATA_ROOT"
 
 PROBE = r'''
 import importlib, json, sys, tomllib
@@ -104,11 +105,30 @@ def validate_environment(target: Path) -> dict:
     return json.loads(results[0])
 
 
-def launch_console(target: Path, data: Path, port: int) -> int:
+def validate_research_data_root(path: Path) -> Path:
+    """Admit an explicit ordinary directory without following redirecting ancestors."""
+    if not path.is_absolute():
+        raise ValueError("research-data-root must be an absolute path")
+    try:
+        for entry in reversed((path, *path.parents)):
+            attributes = getattr(entry.lstat(), "st_file_attributes", 0)
+            if entry.is_symlink() or attributes & 0x400:
+                raise ValueError("research-data-root must not contain symlinks or reparse points")
+    except FileNotFoundError as exc:
+        raise ValueError("research-data-root must be an existing directory") from exc
+    if not path.is_dir():
+        raise ValueError("research-data-root must be an existing directory")
+    return path.resolve(strict=True)
+
+
+def launch_console(target: Path, data: Path, port: int, research_data_root: Path | None = None) -> int:
     command = [str(environment_python(target)), "-I", "-B", "-m", "model_release_assurance.console",
                "local", "--data", str(data), "--port", str(port)]
     # The existing console launcher owns the API, worker and their shutdown.
-    console = subprocess.Popen(command, cwd=ROOT, env=_process_environment())
+    environment = _process_environment()
+    if research_data_root is not None:
+        environment[RESEARCH_DATA_ENV] = str(validate_research_data_root(research_data_root))
+    console = subprocess.Popen(command, cwd=ROOT, env=environment)
     try:
         return console.wait()
     except KeyboardInterrupt:
@@ -130,6 +150,8 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--port", type=int, default=8765)
     parser.add_argument("--wheelhouse", type=Path, help="install from a prepared local wheel directory")
     parser.add_argument("--install-only", action="store_true", help="install or validate without starting services")
+    parser.add_argument("--research-data-root", type=Path,
+                        help="absolute local directory of public research datasets; no uploads or downloads")
     args = parser.parse_args(argv)
     if sys.version_info < (3, 11):
         parser.error("Python 3.11 or newer is required")
@@ -138,6 +160,8 @@ def main(argv: list[str] | None = None) -> int:
     target, data = args.venv.resolve(), args.data.resolve()
     wheelhouse = args.wheelhouse.resolve() if args.wheelhouse is not None else None
     try:
+        research_data_root = (validate_research_data_root(args.research_data_root)
+                              if args.research_data_root is not None else None)
         if wheelhouse is not None and not wheelhouse.is_dir():
             raise ValueError("wheelhouse must be an existing prepared local directory")
         binding = installation_binding()
@@ -165,6 +189,8 @@ def main(argv: list[str] | None = None) -> int:
             print("Installation ready. Run the same command without --install-only to start the demo.")
             return 0
         print(f"Open http://127.0.0.1:{args.port}/ after the services start. Ctrl+C stops both.", flush=True)
+        if research_data_root is not None:
+            return launch_console(target, data, args.port, research_data_root=research_data_root)
         return launch_console(target, data, args.port)
     except KeyboardInterrupt:
         print("Demo stopped. Any partial installation and existing evidence were retained.", file=sys.stderr)

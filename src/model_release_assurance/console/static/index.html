@@ -34,7 +34,7 @@
 
     <article class="demo-card"><div class="card-top"><span class="icon-box">◈</span><span class="pill muted">Synthetic fixtures</span></div><h3>Explore decision scenarios</h3><p>See how the workflow responds to missing evidence, demonstrated leakage, tampering and lifecycle changes.</p><div class="card-foot"><span>8 reference scenarios</span><button class="secondary" id="run-reference">Run scenarios <span>↗</span></button></div></article>
 
-    <article class="demo-card"><div class="card-top"><span class="icon-box teal">↗</span><span class="pill muted">Real public data</span></div><h3>Train → export → assess</h3><p>Train a linear, tree, neural-network, SVM or ensemble candidate on bundled public data, then inspect compatible red-team results.</p><div class="card-foot"><span>10 model presets · 4 datasets</span><button class="secondary" id="run-training">Open training wizard <span>↗</span></button></div></article>
+    <article class="demo-card"><div class="card-top"><span class="icon-box teal">↗</span><span class="pill muted">Real public data</span></div><h3>Train → export → assess</h3><p>Train a linear, tree, neural-network, SVM or ensemble candidate on bundled public data or configured local public research samples, then inspect compatible red-team results.</p><div class="card-foot"><span id="training-coverage">10 model presets · 4 bundled datasets</span><button class="secondary" id="run-training">Open training wizard <span>↗</span></button></div></article>
 
   </div></section>
 
@@ -59,9 +59,10 @@
     <p id="training-step" class="eyebrow">STEP 1 OF 3 · SAMPLE DATA</p>
     <section id="training-data">
       <label for="training-name">Training case name</label><input id="training-name" required maxlength="100" value="Public data training">
-      <label for="training-dataset">Sample public dataset</label><select id="training-dataset"><option value="sklearn-breast-cancer">Wisconsin Diagnostic Breast Cancer</option><option value="sklearn-wine">Wine classification</option><option value="sklearn-digits">Handwritten digits (8×8 images)</option><option value="sklearn-diabetes">Diabetes progression (regression)</option></select>
+      <label for="training-dataset">Sample public dataset</label><select id="training-dataset"><option value="sklearn-breast-cancer">Wisconsin Diagnostic Breast Cancer</option><option value="sklearn-wine">Wine classification</option><option value="sklearn-digits">Handwritten digits (8×8 images)</option><option value="sklearn-diabetes">Diabetes progression (regression)</option><option value="research-acs" disabled>ACS census and income (local research)</option><option value="research-bts" disabled>BTS aviation (local research)</option><option value="research-hmda" disabled>HMDA mortgage lending (local research)</option><option value="research-tlc" disabled>NYC TLC taxi mobility (local research)</option></select>
       <p id="training-data-description">569 samples · 30 numeric features · binary classification.</p>
-      <p class="operator-note">Bundled with scikit-learn. No upload, account or download needed. Learn on public sample data; this exercise does not establish clinical validity.</p>
+      <p id="training-source-note" class="operator-note">Bundled with scikit-learn. No upload, account or dataset download needed. Learn on public sample data; this exercise does not establish clinical validity.</p>
+      <p id="training-research-note" class="operator-note">Optional local research sources are not configured. The four bundled datasets remain available.</p>
     </section>
     <section id="training-settings" hidden>
       <label for="training-preset">Model family</label><select id="training-preset"><option value="xgboost-small">XGBoost: registered assessment demo</option><option value="logistic">Logistic regression</option><option value="random-forest">Random forest</option><option value="mlp">Small neural network (MLP)</option><option value="mlp-finetuned">Fine-tuned MLP (retains base model)</option><option value="cnn">CPU convolutional digit classifier</option><option value="ridge">Ridge regression</option><option value="forest-regression">Random forest regression</option><option value="svm">RBF support-vector classifier</option><option value="ensemble">Soft-voting linear + forest ensemble</option></select>

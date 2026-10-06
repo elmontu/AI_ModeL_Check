@@ -7,6 +7,7 @@ $('show-government-audit').onclick=showGovernmentControls;
 const names = {trained:'Trained model','fine-tuned':'Fine-tuned',adapter:'LoRA / adapter',merged:'Merged model',ensemble:'Ensemble / routed',distilled:'Distilled model',language:'Language red-team',reference:'Reference scenarios',training:'Training demo',check:'Input preflight',assess:'Case assessment',api:'Controlled API','named-party-weights':'Named-party files','public-weights':'Public model files'};
 
 let cases = [], jobs = [], selectedCase = null, selectedJob = null, lastCases = '', lastJobs = '', toastTimer;
+let researchData = {configured:false,max_rows:4096,error:false};
 
 const time = seconds => seconds ? new Date(seconds * 1000).toLocaleString([], {month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'}) : '—';
 
@@ -213,7 +214,7 @@ $('close-create').onclick=()=>$('case-dialog').close();$('close-detail').onclick
 
 $('case-form').onsubmit=async event=>{event.preventDefault();const button=event.submitter;button.disabled=true;try{const c=await api('cases',{name:$('case-name').value,kind:$('case-kind').value,route:$('case-route').value,mode:$('case-mode').value});$('case-dialog').close();$('case-form').reset();await refresh();await showCase(c.id);}catch(e){$('form-error').textContent=e.message;}finally{button.disabled=false;}};
 
-$('run-reference').onclick=()=>submitJob('reference');$('run-training').onclick=()=>{trainingStep=0;renderTrainingStep();$('training-dialog').showModal();};
+$('run-reference').onclick=()=>submitJob('reference');$('run-training').onclick=async()=>{trainingStep=0;await loadTrainingCapabilities();renderTrainingStep();$('training-dialog').showModal();};
 
 refresh();setInterval(refresh,2500);
 
@@ -255,30 +256,56 @@ $('training-form').onsubmit=async event=>{
 
 
 
-function updateTrainingSelection(){
-
-  const descriptions={'sklearn-breast-cancer':'569 samples · 30 features · 2 classes','sklearn-wine':'178 samples · 13 features · 3 classes','sklearn-digits':'1797 images · 64 pixels · 10 classes','sklearn-diabetes':'442 records · 10 features · continuous target'};
-
-  $('training-data-description').textContent=descriptions[$('training-dataset').value];
-
-  const xgb=$('training-preset').querySelector('option[value="xgboost-small"]');xgb.disabled=$('training-dataset').value!=='sklearn-breast-cancer';
-
-  if(xgb.disabled && $('training-preset').value==='xgboost-small')$('training-preset').value='logistic';
-
-  for(const option of $('training-preset').options){
-
-    if(option.value==='xgboost-small')continue;
-
-    const isRegression=['ridge','forest-regression'].includes(option.value);
-
-    option.disabled=isRegression!==($('training-dataset').value==='sklearn-diabetes') || (option.value==='cnn' && $('training-dataset').value!=='sklearn-digits');
-
+async function loadTrainingCapabilities(){
+  try{
+    const data=await api('capabilities');
+    researchData={configured:data.research_data?.configured===true,max_rows:4096,error:false};
+  }catch(error){
+    researchData={configured:false,max_rows:4096,error:true};
   }
+  updateTrainingSelection();
+}
 
+function updateTrainingSelection(){
+  const dataset=$('training-dataset'),isResearch=dataset.value.startsWith('research-');
+  for(const option of dataset.options){
+    if(option.value.startsWith('research-'))option.disabled=!researchData.configured;
+  }
+  const descriptions={
+    'sklearn-breast-cancer':'569 samples · 30 features · 2 classes',
+    'sklearn-wine':'178 samples · 13 features · 3 classes',
+    'sklearn-digits':'1797 images · 64 pixels · 10 classes',
+    'sklearn-diabetes':'442 records · 10 features · continuous target',
+    'research-acs':'Historical public census sample · at most 4,096 sampled rows · 8 features · 2 classes',
+    'research-bts':'Historical public aviation sample · at most 4,096 sampled rows · 7 features · 2 classes',
+    'research-hmda':'Historical public lending sample · at most 4,096 sampled rows · 7 features · 2 classes',
+    'research-tlc':'Historical public mobility sample · at most 4,096 sampled rows · 4 features · 2 classes'
+  };
+  $('training-data-description').textContent=descriptions[dataset.value];
+  $('training-source-note').textContent=isResearch
+    ?'Uses public covariates and utility labels only; withheld attributes and record keys are omitted. Historical training data is reused, so this is not fresh audit evidence. Missing or changed source files fail the run; no download or replacement dataset is used.'
+    :'Bundled with scikit-learn. No upload, account or dataset download needed. Learn on public sample data; this exercise does not establish clinical validity.';
+  $('training-research-note').textContent=researchData.configured
+    ?'Local public research sources are configured. Each selected source must pass validation when its run starts; configuration does not establish availability, freshness or scientific qualification.'
+    :researchData.error
+      ?'Could not check local research configuration. Research choices are disabled; the four bundled datasets remain available.'
+      :'Optional local research sources are not configured. Restart the launcher with --research-data-root PATH to enable their choices; the four bundled datasets remain available.';
+  $('training-coverage').textContent=researchData.configured
+    ?'10 model presets · 4 bundled + 4 optional research profiles'
+    :'10 model presets · 4 bundled datasets';
+
+  const xgb=$('training-preset').querySelector('option[value="xgboost-small"]');xgb.disabled=dataset.value!=='sklearn-breast-cancer';
+  if(xgb.disabled && $('training-preset').value==='xgboost-small')$('training-preset').value='logistic';
+  for(const option of $('training-preset').options){
+    if(option.value==='xgboost-small')continue;
+    const isRegression=['ridge','forest-regression'].includes(option.value);
+    option.disabled=isRegression!==(dataset.value==='sklearn-diabetes') || (option.value==='cnn' && dataset.value!=='sklearn-digits');
+  }
   if($('training-preset').selectedOptions[0].disabled)$('training-preset').value=Array.from($('training-preset').options).find(o=>!o.disabled).value;
-
+  const researchUnavailable=isResearch&&!researchData.configured;
+  $('training-next').disabled=researchUnavailable;
+  $('training-start').disabled=researchUnavailable;
   $('training-model-note').textContent='Freezes a membership-evidence plan before training and produces a registered assessment. Other tools remain exploratory; no preset authorizes release.';
-
 }
 
 $('training-dataset').onchange=updateTrainingSelection;$('training-preset').onchange=updateTrainingSelection;

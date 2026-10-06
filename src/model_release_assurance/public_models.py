@@ -3,6 +3,8 @@ from __future__ import annotations
 
 from pathlib import Path
 
+from .console.research_data import RESEARCH_DATASETS, load_console_research, research_inventory
+
 PRESETS = {
     "xgboost-small": "XGBoost (registered assessment demo)",
     "logistic": "Logistic regression",
@@ -22,9 +24,11 @@ DATASETS = {
     "sklearn-diabetes": "Diabetes progression · 442 records · 10 features · continuous target",
 }
 
+DATASETS.update(RESEARCH_DATASETS)
+
 def capability_inventory():
-    return {"presets": PRESETS, "datasets": DATASETS,
-            "training": "Ten CPU presets across four public datasets, including a convolutional classifier and regression; dataset compatibility is enforced",
+    return {"presets": PRESETS, "datasets": DATASETS, "research_data": research_inventory(),
+            "training": "Ten CPU presets across four bundled public datasets and four optional retained research samples; dataset compatibility is enforced",
             "red_team": "Classification and regression attacks, derivative/component comparisons, image translations and nine local Ollama language tests with two controls; unsupported adapters remain explicit",
             "assessment": "All ten presets generate registered membership-evidence assessments; the broader attack suite remains exploratory",
             "other_framework_paths": [
@@ -85,7 +89,7 @@ def _verify_export(path, original_model, original_scaler, raw_x):
     return bundle
 
 
-def run_public(preset, dataset, output):
+def run_public(preset, dataset, output, *, research_data_root=None):
     import warnings
     import joblib
     import numpy as np
@@ -101,8 +105,12 @@ def run_public(preset, dataset, output):
     regression=preset in {"ridge","forest-regression"}
     if regression != (dataset=="sklearn-diabetes"):raise ValueError("regression presets require the diabetes dataset")
     model=make_model(preset,3407)
+    provenance = None
+    if dataset in RESEARCH_DATASETS:
+        data, provenance = load_console_research(dataset, data_root=research_data_root)
+    else:
+        data={"sklearn-breast-cancer":load_breast_cancer,"sklearn-wine":load_wine,"sklearn-digits":load_digits,"sklearn-diabetes":load_diabetes}[dataset]()
     output.mkdir(parents=True,exist_ok=False)
-    data={"sklearn-breast-cancer":load_breast_cancer,"sklearn-wine":load_wine,"sklearn-digits":load_digits,"sklearn-diabetes":load_diabetes}[dataset]()
     indices=np.arange(len(data.target))
     train,test=train_test_split(indices,test_size=.35,stratify=None if regression else data.target,random_state=3407)
     # Fit the fixed utility comparator before training, using training labels only.
@@ -118,12 +126,20 @@ def run_public(preset, dataset, output):
             "scaler":"StandardScaler fitted on base-training subset only" if preset=="mlp-finetuned" else "StandardScaler fitted on training partition only",
             "parameters":_parameters(model),"calibration_rule":"first half of the fixed nonmember partition; remaining rows are audit controls"}
     if preset=="mlp-finetuned": recipe["fine_tuning"]={"base_training_fraction":.5,"base_max_epochs":120,"derivative_max_epochs":30,"warm_start":True,"derivative_training_fraction":1.0}
+    if provenance is not None:
+        recipe["research_source"] = provenance
+        workflow.write_json(output/"research-source.json", provenance)
     workflow.write_json(output/"training-config.json",recipe)
     np.savez_compressed(output/"public-dataset.npz",x=data.data,y=data.target,train=train,test=test,
                         calibration=test[:len(test)//2],audit=test[len(test)//2:],base_train=base_train)
-    workflow.write_json(output/"data-manifest.json",{"dataset":dataset,"dataset_sha256":workflow.digest(output/"public-dataset.npz"),"source":"scikit-learn bundled public sample","training_records":len(train),"test_records":len(test)})
+    manifest={"dataset":dataset,"dataset_sha256":workflow.digest(output/"public-dataset.npz"),"source":"scikit-learn bundled public sample","training_records":len(train),"test_records":len(test)}
+    if provenance is not None:
+        manifest.update(source="historical public research matrix; bounded retained sample", research_source=provenance,
+                        feature_names=list(data.feature_names), selected_rows=len(data.target),
+                        snapshot_fields=["x","y","train","test","calibration","audit","base_train"])
+    workflow.write_json(output/"data-manifest.json",manifest)
     from .registered_training import prepare, assess, now, _iso
-    plan=prepare(output,{"name":DATASETS[dataset],"rows":len(data.target)},len(train),len(test)-len(test)//2)
+    plan=prepare(output,{"name":DATASETS[dataset],"rows":len(data.target),"research":provenance is not None},len(train),len(test)-len(test)//2)
     plan['training_started_at']=_iso(now())
     with warnings.catch_warnings(record=True) as caught:
         warnings.simplefilter("always")
@@ -229,6 +245,12 @@ def run_public(preset, dataset, output):
             "component_comparisons":comparisons,"implementation_sha256":workflow.digest(Path(__file__)),"verdict":assessment.overall_verdict.value,"assessment_eligible":True,
             "authorization_eligible":False,"authorized":False,"deployed":False,"warnings":warnings_seen+utility_warnings,
             "limitations":["One registered membership assessment; other red-team tools remain exploratory","Digits use 8x8 public samples; CNN preset learns convolutional kernels, other presets use flattened pixels","Component accuracy comparisons do not establish joint-access privacy"]}
+    if provenance is not None:
+        result["dataset"]["research_source"] = provenance
+        result["limitations"].extend(provenance["metadata"]["limitations"])
+        result["limitations"].extend(["At most 4096 rows from a retained historical public research matrix; not the entire raw collection",
+                                      "Public B covariates and y utility labels only; withheld attributes and record keys are omitted",
+                                      "Research rows were historically reused; no fresh independent audit or person-level disjointness claim"])
     workflow.write_json(output/"result.json",result)
     return result
 
@@ -238,6 +260,7 @@ if __name__=="__main__":
     parser=argparse.ArgumentParser()
     parser.add_argument("--preset",required=True,choices=[x for x in PRESETS if x!="xgboost-small"])
     parser.add_argument("--dataset",required=True,choices=DATASETS)
+    parser.add_argument("--research-data-root",type=Path,help="explicit existing retained public research root")
     parser.add_argument("--output",type=Path,required=True)
     args=parser.parse_args()
-    run_public(args.preset,args.dataset,args.output.resolve())
+    run_public(args.preset,args.dataset,args.output.resolve(),research_data_root=args.research_data_root)

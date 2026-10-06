@@ -5,12 +5,16 @@ import copy
 import importlib.util
 import io
 import json
+import stat
 import subprocess
 import tempfile
 import unittest
 from contextlib import redirect_stderr, redirect_stdout
 from pathlib import Path
-from unittest.mock import patch
+from types import SimpleNamespace
+from unittest.mock import MagicMock, patch
+
+from model_release_assurance.console import __main__ as CONSOLE_MAIN
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -330,6 +334,122 @@ class GovernmentDemoLauncherTests(unittest.TestCase):
             console.__enter__.assert_not_called()
             console.__exit__.assert_not_called()
         self.assertIn("unconfirmed", diagnostic.getvalue().lower())
+
+    def test_research_data_flag_preserves_marker_and_reuses_installed_environment(self) -> None:
+        marker = self.ready_environment()
+        before = marker.read_bytes()
+        research = self.root / "public research data"
+        research.mkdir()
+        with patch.object(LAUNCHER, "install_environment") as install, \
+                patch.object(LAUNCHER, "validate_environment", return_value={}), \
+                patch.object(LAUNCHER, "launch_console", return_value=0) as launch:
+            self.assertEqual(self.invoke(self.args() + ["--research-data-root", str(research)]), 0)
+            install.assert_not_called()
+            launch.assert_called_once_with(self.target.resolve(), self.data.resolve(), 8765,
+                                           research_data_root=research.resolve())
+        self.assertEqual(marker.read_bytes(), before)
+
+    def test_relative_missing_or_file_research_root_is_rejected_before_installation(self) -> None:
+        regular_file = self.root / "not a directory"
+        regular_file.write_bytes(b"fixture\n")
+        for path in (Path("relative/research"), self.root / "missing research", regular_file):
+            with self.subTest(path=str(path)), \
+                    patch.object(LAUNCHER, "install_environment") as install, \
+                    patch.object(LAUNCHER, "validate_environment") as validate, \
+                    patch.object(LAUNCHER, "launch_console") as launch:
+                diagnostic = io.StringIO()
+                with redirect_stdout(io.StringIO()), redirect_stderr(diagnostic):
+                    self.assertEqual(LAUNCHER.main(self.args() + ["--research-data-root", str(path)]), 2)
+                self.assertIn("research-data-root", diagnostic.getvalue())
+                install.assert_not_called()
+                validate.assert_not_called()
+                launch.assert_not_called()
+        self.assertFalse(self.target.exists())
+
+    def test_research_root_rejects_symlink_or_reparse_redirects_in_ancestors(self) -> None:
+        research = self.root / "ordinary research"
+        research.mkdir()
+        original_lstat = Path.lstat
+        for module in (LAUNCHER, CONSOLE_MAIN):
+            for kind in ("symlink", "reparse"):
+                with self.subTest(module=module.__name__, kind=kind):
+                    if kind == "symlink":
+                        with patch.object(Path, "is_symlink", autospec=True,
+                                          side_effect=lambda entry: entry == self.root):
+                            with self.assertRaisesRegex(ValueError, "symlinks or reparse"):
+                                module.validate_research_data_root(research)
+                    else:
+                        def metadata(entry: Path):
+                            if entry == self.root:
+                                return SimpleNamespace(st_mode=stat.S_IFDIR, st_file_attributes=0x400)
+                            return original_lstat(entry)
+
+                        with patch.object(Path, "lstat", autospec=True, side_effect=metadata):
+                            with self.assertRaisesRegex(ValueError, "symlinks or reparse"):
+                                module.validate_research_data_root(research)
+
+    def test_research_root_is_sent_to_console_environment_without_mutating_parent(self) -> None:
+        research = self.root / "public research"
+        research.mkdir()
+        with patch.dict(LAUNCHER.os.environ, {LAUNCHER.RESEARCH_DATA_ENV: "parent configuration"}), \
+                patch.object(LAUNCHER.subprocess, "Popen") as popen:
+            popen.return_value.wait.return_value = 0
+            self.assertEqual(LAUNCHER.launch_console(self.target, self.data, 8765, research), 0)
+            self.assertEqual(popen.call_args.kwargs["env"][LAUNCHER.RESEARCH_DATA_ENV], str(research.resolve()))
+            self.assertEqual(LAUNCHER.os.environ[LAUNCHER.RESEARCH_DATA_ENV], "parent configuration")
+            self.assertNotIn(str(research.resolve()), popen.call_args.args[0])
+
+    def test_unconfigured_launch_does_not_add_research_data_configuration(self) -> None:
+        with patch.object(LAUNCHER, "_process_environment", return_value={"DEMO_SENTINEL": "bundled"}), \
+                patch.object(LAUNCHER.subprocess, "Popen") as popen:
+            popen.return_value.wait.return_value = 0
+            self.assertEqual(LAUNCHER.launch_console(self.target, self.data, 8765), 0)
+            self.assertEqual(popen.call_args.kwargs["env"], {"DEMO_SENTINEL": "bundled"})
+            self.assertNotIn("--research-data-root", popen.call_args.args[0])
+
+    def test_console_propagates_configured_research_root_to_both_owned_children(self) -> None:
+        research = self.root / "public research"
+        research.mkdir()
+        for source in ("flag", "inherited"):
+            with self.subTest(source=source):
+                environment_value = "parent configuration" if source == "flag" else str(research)
+                arguments = ["local", "--data", str(self.root / f"console-{source}")]
+                if source == "flag":
+                    arguments.extend(["--research-data-root", str(research)])
+                worker, web = MagicMock(), MagicMock()
+                worker.poll.return_value = web.poll.return_value = None
+                with patch.dict(CONSOLE_MAIN.os.environ, {CONSOLE_MAIN.RESEARCH_DATA_ENV: environment_value}), \
+                        patch.object(CONSOLE_MAIN.socket, "socket"), \
+                        patch.object(CONSOLE_MAIN.subprocess, "Popen", side_effect=[worker, web]) as popen, \
+                        patch.object(CONSOLE_MAIN.time, "sleep", side_effect=KeyboardInterrupt()), \
+                        redirect_stdout(io.StringIO()), redirect_stderr(io.StringIO()):
+                    CONSOLE_MAIN.main(arguments)
+                    self.assertEqual(popen.call_count, 2)
+                    self.assertEqual([call.args[0][3] for call in popen.call_args_list], ["worker", "serve"])
+                    for call in popen.call_args_list:
+                        self.assertEqual(call.kwargs["env"][CONSOLE_MAIN.RESEARCH_DATA_ENV], str(research.resolve()))
+                    self.assertEqual(CONSOLE_MAIN.os.environ[CONSOLE_MAIN.RESEARCH_DATA_ENV], environment_value)
+                    worker.terminate.assert_called_once_with()
+                    web.terminate.assert_called_once_with()
+
+    def test_console_invalid_configured_root_fails_before_service_or_data_creation(self) -> None:
+        for source in ("flag", "inherited"):
+            with self.subTest(source=source):
+                data = self.root / f"uncreated-console-{source}"
+                arguments = ["local", "--data", str(data)]
+                if source == "flag":
+                    arguments.extend(["--research-data-root", "relative/research"])
+                with patch.dict(CONSOLE_MAIN.os.environ, {CONSOLE_MAIN.RESEARCH_DATA_ENV: "relative/research"}), \
+                        patch.object(CONSOLE_MAIN.socket, "socket") as socket_open, \
+                        patch.object(CONSOLE_MAIN.subprocess, "Popen") as popen, \
+                        redirect_stdout(io.StringIO()), redirect_stderr(io.StringIO()):
+                    with self.assertRaises(SystemExit) as error:
+                        CONSOLE_MAIN.main(arguments)
+                    self.assertEqual(error.exception.code, 2)
+                    socket_open.assert_not_called()
+                    popen.assert_not_called()
+                self.assertFalse(data.exists())
+
 
 if __name__ == "__main__":
     unittest.main()
