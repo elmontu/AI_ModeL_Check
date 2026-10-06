@@ -14,7 +14,58 @@ Start with the [government audit guide](docs/government-audit-guide.md).
 The [production roadmap](docs/production-private-cloud-plan.md) explains the
 path to an agency private-cloud service.
 
+## Run the GitHub demo locally
+
+Clone the repository into a folder outside OneDrive or other synchronized storage:
+
+```console
+git clone https://github.com/elmontu/AI_ModeL_Check.git
+cd AI_ModeL_Check
+```
+
+Then run **one command** from the checkout:
+
+```powershell
+# Windows PowerShell
+python scripts/start_demo.py
+```
+
+```bash
+# Linux/macOS
+python3 scripts/start_demo.py
+```
+
+The launcher installs the console environment on first use, validates and reuses
+its own environment on later launches, and starts the web service and separate
+worker. Open [the demo console](http://127.0.0.1:8765/). Ctrl+C stops both services.
+The environment and evidence stay in `.local/demo-venv` and `.local/demo-data`
+inside your checkout. First installation needs package access; the bundled
+public-data examples then run offline.
+
+```mermaid
+flowchart TD
+    A[Clone the GitHub repository] --> B[Run scripts/start_demo.py]
+    B --> C[Install or validate and reuse the demo environment]
+    C --> D[Start local web service and separate worker]
+    D --> E[Select public dataset and model]
+    E --> F[Train and export the model]
+    F --> G[Run red-team checks]
+    G --> H[Inspect findings, unsupported tools and incomplete evidence]
+    H --> I[Government audit review]
+    I --> J[Download evidence ZIP and review JSON]
+```
+
+Start with **Wine classification** and **Logistic regression** for a small CPU
+example. The demo records findings and gaps; it does not grant model clearance
+or release approval. Use bundled public data only. The
+[step-by-step demo guide](docs/local-demo.md) explains the walkthrough and launcher
+options. Public-use licensing remains pending; see
+[support and licensing](#support-and-licensing) before reuse or redistribution.
+
 ## Quick start
+
+For manual setup instead of the one-command launcher above, use the following
+commands.
 
 Use **Python 3.11 or newer**, and run these commands from a source checkout.
 The installer creates a new environment with the console, training tools and
@@ -45,14 +96,16 @@ choose a new location with `--venv PATH`.
 
 ### First review
 
-1. Select a supported model and bundled public dataset in the training wizard,
-   or create a case and bind the required files for an existing candidate.
-2. Run preflight, training and adversarial checks. Review failures, unsupported
-   tools and uncertainty alongside completed tests.
-3. Open **Government audit review** and record evidence, rationale and gaps
+1. Under **Train → export → assess**, select **Open training wizard**. Choose
+   **Wine classification**, then **Logistic regression**, and **Start training**.
+2. Open the run details. Inspect **Red-team coverage**, failures, unsupported
+   tools and uncertainty alongside the scientific result.
+3. Select **Open trained model case** and **Check inputs** to inspect preflight.
+   Open **Government audit review** and record evidence, rationale and gaps
    against its twelve controls.
-4. Download the case evidence and review record. Changing a binding or cited
-   file makes affected review entries stale.
+4. Use **Download evidence ZIP**, **Download result JSON** and **Download review
+   JSON** to retain the separate run evidence and review. Changing a binding or
+   cited file makes affected review entries stale.
 
 Education mode supports trusted local exercises with optional institutional
 documents. Scientific and evidence-integrity checks still apply. See the
@@ -252,6 +305,7 @@ retains earlier publication evidence.
 
 | Need | Reference |
 | --- | --- |
+| GitHub demo on your computer | [Local public-data walkthrough](docs/local-demo.md) |
 | Government review walkthrough | [Government audit guide](docs/government-audit-guide.md) |
 | Lifecycle contracts and enforcement | [Release protocol](docs/model-release-assurance-protocol.md), [system audit specification](docs/system-audit-specification.md) |
 | Supported model families and tools | [Model-family coverage](docs/model-family-coverage.md), [red-team tools](docs/sacro-ml-red-team.md), [MCP/RAG](docs/rag-mcp.md) |
