@@ -116,3 +116,14 @@ fresh-assessment rehearsal checks the integrated public lifecycle. The required
 government profile includes these modules; fixture success grants no agency
 pilot exit, operational acceptance or delivery permission. See
 [PRD-24](../docs/production-prd24-operational-handover.md).
+
+
+### PRD-25 ART comparison
+
+`test_production_art_*.py` covers strict public group-loss inputs, fixed splits,
+float32 conversion, fitted logistic score replay, mandatory controls, runtime
+source/metadata bindings, owned process cleanup, explicit unavailable/unsupported
+outcomes, frozen artifact tampering and all-eight-profile driver completeness.
+The optional ART dependency is not required by the ordinary test runtime; real
+pinned upstream executions are retained as separate PRD-25 local receipts.
+These checks do not establish production isolation or scientific acceptance.

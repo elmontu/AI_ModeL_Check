@@ -84,12 +84,14 @@ not automatically admitted to a temporal or production registry.
 | Local language models | Nine synthetic probes and two controls through an installed Ollama model | No model download, real tool execution or general training-record extraction claim |
 | Public export pilot | One loss-based membership screen on an offline GaussianNB package | One public fixture |
 | SACRO-ML | Separate pinned 2.0.1 adapter for seven public classifier profiles | Separate runtime; Diabetes regression unsupported; not a console integration |
+| ART | Separate pinned 1.20.1 retained-loss membership comparison across eight public profiles | Includes continuous regression; trusted loss oracle; no live target-query or console integration |
 
-ART, garak and PyRIT adapters remain planned. Discovery lists available and
+garak and PyRIT adapters remain planned. Discovery lists available and
 unsupported tools; it does not establish that every dependency is installed.
 See [tool coverage](docs/framework-capability-gaps.md),
 [export screening](docs/red-team-export-review.md) and the
-[scoped SACRO-ML adapter](docs/production-prd14-sacro-adapter.md).
+[scoped SACRO-ML adapter](docs/production-prd14-sacro-adapter.md) and
+[ART retained-loss comparison](docs/production-prd25-art-adapter.md).
 
 Run the public export-screening example from the console environment:
 
@@ -140,7 +142,7 @@ over large private datasets. Provider and region remain open. The framework
 supports broader government sectors; a major public-health agency is one
 possible pilot.
 
-PRD-01 through PRD-24 have reviewable local work. Each retains its own acceptance
+PRD-01 through PRD-25 have reviewable local work. Each retains its own acceptance
 gates and remains in progress for production qualification.
 
 | Workstream | Local progress | Detailed records |
@@ -155,11 +157,12 @@ Public benchmarks include bundled datasets and prepared ACS, aviation, lending
 and taxi samples. Catalog registration does not mean every dataset is available
 or tested. Private agency data is not admitted by these rehearsals.
 
-**Current: [PRD-24, exit review and operational handover preparation](docs/production-prd24-operational-handover.md).** Local signed review binds the
-exact pilot plan and records support, maintenance, pending capacity/cost and
-terminal retirement. No agency pilot has started or passed exit review.
+**Current: [PRD-25, ART retained-loss membership comparison](docs/production-prd25-art-adapter.md).** A separate pinned runtime executes the real ART learner
+on eight public classifier/regression profiles with required controls and independent
+score replay. Results remain non-authorizing local diagnostics. No agency pilot
+has started or passed exit review.
 
-**Next: PRD-25**, selected ART adapters and broader tabular/regression profiles.
+**Next: PRD-26**, scoped garak then PyRIT profiles for selected LLM/RAG/agent interfaces.
 
 Production acceptance still requires agency appointments and release criteria,
 real identity/key services, isolated workers and networks, independent custody,
@@ -208,11 +211,12 @@ See [required CI](docs/production-prd04-required-ci.md),
 [build controls](docs/production-prd09-build-controls.md) and
 [test coverage](tests/README.md) for the full prerequisites.
 
-The PRD-24 implementation validation passed **1,909 required tests
-with zero failures, errors or skips**. Current checks also verified 37 schemas
-and links in 72 Markdown files. Source and installed-wheel handover rehearsals
-passed. The [PRD-24 record](docs/production-prd24-operational-handover.md) describes
-validation and pending agency acceptance. Hosted CI failures remain outside this
+The PRD-25 implementation validation passed **2,056 required tests across 115
+modules with zero failures, errors or skips**. Checks also verified 37 schemas
+and links in 73 Markdown files. Source and installed-wheel ART comparisons each
+passed all eight public profiles with 72 target/control repetitions. The
+[PRD-25 record](docs/production-prd25-art-adapter.md) retains descriptive metrics,
+validation limits and pending agency acceptance. Hosted CI remains outside this
 phase at the user's request; the [publication checkpoint](docs/government-academic-separation-plan-2026-10-01.md#government-publication-checkpoint) retains earlier publication evidence.
 
 ## Documentation and research

@@ -308,4 +308,16 @@ requires a current seven-person acknowledged plan and exercises independent
 handover preparation, original roster expiry and terminal local retirement.
 Capacity/cost and agency exit remain pending. Production defaults refuse before
 output. See [PRD-24](../docs/production-prd24-operational-handover.md) for commands,
-operational declarations and the acceptance boundary. PRD-25 ART adapters are next.
+operational declarations and the acceptance boundary. PRD-25 adds the separate retained-loss comparison below.
+
+
+### ART retained-loss comparison
+
+`rehearse_art_adapter.py` executes the real pinned ART membership learner on all
+eight captured PRD-13 public classifier/regression profiles. Pass the Python
+executable of the separately prepared hash-locked ART environment and a new
+ignored `.local` output. Required positive/null controls and independent fitted
+score replay must pass; missing dependencies have an explicit disposition.
+See [PRD-25](../docs/production-prd25-art-adapter.md) for commands, the trusted
+loss-oracle interface and remaining scientific/agency acceptance. No live target
+or private data is admitted. PRD-26 garak/PyRIT profiles are next.

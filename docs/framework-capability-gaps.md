@@ -72,9 +72,12 @@ packages. No console model is automatically admitted to the privacy registry.
 11 classifier groups, three regression groups, nine language probes, the public
 export pilot and the separate multi-shadow experiment. The old two-tool typed
 catalog and its digest remain a separate assessment contract. Discovery neither
-executes a tool nor certifies dependency availability. External SACRO-ML, ART,
-garak and PyRIT adapters remain unintegrated; an entry under external adapters
-is a declared gap, not an installed capability.
+executes a tool nor certifies dependency availability. Separate
+[SACRO-ML](production-prd14-sacro-adapter.md) and
+[ART retained-loss](production-prd25-art-adapter.md) adapters now execute scoped
+public-fixture comparisons in explicit pinned runtimes. They do not integrate
+with the console or widen the old assessment contract. garak and PyRIT remain
+unimplemented; their discovery entries declare gaps, not installed capabilities.
 
 ## Remaining research and deployment work
 

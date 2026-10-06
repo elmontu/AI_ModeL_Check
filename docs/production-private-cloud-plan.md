@@ -275,7 +275,9 @@ sandboxed even with constrained formats. See the official
 [PRD-14](production-prd14-sacro-adapter.md) now implements one bounded local
 SACRO-ML probability-membership comparison over seven public classifier profiles,
 with explicit regression non-applicability and independent metrics. This is not
-production acceptance or coverage of every SACRO method. ART, garak and PyRIT
+production acceptance or coverage of every SACRO method. PRD-25 adds a separate
+[ART retained-loss comparison](production-prd25-art-adapter.md) over eight public
+classification/regression profiles; it does not qualify live target queries. garak and PyRIT
 adapters remain **unimplemented**. The order is an engineering recommendation,
 not an instruction to install every tool. Retain native fixtures as regression
 references; independently validate attack-specific end-to-end positive and null
@@ -395,7 +397,9 @@ and agency acceptance remain pending.
 **PRD-23 is in progress**: [restricted local pilot plan](production-prd23-restricted-pilot.md)
 binds exact public evidence, seven current signed people and scoped local plan
 review/suspension/withdrawal. Actual agency pilot admission remains blocked.
-**PRD-24 is in progress**: [exit review and operational handover preparation](production-prd24-operational-handover.md) binds the exact current plan and records pending agency capacity/cost, support, maintenance and terminal local retirement. The next planned task is **PRD-25**, selected ART adapters.
+**PRD-24 is in progress**: [exit review and operational handover preparation](production-prd24-operational-handover.md) binds the exact current plan and records pending agency capacity/cost, support, maintenance and terminal local retirement. PRD-25 adds a separate retained-loss ART diagnostic; agency handover remains pending.
+
+**PRD-25 is in progress**: [pinned ART retained-loss membership comparison](production-prd25-art-adapter.md) preserves all eight profile group rosters, including conflicting labels and continuous regression, with actual learner-path controls and independent fitted-score replay. Scientific acceptance, live interfaces and other attack families remain pending. The next local task is **PRD-26**, scoped garak then PyRIT profiles.
 Other tasks remain **planned**.
 Dependencies are task IDs, not completion claims. PRD-04 may prepare and locally
 validate CI against the captured PRD-03 source while its publication gate remains
@@ -430,7 +434,7 @@ dependencies and adequate staffing.
 | PRD-22 | M4 | Independent security/assessor | PRD-19, PRD-20, PRD-21 | **In progress:** [local assessment handoff](production-prd22-independent-assessment.md), fresh bounded adversarial probes, signed exact packets and current local finding review; appointed deployment penetration/scientific/control assessment and explicit agency acceptance remain pending |
 | PRD-23 | M5 | Sponsor/release authority | PRD-22 | **In progress:** [restricted local pilot plan](production-prd23-restricted-pilot.md), exact public evidence, seven signed current people, named support/suspension and guarded review; actual agency admission and evidenced pilot acceptance remain blocked by PRD-22 findings |
 | PRD-24 | M5 | Service owner | PRD-23 | **In progress:** [local exit-review and handover preparation](production-prd24-operational-handover.md), exact signed pilot binding, support/maintenance, pending capacity/cost and terminal local retirement; actual agency pilot exit and operational acceptance remain pending |
-| PRD-25 | Expansion | ML/scientific lead | PRD-14, PRD-23 | Selected ART adapters and further tabular/regression families, each independently accepted |
+| PRD-25 | Expansion | ML/scientific lead | PRD-14, PRD-23 | **In progress:** [pinned ART retained-loss membership comparison](production-prd25-art-adapter.md) over eight public profiles, including regression; live interfaces, additional families and independent scientific/security/license acceptance remain pending |
 | PRD-26 | Expansion | LLM security/data steward | PRD-10, PRD-12, PRD-23 | garak then PyRIT profiles for selected LLM/RAG/agent interfaces; sandbox controls, evaluated scorers and approved egress |
 | PRD-27 | Expansion | Architecture/agency owner | PRD-23 | Separate acceptance for new recipient APIs, derivatives, vision, agencies or classifications; no blanket inherited approval |
 
