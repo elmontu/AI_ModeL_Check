@@ -147,3 +147,16 @@ bindings, owned Windows process deadlines and persisted-stage replay. Optional
 upstream imports run in the separate pinned rehearsal runtime. The required
 government profile includes these suites without dependency skips or live model
 calls. Actual source and installed-wheel campaigns are recorded separately.
+
+### PRD-26 bounded adaptive PyRIT component
+
+`test_production_pyrit_adaptive_*.py` exercises a separate frozen adaptive plan,
+role identities and shared-model declarations, bounded local client requests,
+owned worker startup, structured attacker responses, target feedback, complete
+conversation replay and terminal attacker-error evidence. Saved artifact
+changes, role-history confusion and unjustified completion must be refused.
+The existing `test_production_pyrit_*.py` required-profile pattern includes these
+suites without changing or weakening the earlier scripted tests. Real upstream
+source and installed-wheel rehearsals use a separately prepared pinned runtime;
+they do not establish independent human or agency acceptance.
+See [the adaptive component](../docs/production-prd26-pyrit-adaptive-adapter.md).

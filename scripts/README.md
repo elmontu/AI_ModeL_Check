@@ -342,3 +342,15 @@ the existing local Ollama model on two public synthetic objectives. It requires
 a new explicit pinned component runtime and fresh ignored output on D:.
 See [PRD-26 PyRIT](../docs/production-prd26-pyrit-adapter.md) for setup, storage
 hook, incomplete outcomes and pending acceptance. Results never authorize release.
+
+### PyRIT bounded adaptive fixture
+
+`rehearse_pyrit_adaptive_adapter.py` freezes a separate real adaptive-attacker
+plan before inference. It uses the unchanged pinned PyRIT dependency closure,
+a fresh D: runtime and output, and the existing local model for both attacker
+and target roles. Distinct conversations and role identifiers, structured
+attacker output, role-specific call limits, target feedback, positive/null
+controls and independent replay are required. Failed attacker generations
+retain incomplete evidence and cannot fall back to scripted prompts.
+See [PRD-26 adaptive PyRIT](../docs/production-prd26-pyrit-adaptive-adapter.md).
+The earlier scripted fixture, runtime lock and saved results remain separate.

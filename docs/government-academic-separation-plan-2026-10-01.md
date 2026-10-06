@@ -435,3 +435,33 @@ with zero failures, errors or skips and 451 hashed source inputs verified.
 The 37 schemas, links in 72 Markdown files, source rehearsal and isolated
 installed-wheel rehearsal passed. Exact dated receipts remain in the new ignored
 PRD-24 verification directory; older evidence was not restamped.
+
+## PRD-26 adaptive local continuation, 6 October 2026
+
+The [bounded adaptive PyRIT component](production-prd26-pyrit-adaptive-adapter.md)
+supports model-generated follow-ups using target feedback through the
+real pinned upstream attack loop. The preceding scripted PyRIT, garak, ART and
+other implementation and advisory records retain their exact source bindings.
+This is a separate public synthetic fixture with a three-turn limit, distinct
+role identities and conversations, positive/null controls and retained replay.
+Both adaptive roles share one local model artifact; no independent-model,
+human-adjudication, privacy-ceiling or production-acceptance claim follows.
+
+The unchanged 52-wheel dependency closure is preserved as prior provenance.
+A separate adaptive execution binding identifies the new scope. Runtime,
+cache and evidence stay under the government repository on D:. Malformed,
+truncated or failed attacker generations remain incomplete, including when
+no target call occurred. All 121 new focused tests and five actual upstream
+offline fixtures pass. Real source and installed-wheel campaigns both stop on
+the first target turn for each objective under literal scoring; controlled
+fixtures exercise later-turn feedback. The required government profile passed
+2,466 tests across 134 modules with zero failures, errors or skips; all 518
+recorded source hashes match. The 37 schemas and links in 76 Markdown files pass.
+Exact source-bound receipts remain in the new ignored adaptive verification
+directory. Earlier receipts and the frozen advisory are not restamped.
+
+All eleven frozen production findings stay open. Agency endpoints, human
+scoring, live RAG/tools, worker/network isolation, independent review and
+operational ownership still need their own acceptance evidence. Hosted CI
+remains outside this phase at the user's request. The original research and
+separate academic repository are not modified.

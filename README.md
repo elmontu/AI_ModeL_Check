@@ -86,7 +86,7 @@ not automatically admitted to a temporal or production registry.
 | SACRO-ML | Separate pinned 2.0.1 adapter for seven public classifier profiles | Separate runtime; Diabetes regression unsupported; not a console integration |
 | ART | Separate pinned 1.20.1 retained-loss membership comparison across eight public profiles | Includes continuous regression; trusted loss oracle; no live target-query or console integration |
 | garak | Separate pinned 0.17.0 prompt-injection component on one local Ollama model | Four templates, three synthetic wrappers; literal scoring; no live retrieval, tools or console integration |
-| PyRIT | Separate pinned 1.1.0 multi-turn component with scripted attacker and local Ollama target | Two public synthetic objectives, three-turn limit and literal scorer; adaptive attacker and live RAG/tools remain pending |
+| PyRIT | Separate pinned 1.1.0 scripted and bounded adaptive multi-turn components | Two public synthetic objectives, three-turn limit and literal scorer; adaptive roles share one local model; human review and live RAG/tools remain pending |
 
 Discovery lists available and unsupported tools; it does not establish that every dependency is installed.
 See [tool coverage](docs/framework-capability-gaps.md),
@@ -94,7 +94,8 @@ See [tool coverage](docs/framework-capability-gaps.md),
 [scoped SACRO-ML](docs/production-prd14-sacro-adapter.md),
 [ART retained-loss comparison](docs/production-prd25-art-adapter.md) and
 [scoped garak](docs/production-prd26-garak-adapter.md) and
-[PyRIT multi-turn orchestration](docs/production-prd26-pyrit-adapter.md).
+[PyRIT multi-turn orchestration](docs/production-prd26-pyrit-adapter.md) and
+[bounded adaptive attacker](docs/production-prd26-pyrit-adaptive-adapter.md).
 
 Run the public export-screening example from the console environment:
 
@@ -160,16 +161,20 @@ Public benchmarks include bundled datasets and prepared ACS, aviation, lending
 and taxi samples. Catalog registration does not mean every dataset is available
 or tested. Private agency data is not admitted by these rehearsals.
 
-**Current: [PRD-26, scoped PyRIT multi-turn adapter](docs/production-prd26-pyrit-adapter.md).**
-The real upstream attack loop, in-memory conversation store and literal scorer
-execute two synthetic objectives with a scripted attacker and one local model.
-Separate role identities, bounded turns, positive/null controls and independent
-conversation replay are mandatory. The earlier [garak component](docs/production-prd26-garak-adapter.md)
-remains a separate prompt-injection fixture. These local adapters grant no
-agency acceptance or release authority.
+**Current: [PRD-26, bounded adaptive PyRIT attacker](docs/production-prd26-pyrit-adaptive-adapter.md).**
+The separate adaptive component supports model-generated follow-ups using target
+feedback through the real upstream attack loop. Attacker and target have distinct roles
+and conversations while sharing one local model artifact. Frozen inputs,
+three-turn limits, positive/null controls and independent replay are mandatory.
+The earlier [scripted PyRIT](docs/production-prd26-pyrit-adapter.md) and
+[garak](docs/production-prd26-garak-adapter.md) components retain their own scope
+and evidence. Both live adaptive objectives stopped on the first target turn;
+later-turn feedback was exercised in controlled upstream fixtures. These local
+adapters grant no agency acceptance or release authority.
 
-Remaining PRD-26 acceptance includes adaptive attackers, semantic/human review,
-approved agency endpoints, live interfaces and verified worker isolation.
+Remaining PRD-26 acceptance includes independently qualified adaptive attackers,
+semantic/human review, approved agency endpoints, live interfaces and verified
+worker isolation.
 
 Production acceptance still requires agency appointments and release criteria,
 real identity/key services, isolated workers and networks, independent custody,
@@ -218,7 +223,17 @@ See [required CI](docs/production-prd04-required-ci.md),
 [build controls](docs/production-prd09-build-controls.md) and
 [test coverage](tests/README.md) for the full prerequisites.
 
-The PyRIT milestone passed **2,345 required tests across 127 modules with zero
+The adaptive PyRIT milestone passed **2,466 required tests across 134 modules
+with zero failures, errors or skips**, and all 518 recorded source hashes match.
+Its 121 new tests, 37-schema check and 76-file Markdown link check passed. Source
+and installed-wheel rehearsals each completed six campaigns with two real
+attacker generations and two target responses, both stopping on their first
+target turn under literal scoring. Five controlled upstream fixtures exercised
+later-turn feedback and incomplete attacker failures with zero provider calls.
+See [the adaptive record](docs/production-prd26-pyrit-adaptive-adapter.md) for
+shared-model limits, retained diagnostics and pending human/agency acceptance.
+
+The scripted PyRIT milestone passed **2,345 required tests across 127 modules with zero
 failures, errors or skips**, with all 502 recorded source hashes still matching.
 Checks verified 37 schemas and links in 75 Markdown files. Source and
 installed-wheel PyRIT runs each completed six upstream campaigns, four real-model

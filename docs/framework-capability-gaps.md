@@ -83,13 +83,16 @@ document wrappers. Full scanner, live RAG/agent and semantic scoring remain gaps
 The separate [PyRIT component](production-prd26-pyrit-adapter.md) executes real
 upstream multi-turn orchestration with a fixed scripted attacker, in-memory
 conversation storage and case-sensitive literal scoring on two public synthetic
-objectives. Adaptive attacker qualification, live interfaces and semantic/human
-review remain gaps; discovery does not certify an installed adapter.
+objectives. A separate [bounded adaptive attacker](production-prd26-pyrit-adaptive-adapter.md)
+supports model-generated follow-ups using retained target feedback, with attacker
+and target roles sharing one local model. Independent adaptive qualification, live
+interfaces and semantic/human review remain gaps; discovery does not certify an
+installed adapter.
 
 ## Remaining research and deployment work
 
-- Live retrieval-index and real agent adapters, adaptive language attacks,
-  training-data memorization probes and independent human scoring.
+- Live retrieval-index and real agent adapters, independently qualified adaptive
+  language attacks, training-data memorization probes and independent human scoring.
 - Large language/vision fine-tuning in the wizard, audio and diffusion adapters.
 - Complete-interface privacy ceilings and calibrated registered evidence for
   exploratory tools; exhaustive derivative and composition analysis.
