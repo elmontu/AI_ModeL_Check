@@ -51,11 +51,30 @@ The [README flow diagram](../README.md#run-the-github-demo-locally) shows the
 steps from checkout through evidence download. Manual installation is also
 available in [Quick start](../README.md#quick-start).
 
+## Start from Dataset overview
+
+**Dataset overview** is the main navigation entry. Its eight known profiles show
+source, task, rows and features, training-run counts and the latest recorded
+model verdict. Open a dataset to inspect its training runs and derived model
+cases. Starting training from these details preselects the dataset in the wizard.
+
+These are catalog facts and recorded run observations. Configured research
+sources are checked when training starts; the overview does not rehash them or
+establish current availability. Any latest verdict applies to its recorded
+model and evidence, not to the dataset as a whole. A listed dataset is not
+cleared, approved or scientifically qualified.
+
+**Model cases** is the secondary view for reviewing trained candidates and
+manually created cases. **Run history** retains execution attempts. Earlier
+cases, runs and their evidence remain available. For an existing candidate,
+use **Create model case** and bind its files in Model cases instead of starting
+a new dataset training run.
+
 ## Follow the public-data flow
 
-1. Under **Train → export → assess**, select **Open training wizard**. Name the
-   case `Public Wine demo` and select **Wine classification**. This bundled
-   dataset has 178 samples, 13 features and three classes.
+1. In **Dataset overview**, open **Wine classification**. This bundled dataset
+   has 178 samples, 13 features and three classes. Start training from its details
+   to open the wizard with Wine preselected; name the case `Public Wine demo`.
 2. Select **Next**. Choose **Logistic regression** under **Model family**. Select
    **Next**, inspect the summary and select **Start training**. Compatible tools
    run automatically after training and export; unsupported tools remain visible.
@@ -106,12 +125,14 @@ option configures read-only research inputs; `.local/demo-data` still stores new
 cases and results separately. To restart the same configured session, repeat the
 option. It does not relocate, overwrite or download source data.
 
-In **Open training wizard**, the research choices become enabled when the root is
-configured. Choose a dataset below, select **Next**, and start with **Logistic
-regression** or **Random forest**. Regression and the digits-only CNN preset do
-not apply to these binary classification profiles.
+In **Dataset overview**, open a research profile below and start training from
+its details. Its training action and wizard choice become enabled when the root
+is configured. Start with **Logistic regression** or **Random forest**. Regression
+and the digits-only CNN preset do not apply to these binary classification profiles.
+The dataset details retain the last training provenance; that historical
+observation does not verify the source's current bytes.
 
-| Sample public dataset label | Dataset ID | Public covariates | Historical utility target |
+| Dataset profile | Dataset ID | Public covariates | Historical utility target |
 | --- | --- | ---: | --- |
 | ACS census and income (local research) | `research-acs` | 8 | Income classification |
 | BTS aviation (local research) | `research-bts` | 7 | Departure disruption |
@@ -144,8 +165,9 @@ There is no automatic dataset download or fallback to a bundled dataset. Without
 a configured research root, research choices stay disabled while the original
 four bundled datasets continue to work. The console also accepts the trusted
 local `MRA_DEMO_RESEARCH_DATA_ROOT` environment variable; the launcher option
-above is the explicit way to configure this session. Inspect actual utility, red-team outcomes and
-unsupported coverage rather than expecting a successful or safe result.
+above is the explicit way to configure this session. Inspect actual utility,
+red-team outcomes and unsupported coverage rather than expecting a successful
+or safe result.
 
 ## Launcher options and retained evidence
 

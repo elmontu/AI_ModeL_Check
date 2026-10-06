@@ -8,6 +8,8 @@ const names = {trained:'Trained model','fine-tuned':'Fine-tuned',adapter:'LoRA /
 
 let cases = [], jobs = [], selectedCase = null, selectedJob = null, lastCases = '', lastJobs = '', toastTimer;
 let researchData = {configured:false,max_rows:4096,error:false};
+let datasets = [], selectedDataset = null, lastDatasets = '';
+let datasetOverview = {unlinked_case_count:0,unclassified_training_run_count:0};
 
 const time = seconds => seconds ? new Date(seconds * 1000).toLocaleString([], {month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'}) : '—';
 
@@ -26,7 +28,7 @@ async function showGovernmentControls(){
     const data=await api('government-audit');selectedCase=null;selectedJob=null;
     $('detail-label').textContent='GOVERNMENT AUDIT';$('detail-title').textContent='Review the full release';
     const box=$('detail-content');box.replaceChildren();
-    box.append(el('p','Open a release case to record your findings. These controls connect the revised paper to the agency review: test omission first, identify all dependencies and inspect the actual release path.','detail-summary'));
+    box.append(el('p','Open a model case from its dataset to record your findings. These controls connect the revised paper to the agency review: test omission first, identify all dependencies and inspect the actual release path.','detail-summary'));
     data.controls.forEach(control=>{
       const detail=el('details'),title=el('summary',control.title);detail.append(title,el('p',control.motivation),el('p',control.review_question,'operator-note'));
       const examples=el('ul');control.evidence_examples.forEach(item=>examples.append(el('li',item)));detail.append(examples);box.append(detail);
@@ -110,7 +112,113 @@ function renderCases() {const rows = $('case-rows'); rows.replaceChildren(); $('
 
 function renderJobs() {const rows=$('job-rows'); rows.replaceChildren(); $('job-empty').hidden=jobs.length>0; jobs.forEach(j=>{const tr=el('tr'); tr.append(el('td',names[j.kind])); const state=el('td'); state.append(pill(j.state)); tr.append(state); tr.append(el('td',outcome(j)),el('td',time(j.started || j.created))); const td=el('td'), b=el('button','View →','table-action'); b.setAttribute('aria-label','View ' + names[j.kind] + ' ' + j.id.slice(0,6)); b.onclick=()=>showJob(j.id); td.append(b); tr.append(td); rows.append(tr);});}
 
-async function refresh() {try {const [status, c, j]=await Promise.all([api('status'),api('cases'),api('jobs')]); cases=c;jobs=j; $('connection').className='connection' + (status.worker_online?' online':''); $('connection').replaceChildren(el('i'),document.createTextNode(status.worker_online?'API & worker online':'API online · worker offline')); $('count-active').textContent=(status.jobs.queued||0)+(status.jobs.running||0); $('count-completed').textContent=status.jobs.completed||0; $('count-failed').textContent=status.jobs.failed||0; const cs=JSON.stringify(c),js=JSON.stringify(j); if(cs!==lastCases){renderCases();lastCases=cs;} if(js!==lastJobs){renderJobs();lastJobs=js;if(selectedJob && $('detail-dialog').open) renderJob(jobs.find(x=>x.id===selectedJob));}} catch(error){$('connection').className='connection';$('connection').replaceChildren(el('i'),document.createTextNode('Console disconnected'));}}
+async function refresh() {
+  try {
+    const [status,c,j,d]=await Promise.all([api('status'),api('cases'),api('jobs'),api('datasets')]);
+    cases=c;jobs=j;datasets=d.datasets;datasetOverview=d;
+    $('connection').className='connection'+(status.worker_online?' online':'');
+    $('connection').replaceChildren(el('i'),document.createTextNode(status.worker_online?'API & worker online':'API online · worker offline'));
+    $('count-active').textContent=(status.jobs.queued||0)+(status.jobs.running||0);
+    $('count-completed').textContent=status.jobs.completed||0;$('count-failed').textContent=status.jobs.failed||0;
+    const cs=JSON.stringify(c),js=JSON.stringify(j),ds=JSON.stringify(d);
+    if(cs!==lastCases){renderCases();lastCases=cs;}
+    if(js!==lastJobs){renderJobs();lastJobs=js;if(selectedJob&&$('detail-dialog').open)renderJob(jobs.find(x=>x.id===selectedJob));}
+    if(ds!==lastDatasets){renderDatasets(d);lastDatasets=ds;if(selectedDataset&&$('dataset-dialog').open){const selected=datasets.find(x=>x.id===selectedDataset);if(selected)renderDatasetDetail(selected);}}
+  }catch(error){$('connection').className='connection';$('connection').replaceChildren(el('i'),document.createTextNode('Console disconnected'));if(!datasets.length)$('dataset-empty').textContent='Dataset records could not be loaded. Saved model cases and runs are retained. Retry when the local console is available.';}
+}
+
+const presetNames = {logistic:'Logistic regression','random-forest':'Random forest',mlp:'Small neural network','mlp-finetuned':'Fine-tuned MLP',cnn:'CPU convolutional classifier',ridge:'Ridge regression','forest-regression':'Random forest regression',svm:'RBF support-vector classifier',ensemble:'Ensemble', 'xgboost-small':'Registered XGBoost demo'};
+const count = value => typeof value==='number'?value.toLocaleString():'Not recorded';
+const isResearchDataset = dataset => dataset.id.startsWith('research-');
+function latestDatasetRun(dataset){return dataset.training_runs.find(run=>run.state==='completed')||null;}
+function closeDataset(){selectedDataset=null;$('dataset-dialog').close();}
+function datasetAction(label,action,cls='secondary'){const button=el('button',label,cls);button.type='button';button.onclick=()=>{closeDataset();action();};return button;}
+
+function renderDatasets(overview){
+  const cards=$('dataset-cards');cards.replaceChildren();
+  $('count-datasets').textContent=datasets.length;$('dataset-badge').textContent=datasets.length;
+  const filter=$('dataset-filter').value;
+  const shown=datasets.filter(d=>filter==='all'||(filter==='research')===isResearchDataset(d))
+    .slice().sort((a,b)=>Number(isResearchDataset(b))-Number(isResearchDataset(a)));
+  shown.forEach(dataset=>{
+    const card=el('article',undefined,'dataset-card'),latest=latestDatasetRun(dataset),research=isResearchDataset(dataset);
+    card.append(pill(research?'local research':'bundled example'),el('h3',dataset.name));
+    card.append(el('p',dataset.task==='regression'?'Regression':'Classification'));
+    const source=el('p',research?(dataset.configured?'Configured local source · checked when training starts':'Source not configured'):'Bundled public sample','dataset-source');
+    card.append(source);
+    if(research){
+      card.append(el('p','At most '+count(dataset.max_rows)+' rows per training run','dataset-source'));
+      const metadata=latest?.research_source?.metadata;
+      if(metadata?.source_rows!==undefined)card.append(el('p',count(metadata.source_rows)+' prepared rows recorded · historical reuse','dataset-source'));
+    }else card.append(el('p',count(dataset.source_rows)+' catalog rows · '+count(dataset.features)+' features','dataset-source'));
+    card.append(el('p',dataset.summary.training_runs+' training run'+(dataset.summary.training_runs===1?'':'s')+' · '+dataset.summary.linked_cases+' model case'+(dataset.summary.linked_cases===1?'':'s'),'dataset-counts'));
+    if(latest){const result=el('p','Latest model result: ','dataset-source');result.append(pill(latest.verdict||'not recorded'));card.append(result);}
+    else card.append(el('p','No completed model run recorded','dataset-source'));
+    const actions=el('div',undefined,'dataset-actions'),view=el('button','View dataset →','secondary'),train=el('button','Train a model','primary');
+    view.type='button';view.setAttribute('aria-label','View dataset '+dataset.name);view.onclick=()=>showDataset(dataset.id);
+    train.type='button';train.setAttribute('aria-label','Train a model on '+dataset.name);train.disabled=!dataset.configured;train.onclick=()=>openTraining(dataset.id);
+    actions.append(view,train);card.append(actions);cards.append(card);
+  });
+  $('dataset-empty').hidden=shown.length>0;$('dataset-empty').textContent='No datasets match this view.';
+  $('dataset-unlinked').hidden=!overview.unlinked_case_count&&!overview.unclassified_training_run_count;
+  $('dataset-unlinked').textContent=overview.unlinked_case_count+' model cases have no recorded dataset link; '+overview.unclassified_training_run_count+' training runs have no recognised dataset selection. They remain in Model cases and Run history.';
+}
+
+function renderDatasetDetail(dataset){
+  $('dataset-title').textContent=dataset.name;
+  const box=$('dataset-content');box.replaceChildren();
+  const latest=latestDatasetRun(dataset),research=isResearchDataset(dataset),metadata=latest?.research_source?.metadata;
+  box.append(el('p','Dataset → model training → red-team checks → model assessment and review → evidence','dataset-dialog-intro'));
+  box.append(el('p','Dataset records organise model work. A model verdict applies only to its recorded run and evidence; it does not clear the dataset or authorize release.','detail-warning'));
+  const facts=el('div',undefined,'dataset-facts');
+  const values=[['Source',research?'Retained public research matrix':'Scikit-learn bundled public sample'],['Task',dataset.task],
+    ['Rows',research?(metadata?.source_rows!==undefined?count(metadata.source_rows)+' prepared rows (recorded)':'No prepared source observation recorded'):count(dataset.source_rows)+' catalog rows'],
+    ['Features',count(research?latest?.features:dataset.features)],['Per-run sample',research?'At most '+count(dataset.max_rows)+' rows':count(dataset.max_rows)+' rows'],
+    ['Recorded training',dataset.summary.completed+' completed · '+dataset.summary.failed+' failed · '+dataset.summary.active+' active']];
+  values.forEach(([label,value])=>{const fact=el('div');fact.append(el('span',label),el('strong',value));facts.append(fact);});box.append(facts);
+  const actions=el('div',undefined,'detail-actions'),train=datasetAction('Train a model',()=>openTraining(dataset.id),'primary');train.disabled=!dataset.configured;actions.append(train);box.append(actions);
+  if(research)box.append(el('p',dataset.configured?'Research root configured. Source and manifest pins are checked when a new training run starts; this overview has not rehashed current files.':'Research source is not configured for new training. Restart with --research-data-root PATH to enable it. Earlier runs and evidence remain available.','operator-note'));
+  if(latest?.research_source){
+    const details=el('details');details.append(el('summary','Last recorded research source'),el('p','From training run '+latest.job_id.slice(0,8)+' · '+time(latest.finished||latest.created)+'. Public covariates and utility labels only. Historical reuse is not fresh audit evidence; current source bytes have not been verified by this view.','operator-note'),el('pre',JSON.stringify(latest.research_source,null,2)));box.append(details);
+  }
+  box.append(el('h3','Training runs ('+dataset.summary.training_runs+')'));
+  if(!dataset.training_runs.length)box.append(el('p','No training runs recorded for this dataset yet. Choose a compatible model to start.','operator-note'));
+  dataset.training_runs.forEach(run=>{
+    const row=el('article',undefined,'dataset-run'),header=el('div',undefined,'input-row');
+    header.append(el('strong',presetNames[run.preset]||run.preset),pill(run.state));row.append(header);
+    row.append(el('p','Run '+run.job_id.slice(0,8)+' · '+time(run.started||run.created),'operator-note'));
+    if(run.rows!==null)row.append(el('p',count(run.rows)+' rows · '+count(run.features)+' features','operator-note'));
+    if(run.verdict)row.append(el('p','Recorded model result: '+run.verdict,'operator-note'));
+    if(run.retry_of)row.append(el('p','Retry of '+run.retry_of.slice(0,8)+'; original attempt retained.','operator-note'));
+    const runActions=el('div',undefined,'detail-actions');runActions.append(datasetAction('Inspect run and evidence',()=>showJob(run.job_id)));
+    if(run.case_id)runActions.append(datasetAction('Review model case',()=>showCase(run.case_id)));
+    row.append(runActions);box.append(row);
+  });
+  box.append(el('h3','Related model cases ('+dataset.summary.linked_cases+')'));
+  if(!dataset.cases.length)box.append(el('p','No completed training result links a saved model case to this dataset. Manually created cases remain in the secondary Model cases view.','operator-note'));
+  dataset.cases.forEach(model=>{
+    const row=el('div',undefined,'dataset-case');row.append(el('strong',model.name||model.case_id),el('p',(names[model.kind]||model.kind)+' · '+(names[model.route]||model.route),'operator-note'));
+    row.append(datasetAction('Open model case →',()=>showCase(model.case_id),'table-action'));
+    if(model.followup_jobs.length){row.append(el('p','Input checks and assessments','operator-note'));model.followup_jobs.forEach(job=>{const line=el('div',undefined,'input-row');line.append(el('span',(names[job.kind]||job.kind)+' · '+job.state+(job.kind==='assess'?' · '+(job.verdict||'No recorded assessment verdict'):'')),datasetAction('View run',()=>showJob(job.job_id),'table-action'));row.append(line);});}
+    box.append(row);
+  });
+}
+
+async function showDataset(id){
+  try{const dataset=await api('datasets/'+encodeURIComponent(id));selectedDataset=id;renderDatasetDetail(dataset);if(!$('dataset-dialog').open)$('dataset-dialog').showModal();}catch(error){toast(error.message);}
+}
+
+async function openTraining(datasetId=null){
+  if($('detail-dialog').open){$('detail-dialog').close();selectedCase=null;selectedJob=null;}
+  if($('dataset-dialog').open)closeDataset();
+  trainingStep=0;await loadTrainingCapabilities();
+  if(datasetId){$('training-dataset').value=datasetId;const dataset=datasets.find(d=>d.id===datasetId);if(dataset)$('training-name').value=dataset.name+' model training';}
+  renderTrainingStep();$('training-dialog').showModal();
+}
+
+$('dataset-filter').onchange=()=>renderDatasets(datasetOverview);
+$('close-dataset').onclick=closeDataset;
+$('dataset-dialog').addEventListener('close',()=>{selectedDataset=null;});
 
 async function submitJob(kind, caseId=null) {try {const j=await api('jobs',{kind,case_id:caseId}); toast('Job queued. The worker will process it shortly.'); await refresh(); await showJob(j.id);}catch(e){toast(e.message);}}
 
@@ -214,7 +322,7 @@ $('close-create').onclick=()=>$('case-dialog').close();$('close-detail').onclick
 
 $('case-form').onsubmit=async event=>{event.preventDefault();const button=event.submitter;button.disabled=true;try{const c=await api('cases',{name:$('case-name').value,kind:$('case-kind').value,route:$('case-route').value,mode:$('case-mode').value});$('case-dialog').close();$('case-form').reset();await refresh();await showCase(c.id);}catch(e){$('form-error').textContent=e.message;}finally{button.disabled=false;}};
 
-$('run-reference').onclick=()=>submitJob('reference');$('run-training').onclick=async()=>{trainingStep=0;await loadTrainingCapabilities();renderTrainingStep();$('training-dialog').showModal();};
+$('run-reference').onclick=()=>submitJob('reference');$('run-training').onclick=()=>openTraining();
 
 refresh();setInterval(refresh,2500);
 

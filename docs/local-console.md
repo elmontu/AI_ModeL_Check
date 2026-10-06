@@ -37,6 +37,26 @@ flowchart LR
 
 ```
 
+## Dataset overview and model cases
+
+Start in **Dataset overview**, the main view for the four bundled public datasets
+and four optional historical research profiles. Each entry shows source, task,
+rows/features, training-run counts and the latest recorded model verdict. Open
+a dataset to inspect its training runs and derived cases; start training there
+to preselect that dataset in the wizard.
+
+The overview reads catalog metadata and retained run observations. A configured
+research root is not proof of current source availability or matching bytes;
+source checks run when training starts. Last training provenance remains a
+historical observation. Model verdicts apply to the checked candidate and
+evidence, not to an entire dataset, and grant no clearance or qualification.
+
+Use **Model cases** to review the resulting model or bind an existing candidate
+manually. **Run history** retains execution attempts. Existing cases, bindings
+and results remain available. See the [local demo walkthrough](local-demo.md)
+for the dataset → training → red-team/assessment → model review → evidence flow,
+including the optional public research root on D:.
+
 ## Educational defaults
 
 New console cases default to **Education** mode. Agency scope, security report
@@ -175,34 +195,29 @@ private outputs and caches and includes only required source and example trees.
 
 ## What testers can do
 
-1. **Run scenarios:** execute the existing eight fictional reference cases,
+1. **Choose a dataset:** open Dataset overview for the eight known profiles and
+   inspect source metadata, training history and derived model cases. Research
+   profiles require a configured existing public-data root; missing or changed
+   sources fail validation rather than falling back to bundled examples.
+2. **Train a model:** start training from dataset details, name the model case
+   and select a compatible CPU preset in the preselected wizard. Training,
+   export, red-team checks and assessment produce scoped model evidence; the
+   disposition can be inconclusive or blocked, never automatic release.
+3. **Review model cases:** choose **Open trained model case** from a successful
+   run, or use the secondary Model cases view. Inspect **Check inputs**, **Run
+   assessment** and **Government audit review** against the current candidate.
+   Generated Education cases bind their five required evidence slots.
+4. **Run scenarios:** execute the eight fictional reference cases covering missing
+   evidence, leakage, tampering and simulated lifecycle changes. Simulation
+   labels remain explicit; SIMULATED_ACTIVE is not deployment.
+5. **Inspect and download results:** distinguish execution state from scientific
+   findings. Retain result JSON, run evidence ZIP and separate review JSON.
+   Logs, partial attempts and artifacts remain in the configured data directory.
 
-   including missing evidence, leakage, tampering and simulated lifecycle
-
-   changes. Simulation labels are preserved; SIMULATED_ACTIVE is not deployment.
-
-2. **Open training wizard:** name the case, review the bundled public dataset and
-   small CPU preset, then start real XGBoost training, export,
-
-   membership evidence and the assessment prefix. Expected disposition is
-
-   inconclusive or block, never automatic release. Stage updates appear in run
-   details. On success, **Open trained model case** opens an Education case with
-   candidate, lineage, request, evaluation plan and utility report already bound.
-
-3. **Create release cases:** choose trained, fine-tuned, adapter, merged,
-
-   ensemble or distilled, plus API/named-party/public release route.
-
-4. **Check inputs and assess:** inspect missing slots, enqueue preflight or
-
-   invoke the existing Engine workflow. Workers preserve failed attempts.
-
-5. **Inspect and download results:** view execution state separately from the
-
-   scientific result and download the returned JSON. Logs and full artifacts
-
-   stay in the configured local data directory.
+For advanced review of an existing candidate, **Create model case** in Model
+cases still supports trained, fine-tuned, adapter, merged, ensemble and distilled
+profiles with API, named-party or public release routes. This manual path does
+not import a dataset or imply a trainer for every model type.
 
 In Education mode, select an input slot and paste an absolute local file path
 
@@ -363,12 +378,14 @@ validate; Docker image execution remains untested because the daemon is unavaila
 
 ## Public-data training wizard
 
-Open **Train → export → assess → Open training wizard**. The three steps cover
-sample data, the training preset, and a final review. This version includes one
-offline preset: the scikit-learn packaged Wisconsin Diagnostic Breast Cancer
-dataset (569 samples, 30 features), with XGBoost, 32 boosting rounds, tree depth
-3 and seed 3407. It trains a new tabular model; fine-tuning and combined-model
-training are not wizard options yet.
+Open **Dataset overview**, choose a dataset and start training from its details.
+The wizard preselects that dataset; its three steps cover public data, a
+compatible training preset and final review. Ten CPU presets support the four
+bundled datasets, including small neural, fine-tuned and ensemble examples;
+four optional public research profiles add bounded historical classification
+samples when an existing source root is configured. The
+[local demo guide](local-demo.md) records model/data compatibility and the D-drive
+source limits. These choices do not qualify arbitrary private-data training.
 
 The worker freezes the existing evaluation plan, trains and exports, collects
 membership evidence, and records the assessment. Progress labels reflect output
@@ -391,7 +408,9 @@ API clients can use `POST /api/jobs` with:
 The existing `{"kind":"training"}` API demo remains supported without creating
 a case. Unsupported datasets/presets are rejected. Training options and milestone
 status survive API restarts through additive SQLite columns; existing jobs remain
-available. No model download, GPU, account or additional dataset setup is needed.
+available. Bundled examples need no model download, GPU, account or additional
+dataset setup. Optional research examples require the explicitly configured
+existing source root; no research data is downloaded automatically.
 
 ### Training-wizard verification
 

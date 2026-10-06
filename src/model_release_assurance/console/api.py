@@ -78,6 +78,16 @@ def create_app(root: Path) -> FastAPI:
     async def missing(request, exc):
         return JSONResponse({"detail": "case or job not found"}, status_code=404)
 
+    @app.get("/api/datasets")
+    def datasets():
+        from .dataset_overview import dataset_overview
+        return dataset_overview(store)
+
+    @app.get("/api/datasets/{dataset_id}")
+    def dataset(dataset_id: str):
+        from .dataset_overview import dataset_detail
+        return dataset_detail(store, dataset_id)
+
     @app.get("/api/capabilities")
     def capabilities():
         from ..public_models import capability_inventory

@@ -48,8 +48,16 @@ To also use the existing public research samples on D:, start with:
 python scripts/start_demo.py --research-data-root D:/model_audit_data
 ```
 
-The training wizard then offers ACS census, BTS aviation, HMDA lending and NYC
-TLC mobility profiles. Each uses at most **4,096 rows** from its retained 27,000-row
+**Dataset overview** is the main console view. It lists each known dataset's
+source, task, row/feature counts, training history and latest model verdict.
+Open a dataset to see its training runs and derived model cases, then start
+training from its details. **Model cases** and **Run history** remain available;
+manually created cases can still be reviewed separately. A model verdict does
+not clear or qualify its dataset.
+
+With the research root configured, Dataset overview also offers ACS census, BTS
+aviation, HMDA lending and NYC TLC mobility for training. Each uses at most
+**4,096 rows** from its retained 27,000-row
 prepared matrix, with public covariates and utility labels only. Withheld fields
 and record keys are excluded. These historical samples are separate from the
 larger raw collection and do not become fresh audit evidence. Source validation
@@ -61,12 +69,12 @@ flowchart TD
     A[Clone the GitHub repository] --> B[Run scripts/start_demo.py]
     B --> C[Install or validate and reuse the demo environment]
     C --> D[Start local web service and separate worker]
-    D --> E[Select public dataset and model]
-    E --> F[Train and export the model]
-    F --> G[Run red-team checks]
-    G --> H[Inspect findings, unsupported tools and incomplete evidence]
-    H --> I[Government audit review]
-    I --> J[Download evidence ZIP and review JSON]
+    D --> E[Choose a dataset in Dataset overview]
+    E --> F[Train and export a model]
+    F --> G[Run red-team checks and assessment]
+    G --> H[Inspect model findings and coverage gaps]
+    H --> I[Open the model case for government audit review]
+    I --> J[Download model evidence ZIP and review JSON]
 ```
 
 Start with **Wine classification** and **Logistic regression** for a small CPU
@@ -110,8 +118,9 @@ choose a new location with `--venv PATH`.
 
 ### First review
 
-1. Under **Train → export → assess**, select **Open training wizard**. Choose
-   **Wine classification**, then **Logistic regression**, and **Start training**.
+1. In **Dataset overview**, open **Wine classification** and start training
+   from its details. The wizard preselects the dataset; choose **Logistic
+   regression**, then **Next** and **Start training**.
 2. Open the run details. Inspect **Red-team coverage**, failures, unsupported
    tools and uncertainty alongside the scientific result.
 3. Select **Open trained model case** and **Check inputs** to inspect preflight.

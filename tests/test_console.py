@@ -228,7 +228,7 @@ class ConsoleApiTests(unittest.TestCase):
 
         index = self.client.get("/")
 
-        self.assertIn("Test before you release", index.text)
+        self.assertIn("Start with your dataset", index.text)
 
         self.assertIn("frame-ancestors 'none'", index.headers["content-security-policy"])
 

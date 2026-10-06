@@ -2,7 +2,7 @@
 
 <html lang="en">
 
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>MRA · Release testing console</title><link rel="stylesheet" href="/assets/style.css"><script defer src="/assets/app.js"></script></head>
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>MRA · Dataset testing console</title><link rel="stylesheet" href="/assets/style.css"><script defer src="/assets/app.js"></script></head>
 
 <body>
 
@@ -12,7 +12,7 @@
 
   <div class="workspace-label">LOCAL WORKSPACE <span>01</span></div>
 
-  <nav aria-label="Main navigation"><a class="nav-item active" href="#overview"><span>◫</span> Test workspace</a><a class="nav-item" href="#cases"><span>▤</span> Release cases</a><a class="nav-item" href="#activity"><span>↗</span> Run history</a><a class="nav-item" href="/api/docs" target="_blank" rel="noopener"><span>⌘</span> API reference</a></nav>
+  <nav aria-label="Main navigation"><a class="nav-item active" href="#datasets"><span>◫</span> Dataset overview</a><a class="nav-item" href="#cases"><span>▤</span> Model cases</a><a class="nav-item" href="#activity"><span>↗</span> Run history</a><a class="nav-item" href="/api/docs" target="_blank" rel="noopener"><span>⌘</span> API reference</a></nav>
 
   <div class="sidebar-note"><span class="tiny-label">ENVIRONMENT</span><strong>Local pre-POC</strong><p>A shared sandbox for trusted testers. Results support review; they do not authorize release.</p><div class="version">REFERENCE LIBRARY <span>0.8</span></div></div>
 
@@ -20,17 +20,25 @@
 
 <div class="shell">
 
-<header class="topbar"><div>Workspace <span class="slash">/</span> <strong>Model release testing</strong></div><span class="connection" id="connection"><i></i> Connecting</span></header>
+<header class="topbar"><div>Workspace <span class="slash">/</span> <strong>Dataset and model testing</strong></div><span class="connection" id="connection"><i></i> Connecting</span></header>
 
 <main id="overview">
 
-  <div class="heading"><div><div class="eyebrow">GOVERNMENT MODEL ASSURANCE</div><h1>Test before you release.</h1><p class="intro">Explore the workflow, prepare a candidate and inspect the evidence.</p></div><button class="primary" id="new-case">＋ Create release case</button></div>
+  <div class="heading"><div><div class="eyebrow">GOVERNMENT MODEL ASSURANCE</div><h1>Start with your dataset.</h1><p class="intro">Explore sources, compare model runs and inspect their assessment evidence.</p></div><a class="primary" href="#datasets">Browse datasets ↓</a></div>
 
   <div class="notice"><span class="notice-symbol">i</span><div><strong>Assessment is not authorization.</strong> A completed run can still be blocked or inconclusive. This console does not publish or deploy models.</div><span class="notice-tag">PRE-POC</span></div>
 
-  <section class="metrics" aria-label="Workspace totals"><div><span>Release cases</span><strong id="count-cases">0</strong><small>All candidate types</small></div><div><span>Queued & running</span><strong id="count-active">0</strong><small>Processed by a separate worker</small></div><div><span>Completed runs</span><strong id="count-completed">0</strong><small>Inspect each scientific result</small></div><div><span>Failed runs</span><strong id="count-failed">0</strong><small>Artifacts retained for review</small></div></section>
+  <section class="metrics" aria-label="Workspace totals"><div><span>Datasets</span><strong id="count-datasets">0</strong><small>Bundled and local research profiles</small></div><div><span>Model cases</span><strong id="count-cases">0</strong><small>Evidence for individual candidates</small></div><div><span>Completed runs</span><strong id="count-completed">0</strong><small>Inspect each model result</small></div><div><span>Queued & running</span><strong id="count-active">0</strong><small>Processed by a separate worker</small></div></section>
 
-  <section aria-labelledby="start-title"><div class="section-title"><h2 id="start-title">Start with a guided test</h2><span>NO AGENCY DATA REQUIRED</span></div><div class="demo-grid">
+  <section id="datasets" aria-labelledby="datasets-title">
+    <div class="section-title"><h2 id="datasets-title">Dataset overview <span class="count" id="dataset-badge">0</span></h2><div class="dataset-filter"><label for="dataset-filter">Show</label><select id="dataset-filter"><option value="all">All datasets</option><option value="research">Local research</option><option value="bundled">Bundled examples</option></select></div></div>
+    <p class="dataset-intro">Choose a dataset to see its source, training runs and related model cases. Assessment results belong to individual model runs; they do not clear a dataset.</p>
+    <div class="dataset-grid" id="dataset-cards" aria-live="polite"></div>
+    <p id="dataset-empty" class="operator-note">Loading dataset records…</p>
+    <p id="dataset-unlinked" class="operator-note" hidden></p>
+  </section>
+
+  <section aria-labelledby="start-title"><div class="section-title"><h2 id="start-title">More guided workflows</h2><span>NO AGENCY DATA REQUIRED</span></div><div class="demo-grid">
 
     <article class="demo-card"><div class="card-top"><span class="icon-box">◈</span><span class="pill muted">Synthetic fixtures</span></div><h3>Explore decision scenarios</h3><p>See how the workflow responds to missing evidence, demonstrated leakage, tampering and lifecycle changes.</p><div class="card-foot"><span>8 reference scenarios</span><button class="secondary" id="run-reference">Run scenarios <span>↗</span></button></div></article>
 
@@ -38,17 +46,17 @@
 
   </div></section>
 
-  <section id="government-audit"><div class="section-title"><h2>Government audit review</h2><button class="secondary" id="show-government-audit">View the 12 review controls</button></div><p>Start with whether protected inputs are needed. Review omission baselines, the recipient's complete package and history, training and scoring dependencies, and the evidence for release. Open a case to record your findings and inspect gaps. A recorded review is not a scientific pass or agency approval.</p></section>
+  <section id="government-audit"><div class="section-title"><h2>Government audit review</h2><button class="secondary" id="show-government-audit">View the 12 review controls</button></div><p>Start with whether protected inputs are needed. Review omission baselines, the recipient's complete package and history, training and scoring dependencies, and the evidence for release. Open a model case from its dataset to record your findings and inspect gaps. A recorded review is not a scientific pass or agency approval.</p></section>
 
   <section><div class="section-title"><h2>Temporal release assurance</h2><a class="secondary" href="http://127.0.0.1:8767/" target="_blank" rel="noopener noreferrer">Open release dashboard ↗</a></div><p>Explore verified release histories across ten model families, compare accumulated privacy spending and attribute inference, and operate the registered model workflow. The separate dashboard starts with <code>mra export serve</code>; use <code>--temporal-run</code> and <code>--temporal-operator</code> to select existing evidence and registry directories on this computer. It also retains the <a href="http://127.0.0.1:8767/synthetic" target="_blank" rel="noopener noreferrer">two-model synthetic lab</a> and its existing history. This separate service delivers registered packages under its declared attribute-DP scope; it does not import console cases automatically.</p></section>
 
   <section class="flow" aria-label="Service architecture"><div><span class="step">1</span><div><strong>Console & API</strong><small>Create cases and submit jobs</small></div></div><span class="flow-arrow">→</span><div><span class="step">2</span><div><strong>Persistent queue</strong><small>Track queued and running work</small></div></div><span class="flow-arrow">→</span><div><span class="step">3</span><div><strong>Assessment worker</strong><small>Execute, record and return results</small></div></div></section>
 
-  <section><div class="section-title"><h2>Local language red-team</h2><button id="open-language" class="secondary">Test an installed language model</button></div><p>Secret extraction, instruction overrides, poisoned documents and simulated tool requests. Uses synthetic data and inert tools.</p></section><section><div class="section-title"><h2>Framework capabilities</h2><button id="show-capabilities" class="secondary">View support and gaps</button></div><p>Check which model families can train, run attacks or supply registered assessment evidence.</p></section><section id="cases"><div class="section-title"><h2>Release cases <span class="count" id="case-badge">0</span></h2><span>TRAINED · FINE-TUNED · COMBINED</span></div><div class="table-wrap"><table><thead><tr><th>Candidate</th><th>Model profile</th><th>Release route</th><th>Created</th><th><span class="sr-only">Open</span></th></tr></thead><tbody id="case-rows"></tbody></table><div class="empty" id="case-empty"><div class="empty-icon">▤</div><strong>No release cases yet</strong><p>Create a case to organise the candidate, lineage and assessment inputs.</p><button class="text-button" id="new-case-empty">Create your first case →</button></div></div></section>
+  <section><div class="section-title"><h2>Local language red-team</h2><button id="open-language" class="secondary">Test an installed language model</button></div><p>Secret extraction, instruction overrides, poisoned documents and simulated tool requests. Uses synthetic data and inert tools.</p></section><section><div class="section-title"><h2>Framework capabilities</h2><button id="show-capabilities" class="secondary">View support and gaps</button></div><p>Check which model families can train, run attacks or supply registered assessment evidence.</p></section><section id="cases"><div class="section-title"><h2>Model cases <span class="count" id="case-badge">0</span></h2><button class="secondary" id="new-case">＋ Create model case</button></div><p class="operator-note">Candidate evidence workspaces. Models created through training are also grouped under their dataset above. Manually created cases remain available here.</p><div class="table-wrap"><table><thead><tr><th>Candidate</th><th>Model profile</th><th>Release route</th><th>Created</th><th><span class="sr-only">Open</span></th></tr></thead><tbody id="case-rows"></tbody></table><div class="empty" id="case-empty"><div class="empty-icon">▤</div><strong>No model cases yet</strong><p>Create a case to organise the candidate, lineage and assessment inputs.</p><button class="text-button" id="new-case-empty">Create your first case →</button></div></div></section>
 
-  <section id="activity"><div class="section-title"><h2>Run history</h2><span>UPDATES AUTOMATICALLY</span></div><div class="table-wrap"><table><thead><tr><th>Run</th><th>Execution</th><th>Assessment / preflight</th><th>Started</th><th><span class="sr-only">Open</span></th></tr></thead><tbody id="job-rows"></tbody></table><div class="empty compact" id="job-empty"><strong>Your test runs will appear here</strong><p>Start a guided test or run a case preflight.</p></div></div></section>
+  <section id="activity"><div class="section-title"><h2>Run history</h2><span>FAILED RUNS <span id="count-failed">0</span> · UPDATES AUTOMATICALLY</span></div><div class="table-wrap"><table><thead><tr><th>Run</th><th>Execution</th><th>Assessment / preflight</th><th>Started</th><th><span class="sr-only">Open</span></th></tr></thead><tbody id="job-rows"></tbody></table><div class="empty compact" id="job-empty"><strong>Your test runs will appear here</strong><p>Start a guided test or run a case preflight.</p></div></div></section>
 
-  <footer>LOCAL TESTING CONSOLE <span>Evidence first. Accountable decisions follow.</span></footer>
+  <footer>LOCAL DATASET &amp; MODEL CONSOLE <span>Evidence first. Accountable decisions follow.</span></footer>
 
 </main></div>
 
@@ -78,7 +86,9 @@
     <div class="detail-actions"><button type="button" class="secondary" id="training-back" hidden>Back</button><button type="button" class="primary" id="training-next">Next</button><button type="submit" class="primary" id="training-start" hidden>Start training</button></div>
   </form>
 </dialog>
-<dialog id="case-dialog"><form id="case-form"><div class="dialog-head"><h2>Create release case</h2><button class="close" type="button" id="close-create" aria-label="Close">×</button></div><p class="dialog-sub">Begin with an empty evidence workspace. No approval is implied.</p><label for="case-name">Case name</label><input id="case-name" name="name" required maxlength="100" placeholder="e.g. Agency service assistant"><label for="case-kind">Model profile</label><select id="case-kind" name="kind"><option value="trained">Trained model</option><option value="fine-tuned">Fine-tuned model</option><option value="adapter">LoRA / adapter</option><option value="merged">Merged model</option><option value="ensemble">Ensemble / routed models</option><option value="distilled">Distilled model</option></select><label for="case-route">Release route</label><select id="case-route" name="route"><option value="named-party-weights">Model files to a named party</option><option value="public-weights">Public model files</option><option value="api">Controlled API</option></select><label for="case-mode">Workflow mode</label><select id="case-mode" name="mode"><option value="education">Education — simplified document requirements</option><option value="review">Review — all document inputs required</option></select><p class="form-error" id="form-error" role="alert"></p><button class="primary full" type="submit">Create case</button></form></dialog>
+<dialog id="case-dialog"><form id="case-form"><div class="dialog-head"><h2>Create model case</h2><button class="close" type="button" id="close-create" aria-label="Close">×</button></div><p class="dialog-sub">Begin with an empty evidence workspace. No approval is implied.</p><label for="case-name">Case name</label><input id="case-name" name="name" required maxlength="100" placeholder="e.g. Agency service assistant"><label for="case-kind">Model profile</label><select id="case-kind" name="kind"><option value="trained">Trained model</option><option value="fine-tuned">Fine-tuned model</option><option value="adapter">LoRA / adapter</option><option value="merged">Merged model</option><option value="ensemble">Ensemble / routed models</option><option value="distilled">Distilled model</option></select><label for="case-route">Release route</label><select id="case-route" name="route"><option value="named-party-weights">Model files to a named party</option><option value="public-weights">Public model files</option><option value="api">Controlled API</option></select><label for="case-mode">Workflow mode</label><select id="case-mode" name="mode"><option value="education">Education — simplified document requirements</option><option value="review">Review — all document inputs required</option></select><p class="form-error" id="form-error" role="alert"></p><button class="primary full" type="submit">Create case</button></form></dialog>
+
+<dialog id="dataset-dialog" aria-labelledby="dataset-title"><div class="dialog-head"><div><div class="eyebrow">DATASET OVERVIEW</div><h2 id="dataset-title"></h2></div><button class="close" id="close-dataset" aria-label="Close dataset details">×</button></div><div id="dataset-content"></div></dialog>
 
 <dialog id="detail-dialog"><div class="dialog-head"><div><div class="eyebrow" id="detail-label">RUN DETAILS</div><h2 id="detail-title"></h2></div><button class="close" id="close-detail" aria-label="Close">×</button></div><div id="detail-content"></div></dialog>
 
