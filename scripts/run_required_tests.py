@@ -50,14 +50,17 @@ PATTERNS = (
     "test_production_pilot_*.py",
     "test_production_handover_*.py",
     "test_production_art_*.py",
+    "test_production_garak_*.py",
 )
 REQUIRED_SOURCE_INPUTS = (
     "deploy/agency-private-cloud/blueprint.json", "requirements.lock",
+    "deploy/garak/windows-cp312.json", "deploy/garak/windows-cp312.requirements.txt",
     "deploy/art/windows-cp312.json", "deploy/art/windows-cp312.requirements.txt",
     "deploy/sacro/windows-cp312.json", "deploy/sacro/windows-cp312.requirements.txt",
     "deploy/build/windows-cp312.json", "deploy/build/linux-cp312.json",
     "deploy/build/windows-cp312.requirements.txt", "deploy/build/linux-cp312.requirements.txt",
     "deploy/build/verification-runtime.requirements.txt", "deploy/build/policy.json",
+    "tests/fixtures/garak_promptinject_corpus.json",
     "reproduction/openml/manifests/suite-99-datasets.json",
 )
 REQUIRED_TEMPORAL = (

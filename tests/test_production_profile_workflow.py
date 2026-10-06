@@ -242,8 +242,13 @@ class PublicProfileWorkflowTests(unittest.TestCase):
         # receipt; semantic receipt integration is covered by exercise below.
 
     def test_full_rehearsal_real_native_fictional_worker_and_semantic_historical_receipt(self):
-        result = rehearsal.exercise(self.root / "exercise", python="fictional-python",
-            versions=dict(runtime._PINNED_VERSIONS), lock_sha256=runtime.LOCK_SHA256)
+        # Keep the positive lifecycle independent of filesystem/CPU speed. Its
+        # explicit advance_to(expiry) still exercises exclusive expiry denial;
+        # separate deadline tests cover expiry during expensive guarded work.
+        # Only this fixture clock is controlled; process deadlines remain real.
+        with patch.object(module.PublicProfileWorkflow, "clock", lambda flow: 1000 + flow._offset):
+            result = rehearsal.exercise(self.root / "exercise", python="fictional-python",
+                versions=dict(runtime._PINNED_VERSIONS), lock_sha256=runtime.LOCK_SHA256)
         self.assertEqual(result["status"], "passed")
         self.assertEqual({item["name"] for item in result["checks"]}, rehearsal.REQUIRED_CHECKS)
         self.assertTrue(all(item["passed"] for item in result["checks"]))

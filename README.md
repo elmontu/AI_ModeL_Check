@@ -85,13 +85,15 @@ not automatically admitted to a temporal or production registry.
 | Public export pilot | One loss-based membership screen on an offline GaussianNB package | One public fixture |
 | SACRO-ML | Separate pinned 2.0.1 adapter for seven public classifier profiles | Separate runtime; Diabetes regression unsupported; not a console integration |
 | ART | Separate pinned 1.20.1 retained-loss membership comparison across eight public profiles | Includes continuous regression; trusted loss oracle; no live target-query or console integration |
+| garak | Separate pinned 0.17.0 prompt-injection component on one local Ollama model | Four templates, three synthetic wrappers; literal scoring; no live retrieval, tools or console integration |
 
-garak and PyRIT adapters remain planned. Discovery lists available and
+PyRIT remains planned. Discovery lists available and
 unsupported tools; it does not establish that every dependency is installed.
 See [tool coverage](docs/framework-capability-gaps.md),
-[export screening](docs/red-team-export-review.md) and the
-[scoped SACRO-ML adapter](docs/production-prd14-sacro-adapter.md) and
-[ART retained-loss comparison](docs/production-prd25-art-adapter.md).
+[export screening](docs/red-team-export-review.md),
+[scoped SACRO-ML](docs/production-prd14-sacro-adapter.md),
+[ART retained-loss comparison](docs/production-prd25-art-adapter.md) and
+[scoped garak](docs/production-prd26-garak-adapter.md).
 
 Run the public export-screening example from the console environment:
 
@@ -142,7 +144,7 @@ over large private datasets. Provider and region remain open. The framework
 supports broader government sectors; a major public-health agency is one
 possible pilot.
 
-PRD-01 through PRD-25 have reviewable local work. Each retains its own acceptance
+PRD-01 through PRD-26 have reviewable local work. Each retains its own acceptance
 gates and remains in progress for production qualification.
 
 | Workstream | Local progress | Detailed records |
@@ -157,12 +159,13 @@ Public benchmarks include bundled datasets and prepared ACS, aviation, lending
 and taxi samples. Catalog registration does not mean every dataset is available
 or tested. Private agency data is not admitted by these rehearsals.
 
-**Current: [PRD-25, ART retained-loss membership comparison](docs/production-prd25-art-adapter.md).** A separate pinned runtime executes the real ART learner
-on eight public classifier/regression profiles with required controls and independent
-score replay. Results remain non-authorizing local diagnostics. No agency pilot
-has started or passed exit review.
+**Current: [PRD-26, scoped garak prompt-injection adapter](docs/production-prd26-garak-adapter.md).**
+A separate component runtime executes four upstream attack templates across
+direct, synthetic document and inert agent-document wrappers on one locally
+bound model. Retained controls, literal-score replay and source/runtime bindings
+are mandatory. This local fixture grants no agency acceptance or release authority.
 
-**Next: PRD-26**, scoped garak then PyRIT profiles for selected LLM/RAG/agent interfaces.
+**Next within PRD-26: PyRIT**, bounded multi-turn orchestration with distinct target, attacker and scorer identities.
 
 Production acceptance still requires agency appointments and release criteria,
 real identity/key services, isolated workers and networks, independent custody,
@@ -211,13 +214,17 @@ See [required CI](docs/production-prd04-required-ci.md),
 [build controls](docs/production-prd09-build-controls.md) and
 [test coverage](tests/README.md) for the full prerequisites.
 
-The PRD-25 implementation validation passed **2,056 required tests across 115
+The PRD-26 implementation validation passed **2,207 required tests across 121
 modules with zero failures, errors or skips**. Checks also verified 37 schemas
-and links in 73 Markdown files. Source and installed-wheel ART comparisons each
-passed all eight public profiles with 72 target/control repetitions. The
-[PRD-25 record](docs/production-prd25-art-adapter.md) retains descriptive metrics,
-validation limits and pending agency acceptance. Hosted CI remains outside this
-phase at the user's request; the [publication checkpoint](docs/government-academic-separation-plan-2026-10-01.md#government-publication-checkpoint) retains earlier publication evidence.
+and links in 74 Markdown files. Source and installed-wheel garak campaigns each
+completed 12 probes with all controls and independent replay passing. Each
+retained 8 literal marker matches; human/semantic review remains pending. The
+[PRD-26 record](docs/production-prd26-garak-adapter.md) documents the component
+scope, the repaired positive-test fixture clock and remaining agency acceptance.
+Earlier [ART validation](docs/production-prd25-art-adapter.md) remains source-bound.
+Hosted CI remains outside this phase at the user's request; the
+[publication checkpoint](docs/government-academic-separation-plan-2026-10-01.md#government-publication-checkpoint)
+retains earlier publication evidence.
 
 ## Documentation and research
 

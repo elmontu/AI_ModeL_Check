@@ -76,8 +76,11 @@ executes a tool nor certifies dependency availability. Separate
 [SACRO-ML](production-prd14-sacro-adapter.md) and
 [ART retained-loss](production-prd25-art-adapter.md) adapters now execute scoped
 public-fixture comparisons in explicit pinned runtimes. They do not integrate
-with the console or widen the old assessment contract. garak and PyRIT remain
-unimplemented; their discovery entries declare gaps, not installed capabilities.
+with the console or widen the old assessment contract. The separate
+[garak component adapter](production-prd26-garak-adapter.md) adds four fixed
+prompt-injection templates on one local model with literal scoring and synthetic
+document wrappers. Full scanner, live RAG/agent and semantic scoring remain gaps.
+PyRIT remains unimplemented; discovery does not certify an installed adapter.
 
 ## Remaining research and deployment work
 

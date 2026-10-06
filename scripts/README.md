@@ -320,4 +320,15 @@ ignored `.local` output. Required positive/null controls and independent fitted
 score replay must pass; missing dependencies have an explicit disposition.
 See [PRD-25](../docs/production-prd25-art-adapter.md) for commands, the trusted
 loss-oracle interface and remaining scientific/agency acceptance. No live target
-or private data is admitted. PRD-26 garak/PyRIT profiles are next.
+or private data is admitted. PRD-26 adds the garak fixture below; PyRIT remains next.
+
+### garak prompt-injection fixture
+
+`rehearse_garak_adapter.py` prepares and freezes a real upstream corpus before
+running the separately pinned component worker on one installed local model.
+Pass the declared component environment's Python and a fresh ignored `.local`
+output. Twelve target attempts, scripted controls and six endpoint calibrations
+retain exact responses and independent lexical/attempt/process replay. No tool
+is executed and incomplete outcomes cannot clear coverage. See
+[PRD-26](../docs/production-prd26-garak-adapter.md) for model/runtime bindings,
+component omissions and pending acceptance. PyRIT is the next scoped milestone.

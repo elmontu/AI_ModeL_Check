@@ -127,3 +127,13 @@ outcomes, frozen artifact tampering and all-eight-profile driver completeness.
 The optional ART dependency is not required by the ordinary test runtime; real
 pinned upstream executions are retained as separate PRD-25 local receipts.
 These checks do not establish production isolation or scientific acceptance.
+
+### PRD-26 garak component
+
+`test_production_garak_*.py` covers fixed corpus and model bindings, literal
+scorer limitations, malformed/incomplete responses, mandatory controls,
+independent attempt/transcript replay, runtime source/metadata tampering,
+owned process cleanup and frozen driver/artifact misuse. Ordinary tests use
+readable pinned public corpus records without importing optional garak.
+Actual pinned upstream and local model execution is verified separately.
+These tests establish neither semantic safety nor production isolation.
