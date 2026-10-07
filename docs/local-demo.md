@@ -70,6 +70,26 @@ cases, runs and their evidence remain available. For an existing candidate,
 use **Create model case** and bind its files in Model cases instead of starting
 a new dataset training run.
 
+## Inspect Red-team tools
+
+Open **Red-team tools** in the navigation, or select **Red-team results** on a
+dataset card. Choose the dataset and a recorded training run. The workspace shows
+named tool cards with execution states, recorded measurements, expandable raw
+details and coverage gaps. Failed and unsupported tools remain visible. Datasets
+without a recorded run have no measured results yet.
+
+Classifier runs list eleven integrated tools; regression runs list three.
+Supported tools run automatically after training. **Train and run checks** opens
+the dataset-preselected wizard and trains a new model before checking it; it does
+not rerun an existing model or offer individual-tool selection. A completed tool
+means execution finished, not that its model or dataset is safe.
+
+The local language action opens the existing tests for an installed Ollama model:
+nine synthetic probes and two controls, with inert tool requests. SACRO-ML, ART,
+garak, PyRIT, public export screening and multi-shadow experiments remain separate
+workflows. They are not launched by this workspace; see the
+[coverage and adapter links](../README.md#red-team-coverage).
+
 ## Follow the public-data flow
 
 1. In **Dataset overview**, open **Wine classification**. This bundled dataset
@@ -78,13 +98,15 @@ a new dataset training run.
 2. Select **Next**. Choose **Logistic regression** under **Model family**. Select
    **Next**, inspect the summary and select **Start training**. Compatible tools
    run automatically after training and export; unsupported tools remain visible.
-3. Inspect the run details and **Red-team coverage**. Expand each tool to read its
-   measurements, budgets, baselines and assumptions. Read the scientific result
-   separately from the execution state. In the Wine/logistic example, ten checks
-   finish and tree-leaf exposure is unsupported, so overall red-team coverage
-   remains incomplete. A completed run can be blocked or inconclusive; a completed
-   attack does not establish safety.
-4. Select **Open trained model case**. The generated case uses **Education** mode
+3. Open **Red-team tools**, select Wine and the recorded training run, then
+   expand its tool cards to read measurements, budgets, baselines and assumptions.
+   The run details also retain **Red-team coverage**. Read the scientific result
+   separately from execution state. In the Wine/logistic example, ten checks
+   finish and tree-leaf exposure is unsupported, so coverage remains incomplete.
+   A completed run can be blocked or inconclusive; a completed attack does not
+   establish safety.
+4. In the run details, select **Open trained model case**. The generated case
+   uses **Education** mode
    and binds the candidate, lineage, request, evaluation plan and utility report.
    Select **Check inputs** to inspect required bindings and optional institutional
    gaps. **Run assessment** can repeat the assessment on the current bindings.

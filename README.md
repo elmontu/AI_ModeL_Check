@@ -55,6 +55,12 @@ training from its details. **Model cases** and **Run history** remain available;
 manually created cases can still be reviewed separately. A model verdict does
 not clear or qualify its dataset.
 
+Open **Red-team tools** in the navigation or **Red-team results** on a dataset
+card. Select a dataset and recorded training run to see named tools, execution
+states, recorded measurements and coverage gaps. **Train and run checks** opens
+the training wizard with that dataset selected; compatible checks run
+automatically on the new model.
+
 With the research root configured, Dataset overview also offers ACS census, BTS
 aviation, HMDA lending and NYC TLC mobility for training. Each uses at most
 **4,096 rows** from its retained 27,000-row
@@ -72,7 +78,7 @@ flowchart TD
     D --> E[Choose a dataset in Dataset overview]
     E --> F[Train and export a model]
     F --> G[Run red-team checks and assessment]
-    G --> H[Inspect model findings and coverage gaps]
+    G --> H[Open Red-team tools for recorded findings and coverage gaps]
     H --> I[Open the model case for government audit review]
     I --> J[Download model evidence ZIP and review JSON]
 ```
@@ -121,9 +127,11 @@ choose a new location with `--venv PATH`.
 1. In **Dataset overview**, open **Wine classification** and start training
    from its details. The wizard preselects the dataset; choose **Logistic
    regression**, then **Next** and **Start training**.
-2. Open the run details. Inspect **Red-team coverage**, failures, unsupported
-   tools and uncertainty alongside the scientific result.
-3. Select **Open trained model case** and **Check inputs** to inspect preflight.
+2. Open **Red-team tools**, select Wine and the completed training run, then
+   inspect tool cards, recorded measurements and coverage gaps. The run details
+   also retain **Red-team coverage** and the separate scientific result.
+3. In the run details, select **Open trained model case**, then **Check inputs**
+   to inspect preflight.
    Open **Government audit review** and record evidence, rationale and gaps
    against its twelve controls.
 4. Use **Download evidence ZIP**, **Download result JSON** and **Download review
@@ -155,16 +163,20 @@ not automatically admitted to a temporal or production registry.
 
 | Area | Available now | Limit |
 | --- | --- | --- |
-| Tabular classification | Membership checks and exploratory attack groups | Coverage depends on the supported model and declared interface |
-| Regression | Membership, extraction and robustness screens | Scoped diagnostic evidence |
-| Local language models | Nine synthetic probes and two controls through an installed Ollama model | No model download, real tool execution or general training-record extraction claim |
+| Tabular classification | Eleven integrated tools, visible per recorded run in the console's Red-team tools workspace | Supported tools run after training; unsupported tools and coverage gaps remain visible |
+| Regression | Three integrated membership, extraction and robustness screens in the same workspace | Scoped diagnostic evidence |
+| Local language models | Nine synthetic probes and two controls through an installed Ollama model; launch from Red-team tools | No model download, real tool execution or general training-record extraction claim |
 | Public export pilot | One loss-based membership screen on an offline GaussianNB package | One public fixture |
 | SACRO-ML | Separate pinned 2.0.1 adapter for seven public classifier profiles | Separate runtime; Diabetes regression unsupported; not a console integration |
 | ART | Separate pinned 1.20.1 retained-loss membership comparison across eight public profiles | Includes continuous regression; trusted loss oracle; no live target-query or console integration |
 | garak | Separate pinned 0.17.0 prompt-injection component on one local Ollama model | Four templates, three synthetic wrappers; literal scoring; no live retrieval, tools or console integration |
 | PyRIT | Separate pinned 1.1.0 scripted and bounded adaptive multi-turn components | Two public synthetic objectives, three-turn limit and literal scorer; adaptive roles share one local model; human review and live RAG/tools remain pending |
 
-Discovery lists available and unsupported tools; it does not establish that every dependency is installed.
+The console displays recorded tool evidence; it does not rerun individual tools
+or launch the separate adapters, public export screen or multi-shadow experiments.
+Starting **Train and run checks** creates a new training run. A completed tool is
+an execution result, not a safety verdict. Discovery lists available and
+unsupported tools; it does not establish that every dependency is installed.
 See [tool coverage](docs/framework-capability-gaps.md),
 [export screening](docs/red-team-export-review.md),
 [scoped SACRO-ML](docs/production-prd14-sacro-adapter.md),

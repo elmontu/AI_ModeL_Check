@@ -230,7 +230,7 @@ def create_app(root: Path) -> FastAPI:
 
     @app.get("/assets/{name}")
     def asset(name: str):
-        if name not in {"app.js", "style.css"}:
+        if name not in {"app.js", "red-team.js", "style.css"}:
             raise HTTPException(404)
         return FileResponse(static / name)
 

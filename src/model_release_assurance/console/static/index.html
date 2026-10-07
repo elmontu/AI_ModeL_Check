@@ -2,7 +2,7 @@
 
 <html lang="en">
 
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>MRA · Dataset testing console</title><link rel="stylesheet" href="/assets/style.css"><script defer src="/assets/app.js"></script></head>
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>MRA · Dataset testing console</title><link rel="stylesheet" href="/assets/style.css"><script defer src="/assets/app.js"></script><script defer src="/assets/red-team.js"></script></head>
 
 <body>
 
@@ -12,7 +12,7 @@
 
   <div class="workspace-label">LOCAL WORKSPACE <span>01</span></div>
 
-  <nav aria-label="Main navigation"><a class="nav-item active" href="#datasets"><span>◫</span> Dataset overview</a><a class="nav-item" href="#cases"><span>▤</span> Model cases</a><a class="nav-item" href="#activity"><span>↗</span> Run history</a><a class="nav-item" href="/api/docs" target="_blank" rel="noopener"><span>⌘</span> API reference</a></nav>
+  <nav aria-label="Main navigation"><a class="nav-item active" href="#datasets"><span>◫</span> Dataset overview</a><a class="nav-item" href="#red-team-tools"><span>◇</span> Red-team tools</a><a class="nav-item" href="#cases"><span>▤</span> Model cases</a><a class="nav-item" href="#activity"><span>↗</span> Run history</a><a class="nav-item" href="/api/docs" target="_blank" rel="noopener"><span>⌘</span> API reference</a></nav>
 
   <div class="sidebar-note"><span class="tiny-label">ENVIRONMENT</span><strong>Local pre-POC</strong><p>A shared sandbox for trusted testers. Results support review; they do not authorize release.</p><div class="version">REFERENCE LIBRARY <span>0.8</span></div></div>
 
@@ -38,6 +38,19 @@
     <p id="dataset-unlinked" class="operator-note" hidden></p>
   </section>
 
+
+  <section id="red-team-tools" aria-labelledby="red-team-title">
+    <div class="section-title"><h2 id="red-team-title" tabindex="-1">Red-team tools</h2><button class="primary" id="red-team-train" type="button" disabled>Train and run checks</button></div>
+    <p class="dataset-intro">Choose a dataset and a recorded model run to inspect its attacks. Training a new model runs its compatible tools automatically; the training wizard opens before any work starts.</p>
+    <p id="red-team-catalog-status" class="operator-note">Loading tool catalog…</p><button id="red-team-retry" class="secondary" type="button" hidden>Retry tool catalog</button>
+    <div class="red-team-selectors"><div><label for="red-team-dataset">Dataset for red-team tools</label><select id="red-team-dataset"></select></div><div><label for="red-team-run">Recorded model run</label><select id="red-team-run"></select></div></div>
+    <p id="red-team-run-status" class="operator-note" aria-live="polite">Loading recorded results…</p>
+    <p class="red-team-note">Statuses describe execution, not safety. Metrics and controls apply to the selected recorded run; unsupported and missing checks remain visible. Displayed metrics are rounded; saved results retain the original values.</p>
+    <div id="red-team-result-actions" class="detail-actions"></div><div id="red-team-cards" class="red-team-grid"></div><div id="red-team-gaps"></div>
+    <div class="red-team-language"><div class="section-title"><h3>Language model probes</h3><button id="open-language" class="secondary" type="button">Test an installed language model</button></div><p class="operator-note">Nine synthetic attacks and two controls through an installed local Ollama model. Retrieved documents are synthetic and tool calls are inert.</p><div id="red-team-language-probes" class="red-team-probes"></div></div>
+    <details class="red-team-separate"><summary>Separate tool integrations</summary><p id="red-team-separate" class="operator-note">Loading integration boundaries…</p><p class="operator-note">Catalog discovery does not check optional installations or execute attacks.</p></details>
+  </section>
+
   <section aria-labelledby="start-title"><div class="section-title"><h2 id="start-title">More guided workflows</h2><span>NO AGENCY DATA REQUIRED</span></div><div class="demo-grid">
 
     <article class="demo-card"><div class="card-top"><span class="icon-box">◈</span><span class="pill muted">Synthetic fixtures</span></div><h3>Explore decision scenarios</h3><p>See how the workflow responds to missing evidence, demonstrated leakage, tampering and lifecycle changes.</p><div class="card-foot"><span>8 reference scenarios</span><button class="secondary" id="run-reference">Run scenarios <span>↗</span></button></div></article>
@@ -52,7 +65,7 @@
 
   <section class="flow" aria-label="Service architecture"><div><span class="step">1</span><div><strong>Console & API</strong><small>Create cases and submit jobs</small></div></div><span class="flow-arrow">→</span><div><span class="step">2</span><div><strong>Persistent queue</strong><small>Track queued and running work</small></div></div><span class="flow-arrow">→</span><div><span class="step">3</span><div><strong>Assessment worker</strong><small>Execute, record and return results</small></div></div></section>
 
-  <section><div class="section-title"><h2>Local language red-team</h2><button id="open-language" class="secondary">Test an installed language model</button></div><p>Secret extraction, instruction overrides, poisoned documents and simulated tool requests. Uses synthetic data and inert tools.</p></section><section><div class="section-title"><h2>Framework capabilities</h2><button id="show-capabilities" class="secondary">View support and gaps</button></div><p>Check which model families can train, run attacks or supply registered assessment evidence.</p></section><section id="cases"><div class="section-title"><h2>Model cases <span class="count" id="case-badge">0</span></h2><button class="secondary" id="new-case">＋ Create model case</button></div><p class="operator-note">Candidate evidence workspaces. Models created through training are also grouped under their dataset above. Manually created cases remain available here.</p><div class="table-wrap"><table><thead><tr><th>Candidate</th><th>Model profile</th><th>Release route</th><th>Created</th><th><span class="sr-only">Open</span></th></tr></thead><tbody id="case-rows"></tbody></table><div class="empty" id="case-empty"><div class="empty-icon">▤</div><strong>No model cases yet</strong><p>Create a case to organise the candidate, lineage and assessment inputs.</p><button class="text-button" id="new-case-empty">Create your first case →</button></div></div></section>
+  <section><div class="section-title"><h2>Framework capabilities</h2><button id="show-capabilities" class="secondary">View support and gaps</button></div><p>Check which model families can train, run attacks or supply registered assessment evidence.</p></section><section id="cases"><div class="section-title"><h2>Model cases <span class="count" id="case-badge">0</span></h2><button class="secondary" id="new-case">＋ Create model case</button></div><p class="operator-note">Candidate evidence workspaces. Models created through training are also grouped under their dataset above. Manually created cases remain available here.</p><div class="table-wrap"><table><thead><tr><th>Candidate</th><th>Model profile</th><th>Release route</th><th>Created</th><th><span class="sr-only">Open</span></th></tr></thead><tbody id="case-rows"></tbody></table><div class="empty" id="case-empty"><div class="empty-icon">▤</div><strong>No model cases yet</strong><p>Create a case to organise the candidate, lineage and assessment inputs.</p><button class="text-button" id="new-case-empty">Create your first case →</button></div></div></section>
 
   <section id="activity"><div class="section-title"><h2>Run history</h2><span>FAILED RUNS <span id="count-failed">0</span> · UPDATES AUTOMATICALLY</span></div><div class="table-wrap"><table><thead><tr><th>Run</th><th>Execution</th><th>Assessment / preflight</th><th>Started</th><th><span class="sr-only">Open</span></th></tr></thead><tbody id="job-rows"></tbody></table><div class="empty compact" id="job-empty"><strong>Your test runs will appear here</strong><p>Start a guided test or run a case preflight.</p></div></div></section>
 

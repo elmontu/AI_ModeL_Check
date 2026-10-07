@@ -234,6 +234,14 @@ class ConsoleApiTests(unittest.TestCase):
 
         self.assertEqual(self.client.get("/assets/app.js").status_code, 200)
 
+        self.assertIn("/assets/red-team.js", index.text)
+
+        red_team = self.client.get("/assets/red-team.js")
+
+        self.assertEqual(red_team.status_code, 200)
+
+        self.assertIn("javascript", red_team.headers["content-type"])
+
         self.assertEqual(self.client.get("/assets/project.json").status_code, 404)
 
 

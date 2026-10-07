@@ -123,7 +123,7 @@ async function refresh() {
     const cs=JSON.stringify(c),js=JSON.stringify(j),ds=JSON.stringify(d);
     if(cs!==lastCases){renderCases();lastCases=cs;}
     if(js!==lastJobs){renderJobs();lastJobs=js;if(selectedJob&&$('detail-dialog').open)renderJob(jobs.find(x=>x.id===selectedJob));}
-    if(ds!==lastDatasets){renderDatasets(d);lastDatasets=ds;if(selectedDataset&&$('dataset-dialog').open){const selected=datasets.find(x=>x.id===selectedDataset);if(selected)renderDatasetDetail(selected);}}
+    if(ds!==lastDatasets){renderDatasets(d);if(typeof refreshRedTeam==='function')refreshRedTeam();lastDatasets=ds;if(selectedDataset&&$('dataset-dialog').open){const selected=datasets.find(x=>x.id===selectedDataset);if(selected)renderDatasetDetail(selected);}}
   }catch(error){$('connection').className='connection';$('connection').replaceChildren(el('i'),document.createTextNode('Console disconnected'));if(!datasets.length)$('dataset-empty').textContent='Dataset records could not be loaded. Saved model cases and runs are retained. Retry when the local console is available.';}
 }
 
@@ -157,7 +157,8 @@ function renderDatasets(overview){
     const actions=el('div',undefined,'dataset-actions'),view=el('button','View dataset →','secondary'),train=el('button','Train a model','primary');
     view.type='button';view.setAttribute('aria-label','View dataset '+dataset.name);view.onclick=()=>showDataset(dataset.id);
     train.type='button';train.setAttribute('aria-label','Train a model on '+dataset.name);train.disabled=!dataset.configured;train.onclick=()=>openTraining(dataset.id);
-    actions.append(view,train);card.append(actions);cards.append(card);
+    const red=el('button','Red-team results','secondary');red.type='button';red.setAttribute('aria-label','Red-team results for '+dataset.name);red.onclick=()=>openRedTeam(dataset.id);
+    actions.append(view,train,red);card.append(actions);cards.append(card);
   });
   $('dataset-empty').hidden=shown.length>0;$('dataset-empty').textContent='No datasets match this view.';
   $('dataset-unlinked').hidden=!overview.unlinked_case_count&&!overview.unclassified_training_run_count;
@@ -176,7 +177,7 @@ function renderDatasetDetail(dataset){
     ['Features',count(research?latest?.features:dataset.features)],['Per-run sample',research?'At most '+count(dataset.max_rows)+' rows':count(dataset.max_rows)+' rows'],
     ['Recorded training',dataset.summary.completed+' completed · '+dataset.summary.failed+' failed · '+dataset.summary.active+' active']];
   values.forEach(([label,value])=>{const fact=el('div');fact.append(el('span',label),el('strong',value));facts.append(fact);});box.append(facts);
-  const actions=el('div',undefined,'detail-actions'),train=datasetAction('Train a model',()=>openTraining(dataset.id),'primary');train.disabled=!dataset.configured;actions.append(train);box.append(actions);
+  const actions=el('div',undefined,'detail-actions'),train=datasetAction('Train a model',()=>openTraining(dataset.id),'primary');train.disabled=!dataset.configured;actions.append(train,datasetAction('Red-team results',()=>openRedTeam(dataset.id)));box.append(actions);
   if(research)box.append(el('p',dataset.configured?'Research root configured. Source and manifest pins are checked when a new training run starts; this overview has not rehashed current files.':'Research source is not configured for new training. Restart with --research-data-root PATH to enable it. Earlier runs and evidence remain available.','operator-note'));
   if(latest?.research_source){
     const details=el('details');details.append(el('summary','Last recorded research source'),el('p','From training run '+latest.job_id.slice(0,8)+' · '+time(latest.finished||latest.created)+'. Public covariates and utility labels only. Historical reuse is not fresh audit evidence; current source bytes have not been verified by this view.','operator-note'),el('pre',JSON.stringify(latest.research_source,null,2)));box.append(details);
@@ -190,7 +191,7 @@ function renderDatasetDetail(dataset){
     if(run.rows!==null)row.append(el('p',count(run.rows)+' rows · '+count(run.features)+' features','operator-note'));
     if(run.verdict)row.append(el('p','Recorded model result: '+run.verdict,'operator-note'));
     if(run.retry_of)row.append(el('p','Retry of '+run.retry_of.slice(0,8)+'; original attempt retained.','operator-note'));
-    const runActions=el('div',undefined,'detail-actions');runActions.append(datasetAction('Inspect run and evidence',()=>showJob(run.job_id)));
+    const runActions=el('div',undefined,'detail-actions');runActions.append(datasetAction('Inspect run and evidence',()=>showJob(run.job_id)));runActions.append(datasetAction('Red-team results',()=>openRedTeam(dataset.id,run.job_id)));
     if(run.case_id)runActions.append(datasetAction('Review model case',()=>showCase(run.case_id)));
     row.append(runActions);box.append(row);
   });
