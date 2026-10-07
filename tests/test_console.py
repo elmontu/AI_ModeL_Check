@@ -367,7 +367,7 @@ class ConsoleApiTests(unittest.TestCase):
 
     def test_model_capabilities_and_dataset_pair_validation(self):
         response = self.client.get("/api/capabilities")
-        self.assertEqual(len(response.json()["presets"]), 10)
+        self.assertEqual(len(response.json()["presets"]), 11)
         response = self.client.post("/api/jobs", json={"kind":"training","training":{"preset":"mlp","dataset":"sklearn-digits"}})
         self.assertEqual(response.status_code, 202)
         response = self.client.post("/api/jobs", json={"kind":"training","training":{"preset":"xgboost-small","dataset":"sklearn-digits"}})

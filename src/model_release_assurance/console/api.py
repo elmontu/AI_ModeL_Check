@@ -188,6 +188,40 @@ def create_app(root: Path) -> FastAPI:
         path = file_path(store, job_id, name)
         return FileResponse(path, media_type="application/octet-stream", filename=path.name)
 
+    @app.get("/api/jobs/{job_id}/recipient-package")
+    def recipient_package(job_id: str):
+        import json
+        from ..private_model_clearance import verify_private_model_run
+        from ..errors import AssuranceError
+        from .artifacts import file_path
+        job = store.job(job_id)
+        options = job.get("options") or {}
+        if not isinstance(options, dict):
+            raise ValueError("recorded private training options are invalid")
+        if (job["kind"] != "training" or job["state"] != "completed"
+                or options.get("preset") != "dp-histogram" or options.get("dataset") != "sklearn-wine"):
+            raise ValueError("recipient-only download requires a completed private histogram training run")
+        package = file_path(store, job_id, "job/artifacts/recipient-package.json")
+        output = package.parent
+        expected_job = (store.root / "jobs" / job_id).resolve()
+        if expected_job.parent != (store.root / "jobs").resolve() or output != expected_job / "artifacts":
+            raise ValueError("recipient package does not belong to the recorded training job")
+        try:
+            verified = verify_private_model_run(output)
+            retained = json.loads((output / "training-result.json").read_bytes())
+            current = job.get("result")
+            if (verified.get("verified") is not True
+                    or not isinstance(current, dict) or not isinstance(retained, dict)
+                    or current.get("verdict") != verified["verdict"]
+                    or current.get("clearance_profile") != verified["clearance_profile"]
+                    or any(current.get(key) != value for key, value in retained.items()
+                           if key not in {"case_id", "artifact_directory", "next_step"})
+                    or workflow.digest(package) != verified["recipient_package_sha256"]):
+                raise ValueError("retained training result or recipient package differs from verified evidence")
+        except (OSError, ValueError, KeyError, TypeError, AssuranceError) as exc:
+            raise ValueError("recipient package verification failed; inspect retained evidence and submit a new attempt") from exc
+        return FileResponse(package, media_type="application/json", filename="recipient-package.json")
+
     @app.get("/api/jobs/{job_id}/bundle")
     def artifact_bundle(job_id: str):
         from .artifacts import bundle

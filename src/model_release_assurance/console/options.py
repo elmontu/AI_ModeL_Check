@@ -10,7 +10,7 @@ class TrainingOptions(BaseModel):
     model_config = ConfigDict(extra="forbid", str_strip_whitespace=True)
     name: str = Field(default="Public data training", min_length=1, max_length=100)
     dataset: Literal["sklearn-breast-cancer", "sklearn-wine", "sklearn-digits", "sklearn-diabetes", "research-acs", "research-bts", "research-hmda", "research-tlc"] = "sklearn-breast-cancer"
-    preset: Literal["xgboost-small", "logistic", "random-forest", "mlp", "mlp-finetuned", "cnn", "svm", "ensemble", "ridge", "forest-regression"] = "xgboost-small"
+    preset: Literal["xgboost-small", "logistic", "random-forest", "mlp", "mlp-finetuned", "cnn", "svm", "ensemble", "ridge", "forest-regression", "dp-histogram"] = "xgboost-small"
 
     @model_validator(mode="after")
     def validate_pair(self):
@@ -20,6 +20,8 @@ class TrainingOptions(BaseModel):
             raise ValueError("CNN preset requires digits")
         if self.preset == "xgboost-small" and self.dataset != "sklearn-breast-cancer":
             raise ValueError("registered XGBoost demo requires the breast-cancer dataset")
+        if self.preset == "dp-histogram" and self.dataset != "sklearn-wine":
+            raise ValueError("private categorical histogram model requires the wine dataset")
         return self
 
 

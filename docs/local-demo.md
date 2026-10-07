@@ -141,6 +141,34 @@ Training/export evidence is scoped to the generated public fixture. The console
 does not automatically register it in the separate temporal release broker.
 That dashboard and its retained research inputs are separate workflows.
 
+## Train a real model with clearance evidence
+
+Under **More guided workflows**, select **Open private-training wizard** in
+**Train with clearance evidence**. The wizard selects **Wine classification** and
+**Private categorical model: Wine membership clearance**. Review its scope and
+select **Start training** once. This creates a new model, retained run and
+Education case; earlier models remain intact.
+
+The worker freezes the fixed-bin recipe and policy, trains with secret OS
+randomness, replays the accountant and exported parameters, exercises real model
+attacks and independent known-leak/null controls, then submits evidence to the
+native engine. A scientific clear result covers one model-only release and
+add/remove-record membership. Target FPR remains 0.10 and tolerance remains 0.20.
+Ordinary attack-floor policies remain unchanged.
+
+Open **Scientific clearance within the recorded scope** to read the bound,
+recipient files, policy waiver and limitations. **Download verified recipient
+model** returns only the assessed JSON package after checking its evidence again.
+Changed or missing bytes are refused. In **Open trained model case**, use **Check
+inputs** before **Run assessment**; preflight replays the private evidence too.
+Retain the assessment report and separate operator evidence ZIP for audit.
+
+The public split and utility evaluation are teaching fixtures. This privacy
+bound does not establish useful predictions, person-level protection, combined
+release privacy or agency approval. Each new training run spends additional
+privacy budget; repeated releases need composition. See the
+[mechanism and recipient inference guide](private-model-clearance.md).
+
 ## Use existing public research data on D:
 
 The default launcher needs no external dataset directory. To enable the four

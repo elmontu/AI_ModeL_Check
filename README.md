@@ -91,6 +91,25 @@ or release approval. Use the bundled or configured public research data only. Th
 options. Public-use licensing remains pending; see
 [support and licensing](#support-and-licensing) before reuse or redistribution.
 
+### Train a real model with clearance evidence
+
+Under **More guided workflows**, select **Open private-training wizard** in
+**Train with clearance evidence**. It selects Wine and the **Private categorical
+model** preset. Review the scope, then select **Start training**.
+
+The fixed geometric-noise mechanism trains a real model. Its accountant and
+exported parameters are replayed before the native assessment accepts a
+membership ceiling. The target FPR stays **0.10** and tolerance **0.20**. A clear
+result applies to the exact model-only recipient package, one training release
+and add/remove-record membership. Utility, other threats, earlier model releases
+and agency authorization remain separate.
+
+Use **Download verified recipient model** for the assessed JSON package; the
+endpoint rechecks its evidence. The evidence ZIP is an operator audit bundle,
+which is outside the assessed recipient interface. The prospective local policy
+records an explicit institutional attack-battery waiver and does not claim
+agency qualification. See the [recipe and replay guide](docs/private-model-clearance.md).
+
 ## Quick start
 
 For manual setup instead of the one-command launcher above, use the following
@@ -148,7 +167,7 @@ documents. Scientific and evidence-integrity checks still apply. See the
 
 | Workflow | Current capability | Scope |
 | --- | --- | --- |
-| Training and case review | Ten CPU training presets, four bundled datasets, four optional existing public research profiles, lineage records, adversarial jobs and a twelve-control review | Supported model/data pairs; local operator review; historical research samples are not fresh audits |
+| Training and case review | Eleven CPU training presets, including one model-only private-training recipe, four bundled datasets, four optional existing public research profiles, lineage records, adversarial jobs and a twelve-control review | Supported model/data pairs; local operator review; historical research samples are not fresh audits |
 | Assessment | Versioned contracts, scoped evidence, optimization, signed records and lifecycle replay | Non-authorizing recommendations |
 | Export screening | Reloaded public model packages, a frozen membership screen, positive/null controls and reviewer receipts | Declared attacks and exact candidate bytes |
 | Synthetic export lab | Public synthetic training, accounting exercises, atomic commitment and exact-byte delivery | Fixed fixtures |

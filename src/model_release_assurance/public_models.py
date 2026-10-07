@@ -6,6 +6,7 @@ from pathlib import Path
 from .console.research_data import RESEARCH_DATASETS, load_console_research, research_inventory
 
 PRESETS = {
+    "dp-histogram": "Private categorical model (Wine membership clearance)",
     "xgboost-small": "XGBoost (registered assessment demo)",
     "logistic": "Logistic regression",
     "random-forest": "Random forest",
@@ -28,9 +29,9 @@ DATASETS.update(RESEARCH_DATASETS)
 
 def capability_inventory():
     return {"presets": PRESETS, "datasets": DATASETS, "research_data": research_inventory(),
-            "training": "Ten CPU presets across four bundled public datasets and four optional retained research samples; dataset compatibility is enforced",
+            "training": "Eleven CPU presets across four bundled public datasets and four optional retained research samples; the private categorical preset uses Wine only",
             "red_team": "Classification and regression attacks, derivative/component comparisons, image translations and nine local Ollama language tests with two controls; unsupported adapters remain explicit",
-            "assessment": "All ten presets generate registered membership-evidence assessments; the broader attack suite remains exploratory",
+            "assessment": "Ten conventional presets generate registered membership attack-floor assessments. The private categorical preset generates a replay-verified, one-release model-only DP ceiling; broader attacks remain exploratory",
             "other_framework_paths": [
                 {"family": "larger vision CNN", "entry": "scripts/run_vision_training_hook_audit.py", "status": "separate experiment profile; the small digits CNN is available in the wizard"},
                 {"family": "LLM", "entry": "scripts/run_llm_training_hook_audit.py", "status": "separate experiment script; not a console trainer"},
@@ -90,6 +91,11 @@ def _verify_export(path, original_model, original_scaler, raw_x):
 
 
 def run_public(preset, dataset, output, *, research_data_root=None):
+    if preset == "dp-histogram":
+        if dataset != "sklearn-wine":
+            raise ValueError("private categorical clearance preset requires Wine")
+        from .private_model_clearance import run_private_model_clearance
+        return run_private_model_clearance(output)
     import warnings
     import joblib
     import numpy as np

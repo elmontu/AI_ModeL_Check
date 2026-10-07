@@ -21,6 +21,7 @@
         <li><a href="#start">Install and start</a></li>
         <li><a href="#datasets">Choose a dataset</a></li>
         <li><a href="#training">Train a model</a></li>
+        <li><a href="#private-training">Train with clearance evidence</a></li>
         <li><a href="#tools">Inspect red-team tools</a></li>
         <li><a href="#language">Test a language model</a></li>
         <li><a href="#review">Review a model case</a></li>
@@ -41,7 +42,7 @@
       <section id="results" aria-labelledby="results-title">
         <p class="eyebrow">01 · UNDERSTAND THE OUTCOME</p><h2 id="results-title">Why do the trained models say inconclusive?</h2>
         <p>A model run answers several different questions. Did training finish? Which attacks ran? What did they measure? Is there enough correctly scoped evidence to support the registered assessment? These answers can differ.</p>
-        <p>The public-data walkthrough records attack measurements and a narrow registered, loss-based membership assessment. In the saved examples inspected on <strong>7 October 2026</strong>, the policy tolerates a true-positive rate of <strong>0.20</strong> at a target false-positive rate of <strong>0.10</strong>. None has admissible evidence establishing a clearing bound for the complete recipient interface. Their decision ceiling remains <strong>1.0</strong>, above the tolerance, so the policy returns inconclusive.</p>
+        <p>The conventional public-data walkthrough records attack measurements and a narrow registered, loss-based membership assessment. In the eight earlier trained-model examples inspected on <strong>7 October 2026</strong>, the policy tolerates a true-positive rate of <strong>0.20</strong> at a target false-positive rate of <strong>0.10</strong>. None has admissible evidence establishing a clearing bound for the complete recipient interface. Their decision ceiling remains <strong>1.0</strong>, above the tolerance, so the policy returns inconclusive.</p>
         <p>A finite attack can demonstrate a weakness, but a weak or unsuccessful attack does not bound every attacker's success. For example, the saved ACS/random-forest attack attained the declared false-positive target, with a membership floor of about <strong>0.0774</strong> and a false-positive upper bound of about <strong>0.0956</strong>. Its floor below 0.20 still does not supply a clearing ceiling. Other saved examples did not attain that false-positive target; their registered floors remain zero. Optional agency documents, government checklist gaps and an unsupported tree check do not cause this membership verdict.<br><br>Open a recorded run and read <strong>Why this assessment is inconclusive</strong> for its retained reasons, bounds and operating-point check. Select <strong>Download assessment report JSON</strong> for the original decisions and evidence references. In <strong>Red-team tools</strong>, expand each tool's details to see the attack, baseline, budget and limitations. The findings remain useful even when the overall assessment cannot reach a supported conclusion.</p>
         <div class="table-wrap"><table><caption>Different labels answer different questions</caption><thead><tr><th scope="col">Label</th><th scope="col">What it means</th><th scope="col">Next action</th></tr></thead><tbody>
           <tr><th scope="row">Queued / running</th><td>The separate worker has not finished the job.</td><td>Keep the launcher running; watch Run history.</td></tr>
@@ -102,17 +103,28 @@ python3 scripts/start_demo.py</code></pre>
           <li><strong>Review.</strong> Check the summary, then select <strong>Start training</strong>. Only this final action submits the job. Closing the wizard before submission starts no work.</li>
         </ol>
         <p>The worker prepares data and freezes the evaluation plan, trains and exports the model, runs compatible attacks, and records an Education case with lineage and assessment inputs. Watch milestone progress in the run details. You may close that panel and return through <strong>Run history</strong>.</p>
-        <div class="table-wrap"><table><caption>Ten CPU presets and their compatibility</caption><thead><tr><th scope="col">Presets</th><th scope="col">Compatible datasets</th></tr></thead><tbody>
+        <div class="table-wrap"><table><caption>Eleven CPU presets and their compatibility</caption><thead><tr><th scope="col">Presets</th><th scope="col">Compatible datasets</th></tr></thead><tbody>
           <tr><th scope="row">Logistic regression; Random forest; Small neural network (MLP); Fine-tuned MLP; RBF support-vector classifier; Soft-voting linear + forest ensemble</th><td>Classification datasets: Breast Cancer, Wine, Digits, and configured ACS/BTS/HMDA/TLC.</td></tr>
           <tr><th scope="row">CPU convolutional digit classifier</th><td>Digits only.</td></tr>
           <tr><th scope="row">XGBoost: registered assessment demo</th><td>Breast Cancer only.</td></tr>
           <tr><th scope="row">Ridge regression; Random forest regression</th><td>Diabetes only.</td></tr>
+          <tr><th scope="row">Private categorical model: Wine membership clearance</th><td>Wine only; fixed two-feature private training and a verified model-only recipient package.</td></tr>
         </tbody></table></div>
         <p>Use Wine/logistic, Digits/random forest and Diabetes/ridge to compare a multiclass model, a tree model and a regressor. Use a configured research profile with random forest to inspect the recorded D-drive source provenance. Fixed seeds make these bounded demonstrations easier to compare; they do not replace an independent audit.</p>
       </section>
 
+      <section id="private-training" aria-labelledby="private-training-title">
+        <p class="eyebrow">05 · REAL MODEL AND CLEARANCE EVIDENCE</p><h2 id="private-training-title">Train with evidence that can establish clearance</h2>
+        <p>Under <strong>More guided workflows</strong>, select <strong>Open private-training wizard</strong> in <strong>Train with clearance evidence</strong>. It selects <strong>Wine classification</strong> and <strong>Private categorical model: Wine membership clearance</strong>. Review the fixed scope and select <strong>Start training</strong> once.</p>
+        <p>This trains a real categorical Naive Bayes model using fixed alcohol/proline bins and noisy counts. Before fitting, the worker freezes the recipe and prospective policy. It then trains with secret OS randomness, independently replays the privacy calculation and model postprocessing, runs compatible real attacks and known-leak/null controls, and submits the evidence to the native assessment engine.</p>
+        <div class="guide-callout"><h3>What does this clear result cover?</h3><p>The conservative privacy parameter is <strong>epsilon ≤ 1/3, delta 0</strong> for add/remove-record adjacency. It gives a membership TPR ceiling of approximately <strong>0.13957</strong> at FPR <strong>0.10</strong>, below the unchanged tolerance <strong>0.20</strong>. Clearance covers the exact model-only recipient package and one training release. Utility, other threats, person-level groups, prior models and operator evidence are outside this claim. Agency release authorization is not granted.</p></div>
+        <ol><li>Open the completed run and read <strong>Scientific clearance within the recorded scope</strong>. Inspect its bound, protected unit, recipient files, evidence assumptions and policy.</li><li>Select <strong>Download verified recipient model</strong> for the inert JSON model package. The endpoint checks the retained evidence again and refuses missing or changed bytes. The operator evidence ZIP is a separate audit package.</li><li>Select <strong>Open trained model case</strong>, then <strong>Check inputs</strong> and <strong>Run assessment</strong>. Preflight verifies the private evidence before creating another retained assessment.</li><li>Read held-out utility, real attack metrics, both independent controls and unsupported checks separately. Fresh noise can change utility. Do not treat repeated training releases as free privacy refresh; they require composition.</li></ol>
+        <p>The new local policy explicitly waives institutional attack-battery qualification for this mathematical mechanism example; that reason is retained in the assessment. Local controls do not authenticate agency acceptance. The eight earlier conventional-model cases retain their original verdicts.</p>
+        <p>Use the <a href="https://github.com/elmontu/AI_ModeL_Check/blob/main/docs/private-model-clearance.md" target="_blank" rel="noopener">complete recipe, replay and recipient inference guide ↗</a> for the exact sampler, accountant and command to predict from the package. The one-release guarantee begins at valid training input records; private ingestion, population selection and cumulative disclosure still need qualification.</p>
+      </section>
+
       <section id="tools" aria-labelledby="tools-title">
-        <p class="eyebrow">05 · RED-TEAM WORKSPACE</p><h2 id="tools-title">Read tools, metrics, controls and gaps together</h2>
+        <p class="eyebrow">06 · RED-TEAM WORKSPACE</p><h2 id="tools-title">Read tools, metrics, controls and gaps together</h2>
         <ol class="guide-steps">
           <li>Open <a href="/#red-team-tools"><strong>Red-team tools</strong></a>. Choose <strong>Dataset for red-team tools</strong> and the exact <strong>Recorded model run</strong>.</li>
           <li>Read each named card's execution state and measured values. Expand the card for full details. Check member/nonmember cohorts, query budgets, perturbation settings and baselines.</li>
@@ -129,14 +141,14 @@ python3 scripts/start_demo.py</code></pre>
       </section>
 
       <section id="language" aria-labelledby="language-title">
-        <p class="eyebrow">06 · OPTIONAL LANGUAGE TESTING</p><h2 id="language-title">Test an already installed Ollama model</h2>
+        <p class="eyebrow">07 · OPTIONAL LANGUAGE TESTING</p><h2 id="language-title">Test an already installed Ollama model</h2>
         <p>In <strong>Red-team tools</strong>, select <strong>Test an installed language model</strong>. Choose an <strong>Installed Ollama model</strong>, then select <strong>Run local tests</strong>. The demo does not install or download a model.</p>
         <p>The job runs <strong>nine synthetic probes and two controls</strong>: direct secret extraction, instruction override, role spoofing, encoded extraction, fragment extraction, retrieved-document injection, answer contamination, inert tool-call injection and multi-turn pressure. Retrieved documents and secrets are synthetic. Tool requests are inspected and <strong>never executed</strong>.</p>
         <p>Read observed violations, both controls, failed probes and limitations in the run details. “No match detected” means the detector found no configured match in that finite probe; it is not a guarantee against prompt injection or data leakage. An offline provider or failed probe can leave coverage incomplete.</p>
       </section>
 
       <section id="review" aria-labelledby="review-title">
-        <p class="eyebrow">07 · CASE AND GOVERNMENT REVIEW</p><h2 id="review-title">Keep input checks separate from evidence adequacy</h2>
+        <p class="eyebrow">08 · CASE AND GOVERNMENT REVIEW</p><h2 id="review-title">Keep input checks separate from evidence adequacy</h2>
         <p>Open the training run and select <strong>Open trained model case</strong>, or open its case from the dataset details. <strong>Check inputs</strong> checks required bindings. <strong>Run assessment</strong> assesses the current bound inputs; it creates another retained run.</p>
         <p>Training creates an <strong>Education</strong> case. Candidate, lineage, request, evaluation plan and utility report are bound. Agency scope, security report and independent review remain optional for exercises. <strong>Use review mode</strong> requires all eight slots, but supplying files does not prove their truth or scientific adequacy. Changing mode or bindings can make earlier review entries stale.</p>
         <p>Select <strong>Government audit review</strong> in the case. For each of the twelve controls, choose <strong>Evidence recorded</strong>, <strong>Gap identified</strong> or <strong>Not applicable</strong>, explain your rationale and save. Evidence-recorded entries require an unchanged bound file; the server verifies those bytes, not whether the document answers the question.</p>
@@ -147,20 +159,20 @@ python3 scripts/start_demo.py</code></pre>
       </section>
 
       <section id="evidence" aria-labelledby="evidence-title">
-        <p class="eyebrow">08 · RETAIN THE PACKAGE</p><h2 id="evidence-title">Download reports and the exact run artifacts</h2>
+        <p class="eyebrow">09 · RETAIN THE PACKAGE</p><h2 id="evidence-title">Download reports and the exact run artifacts</h2>
         <p>In run details, use <strong>Download result JSON</strong> and <strong>Download evidence ZIP</strong>. The ZIP includes generated artifacts and a SHA-256 manifest. Assessment bundles include audit and preflight reports. Failed attempts can retain partial artifacts and diagnostics; inspect those too.</p>
         <p>ZIP bundles are limited to <strong>64 MiB</strong>. Larger evidence can be downloaded file by file from the artifact inventory. External case input bindings stay at their original paths and <strong>are not copied into the ZIP</strong>. The government review JSON is a separate checklist, so download it separately.</p>
         <p>Keep the job ID, dataset and preset, source provenance, evaluation plan, result, model artifacts and review together. A retry has a new ID linked to the original; previous results stay intact. Generated evidence may contain model or source-derived information. Choose what to share before publishing files.</p>
       </section>
 
       <section id="scenarios" aria-labelledby="scenarios-title">
-        <p class="eyebrow">09 · SEE DIFFERENT DECISIONS</p><h2 id="scenarios-title">Use the eight synthetic reference scenarios</h2>
+        <p class="eyebrow">10 · SEE DIFFERENT DECISIONS</p><h2 id="scenarios-title">Use the eight synthetic reference scenarios</h2>
         <p>Under <strong>More guided workflows</strong>, select <strong>Run scenarios</strong> on <strong>Explore decision scenarios</strong>. The worker runs eight fictional fixtures covering evidence gaps, demonstrated leakage, tampering and lifecycle changes. Inspect their individual results and downloaded reports.</p>
         <p>These fixtures demonstrate decision branches under predefined synthetic evidence: <strong>CONTINUE_TO_EXTERNAL_REVIEW</strong> for a scoped clear control, <strong>HOLD</strong> for missing evidence, <strong>BLOCK_AND_REDESIGN</strong> for demonstrated leakage, <strong>STOP</strong> for tampering or mismatch, <strong>REASSESS</strong> for stale evidence, and <strong>SIMULATED_ACTIVE</strong> / <strong>SIMULATED_SUSPENDED</strong> for mocked lifecycle controls. These are eight scenario results, not eight trained models or deployed releases. A synthetic passing branch does not imply a public-data model should pass. Open an existing <strong>Reference scenarios</strong> entry in <strong>Run history</strong> to inspect its retained result, or use <strong>Run scenarios</strong> to create a fresh attempt.</p>
       </section>
 
       <section id="restart" aria-labelledby="restart-title">
-        <p class="eyebrow">10 · SESSION AND STORAGE</p><h2 id="restart-title">Stop services without discarding evidence</h2>
+        <p class="eyebrow">11 · SESSION AND STORAGE</p><h2 id="restart-title">Stop services without discarding evidence</h2>
         <p>Press <strong>Ctrl+C</strong> in the launcher terminal to stop the web service and worker. Cases and results remain in the selected data directory. Restart with the same checkout, <code>--data</code> value and research-root option to see the same records. Queued jobs persist; interrupted jobs retain their attempt history and recovery state.</p>
         <pre><code># Prepare the environment without starting services
 python scripts/start_demo.py --install-only
@@ -174,7 +186,7 @@ python scripts/start_demo.py --data D:/YOUR_LOCAL_EVIDENCE_FOLDER --research-dat
       </section>
 
       <section id="troubleshooting" aria-labelledby="troubleshooting-title">
-        <p class="eyebrow">11 · TROUBLESHOOT</p><h2 id="troubleshooting-title">Resolve the specific problem</h2>
+        <p class="eyebrow">12 · TROUBLESHOOT</p><h2 id="troubleshooting-title">Resolve the specific problem</h2>
         <div class="table-wrap"><table><caption>Common symptoms and practical next steps</caption><thead><tr><th scope="col">Symptom</th><th scope="col">Action</th></tr></thead><tbody>
           <tr><th scope="row">Console cannot connect</th><td>Keep the launcher terminal open; read its error. If port 8765 is occupied, restart with <code>--port 8766</code> and open that port.</td></tr>
           <tr><th scope="row">Queued job never starts</th><td>Check the worker status and launcher output. Starting only an HTTP service is insufficient; the launcher starts both processes.</td></tr>
@@ -183,7 +195,7 @@ python scripts/start_demo.py --data D:/YOUR_LOCAL_EVIDENCE_FOLDER --research-dat
           <tr><th scope="row">Preset disabled or rejected</th><td>Use a compatible pair: Diabetes with a regressor, CNN with Digits, XGBoost with Breast Cancer. Use the matrix above.</td></tr>
           <tr><th scope="row">Failed or cancelled run</th><td>Fix the underlying issue, then select <strong>Retry as new run</strong>. It preserves the original attempt and options. A completed inconclusive run is not a failed job.</td></tr>
           <tr><th scope="row">A tool is unsupported</th><td>Read its model restriction. Keep coverage incomplete; successful unrelated tools do not fill that gap.</td></tr>
-          <tr><th scope="row">Every trained model is inconclusive</th><td>Read each registered assessment's reasons and tool metrics. Resolve declared evidence gaps or uncertainty; adding optional documents or repeating identical inputs does not create new scientific evidence.</td></tr>
+          <tr><th scope="row">Earlier conventional models are inconclusive</th><td>Read each registered assessment's reasons and tool metrics. Resolve declared evidence gaps or uncertainty; adding optional documents or repeating identical inputs does not create new scientific evidence.</td></tr>
           <tr><th scope="row">Ollama unavailable / no model listed</th><td>Use a running local Ollama service and an already installed model. Language tests are optional; public-data training remains a separate workflow.</td></tr>
           <tr><th scope="row">Installer rejects a virtual environment</th><td>Retain the error and choose a fresh <code>--venv</code> path. The launcher does not silently reuse an unrelated or incomplete environment.</td></tr>
           <tr><th scope="row">Review entry becomes stale</th><td>Inspect changed mode, bindings or cited bytes. Refresh the case evidence and record a new rationale against the current context.</td></tr>
@@ -193,7 +205,7 @@ python scripts/start_demo.py --data D:/YOUR_LOCAL_EVIDENCE_FOLDER --research-dat
       </section>
 
       <section id="production" aria-labelledby="production-title">
-        <p class="eyebrow">12 · AGENCY PRIVATE CLOUD</p><h2 id="production-title">What remains before a production deployment?</h2>
+        <p class="eyebrow">13 · AGENCY PRIVATE CLOUD</p><h2 id="production-title">What remains before a production deployment?</h2>
         <p>The production direction is an agency private cloud with provider and region still open. The framework is sector-neutral; a major public-health agency is one possible use case. The local public-data demo is assessment and engineering practice, not qualification of the agency's large private datasets.</p>
         <p>A production pilot needs an accountable agency, purpose, data classification, recipient and model profile; authenticated identities and permissions; immutable classified data custody; isolated workers and quotas; reviewed privacy mechanisms and complete training/scoring dependencies; representative independent evidence; authoritative prior-disclosure accounting; and an enforcing delivery path. Operations must prove monitoring, incident response, restoration, retention and capacity at the approved scale.</p>
         <p>Private-cloud hosting and more attack tools do not supply membership privacy, whole-record privacy or a lifetime citizen-privacy guarantee. The applicable scientific scope and unresolved threats must be accepted through the agency's actual review process. Local checklist entries and demo results do not issue release authority or deploy a model.</p>

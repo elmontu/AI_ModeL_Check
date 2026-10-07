@@ -50,6 +50,35 @@ def attach_training_case(store: Store, job: dict, output: Path, report: dict) ->
     return case["id"]
 
 
+def attach_private_model_case(store: Store, job: dict, output: Path, result: dict) -> dict:
+    """Bind only the real private recipient package after independent replay."""
+    from ..private_model_clearance import verify_private_model_run
+    verified = verify_private_model_run(output)
+    if (result.get("preset") != "dp-histogram" or result.get("verdict") != verified["verdict"]
+            or result.get("clearance_profile") != verified["clearance_profile"]
+            or result.get("clearance_scope") != verified["clearance_scope"]):
+        raise ValueError("private training result does not match independently replayed evidence")
+    store.progress(job, "Attaching the private model-only package and retained clearance evidence")
+    case = store.create_case(job["options"]["name"], "trained", "named-party-weights", "education")
+    case_root = store.case_path(case["id"])
+    for slot, name in {"candidate": "recipient-package.json", "request": "assessment-request.json",
+                       "evaluation-plan": "evaluation-plan.json", "utility-report": "utility-report.json"}.items():
+        workflow.bind(case_root, slot, output / name)
+    overlap = output / "console-overlap.json"
+    workflow.write_json(overlap, {"population_overlap": "single-source", "parents": [],
+                                 "note": "One newly trained private model-only candidate; no parent-model access is covered."})
+    request = json.loads((output / "assessment-request.json").read_text(encoding="utf-8"))
+    workflow.create_lineage(case_root, [], output / "training-config.json", output / "data-manifest.json",
+                            overlap, "single-source", request["release"]["previous_release_ids"])
+    preflight, _, _ = workflow.inspect_project(case_root)
+    if preflight["issues"]:
+        raise ValueError("generated private model case failed preflight: " + str(preflight["issues"]))
+    result["case_id"] = case["id"]
+    result["artifact_directory"] = f"jobs/{job['id']}/artifacts"
+    result["next_step"] = "Review the model-only membership ceiling and its scope; independent agency review and authorization remain required."
+    return result
+
+
 def execute(store: Store, job: dict) -> dict:
     job_root = store.root / "jobs" / job["id"]
     job_root.mkdir(parents=True, exist_ok=True)
@@ -83,6 +112,17 @@ def execute(store: Store, job: dict) -> dict:
         result=json.loads((root / "artifacts" / "result.json").read_text(encoding="utf-8"))
         result["artifact_directory"]=f"jobs/{job['id']}/artifacts"
         return result
+
+    if job["kind"] == "training" and (job.get("options") or {}).get("preset") == "dp-histogram":
+        output = job_root / "artifacts"
+        store.progress(job, "Freezing private-model plan, training and independently replaying the accountant")
+        with (job_root / "worker.log").open("w", encoding="utf-8") as log:
+            subprocess.run([sys.executable, "-m", "model_release_assurance.private_model_clearance",
+                            "--output", str(output)], stdout=log, stderr=subprocess.STDOUT,
+                           timeout=600, check=True,
+                           creationflags=subprocess.CREATE_NO_WINDOW if os.name == "nt" else 0)
+        result = json.loads((output / "training-result.json").read_text(encoding="utf-8"))
+        return attach_private_model_case(store, job, output, result)
 
     if job["kind"] == "training" and job.get("options", {}) and job["options"]["preset"] != "xgboost-small":
         options = job["options"]

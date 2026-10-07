@@ -360,6 +360,16 @@ def initialize(root: Path, kind: str, route: str, mode: Mode = "review") -> None
 
 
 
+def _private_model_request(request: AssessmentRequest) -> bool:
+    """Recognize the local private recipe through multiple bound request fields."""
+    return (
+        "local-private-wine-model-only-v1" in (request.release.interface.notes or "")
+        or any(value.provenance.tool == "local-private-wine-geometric-nb"
+               or getattr(value, "accountant", None) == "independent-geometric-count-rational-bound-v1"
+               for value in request.analyzer_inputs)
+    )
+
+
 def bind(root: Path, slot: str, path: Path) -> None:
 
     project = load_project(root)
@@ -376,6 +386,7 @@ def bind(root: Path, slot: str, path: Path) -> None:
 
     if slot == "request":
         project.supporting_files.pop("training-verification", None)
+        project.supporting_files.pop("private-model-clearance", None)
         try:
             request = AssessmentRequest.model_validate_json(path.read_bytes())
         except ValueError:
@@ -383,6 +394,9 @@ def bind(root: Path, slot: str, path: Path) -> None:
         if request is not None and any(value.provenance.tool == "public-classifier-loss" and value.provenance.tool_version != "1.0.0" for value in request.analyzer_inputs):
             replay = path.parent / "training-verification.json"
             project.supporting_files["training-verification"] = FileBinding(path=str(replay), sha256=digest(replay))
+        if request is not None and _private_model_request(request):
+            replay = path.parent / "clearance-certificate.json"
+            project.supporting_files["private-model-clearance"] = FileBinding(path=str(replay), sha256=digest(replay))
 
     write_json(root / "project.json", project.model_dump(), replace=True)
 
@@ -545,6 +559,40 @@ def inspect_project(root: Path) -> tuple[dict, AssessmentRequest | None, Path | 
             from .registered_training import verify_local_training_evidence
             replay = project.supporting_files.get("training-verification")
             verify_local_training_evidence(request, request_base, replay.sha256 if replay else None, ref.sha256)
+            private_replay = project.supporting_files.get("private-model-clearance")
+            private_recipe = False
+            if lineage is not None:
+                lineage_base = resolve(root, project.files["lineage"]).parent
+                try:
+                    recipe_path = resolve(lineage_base, lineage.recipe)
+                    recipe = (json.loads(verified_bytes(lineage_base, lineage.recipe))
+                              if recipe_path.stat().st_size <= 2_000_000 else None)
+                except (ValueError, UnicodeDecodeError):
+                    recipe = None  # Other existing recipes retain their ordinary hash checks.
+                private_recipe = isinstance(recipe, dict) and recipe.get("profile") == "local-private-wine-model-only-v1"
+            private_candidate = False
+            candidate_path = resolve(root, candidate)
+            if candidate_path.suffix.lower() == ".json" and candidate_path.stat().st_size <= 2_000_000:
+                try:
+                    package = json.loads(verified_bytes(root, candidate))
+                except (ValueError, UnicodeDecodeError):
+                    package = None
+                private_candidate = isinstance(package, dict) and (
+                    package.get("profile") == "local-private-wine-model-only-v1"
+                    or package.get("format_version") == "private-categorical-model/1")
+            if _private_model_request(request) or private_recipe or private_candidate or private_replay is not None:
+                if private_replay is None:
+                    raise ValueError("bind the private-model replay certificate before assessment")
+                if digest(request_base / "assessment-request.json") != ref.sha256:
+                    raise ValueError("private-model replay targets a different request")
+                if resolve(root, private_replay) != (request_base / "clearance-certificate.json").resolve():
+                    raise ValueError("private-model certificate must belong to the request bundle")
+                from .private_model_clearance import verify_private_model_run
+                from .errors import AssuranceError
+                try:
+                    verify_private_model_run(request_base)
+                except AssuranceError as exc:
+                    raise ValueError("private-model scientific replay failed: " + str(exc)) from exc
 
         except (OSError, ValueError, IntegrityError, KeyError, TypeError) as exc:
 
@@ -637,6 +685,13 @@ def assess(root: Path) -> Path:
             "boundary": "Local orchestration, not an authenticated MRAP lifecycle transcript or complete evidence archive.",
 
         }
+
+        if _private_model_request(request):
+            from .private_model_clearance import verify_private_model_run
+            private_verified = verify_private_model_run(base)
+            result["clearance_profile"] = private_verified["clearance_profile"]
+            result["clearance_scope"] = private_verified["clearance_scope"]
+            result["scope_limitations"] = private_verified["scope_limitations"]
 
         (run / "START-HERE.md").write_text(
 

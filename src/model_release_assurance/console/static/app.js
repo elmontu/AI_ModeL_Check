@@ -19,7 +19,7 @@ function toast(text) {$('toast').textContent = text; $('toast').hidden = false; 
 
 async function api(path, payload) {let response; try {response = await fetch('/api/' + path, payload === undefined ? {} : {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});} catch(error){throw new Error('Cannot reach the local console. Start mra-console local, then retry. Your saved cases and runs are retained.');} const body = await response.json(); if(!response.ok) throw new Error(typeof body.detail === 'string' ? body.detail : 'Invalid request. Check the fields and try again.'); return body;}
 
-function pill(value) {return el('span', value.replaceAll('_',' '), 'pill ' + (['completed','failed','cancelled','running','queued','inconclusive','inputs_incomplete','needs_work'].includes(value) ? value : 'muted'));}
+function pill(value) {return el('span', value.replaceAll('_',' '), 'pill ' + (['completed','failed','cancelled','running','queued','clear','block','inconclusive','inputs_incomplete','needs_work'].includes(value) ? value : 'muted'));}
 
 const reviewNames={evidence_recorded:'Evidence recorded',gap:'Gap identified',not_applicable:'Not applicable',recorded:'Recorded',needs_work:'Needs work',not_started:'Not started'};
 
@@ -127,7 +127,7 @@ async function refresh() {
   }catch(error){$('connection').className='connection';$('connection').replaceChildren(el('i'),document.createTextNode('Console disconnected'));if(!datasets.length)$('dataset-empty').textContent='Dataset records could not be loaded. Saved model cases and runs are retained. Retry when the local console is available.';}
 }
 
-const presetNames = {logistic:'Logistic regression','random-forest':'Random forest',mlp:'Small neural network','mlp-finetuned':'Fine-tuned MLP',cnn:'CPU convolutional classifier',ridge:'Ridge regression','forest-regression':'Random forest regression',svm:'RBF support-vector classifier',ensemble:'Ensemble', 'xgboost-small':'Registered XGBoost demo'};
+const presetNames = {'dp-histogram':'Private categorical model',logistic:'Logistic regression','random-forest':'Random forest',mlp:'Small neural network','mlp-finetuned':'Fine-tuned MLP',cnn:'CPU convolutional classifier',ridge:'Ridge regression','forest-regression':'Random forest regression',svm:'RBF support-vector classifier',ensemble:'Ensemble', 'xgboost-small':'Registered XGBoost demo'};
 const count = value => typeof value==='number'?value.toLocaleString():'Not recorded';
 const isResearchDataset = dataset => dataset.id.startsWith('research-');
 function latestDatasetRun(dataset){return dataset.training_runs.find(run=>run.state==='completed')||null;}
@@ -152,7 +152,7 @@ function renderDatasets(overview){
       if(metadata?.source_rows!==undefined)card.append(el('p',count(metadata.source_rows)+' prepared rows recorded · historical reuse','dataset-source'));
     }else card.append(el('p',count(dataset.source_rows)+' catalog rows · '+count(dataset.features)+' features','dataset-source'));
     card.append(el('p',dataset.summary.training_runs+' training run'+(dataset.summary.training_runs===1?'':'s')+' · '+dataset.summary.linked_cases+' model case'+(dataset.summary.linked_cases===1?'':'s'),'dataset-counts'));
-    if(latest){const result=el('p','Latest model result: ','dataset-source');result.append(pill(latest.verdict||'not recorded'));card.append(result);}
+    if(latest){const result=el('p','Latest model result: ','dataset-source');result.append(pill(latest.verdict||'not recorded'));card.append(result);if(latest.preset==='dp-histogram')card.append(el('p','Model-only record-membership scope · one release','operator-note'));}
     else card.append(el('p','No completed model run recorded','dataset-source'));
     const actions=el('div',undefined,'dataset-actions'),view=el('button','View dataset →','secondary'),train=el('button','Train a model','primary');
     view.type='button';view.setAttribute('aria-label','View dataset '+dataset.name);view.onclick=()=>showDataset(dataset.id);
@@ -190,6 +190,7 @@ function renderDatasetDetail(dataset){
     row.append(el('p','Run '+run.job_id.slice(0,8)+' · '+time(run.started||run.created),'operator-note'));
     if(run.rows!==null)row.append(el('p',count(run.rows)+' rows · '+count(run.features)+' features','operator-note'));
     if(run.verdict)row.append(el('p','Recorded model result: '+run.verdict,'operator-note'));
+    if(run.preset==='dp-histogram')row.append(el('p','Private training profile: model-only record membership for one release. Other releases and operator evidence require separate review.','operator-note'));
     if(run.retry_of)row.append(el('p','Retry of '+run.retry_of.slice(0,8)+'; original attempt retained.','operator-note'));
     const runActions=el('div',undefined,'detail-actions');runActions.append(datasetAction('Inspect run and evidence',()=>showJob(run.job_id)));runActions.append(datasetAction('Red-team results',()=>openRedTeam(dataset.id,run.job_id)));
     if(run.case_id)runActions.append(datasetAction('Review model case',()=>showCase(run.case_id)));
@@ -209,11 +210,12 @@ async function showDataset(id){
   try{const dataset=await api('datasets/'+encodeURIComponent(id));selectedDataset=id;renderDatasetDetail(dataset);if(!$('dataset-dialog').open)$('dataset-dialog').showModal();}catch(error){toast(error.message);}
 }
 
-async function openTraining(datasetId=null){
+async function openTraining(datasetId=null,presetId=null){
   if($('detail-dialog').open){$('detail-dialog').close();selectedCase=null;selectedJob=null;}
   if($('dataset-dialog').open)closeDataset();
   trainingStep=0;await loadTrainingCapabilities();
   if(datasetId){$('training-dataset').value=datasetId;const dataset=datasets.find(d=>d.id===datasetId);if(dataset)$('training-name').value=dataset.name+' model training';}
+  if(presetId){$('training-preset').value=presetId;$('training-name').value='Private Wine model · membership clearance';}
   renderTrainingStep();$('training-dialog').showModal();
 }
 
@@ -400,23 +402,27 @@ function updateTrainingSelection(){
       ?'Could not check local research configuration. Research choices are disabled; the four bundled datasets remain available.'
       :'Optional local research sources are not configured. Restart the launcher with --research-data-root PATH to enable their choices; the four bundled datasets remain available.';
   $('training-coverage').textContent=researchData.configured
-    ?'10 model presets · 4 bundled + 4 optional research profiles'
-    :'10 model presets · 4 bundled datasets';
+    ?'11 model presets · 4 bundled + 4 optional research profiles'
+    :'11 model presets · 4 bundled datasets';
 
   const xgb=$('training-preset').querySelector('option[value="xgboost-small"]');xgb.disabled=dataset.value!=='sklearn-breast-cancer';
   if(xgb.disabled && $('training-preset').value==='xgboost-small')$('training-preset').value='logistic';
   for(const option of $('training-preset').options){
     if(option.value==='xgboost-small')continue;
     const isRegression=['ridge','forest-regression'].includes(option.value);
-    option.disabled=isRegression!==(dataset.value==='sklearn-diabetes') || (option.value==='cnn' && dataset.value!=='sklearn-digits');
+    option.disabled=isRegression!==(dataset.value==='sklearn-diabetes') || (option.value==='cnn' && dataset.value!=='sklearn-digits') || (option.value==='dp-histogram' && dataset.value!=='sklearn-wine');
   }
   if($('training-preset').selectedOptions[0].disabled)$('training-preset').value=Array.from($('training-preset').options).find(o=>!o.disabled).value;
   const researchUnavailable=isResearch&&!researchData.configured;
   $('training-next').disabled=researchUnavailable;
   $('training-start').disabled=researchUnavailable;
-  $('training-model-note').textContent='Freezes a membership-evidence plan before training and produces a registered assessment. Other tools remain exploratory; no preset authorizes release.';
+  const privatePreset=$('training-preset').value==='dp-histogram';
+  $('training-recipe-note').textContent=privatePreset?'Uses fixed public feature bins and fresh private randomness to train a categorical model. The noise and its random seed are not retained. Utility can vary between runs.':'Local CPU presets use a fixed training seed. Scaling is fitted on training data only. Compatible red-team tools run automatically; unsupported tools remain explicit.';
+  $('training-model-note').textContent=privatePreset?'Freezes the unchanged membership tolerance (0.20 at false-positive rate 0.10), trains once and verifies the privacy mechanism and exact model-only package. The prospective local policy explicitly waives institutional attack-battery qualification; it does not authorize release. Existing conventional model verdicts do not change.':'Freezes a membership-evidence plan before training and produces a registered assessment. Other tools remain exploratory; no preset authorizes release.';
+  $('training-review-scope').textContent=privatePreset?'Assesses only the recipient model package for record membership from one training release. Operator evidence, prior models, utility qualification and other privacy threats are outside this clearance. A new training run spends additional privacy budget.':'Runs on your local worker. The registered assessment may be inconclusive or blocked. Additional exploratory tools do not supply release authorization.';
 }
 
+$('run-private-training').onclick=()=>openTraining('sklearn-wine','dp-histogram');
 $('training-dataset').onchange=updateTrainingSelection;$('training-preset').onchange=updateTrainingSelection;
 
 $('show-capabilities').onclick=async()=>{try{const data=await api('capabilities');selectedJob=null;selectedCase=null;$('detail-label').textContent='IMPLEMENTED SUPPORT';$('detail-title').textContent='Framework capabilities';const box=$('detail-content');box.replaceChildren();for(const key of ['training','red_team','assessment'])box.append(el('h3',key),el('p',data[key]));box.append(el('h3','Separate experiment paths'));data.other_framework_paths.forEach(item=>box.append(el('p',item.family+' · '+item.status),el('code',item.entry)));box.append(el('h3','Missing integrations'));data.missing.forEach(item=>box.append(el('p',item,'operator-note')));$('detail-dialog').showModal();}catch(error){toast(error.message);}};
