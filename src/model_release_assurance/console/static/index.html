@@ -2,7 +2,7 @@
 
 <html lang="en">
 
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>MRA · Dataset testing console</title><link rel="stylesheet" href="/assets/style.css"><script defer src="/assets/app.js"></script><script defer src="/assets/red-team.js"></script></head>
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>MRA · Dataset testing console</title><link rel="stylesheet" href="/assets/style.css"><script defer src="/assets/app.js"></script><script defer src="/assets/assessment-help.js"></script><script defer src="/assets/red-team.js"></script></head>
 
 <body>
 
@@ -12,7 +12,7 @@
 
   <div class="workspace-label">LOCAL WORKSPACE <span>01</span></div>
 
-  <nav aria-label="Main navigation"><a class="nav-item active" href="#datasets"><span>◫</span> Dataset overview</a><a class="nav-item" href="#red-team-tools"><span>◇</span> Red-team tools</a><a class="nav-item" href="#cases"><span>▤</span> Model cases</a><a class="nav-item" href="#activity"><span>↗</span> Run history</a><a class="nav-item" href="/api/docs" target="_blank" rel="noopener"><span>⌘</span> API reference</a></nav>
+  <nav aria-label="Main navigation"><a class="nav-item active" href="#datasets"><span>◫</span> Dataset overview</a><a class="nav-item" href="#red-team-tools"><span>◇</span> Red-team tools</a><a class="nav-item" href="#cases"><span>▤</span> Model cases</a><a class="nav-item" href="#activity"><span>↗</span> Run history</a><a class="nav-item" href="/guide" target="_blank" rel="noopener"><span>?</span> Running guide ↗</a><a class="nav-item" href="/api/docs" target="_blank" rel="noopener"><span>⌘</span> API reference</a></nav>
 
   <div class="sidebar-note"><span class="tiny-label">ENVIRONMENT</span><strong>Local pre-POC</strong><p>A shared sandbox for trusted testers. Results support review; they do not authorize release.</p><div class="version">REFERENCE LIBRARY <span>0.8</span></div></div>
 
@@ -46,6 +46,7 @@
     <div class="red-team-selectors"><div><label for="red-team-dataset">Dataset for red-team tools</label><select id="red-team-dataset"></select></div><div><label for="red-team-run">Recorded model run</label><select id="red-team-run"></select></div></div>
     <p id="red-team-run-status" class="operator-note" aria-live="polite">Loading recorded results…</p>
     <p class="red-team-note">Statuses describe execution, not safety. Metrics and controls apply to the selected recorded run; unsupported and missing checks remain visible. Displayed metrics are rounded; saved results retain the original values.</p>
+    <p class="operator-note"><a href="/guide#results" target="_blank" rel="noopener">Read the running guide for result meanings and next steps →</a></p>
     <div id="red-team-result-actions" class="detail-actions"></div><div id="red-team-cards" class="red-team-grid"></div><div id="red-team-gaps"></div>
     <div class="red-team-language"><div class="section-title"><h3>Language model probes</h3><button id="open-language" class="secondary" type="button">Test an installed language model</button></div><p class="operator-note">Nine synthetic attacks and two controls through an installed local Ollama model. Retrieved documents are synthetic and tool calls are inert.</p><div id="red-team-language-probes" class="red-team-probes"></div></div>
     <details class="red-team-separate"><summary>Separate tool integrations</summary><p id="red-team-separate" class="operator-note">Loading integration boundaries…</p><p class="operator-note">Catalog discovery does not check optional installations or execute attacks.</p></details>

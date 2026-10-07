@@ -70,6 +70,15 @@ cases, runs and their evidence remain available. For an existing candidate,
 use **Create model case** and bind its files in Model cases instead of starting
 a new dataset training run.
 
+## Use the in-console running guide
+
+Select **Running guide** in the console navigation to open the guide in a separate
+tab. It covers installation, all dataset/model choices, training, red-team tools,
+case review, evidence downloads, restarts and troubleshooting. Its result section
+explains the saved inconclusive membership assessments and the separate synthetic
+reference scenarios. Completed training and attacks are execution outcomes; the
+guide and per-run explanations retain the recorded scientific verdicts.
+
 ## Inspect Red-team tools
 
 Open **Red-team tools** in the navigation, or select **Red-team results** on a

@@ -59,7 +59,8 @@ Open **Red-team tools** in the navigation or **Red-team results** on a dataset
 card. Select a dataset and recorded training run to see named tools, execution
 states, recorded measurements and coverage gaps. **Train and run checks** opens
 the training wizard with that dataset selected; compatible checks run
-automatically on the new model.
+automatically on the new model. **Running guide** opens a separate console tab
+with the full setup and operating walkthrough, result meanings and troubleshooting.
 
 With the research root configured, Dataset overview also offers ACS census, BTS
 aviation, HMDA lending and NYC TLC mobility for training. Each uses at most

@@ -224,13 +224,17 @@ def create_app(root: Path) -> FastAPI:
     def index():
         return FileResponse(static / "index.html")
 
+    @app.get("/guide")
+    def running_guide():
+        return FileResponse(static / "guide.html")
+
     @app.get("/api/docs")
     def docs():
         return FileResponse(static / "api.html")
 
     @app.get("/assets/{name}")
     def asset(name: str):
-        if name not in {"app.js", "red-team.js", "style.css"}:
+        if name not in {"app.js", "assessment-help.js", "red-team.js", "style.css"}:
             raise HTTPException(404)
         return FileResponse(static / name)
 
