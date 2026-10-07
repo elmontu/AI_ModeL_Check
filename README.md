@@ -71,18 +71,49 @@ larger raw collection and do not become fresh audit evidence. Source validation
 failures are retained; no source is downloaded or replaced with bundled data.
 See [the D-drive walkthrough](docs/local-demo.md#use-existing-public-research-data-on-d).
 
+### Model pipeline
+
+After the launcher starts, the selected preset determines its evidence route:
+
+Open the [private Wine pipeline view](http://127.0.0.1:8765/#pipeline-flow)
+in the running local demo to inspect a saved run at each stage. Its
+[pipeline guide](http://127.0.0.1:8765/guide#guide-pipeline-flow) stays open
+beside the console.
+
 ```mermaid
 flowchart TD
-    A[Clone the GitHub repository] --> B[Run scripts/start_demo.py]
-    B --> C[Install or validate and reuse the demo environment]
-    C --> D[Start local web service and separate worker]
-    D --> E[Choose a dataset in Dataset overview]
-    E --> F[Train and export a model]
-    F --> G[Run red-team checks and assessment]
-    G --> H[Open Red-team tools for recorded findings and coverage gaps]
-    H --> I[Open the model case for government audit review]
-    I --> J[Download model evidence ZIP and review JSON]
+    A["Choose dataset and model preset"] --> B["Freeze plan, policy and input bindings"]
+    B --> C["Train one new model"]
+    C --> D["Export and reload exact model bytes"]
+    D --> E{"Evidence route"}
+    E --> F["Private Wine: compatible attacks and known-leak/null controls"]
+    F --> G["Replay accountant, model, scope and evidence bindings"]
+    G --> H["Native assessment: clear, inconclusive or block"]
+    E --> I["Conventional: registered loss-based membership evidence"]
+    I --> H
+    H -->|Conventional| J["Retain separate exploratory red-team findings"]
+    H -->|Private Wine| K["Education case and government review"]
+    J --> K
+    H --> L["Operator evidence ZIP and report JSON"]
+    H --> M["Private Wine: verified recipient model download"]
+    K -.-> N["External agency authorization and enforced delivery"]
 ```
+
+The conventional presets retain their registered attack-floor assessment and
+separate exploratory measurements. They do not acquire a DP guarantee from
+successful checks. The private Wine recipe verifies its geometric-DP accountant
+before native assessment; its clear result covers **one model-only package and
+add/remove-record membership**, with the recorded local policy waiver. Existing
+models and their policies keep their original results.
+
+For private Wine, the recipient artifact is **`recipient-package.json`**. The
+operator evidence ZIP contains source, utility and audit diagnostics **outside
+that assessed recipient interface**; it is not a substitute recipient package.
+The verified model download rechecks retained evidence. Government review is
+separate, and agency authorization and enforced delivery are external steps;
+the console performs neither automatically. See the
+[detailed pipeline](docs/local-demo.md#model-pipeline-and-evidence-boundaries) and
+[private recipe and replay](docs/private-model-clearance.md).
 
 Start with **Wine classification** and **Logistic regression** for a small CPU
 example. The demo records findings and gaps; it does not grant model clearance

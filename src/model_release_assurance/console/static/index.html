@@ -12,7 +12,7 @@
 
   <div class="workspace-label">LOCAL WORKSPACE <span>01</span></div>
 
-  <nav aria-label="Main navigation"><a class="nav-item active" href="#datasets"><span>◫</span> Dataset overview</a><a class="nav-item" href="#red-team-tools"><span>◇</span> Red-team tools</a><a class="nav-item" href="#cases"><span>▤</span> Model cases</a><a class="nav-item" href="#activity"><span>↗</span> Run history</a><a class="nav-item" href="/guide" target="_blank" rel="noopener"><span>?</span> Running guide ↗</a><a class="nav-item" href="/api/docs" target="_blank" rel="noopener"><span>⌘</span> API reference</a></nav>
+  <nav aria-label="Main navigation"><a class="nav-item active" href="#datasets"><span>◫</span> Dataset overview</a><a class="nav-item" href="#pipeline-flow"><span>→</span> Pipeline flow</a><a class="nav-item" href="#red-team-tools"><span>◇</span> Red-team tools</a><a class="nav-item" href="#cases"><span>▤</span> Model cases</a><a class="nav-item" href="#activity"><span>↗</span> Run history</a><a class="nav-item" href="/guide" target="_blank" rel="noopener"><span>?</span> Running guide ↗</a><a class="nav-item" href="/api/docs" target="_blank" rel="noopener"><span>⌘</span> API reference</a></nav>
 
   <div class="sidebar-note"><span class="tiny-label">ENVIRONMENT</span><strong>Local pre-POC</strong><p>A shared sandbox for trusted testers. Results support review; they do not authorize release.</p><div class="version">REFERENCE LIBRARY <span>0.8</span></div></div>
 
@@ -38,6 +38,27 @@
     <p id="dataset-unlinked" class="operator-note" hidden></p>
   </section>
 
+
+  <section id="pipeline-flow" aria-labelledby="pipeline-title">
+    <div class="section-title"><h2 id="pipeline-title" tabindex="-1">Private Wine clearance pipeline</h2><a class="secondary" href="/guide#guide-pipeline-flow" target="_blank" rel="noopener">Pipeline guide ↗</a></div>
+    <p class="dataset-intro">Follow the private-training recipe from public data to a scoped assessment. Select a saved run to inspect its evidence. Conventional models retain their <a href="/guide#training" target="_blank" rel="noopener">existing assessment paths</a>.</p>
+    <p class="pipeline-route" aria-label="Pipeline stages at a glance"><a href="#pipeline-stage-1">Dataset</a><span aria-hidden="true">→</span><a href="#pipeline-stage-2">Freeze</a><span aria-hidden="true">→</span><a href="#pipeline-stage-3">Train</a><span aria-hidden="true">→</span><a href="#pipeline-stage-4">Export</a><span aria-hidden="true">→</span><a href="#pipeline-stage-5">Evidence and replay</a><span aria-hidden="true">→</span><a href="#pipeline-stage-6">Assess</a><span aria-hidden="true">→</span><a class="pipeline-route-external" href="#pipeline-stage-7">External review</a></p>
+    <div class="pipeline-selector"><div><label for="pipeline-run">Private Wine model run</label><select id="pipeline-run"><option value="">Loading saved runs…</option></select></div><button id="pipeline-start" class="secondary" type="button">Open private-training wizard</button></div>
+    <p id="pipeline-status" class="operator-note" aria-live="polite">Loading the recorded pipeline…</p>
+    <div id="pipeline-actions" class="detail-actions"></div>
+    <ol class="pipeline-map" aria-label="Private Wine workflow stages">
+      <li id="pipeline-stage-1"><span class="pipeline-number" aria-hidden="true">01</span><h3>Choose dataset</h3><p>Accept public Wine training records. The guarantee starts after public benchmark preparation.</p><div id="pipeline-evidence-1" class="pipeline-evidence"></div></li>
+      <li id="pipeline-stage-2"><span class="pipeline-number" aria-hidden="true">02</span><h3>Freeze plan</h3><p>Fix bins, recipe, policy, adjacency and source identities before fitting.</p><div id="pipeline-evidence-2" class="pipeline-evidence"></div></li>
+      <li id="pipeline-stage-3"><span class="pipeline-number" aria-hidden="true">03</span><h3>Train model</h3><p>Fit one categorical model with hidden OS randomness and noisy counts.</p><div id="pipeline-evidence-3" class="pipeline-evidence"></div></li>
+      <li id="pipeline-stage-4"><span class="pipeline-number" aria-hidden="true">04</span><h3>Export and reload</h3><p>Write the inert recipient JSON and verify its derived model parameters.</p><div id="pipeline-evidence-4" class="pipeline-evidence"></div></li>
+      <li class="pipeline-wide" id="pipeline-stage-5"><span class="pipeline-number" aria-hidden="true">05</span><h3>Collect evidence and replay</h3><div class="pipeline-evidence-tracks"><div class="pipeline-evidence-track"><h4>Measure utility and attacks</h4><p>Run compatible red-team tools and known-leak/null controls. Their findings do not supply a privacy ceiling.</p><p id="pipeline-attacks" class="operator-note">Read execution, findings and coverage separately.</p></div><div class="pipeline-evidence-track"><h4>Verify the mechanism</h4><p>Independently replay the accountant, model postprocessing, input joins and source bindings.</p></div></div><div id="pipeline-evidence-5" class="pipeline-evidence"></div></li>
+      <li id="pipeline-stage-6"><span class="pipeline-number" aria-hidden="true">06</span><h3>Assess declared scope</h3><p>The native engine records clear, block or inconclusive under the frozen policy.</p><div id="pipeline-evidence-6" class="pipeline-evidence"></div></li>
+      <li class="pipeline-external" id="pipeline-stage-7"><span class="pipeline-number" aria-hidden="true">07</span><h3>External agency review</h3><p>Accountable reviewers handle purpose, security, utility, other threats and release history. The demo does not grant approval or enforce agency delivery.</p><p class="pipeline-evidence-note">Outside this local pipeline</p></li>
+    </ol>
+    <p class="pipeline-scope-note">Clearance covers one model-only package and add/remove-record membership. The local policy explicitly waives institutional attack-battery qualification. A new fit or another released model requires composition; agency approval remains separate.</p>
+    <h3 class="pipeline-output-title">Keep the two packages separate</h3><div id="pipeline-outputs" class="detail-actions pipeline-outputs" aria-live="polite"></div>
+    <button id="pipeline-retry" class="secondary" type="button" hidden>Retry evidence inventory</button>
+  </section>
 
   <section id="red-team-tools" aria-labelledby="red-team-title">
     <div class="section-title"><h2 id="red-team-title" tabindex="-1">Red-team tools</h2><button class="primary" id="red-team-train" type="button" disabled>Train and run checks</button></div>

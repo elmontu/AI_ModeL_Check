@@ -47,9 +47,70 @@ The launcher starts a local web service and a separate worker. Open
 artifacts under `.local/demo-data`. Local mode binds to loopback for trusted
 testers on one computer; it is not a shared public service.
 
-The [README flow diagram](../README.md#run-the-github-demo-locally) shows the
-steps from checkout through evidence download. Manual installation is also
+The [README pipeline diagram](../README.md#model-pipeline) shows the model
+stages and their separate evidence routes. Manual installation is also
 available in [Quick start](../README.md#quick-start).
+
+## Model pipeline and evidence boundaries
+
+Open the [private Wine pipeline view](http://127.0.0.1:8765/#pipeline-flow)
+in the running local demo to inspect a saved run at each stage. Its
+[pipeline guide](http://127.0.0.1:8765/guide#guide-pipeline-flow) stays open
+beside the console.
+
+Choose the dataset and preset first. Each attempt freezes its policy and plan
+before fitting and retains the exact exported model, evidence and result. The
+private Wine route runs these stages in order:
+
+```mermaid
+flowchart TD
+    A["Wine dataset and private categorical preset"] --> B["Freeze recipe, evaluation plan, policy and source bindings"]
+    B --> C["Fit once with hidden geometric noise"]
+    C --> D["Export recipient-package.json and reload its model"]
+    D --> E["Measure utility, compatible red-team tools and known-leak/null controls"]
+    E --> F["Verify accountant, model postprocessing, scope and hashes"]
+    F --> G["Native assurance engine assessment"]
+    G --> H["Replay completed run and retain Education case"]
+    H --> I["Government audit review"]
+    H --> J["Verified recipient model download"]
+    H --> K["Separate operator evidence ZIP and report JSON"]
+    I -.-> L["External agency review, authorization and enforcing delivery"]
+```
+
+| Stage | What to inspect | Boundary |
+| --- | --- | --- |
+| Select and freeze | Dataset snapshot, training recipe, evaluation plan, policy and source identities | Freeze before fitting; a changed input belongs in a new attempt. |
+| Train | Receipt for one real fit with OS-backed secret randomness | The private Wine mechanism starts at its accepted training records; public benchmark preparation is outside that guarantee. |
+| Export and reload | Exact `recipient-package.json`, fixed schema and model derived from noisy counts | No raw records, raw training counts, private seed or noise realization in the recipient package. |
+| Check and verify | Utility, compatible attacks, known-leak/null controls, independently replayed accountant, model and bindings | Unsupported tools remain gaps. These diagnostic controls do not establish institutional attack-battery qualification. |
+| Assess and replay | Native assessment report, bounds, policy and completed-run verification | The private route uses a mechanism ceiling and an explicit local battery waiver; a scientific result is scoped to its declared interface. |
+| Review and retain | Education case, twelve-control review, reports and operator evidence ZIP | Review entries record evidence and gaps; they do not issue agency approval. |
+| Recipient delivery | **Download verified recipient model** rechecks retained private-run evidence | Only the model-only JSON is assessed for that recipient; agency authorization and production delivery remain separate external obligations. |
+
+Conventional logistic, forest, neural, regression and XGBoost demonstrations
+use a different evidence route: **freeze → train → export/reload → registered
+membership assessment**, followed by separate compatible exploratory attacks
+and retained utility/review evidence. Their attack-floor policies remain unchanged;
+failed or weak attacks do not create a clearing ceiling, and no accountant or DP
+claim is added to those earlier models. Exploratory results are not silently
+admitted to the registered assessment.
+
+A private Wine clear result covers one fit, one model-only recipient package and
+add/remove-record membership under its recorded policy. It does not clear the
+whole dataset, another model, person-level groups, utility, fairness, cumulative
+prior releases or an agency deployment. A second noisy model release requires
+composition; reassessing the same bytes is not a new fit.
+
+**Keep the two downloads distinct.** `recipient-package.json` is the assessed
+private model artifact. The evidence ZIP is an operator audit bundle containing
+source, manifest, utility and attack diagnostics outside that recipient package.
+Sharing the ZIP is a different disclosure, with no automatic transfer of the
+model-only privacy claim. Keep the separate review JSON for audit as well.
+
+See [private training and replay](private-model-clearance.md),
+[the government review](government-audit-guide.md) and
+[the private-cloud production plan](production-private-cloud-plan.md) for their
+respective evidence and deployment obligations.
 
 ## Start from Dataset overview
 

@@ -16,6 +16,7 @@
   <div class="guide-layout">
     <nav class="guide-toc" aria-label="Running guide contents">
       <p class="eyebrow">RUNNING GUIDE</p>
+      <p class="guide-toc-flow"><a href="#guide-pipeline-flow">Private Wine pipeline flow</a></p>
       <ol>
         <li><a href="#results">Read the results</a></li>
         <li><a href="#start">Install and start</a></li>
@@ -38,6 +39,27 @@
         <div><p class="eyebrow">LOCAL DATASET &amp; MODEL TESTING</p><h1>Run it. Read the evidence.</h1><p class="intro">From a GitHub checkout to training, red-team measurements, review and a retained evidence package.</p></div>
       </div>
       <div class="notice"><span class="notice-symbol" aria-hidden="true">i</span><div><strong>Inconclusive is an assessment outcome.</strong> It does not mean training failed or the red-team tools did nothing. Read the execution state, measured results and assessment reasons separately.</div></div>
+
+      <section id="guide-pipeline-flow" class="guide-callout pipeline-panel" aria-labelledby="guide-pipeline-title">
+        <h2 id="guide-pipeline-title">Private Wine clearance pipeline</h2>
+        <p>This flow follows the supported private Wine model through its recorded checks, native assessment and separate agency review. Conventional models use their own ordering and evidence requirements. Reading this map does not execute jobs.</p>
+        <ol class="pipeline-map" aria-label="Private Wine training to scoped assessment and external agency review">
+          <li><h3>Choose Wine</h3><p>Select the bundled Wine dataset and its private categorical preset. This fixed example does not qualify a dataset or private agency inputs.</p></li>
+          <li><h3>Freeze the plan</h3><p>Before fitting, record the fixed recipe, privacy mechanism, recipient interface, prospective policy and evaluation design.</p></li>
+          <li><h3>Train a private model</h3><p>Fit the categorical model using secret OS randomness and noisy counts. Each new training release needs its own disclosure accounting.</p></li>
+          <li><h3>Export and reload</h3><p>Save the exact model-only recipient package and check its predictions after reload. Keep operator audit material separate.</p></li>
+          <li><h3>Run checks, then replay</h3>
+            <div class="pipeline-evidence-tracks">
+              <div class="pipeline-evidence-track"><h4>Utility, attacks and controls</h4><p>Record utility, compatible real attacks, positive/null controls and unsupported checks. These exploratory measurements do not supply a privacy ceiling.</p></div>
+              <div class="pipeline-evidence-track"><h4>Privacy mechanism and verification</h4><p>Then replay the accountant and model postprocessing, and verify source, candidate and evidence bindings against the frozen scope and exact recipient package.</p></div>
+            </div>
+          </li>
+          <li><h3>Native assessment</h3><p>Submit the verified, admissible evidence to the assessment engine. Clear, block or inconclusive is a scoped scientific outcome, not release authority.</p></li>
+          <li class="pipeline-external"><h3>External agency review</h3><p>Agency owners and independent reviewers must resolve authority, remaining risks and deployment controls outside this demo. Local government review notes retain gaps; they do not perform that acceptance.</p></li>
+        </ol>
+        <p class="pipeline-scope-note"><strong>Keep the packages separate.</strong> The verified recipient model is the exact model-only package covered by this private example. The operator evidence ZIP also retains audit material and is outside that recipient claim. Neither download grants agency release authorization.</p>
+        <div class="guide-links"><a href="/#pipeline-flow">View the private pipeline in the console</a><a href="#private-training">Private-training walkthrough</a><a href="#training">Conventional training workflow</a></div>
+      </section>
 
       <section id="results" aria-labelledby="results-title">
         <p class="eyebrow">01 · UNDERSTAND THE OUTCOME</p><h2 id="results-title">Why do the trained models say inconclusive?</h2>

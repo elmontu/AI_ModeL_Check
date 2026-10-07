@@ -122,7 +122,7 @@ async function refresh() {
     $('count-completed').textContent=status.jobs.completed||0;$('count-failed').textContent=status.jobs.failed||0;
     const cs=JSON.stringify(c),js=JSON.stringify(j),ds=JSON.stringify(d);
     if(cs!==lastCases){renderCases();lastCases=cs;}
-    if(js!==lastJobs){renderJobs();lastJobs=js;if(selectedJob&&$('detail-dialog').open)renderJob(jobs.find(x=>x.id===selectedJob));}
+    if(js!==lastJobs){renderJobs();if(typeof refreshPipeline==='function')refreshPipeline();lastJobs=js;if(selectedJob&&$('detail-dialog').open)renderJob(jobs.find(x=>x.id===selectedJob));}
     if(ds!==lastDatasets){renderDatasets(d);if(typeof refreshRedTeam==='function')refreshRedTeam();lastDatasets=ds;if(selectedDataset&&$('dataset-dialog').open){const selected=datasets.find(x=>x.id===selectedDataset);if(selected)renderDatasetDetail(selected);}}
   }catch(error){$('connection').className='connection';$('connection').replaceChildren(el('i'),document.createTextNode('Console disconnected'));if(!datasets.length)$('dataset-empty').textContent='Dataset records could not be loaded. Saved model cases and runs are retained. Retry when the local console is available.';}
 }
@@ -435,3 +435,106 @@ $('close-language').onclick=()=>$('language-dialog').close();
 
 $('language-form').onsubmit=async e=>{e.preventDefault();$('language-start').disabled=true;try{const job=await api('jobs',{kind:'language',language:{model:$('language-model').value}});$('language-dialog').close();await refresh();await showJob(job.id);}catch(error){$('language-error').textContent=error.message;}finally{$('language-start').disabled=false;}};
 
+
+// Read-only evidence map for retained private Wine training runs.
+'use strict';
+const pipelineStages = [
+  [['data-manifest.json','Source manifest']],
+  [['evidence-freeze.json','Frozen inputs'],['training-config.json','Recipe'],['evaluation-plan.json','Evaluation plan'],['policy.json','Policy']],
+  [['training-receipt.json','Training receipt'],['training-result.json','Training result']],
+  [['export-verification.json','Export verification']],
+  [['utility-report.json','Utility'],['red-team-report.json','Attack results'],['positive-controls.json','Controls'],['accountant-ledger.json','Accountant'],['clearance-certificate.json','Replay certificate']],
+  [['assessment-report.json','Assessment report']]
+];
+let pipelineRequest = 0, pipelineKey = '';
+function pipelineRuns() {
+  return jobs.filter(job=>job.kind==='training'&&job.options?.preset==='dp-histogram'&&job.options?.dataset==='sklearn-wine');
+}
+function pipelineCurrent(request,id) {
+  return request===pipelineRequest&&$('pipeline-run').value===id;
+}
+function pipelineLink(job,name,label) {
+  const link=el('a',label,'pipeline-file');
+  link.href='/api/jobs/'+encodeURIComponent(job.id)+'/artifacts/job/artifacts/'+encodeURIComponent(name);
+  link.download=name;return link;
+}
+function pipelineResetEvidence(message) {
+  for(let step=1;step<=6;step++){
+    $('pipeline-evidence-'+step).replaceChildren(el('p',message,'pipeline-evidence-note'));
+  }
+  $('pipeline-outputs').replaceChildren();$('pipeline-retry').hidden=true;
+}
+function pipelineRenderInventory(job,inventory,request) {
+  if(!pipelineCurrent(request,job.id))return;
+  if(!inventory||!Array.isArray(inventory.files))throw Error('The saved evidence inventory is unavailable.');
+  const paths=new Set(inventory.files.filter(file=>file&&typeof file.path==='string').map(file=>file.path));
+  pipelineStages.forEach((stage,index)=>{
+    const box=$('pipeline-evidence-'+(index+1));box.replaceChildren();
+    const matches=stage.filter(([name])=>paths.has('job/artifacts/'+name));
+    box.append(el('p',matches.length?'Saved files — inspect their contents':'No supported evidence file recorded','pipeline-evidence-note'));
+    for(const [name,label] of matches)box.append(pipelineLink(job,name,label));
+  });
+  const outputs=$('pipeline-outputs');outputs.replaceChildren();
+  const isComplete=job.state==='completed';
+  if(isComplete&&job.result?.clearance?.verified===true&&['recipient-package.json','clearance-certificate.json','assessment-request.json'].every(name=>paths.has('job/artifacts/'+name))){
+    const recipient=el('a','Download verified recipient model','secondary');
+    recipient.href='/api/jobs/'+encodeURIComponent(job.id)+'/recipient-package';recipient.download='recipient-package.json';
+    outputs.append(recipient);
+  }else outputs.append(el('p','Verified recipient download is unavailable until training completes with the required retained evidence.','operator-note'));
+  outputs.append(el('p','The recipient endpoint rechecks the evidence. File presence in this map is not scientific verification or agency approval.','operator-note'));
+  if(inventory.files.length){
+    const audit=el('a','Download operator evidence ZIP','secondary');audit.href='/api/jobs/'+encodeURIComponent(job.id)+'/bundle';
+    outputs.append(audit,el('p','The audit ZIP is outside the assessed recipient interface.','operator-note'));
+  }
+}
+async function pipelineSelect(job) {
+  const request=++pipelineRequest;
+  const status=$('pipeline-status'),actions=$('pipeline-actions');actions.replaceChildren();
+  if(!job){
+    status.textContent='No private Wine training run recorded. Open the wizard to create one.';
+    $('pipeline-attacks').textContent='Read execution, findings and coverage separately.';
+    pipelineResetEvidence('No run selected');return;
+  }
+  const verdict=job.result?.verdict;
+  status.textContent='Run '+job.id.slice(0,8)+' · '+job.state+(job.state==='completed'&&['clear','block','inconclusive'].includes(verdict)?' · recorded scientific result: '+verdict:' · no completed scientific assessment');
+  if(job.state==='running'&&job.progress)status.append(document.createTextNode(' · '+job.progress));
+  const inspect=el('button','Inspect saved run','secondary');inspect.type='button';inspect.onclick=()=>showJob(job.id);actions.append(inspect);
+  const caseId=job.result?.case_id;
+  if(typeof caseId==='string'&&/^[0-9a-f]{32}$/.test(caseId)){
+    const modelCase=el('button','Open model case','secondary');modelCase.type='button';modelCase.onclick=()=>showCase(caseId);actions.append(modelCase);
+  }
+  const execution=job.result?.red_team?.execution_summary;
+  const summary=$('pipeline-attacks');summary.textContent='Read execution, findings and coverage separately.';
+  if(execution&&['completed','failed','unsupported'].every(key=>Number.isInteger(execution[key])&&execution[key]>=0))summary.textContent=execution.completed+' completed · '+execution.failed+' failed · '+execution.unsupported+' unsupported tool groups. These attacks are exploratory.';
+  pipelineResetEvidence('Loading saved files…');
+  try{
+    const inventory=await api('jobs/'+encodeURIComponent(job.id)+'/artifacts');
+    pipelineRenderInventory(job,inventory,request);
+  }catch(error){
+    if(!pipelineCurrent(request,job.id))return;
+    pipelineResetEvidence('Saved evidence could not be loaded. Inspect the run or retry.');
+    $('pipeline-retry').hidden=false;
+  }
+}
+function refreshPipeline() {
+  const select=$('pipeline-run');if(!select)return;
+  const runs=pipelineRuns(),previous=select.value;
+  const labels=runs.map(job=>[job.id,(job.options.name||'Private Wine model')+' · '+job.state+' · '+job.id.slice(0,8)]);
+  const signature=JSON.stringify(labels);
+  if(select.dataset.signature!==signature){
+    select.replaceChildren();
+    if(!runs.length){const option=el('option','No private Wine runs yet');option.value='';select.append(option);}
+    labels.forEach(([id,label])=>{const option=el('option',label);option.value=id;select.append(option);});
+    if(runs.some(job=>job.id===previous))select.value=previous;
+    select.dataset.signature=signature;
+  }
+  select.disabled=!runs.length;
+  const job=runs.find(value=>value.id===select.value);
+  const key=job?JSON.stringify([job.id,job.state,job.finished,job.progress,job.result]):'empty';
+  if(key===pipelineKey)return;
+  pipelineKey=key;pipelineSelect(job);
+}
+$('pipeline-run').onchange=()=>{pipelineKey='';refreshPipeline();};
+$('pipeline-retry').onclick=()=>{pipelineKey='';refreshPipeline();};
+$('pipeline-start').onclick=()=>openTraining('sklearn-wine','dp-histogram');
+refreshPipeline();
