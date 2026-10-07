@@ -36,7 +36,7 @@
     </nav>
     <main id="guide-content">
       <div class="heading">
-        <div><p class="eyebrow">LOCAL DATASET &amp; MODEL TESTING</p><h1>Run it. Read the evidence.</h1><p class="intro">From a GitHub checkout to training, red-team measurements, review and a retained evidence package.</p></div>
+        <div><p class="eyebrow">LOCAL DATASET &amp; MODEL TESTING</p><h1>Run it. Read the evidence.</h1><p class="intro">From a downloaded Windows launcher or GitHub checkout to training, red-team measurements, review and a retained evidence package.</p></div>
       </div>
       <div class="notice"><span class="notice-symbol" aria-hidden="true">i</span><div><strong>Inconclusive is an assessment outcome.</strong> It does not mean training failed or the red-team tools did nothing. Read the execution state, measured results and assessment reasons separately.</div></div>
 
@@ -81,21 +81,29 @@
 
       <section id="start" aria-labelledby="start-title">
         <p class="eyebrow">02 · INSTALL AND START</p><h2 id="start-title">One launcher starts the web service and worker</h2>
-        <p>Install <strong>Git and Python 3.11 or newer</strong>. Clone into a local directory outside a synchronized folder. On Windows, you can keep the checkout and new evidence on D:</p>
-        <pre><code># Windows PowerShell — choose an existing local folder on D:
-Set-Location D:\ChatGPT
-git clone https://github.com/elmontu/AI_ModeL_Check.git
-Set-Location AI_ModeL_Check
-python scripts/start_demo.py</code></pre>
-        <pre><code># Linux / macOS — choose your local parent directory
-git clone https://github.com/elmontu/AI_ModeL_Check.git
+        <ol class="guide-steps">
+          <li><strong>Download the ZIP.</strong> Save <a href="https://github.com/elmontu/AI_ModeL_Check/raw/refs/heads/main/demo/Try-Demo.zip">Try-Demo.zip</a> on Windows x64.</li>
+          <li><strong>Extract and double-click.</strong> Use <strong>Extract All</strong>, then double-click <code>Try-Demo.cmd</code> in the extracted folder. No Git, preinstalled Python or administrator installation is required. First use needs internet access for the managed runtime, fixed application snapshot and console packages.</li>
+          <li><strong>Wait for dataset checks.</strong> Setup validates and prepares local copies of all four required public samples: Wine, Digits, Breast Cancer and Diabetes, bundled in scikit-learn 1.6.1. The launcher then starts the web service and separate worker and opens the browser.</li>
+        </ol>
+        <p>The <a href="https://github.com/elmontu/AI_ModeL_Check/raw/refs/heads/main/Try-Demo.cmd">plain launcher</a> is also available. If the browser displays the script, use <strong>Save as</strong> and retain the filename <code>Try-Demo.cmd</code> rather than <code>.txt</code>.</p>
+        <p>Open <a href="http://127.0.0.1:8765/">http://127.0.0.1:8765/</a> if the browser does not open. Keep the launcher window open; <strong>Ctrl+C</strong> stops both services. If Windows asks <code>Terminate batch job (Y/N)?</code>, confirm with <code>Y</code>. Later launches validate and reuse the installation. The core public-data examples run offline after setup.</p>
+        <p>The default home is <code>D:/MRA-Demo/&lt;Windows username&gt;</code> when D: is available, otherwise <code>%LOCALAPPDATA%/MRA-Demo/&lt;Windows username&gt;</code>. Runtime, application, prepared data and new evidence stay under that home. OneDrive locations are refused. This remains a trusted local, loopback service.</p>
+        <p>The bootstrap uses official portable CPython NuGet <strong>3.13.16</strong> and immutable source snapshot <code>76d5efe</code>. Installed dependencies are checked against requirements; they are not described as a completely locked dependency set.</p>
+        <details><summary>Standalone Windows settings and optional existing research inputs</summary>
+          <p>Use <code>MRA_DEMO_HOME</code> for another absolute home outside OneDrive, <code>MRA_DEMO_PORT</code> for another port, <code>MRA_DEMO_SETUP_ONLY=1</code> to prepare without starting services, or <code>MRA_DEMO_NO_BROWSER=1</code> to start without opening the browser.</p>
+          <pre><code># PowerShell, beside the extracted launcher
+$env:MRA_DEMO_RESEARCH_DATA_ROOT = 'D:/model_audit_data'
+&amp; .\Try-Demo.cmd</code></pre>
+          <p>The research root is optional and must already contain the four fixed historical prepared matrices. No large raw collection is downloaded or missing source replaced. The research inputs and new console evidence have different roles.</p>
+        </details>
+        <details><summary>Advanced existing checkout or Linux/macOS setup</summary>
+          <p>With Git and Python 3.11 or newer, clone outside synchronized storage and use the source launcher:</p>
+          <pre><code>git clone https://github.com/elmontu/AI_ModeL_Check.git
 cd AI_ModeL_Check
-python3 scripts/start_demo.py</code></pre>
-        <p>Open <a href="http://127.0.0.1:8765/">http://127.0.0.1:8765/</a>. Leave the launcher terminal open. The first launch installs the console profile into <code>.local/demo-venv</code>; later launches validate and reuse it. First installation needs package access or a prepared wheel directory. Bundled datasets need no separate download.</p>
-        <p>The browser/API submits work to a persistent SQLite queue. A <strong>separate worker</strong> trains models and executes checks. Cases, jobs and results live under <code>.local/demo-data</code> by default. This is a trusted local service bound to loopback.</p>
-        <details><summary>Use existing public research sources on D:</summary>
-          <pre><code>python scripts/start_demo.py --research-data-root D:/model_audit_data</code></pre>
-          <p>This enables the four fixed prepared research profiles without copying or changing their source files. Repeat the option when restarting. To store evidence somewhere else, add <code>--data D:/YOUR_LOCAL_EVIDENCE_FOLDER</code> and use the same path on later launches. The research root and evidence directory have different purposes.</p>
+python scripts/start_demo.py
+# On Linux/macOS, use python3 instead.</code></pre>
+          <p>This route keeps its environment and evidence under <code>.local/demo-venv</code> and <code>.local/demo-data</code>. Add <code>--research-data-root D:/model_audit_data</code> for existing research sources or <code>--data PATH</code> for another evidence directory.</p>
         </details>
       </section>
 
@@ -195,7 +203,8 @@ python3 scripts/start_demo.py</code></pre>
 
       <section id="restart" aria-labelledby="restart-title">
         <p class="eyebrow">11 · SESSION AND STORAGE</p><h2 id="restart-title">Stop services without discarding evidence</h2>
-        <p>Press <strong>Ctrl+C</strong> in the launcher terminal to stop the web service and worker. Cases and results remain in the selected data directory. Restart with the same checkout, <code>--data</code> value and research-root option to see the same records. Queued jobs persist; interrupted jobs retain their attempt history and recovery state.</p>
+        <p>Press <strong>Ctrl+C</strong> in the launcher terminal to stop the web service and worker. If Windows asks <code>Terminate batch job (Y/N)?</code>, confirm with <code>Y</code>. Cases and results remain in the selected data directory. Reopen <code>Try-Demo.cmd</code> with the same installation home and research setting for the standalone Windows route. For a source checkout, use the same <code>--data</code> value and research-root option. Queued jobs persist; interrupted jobs retain their attempt history and recovery state.</p>
+        <p>Standalone setup-only mode uses <code>MRA_DEMO_SETUP_ONLY=1</code>. The following commands apply to an existing source checkout:</p>
         <pre><code># Prepare the environment without starting services
 python scripts/start_demo.py --install-only
 

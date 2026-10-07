@@ -16,17 +16,44 @@ path to an agency private-cloud service.
 
 ## Run the GitHub demo locally
 
-Clone the repository into a folder outside OneDrive or other synchronized storage:
+### Windows: download and double-click
+
+[Download Try-Demo.zip](https://github.com/elmontu/AI_ModeL_Check/raw/refs/heads/main/demo/Try-Demo.zip),
+extract the ZIP, and double-click `Try-Demo.cmd` on **Windows x64**.
+No Git, preinstalled Python or administrator installation is required.
+
+The [plain launcher](https://github.com/elmontu/AI_ModeL_Check/raw/refs/heads/main/Try-Demo.cmd)
+is also available. If your browser displays it, use **Save as** and keep the
+filename `Try-Demo.cmd`, not `.txt`.
+
+First use needs internet access. The launcher prepares a managed Python runtime,
+a fixed repository snapshot and a validated console environment. It also prepares
+and verifies local copies of all four required public datasets: **Wine, Digits,
+Breast Cancer and Diabetes**, bundled in the scikit-learn package. The console and
+separate worker then start; open [the demo](http://127.0.0.1:8765/) if the browser
+does not open automatically. Keep the launcher window open; **Ctrl+C** stops both
+services. If Windows asks `Terminate batch job (Y/N)?`, confirm with `Y`.
+Later launches validate and reuse the installation; the public-data
+examples can run offline after setup.
+
+The default installation is `D:/MRA-Demo/<Windows username>` when D: is available,
+otherwise `%LOCALAPPDATA%/MRA-Demo/<Windows username>`. Runtime, prepared data and
+new evidence stay under that home. OneDrive locations are refused. See the
+[Windows launcher options](docs/local-demo.md#windows-download-and-start) for a
+different home or port, setup-only mode and optional existing research inputs.
+
+### Existing checkout or Linux/macOS
+
+With Git and Python 3.11 or newer, clone outside synchronized storage and run one
+command from the checkout:
 
 ```console
 git clone https://github.com/elmontu/AI_ModeL_Check.git
 cd AI_ModeL_Check
 ```
 
-Then run **one command** from the checkout:
-
 ```powershell
-# Windows PowerShell
+# Windows PowerShell, using an existing Python
 python scripts/start_demo.py
 ```
 
@@ -35,18 +62,11 @@ python scripts/start_demo.py
 python3 scripts/start_demo.py
 ```
 
-The launcher installs the console environment on first use, validates and reuses
-its own environment on later launches, and starts the web service and separate
-worker. Open [the demo console](http://127.0.0.1:8765/). Ctrl+C stops both services.
-The environment and evidence stay in `.local/demo-venv` and `.local/demo-data`
-inside your checkout. First installation needs package access; the bundled
-public-data examples then run offline.
-
-To also use the existing public research samples on D:, start with:
-
-```powershell
-python scripts/start_demo.py --research-data-root D:/model_audit_data
-```
+This source-checkout route keeps its environment and evidence in
+`.local/demo-venv` and `.local/demo-data`. To use the existing optional public
+research samples on D:, add `--research-data-root D:/model_audit_data`. The
+standalone Windows launcher accepts the same existing sources through
+`MRA_DEMO_RESEARCH_DATA_ROOT`; it does not download the large research collection.
 
 **Dataset overview** is the main console view. It lists each known dataset's
 source, task, row/feature counts, training history and latest model verdict.

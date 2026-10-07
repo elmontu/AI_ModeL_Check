@@ -1,8 +1,9 @@
 # GitHub demo on your computer
 
 This walkthrough trains a small public-data model, exports it, inspects red-team
-findings and records an educational government audit. Clone the GitHub repository
-and start its local web console with one command.
+findings and records an educational government audit. On Windows, download and
+extract the launcher ZIP, then double-click its script. An existing source checkout remains available for
+advanced use and Linux/macOS.
 
 Use the bundled or configured public research data only. This walkthrough uses
 public data and does not qualify private agency data, authorize model release or
@@ -11,7 +12,66 @@ licence has been selected; repository visibility and this walkthrough do not
 grant general permission to reuse or redistribute the software. See
 [the repository licensing notice](../README.md#support-and-licensing).
 
+## Windows: download and start
+
+1. [Download Try-Demo.zip](https://github.com/elmontu/AI_ModeL_Check/raw/refs/heads/main/demo/Try-Demo.zip)
+   on your Windows x64 computer. Use **Extract All** to unpack the ZIP.
+2. Double-click `Try-Demo.cmd` in the extracted folder. Git, preinstalled Python and an administrator
+   installation are not required. First use needs internet access for the managed
+   runtime, repository snapshot and console packages.
+3. Wait for setup and dataset checks to finish. The launcher starts the web
+   service and separate worker, then opens [the console](http://127.0.0.1:8765/).
+   Keep its window open while using the demo. Press **Ctrl+C** to stop both services.
+   If Windows asks `Terminate batch job (Y/N)?`, confirm with `Y`.
+
+You can alternatively [download the plain launcher](https://github.com/elmontu/AI_ModeL_Check/raw/refs/heads/main/Try-Demo.cmd).
+If the browser displays its contents, choose **Save as** and retain the filename
+`Try-Demo.cmd` rather than `.txt`.
+
+The standalone launcher currently uses the official portable CPython NuGet
+package **3.13.16** and the immutable application source snapshot **`76d5efe`**.
+It validates installed packages against the application's dependency requirements;
+this is not a claim that every dependency is frozen by a complete lockfile.
+
+The **four required public datasets** arrive inside the scikit-learn **1.6.1**
+wheel: Wine, Digits, Wisconsin Diagnostic Breast Cancer and Diabetes. Setup
+validates them and exports local copies under the installation home. There is no
+manual dataset download or preparation step. The public-data examples run offline
+after successful setup; optional language models and large historical research
+collections are separate inputs.
+
+The default home is `D:/MRA-Demo/<Windows username>` when D: is available. Otherwise
+it uses `%LOCALAPPDATA%/MRA-Demo/<Windows username>`. The managed runtime,
+application, prepared datasets and console evidence remain under that home.
+OneDrive locations are refused. Reopening the launcher validates and reuses its
+installation; use the same home to retain the same records.
+
+Set these environment variables before launching only when you need an override:
+
+| Variable | Purpose |
+| --- | --- |
+| `MRA_DEMO_HOME` | Absolute installation home outside OneDrive |
+| `MRA_DEMO_PORT` | Local console port; default 8765 |
+| `MRA_DEMO_SETUP_ONLY=1` | Prepare and validate setup/data without starting services |
+| `MRA_DEMO_NO_BROWSER=1` | Start services without automatically opening a browser |
+| `MRA_DEMO_RESEARCH_DATA_ROOT` | Existing prepared public research root; optional |
+
+For example, from PowerShell in the folder containing the extracted launcher:
+
+```powershell
+$env:MRA_DEMO_HOME = 'D:/MRA-Demo/MyDemo'
+$env:MRA_DEMO_PORT = '8766'
+& .\Try-Demo.cmd
+```
+
+Open the selected local port if browser opening is disabled. The research option
+uses already existing ACS/BTS/HMDA/TLC prepared matrices; it does not fetch raw
+corpora, replace missing sources or qualify private agency data. See
+[existing research inputs](#use-existing-public-research-data-on-d).
+
 ## Clone and start
+
+This is the advanced existing-checkout route and the Linux/macOS setup.
 
 Use Python 3.11 or newer and Git. Choose a directory outside OneDrive or another
 synchronized cloud-storage folder if you want evidence to stay on your computer:
@@ -234,16 +294,25 @@ privacy budget; repeated releases need composition. See the
 
 The default launcher needs no external dataset directory. To enable the four
 already prepared public research profiles on this computer, stop the console and
-restart it with an explicit data root:
+restart it with an explicit data root. For the standalone Windows launcher,
+run this from the folder containing the downloaded file:
+
+```powershell
+$env:MRA_DEMO_RESEARCH_DATA_ROOT = 'D:/model_audit_data'
+& .\Try-Demo.cmd
+```
+
+For an existing source checkout:
 
 ```powershell
 python scripts/start_demo.py --research-data-root D:/model_audit_data
 ```
 
 On Linux/macOS use `python3` and the existing absolute local source root. This
-option configures read-only research inputs; `.local/demo-data` still stores new
-cases and results separately. To restart the same configured session, repeat the
-option. It does not relocate, overwrite or download source data.
+option configures read-only research inputs. New cases and results stay separately
+under the standalone installation home, or `.local/demo-data` for the checkout
+route. To restart the same configured session, retain the same environment setting
+or repeat the checkout option. It does not relocate, overwrite or download source data.
 
 In **Dataset overview**, open a research profile below and start training from
 its details. Its training action and wizard choice become enabled when the root
@@ -291,6 +360,10 @@ or safe result.
 
 ## Launcher options and retained evidence
 
+The standalone Windows environment variables are listed in
+[Windows setup](#windows-download-and-start). The commands below apply to an
+existing source checkout.
+
 Use `python scripts/start_demo.py --help` to see the available options. On
 Linux/macOS, use `python3` instead. For example:
 
@@ -311,10 +384,26 @@ four fixed prepared public research profiles described above. Follow the
 [setup guide](pipeline-quickstart.md) for their prerequisites.
 
 Press Ctrl+C in the launcher terminal to stop the web service and worker.
-Evidence stays in the selected data directory. Restart with the same command and
-`--data` value to retain access to earlier cases and runs. Use the download
-buttons to copy the evidence you want to share; do not publish confidential
+If Windows asks `Terminate batch job (Y/N)?`, confirm with `Y`.
+Evidence stays in the selected data directory. For the standalone Windows route,
+reopen `Try-Demo.cmd` with the same installation home. For a source checkout,
+restart with the same command and `--data` value to retain earlier cases and runs.
+Use the download buttons to copy the evidence you want to share; do not publish confidential
 inputs or signing material to GitHub.
+
+## Maintainer packaging
+
+From a source checkout, refresh the embedded dataset helper and its hash, then
+build the reproducible ZIP containing only `Try-Demo.cmd`:
+
+```console
+python scripts/build_demo_launcher.py
+python scripts/build_demo_launcher.py --check
+```
+
+Use `python3` on Linux/macOS. The check validates both the launcher and ZIP without
+writing them, keeping the embedded helper and distribution in sync. It does not
+change the launcher's immutable application source snapshot.
 
 ## Scope and troubleshooting
 

@@ -12,3 +12,7 @@
 /deploy/** -text
 /tests/** -text
 /docs/** -text
+
+# Preserve the Windows single-file launcher and its reproducible download bytes.
+/Try-Demo.cmd -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+/demo/Try-Demo.zip -text
