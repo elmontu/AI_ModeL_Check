@@ -29,7 +29,7 @@ If the browser displays its contents, choose **Save as** and retain the filename
 `Try-Demo.cmd` rather than `.txt`.
 
 The standalone launcher currently uses the official portable CPython NuGet
-package **3.13.16** and the immutable application source snapshot **`76d5efe`**.
+package **3.13.16** and the immutable application source snapshot **`76a6a02`**.
 It validates installed packages against the application's dependency requirements;
 this is not a claim that every dependency is frozen by a complete lockfile.
 
@@ -43,8 +43,11 @@ collections are separate inputs.
 The default home is `D:/MRA-Demo/<Windows username>` when D: is available. Otherwise
 it uses `%LOCALAPPDATA%/MRA-Demo/<Windows username>`. The managed runtime,
 application, prepared datasets and console evidence remain under that home.
-OneDrive locations are refused. Reopening the launcher validates and reuses its
-installation; use the same home to retain the same records.
+OneDrive locations are refused. Reopening the same launcher version validates
+and reuses its installation and records. Each source version uses a separate
+`demo-<revision>/console-data` folder. A new version starts with its own empty
+console; earlier records stay in their original folder. Retain the earlier
+launcher if you want to reopen that version and its records.
 
 Set these environment variables before launching only when you need an override:
 
@@ -174,13 +177,13 @@ respective evidence and deployment obligations.
 
 ## Start from Dataset overview
 
-**Dataset overview** is the main navigation entry. In the current source
-checkout, **Graph** is the default view: dataset → each saved training run or
+**Dataset overview** is the main navigation entry. **Graph** is the default view:
+dataset → each saved training run or
 attempt → its recorded training assessment. All runs remain separate by job ID,
 so several models trained on one dataset remain visible. An unfinished attempt
 does not mean a trained model exists. Dataset nodes have no verdict. Result
 nodes show the original training assessment, not a later assessment of its case.
-The standalone Windows snapshot `76d5efe` predates this graph.
+The downloadable Windows launcher includes this graph.
 
 Choose **Cards** for the catalog view. Both views share the **Source** filter:
 **Local research** or **Bundled examples**. In Graph, **Find a dataset or model**

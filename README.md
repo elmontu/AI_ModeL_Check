@@ -33,8 +33,10 @@ Breast Cancer and Diabetes**, bundled in the scikit-learn package. The console a
 separate worker then start; open [the demo](http://127.0.0.1:8765/) if the browser
 does not open automatically. Keep the launcher window open; **Ctrl+C** stops both
 services. If Windows asks `Terminate batch job (Y/N)?`, confirm with `Y`.
-Later launches validate and reuse the installation; the public-data
-examples can run offline after setup.
+Later launches of the same version validate and reuse the installation; the
+public-data examples can run offline after setup. A newer source version uses
+a separate console-data folder and preserves previous records in their original
+folder.
 
 The default installation is `D:/MRA-Demo/<Windows username>` when D: is available,
 otherwise `%LOCALAPPDATA%/MRA-Demo/<Windows username>`. Runtime, prepared data and
@@ -68,8 +70,8 @@ research samples on D:, add `--research-data-root D:/model_audit_data`. The
 standalone Windows launcher accepts the same existing sources through
 `MRA_DEMO_RESEARCH_DATA_ROOT`; it does not download the large research collection.
 
-**Dataset overview** is the main console view. In the current source checkout,
-its default **Graph** connects each dataset to every saved training run or attempt
+**Dataset overview** is the main console view. Its default **Graph** connects
+each dataset to every saved training run or attempt
 and that run's recorded training assessment. Multiple models stay separate by
 job ID; unfinished attempts do not imply a trained model exists. Dataset nodes
 have no verdict, and result nodes show the original training assessment rather
@@ -84,8 +86,8 @@ open its dataset or run details. A selected run offers **Inspect model run**,
 Starting training from dataset details preselects the dataset.
 **Model cases** and **Run history** remain available, including manually created
 cases. This read-only graph does not verify current source bytes or authorize a
-release; a model verdict does not clear its dataset. The standalone Windows
-snapshot `76d5efe` predates this graph.
+release; a model verdict does not clear its dataset. The downloadable Windows
+launcher includes this graph.
 
 Open **Red-team tools** in the navigation or **Red-team results** for a selected
 graph run or dataset card. Select a dataset and recorded training run to see named tools, execution
