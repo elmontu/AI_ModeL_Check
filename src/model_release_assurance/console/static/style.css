@@ -22,3 +22,61 @@
 @media(max-width:600px){#pipeline-flow{padding:17px}.pipeline-selector{display:block}.pipeline-selector button{margin-top:12px}.pipeline-map,.running-guide .pipeline-map{grid-template-columns:1fr}.pipeline-map .pipeline-wide,.running-guide .pipeline-map>li:last-child{grid-column:auto}.pipeline-map>li::after,.running-guide .pipeline-map>li:nth-child(odd)::after{display:none}.pipeline-evidence-tracks{grid-template-columns:1fr}.pipeline-evidence-track+div{border-left:0;border-top:1px solid var(--line);padding:12px 0 0}.pipeline-map p{font-size:12px}}
 
 .pipeline-route{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:18px 0 6px}.pipeline-route a{font-size:11px;color:var(--teal);font-weight:550;text-decoration:none;padding:7px 9px;background:#edf3e9;border:1px solid #dae5d6;border-radius:5px}.pipeline-route a:hover,.pipeline-route a:focus-visible{text-decoration:underline;background:#e3eddc}.pipeline-route span{color:#7e9587;font-size:14px}.pipeline-route .pipeline-route-external{background:#faf6ed;border-style:dashed;color:#775f3e}.pipeline-map>li{scroll-margin-top:24px}
+
+/* Dataset → trained-model relationships retain their SVG text size while the viewport scrolls. */
+.dataset-view-switch{display:inline-flex;align-items:center;gap:3px;padding:3px;border:1px solid var(--line);border-radius:7px;background:#edf2e9;flex-shrink:0}
+.dataset-view-switch button{display:inline-flex;align-items:center;justify-content:center;min-height:33px;padding:7px 13px;border:1px solid transparent;border-radius:5px;background:transparent;color:#5d7166;font-size:11px;font-weight:600;line-height:1.5;white-space:nowrap}
+.dataset-view-switch button:hover{background:#f8faf5;color:var(--teal)}
+.dataset-view-switch button[aria-pressed="true"]{background:#fff;color:var(--teal);border-color:#d0ded3;box-shadow:0 1px 3px #173c3410}
+.dataset-graph-toolbar{display:flex;align-items:flex-end;flex-wrap:wrap;gap:14px;margin:18px 0 12px;min-width:0}
+.dataset-graph-toolbar>div:not(.graph-control){flex:1 1 180px;min-width:180px}
+.dataset-graph-toolbar>div:first-child:not(.graph-control){flex:2 1 260px}
+.dataset-graph-toolbar .graph-control{display:flex;flex-direction:row;align-items:center;gap:6px;flex:0 0 auto;min-width:0}
+.dataset-graph-toolbar .graph-control button{display:inline-flex;align-items:center;justify-content:center;gap:0;width:38px;min-width:38px;min-height:37px;height:37px;padding:8px 0;flex:0 0 38px}
+.dataset-graph-toolbar .graph-control #dataset-graph-reset{width:92px;flex-basis:92px;padding:8px 10px}
+.dataset-graph-toolbar .graph-control span{width:42px;flex:0 0 42px;text-align:center;color:#5d7264;font-size:11px}
+.dataset-graph-toolbar label{margin:0;font-size:10px;font-weight:600;color:#576d60}
+.dataset-graph-toolbar input,.dataset-graph-toolbar select{min-height:37px;padding:8px 10px;font-size:11px;width:100%;min-width:0;background:#fff}
+.dataset-graph-toolbar>button{min-height:37px;align-self:flex-end}
+.dataset-graph-viewport{max-height:680px;max-width:100%;min-width:0;overflow:auto;overscroll-behavior:contain;scrollbar-gutter:stable;border:1px solid var(--line);border-radius:8px;background-color:#fbfcf9;background-image:linear-gradient(#e8ede680 1px,transparent 1px),linear-gradient(90deg,#e8ede680 1px,transparent 1px);background-size:24px 24px;box-shadow:inset 0 1px 4px #1c3a2c05}
+.dataset-graph-viewport:focus-visible{outline:3px solid #5aba9e;outline-offset:3px}
+.dataset-model-graph{display:block;width:100%;min-width:900px;height:auto;max-width:none;overflow:visible;font-family:"Segoe UI",Arial,sans-serif}
+.dataset-graph-column-labels,.dataset-graph-column-labels text{font-size:10px;letter-spacing:1.2px;font-weight:600;fill:#627c6c;color:#627c6c}
+.dataset-graph-edge{fill:none;stroke:#b7c8c0;stroke-width:1.5;vector-effect:non-scaling-stroke;pointer-events:none}
+.dataset-graph-edge path{fill:none;stroke:inherit;stroke-width:inherit;vector-effect:non-scaling-stroke}
+.dataset-model-graph marker path{fill:#91a99d;stroke:none}
+.dataset-graph-edge.is-highlighted,.dataset-graph-edge.is-highlighted path{stroke:var(--teal);stroke-width:2.5}
+.dataset-graph-node{--graph-fill:#fff;--graph-stroke:#cedbd3;--graph-status:#536e5d;cursor:pointer;outline:none}
+.dataset-graph-node rect{fill:var(--graph-fill);stroke:var(--graph-stroke);stroke-width:1.5;vector-effect:non-scaling-stroke;rx:8px;ry:8px}
+.dataset-graph-node text{pointer-events:none;fill:var(--ink)}
+.dataset-graph-node .graph-node-kicker{font-size:10px;letter-spacing:.7px;fill:#6b8073;font-weight:500}
+.dataset-graph-node .graph-node-title{font-size:13px;font-weight:600;letter-spacing:-.15px}
+.dataset-graph-node .graph-node-meta{font-size:11px;fill:#66796d}
+.dataset-graph-node .graph-node-status{font-size:11px;font-weight:600;fill:var(--graph-status)}
+.dataset-graph-dataset{--graph-fill:#eff5e9;--graph-stroke:#bfd3b6;--graph-status:#4d7248}
+.dataset-graph-model{--graph-fill:#fff;--graph-stroke:#c9dcd4;--graph-status:#3f7662}
+.dataset-graph-result{--graph-fill:#f8faf6;--graph-stroke:#d2dcd2}
+.dataset-graph-clear{--graph-fill:#eaf4ec;--graph-stroke:#9fbfa4;--graph-status:#245a38}
+.dataset-graph-inconclusive{--graph-fill:#fcf6e7;--graph-stroke:#d6c18d;--graph-status:#88651b}
+.dataset-graph-block,.dataset-graph-failed{--graph-fill:#fbefeb;--graph-stroke:#d5aaa0;--graph-status:#943e2e}
+.dataset-graph-running{--graph-fill:#edf4f8;--graph-stroke:#a8c1d1;--graph-status:#3c6c87}
+.dataset-graph-queued{--graph-fill:#f6f3e8;--graph-stroke:#d3c9a8;--graph-status:#7a6730}
+.dataset-graph-empty{color:var(--muted);font-size:12px;line-height:1.8;padding:26px 20px;margin:0}
+.dataset-graph-node.dataset-graph-empty{--graph-fill:#f8faf6;--graph-stroke:#d6dfd3;--graph-status:#718373;cursor:default}
+.dataset-graph-node.dataset-graph-empty rect{stroke-dasharray:4 3}
+.dataset-graph-node.dataset-graph-empty[role="button"]:not([aria-disabled="true"]){cursor:pointer}
+.dataset-graph-node:hover rect,.dataset-graph-node.is-highlighted rect{stroke:var(--teal);stroke-width:2.5}
+.dataset-graph-node:focus-visible rect{stroke:#07594d;stroke-width:3.5}
+.dataset-graph-node:focus-visible .graph-node-title{fill:#07594d}
+.dataset-graph-node[aria-disabled="true"]{cursor:default}
+.dataset-graph-legend{display:flex;align-items:center;flex-wrap:wrap;gap:9px 18px;padding:12px 2px 4px;color:#5d7264;font-size:10px;line-height:1.6}
+.dataset-graph-legend>span{display:inline-flex;align-items:center;gap:6px}
+.graph-key{display:inline-block;flex-shrink:0;width:10px;height:10px;border:1px solid #aebfb4;border-radius:3px;background:#eef3e9;vertical-align:middle}
+.graph-key.dataset-graph-clear,.graph-key.clear{background:#d9ebdc;border-color:#8dab94}
+.graph-key.dataset-graph-inconclusive,.graph-key.inconclusive{background:#f6e9c8;border-color:#c6ae6a}
+.graph-key.dataset-graph-block,.graph-key.dataset-graph-failed,.graph-key.block,.graph-key.failed{background:#f0d6ce;border-color:#c88d7e}
+.graph-key.dataset-graph-running,.graph-key.running{background:#dcebf4;border-color:#8eafc3}
+.graph-key.dataset-graph-empty,.graph-key.empty{padding:0;background:#f4f6f1;border-style:dashed;border-color:#aebfaf}
+.dataset-graph-caption{font-size:11px;line-height:1.8;color:var(--muted);margin:10px 0 20px;max-width:850px}
+@media(max-width:700px){.dataset-view-switch{margin-top:8px}.dataset-view-switch button{padding:7px 11px}.dataset-graph-toolbar{gap:12px;margin-top:15px}.dataset-graph-toolbar>div:not(.graph-control),.dataset-graph-toolbar>div:first-child:not(.graph-control){flex:1 1 100%;min-width:0}.dataset-graph-toolbar .graph-control{flex:0 0 auto;flex-direction:row}.dataset-graph-toolbar>button{width:100%;justify-content:center}.dataset-graph-viewport{max-height:580px;border-radius:6px}.dataset-graph-legend{gap:8px 14px}.dataset-graph-caption{font-size:11px}.dataset-model-graph{min-width:900px}}
+@media(forced-colors:active){.dataset-graph-node rect{fill:Canvas;stroke:CanvasText}.dataset-graph-node text,.dataset-graph-column-labels text{fill:CanvasText}.dataset-graph-node:hover rect,.dataset-graph-node:focus-visible rect,.dataset-graph-node.is-highlighted rect{stroke:Highlight}.dataset-graph-edge,.dataset-graph-edge path{stroke:CanvasText}.dataset-graph-edge.is-highlighted,.dataset-graph-edge.is-highlighted path{stroke:Highlight}.graph-key{border-color:CanvasText}.dataset-view-switch button[aria-pressed="true"]{border-color:Highlight}}

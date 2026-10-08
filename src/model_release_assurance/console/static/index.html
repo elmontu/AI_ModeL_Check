@@ -31,9 +31,24 @@
   <section class="metrics" aria-label="Workspace totals"><div><span>Datasets</span><strong id="count-datasets">0</strong><small>Bundled and local research profiles</small></div><div><span>Model cases</span><strong id="count-cases">0</strong><small>Evidence for individual candidates</small></div><div><span>Completed runs</span><strong id="count-completed">0</strong><small>Inspect each model result</small></div><div><span>Queued & running</span><strong id="count-active">0</strong><small>Processed by a separate worker</small></div></section>
 
   <section id="datasets" aria-labelledby="datasets-title">
-    <div class="section-title"><h2 id="datasets-title">Dataset overview <span class="count" id="dataset-badge">0</span></h2><div class="dataset-filter"><label for="dataset-filter">Show</label><select id="dataset-filter"><option value="all">All datasets</option><option value="research">Local research</option><option value="bundled">Bundled examples</option></select></div></div>
-    <p class="dataset-intro">Choose a dataset to see its source, training runs and related model cases. Assessment results belong to individual model runs; they do not clear a dataset.</p>
-    <div class="dataset-grid" id="dataset-cards" aria-live="polite"></div>
+    <div class="section-title"><h2 id="datasets-title">Dataset overview <span class="count" id="dataset-badge">0</span></h2><div class="dataset-view-switch" role="group" aria-label="Dataset overview display"><button id="dataset-view-graph" type="button" aria-pressed="true">Graph</button><button id="dataset-view-cards" type="button" aria-pressed="false">Cards</button></div></div>
+    <p class="dataset-intro">Follow each dataset to its trained models and recorded assessments. Click a node to inspect saved details. Assessment results belong to individual model runs; they do not clear a dataset.</p>
+    <div class="dataset-filter"><label for="dataset-filter">Source</label><select id="dataset-filter"><option value="all">All datasets</option><option value="research">Local research</option><option value="bundled">Bundled examples</option></select></div>
+    <div id="dataset-graph-panel">
+      <div class="dataset-graph-toolbar">
+        <div><label for="dataset-graph-search">Find a dataset or model</label><input type="search" id="dataset-graph-search" placeholder="Name, model family or run ID" autocomplete="off"></div>
+        <div><label for="dataset-graph-state">Training runs</label><select id="dataset-graph-state"><option value="all">All training runs</option><option value="completed">Completed models</option><option value="active">Queued or running</option><option value="failed">Failed or cancelled</option></select></div>
+        <div class="graph-control" role="group" aria-label="Graph zoom"><button id="dataset-graph-zoom-out" type="button" class="secondary" aria-label="Zoom graph out">−</button><span id="dataset-graph-zoom" aria-live="polite">100%</span><button id="dataset-graph-zoom-in" type="button" class="secondary" aria-label="Zoom graph in">+</button><button id="dataset-graph-reset" type="button" class="secondary">Reset view</button></div>
+      </div>
+      <div class="dataset-graph-legend" aria-label="Recorded assessment legend"><span><i class="graph-key dataset-graph-dataset" aria-hidden="true"></i>Dataset</span><span><i class="graph-key dataset-graph-model" aria-hidden="true"></i>Model / attempt</span><span><i class="graph-key dataset-graph-clear" aria-hidden="true"></i>Clear within scope</span><span><i class="graph-key dataset-graph-inconclusive" aria-hidden="true"></i>Inconclusive</span><span><i class="graph-key dataset-graph-block" aria-hidden="true"></i>Block</span><span><i class="graph-key dataset-graph-empty" aria-hidden="true"></i>No verdict</span></div>
+      <p class="dataset-graph-caption" id="dataset-graph-caption" aria-live="polite">Loading saved dataset and model relationships…</p>
+      <div id="dataset-graph-viewport" class="dataset-graph-viewport" role="region" aria-label="Interactive dataset and model graph" tabindex="0"></div>
+      <p id="dataset-graph-empty" class="dataset-graph-empty" hidden></p>
+      <div id="dataset-graph-selection" class="dataset-graph-selection"></div>
+      <p class="operator-note">Scroll to see more branches; use Tab and Enter to open a node. Colours show the original training assessment, not a new evidence verification or agency approval.</p>
+    </div>
+    <div class="dataset-grid" id="dataset-cards" hidden></div>
+
     <p id="dataset-empty" class="operator-note">Loading dataset records…</p>
     <p id="dataset-unlinked" class="operator-note" hidden></p>
   </section>

@@ -140,6 +140,7 @@ function renderDatasets(overview){
   const filter=$('dataset-filter').value;
   const shown=datasets.filter(d=>filter==='all'||(filter==='research')===isResearchDataset(d))
     .slice().sort((a,b)=>Number(isResearchDataset(b))-Number(isResearchDataset(a)));
+  renderDatasetGraph(shown);
   shown.forEach(dataset=>{
     const card=el('article',undefined,'dataset-card'),latest=latestDatasetRun(dataset),research=isResearchDataset(dataset);
     card.append(pill(research?'local research':'bundled example'),el('h3',dataset.name));
@@ -164,6 +165,182 @@ function renderDatasets(overview){
   $('dataset-unlinked').hidden=!overview.unlinked_case_count&&!overview.unclassified_training_run_count;
   $('dataset-unlinked').textContent=overview.unlinked_case_count+' model cases have no recorded dataset link; '+overview.unclassified_training_run_count+' training runs have no recognised dataset selection. They remain in Model cases and Run history.';
 }
+
+
+// Dataset graph uses only the existing retained dataset projection.
+// It does not create jobs, replay evidence or infer links from display names.
+let datasetGraphView = 'graph', datasetGraphZoom = 1, datasetGraphSelection = null, datasetGraphHasLayout = false;
+const graphStates = new Set(['completed','queued','running','failed','cancelled']);
+const graphVerdicts = new Set(['clear','block','inconclusive']);
+
+function buildDatasetGraph(visibleDatasets, query='', stateFilter='all'){
+  const search=String(query).trim().toLocaleLowerCase(),groups=[];
+  let runCount=0,modelCount=0;
+  for(const dataset of visibleDatasets){
+    const datasetMatch=!search||[dataset.name,dataset.id].some(value=>String(value||'').toLocaleLowerCase().includes(search));
+    const linkedCases=new Set((dataset.cases||[]).map(model=>model.case_id));
+    const runs=[];
+    for(const run of dataset.training_runs||[]){
+      if(!/^[a-f0-9]{32}$/.test(run.job_id||''))continue;
+      const state=graphStates.has(run.state)?run.state:'unknown';
+      if(stateFilter!=='all'&&!(stateFilter==='active'?['queued','running'].includes(state):stateFilter==='failed'?['failed','cancelled'].includes(state):state===stateFilter))continue;
+      if(!datasetMatch&&![presetNames[run.preset]||run.preset,run.job_id].some(value=>String(value||'').toLocaleLowerCase().includes(search)))continue;
+      const verdict=state==='completed'&&graphVerdicts.has(run.verdict)?run.verdict:null;
+      const caseId=state==='completed'&&/^[a-f0-9]{32}$/.test(run.case_id||'')&&linkedCases.has(run.case_id)?run.case_id:null;
+      runs.push({run,state,verdict,caseId,isModel:state==='completed'});
+    }
+    if(!runs.length&&(stateFilter!=='all'||!datasetMatch))continue;
+    groups.push({dataset,runs});
+    runCount+=runs.length;modelCount+=runs.filter(model=>model.isModel).length;
+  }
+  // Put saved model branches first; keep every matching source and attempt.
+  groups.sort((a,b)=>b.runs.length-a.runs.length);
+  return {groups,datasetCount:groups.length,runCount,modelCount};
+}
+
+function graphSvg(tag,attributes={},text){
+  const node=document.createElementNS('http://www.w3.org/2000/svg',tag);
+  Object.entries(attributes).forEach(([name,value])=>node.setAttribute(name,String(value)));
+  if(text!==undefined)node.textContent=String(text);
+  return node;
+}
+
+function graphLabel(text,limit=27){
+  const words=String(text).split(/\s+/),lines=[];
+  let line='';
+  for(const word of words){
+    if(line&&(line+' '+word).length>limit){lines.push(line);line=word;}else line+=(line?' ':'')+word;
+  }
+  if(line)lines.push(line);
+  if(lines.length>2)return [lines[0],lines.slice(1).join(' ').slice(0,limit-1)+'…'];
+  return lines;
+}
+
+function graphNode(svg,{id,x,y,width,type,status,kicker,title,meta,label,datasetId,jobId,action}){
+  const node=graphSvg('g',{id,class:'dataset-graph-node dataset-graph-'+type+' dataset-graph-'+status,
+    transform:'translate('+x+' '+y+')','data-dataset-id':datasetId});
+  if(jobId)node.setAttribute('data-job-id',jobId);
+  node.append(graphSvg('title',{},label),graphSvg('rect',{width,height:94,rx:10}),
+    graphSvg('text',{x:15,y:19,class:'graph-node-kicker'},kicker));
+  const lines=graphLabel(title,width===210?23:27);
+  lines.forEach((line,index)=>node.append(graphSvg('text',{x:15,y:40+index*16,class:'graph-node-title'},line)));
+  node.append(graphSvg('text',{x:15,y:82,class:'graph-node-meta'},meta));
+  if(action){
+    node.setAttribute('role','button');node.setAttribute('tabindex','0');node.setAttribute('aria-label',label);
+    node.onclick=action;
+    node.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();action();}});
+    const highlight=()=>highlightDatasetGraph(datasetId,jobId);
+    node.addEventListener('pointerenter',highlight);node.addEventListener('focus',highlight);
+    node.addEventListener('pointerleave',()=>highlightDatasetGraph(datasetGraphSelection?.datasetId,datasetGraphSelection?.jobId));
+  }
+  svg.append(node);return node;
+}
+
+function highlightDatasetGraph(datasetId,jobId){
+  const svg=$('dataset-graph-svg');if(!svg)return;
+  for(const node of svg.querySelectorAll('[data-dataset-id]')){
+    const match=node.getAttribute('data-dataset-id')===datasetId&&(!jobId||!node.getAttribute('data-job-id')||node.getAttribute('data-job-id')===jobId);
+    node.classList.toggle('is-highlighted',match);
+  }
+}
+
+function renderGraphSelection(){
+  const box=$('dataset-graph-selection');box.replaceChildren();
+  if(!datasetGraphSelection){box.append(el('p','Click a dataset, model or assessment node to open its saved details. Tab and Enter work too.','operator-note'));return;}
+  const dataset=datasets.find(item=>item.id===datasetGraphSelection.datasetId);
+  const run=dataset?.training_runs.find(item=>item.job_id===datasetGraphSelection.jobId);
+  if(!dataset||!run){datasetGraphSelection=null;renderGraphSelection();return;}
+  box.append(el('p',(presetNames[run.preset]||run.preset)+' · '+dataset.name+' · Run '+run.job_id.slice(0,8),'operator-note'));
+  const actions=el('div',undefined,'detail-actions');
+  const button=(label,action)=>{const node=el('button',label,'secondary');node.type='button';node.onclick=action;actions.append(node);};
+  button('Inspect model run',()=>showJob(run.job_id));
+  button('Red-team results',()=>openRedTeam(dataset.id,run.job_id));
+  if(run.state==='completed'&&/^[a-f0-9]{32}$/.test(run.case_id||'')&&dataset.cases.some(model=>model.case_id===run.case_id))button('Review model case',()=>showCase(run.case_id));
+  box.append(actions);
+}
+
+function applyDatasetGraphZoom(){
+  const svg=$('dataset-graph-svg');if(!svg)return;
+  const height=Number(svg.getAttribute('data-layout-height'));
+  svg.style.width=(860*datasetGraphZoom)+'px';svg.style.minWidth='0';
+  svg.style.height=(height*datasetGraphZoom)+'px';
+  $('dataset-graph-zoom').textContent=Math.round(datasetGraphZoom*100)+'%';
+  $('dataset-graph-zoom-out').disabled=datasetGraphZoom<=.8;
+  $('dataset-graph-zoom-in').disabled=datasetGraphZoom>=1.5;
+}
+
+function renderDatasetGraph(shown){
+  const model=buildDatasetGraph(shown,$('dataset-graph-search').value,$('dataset-graph-state').value);
+  const host=$('dataset-graph-viewport'),focused=document.activeElement?.id;
+  host.replaceChildren();
+  if(datasetGraphSelection&&!model.groups.some(group=>group.dataset.id===datasetGraphSelection.datasetId&&group.runs.some(entry=>entry.run.job_id===datasetGraphSelection.jobId)))datasetGraphSelection=null;
+  renderGraphSelection();
+  $('dataset-graph-empty').hidden=model.groups.length>0;
+  $('dataset-graph-caption').textContent=model.datasetCount+' datasets · '+model.modelCount+' completed model runs · '+(model.runCount-model.modelCount)+' other training attempts. Lines follow saved dataset selections; colours describe each run’s recorded assessment.';
+  if(!model.groups.length){$('dataset-graph-empty').textContent='No dataset or model matches these filters. Clear the search or choose All training runs.';return;}
+  const height=78+model.groups.reduce((total,group)=>total+Math.max(1,group.runs.length)*126+24,0);
+  const svg=graphSvg('svg',{id:'dataset-graph-svg',class:'dataset-model-graph',viewBox:'0 0 860 '+height,
+    width:860,height,'data-layout-height':height,role:'group','aria-label':'Datasets connected to saved training runs and their recorded training assessments'});
+  svg.append(graphSvg('title',{},'Dataset and model graph'),graphSvg('desc',{},'Each branch connects one source dataset to one recorded training run and its original assessment. A model verdict does not clear its dataset.'));
+  const defs=graphSvg('defs'),marker=graphSvg('marker',{id:'dataset-graph-arrow',viewBox:'0 0 10 10',refX:9,refY:5,markerWidth:5,markerHeight:5,orient:'auto-start-reverse'});
+  marker.append(graphSvg('path',{d:'M 0 0 L 10 5 L 0 10 z',fill:'#91a59c'}));defs.append(marker);svg.append(defs);
+  for(const [x,label] of [[20,'DATASET SOURCE'],[315,'MODEL / TRAINING RUN'],[625,'RECORDED ASSESSMENT']])svg.append(graphSvg('text',{x,y:27,class:'graph-node-kicker'},label));
+  const edges=graphSvg('g',{'aria-hidden':'true'});svg.append(edges);
+  let offset=56;
+  for(const group of model.groups){
+    const dataset=group.dataset,rows=Math.max(1,group.runs.length),sourceY=offset+(rows-1)*63;
+    const sourceMeta=isResearchDataset(dataset)?(dataset.configured?'Local research · configured':'Local research · not configured'):(count(dataset.source_rows)+' rows · '+count(dataset.features)+' features');
+    graphNode(svg,{id:'dataset-graph-node-source-'+dataset.id,x:20,y:sourceY,width:230,type:'dataset',status:'source',
+      kicker:'DATASET',title:dataset.name,meta:sourceMeta,label:'Open dataset '+dataset.name,datasetId:dataset.id,action:()=>showDataset(dataset.id)});
+    if(!group.runs.length){
+      const line=graphSvg('path',{d:'M 250 '+(sourceY+47)+' C 280 '+(sourceY+47)+' 280 '+(sourceY+47)+' 315 '+(sourceY+47),
+        class:'dataset-graph-edge','marker-end':'url(#dataset-graph-arrow)','data-dataset-id':dataset.id});edges.append(line);
+      graphNode(svg,{id:'dataset-graph-node-empty-'+dataset.id,x:315,y:sourceY,width:245,type:'model',status:'empty',
+        kicker:'NO SAVED TRAINING',title:'No saved training runs',meta:dataset.configured?'Open dataset to choose a model':'Source not configured for training',
+        label:'No recorded training runs for '+dataset.name,datasetId:dataset.id,action:()=>showDataset(dataset.id)});
+    }
+    group.runs.forEach((entry,index)=>{
+      const {run,state,verdict,isModel}=entry,y=offset+index*126;
+      const select=()=>{datasetGraphSelection={datasetId:dataset.id,jobId:run.job_id};renderGraphSelection();highlightDatasetGraph(dataset.id,run.job_id);return showJob(run.job_id);};
+      const bindings={'data-dataset-id':dataset.id,'data-job-id':run.job_id};
+      edges.append(graphSvg('path',{...bindings,d:'M 250 '+(sourceY+47)+' C 280 '+(sourceY+47)+' 290 '+(y+47)+' 315 '+(y+47),class:'dataset-graph-edge','marker-end':'url(#dataset-graph-arrow)'}));
+      edges.append(graphSvg('path',{...bindings,d:'M 560 '+(y+47)+' C 585 '+(y+47)+' 600 '+(y+47)+' 625 '+(y+47),class:'dataset-graph-edge','marker-end':'url(#dataset-graph-arrow)'}));
+      const title=presetNames[run.preset]||run.preset||'Training run';
+      graphNode(svg,{id:'dataset-graph-node-model-'+run.job_id,x:315,y,width:245,type:'model',status:state,
+        kicker:isModel?'TRAINED · '+run.job_id.slice(0,8):state.toUpperCase()+' ATTEMPT · '+run.job_id.slice(0,8),
+        title,meta:run.rows!==null&&run.rows!==undefined?count(run.rows)+' rows · '+count(run.features)+' features':time(run.started||run.created),
+        label:'Open '+(isModel?'model':'training attempt')+' '+title+' on '+dataset.name+', run '+run.job_id.slice(0,8)+', '+state,datasetId:dataset.id,jobId:run.job_id,action:select});
+      const resultTitle=verdict?verdict.charAt(0).toUpperCase()+verdict.slice(1):isModel?'No recorded verdict':'No assessment yet';
+      graphNode(svg,{id:'dataset-graph-node-result-'+run.job_id,x:625,y,width:210,type:'result',status:verdict||'empty',
+        kicker:verdict?'TRAINING ASSESSMENT':'ASSESSMENT',title:resultTitle,
+        meta:verdict?(run.preset==='dp-histogram'?'Model-only record membership':'Recorded scope · inspect evidence'):(isModel?'Inspect retained run details':state+' training attempt'),
+        label:'Open recorded assessment for run '+run.job_id.slice(0,8)+': '+resultTitle,datasetId:dataset.id,jobId:run.job_id,action:select});
+    });
+    offset+=rows*126+24;
+  }
+  host.append(svg);
+  if(!datasetGraphHasLayout&&host.clientWidth>0){datasetGraphZoom=Math.max(.8,Math.min(1,Math.floor((host.clientWidth-18)/860*10)/10));datasetGraphHasLayout=true;}
+  applyDatasetGraphZoom();
+  highlightDatasetGraph(datasetGraphSelection?.datasetId,datasetGraphSelection?.jobId);renderGraphSelection();
+  if(focused?.startsWith('dataset-graph-node-'))document.getElementById(focused)?.focus({preventScroll:true});
+}
+
+function setDatasetGraphView(view){
+  datasetGraphView=view==='cards'?'cards':'graph';
+  $('dataset-graph-panel').hidden=datasetGraphView!=='graph';$('dataset-cards').hidden=datasetGraphView!=='cards';
+  $('dataset-view-graph').setAttribute('aria-pressed',String(datasetGraphView==='graph'));
+  $('dataset-view-cards').setAttribute('aria-pressed',String(datasetGraphView==='cards'));
+}
+$('dataset-view-graph').onclick=()=>setDatasetGraphView('graph');
+$('dataset-view-cards').onclick=()=>setDatasetGraphView('cards');
+$('dataset-graph-search').oninput=()=>renderDatasets(datasetOverview);
+$('dataset-graph-state').onchange=()=>renderDatasets(datasetOverview);
+$('dataset-graph-zoom-out').onclick=()=>{datasetGraphZoom=Math.max(.8,Math.round((datasetGraphZoom-.1)*10)/10);applyDatasetGraphZoom();};
+$('dataset-graph-zoom-in').onclick=()=>{datasetGraphZoom=Math.min(1.5,Math.round((datasetGraphZoom+.1)*10)/10);applyDatasetGraphZoom();};
+$('dataset-graph-reset').onclick=()=>{datasetGraphZoom=1;applyDatasetGraphZoom();$('dataset-graph-viewport').scrollLeft=0;$('dataset-graph-viewport').scrollTop=0;};
+setDatasetGraphView('graph');
+// End dataset graph.
+
 
 function renderDatasetDetail(dataset){
   $('dataset-title').textContent=dataset.name;

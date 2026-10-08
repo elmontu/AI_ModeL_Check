@@ -174,16 +174,30 @@ respective evidence and deployment obligations.
 
 ## Start from Dataset overview
 
-**Dataset overview** is the main navigation entry. Its eight known profiles show
-source, task, rows and features, training-run counts and the latest recorded
-model verdict. Open a dataset to inspect its training runs and derived model
-cases. Starting training from these details preselects the dataset in the wizard.
+**Dataset overview** is the main navigation entry. In the current source
+checkout, **Graph** is the default view: dataset → each saved training run or
+attempt → its recorded training assessment. All runs remain separate by job ID,
+so several models trained on one dataset remain visible. An unfinished attempt
+does not mean a trained model exists. Dataset nodes have no verdict. Result
+nodes show the original training assessment, not a later assessment of its case.
+The standalone Windows snapshot `76d5efe` predates this graph.
 
-These are catalog facts and recorded run observations. Configured research
-sources are checked when training starts; the overview does not rehash them or
-establish current availability. Any latest verdict applies to its recorded
-model and evidence, not to the dataset as a whole. A listed dataset is not
-cleared, approved or scientifically qualified.
+Choose **Cards** for the catalog view. Both views share the **Source** filter:
+**Local research** or **Bundled examples**. In Graph, **Find a dataset or model**
+searches by dataset, model family or short job ID; **Training runs** filters run
+state. Use **Zoom graph in** (+), **Zoom graph out** (−) and **Reset view**. Click
+a node, or use Tab and Enter, to open the existing dataset or run details.
+A selected run offers **Inspect model run**, **Red-team results** and, when its
+saved case exists, **Review model case**. Open a dataset to inspect its source,
+rows/features, all training runs and derived cases; **Train a model** preselects
+that dataset in the wizard.
+
+The graph reads catalog facts and retained observations; it starts no jobs and
+grants no release authorization. Configured research sources are checked when
+training starts; the overview does not rehash them or establish current
+availability. A result applies to its recorded model and evidence, not to the
+dataset as a whole. A listed dataset is not cleared, approved or scientifically
+qualified.
 
 **Model cases** is the secondary view for reviewing trained candidates and
 manually created cases. **Run history** retains execution attempts. Earlier
@@ -202,8 +216,8 @@ guide and per-run explanations retain the recorded scientific verdicts.
 
 ## Inspect Red-team tools
 
-Open **Red-team tools** in the navigation, or select **Red-team results** on a
-dataset card. Choose the dataset and a recorded training run. The workspace shows
+Open **Red-team tools** in the navigation, or select **Red-team results** for a
+graph run or dataset card. Choose the dataset and a recorded training run. The workspace shows
 named tool cards with execution states, recorded measurements, expandable raw
 details and coverage gaps. Failed and unsupported tools remain visible. Datasets
 without a recorded run have no measured results yet.

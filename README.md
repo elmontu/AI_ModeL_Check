@@ -68,15 +68,27 @@ research samples on D:, add `--research-data-root D:/model_audit_data`. The
 standalone Windows launcher accepts the same existing sources through
 `MRA_DEMO_RESEARCH_DATA_ROOT`; it does not download the large research collection.
 
-**Dataset overview** is the main console view. It lists each known dataset's
-source, task, row/feature counts, training history and latest model verdict.
-Open a dataset to see its training runs and derived model cases, then start
-training from its details. **Model cases** and **Run history** remain available;
-manually created cases can still be reviewed separately. A model verdict does
-not clear or qualify its dataset.
+**Dataset overview** is the main console view. In the current source checkout,
+its default **Graph** connects each dataset to every saved training run or attempt
+and that run's recorded training assessment. Multiple models stay separate by
+job ID; unfinished attempts do not imply a trained model exists. Dataset nodes
+have no verdict, and result nodes show the original training assessment rather
+than a later case assessment. **Cards** retains the catalog view.
 
-Open **Red-team tools** in the navigation or **Red-team results** on a dataset
-card. Select a dataset and recorded training run to see named tools, execution
+Filter either view by **Local research** or **Bundled examples** source. In Graph,
+use **Find a dataset or model** to search by dataset, model family or short job ID,
+and **Training runs** to filter run state. Use **Zoom graph in** (+),
+**Zoom graph out** (−) and **Reset view**. Click a node, or use Tab and Enter, to
+open its dataset or run details. A selected run offers **Inspect model run**,
+**Red-team results** and, when its saved case exists, **Review model case**.
+Starting training from dataset details preselects the dataset.
+**Model cases** and **Run history** remain available, including manually created
+cases. This read-only graph does not verify current source bytes or authorize a
+release; a model verdict does not clear its dataset. The standalone Windows
+snapshot `76d5efe` predates this graph.
+
+Open **Red-team tools** in the navigation or **Red-team results** for a selected
+graph run or dataset card. Select a dataset and recorded training run to see named tools, execution
 states, recorded measurements and coverage gaps. **Train and run checks** opens
 the training wizard with that dataset selected; compatible checks run
 automatically on the new model. **Running guide** opens a separate console tab
