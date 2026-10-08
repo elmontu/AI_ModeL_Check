@@ -31,7 +31,7 @@
   <section class="metrics" aria-label="Workspace totals"><div><span>Datasets</span><strong id="count-datasets">0</strong><small>Bundled and local research profiles</small></div><div><span>Model cases</span><strong id="count-cases">0</strong><small>Evidence for individual candidates</small></div><div><span>Completed runs</span><strong id="count-completed">0</strong><small>Inspect each model result</small></div><div><span>Queued & running</span><strong id="count-active">0</strong><small>Processed by a separate worker</small></div></section>
 
   <section id="datasets" aria-labelledby="datasets-title">
-    <div class="section-title"><h2 id="datasets-title">Dataset overview <span class="count" id="dataset-badge">0</span></h2><div class="dataset-view-switch" role="group" aria-label="Dataset overview display"><button id="dataset-view-graph" type="button" aria-pressed="true">Graph</button><button id="dataset-view-cards" type="button" aria-pressed="false">Cards</button></div></div>
+    <div class="section-title"><h2 id="datasets-title">Dataset overview <span class="count" id="dataset-badge">0</span></h2><div class="dataset-view-switch" role="group" aria-label="Dataset overview display"><button id="dataset-view-graph" type="button" aria-pressed="true">Graph</button><button id="dataset-view-cards" type="button" aria-pressed="false">Cards</button><button id="dataset-view-history" type="button" aria-pressed="false">Training history</button></div></div>
     <p class="dataset-intro">Follow each dataset to its trained models and recorded assessments. Click a node to inspect saved details. Assessment results belong to individual model runs; they do not clear a dataset.</p>
     <div class="dataset-filter"><label for="dataset-filter">Source</label><select id="dataset-filter"><option value="all">All datasets</option><option value="research">Local research</option><option value="bundled">Bundled examples</option></select></div>
     <div id="dataset-graph-panel">
@@ -48,6 +48,16 @@
       <p class="operator-note">Scroll to see more branches; use Tab and Enter to open a node. Colours show the original training assessment, not a new evidence verification or agency approval.</p>
     </div>
     <div class="dataset-grid" id="dataset-cards" hidden></div>
+    <div id="dataset-history-panel" hidden>
+      <p class="dataset-intro">See successive dataset runs and continued language-model training. Dates describe chronology; parent arrows require recorded checkpoint bindings.</p>
+      <div class="training-history-toolbar"><div><label for="training-history-dataset">Dataset training history</label><select id="training-history-dataset"><option value="all">All visible datasets</option></select></div><button id="training-history-refresh" class="secondary" type="button">Refresh history</button></div>
+      <p id="training-history-status" class="operator-note" aria-live="polite">Loading saved training history…</p>
+      <div id="training-history-runs" class="training-history-groups"></div>
+      <h3 id="slm-history-title">Language-model fine-tuning lineage</h3>
+      <p class="operator-note">Pretrained base → fine-tuning stage 1 → continued fine-tuning stage 2. Each stage keeps its own checkpoint, synthetic data and served-model diagnostic. Recorded hash links do not grant clearance.</p>
+      <p id="slm-history-status" class="operator-note" aria-live="polite">Open Training history to load saved language-model lineage.</p>
+      <div id="slm-history-groups"></div>
+    </div>
 
     <p id="dataset-empty" class="operator-note">Loading dataset records…</p>
     <p id="dataset-unlinked" class="operator-note" hidden></p>

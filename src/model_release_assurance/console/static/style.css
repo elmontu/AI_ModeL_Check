@@ -80,3 +80,50 @@
 .dataset-graph-caption{font-size:11px;line-height:1.8;color:var(--muted);margin:10px 0 20px;max-width:850px}
 @media(max-width:700px){.dataset-view-switch{margin-top:8px}.dataset-view-switch button{padding:7px 11px}.dataset-graph-toolbar{gap:12px;margin-top:15px}.dataset-graph-toolbar>div:not(.graph-control),.dataset-graph-toolbar>div:first-child:not(.graph-control){flex:1 1 100%;min-width:0}.dataset-graph-toolbar .graph-control{flex:0 0 auto;flex-direction:row}.dataset-graph-toolbar>button{width:100%;justify-content:center}.dataset-graph-viewport{max-height:580px;border-radius:6px}.dataset-graph-legend{gap:8px 14px}.dataset-graph-caption{font-size:11px}.dataset-model-graph{min-width:900px}}
 @media(forced-colors:active){.dataset-graph-node rect{fill:Canvas;stroke:CanvasText}.dataset-graph-node text,.dataset-graph-column-labels text{fill:CanvasText}.dataset-graph-node:hover rect,.dataset-graph-node:focus-visible rect,.dataset-graph-node.is-highlighted rect{stroke:Highlight}.dataset-graph-edge,.dataset-graph-edge path{stroke:CanvasText}.dataset-graph-edge.is-highlighted,.dataset-graph-edge.is-highlighted path{stroke:Highlight}.graph-key{border-color:CanvasText}.dataset-view-switch button[aria-pressed="true"]{border-color:Highlight}}
+
+/* Stored training history uses ordered entries and explicit model-stage relationships. */
+#dataset-history-panel{margin:18px 0 28px;min-width:0}
+.training-history-toolbar{display:flex;align-items:flex-end;flex-wrap:wrap;gap:14px;margin:0 0 12px;min-width:0}
+.training-history-toolbar>label,.training-history-toolbar>div{flex:1 1 260px;max-width:420px;min-width:180px;margin:0;color:#576d60;font-size:11px;font-weight:600}
+.training-history-toolbar label{display:block;margin:0;color:#576d60;font-size:11px;font-weight:600}
+.training-history-toolbar select{display:block;min-height:37px;margin-top:6px;padding:8px 10px;font-size:11px}
+.training-history-toolbar button{min-height:37px;align-items:center;justify-content:center;flex-shrink:0}
+#training-history-status,#slm-history-status{font-size:12px;line-height:1.75;color:var(--muted);margin:10px 0 18px;overflow-wrap:anywhere}
+.training-history-groups{display:grid;gap:20px;min-width:0}
+.training-history-group{background:#fff;border:1px solid var(--line);border-radius:8px;padding:21px;min-width:0}
+.training-history-group>h3{font-size:18px;line-height:1.4;margin:0 0 6px}
+.training-history-group>p{font-size:12px;line-height:1.75;color:var(--muted);margin:6px 0;overflow-wrap:anywhere}
+.training-history-group>.pill{margin-top:5px}
+.training-history-group>.detail-actions{margin:12px 0 0;gap:8px}
+.training-history-timeline{list-style:decimal;margin:22px 0 0;padding:0 0 0 25px;border-left:2px solid #e0e8de}
+.training-history-entry{padding:0 0 18px 4px;margin:0 0 19px;border-bottom:1px solid #edf1e8;min-width:0;overflow-wrap:anywhere}
+.training-history-entry::marker{font-size:11px;font-weight:650;color:var(--teal)}
+.training-history-entry:last-child{padding-bottom:0;margin-bottom:0;border-bottom:0}
+.training-history-entry-head{display:flex;align-items:center;flex-wrap:wrap;gap:7px 9px;min-width:0}
+.training-history-entry-head strong{font-size:13px;font-weight:600;line-height:1.6;flex:1 1 180px;min-width:0}
+.training-history-entry-head time{font-size:10px;color:#798b7c;white-space:nowrap}
+.training-history-entry-head .pill{flex-shrink:0}
+.training-history-entry>p{font-size:12px;line-height:1.75;color:var(--muted);margin:8px 0;overflow-wrap:anywhere}
+.training-history-entry .detail-actions{margin:12px 0 0;gap:8px}
+.training-history-hashes{margin:10px 0 0;font-size:11px;min-width:0;color:#586f5e}
+.training-history-hashes summary{cursor:pointer;font-size:11px;font-weight:600;color:var(--teal);padding:4px 0;line-height:1.65}
+.training-history-hashes summary:hover{text-decoration:underline}
+.training-history-hashes summary:focus-visible{outline:3px solid #5aba9e;outline-offset:3px;border-radius:3px}
+.training-history-hashes p{font:11px/1.8 Consolas,"Courier New",monospace;overflow-wrap:anywhere;white-space:normal;margin:7px 0;color:#617565}
+.training-history-hashes code{font:inherit;white-space:normal;overflow-wrap:anywhere;background:#f2f5ee}
+#slm-history-groups{display:grid;gap:20px;min-width:0;margin-bottom:20px}
+.slm-history-chain{display:flex;align-items:stretch;gap:12px;margin:18px 0 8px;min-width:0}
+.slm-history-stage{flex:1 1 0;min-width:0;padding:17px;background:#fff;border:1px solid var(--line);border-radius:7px}
+.slm-history-stage h4{font-size:14px;font-weight:600;line-height:1.5;margin:0 0 10px}
+.slm-history-stage p{font-size:12px;line-height:1.75;color:var(--muted);margin:8px 0;overflow-wrap:anywhere}
+.slm-history-stage .pill{margin:0 5px 5px 0}
+.slm-history-stage .detail-actions{margin:12px 0 0;gap:7px}
+.slm-history-stage .detail-actions button{font-size:10px;padding:8px 10px;white-space:normal;text-align:center;justify-content:center}
+.slm-history-stage .training-history-hashes p{font-size:10px;line-height:1.8}
+.slm-history-arrow{flex:0 0 28px;display:flex;align-items:center;justify-content:center;align-self:center;min-width:0;text-align:center;color:#879c8c;font-size:18px;line-height:1.5}
+.slm-history-arrow span,.slm-history-arrow a{font-size:10px;line-height:1.6;overflow-wrap:anywhere}
+.slm-history-arrow a{color:var(--teal);text-underline-offset:3px}
+.slm-history-arrow .detail-warning{font-size:10px;line-height:1.6;padding-left:6px;margin:0}
+@media(max-width:850px){.slm-history-chain{flex-direction:column;gap:10px}.slm-history-stage{flex-basis:auto}.slm-history-arrow{flex-basis:auto;min-height:22px;max-width:none;width:100%;gap:8px}.slm-history-arrow span,.slm-history-arrow a{font-size:11px}.slm-history-stage .detail-actions button{font-size:11px}}
+@media(max-width:700px){.training-history-toolbar{gap:10px}.training-history-toolbar>label,.training-history-toolbar>div{flex-basis:100%;max-width:none;min-width:0}.training-history-toolbar button{width:100%}.training-history-group{padding:17px}.training-history-group>h3{font-size:17px}.training-history-entry-head{align-items:flex-start}.training-history-entry-head strong{flex-basis:100%;font-size:13px}.training-history-timeline{padding-left:21px}.training-history-entry{padding-left:2px}.training-history-entry .detail-actions button{padding:8px 10px}.slm-history-stage{padding:15px}}
+@media(forced-colors:active){.training-history-timeline,.training-history-entry,.training-history-group,.slm-history-stage{border-color:CanvasText}.training-history-entry::marker{color:CanvasText}.training-history-hashes summary{color:LinkText}.training-history-hashes summary:focus-visible{outline-color:Highlight}}

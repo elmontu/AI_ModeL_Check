@@ -185,7 +185,8 @@ does not mean a trained model exists. Dataset nodes have no verdict. Result
 nodes show the original training assessment, not a later assessment of its case.
 The downloadable Windows launcher includes this graph.
 
-Choose **Cards** for the catalog view. Both views share the **Source** filter:
+Choose **Cards** for the catalog view, or **Training history** for the timeline
+walkthrough below. These views share the **Source** filter:
 **Local research** or **Bundled examples**. In Graph, **Find a dataset or model**
 searches by dataset, model family or short job ID; **Training runs** filters run
 state. Use **Zoom graph in** (+), **Zoom graph out** (−) and **Reset view**. Click
@@ -207,6 +208,44 @@ manually created cases. **Run history** retains execution attempts. Earlier
 cases, runs and their evidence remain available. For an existing candidate,
 use **Create model case** and bind its files in Model cases instead of starting
 a new dataset training run.
+
+## Read training history
+
+In **Dataset overview**, choose **Training history** beside **Graph** and
+**Cards**. Select a dataset under **Dataset training history**, or keep
+**All visible datasets**; the shared **Source** filter still applies. Select
+**Refresh history** after a training or language-model job finishes.
+
+1. Read each dataset's runs and attempts from oldest dated entry to newest.
+   Matching timestamps have no known order; undated records appear last.
+   An unfinished attempt is labelled without claiming a completed model.
+2. Use **Inspect run**, **Red-team results**, **Model case** when available, or
+   **Previous attempt** for a recorded retry. A retry creates a fresh job; it
+   does not resume a checkpoint. Chronological proximity or matching dataset
+   names do not establish derivation.
+3. Select **Train next model** to open the ordinary training wizard with that
+   dataset selected. Choose a compatible preset, review it, then select
+   **Start training**. Opening history or the wizard starts no work.
+4. To demonstrate a real within-job continuation on bundled Wine, choose
+   **Fine-tuned MLP**. That job exports a base MLP, continues it with warm-start
+   training and retains the derivative. **Inspect recorded identities** shows
+   the recorded base checkpoint SHA-256 when available. This is a relationship
+   inside that job, not a continuation of the preceding timeline entry.
+
+The separate **Language-model fine-tuning lineage** area displays saved native
+Qwen base, stage 1 and stage 2 records from the optional setup below. It checks
+lineage JSON bytes against the existing artifact inventory hash and matches
+recorded parent job/checkpoint identities before drawing a parent arrow. An
+unresolved parent stays visible as unresolved. This read does not replay current
+checkpoint files or establish independently authenticated provenance, model
+quality, privacy, safety or clearance. Pretrained language diagnostic jobs
+without these records are not labelled as fine-tuning. Discovery starts with
+the newest 100 jobs and fetches exact recorded parents when needed; an older
+unreferenced chain may require inspecting its retained run evidence.
+
+For another private Wine fit or release, its original single-model clearance
+scope does not account for the combined disclosure of earlier models. Keep
+separate release accounting and fresh evidence for any proposed release.
 
 ## Use the in-console running guide
 
@@ -288,6 +327,101 @@ queue job may still report incomplete probe coverage. “No match detected” on
 means the finite literal detector found no configured match; human review is
 needed for semantic or partial leaks.
 
+### Optional real SLM fine-tuning history
+
+This separate Windows route needs a source checkout on a **fixed local D:**
+drive, an existing Ollama installation, and network access for large optional
+downloads. Plan roughly **30 GB RAM and 50 GB free D: storage** for this CPU
+route; more retained chains require more disk space. It is not part of **Try-Demo.zip** or the
+normal demo bootstrap. Do not use a OneDrive folder, mapped drive, junction or
+symlink. It trains only on the supplied **synthetic agency FAQ**, not on the
+research collection or private agency records.
+
+Keep the normal console and worker running in one PowerShell terminal from the
+D-drive checkout, using their default data directory and port:
+
+```powershell
+python scripts/start_demo.py
+```
+
+The training helper expects this console at `127.0.0.1:8765`, with
+`.local/demo-data`, and the helper-owned Ollama service at `127.0.0.1:11434`, with
+this checkout's `.local/slm-models`. Custom console data/ports or a different
+Ollama cache are not accepted by this bounded route.
+
+In a second PowerShell terminal, from the same checkout, prepare the owned
+Ollama service and the dedicated training environment once:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts/start_slm.ps1 -SetupOnly
+$slmTrainingCache = Join-Path (Get-Location).Path '.local/slm-training-cache'
+New-Item -ItemType Directory -Force -Path "$slmTrainingCache/pip", "$slmTrainingCache/temp", "$slmTrainingCache/bytecode/install" | Out-Null
+$env:PIP_CACHE_DIR = "$slmTrainingCache/pip"
+$env:TEMP = "$slmTrainingCache/temp"
+$env:TMP = "$slmTrainingCache/temp"
+$env:PYTHONPYCACHEPREFIX = "$slmTrainingCache/bytecode/install"
+& .local/demo-venv/Scripts/python.exe -m venv .local/slm-training-venv
+& .local/slm-training-venv/Scripts/python.exe -m pip install torch==2.8.0 --index-url https://download.pytorch.org/whl/cpu
+& .local/slm-training-venv/Scripts/python.exe -m pip install -r requirements-slm-demo.txt
+```
+
+Stop if any preparation command fails. The Ollama helper refuses an unknown
+listener; quit that service yourself before trying again. Its initial
+`qwen2.5:1.5b` download is a separate pretrained serving model, not the native
+weights used for this training. The training dependencies are isolated from the
+console environment. Pip/temp/bytecode caches are directed to D: before
+installation; the training script also directs its Hugging Face, Torch and
+temporary caches
+under `.local/slm-training-cache`.
+
+Start the bounded training run:
+
+```powershell
+& .local/slm-training-venv/Scripts/python.exe scripts/train_slm_history_demo.py --threads 8
+```
+
+`--threads` accepts 1–16; it is the script's only option. After the one-time setup,
+reuse that last command for a new independent training chain. A new invocation
+creates a fresh run directory; it does not resume an interrupted chain.
+Keep both local services available until the diagnostic jobs finish. Do not
+interrupt merely because a download, CPU training or conversion takes time.
+
+The script resolves `Qwen/Qwen2.5-1.5B-Instruct` to an immutable 40-character
+Hugging Face revision before downloading it. It records that revision and the
+recipe, saves and reloads a native base checkpoint, and trains six rank-8
+output-head LoRA updates for stage 1. Stage 2 reloads the saved stage-1 checkpoint
+and applies six further updates. The backbone stays frozen; this short
+head-only recipe is not full-model fine-tuning. It is not an established exact
+match to the earlier Ollama GGUF.
+
+A pinned llama.cpp conversion prepares distinct local serving tags named
+`mra-qwen15-<run-prefix>-base`, `...-stage-1` and `...-stage-2`. The script starts
+one separate language diagnostic job per tag through the local console API:
+nine synthetic probes and two controls each. Diagnostic failures remain
+failures; training completion does not turn them into successful coverage.
+
+Open **Dataset overview → Training history**, select **Refresh history**, then
+inspect **Language-model fine-tuning lineage**. Read the base → stage 1 → stage 2
+chain, model tags, checkpoint and parent hashes, source revision, update counts,
+loss observations and diagnostic states. Use **Stage evidence** for each job
+and **Lineage JSON** for its saved record. The history view checks that record's
+bytes against the artifact inventory and matches parent identities; it does
+not rehash or replay the current external checkpoint files. Unresolved or
+mismatched parent evidence is shown without a trusted continuation arrow.
+
+Retained material stays on D: under `.local/slm-training-runs/<run-id>/`: the
+synthetic dataset, recipe/configuration, source script, native checkpoints and
+tokenizers, trained-stage adapters, per-stage metrics and explicit SHA-256 file
+manifests, conversion/serving material, and final run result. Each new console
+job retains `job/artifacts/slm-training-lineage.json`; keep the native run
+folder as well as job evidence because the job ZIP does not contain those large
+checkpoints. Existing datasets, jobs, cases and evidence are preserved.
+
+Loss changes, sample generations, matched lineage and a completed finite probe
+battery do not demonstrate quality, safety, privacy, clearance or agency
+release authorization. A failed or interrupted attempt remains retained for
+inspection; use a fresh invocation for another chain.
+
 ## Follow the public-data flow
 
 1. In **Dataset overview**, open **Wine classification**. This bundled dataset
@@ -322,7 +456,7 @@ needed for semantic or partial leaks.
 
 Use **Run scenarios** to explore the eight fictional reference cases. Use
 **View support and gaps** to inspect supported model families and missing
-integrations before trying other presets. Four bundled datasets and ten CPU
+integrations before trying other presets. Four bundled datasets and eleven CPU
 presets are listed, alongside four optional configured research profiles; only
 compatible combinations can run.
 

@@ -116,6 +116,7 @@ async function refresh() {
   try {
     const [status,c,j,d]=await Promise.all([api('status'),api('cases'),api('jobs'),api('datasets')]);
     cases=c;jobs=j;datasets=d.datasets;datasetOverview=d;
+    if(datasetGraphView==='history')refreshSlmTrainingHistory();
     $('connection').className='connection'+(status.worker_online?' online':'');
     $('connection').replaceChildren(el('i'),document.createTextNode(status.worker_online?'API & worker online':'API online · worker offline'));
     $('count-active').textContent=(status.jobs.queued||0)+(status.jobs.running||0);
@@ -141,6 +142,7 @@ function renderDatasets(overview){
   const shown=datasets.filter(d=>filter==='all'||(filter==='research')===isResearchDataset(d))
     .slice().sort((a,b)=>Number(isResearchDataset(b))-Number(isResearchDataset(a)));
   renderDatasetGraph(shown);
+  if(datasetGraphView==='history')renderTrainingHistory(shown);
   shown.forEach(dataset=>{
     const card=el('article',undefined,'dataset-card'),latest=latestDatasetRun(dataset),research=isResearchDataset(dataset);
     card.append(pill(research?'local research':'bundled example'),el('h3',dataset.name));
@@ -181,7 +183,7 @@ function buildDatasetGraph(visibleDatasets, query='', stateFilter='all'){
     const linkedCases=new Set((dataset.cases||[]).map(model=>model.case_id));
     const runs=[];
     for(const run of dataset.training_runs||[]){
-      if(!/^[a-f0-9]{32}$/.test(run.job_id||''))continue;
+      if(typeof run.job_id!=='string'||!/^[a-f0-9]{32}$/.test(run.job_id))continue;
       const state=graphStates.has(run.state)?run.state:'unknown';
       if(stateFilter!=='all'&&!(stateFilter==='active'?['queued','running'].includes(state):stateFilter==='failed'?['failed','cancelled'].includes(state):state===stateFilter))continue;
       if(!datasetMatch&&![presetNames[run.preset]||run.preset,run.job_id].some(value=>String(value||'').toLocaleLowerCase().includes(search)))continue;
@@ -326,20 +328,203 @@ function renderDatasetGraph(shown){
 }
 
 function setDatasetGraphView(view){
-  datasetGraphView=view==='cards'?'cards':'graph';
+  datasetGraphView=['cards','history'].includes(view)?view:'graph';
   $('dataset-graph-panel').hidden=datasetGraphView!=='graph';$('dataset-cards').hidden=datasetGraphView!=='cards';
   $('dataset-view-graph').setAttribute('aria-pressed',String(datasetGraphView==='graph'));
   $('dataset-view-cards').setAttribute('aria-pressed',String(datasetGraphView==='cards'));
+  $('dataset-history-panel').hidden=datasetGraphView!=='history';
+  $('dataset-view-history').setAttribute('aria-pressed',String(datasetGraphView==='history'));
+  if(datasetGraphView==='history')renderDatasets(datasetOverview);
 }
 $('dataset-view-graph').onclick=()=>setDatasetGraphView('graph');
 $('dataset-view-cards').onclick=()=>setDatasetGraphView('cards');
+$('dataset-view-history').onclick=()=>setDatasetGraphView('history');
 $('dataset-graph-search').oninput=()=>renderDatasets(datasetOverview);
 $('dataset-graph-state').onchange=()=>renderDatasets(datasetOverview);
 $('dataset-graph-zoom-out').onclick=()=>{datasetGraphZoom=Math.max(.8,Math.round((datasetGraphZoom-.1)*10)/10);applyDatasetGraphZoom();};
 $('dataset-graph-zoom-in').onclick=()=>{datasetGraphZoom=Math.min(1.5,Math.round((datasetGraphZoom+.1)*10)/10);applyDatasetGraphZoom();};
 $('dataset-graph-reset').onclick=()=>{datasetGraphZoom=1;applyDatasetGraphZoom();$('dataset-graph-viewport').scrollLeft=0;$('dataset-graph-viewport').scrollTop=0;};
-setDatasetGraphView('graph');
 // End dataset graph.
+
+// Training history models. These projections never infer derivation from dates or names.
+function buildTrainingHistory(sourceDatasets,datasetFilter='all'){
+  const groups=[];
+  for(const dataset of sourceDatasets){
+    if(datasetFilter!=='all'&&dataset.id!==datasetFilter)continue;
+    const projected=buildDatasetGraph([dataset]).groups[0]?.runs||[];
+    const ids=new Set(projected.map(entry=>entry.run.job_id));
+    const entries=projected.map(entry=>({...entry,
+      created:typeof entry.run.created==='number'&&Number.isFinite(entry.run.created)&&entry.run.created>0?entry.run.created:null,
+      retryOf:/^[a-f0-9]{32}$/.test(entry.run.retry_of||'')&&entry.run.retry_of!==entry.run.job_id&&ids.has(entry.run.retry_of)?entry.run.retry_of:null
+    }));
+    entries.sort((a,b)=>(a.created===null)-(b.created===null)||(a.created!==null&&b.created!==null?a.created-b.created:0)||a.run.job_id.localeCompare(b.run.job_id));
+    const times=new Map();entries.forEach(entry=>{if(entry.created!==null)times.set(entry.created,(times.get(entry.created)||0)+1);});
+    entries.forEach((entry,index)=>{entry.orderLabel=entry.created===null?'Time not recorded':times.get(entry.created)>1?'Same recorded time':'Recorded run '+(index+1);});
+    groups.push({dataset,entries});
+  }
+  return {groups,runCount:groups.reduce((n,group)=>n+group.entries.length,0)};
+}
+
+function buildSlmTrainingHistory(records){
+  const valid=[],errors=[],hash=value=>typeof value==='string'&&/^[a-f0-9]{64}$/.test(value),id=value=>typeof value==='string'&&/^[a-f0-9]{32}$/.test(value);
+  for(const record of records){
+    const job=record?.job,m=record?.manifest;
+    const reject=message=>errors.push({jobId:id(job?.id||'')?job.id:null,message});
+    if(!m||m.format_version!=='slm-training-history/1'){reject('Unsupported or missing training-lineage record.');continue;}
+    if(!job||job.kind!=='language'||!id(job.id)||m.job_id!==job.id||!id(m.training_run_id)){
+      reject('Training history does not bind this exact language diagnostic job.');continue;
+    }
+    if(!Number.isInteger(m.stage_index)||m.stage_index<0||m.stage_index>2||!hash(m.checkpoint_sha256)||!hash(m.serving_digest)||!hash(m.dataset_sha256)||!(typeof m.source_revision==='string'&&/^[a-f0-9]{40}$/.test(m.source_revision))){
+      reject('Stage identity, checkpoint, serving, source or dataset hash is invalid.');continue;
+    }
+    if(m.status!=='completed'||m.dataset_id!=='synthetic-agency-faq'||typeof m.model_tag!=='string'||!m.model_tag||m.model_tag.length>150||typeof m.training_method!=='string'||!m.training_method||m.training_method.length>500||typeof m.stage_label!=='string'||!m.stage_label||m.stage_label.length>150){
+      reject('Completed synthetic training metadata is missing or unsupported.');continue;
+    }
+    if(!Number.isInteger(m.steps)||m.steps<0||m.steps>1000000||!(m.train_loss===null||typeof m.train_loss==='number'&&Number.isFinite(m.train_loss))||
+        (m.stage_index===0?(m.steps!==0||m.train_loss!==null||m.parent_job_id!==null||m.parent_checkpoint_sha256!==null):(m.steps===0||m.train_loss===null||!id(m.parent_job_id||'')||!hash(m.parent_checkpoint_sha256||'')||m.parent_job_id===job.id))){
+      reject('Invalid base or continued-training steps, loss or parent fields.');continue;
+    }
+    if((job.result&&(job.result.model!==m.model_tag||job.result.model_digest!==m.serving_digest))||(!job.result&&job.options?.model!==m.model_tag)||(job.options?.model&&job.options.model!==m.model_tag)){
+      reject('Recorded serving tag or digest does not match this diagnostic.');continue;
+    }
+    const diagnosticBound=job.state==='completed'&&job.result?.model_digest_stable===true;
+    valid.push({job,manifest:m,parent:null,linked:false,issue:'',diagnosticBound});
+  }
+  const groups=[];
+  const jobCounts=new Map();valid.forEach(stage=>jobCounts.set(stage.job.id,(jobCounts.get(stage.job.id)||0)+1));
+  for(const runId of [...new Set(valid.map(stage=>stage.manifest.training_run_id))]){
+    const stages=valid.filter(stage=>stage.manifest.training_run_id===runId).sort((a,b)=>a.manifest.stage_index-b.manifest.stage_index||a.job.id.localeCompare(b.job.id));
+    const byIndex=new Map();stages.forEach(stage=>{const i=stage.manifest.stage_index;byIndex.set(i,[...(byIndex.get(i)||[]),stage]);});
+    for(const stage of stages){
+      const m=stage.manifest;
+      if(jobCounts.get(stage.job.id)!==1||byIndex.get(m.stage_index).length!==1){stage.issue='Ambiguous duplicate job or stage; no parent link is claimed.';continue;}
+      if(m.stage_index===0)continue;
+      const candidates=byIndex.get(m.stage_index-1)||[],parent=candidates.length===1?candidates[0]:null;
+      if(!parent||jobCounts.get(parent.job.id)!==1){stage.issue='Previous stage is missing or ambiguous; recorded parent remains unresolved.';continue;}
+      if(parent.manifest.job_id!==m.parent_job_id||parent.manifest.checkpoint_sha256!==m.parent_checkpoint_sha256||parent.manifest.source_revision!==m.source_revision){stage.issue='Parent identity, checkpoint hash or source revision does not match.';continue;}
+      stage.parent=parent.job.id;stage.linked=true;
+    }
+    groups.push({runId,stages});
+  }
+  return {groups,errors};
+}
+// End training history models.
+
+let slmHistoryRecords=[],slmHistoryErrors=[],slmHistoryBusy=false,slmHistoryEpoch=0;
+const slmHistoryCache=new Map();
+function historyButton(actions,label,action){const button=el('button',label,'secondary');button.type='button';button.onclick=action;actions.append(button);return button;}
+function historyHashes(fields){
+  const details=el('details',undefined,'training-history-hashes');details.append(el('summary','Inspect recorded identities'));
+  fields.forEach(([label,value])=>details.append(el('p',label+': '+String(value??'Not recorded'))));return details;
+}
+function renderTrainingHistory(shown){
+  const select=$('training-history-dataset'),previous=select.value;
+  select.replaceChildren();const all=el('option','All visible datasets');all.value='all';select.append(all);
+  shown.forEach(dataset=>{const option=el('option',dataset.name);option.value=dataset.id;select.append(option);});
+  if(shown.some(dataset=>dataset.id===previous))select.value=previous;
+  const history=buildTrainingHistory(shown,select.value),host=$('training-history-runs');host.replaceChildren();
+  $('training-history-status').textContent=history.runCount+' retained training runs / attempts, oldest dated first. Matching timestamps have no known order; undated records appear last. Each new fit is independent unless explicit parent evidence is recorded.';
+  for(const {dataset,entries} of history.groups){
+    const article=el('article',undefined,'training-history-group');article.append(el('h3',dataset.name));
+    const actions=el('div',undefined,'detail-actions');historyButton(actions,'Dataset details',()=>showDataset(dataset.id));
+    const train=historyButton(actions,'Train next model',()=>openTraining(dataset.id));train.disabled=!dataset.configured;article.append(actions);
+    if(!entries.length)article.append(el('p','No saved training runs for this dataset.','operator-note'));
+    const timeline=el('ol',undefined,'training-history-timeline');
+    for(const entry of entries){
+      const {run,state,verdict}=entry,item=el('li',undefined,'training-history-entry');item.dataset.jobId=run.job_id;
+      const head=el('div',undefined,'training-history-entry-head');head.append(el('strong',entry.orderLabel+' · '+(presetNames[run.preset]||run.preset||'Training attempt')),pill(state));
+      if(verdict)head.append(pill(verdict));item.append(head,el('p',entry.created===null?'Creation time not recorded':new Date(entry.created*1000).toLocaleString(),'operator-note'));
+      item.append(el('p',entry.retryOf?'Retry of recorded attempt '+entry.retryOf.slice(0,8)+'. A retry is a new job, not a resumed checkpoint.':run.preset==='mlp-finetuned'?'This run retains a base MLP and its warm-start derivative. Both stages belong to this job; it does not resume the previous listed model.':'Separate fit selected on this dataset. Chronological order does not establish a parent checkpoint.','operator-note'));
+      if(!entry.isModel)item.append(el('p','No completed model is claimed for this attempt.','operator-note'));
+      if(run.preset==='dp-histogram')item.append(el('p','This assessment applies to its original single-model scope. Another fit or release requires composition and fresh evidence.','operator-note'));
+      const current=jobs.find(job=>job.id===run.job_id),base=current?.result?.component_comparisons?.find(component=>component.component==='base');
+      if(entry.isModel&&base&&/^[a-f0-9]{64}$/.test(base.sha256||''))item.append(historyHashes([['Recorded base checkpoint SHA-256',base.sha256],['Base checkpoint artifact',base.path],['Relationship','Base → warm-start derivative within this run']]));
+      const row=el('div',undefined,'detail-actions');historyButton(row,'Inspect run '+run.job_id.slice(0,8),()=>showJob(run.job_id));historyButton(row,'Red-team results',()=>openRedTeam(dataset.id,run.job_id));
+      if(entry.caseId)historyButton(row,'Model case',()=>showCase(entry.caseId));
+      if(entry.retryOf)historyButton(row,'Previous attempt',()=>showJob(entry.retryOf));item.append(row);timeline.append(item);
+    }
+    article.append(timeline);host.append(article);
+  }
+  renderSlmTrainingHistory();refreshSlmTrainingHistory();
+}
+function renderSlmTrainingHistory(){
+  const model=buildSlmTrainingHistory(slmHistoryRecords),host=$('slm-history-groups');host.replaceChildren();
+  const lineageJobs=new Set(slmHistoryRecords.map(record=>record.job.id));
+  const ordinary=jobs.filter(job=>job.kind==='language'&&!lineageJobs.has(job.id)).length;
+  $('slm-history-status').textContent=(slmHistoryBusy?'Loading saved lineage… ':model.groups.length+' training chains · ')+Math.max(0,ordinary)+' other language diagnostics in the newest 100 jobs. Pretrained diagnostic runs without lineage are not treated as fine-tuning. Parent jobs are fetched by exact ID when needed.';
+  for(const group of model.groups){
+    const article=el('article',undefined,'training-history-group');article.append(el('h4','Language model training · '+group.runId.slice(0,8)),el('p','Synthetic agency FAQ fixtures; no private or retained research data. Short output-head training demonstrates checkpoint continuation, not model quality or clearance.','operator-note'));
+    const present=new Set(group.stages.map(stage=>stage.manifest.stage_index)),missing=[0,1,2].filter(index=>!present.has(index));
+    article.append(el('p',present.size+'/3 stages recorded'+(missing.length?' · stages '+missing.join(', ')+' are not recorded yet.':'. All three stage records are available.'),'operator-note'));
+    const chain=el('div',undefined,'slm-history-chain');
+    for(const stage of group.stages){
+      const {job,manifest:m}=stage;
+      if(m.stage_index>0){const arrow=el('span',stage.linked?'→':'⋯','slm-history-arrow');arrow.setAttribute('aria-label',stage.linked?'Recorded parent checkpoint matches':'Parent unresolved');chain.append(arrow);}
+      const card=el('article',undefined,'slm-history-stage');card.dataset.jobId=job.id;
+      card.append(el('h4',m.stage_label),el('p',m.model_tag),pill(m.stage_index===0?'pretrained':'fine-tuned'));
+      card.append(el('p',m.steps+' optimizer updates'+(m.train_loss===null?'':' · last training loss '+m.train_loss.toFixed(4)),'operator-note'));
+      card.append(el('p',stage.linked?'Recorded parent: '+stage.parent.slice(0,8)+' · checkpoint hash matches':m.stage_index===0?'Pretrained source; no local parent checkpoint':stage.issue,'operator-note'));
+      if(stage.issue&&m.stage_index===0)card.append(el('p',stage.issue,'detail-warning'));
+      const r=job.result,coverage=r?.tests?Object.values(r.tests).filter(test=>test.status==='completed').length:null;
+      card.append(el('p','Diagnostic '+job.state+' · '+(r?.observed_violations??'Unrecorded')+' observed violations'+(coverage===null?'':' · '+coverage+'/'+Object.keys(r.tests).length+' probes completed'),'operator-note'));
+      if(!stage.diagnosticBound)card.append(el('p','Stable served-model binding is not confirmed for this diagnostic.','detail-warning'));
+      if(r?.status==='incomplete')card.append(el('p','Diagnostic coverage is incomplete. Inspect controls and failed or truncated probes.','detail-warning'));
+      const validation=m.validation;
+      if(typeof validation?.validation_loss==='number'&&Number.isFinite(validation.validation_loss))card.append(el('p','Synthetic held-out loss '+validation.validation_loss.toFixed(4)+' · descriptive only','operator-note'));
+      if(validation?.serialized_reload_logits_verified===true)card.append(el('p','Recorded serialization check: reloaded logits matched.','operator-note'));
+      if(typeof validation?.changed_output_head_weights==='number'&&Number.isFinite(validation.changed_output_head_weights))card.append(el('p',count(validation.changed_output_head_weights)+' output-head weights changed; backbone frozen.','operator-note'));
+      if(m.generation&&typeof m.generation.response==='string'){const sample=el('details',undefined,'training-history-hashes');sample.append(el('summary','Recorded generation sample'),el('p',String(m.generation.prompt||'Synthetic prompt').slice(0,2000)),el('p',m.generation.response.slice(0,4000)));card.append(sample);}
+      card.append(historyHashes([['Checkpoint SHA-256',m.checkpoint_sha256],['Parent checkpoint SHA-256',m.parent_checkpoint_sha256],['Serving digest',m.serving_digest],['Synthetic data SHA-256',m.dataset_sha256],['Hugging Face source revision',m.source_revision],['Method',m.training_method],['Diagnostic job ID',job.id]]));
+      const actions=el('div',undefined,'detail-actions');historyButton(actions,'Stage evidence',()=>showJob(job.id));
+      const download=el('a','Lineage JSON','secondary');download.href='/api/jobs/'+job.id+'/artifacts/job/artifacts/slm-training-lineage.json';download.download='slm-lineage-'+job.id+'.json';actions.append(download);card.append(actions);chain.append(card);
+    }
+    article.append(chain);host.append(article);
+  }
+  for(const error of [...model.errors,...slmHistoryErrors])host.append(el('p',(error.jobId?'Run '+error.jobId.slice(0,8)+': ':'')+error.message,'detail-warning'));
+  if(!model.groups.length&&!slmHistoryBusy)host.append(el('p','No saved language fine-tuning lineage was found. Run the optional synthetic training script from the running guide, then Refresh history. Existing pretrained models remain available in Language red-team.','operator-note'));
+}
+async function loadSlmHistoryRecord(job){
+  const cached=slmHistoryCache.get(job.id),key=JSON.stringify([job.state,job.result?.model_digest,job.result?.model_digest_stable]);
+  if(cached&&cached.key===key&&(cached.record||Date.now()-cached.observed<15000))return cached.record;
+  const inventory=await api('jobs/'+job.id+'/artifacts');
+  const artifact=inventory.files.find(file=>file.path==='job/artifacts/slm-training-lineage.json');
+  if(!artifact){slmHistoryCache.set(job.id,{key,record:null,observed:Date.now()});return null;}
+  if(artifact.size_bytes>131072||!/^[a-f0-9]{64}$/.test(artifact.sha256))throw new Error('Saved lineage file is oversized or has an invalid inventory hash.');
+  const response=await fetch('/api/jobs/'+job.id+'/artifacts/job/artifacts/slm-training-lineage.json');if(!response.ok)throw new Error('Saved lineage file could not be read.');
+  const bytes=await response.arrayBuffer();if(bytes.byteLength>131072)throw new Error('Saved lineage file exceeds the size limit.');
+  const digest=[...new Uint8Array(await crypto.subtle.digest('SHA-256',bytes))].map(value=>value.toString(16).padStart(2,'0')).join('');
+  if(digest!==artifact.sha256)throw new Error('Saved lineage bytes changed after inventory; refresh history.');
+  const record={job,manifest:JSON.parse(new TextDecoder().decode(bytes))};slmHistoryCache.set(job.id,{key,record,observed:Date.now()});return record;
+}
+async function refreshSlmTrainingHistory(force=false){
+  if(datasetGraphView!=='history'||slmHistoryBusy)return;
+  slmHistoryBusy=true;const epoch=++slmHistoryEpoch;
+  if(force)slmHistoryCache.clear();
+  try{
+    const queue=jobs.filter(job=>job.kind==='language'&&/^[a-f0-9]{32}$/.test(job.id)),seen=new Set(),records=[],errors=[];
+    // Follow recorded parent IDs even if the parent is outside the newest-100 job list.
+    while(queue.length&&seen.size<300){
+      const batch=queue.splice(0,6).filter(job=>!seen.has(job.id));batch.forEach(job=>seen.add(job.id));
+      const results=await Promise.allSettled(batch.map(loadSlmHistoryRecord));
+      for(let i=0;i<results.length;i++){
+        const result=results[i],job=batch[i];
+        if(result.status==='rejected'){errors.push({jobId:job.id,message:'Lineage could not be loaded: '+result.reason.message});continue;}
+        const record=result.value;if(!record)continue;records.push(record);
+        const parent=record.manifest?.parent_job_id;
+        if(typeof parent==='string'&&/^[a-f0-9]{32}$/.test(parent)&&!seen.has(parent)&&!queue.some(candidate=>candidate.id===parent)){
+          try{queue.push(await api('jobs/'+parent));}catch(error){errors.push({jobId:job.id,message:'Recorded parent job is unavailable.'});}
+        }
+      }
+    }
+    if(queue.length)errors.push({jobId:null,message:'History reached the 300-parent limit. Inspect saved lineage files for remaining parents.'});
+    if(epoch===slmHistoryEpoch){slmHistoryRecords=records;slmHistoryErrors=errors;}
+  }catch(error){if(epoch===slmHistoryEpoch)slmHistoryErrors=[{jobId:null,message:'History could not be loaded: '+error.message}];}
+  finally{slmHistoryBusy=false;if(datasetGraphView==='history')renderSlmTrainingHistory();}
+}
+$('training-history-dataset').onchange=()=>renderDatasets(datasetOverview);
+$('training-history-refresh').onclick=async()=>{await refresh();await refreshSlmTrainingHistory(true);};
+
+setDatasetGraphView('graph');
 
 
 function renderDatasetDetail(dataset){
@@ -392,7 +577,7 @@ async function openTraining(datasetId=null,presetId=null){
   if($('dataset-dialog').open)closeDataset();
   trainingStep=0;await loadTrainingCapabilities();
   if(datasetId){$('training-dataset').value=datasetId;const dataset=datasets.find(d=>d.id===datasetId);if(dataset)$('training-name').value=dataset.name+' model training';}
-  if(presetId){$('training-preset').value=presetId;$('training-name').value='Private Wine model · membership clearance';}
+  if(presetId){$('training-preset').value=presetId;$('training-name').value=presetId==='dp-histogram'?'Private Wine model · membership clearance':(datasets.find(d=>d.id===datasetId)?.name||'Public data')+' · '+(presetNames[presetId]||presetId);}
   renderTrainingStep();$('training-dialog').showModal();
 }
 

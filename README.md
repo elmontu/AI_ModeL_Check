@@ -76,8 +76,16 @@ and that run's recorded training assessment. Multiple models stay separate by
 job ID; unfinished attempts do not imply a trained model exists. Dataset nodes
 have no verdict, and result nodes show the original training assessment rather
 than a later case assessment. **Cards** retains the catalog view.
+**Training history**, beside Graph and Cards, lists each dataset's retained
+training runs and attempts. Choose a **Dataset training history** filter and
+select **Refresh history** after new work. Dated entries appear oldest first;
+matching timestamps have no known order, and undated entries appear last.
+Each fit is independent; retrying creates a new job. **Train next model** opens
+the existing wizard without starting training. The Fine-tuned MLP preset records
+its own base checkpoint and warm-start derivative within one job.
+See [the training history walkthrough](docs/local-demo.md#read-training-history).
 
-Filter either view by **Local research** or **Bundled examples** source. In Graph,
+Filter these views by **Local research** or **Bundled examples** source. In Graph,
 use **Find a dataset or model** to search by dataset, model family or short job ID,
 and **Training runs** to filter run state. Use **Zoom graph in** (+),
 **Zoom graph out** (−) and **Reset view**. Click a node, or use Tab and Enter, to
@@ -104,6 +112,38 @@ and record keys are excluded. These historical samples are separate from the
 larger raw collection and do not become fresh audit evidence. Source validation
 failures are retained; no source is downloaded or replaced with bundled data.
 See [the D-drive walkthrough](docs/local-demo.md#use-existing-public-research-data-on-d).
+
+### Optional language-model training history
+
+After the normal demo is running, a separate Windows source-checkout route on
+D: demonstrates actual continuation of
+`Qwen/Qwen2.5-1.5B-Instruct`. It resolves and records an immutable Hugging Face
+revision, keeps the backbone frozen, and performs six rank-8 output-head LoRA
+updates at each of two stages on a **synthetic agency FAQ**. Stage 2 reloads
+stage 1's native checkpoint. This does not reuse or establish equivalence to the
+previously installed Ollama GGUF.
+
+```mermaid
+flowchart LR
+  A[Start the normal local demo] --> B[Optional dedicated SLM environment on D]
+  B --> C[Pinned HF base checkpoint]
+  C --> D[Stage 1: output-head updates]
+  D --> E[Reload stage 1, train stage 2]
+  E --> F[Three distinct Ollama tags and diagnostic jobs]
+  F --> G[Training history: recorded parent hashes]
+```
+
+Follow [the optional SLM training setup](docs/local-demo.md#optional-real-slm-fine-tuning-history)
+or **Running guide → Training history** for the commands. This needs additional
+large downloads, native checkpoints, serving copies and a dedicated optional
+venv; plan roughly **30 GB RAM and 50 GB free D: storage** for this CPU route,
+with more disk needed as chains are retained. The normal one-command launcher
+does not install them. All model caches
+and retained training outputs use the checkout's D-drive `.local` directory.
+The three serving tags receive separate nine-probe/two-control synthetic
+checks. Recorded lineage, losses and generations demonstrate execution and
+continuation; they do not establish quality, safety, privacy or release
+clearance.
 
 ### Model pipeline
 
