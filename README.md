@@ -250,7 +250,7 @@ not automatically admitted to a temporal or production registry.
 | --- | --- | --- |
 | Tabular classification | Eleven integrated tools, visible per recorded run in the console's Red-team tools workspace | Supported tools run after training; unsupported tools and coverage gaps remain visible |
 | Regression | Three integrated membership, extraction and robustness screens in the same workspace | Scoped diagnostic evidence |
-| Local language models | Nine synthetic probes and two controls through an installed Ollama model; launch from Red-team tools | No model download, real tool execution or general training-record extraction claim |
+| Local language models | Nine synthetic probes and two controls through an installed Ollama model; launch from Red-team tools | Optional model setup is separate; no real tool execution or general training-record extraction claim |
 | Public export pilot | One loss-based membership screen on an offline GaussianNB package | One public fixture |
 | SACRO-ML | Separate pinned 2.0.1 adapter for seven public classifier profiles | Separate runtime; Diabetes regression unsupported; not a console integration |
 | ART | Separate pinned 1.20.1 retained-loss membership comparison across eight public profiles | Includes continuous regression; trusted loss oracle; no live target-query or console integration |
@@ -269,6 +269,31 @@ See [tool coverage](docs/framework-capability-gaps.md),
 [scoped garak](docs/production-prd26-garak-adapter.md) and
 [PyRIT multi-turn orchestration](docs/production-prd26-pyrit-adapter.md) and
 [bounded adaptive attacker](docs/production-prd26-pyrit-adaptive-adapter.md).
+
+For an optional small pretrained language model, install
+[Ollama for Windows](https://ollama.com/download/windows) separately. The selected
+[Qwen2.5:1.5b model](https://ollama.com/library/qwen2.5:1.5b) is about **986 MB**.
+From a source checkout on D:, prepare it with:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts/start_slm.ps1 -SetupOnly
+```
+
+The helper uses `.local/slm-models` on D: by default. Omit `-SetupOnly` to open
+local CLI chat; `ollama run qwen2.5:1.5b` also opens chat once that server is running.
+It leaves its local server available for console tests. Quit an existing Ollama
+server yourself if the helper refuses its listener; it does not kill unknown services.
+Standalone users can [save the helper](https://github.com/elmontu/AI_ModeL_Check/raw/refs/heads/main/scripts/start_slm.ps1)
+in `D:/MRA-Demo/<Windows username>/scripts/` and pass
+`-ModelRoot "D:/MRA-Demo/<Windows username>/slm-models"`.
+**Try-Demo.zip does not include Ollama or download the SLM.** See the
+[optional SLM steps](docs/local-demo.md#optional-small-local-language-model).
+
+In **Red-team tools**, select **Test an installed language model**, choose
+`qwen2.5:1.5b` under **Installed Ollama model**, then **Run local tests**. These
+synthetic inference diagnostics do not retrain the model, create a dataset graph
+branch or establish native clearance or agency approval. Inspect both controls,
+failed probes and observed violations in **Run history**.
 
 Run the public export-screening example from the console environment:
 

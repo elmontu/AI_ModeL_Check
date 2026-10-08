@@ -237,6 +237,57 @@ garak, PyRIT, public export screening and multi-shadow experiments remain separa
 workflows. They are not launched by this workspace; see the
 [coverage and adapter links](../README.md#red-team-coverage).
 
+### Optional small local language model
+
+Install [Ollama for Windows](https://ollama.com/download/windows) separately.
+The [Qwen2.5:1.5b model](https://ollama.com/library/qwen2.5:1.5b) is a small
+pretrained model with a download of about **986 MB**. This optional helper needs
+an existing Ollama installation and D: storage; the main **Try-Demo.zip** setup
+does not include Ollama or download language models.
+
+From a source checkout on D:, prepare the model without entering chat:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts/start_slm.ps1 -SetupOnly
+```
+
+The default model cache is the checkout's `.local/slm-models`. `-ModelRoot` chooses
+another D: directory. If another Ollama server owns `127.0.0.1:11434`, quit it
+yourself before using the helper; it refuses an unknown listener and does not
+kill it. The helper starts or reuses its own local server and leaves it available
+after setup or chat exits.
+
+For a standalone Windows installation, [download the same helper](https://github.com/elmontu/AI_ModeL_Check/raw/refs/heads/main/scripts/start_slm.ps1)
+and save it as `D:/MRA-Demo/<Windows username>/scripts/start_slm.ps1`; create the
+`scripts` folder under your demo home if needed. If your browser displays the
+file, use **Save as** and retain `.ps1`, not `.txt`. Run it with an explicit D: cache:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File "D:/MRA-Demo/$env:USERNAME/scripts/start_slm.ps1" -SetupOnly -ModelRoot "D:/MRA-Demo/$env:USERNAME/slm-models"
+```
+
+Here `$env:USERNAME` supplies your Windows username. Keeping the script in that
+`scripts` folder also keeps its service logs and receipt under your demo home.
+Omit `-SetupOnly` to open
+local CLI chat. Once the local server is running, you can also use:
+
+```console
+ollama run qwen2.5:1.5b
+```
+
+In **Red-team tools**, select **Test an installed language model**, choose
+`qwen2.5:1.5b` under **Installed Ollama model**, then select **Run local tests**.
+Close and reopen this dialog if the model was installed after you opened it.
+Review the language run in **Run history**, including both controls, observed
+violations, failed probes and limitations; retain its result JSON and evidence ZIP.
+
+These tests use pretrained inference and synthetic inputs. They do not retrain
+or fine-tune the SLM, create a dataset-training graph branch or model case, or
+establish a privacy ceiling, native clearance or agency approval. A completed
+queue job may still report incomplete probe coverage. “No match detected” only
+means the finite literal detector found no configured match; human review is
+needed for semantic or partial leaks.
+
 ## Follow the public-data flow
 
 1. In **Dataset overview**, open **Wine classification**. This bundled dataset
@@ -430,8 +481,9 @@ change the launcher's immutable application source snapshot.
 - A queued job needs the launcher worker. Run details distinguish queued,
   running, completed and failed jobs. Failed attempts retain evidence; retrying
   creates a new attempt rather than rewriting the original.
-- Optional language-model tests require an already installed local Ollama model.
-  This walkthrough installs or downloads no language model. The separate
+- Optional language-model tests require local Ollama and an installed model.
+  Use the [separate optional SLM helper](#optional-small-local-language-model)
+  for Qwen2.5:1.5b; the main demo launcher does not install language models. The separate
   [garak](production-prd26-garak-adapter.md),
   [scripted PyRIT](production-prd26-pyrit-adapter.md) and
   [adaptive PyRIT](production-prd26-pyrit-adaptive-adapter.md) components need

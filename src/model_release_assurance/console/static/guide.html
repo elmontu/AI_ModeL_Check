@@ -174,9 +174,19 @@ python scripts/start_demo.py
 
       <section id="language" aria-labelledby="language-title">
         <p class="eyebrow">07 · OPTIONAL LANGUAGE TESTING</p><h2 id="language-title">Test an already installed Ollama model</h2>
-        <p>In <strong>Red-team tools</strong>, select <strong>Test an installed language model</strong>. Choose an <strong>Installed Ollama model</strong>, then select <strong>Run local tests</strong>. The demo does not install or download a model.</p>
+        <p>In <strong>Red-team tools</strong>, select <strong>Test an installed language model</strong>. Choose <code>qwen2.5:1.5b</code> under <strong>Installed Ollama model</strong>, then select <strong>Run local tests</strong>. Other installed local models remain selectable. Close and reopen the dialog if a model was installed after you opened it. <strong>Try-Demo.zip does not include Ollama or download an SLM.</strong></p>
+        <details><summary>Optional Qwen2.5:1.5b setup on D:</summary>
+          <p>Install <a href="https://ollama.com/download/windows" target="_blank" rel="noopener">Ollama for Windows</a> separately. The small pretrained <a href="https://ollama.com/library/qwen2.5:1.5b" target="_blank" rel="noopener">Qwen2.5:1.5b model</a> has a download of about <strong>986 MB</strong>. From a source checkout on D:, prepare it without entering chat:</p>
+          <pre><code>powershell -ExecutionPolicy Bypass -File scripts/start_slm.ps1 -SetupOnly</code></pre>
+          <p>The default model cache is the checkout's <code>.local/slm-models</code>. The helper requires D: storage and an existing Ollama installation. Quit an existing Ollama server yourself if it refuses the listener at <code>127.0.0.1:11434</code>; it does not kill an unknown service. It starts or reuses its own local server and leaves it available after setup or chat exits.</p>
+          <p>Standalone users can <a href="https://github.com/elmontu/AI_ModeL_Check/raw/refs/heads/main/scripts/start_slm.ps1">download the helper</a>, save it as <code>D:/MRA-Demo/&lt;Windows username&gt;/scripts/start_slm.ps1</code> (not <code>.txt</code>), and supply an explicit D: cache. Create the <code>scripts</code> folder under your demo home if needed; this also keeps service logs and the receipt there. In PowerShell, <code>$env:USERNAME</code> supplies your Windows username:</p>
+          <pre><code>powershell -ExecutionPolicy Bypass -File "D:/MRA-Demo/$env:USERNAME/scripts/start_slm.ps1" -SetupOnly -ModelRoot "D:/MRA-Demo/$env:USERNAME/slm-models"</code></pre>
+          <p>Omit <code>-SetupOnly</code> to open local CLI chat. Once that local server is running, this command also opens chat:</p>
+          <pre><code>ollama run qwen2.5:1.5b</code></pre>
+        </details>
+        <p>These are pretrained inference diagnostics, not SLM retraining or fine-tuning. A language run appears in <strong>Run history</strong>; it does not create a dataset-training graph branch or model case, establish a privacy ceiling or confer native clearance or agency approval.</p>
         <p>The job runs <strong>nine synthetic probes and two controls</strong>: direct secret extraction, instruction override, role spoofing, encoded extraction, fragment extraction, retrieved-document injection, answer contamination, inert tool-call injection and multi-turn pressure. Retrieved documents and secrets are synthetic. Tool requests are inspected and <strong>never executed</strong>.</p>
-        <p>Read observed violations, both controls, failed probes and limitations in the run details. “No match detected” means the detector found no configured match in that finite probe; it is not a guarantee against prompt injection or data leakage. An offline provider or failed probe can leave coverage incomplete.</p>
+        <p>Read observed violations, both controls, failed probes and limitations in the run details. “No match detected” means the detector found no configured match in that finite probe; it is not a guarantee against prompt injection or data leakage. An offline provider or failed probe can leave coverage incomplete, even when the queue job has finished. Retain <strong>Download result JSON</strong> and <strong>Download evidence ZIP</strong> for review.</p>
       </section>
 
       <section id="review" aria-labelledby="review-title">
