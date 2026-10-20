@@ -495,7 +495,7 @@ class ProductionRegistrationStoreTests(unittest.TestCase):
             link.unlink()
 
     def test_path_traversal_unc_reparse_and_unexpected_journal_rejected(self):
-        for path in (self.root / ".." / "next", Path(r"\\server\share\registration")):
+        for path in (self.root / ".." / "next", Path("//server/share/registration")):
             with self.subTest(path=str(path)), self.assertRaises(stores.StoreUnavailable):
                 stores.RegistrationStore.create(path)
         with mock.patch.object(stores, "_unsafe", return_value=True):

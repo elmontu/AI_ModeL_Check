@@ -454,7 +454,7 @@ class ProductionRegistryStoreTests(unittest.TestCase):
         try:
             with self.assertRaises(s.StoreUnavailable):reopened.inspect(guard=self.guard)
         finally:alias.unlink()
-        for path in (self.root/'..'/'child',Path(r'\\server\share\registry')):
+        for path in (self.root/'..'/'child',Path('//server/share/registry')):
             with self.assertRaises(s.StoreUnavailable):s.RegistryStore.create(path,accounts=self.accounts)
         with mock.patch.object(s,'_unsafe',return_value=True):
             with self.assertRaises(s.StoreUnavailable):reopened.inspect(guard=self.guard)
