@@ -11,6 +11,7 @@ import tempfile
 from types import SimpleNamespace
 import unittest
 from unittest.mock import Mock, patch
+from pyrit_cache_fixture import owned_pyrit_cache_fixture
 from model_release_assurance.production_adapters.contracts import canonical_bytes
 from model_release_assurance.production_pyrit import protocol as p, worker as w, upstream as u
 from model_release_assurance.production_pyrit.runtime import LOCKED_VERSIONS, expected_binding, PyritRuntimeUnavailable
@@ -157,7 +158,7 @@ class StorageHookTests(unittest.TestCase):
         find.assert_not_called()
 
     def test_only_declared_appdirs_calls_and_owned_empty_log(self):
-        with tempfile.TemporaryDirectory() as folder:
+        with tempfile.TemporaryDirectory() as folder, owned_pyrit_cache_fixture(Path(folder)):
             root=Path(folder).absolute();fake=SimpleNamespace(user_data_dir=Mock())
             env={name:str(root) for name in ("HOME","USERPROFILE","APPDATA","LOCALAPPDATA","XDG_CONFIG_HOME","XDG_DATA_HOME","XDG_CACHE_HOME")}
             env.update(RETRY_MAX_NUM_ATTEMPTS="1",CUSTOM_RESULT_RETRY_MAX_NUM_ATTEMPTS="1")
@@ -175,7 +176,7 @@ class StorageHookTests(unittest.TestCase):
                 with patch.dict(sys.modules,{"pyrit.common.path":module}),self.assertRaises(ValueError):u.check_paths()
 
     def test_runtime_repository_marker_rejected_before_pyrit_import(self):
-        with tempfile.TemporaryDirectory() as folder:
+        with tempfile.TemporaryDirectory() as folder, owned_pyrit_cache_fixture(Path(folder)):
             root=Path(folder).absolute();(root/"site").mkdir();(root/"site/.git").touch()
             env={name:str(root) for name in ("HOME","USERPROFILE","APPDATA","LOCALAPPDATA","XDG_CONFIG_HOME","XDG_DATA_HOME","XDG_CACHE_HOME")}
             env.update(RETRY_MAX_NUM_ATTEMPTS="1",CUSTOM_RESULT_RETRY_MAX_NUM_ATTEMPTS="1")

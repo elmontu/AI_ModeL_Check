@@ -67,8 +67,13 @@ class PublicModelTests(unittest.TestCase):
             self.assertEqual(workflow.load_project(case).kind,'trained')
 
     def test_inventory_does_not_claim_llm_console_training(self):
-        self.assertEqual(len(capability_inventory()['presets']),10)
-        self.assertIn('not a console trainer',capability_inventory()['other_framework_paths'][1]['status'])
+        inventory=capability_inventory()
+        self.assertEqual(set(inventory['presets']), {
+            'dp-histogram', 'xgboost-small', 'logistic', 'random-forest',
+            'mlp', 'mlp-finetuned', 'cnn', 'ridge', 'forest-regression',
+            'svm', 'ensemble',
+        })
+        self.assertIn('not a console trainer',inventory['other_framework_paths'][1]['status'])
 
     def test_weak_wine_mlp_is_reported_against_train_only_baseline_without_retuning(self):
         with tempfile.TemporaryDirectory() as temporary:

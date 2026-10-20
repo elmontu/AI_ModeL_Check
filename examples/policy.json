@@ -100,7 +100,7 @@
       "analyzer": "tree_linkage",
       "minimum_service_version": "1.0.0",
       "accepted_implementation_sha256s": [
-        "a70de6be14147a550d16f7b6c46b8499fbc9a8de1b0e4c3d907e1e805360e694"
+        "05485f0db27e2e79d166ac36b42da74da97bd19cad1dcece3c0dae6c7c1df32e"
       ],
       "accepted_configuration_sha256s": [
         "d462c2564b587a5429a5814e95f918003120cced4268db975a9fb6395a4715b3"

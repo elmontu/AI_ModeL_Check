@@ -4,7 +4,7 @@
     "policy_id": "whole-government-model-release-demo",
     "policy_version": "3.0.0",
     "policy_path": "policy.json",
-    "policy_sha256": "6f3fd343ce5b5fa6305fb32e6c1b77efdbbd88112bc29ce41e84fc22c1906c3e"
+    "policy_sha256": "495fa82f8e34e963c0886b4b2823299177b0527593383fc05f35cf80047839f3"
   },
   "release": {
     "release_id": "whole-government-demo-tree-v1",
@@ -306,7 +306,7 @@
       "evidence_context": {
         "release_id": "whole-government-demo-tree-v1",
         "release_contract_sha256": "58fa3564d8445f55834ebdd9699a4d412035a2f96bfb42b27f5c99cd510d035b",
-        "policy_sha256": "6f3fd343ce5b5fa6305fb32e6c1b77efdbbd88112bc29ce41e84fc22c1906c3e",
+        "policy_sha256": "495fa82f8e34e963c0886b4b2823299177b0527593383fc05f35cf80047839f3",
         "artifact_sha256": "2f42b587627c5b6c4447d781b57a47082743f029b475f560a574553abcedfdd5",
         "interface_sha256": "f13f29ea2027109f4f02992b37713ee9f63bf56672afb800ac9c3fb6966473b8",
         "population_scope_id": "service-participants-2026",
@@ -320,12 +320,12 @@
         "producer": {
           "service_id": "mra.analyzer.tree_linkage",
           "service_version": "1.0.0",
-          "implementation_sha256": "a70de6be14147a550d16f7b6c46b8499fbc9a8de1b0e4c3d907e1e805360e694",
+          "implementation_sha256": "05485f0db27e2e79d166ac36b42da74da97bd19cad1dcece3c0dae6c7c1df32e",
           "configuration_sha256": "d462c2564b587a5429a5814e95f918003120cced4268db975a9fb6395a4715b3"
         },
         "configuration_path": "config/tree-linkage-analyzer.json",
         "source_path": "evidence/tree-linkage.json",
-        "source_sha256": "bac08c2a10aca47063039cde92ea3b405cae86aa0cc8af55e03dc300343fe049",
+        "source_sha256": "fd1aaa254862e2b5e4e4bce6177afbf984e66ddcf8d607cc0f959fc400b21acd",
         "bound_fields": [
           "analyzer",
           "threat_id",
@@ -360,7 +360,7 @@
       "evidence_context": {
         "release_id": "whole-government-demo-tree-v1",
         "release_contract_sha256": "58fa3564d8445f55834ebdd9699a4d412035a2f96bfb42b27f5c99cd510d035b",
-        "policy_sha256": "6f3fd343ce5b5fa6305fb32e6c1b77efdbbd88112bc29ce41e84fc22c1906c3e",
+        "policy_sha256": "495fa82f8e34e963c0886b4b2823299177b0527593383fc05f35cf80047839f3",
         "artifact_sha256": "2f42b587627c5b6c4447d781b57a47082743f029b475f560a574553abcedfdd5",
         "interface_sha256": "f13f29ea2027109f4f02992b37713ee9f63bf56672afb800ac9c3fb6966473b8",
         "population_scope_id": "service-participants-2026",
@@ -379,7 +379,7 @@
         },
         "configuration_path": "config/dp-analyzer.json",
         "source_path": "evidence/dp-accountant.json",
-        "source_sha256": "0bbf19450fb76246c16b8e14ca3eafa3027fc79110b4469726b0ab6bbc9943a2",
+        "source_sha256": "4882efe9109fb6babf31cfacdfd50f55016818b017db09b8e7a85aabce1ba44f",
         "bound_fields": [
           "analyzer",
           "threat_id",
@@ -421,7 +421,7 @@
       "evidence_context": {
         "release_id": "whole-government-demo-tree-v1",
         "release_contract_sha256": "58fa3564d8445f55834ebdd9699a4d412035a2f96bfb42b27f5c99cd510d035b",
-        "policy_sha256": "6f3fd343ce5b5fa6305fb32e6c1b77efdbbd88112bc29ce41e84fc22c1906c3e",
+        "policy_sha256": "495fa82f8e34e963c0886b4b2823299177b0527593383fc05f35cf80047839f3",
         "artifact_sha256": "2f42b587627c5b6c4447d781b57a47082743f029b475f560a574553abcedfdd5",
         "interface_sha256": "f13f29ea2027109f4f02992b37713ee9f63bf56672afb800ac9c3fb6966473b8",
         "population_scope_id": "service-participants-2026",
@@ -440,7 +440,7 @@
         },
         "configuration_path": "config/attack-analyzer.json",
         "source_path": "evidence/attack-counts.json",
-        "source_sha256": "87abfbe3805928ad555bad5dde7d253c6f1fb9ca1ca2e0116a7418679cc48a01",
+        "source_sha256": "31515960576a45f4926d66639ce2564db9a63da0c468fa24c42e7821aadbdcff",
         "bound_fields": [
           "analyzer",
           "threat_id",
@@ -556,7 +556,7 @@
         "execution_id": "demo-membership-battery-execution",
         "release_id": "whole-government-demo-tree-v1",
         "release_contract_sha256": "58fa3564d8445f55834ebdd9699a4d412035a2f96bfb42b27f5c99cd510d035b",
-        "policy_sha256": "6f3fd343ce5b5fa6305fb32e6c1b77efdbbd88112bc29ce41e84fc22c1906c3e",
+        "policy_sha256": "495fa82f8e34e963c0886b4b2823299177b0527593383fc05f35cf80047839f3",
         "artifact_sha256": "2f42b587627c5b6c4447d781b57a47082743f029b475f560a574553abcedfdd5",
         "interface_sha256": "f13f29ea2027109f4f02992b37713ee9f63bf56672afb800ac9c3fb6966473b8",
         "population_scope_id": "service-participants-2026",
@@ -658,11 +658,11 @@
         "decision_authority": "none",
         "can_clear": false
       },
-      "worker_output_sha256": "eec3bf471251f4324d61a1dc49cfe30c20aba698f80fd5502ff9fa8e9c102185",
+      "worker_output_sha256": "fea8efb286de324946a24234a5f56421ee818439068279f555f77e31833d8df2",
       "evidence_context": {
         "release_id": "whole-government-demo-tree-v1",
         "release_contract_sha256": "58fa3564d8445f55834ebdd9699a4d412035a2f96bfb42b27f5c99cd510d035b",
-        "policy_sha256": "6f3fd343ce5b5fa6305fb32e6c1b77efdbbd88112bc29ce41e84fc22c1906c3e",
+        "policy_sha256": "495fa82f8e34e963c0886b4b2823299177b0527593383fc05f35cf80047839f3",
         "artifact_sha256": "2f42b587627c5b6c4447d781b57a47082743f029b475f560a574553abcedfdd5",
         "interface_sha256": "f13f29ea2027109f4f02992b37713ee9f63bf56672afb800ac9c3fb6966473b8",
         "population_scope_id": "service-participants-2026",
@@ -681,7 +681,7 @@
         },
         "configuration_path": "config/attack-battery-analyzer.json",
         "source_path": "evidence/attack-battery.json",
-        "source_sha256": "18376b3f14be844f2591f6fd2c918c0653b445e5da5dc047cb930539964279b7",
+        "source_sha256": "1baa592f229e6d326325cdb9f109e7aa5c78aff6f8ba2290cca1ecb8c0fc1f88",
         "bound_fields": [
           "analyzer",
           "schema_version",

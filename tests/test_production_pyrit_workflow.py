@@ -6,6 +6,7 @@ from pathlib import Path
 import tempfile
 import unittest
 from unittest.mock import patch
+from pyrit_cache_fixture import owned_pyrit_cache_fixture
 from model_release_assurance.production_adapters.contracts import canonical_bytes
 from model_release_assurance.production_pyrit import protocol, runtime, worker, workflow
 from test_production_pyrit_protocol import fixture_plan, fixture_campaign, fixture_output, fixture_response
@@ -16,6 +17,7 @@ class PyritWorkflowTests(unittest.TestCase):
         temporary = tempfile.TemporaryDirectory(prefix="pyrit-workflow-")
         self.addCleanup(temporary.cleanup)
         self.root = Path(temporary.name)
+        self.enterContext(owned_pyrit_cache_fixture(self.root))
         self.output = self.root / "campaign"
         self.source = {"fixture.py": "0" * 64}
         self.descriptor = {"python": str(self.root / "env/Scripts/python.exe"),

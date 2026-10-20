@@ -390,6 +390,36 @@ class ContractTests(unittest.TestCase):
         with self.assertRaisesRegex(AnalyzerError, "tree-ensemble"):
             TreeLinkageAnalyzer().analyze(release, request.threats[0], request.analyzer_inputs[0])
 
+    def test_large_uniform_tree_linkage_stays_within_probability_bounds(self) -> None:
+        request = AssessmentRequest.model_validate(load_example())
+        for size in (257, 2000, 4000):
+            with self.subTest(candidates=size):
+                value = request.analyzer_inputs[0].model_copy(update={
+                    "candidate_ids": tuple(f"candidate-{i}" for i in range(size)),
+                    "observations": tuple(f"unique-{i}" for i in range(size)),
+                    "prior": None,
+                })
+                records = TreeLinkageAnalyzer().analyze(request.release, request.threats[0], value)
+                absolute = next(item for item in records if item.metric == "bayes_linkage_success")
+                self.assertEqual((absolute.value, absolute.lower, absolute.upper), (1.0, 1.0, 1.0))
+                self.assertTrue(all(0.0 <= item.value <= 1.0 for item in records))
+        coarsened = value.model_copy(update={"observations": tuple(f"cell-{i % 40}" for i in range(4000))})
+        absolute = TreeLinkageAnalyzer().analyze(request.release, request.threats[0], coarsened)[0]
+        self.assertEqual(absolute.value, 0.01)
+        for observations, expected in (
+            (("one-cell",) * 4000, 0.00025),
+            (("merged", "merged", *(f"unique-{i}" for i in range(2, 4000))), 0.99975),
+        ):
+            coarsened = value.model_copy(update={"observations": observations})
+            self.assertEqual(TreeLinkageAnalyzer().analyze(request.release, request.threats[0], coarsened)[0].value, expected)
+        weighted = value.model_copy(update={
+            "candidate_ids": ("a", "b", "c", "d"),
+            "observations": ("first", "first", "second", "third"),
+            "prior": (0.5, 0.25, 0.125, 0.125),
+        })
+        records = TreeLinkageAnalyzer().analyze(request.release, request.threats[0], weighted)
+        self.assertEqual((records[0].value, records[0].baseline, records[1].value), (0.75, 0.5, 0.25))
+
     def test_linkage_requires_target_signal(self) -> None:
         raw = load_example()
         raw["threats"][0]["target_signal_source"] = None

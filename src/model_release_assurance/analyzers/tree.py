@@ -46,7 +46,10 @@ class TreeLinkageAnalyzer:
         for index, observation in enumerate(value.observations):
             cells[observation].append(index)
         sizes = Counter(value.observations)
-        posterior = sum(max(prior[i] for i in indices) for indices in cells.values())
+        # A uniform prior gives one equal contribution per occupied cell.
+        # Use its count ratio to avoid accumulation beyond probability bounds.
+        posterior = (len(cells) / n if value.prior is None else
+                     sum(max(prior[i] for i in indices) for indices in cells.values()))
         baseline = max(prior)
         incremental = max(0.0, posterior - baseline)
         min_cell = min(sizes.values())

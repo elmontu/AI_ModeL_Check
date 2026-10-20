@@ -29,3 +29,5 @@ healthcare narrative is illustrative; never put real patient data here.
 - Other example families are separately versioned; use the current [schema inventory](../schemas/current-schema-manifest-v1.json), not the package version, to select a contract.
 
 Files under `output/assessments/` are generated demonstrations, not authoritative empirical results or retained governance records. Reproduction tools write generated records under ignored `output/reproduction/` paths; committed study inputs and maturity labels live under `reproduction/`.
+
+The current CI repair replay is `evidence/assessment-clear-report-ci-repair-20261020.json`, referenced by `optimization-request.json`. It binds the corrected uniform-prior analyzer and refreshed synthetic fixture policy. The earlier default and dated assessment reports remain unchanged as historical examples. This refresh replays existing toy inputs; it does not execute an attack, train a model, or grant agency approval.

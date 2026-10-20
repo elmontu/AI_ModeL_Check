@@ -17,7 +17,7 @@ jobs:
   pipeline-bootstrap:
     name: Pipeline setup (${{ matrix.os }})
     runs-on: ${{ matrix.os }}
-    timeout-minutes: 20
+    timeout-minutes: 45
     strategy:
       fail-fast: false
       matrix:
@@ -31,8 +31,56 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
+        if: runner.os != 'Windows'
         with:
           python-version: "3.12.14"
+      - name: Provision the pinned Windows CI interpreter
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $runtimeRoot = Join-Path $env:RUNNER_TEMP 'mra-cpython-3.12.14-20260901'
+          if (Test-Path -LiteralPath $runtimeRoot) { throw 'CI interpreter destination already exists' }
+          New-Item -ItemType Directory -Path $runtimeRoot | Out-Null
+          $archive = Join-Path $runtimeRoot 'runtime.tar.gz'
+          $url = 'https://github.com/astral-sh/python-build-standalone/releases/download/20260901/cpython-3.12.14%2B20260901-x86_64-pc-windows-msvc-install_only.tar.gz'
+          $expectedHash = 'e90c1b6419da3bd812dd73bb3de40287a21abf153438147639ec5e20375ea93f'
+          Invoke-WebRequest -Uri $url -OutFile $archive -TimeoutSec 120
+          if ((Get-Item -LiteralPath $archive).Length -ne 46184075) { throw 'CI interpreter archive size mismatch' }
+          $observedHash = (Get-FileHash -LiteralPath $archive -Algorithm SHA256).Hash.ToLowerInvariant()
+          if ($observedHash -ne $expectedHash) { throw 'CI interpreter archive digest mismatch' }
+          $entries = & tar -tzf $archive
+          if ($LASTEXITCODE -ne 0) { throw 'CI interpreter archive inventory failed' }
+          foreach ($entry in $entries) {
+              $parts = $entry.Replace([char]92, [char]47).Split('/')
+              if ($entry.StartsWith('/') -or $entry -match '^[A-Za-z]:' -or $parts -contains '..' -or $parts[0] -ne 'python') {
+                  throw 'CI interpreter archive path rejected'
+              }
+          }
+          & tar -xzf $archive -C $runtimeRoot
+          if ($LASTEXITCODE -ne 0) { throw 'CI interpreter extraction failed' }
+          $pythonDirectory = Join-Path $runtimeRoot 'python'
+          $pythonExecutable = Join-Path $pythonDirectory 'python.exe'
+          $observed = & $pythonExecutable -I -S -B -c 'import json, platform, struct; print(json.dumps({"implementation": platform.python_implementation(), "version": platform.python_version(), "bits": struct.calcsize("P") * 8}))'
+          if ($LASTEXITCODE -ne 0) { throw 'CI interpreter verification failed' }
+          $runtime = $observed | ConvertFrom-Json
+          if ($runtime.implementation -ne 'CPython' -or $runtime.version -ne '3.12.14' -or $runtime.bits -ne 64) {
+              throw 'CI interpreter version or architecture mismatch'
+          }
+          $pythonDirectory | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+          (Join-Path $pythonDirectory 'Scripts') | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+          New-Item -ItemType Directory -Path '.local' -Force | Out-Null
+          @{
+              schema = 'mra-ci-python-provenance/1'
+              publisher = 'Astral python-build-standalone'
+              release = '20260901'
+              url = $url
+              archive_bytes = 46184075
+              archive_sha256 = $observedHash
+              executable_sha256 = (Get-FileHash -LiteralPath $pythonExecutable -Algorithm SHA256).Hash.ToLowerInvariant()
+              runtime = $runtime
+              scope = 'CI test toolchain'
+          } | ConvertTo-Json -Depth 4 | Set-Content -LiteralPath '.local/ci-python-provenance.json' -Encoding utf8
       - name: Bootstrap a fresh training environment
         run: python scripts/setup_pipeline.py --profile console --venv .local/pipeline-ci
       - name: Install hash-pinned build verifier parser
@@ -47,7 +95,9 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: ci-supply-chain-${{ matrix.os }}-${{ github.run_attempt }}
-          path: .local/ci-supply-chain/*.json
+          path: |
+            .local/ci-supply-chain/*.json
+            .local/ci-python-provenance.json
           include-hidden-files: true
           if-no-files-found: error
       - name: Run required government profile without skips
@@ -156,7 +206,7 @@ jobs:
   test:
     name: Python ${{ matrix.python-version }}
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 30
     strategy:
       fail-fast: false
       matrix:
@@ -167,10 +217,15 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
           cache: pip
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
       - name: Install locked runtime
         run: python -m pip install --disable-pip-version-check -r requirements.lock
       - name: Install experiment test dependencies
         run: python -m pip install --disable-pip-version-check -r requirements-experiments.txt
+      - name: Install console test dependencies
+        run: python -m pip install --disable-pip-version-check -r requirements-console.txt
       - name: Install package without resolving dependencies
         run: python -m pip install --no-deps -e .
       - name: Install hash-pinned build verifier parser
