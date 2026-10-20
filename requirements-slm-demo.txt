@@ -4,6 +4,6 @@
 transformers==4.57.6
 huggingface-hub==0.36.0
 safetensors==0.6.2
-numpy==2.2.6
+numpy==2.4.6
 sentencepiece==0.2.1
 protobuf==4.25.8
