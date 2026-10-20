@@ -6,6 +6,7 @@ import json
 import os
 from pathlib import Path
 import subprocess
+import sys
 import tempfile
 import time
 from types import SimpleNamespace
@@ -14,8 +15,7 @@ from unittest import mock
 
 from model_release_assurance.production_sacro import execution
 
-ROOT = Path(__file__).resolve().parents[1]
-PYTHON = ROOT / '.venv-pipeline' / 'Scripts' / 'python.exe'
+PYTHON = Path(sys.executable)
 GATE = "import sys\nif sys.stdin.buffer.read(1) != b'G': raise SystemExit(70)\n"
 RESULT = "from pathlib import Path\nPath(sys.argv[-1], 'worker.json').write_bytes(b'{}')\n"
 SOURCE = {'trusted-fixture.py': 'a' * 64}

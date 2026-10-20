@@ -32,7 +32,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
-          python-version: "3.12"
+          python-version: "3.12.14"
       - name: Bootstrap a fresh training environment
         run: python scripts/setup_pipeline.py --profile console --venv .local/pipeline-ci
       - name: Install hash-pinned build verifier parser
@@ -53,6 +53,23 @@ jobs:
       - name: Run required government profile without skips
         shell: bash
         run: ${{ matrix.python-path }} -B scripts/run_required_tests.py --profile government --output .local/ci-required
+      - name: Report required test failures
+        if: failure()
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          path = Path(".local/ci-required/result.json")
+          if path.is_file():
+              result = json.loads(path.read_text(encoding="utf-8"))
+              for field in ("discovery_problems", "failures", "errors", "skips", "expected_failures", "unexpected_successes"):
+                  for item in result.get(field, []):
+                      detail = (str(item.get("test_id", "")) + "\n" + str(item.get("reason", ""))) if isinstance(item, dict) else str(item)
+                      message = (field + ": " + detail).replace("%", "%25").replace("\r", "%0D").replace("\n", "%0A")
+                      print("::error title=Required government test failure::" + message)
+          PY
       - name: Require complete government test evidence
         if: always()
         shell: bash
@@ -160,7 +177,26 @@ jobs:
         run: >-
           python -m pip install --require-hashes --only-binary=:all: --no-deps -r deploy/build/verification-runtime.requirements.txt
       - name: Compile, test, and replay schemas
-        run: make PYTHON=python check
+        shell: bash
+        run: |
+          mkdir -p .local
+          set -o pipefail
+          make PYTHON=python check 2>&1 | tee .local/ci-check.log
+      - name: Report Python check failures
+        if: failure()
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          path = Path(".local/ci-check.log")
+          if path.is_file():
+              text = path.read_text(encoding="utf-8", errors="replace")
+              blocks = [block for block in text.split("=" * 70) if block.lstrip().startswith(("FAIL:", "ERROR:"))]
+              for detail in blocks or ["\n".join(text.splitlines()[-80:])]:
+                  message = detail.replace("%", "%25").replace("\r", "%0D").replace("\n", "%0A")
+                  print("::error title=Python CI check failure::" + message)
+          PY
 
   training-release-demo:
     name: Training-to-assessment demo (offline dataset)
@@ -176,7 +212,7 @@ jobs:
         run: |
           python -m pip install --disable-pip-version-check -r requirements.lock
           python -m pip install --disable-pip-version-check -r requirements-experiments.txt
-          python -m pip install --no-deps --no-build-isolation -e .
+          python -m pip install --no-deps -e .
       - name: Verify the real-training pipeline and failure boundaries
         env:
           PYTHONPATH: src
@@ -202,7 +238,7 @@ jobs:
       - name: Install locked core runtime
         run: |
           python -m pip install --disable-pip-version-check -r requirements.lock
-          python -m pip install --no-deps --no-build-isolation -e .
+          python -m pip install --no-deps -e .
       - name: Verify the guided demo contract and failure branches
         env:
           PYTHONPATH: src
