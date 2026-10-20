@@ -274,6 +274,9 @@ class PortableAssuranceTests(unittest.TestCase):
             root = Path(directory)
             profiles = root / "profiles"
             profiles.mkdir()
+            # Exercise noncanonical spelling on every OS; Windows may also
+            # supply an 8.3 alias in TEMP. Both sides compare resolved locations.
+            root = profiles / ".."
             path = profiles / "private.json"
             path.write_text(json.dumps({"schema": SCHEMA, "bundle": "../private-bundle",
                                         "manifest_sha256": "a" * 64,
@@ -282,9 +285,9 @@ class PortableAssuranceTests(unittest.TestCase):
                                         "handoff_manifest_sha256": "d" * 64, "suspend_presentation": True}))
             config = load_readiness_config(path)
             self.assertIsInstance(config, integration.ReadinessConfig)
-            self.assertEqual(config.bundle.resolve(), root / "private-bundle")
-            self.assertEqual(config.intake_report.resolve(), root / "private-report")
-            self.assertEqual(config.handoff_packet.resolve(), root / "private-packet")
+            self.assertEqual(config.bundle.resolve(), (root / "private-bundle").resolve())
+            self.assertEqual(config.intake_report.resolve(), (root / "private-report").resolve())
+            self.assertEqual(config.handoff_packet.resolve(), (root / "private-packet").resolve())
             self.assertTrue(config.suspend_presentation)
             self.assertFalse(config.bundle.exists())
 
