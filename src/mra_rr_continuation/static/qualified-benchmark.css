@@ -1,0 +1,15 @@
+/* Phase 5 additions; the immutable Phase 4 stylesheet supplies the shared design. */
+.qualified-task-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.qualified-outcomes { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.qualified-outcomes strong { font-size: 20px; }
+.qualified-task-grid .task-card h3 { font-size: 15px; }
+.qualified-task-grid .frame-unit { color: var(--ink); font-weight: 600; }
+.qualified-task-grid .source-links { display: flex; flex-wrap: wrap; gap: 7px 14px; margin-top: 12px; }
+.qualified-task-grid .source-links a { margin: 0; }
+.qualified-task-grid ul { margin: 10px 0; padding-left: 17px; font-size: 11px; color: var(--muted); }
+.blocked-reasons { color: var(--amber); font-size: 12px; padding-left: 20px; }
+.margin-table { min-width: 900px; }
+#encoding-rows td, #margin-rows td { overflow-wrap: anywhere; }
+#registration-status.preregistered { color: #245f46; background: #e7f2ec; }
+@media (max-width: 1150px) { .qualified-task-grid { grid-template-columns: 1fr; } .qualified-outcomes { grid-template-columns: repeat(2, minmax(0, 1fr)); } .qualified-outcomes > div:nth-child(3) { border-left: 0; } .qualified-outcomes > div:nth-child(n+3) { border-top: 1px solid var(--line); } }
+@media (max-width: 600px) { .qualified-outcomes { grid-template-columns: 1fr; } .qualified-outcomes > div + div { border-left: 0; border-top: 1px solid var(--line); } }

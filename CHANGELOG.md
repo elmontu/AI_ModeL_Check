@@ -4,6 +4,13 @@ All user-visible changes to Model Release Assurance are recorded here. The proje
 
 ## [Unreleased]
 
+### Native readiness and learning application
+
+- Added readiness, gap checklists, evidence views, tutorials, side-by-side demo comparisons, guided practice and browser-saved demos to the main MRA application under `/assurance/`, with navigation from the existing dataset and model workflows.
+- Made fresh source and wheel installations use a distinct fictional learning demo. Explicit private captured-input profiles retain their own pins and fail closed when inputs are missing or changed; fictional assumptions never become authentic evidence or agency decisions.
+- Included all application packages and browser assets in the distributable codebase, documented the module ownership boundaries, and added bounded automatic application and packaging checks alongside the unchanged full CI workflow.
+- Preserved the reference core, prior findings, project evidence and separate general advisory book. This update changes no benchmark verdict and grants no release authorization.
+
 ### Government audit alignment, 22 September 2026
 
 - Applied the revised academic paper's data-minimization and dependency-accounting findings to the government audit guide and integrated protocol specification: omission comparisons, full recipient history, training/scoring dependencies, cache versions and derivative-model review.

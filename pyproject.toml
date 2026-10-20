@@ -30,6 +30,7 @@ dependencies = [
 [project.optional-dependencies]
 build-controls = ["packaging>=26.3,<27"]
 console = ["fastapi>=0.115,<1", "uvicorn>=0.30,<1", "httpx>=0.27,<1"]
+research-benchmark = ["numpy>=2.0,<3", "threadpoolctl>=3,<4"]
 portfolio = [
   "scipy>=1.13",
 ]
@@ -62,8 +63,9 @@ vision-experiments = [
 [project.scripts]
 mra = "model_release_assurance.cli:main"
 mra-workflow = "model_release_assurance.workflow:main"
-mra-console = "model_release_assurance.console.__main__:main"
+mra-console = "mra_rr_continuation.console:main"
 mra-export = "model_release_assurance.export_poc.cli:main"
+mra-rr = "mra_rr_continuation.cli:main"
 
 [project.urls]
 Homepage = "https://github.com/elmontu/AI_ModeL_Check"
@@ -84,3 +86,7 @@ version = {attr = "model_release_assurance.version.VERSION"}
 
 [tool.setuptools.package-data]
 model_release_assurance = ["py.typed", "console/static/*", "export_poc/static/*", "temporal_assurance/static/*"]
+
+mra_rr_continuation = ["static/*"]
+
+mra_readiness_dashboard = ["practice_saves.js"]

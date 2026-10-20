@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>MRA · Public usefulness benchmark</title>
+  <link rel="stylesheet" href="/research-benchmark/static/benchmark.css">
+  <script defer src="/research-benchmark/static/benchmark.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to public benchmark</a>
+  <aside class="sidebar">
+    <a class="brand" href="/" aria-label="MRA home"><span class="brand-mark">m</span><span>MRA<span class="brand-sub">MODEL RELEASE ASSURANCE</span></span></a>
+    <div class="workspace-label">LOCAL WORKSPACE <span>RESEARCH</span></div>
+    <nav aria-label="Main navigation">
+      <a class="nav-item" href="/#datasets"><span aria-hidden="true">◫</span> Dataset overview</a>
+      <a class="nav-item" href="/#pipeline-flow"><span aria-hidden="true">→</span> Model pipeline</a>
+      <a class="nav-item" href="/#red-team-tools"><span aria-hidden="true">◇</span> Red-team tools</a>
+      <a class="nav-item" href="/research-rr"><span aria-hidden="true">⌁</span> Research pipeline</a>
+      <a class="nav-item active" href="/research-benchmark" aria-current="page"><span aria-hidden="true">▤</span> Public benchmark</a>
+      <a class="nav-item" href="#running-guide"><span aria-hidden="true">?</span> Benchmark running guide</a>
+      <a class="nav-item" href="/guide" target="_blank" rel="noopener"><span aria-hidden="true">↗</span> Full demo guide</a>
+    </nav>
+    <div class="sidebar-note"><span class="tiny-label">ENVIRONMENT</span><strong>Four public task domains</strong><p>Historical fixed public rows. Preregistered comparisons. Every result retained.</p><div class="version">PUBLIC BENCHMARK <span>PHASE 4</span></div></div>
+  </aside>
+  <div class="shell">
+    <header class="topbar"><div>Workspace <span class="slash">/</span> <strong>Public usefulness benchmark</strong></div><span class="connection" id="connection"><i aria-hidden="true"></i><span id="connection-label">Connecting</span></span></header>
+    <main id="main-content" tabindex="-1">
+      <div class="heading"><div><div class="eyebrow">PREREGISTERED PUBLIC RESEARCH</div><h1>Four tasks. Eight comparisons.</h1><p class="intro">Measure the certified continuation against clean public learning and independent randomized response using a fixed plan across census, aviation, lending and mobility tasks.</p></div><a class="secondary" href="#running-guide">How to run this benchmark ↓</a></div>
+      <div class="notice"><span class="notice-symbol" aria-hidden="true">i</span><div><strong>Public research has no release authority.</strong> These historical samples represent four task domains. Population representativeness, fresh audit evidence, whole-person protection and operational usefulness remain unestablished. All source labels are already public.</div><span class="notice-tag">PUBLIC DATA</span></div>
+      <div id="error" class="error" role="alert" hidden></div>
+      <noscript><div class="error">Enable JavaScript to register and inspect this public benchmark.</div></noscript>
+      <section class="panel" id="setup-panel" aria-labelledby="setup-title">
+        <div class="section-title"><div><div class="eyebrow">FIXED PROSPECTIVE DESIGN</div><h2 id="setup-title">Register the benchmark</h2></div><span class="tag" id="source-badge">Checking sources</span></div>
+        <p class="operator-note">Inspect all four tasks and the fixed specification below, then register before evaluation. The benchmark accepts no source uploads, path overrides, alternative seeds or changed criteria.</p>
+        <p id="source-status" class="operator-note source-status" role="status" aria-live="polite">Checking the pinned historical public sources on D.</p>
+        <div class="setup-controls"><button id="register-run" class="primary" type="button" disabled>Register fixed benchmark</button><p id="registration-message" class="operator-note">The fixed source selection, model rules and comparisons are saved before benchmark randomness or fitting.</p></div>
+        <div class="saved-controls"><div><label for="saved-run">Previously registered benchmark</label><select id="saved-run" disabled><option value="">Loading saved benchmarks…</option></select></div><button id="open-run" class="secondary" type="button" disabled>Open saved benchmark</button><button id="refresh-runs" class="secondary" type="button">Refresh</button></div>
+        <p id="saved-run-status" class="field-note" role="status" aria-live="polite" hidden></p>
+      </section>
+      <section class="pipeline-section" aria-labelledby="pipeline-title">
+        <div class="section-title"><h2 id="pipeline-title">Benchmark pipeline</h2><span class="run-label" id="run-label">No registration selected</span></div>
+        <ol class="pipeline-map" aria-label="Benchmark progress">
+          <li id="stage-1"><span class="pipeline-number" aria-hidden="true">01</span><h3>Inspect public tasks</h3><p>Four documented public outcomes. Fixed historical rows, features and splits.</p><strong class="stage-state" id="stage-state-1">Checking sources</strong></li>
+          <li id="stage-2"><span class="pipeline-number" aria-hidden="true">02</span><h3>Register fixed plan</h3><p>Bind the specification, source snapshots and implementation before evaluation.</p><strong class="stage-state" id="stage-state-2">Awaiting registration</strong></li>
+          <li id="stage-3"><span class="pipeline-number" aria-hidden="true">03</span><h3>Run all comparisons</h3><p>One fixed retained history per task; 4,096 paired repetitions per task.</p><strong class="stage-state" id="stage-state-3">Awaiting registration</strong></li>
+          <li id="stage-4"><span class="pipeline-number" aria-hidden="true">04</span><h3>Inspect saved evidence</h3><p>Retain every result, uncertainty interval and descriptive reference model.</p><strong class="stage-state" id="stage-state-4">Awaiting evaluation</strong></li>
+        </ol>
+        <p id="pipeline-message" class="operator-note" role="status" aria-live="polite">Inspect the tasks and preregistered plan to begin.</p>
+      </section>
+      <section class="panel" aria-labelledby="tasks-title">
+        <div class="section-title"><h2 id="tasks-title">Four mandatory public tasks</h2><span class="tag">All domains retained</span></div>
+        <p class="operator-note">Each task uses 512 training, 512 disjoint clean auxiliary and 512 held-out records. Selection uses keys and fixed hash priorities. Row disjointness does not establish person or household disjointness.</p>
+        <div id="task-cards" class="task-grid"></div>
+        <details class="bindings"><summary>Inspect source provenance and pinned bytes</summary><p>The prepared source matrices and transformations are historical. Matching hashes identify retained inputs; they do not independently validate reconstruction from raw agency data.</p><dl id="source-bindings"></dl></details>
+      </section>
+      <section class="panel" aria-labelledby="specification-title">
+        <div class="section-title"><h2 id="specification-title">Preregistered specification</h2><span class="tag">No tuning or optional stopping</span></div>
+        <dl class="specification-summary">
+          <dt>Candidate and alternatives</dt><dd>Optimal continuation with r = 1, d = 3, L = 9 and τ = 2/3. Compare with clean public-only learning on separate auxiliary rows and independent RR at fresh ratio L/d = 3. Alternatives are public simulations, not additional protected releases.</dd>
+          <dt>Shared learner</dt><dd>Affine ridge regression on fixed one-hot categorical features, unpenalized intercept, slope penalty λ = 1 and predictions clipped to [0, 1]. No identifiers, retained bit, response or training truth enter the randomized learner. Test truth is used only for scoring.</dd>
+          <dt>Eight mandatory comparisons</dt><dd>Mean held-out Brier loss; lower is better. Gain is comparator loss minus continuation loss. Each task must improve expected loss by at least 0.01 against both alternatives. This provisional public research margin has no service-owner approval.</dd>
+          <dt>Conditional integration</dt><dd>Exactly 4,096 paired repetitions per task, conditional on one persisted retained RR response. Simultaneous two-sided Hoeffding intervals across eight gains use α = 0.05 and range [−1, 1]. Lower bound ≥ margin passes; upper bound &lt; margin fails; overlap is inconclusive. Every comparison must pass.</dd>
+          <dt>Interval interpretation</dt><dd>These intervals quantify Monte Carlo integration on fixed rows and retained responses under ideal independent uniform tickets. Seeded NumPy PCG64 is a reproducible computational approximation, not a mathematical iid proof. Population uncertainty is not evaluated.</dd>
+          <dt>Separate descriptions</dt><dd>Loss percentiles describe mechanism variation. The first preregistered replicate provides reference-model coefficients, predictions and losses. Those realized scores never determine the expected-gain criterion.</dd>
+          <dt>Scope</dt><dd>Historical public labels, bounded samples and domain coverage only. The original synthetic toy benchmark remains separate. Operational usefulness: not evaluated. Release authorization: none.</dd>
+        </dl>
+        <p class="digest" id="specification-digest">Specification SHA-256: checking</p>
+        <details class="bindings"><summary>Full machine-readable preregistration</summary><pre id="specification-inspector" class="json-inspector">Loading the frozen specification.</pre></details>
+        <div id="specification-links" class="downloads"></div>
+      </section>
+      <div id="run-detail" hidden>
+        <section class="panel" aria-labelledby="evaluation-title">
+          <div class="section-title"><div><div class="eyebrow">SAVED PROSPECTIVE REGISTRATION</div><h2 id="evaluation-title" tabindex="-1">Evaluate the registered benchmark</h2></div><span class="tag" id="execution-status">Registered</span></div>
+          <dl class="run-bindings" id="registration-bindings"></dl>
+          <div class="evaluate-controls"><button id="evaluate-run" class="primary" type="button" disabled>Run fixed benchmark</button><p id="evaluation-message" class="operator-note" role="status" aria-live="polite">A complete valid registration is required.</p></div>
+          <p class="field-note">The fixed computation can take about a minute. Leave this page open. Requests reserve evaluation before work; an incomplete reservation stays blocked across restarts. A completed request returns the same saved result and fixed experiment. Verification can replay the frozen computation; it does not replace the retained history or register a new study.</p>
+          <details class="bindings"><summary>Inspect certificate checks</summary><p>The exact r = 1 certificates are verified against each saved retained history before the experiment. Certificate validity establishes the declared channel claim and does not establish task usefulness.</p><div class="table-wrap" tabindex="0" role="region" aria-label="Four public task certificates"><table><caption>Exact channel checks, separate from usefulness</caption><thead><tr><th scope="col">Public task</th><th scope="col">Certificate</th><th scope="col">Parameters</th><th scope="col">Marginal accuracy</th></tr></thead><tbody id="certificate-rows"></tbody></table></div></details>
+        </section>
+        <section class="panel" id="results-panel" aria-labelledby="results-title" hidden>
+          <div class="section-title"><h2 id="results-title" tabindex="-1">All eight mandatory comparisons</h2><span class="tag" id="result-status">Not evaluated</span></div>
+          <div class="outcomes"><div><span>Public benchmark</span><strong id="benchmark-decision">Not evaluated</strong><small>All four tasks and eight comparisons required</small></div><div><span>Operational usefulness</span><strong id="operational-decision">Not evaluated</strong><small>Independent service margins and review pending</small></div><div><span>Release authorization</span><strong>None</strong><small>Public research grants no agency authority</small></div></div>
+          <p id="decision-message" class="result-explanation"></p>
+          <div class="table-wrap" tabindex="0" role="region" aria-label="Eight conditional expected gain comparisons"><table class="comparison-table"><caption>Conditional expected Brier comparison · Monte Carlo integration on fixed public rows</caption><thead><tr><th scope="col">Mandatory task</th><th scope="col">Comparator</th><th scope="col">Mean Brier<br>Continuation / comparator</th><th scope="col">Expected gain</th><th scope="col">Simultaneous gain interval</th><th scope="col">Margin</th><th scope="col">Criterion</th></tr></thead><tbody id="comparison-rows"></tbody></table></div>
+          <p class="field-note">Positive gain favors continuation. Intervals concern conditional mechanism expectations on these saved rows; they are not population confidence intervals. Negative and inconclusive results remain visible.</p>
+          <p id="integration-message" class="operator-note"></p>
+          <div class="table-wrap" tabindex="0" role="region" aria-label="Descriptive reference model scores"><table><caption>First preregistered replicate · realized reference-model Brier, descriptive only</caption><thead><tr><th scope="col">Public task</th><th scope="col">Public-only</th><th scope="col">Independent RR</th><th scope="col">Certified continuation</th></tr></thead><tbody id="reference-rows"></tbody></table></div>
+          <details class="bindings"><summary>Mechanism variation on fixed rows</summary><p>Predictive loss percentiles summarize randomized-law variation and do not estimate population performance or serve as confidence intervals.</p><div class="table-wrap" tabindex="0" role="region" aria-label="Descriptive mechanism loss percentiles"><table><caption>Descriptive 2.5% and 97.5% loss percentiles</caption><thead><tr><th scope="col">Public task</th><th scope="col">Randomized route</th><th scope="col">2.5% loss</th><th scope="col">97.5% loss</th></tr></thead><tbody id="variation-rows"></tbody></table></div></details>
+          <details class="bindings"><summary>Inspect the complete scientific result</summary><pre id="result-inspector" class="json-inspector"></pre></details>
+        </section>
+        <section class="panel" aria-labelledby="artifacts-title">
+          <div class="section-title"><h2 id="artifacts-title">Saved benchmark evidence</h2><span class="tag">Public operator artifacts</span></div>
+          <p class="operator-note">Inspect the fixed specification, source snapshots, split keys and certificate bindings. Completed evaluation also retains reference coefficients, predictions, per-row losses, integration loss vectors and reproducibility records. Reopening validates saved bytes.</p>
+          <div id="artifact-links" class="downloads"></div><p id="artifact-status" class="operator-note" role="status" aria-live="polite"></p>
+        </section>
+      </div>
+      <section class="panel guide" id="running-guide" aria-labelledby="guide-title">
+        <div class="section-title"><h2 id="guide-title" tabindex="-1">Public benchmark running guide</h2><span class="tag">Start here</span></div>
+        <ol class="guide-steps">
+          <li><h3>Inspect the fixed public tasks</h3><p>Read each task outcome, historical period and public covariates. Open source provenance and the machine-readable specification. These retained categorical samples cover four task domains; they do not establish population representativeness, fresh audit status or person-disjoint panels.</p></li>
+          <li><h3>Register before evaluating</h3><p>Select <strong>Register fixed benchmark</strong>. Registration binds the frozen plan, source snapshots, key-only row selection and runtime before evaluation. The candidate, alternatives, 512-row splits, 0.01 provisional margin and 4,096 repetitions cannot be changed from the page. The registration is local custody, not an independently administered preregistration service.</p></li>
+          <li><h3>Run all mandatory comparisons</h3><p>Select <strong>Run fixed benchmark</strong> and leave the page open while it computes. Each task saves one simulated retained response, verifies the exact channel certificate, then uses the same fixed learner across all three routes. The experiment conditions on the actual retained response. The marginal decoder can be biased under that conditioning; resulting losses are retained without tuning or replacement draws.</p></li>
+          <li><h3>Read gains and uncertainty</h3><p>Review all eight comparisons. A comparison passes only if its simultaneous lower gain bound reaches 0.01; an upper bound below 0.01 fails; an overlapping interval is inconclusive. All eight must pass for an overall pass. The seeded integration and ideal iid interpretation are stated beside the results. Descriptive reference-model scores and mechanism percentiles appear separately.</p></li>
+          <li><h3>Inspect and reopen saved artifacts</h3><p>Download coefficients, predictions, losses and reproducibility records. Choose a saved registration and <strong>Open saved benchmark</strong> to inspect it later. <strong>Reopen saved results</strong> validates and returns the intact completed artifacts. Verification may replay the same fixed computation; it never selects a new history, seed or study. If a reservation is incomplete, preserve its evidence; the page will keep execution blocked across restarts.</p></li>
+        </ol>
+        <div class="guide-boundary"><h3>What remains pending</h3><p>Independent scientific review, justified service-owner margins, fresh representative population assessment, whole-person contribution and linkage controls, authoritative agency custody, private execution and enforced delivery remain pending. A favorable public benchmark or valid certificate does not authorize a release.</p><p>The <a href="/research-rr">original synthetic research pipeline</a> retains its separate Phase 2 usefulness test and Phase 3 shared disclosure history. This larger public benchmark does not overwrite or reinterpret those saved results.</p></div>
+      </section>
+      <footer>Historical public task research · No production release authorization · <a href="/#datasets">Return to dataset overview</a></footer>
+    </main>
+  </div>
+</body>
+</html>

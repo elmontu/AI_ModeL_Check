@@ -1,0 +1,15 @@
+/* Phase 6 additions use the unchanged shared benchmark design. */
+.evaluation-task-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.evaluation-outcomes { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.evaluation-outcomes strong { font-size: 20px; }
+.evaluation-task-grid .task-card h3 { font-size: 15px; }
+.evaluation-task-grid .source-links { display: flex; flex-wrap: wrap; gap: 7px 14px; margin-top: 12px; }
+.evaluation-task-grid .source-links a { margin: 0; }
+.evaluation-task-grid ul { font-size: 11px; padding-left: 18px; color: var(--muted); }
+#blocked-reasons { font-size: 12px; color: var(--amber); padding-left: 20px; }
+#evaluation-progress { width: 100%; height: 16px; accent-color: var(--teal); margin-top: 10px; }
+#comparison-rows td { overflow-wrap: anywhere; }
+#comparison-rows .numeric { font-variant-numeric: tabular-nums; white-space: nowrap; }
+@media (max-width: 1150px) { .evaluation-task-grid { grid-template-columns: 1fr; } .evaluation-outcomes { grid-template-columns: repeat(2, minmax(0, 1fr)); } .evaluation-outcomes > div:nth-child(3) { border-left: 0; } .evaluation-outcomes > div:nth-child(n+3) { border-top: 1px solid var(--line); } }
+@media (max-width: 600px) { .evaluation-outcomes { grid-template-columns: 1fr; } .evaluation-outcomes > div + div { border-left: 0; border-top: 1px solid var(--line); } }
+

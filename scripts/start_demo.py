@@ -51,8 +51,17 @@ for text in requirements:
     versions[req.name] = version
 for name in ("cryptography", "jwt", "pydantic", "fastapi", "uvicorn", "httpx",
              "joblib", "numpy", "pandas", "pyarrow", "sklearn", "scipy", "xgboost",
-             "model_release_assurance.console.api", "model_release_assurance.console.worker"):
+             "model_release_assurance.console.api", "model_release_assurance.console.worker",
+             "mra_rr_continuation.console_app", "mra_rr_continuation.web",
+             "mra_rr_continuation.main_assurance_app", "mra_readiness_dashboard.console_integration"):
     importlib.import_module(name)
+research = importlib.import_module("mra_rr_continuation")
+if Path(research.__file__).resolve() != root / "src/mra_rr_continuation/__init__.py":
+    raise RuntimeError("Installed research package belongs to another checkout")
+for name in ("mra_rr_continuation.main_assurance_app", "mra_readiness_dashboard.console_integration"):
+    module = importlib.import_module(name)
+    if Path(module.__file__).resolve() != root / "src" / Path(*name.split(".")).with_suffix(".py"):
+        raise RuntimeError("Installed readiness integration belongs to another checkout")
 print(json.dumps({"status":"verified", "python":sys.executable, "prefix":str(target),
                   "source":str(Path(package.__file__).resolve()), "versions":versions}, sort_keys=True))
 '''
@@ -122,7 +131,7 @@ def validate_research_data_root(path: Path) -> Path:
 
 
 def launch_console(target: Path, data: Path, port: int, research_data_root: Path | None = None) -> int:
-    command = [str(environment_python(target)), "-I", "-B", "-m", "model_release_assurance.console",
+    command = [str(environment_python(target)), "-I", "-B", "-m", "mra_rr_continuation.console",
                "local", "--data", str(data), "--port", str(port)]
     # The existing console launcher owns the API, worker and their shutdown.
     environment = _process_environment()
@@ -150,6 +159,8 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--port", type=int, default=8765)
     parser.add_argument("--wheelhouse", type=Path, help="install from a prepared local wheel directory")
     parser.add_argument("--install-only", action="store_true", help="install or validate without starting services")
+    parser.add_argument("--revalidate-existing", action="store_true",
+                        help="validate a marked environment against current inputs without reinstalling or changing its marker")
     parser.add_argument("--research-data-root", type=Path,
                         help="absolute local directory of public research datasets; no uploads or downloads")
     args = parser.parse_args(argv)
@@ -169,8 +180,20 @@ def main(argv: list[str] | None = None) -> int:
         if target.exists():
             if not marker.is_file() or marker.stat().st_size > 16_384:
                 raise ValueError("Existing environment is not a complete launcher-managed demo; choose a new --venv path")
-            if json.loads(marker.read_text(encoding="utf-8")) != binding:
-                raise ValueError("Environment checkout or installation inputs changed; choose a new --venv path")
+            retained_binding = json.loads(marker.read_text(encoding="utf-8"))
+            if retained_binding != binding:
+                same_checkout = (isinstance(retained_binding, dict)
+                    and set(retained_binding) == {"schema", "repository", "inputs"}
+                    and retained_binding.get("schema") == binding["schema"]
+                    and retained_binding.get("repository") == binding["repository"]
+                    and isinstance(retained_binding.get("inputs"), dict)
+                    and set(retained_binding["inputs"]) == set(binding["inputs"])
+                    and all(isinstance(value, str) and len(value) == 64
+                            and all(char in "0123456789abcdef" for char in value)
+                            for value in retained_binding["inputs"].values()))
+                if not args.revalidate_existing or not same_checkout:
+                    raise ValueError("Environment checkout or installation inputs changed; choose a new --venv path or explicitly --revalidate-existing for this marked checkout")
+                print("Revalidating current requirements and source imports; the retained installation marker will remain unchanged.", flush=True)
             validate_environment(target)
             if installation_binding() != binding:
                 raise ValueError("Installation inputs changed during validation; choose a new --venv path")

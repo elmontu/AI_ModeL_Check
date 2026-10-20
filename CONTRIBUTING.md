@@ -38,17 +38,45 @@ python -m pip install -r requirements-experiments.txt
 python -m pip install --no-deps -e .
 ```
 
-This matches the dependency set used by CI for the complete repository check, including the optional experiment tests.
+This is the broad development environment, including optional experiment
+runtimes. It is more than the native readiness application needs. For bounded
+application work, use the clean `.[console]` installation in the
+[native application guide](docs/main-application-readiness.md). Automatic
+`readiness.yml` checks exercise finite application behavior and packaging.
+This supplements the existing full CI, which retains its own triggers and broader
+workload coverage.
 
 ## Before opening a pull request
 
-Run:
+Run checks appropriate to the owning layer. For native readiness changes,
+run the bounded application and packaging checks defined by
+`.github/workflows/readiness.yml`; they must work from a clean checkout without
+project captures, private paths, stored results or a running worker. The bounded
+commands are:
+
+```console
+python -B -m unittest discover -s tests -p test_portable_assurance.py -v
+python -I -B scripts/check_portable_assurance.py --installed-target <isolated-wheel-install>
+```
+
+The second command requires a built wheel installed into the named separate
+directory and the console dependencies in the selected Python environment.
+Follow the workflow's build and installation steps before running it. Finite
+saved-demo JavaScript checks require Node.js on PATH. Keep a requested
+no-benchmark change within this bounded verification scope and review
+other workflow triggers before publishing a branch or opening a pull request.
+
+For changes that require the complete repository check, deliberately select:
 
 ```bash
 make check
 ```
 
-Run `make verify` when changing MRAP protocol semantics, Lean artifacts, or the Python-to-Lean correspondence boundary.
+This broader path includes optional scientific and training-related checks; it
+is not a prerequisite for every presentation-only change. Run `make verify`
+when changing MRAP protocol semantics, Lean artifacts, or the Python-to-Lean
+correspondence boundary. Document the checks actually run and their limitations;
+a local UI pass is not a scientific re-evaluation.
 
 If a Pydantic contract changes, regenerate the affected schema with `mra schema`, review the diff, and update the matching example and tests. An incompatible public-contract change requires a new schema version and migration note; never overwrite a retained compatibility schema with a different contract.
 
@@ -86,10 +114,29 @@ in `AssuranceEngine`. They must not authorize, mutate a production registry or
 expand scope. Workload identity, attestation, replay protection, resource limits,
 isolation and durable orchestration must be established separately.
 
-The package remains physically flat; current imports and source-bound studies
-must not be moved merely for visual organization. Only explicitly documented
-Python APIs are supported. The logical ownership map is in the
+The reference package remains physically flat; current imports and
+source-bound studies must not be moved merely for visual organization. Separate
+application packages add routes and learning tools around that core. Choose the
+owning directory before changing behavior:
+
+| Directory | Responsibility and boundary |
+| --- | --- |
+| `src/model_release_assurance/` | Reference contracts, decision engine, existing console and production exercises. Preserve existing source and scientific bindings unless a separately scoped core change explicitly authorizes revision. |
+| `src/mra_rr_continuation/` | Main application composition, CLI supervisor and isolated public research routes. Its `main_assurance_app.py` adds native navigation without moving the reference core. Research execution remains a separate operator action. |
+| `src/mra_readiness_dashboard/` | Readiness presentation, finite fictional scenarios, tutorials, practice, comparisons, saved-demo browser script and native ASGI adapter. Package its browser assets with its Python modules. |
+| `src/mra_readiness_intake/` | Read-only captured-response and evidence-intake validation. It does not provide agency approval. |
+| `src/mra_readiness_handoff/` | Pinned review-packet construction and validation, separate from the general advisory book. |
+| `src/mra_readiness_status/` | Fresh local input-integrity checks and withholding status. Integrity checks do not establish readiness or authorization. |
+| `src/mra_source_readiness/`, `src/mra_research_preregistration/`, `src/mra_preregistered_evaluation/` | Separate source-readiness, registration and evaluation research tools. Their historical stores and results are external inputs, not bundled learning fixtures. |
+| `tests/`, `.github/workflows/readiness.yml` | Public finite application tests and clean-package verification. Keep private-capture qualification and scientific workloads out of the automatic readiness gate. |
+| `docs/`, `.local/` | General operating documentation is publishable; private profiles, captures, generated records and verification evidence stay in ignored local storage. |
+
+Only explicitly documented Python APIs are supported. The reference core's
+logical ownership map remains in the
 [system specification](docs/system-audit-specification.md#202-repository-responsibility-map).
+Do not reorganize source files to match the visual navigation. Application
+links, a fictional checklist and a saved demo cannot revise a real decision or
+silently replace authentic evidence.
 
 ## Support
 

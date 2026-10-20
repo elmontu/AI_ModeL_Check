@@ -26,6 +26,13 @@ The [plain launcher](https://github.com/elmontu/AI_ModeL_Check/raw/refs/heads/ma
 is also available. If your browser displays it, use **Save as** and keep the
 filename `Try-Demo.cmd`, not `.txt`.
 
+Those are the stable `main` downloads. The readiness/codebase update is available
+on `codex/mra-platform-codebase` until merged. Use its matching
+[feature-branch ZIP](https://github.com/elmontu/AI_ModeL_Check/raw/refs/heads/codex/mra-platform-codebase/demo/Try-Demo.zip)
+or [feature-branch launcher](https://github.com/elmontu/AI_ModeL_Check/raw/refs/heads/codex/mra-platform-codebase/Try-Demo.cmd)
+to try that reviewed update. Each launcher retains its immutable source-revision
+and download-integrity checks.
+
 First use needs internet access. The launcher prepares a managed Python runtime,
 a fixed repository snapshot and a validated console environment. It also prepares
 and verifies local copies of all four required public datasets: **Wine, Digits,
@@ -50,9 +57,13 @@ With Git and Python 3.11 or newer, clone outside synchronized storage and run on
 command from the checkout:
 
 ```console
-git clone https://github.com/elmontu/AI_ModeL_Check.git
+git clone --branch codex/mra-platform-codebase https://github.com/elmontu/AI_ModeL_Check.git
 cd AI_ModeL_Check
 ```
+
+Use the same reviewed branch or revision as this guide. For an existing checkout,
+fetch the published branch and select `git checkout codex/mra-platform-codebase`
+before installing. This update is not in `main` until a separate merge is completed.
 
 ```powershell
 # Windows PowerShell, using an existing Python
@@ -69,6 +80,28 @@ This source-checkout route keeps its environment and evidence in
 research samples on D:, add `--research-data-root D:/model_audit_data`. The
 standalone Windows launcher accepts the same existing sources through
 `MRA_DEMO_RESEARCH_DATA_ROOT`; it does not download the large research collection.
+
+### Readiness, tutorials and saved demos
+
+The main application includes **Readiness & learning** beside the dataset and
+model workflows. Open its panel or sidebar links to inspect gap checklists,
+work through tutorials, change fictional decisions and source assumptions,
+compare two configurations, and save or reload named practice demos. Each lesson
+explains why a checklist changes. Saved choices remain in the current browser
+and can be exported and imported as a demo file.
+
+A fresh installation uses a built-in **fictional demo**. Its illustrative
+checklists and source assumptions are learning aids, with no authentic agency
+evidence or decision authority. Real agency decisions remain pending. Existing
+project captures can be inspected only through an explicit, private pinned
+configuration; missing or changed inputs withhold captured content. The general
+advisory book remains separate from these project records.
+
+For review and learning with the worker offline, use the
+[serve-only setup](#review-and-learning-without-a-worker). The
+[native application guide](docs/main-application-readiness.md) covers page
+navigation, private configuration and saved-demo migration. The full
+`start_demo.py` and `local` launchers retain their API-plus-worker behavior.
 
 **Dataset overview** is the main console view. Its default **Graph** connects
 each dataset to every saved training run or attempt
@@ -228,14 +261,14 @@ local API dependencies.
 
 ```powershell
 python scripts/setup_pipeline.py --profile console
-& .\.venv-pipeline\Scripts\python.exe -m model_release_assurance.console local --data .local/console-data --port 8765
+& .\.venv-pipeline\Scripts\python.exe -m mra_rr_continuation.console local --data .local/console-data --port 8765
 ```
 
 **Linux/macOS**
 
 ```bash
 python3 scripts/setup_pipeline.py --profile console
-./.venv-pipeline/bin/python -m model_release_assurance.console local --data .local/console-data --port 8765
+./.venv-pipeline/bin/python -m mra_rr_continuation.console local --data .local/console-data --port 8765
 ```
 
 Open [the local console](http://127.0.0.1:8765/). The launcher starts the API and
@@ -246,6 +279,34 @@ Setup requires package access or a prepared wheel directory supplied with
 `--wheelhouse PATH`. The bundled training examples then run offline. Setup
 refuses to overwrite an existing environment: reuse its Python executable or
 choose a new location with `--venv PATH`.
+
+### Review and learning without a worker
+
+Use a new Python 3.11+ environment for a minimal source installation:
+
+```console
+python -m venv .venv
+```
+
+Activate it with `.venv\Scripts\Activate.ps1` in Windows PowerShell or
+`source .venv/bin/activate` on Linux/macOS, then run:
+
+```console
+python -m pip install ".[console]"
+mra-console serve --data .local/console-data --host 127.0.0.1 --port 8765
+```
+
+Open [MRA](http://127.0.0.1:8765/) and select **Readiness & learning**. This starts
+the web service without a worker. It does not start training or a benchmark.
+The built-in fictional readiness lessons need no project capture or research
+dataset. Model-training tools require their documented optional dependencies
+and a separately started worker.
+
+A separately built wheel can be installed in the same clean environment with
+`python -m pip install "./dist/<built-wheel-name>.whl[console]"`; replace the
+placeholder with the exact wheel filename. Run the same `mra-console serve`
+command from an ordinary working directory. Packaged application assets and
+fictional lessons are included in the wheel, while project evidence is excluded.
 
 ### First review
 
@@ -482,9 +543,12 @@ and undetermined scores. The [PyRIT record](docs/production-prd26-pyrit-adapter.
 documents the partial runtime, D: storage hook and remaining agency acceptance.
 Earlier [garak](docs/production-prd26-garak-adapter.md) and
 [ART](docs/production-prd25-art-adapter.md) validation remain source-bound.
-Hosted CI remains outside this phase at the user's request; the
+The earlier
 [publication checkpoint](docs/government-academic-separation-plan-2026-10-01.md#government-publication-checkpoint)
-retains earlier publication evidence.
+retains its original scope and evidence. The additional portable readiness
+workflow checks bounded application behavior and packaging. The existing full
+CI retains its triggers and broader workload coverage; inspect the selected
+workflow before starting a scientific, training or deployment check.
 
 ## Documentation and research
 
@@ -495,6 +559,7 @@ retains earlier publication evidence.
 | Lifecycle contracts and enforcement | [Release protocol](docs/model-release-assurance-protocol.md), [system audit specification](docs/system-audit-specification.md) |
 | Supported model families and tools | [Model-family coverage](docs/model-family-coverage.md), [red-team tools](docs/sacro-ml-red-team.md), [MCP/RAG](docs/rag-mcp.md) |
 | Current data contracts | [37-schema registry](schemas/README.md) |
+| Readiness and learning | [Native application guide](docs/main-application-readiness.md): fictional scenarios, gap checklists, tutorials, guided practice, comparisons and browser-saved demos |
 | Mathematical and proof assumptions | [Mathematical foundations](docs/mathematical-foundations.md), [formal verification scope](docs/formal-verification.md) |
 | Historical observations and executable tools | [Reproduction index](reproduction/README.md), [script catalog](scripts/README.md) |
 | Contributions and releases | [Contribution guide](CONTRIBUTING.md), [release process](docs/releasing.md), [change history](CHANGELOG.md) |
