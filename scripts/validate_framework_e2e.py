@@ -24,6 +24,7 @@ from model_release_assurance import workflow
 from model_release_assurance.console.api import create_app
 from model_release_assurance.console.store import Store
 from model_release_assurance.console.worker import work_once
+from model_release_assurance.console.research_data import RESEARCH_DATASETS, configured_research_root
 from model_release_assurance.public_models import PRESETS, DATASETS
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -31,6 +32,8 @@ CLASSIFIERS = {"logistic", "random-forest", "mlp", "mlp-finetuned", "svm", "ense
 
 
 def expected_pair(preset, dataset):
+    if preset == "dp-histogram":
+        return dataset == "sklearn-wine"
     if preset == "xgboost-small":
         return dataset == "sklearn-breast-cancer"
     if preset == "cnn":
@@ -38,7 +41,7 @@ def expected_pair(preset, dataset):
     if preset in {"ridge", "forest-regression"}:
         return dataset == "sklearn-diabetes"
     if preset in CLASSIFIERS:
-        return dataset in {"sklearn-breast-cancer", "sklearn-wine", "sklearn-digits"}
+        return dataset in {"sklearn-breast-cancer", "sklearn-wine", "sklearn-digits"} | set(RESEARCH_DATASETS)
     raise ValueError("New preset requires an explicit validation expectation: " + preset)
 
 
@@ -69,7 +72,7 @@ def render_report(report, output):
     for row in rows:
         tools = row.get("attacks", [])
         counts = "/".join(str(sum(t["status"] == state for t in tools)) for state in ("completed", "unsupported", "failed"))
-        lines.append(f"| {row['preset']} | {row['dataset']} | {'execute' if row['supported'] else 'reject'} | {row['status']} | {row.get('verdict', '—')} | {counts} |")
+        lines.append(f"| {row['preset']} | {row['dataset']} | {row['expected_behavior']} | {row['status']} | {row.get('verdict', '—')} | {counts} |")
     lines += ["", "## Every adversary execution", "",
               "Metrics, budgets, baselines and assumptions are retained verbatim in `validation-report.json` and each job artifact directory.", "",
               "| Preset | Dataset | Adversary | Execution |", "| --- | --- | --- | --- |"]
@@ -159,6 +162,11 @@ def run(output, language_models=(), *, presets=None):
 
     try:
         require(client.get("/healthz").status_code == 200, "API health")
+        require(configured_research_root() is None,
+                "Bundled-data CI requires research inputs unconfigured; retained sources need separate qualification")
+        report["research_data_scope"] = (
+            "Four optional retained-source datasets are rejection checks only: no research root is configured, "
+            "no source is loaded or fabricated, and source authenticity remains pending.")
         # Intake covers every exposed release type and route, independently of trainers.
         for kind in workflow.KINDS:
             for route in workflow.ROUTES:
@@ -187,13 +195,23 @@ def run(output, language_models=(), *, presets=None):
         report["scope"] = "all supported presets" if set(selected) == set(PRESETS) else "selected subset"
         for preset in selected:
             for dataset in DATASETS:
-                row = {"preset": preset, "dataset": dataset, "supported": expected_pair(preset, dataset), "status": "FAIL"}
+                supported = expected_pair(preset, dataset)
+                expected = ("reject invalid pair" if not supported else
+                            "reject unconfigured research input" if dataset in RESEARCH_DATASETS else "execute")
+                row = {"preset": preset, "dataset": dataset, "supported": supported,
+                       "expected_behavior": expected, "status": "FAIL"}
                 started = time.monotonic()
                 try:
                     response = client.post("/api/jobs", json={"kind": "training", "training": {"name": f"{preset} {dataset}", "preset": preset, "dataset": dataset}})
                     if not row["supported"]:
                         require(response.status_code == 422, "Unsupported pair accepted")
-                        row.update(status="PASS", rejection_status=response.status_code)
+                        row.update(status="PASS", rejection_status=response.status_code, training_executed=False)
+                    elif dataset in RESEARCH_DATASETS:
+                        require(response.status_code == 409, "Unconfigured retained-source pair was not blocked")
+                        detail = response.json().get("detail", "")
+                        require("explicit --research-data-root" in detail, "Research rejection did not identify missing retained input")
+                        row.update(status="PASS", rejection_status=response.status_code, rejection_reason=detail,
+                                   training_executed=False, source_evidence="not supplied; authenticity pending")
                     else:
                         require(response.status_code == 202, response.text)
                         identifier = response.json()["id"]
@@ -218,7 +236,26 @@ def run(output, language_models=(), *, presets=None):
                         if dataset == "sklearn-digits": expected_related.add("image-tests.json")
                         require(expected_related <= {r["path"] for r in row["related_reports"]}, "Required derivative, component or image experiments missing")
                         require(not result["authorized"], "Teaching run authorized release")
-                        require(result["verdict"] in {"inconclusive", "block"}, "Unexpected clearing verdict")
+                        if preset == "dp-histogram":
+                            from model_release_assurance.private_model_clearance import PROFILE, verify_private_model_run
+                            verified = verify_private_model_run(directory)
+                            require(result["verdict"] == verified["verdict"] == "clear", "Private model-only DP result did not clear exactly")
+                            require(result["clearance_profile"] == verified["clearance_profile"] == PROFILE, "Private DP profile mismatch")
+                            require(result["clearance_scope"] == verified["clearance_scope"], "Private DP scope mismatch")
+                            require(verified["verified"] and verified["accountant_replayed"] and verified["complete_pipeline"],
+                                    "Private DP accountant and complete source-bound evidence did not replay")
+                            require(result["candidate"] == verified["recipient_package"] == "recipient-package.json",
+                                    "Private DP candidate was not the model-only recipient package")
+                            require(not any(result[field] for field in ("authorization_eligible", "release_authorized", "deployed")),
+                                    "Private DP demonstration claimed institutional authorization or deployment")
+                            recipient = client.get(f"/api/jobs/{identifier}/recipient-package")
+                            require(recipient.status_code == 200 and
+                                    hashlib.sha256(recipient.content).hexdigest() == verified["recipient_package_sha256"],
+                                    "Recipient-only download differs from independently verified DP package")
+                            row.update(clearance_profile=verified["clearance_profile"], clearance_scope=verified["clearance_scope"],
+                                       clearance_verification=verified, recipient_download_sha256=verified["recipient_package_sha256"])
+                        else:
+                            require(result["verdict"] in {"inconclusive", "block"}, "Unexpected clearing verdict")
                         require(not any(t["status"] == "failed" for t in row["attacks"]), "One or more adversaries failed")
                         case = result["case_id"]
                         checked = job({"kind": "check", "case_id": case})["result"]

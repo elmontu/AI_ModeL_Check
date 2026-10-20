@@ -172,6 +172,29 @@ jobs:
         if: matrix.os == 'ubuntu-latest'
         shell: bash
         run: ${{ matrix.python-path }} scripts/validate_framework_e2e.py --output output/framework-e2e-ci
+      - name: Report local framework validation failures
+        if: failure() && matrix.os == 'ubuntu-latest'
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          path = Path("output/framework-e2e-ci/validation-report.json")
+          if path.is_file():
+              report = json.loads(path.read_text(encoding="utf-8"))
+              failures = []
+              if report.get("fatal_error"):
+                  failures.append(str(report["fatal_error"]) + "\n" + str(report.get("fatal_traceback", "")))
+              for field in ("training_matrix", "case_matrix", "language"):
+                  for row in report.get(field, []):
+                      if row.get("status") == "FAIL":
+                          identity = " / ".join(str(row.get(key, "")) for key in ("preset", "dataset", "kind", "route", "mode", "model") if row.get(key))
+                          failures.append(identity + ": " + str(row.get("error", "failed")) + "\n" + str(row.get("traceback", "")))
+              for detail in failures:
+                  message = detail.replace("%", "%25").replace("\r", "%0D").replace("\n", "%0A")
+                  print("::error title=Local framework validation failure::" + message)
+          PY
       - name: Retain local workflow test matrix and evidence
         if: always() && matrix.os == 'ubuntu-latest'
         uses: actions/upload-artifact@v4

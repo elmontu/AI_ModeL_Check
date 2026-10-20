@@ -29,40 +29,53 @@ from model_release_assurance.production_storage.backend import FixtureObjectStor
 # Fixed test code, never a request-supplied command. Independent interpreters
 # exercise SQLite arbitration without sharing Python locks or store instances.
 _CHILD = r"""import sys, json, time, os
+from contextlib import contextmanager, nullcontext
 from pathlib import Path
 configuration = json.loads(sys.argv[1])
 sys.path[:0] = configuration['paths']
 from model_release_assurance.production_jobs.store import JobStore
 from model_release_assurance.production_jobs.contracts import JobError
 store = JobStore.open(configuration['root'], configuration['store_id'])
-Path(configuration['ready']).write_text('ready', encoding='ascii')
-deadline = time.monotonic() + 10
-while not Path(configuration['gate']).exists():
-    if time.monotonic() >= deadline:
-        raise SystemExit(24)
-    time.sleep(.01)
-guard = lambda: configuration['now']
-common = dict(broker_id=configuration['broker'], guard=guard)
 try:
     operation = configuration['operation']
-    arguments = configuration['arguments']
-    if operation == 'claim':
-        result = store.claim(**arguments, **common)
-    elif operation == 'consume':
-        result = store.consume_input(**arguments, **common)
-    elif operation == 'cancel':
-        result = store.cancel(**arguments, **common)
-    elif operation == 'complete':
-        result = store.complete(**arguments, **common)
-    elif operation == 'crash_read':
-        def crash():
-            os._exit(23)
-        result = store.with_current_lease(**arguments, operation=crash, **common)
-    else:
-        raise AssertionError('Unknown fixed test operation')
-    print(json.dumps({'ok': True, 'result': result}), flush=True)
+    # Race transaction arbitration after each real connection has completed its
+    # custody checks and configuration. The production one-second busy timeout
+    # remains unchanged and is tested separately. Crash/read recovery keeps its
+    # normal per-transaction connection lifecycle.
+    context = store._connect() if operation != 'crash_read' else nullcontext()
+    with context as connection:
+        if connection is not None:
+            @contextmanager
+            def configured_connection():
+                yield connection
+            store._connect = configured_connection
+        Path(configuration['ready']).write_text('ready', encoding='ascii')
+        deadline = time.monotonic() + 10
+        while not Path(configuration['gate']).exists():
+            if time.monotonic() >= deadline:
+                raise SystemExit(24)
+            time.sleep(.01)
+        guard = lambda: configuration['now']
+        common = dict(broker_id=configuration['broker'], guard=guard)
+        arguments = configuration['arguments']
+        if operation == 'claim':
+            result = store.claim(**arguments, **common)
+        elif operation == 'consume':
+            result = store.consume_input(**arguments, **common)
+        elif operation == 'cancel':
+            result = store.cancel(**arguments, **common)
+        elif operation == 'complete':
+            result = store.complete(**arguments, **common)
+        elif operation == 'crash_read':
+            def crash():
+                os._exit(23)
+            result = store.with_current_lease(**arguments, operation=crash, **common)
+        else:
+            raise AssertionError('Unknown fixed test operation')
 except JobError as error:
-    print(json.dumps({'ok': False, 'error': type(error).__name__}), flush=True)
+    print(json.dumps({'ok': False, 'error': type(error).__name__, 'error_message': str(error)}), flush=True)
+else:
+    print(json.dumps({'ok': True, 'result': result}), flush=True)
 """
 
 
