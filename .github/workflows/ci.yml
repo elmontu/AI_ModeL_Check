@@ -215,7 +215,7 @@ jobs:
       - name: Build and audit Lean proof terms
         id: lean_primary
         continue-on-error: true
-        uses: leanprover/lean-action@v1.6.0
+        uses: leanprover/lean-action@v1.6.2
         with:
           lake-package-directory: formal/lean
           auto-config: false
@@ -228,7 +228,7 @@ jobs:
       - name: Retry the same required Lean build and audit once
         id: lean_retry
         if: steps.lean_primary.outcome == 'failure'
-        uses: leanprover/lean-action@v1.6.0
+        uses: leanprover/lean-action@v1.6.2
         with:
           lake-package-directory: formal/lean
           auto-config: false
